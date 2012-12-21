@@ -36,6 +36,7 @@
 
 #include <allegro5/allegro.h>
 #include <allegro5/allegro_primitives.h>
+#include <allegro5/allegro_shader.h>
 
 static World* s_instance = 0;
 
@@ -115,16 +116,20 @@ World::World(ALLEGRO_DISPLAY *display) : m_display(display)
     loadMap();
     //FIXME: saveMap();
 
-    if (m_shader.loadFromFile("tilerenderer.frag", sf::Shader::Fragment)) {
-        std::cout << "Successfully loaded tilerenderer fragment shader!" << std::endl;
-    } else {
-        std::cout << "failed to load tilerenderer fragment shader!" << std::endl;
-        assert(0);
+    m_shader = al_create_shader(ALLEGRO_SHADER_GLSL);
+
+    bool shaderLoaded = al_attach_shader_source_file(m_shader, ALLEGRO_PIXEL_SHADER, "tilerenderer.frag");
+    bool shaderLinked = al_link_shader(m_shader);
+
+    if (!shaderLoaded || !shaderLoaded) {
+        Debug::log(Debug::Area::Graphics) << "Failure to load tilemap fragment shader, returning error log...";
+
+        Debug::fatal(false, Debug::Area::Graphics, al_get_shader_log(m_shader));
     }
 
     //FIXME: hardcoding :(
     //m_shader.setParameter("TILE_SIZE", Block::blockSize, Block::blockSize);
-    m_shader.setParameter("tile_types_super_texture", m_tileTypesSuperTexture);
+    al_set_shader_sampler(m_shader, "tile_types_super_texture", m_tileMapFinalTexture, 0);
 
     //FIXME: height
 //    m_sky = new Sky(m_window, m_view, 0.0f);
@@ -464,9 +469,12 @@ void World::generatePixelTileMap()
     // or...change the shader to calculate it properly
 //HACK:  m_tileMapPixelsImage.flipVertically();
 
-    m_shader.setParameter("tilemap_pixels", m_tileMapPixelsTexture);
+    //TODO: al_get_shader_log here?
+    Debug::fatal(al_set_shader_sampler(m_shader, "tilemap_pixels", m_tileMapPixelsTexture, 0), Debug::Area::Graphics, "shader tilemap_pixels set failure");
+
     // to get per-pixel smooth scrolling, we get the remainders and pass it as an offset to the shader
-    m_shader.setParameter("offset", tileOffset().x, tileOffset().y);
+    float floatArray = { tileOffset().x(), tileOffset().y() };
+    Debug::fatal(al_set_shader_float_vector(m_shader, "offset", 2, &floatArray, 2), Debug::Area::Graphics, "shader offset set failure");
 }
 
 Eigen::Vector2f World::tileOffset() const

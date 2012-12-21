@@ -25,6 +25,7 @@
 
 #include <Eigen/Core>
 
+class ALLEGRO_SHADER;
 union ALLEGRO_EVENT;
 class ALLEGRO_DISPLAY;
 
@@ -137,6 +138,8 @@ private:
     ALLEGRO_BITMAP *m_tileMapFinalTexture = nullptr;
 
     ALLEGRO_BITMAP *m_tileMapPixelsTexture = nullptr;
+
+    ALLEGRO_SHADER *m_shader = nullptr;
 
     /**
      * A super bitmap which is loaded ONLY at init, which is a tilesheet/spritesheet
