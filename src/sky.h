@@ -18,7 +18,7 @@
 #ifndef SKY_H
 #define SKY_H
 
-#include "renderable.h"
+#include "texture.h"
 
 class CloudSystem;
 

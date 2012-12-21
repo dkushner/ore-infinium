@@ -248,7 +248,7 @@ for (Entity * currentEntity : m_entities) {
         currentEntity->update(elapsedTime);
     }
 
-    m_view->setCenter(m_player->getPosition());
+    m_view->setCenter(m_player->position());
 
     //calculateAttackPosition();
     generatePixelTileMap();
@@ -312,7 +312,7 @@ void World::calculateAttackPosition()
 {
     /*    const Eigen::Vector2f _viewportCenter = viewportCenter();
 
-        const sf::Vector2i mousePos = sf::Mouse::getPosition(*m_window);
+        const sf::Vector2i mousePos = sf::Mouse::position(*m_window);
 
         Eigen::Vector2f diffVect;
         diffVect.x = mousePos.x - _viewportCenter.x;
@@ -340,10 +340,10 @@ void World::performBlockAttack()
     const int row = int((m_relativeVectorToAttack.y + viewPosition.y) / Block::blockSize);
     //    std::cout << "relativevector y: " << m_relativeVectorToAttack.y << " view position y: " << viewPosition.y << "\n";
 
-    const int startRow = (m_player->getPosition().y / Block::blockSize) - radius;
-    const int startColumn = (m_player->getPosition().x / Block::blockSize) - radius;
-    const int endRow = (m_player->getPosition().y / Block::blockSize) + radius;
-    const int endColumn = (m_player->getPosition().x / Block::blockSize) + radius;
+    const int startRow = (m_player->position().y / Block::blockSize) - radius;
+    const int startColumn = (m_player->position().x / Block::blockSize) - radius;
+    const int endRow = (m_player->position().y / Block::blockSize) + radius;
+    const int endColumn = (m_player->position().x / Block::blockSize) + radius;
     */
 
     ALLEGRO_MOUSE_STATE state;
@@ -371,7 +371,7 @@ void World::performBlockAttack()
     int attackX = mouse.x() + (m_view->getCenter().x() - SCREEN_W * 0.5) / Block::blockSize;
     int attackY = mouse.y() + (m_view->getCenter().y() - SCREEN_H * 0.5) / Block::blockSize;
 
-    const Eigen::Vector2f playerPosition = m_player->getPosition();
+    const Eigen::Vector2f playerPosition = m_player->position();
 
     //consider block map as starting at player pos == 0,0 and going down and to the right-ward
     //tilesBefore{X,Y} is only at the center of the view though..find the whole screen real estate
@@ -406,7 +406,7 @@ void World::performBlockAttack()
 
 void World::generatePixelTileMap()
 {
-    const Eigen::Vector2f playerPosition = m_player->getPosition();
+    const Eigen::Vector2f playerPosition = m_player->position();
     //consider block map as starting at player pos == 0,0 and going down and to the right-ward
     //tilesBefore{X,Y} is only at the center of the view though..find the whole screen real estate
     //column
@@ -479,7 +479,7 @@ void World::generatePixelTileMap()
 
 Eigen::Vector2f World::tileOffset() const
 {
-    const Eigen::Vector2f playerPosition = m_player->getPosition();
+    const Eigen::Vector2f playerPosition = m_player->position();
     // to get per-pixel smooth scrolling, we get the remainders and pass it as an offset to things that need to know the tile positions
     const Eigen::Vector2f ret = Eigen::Vector2f(int(playerPosition.x()) & Block::blockSize - 1, int(playerPosition.y()) & Block::blockSize - 1);
     return ret;

@@ -66,7 +66,7 @@ void Game::init()
     Debug::log(Debug::Area::System) << "Using allegro version: " << major << "." << minor << "." << revision << "." << release;
 
     Debug::fatal(al_init(), Debug::Area::System, "Failure to init allegro");
-t
+
     al_init_font_addon();
     Debug::fatal(al_init_acodec_addon(), Debug::Area::System, "Failure to init acodec addon");
     Debug::fatal(al_init_native_dialog_addon(), Debug::Area::System, "Failure to init native dialog addon");
