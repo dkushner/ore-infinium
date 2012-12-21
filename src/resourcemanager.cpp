@@ -59,14 +59,17 @@ ALLEGRO_BITMAP* ResourceManager::loadBitmap(const std::string& filename)
     ALLEGRO_BITMAP *bitmap = nullptr;
 
     // Search project's main directory
-    if (al_load_bitmap(filename.c_str())) {
+    bitmap = al_load_bitmap(filename.c_str());
+
+    if (bitmap) {
         m_bitmaps[filename] = bitmap;
-            Debug::log(Debug::Area::Graphics) << "Bitmap load requested for: " << filename << ". Bitmap is not cached, loading from scratch";
+        Debug::log(Debug::Area::Graphics) << "Bitmap load requested for: " << filename << ". Bitmap is not cached, loading from scratch, main directory";
         return m_bitmaps[filename];
     }
 
     // If the image has still not been found, search all registered directories
     for (std::vector<std::string>::iterator it = m_resourceDirs.begin(); it != m_resourceDirs.end(); ++it) {
+
         std::stringstream fullNameStream;
         fullNameStream << (*it);
         fullNameStream << filename;
@@ -75,7 +78,7 @@ ALLEGRO_BITMAP* ResourceManager::loadBitmap(const std::string& filename)
 
         if (al_load_bitmap(fullName.c_str())) {
             m_bitmaps[filename] = bitmap;
-            Debug::log(Debug::Area::Graphics) << "Bitmap load requested for: " << filename << ". Bitmap is not cached, loading from scratch";
+            Debug::log(Debug::Area::Graphics) << "Bitmap load requested for: " << filename << ". Bitmap is not cached, loading from scratch, searching all directories";
             return m_bitmaps[filename];
         }
     }
