@@ -20,7 +20,7 @@
 
 #include "block.h"
 #include "game.h"
-#include "sky.h"
+//HACK #include "sky.h"
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -172,7 +172,7 @@ void World::render()
 
     // NOTE: (SCREEN_H % Block::blockSize) is what we add so that it is aligned properly to the tile grid, even though the screen is not evenly divisible by such.
     Eigen::Vector2f crosshairPosition(mouse.x() - mouse.x() % Block::blockSize + (SCREEN_W % Block::blockSize) - tileOffset().x() + Block::blockSize,
-                                      mouse.y() - mouse.y() % Block::blockSize + (SCREEN_H % Block::blockSize) - tileOffset().y() + Block::blockSize);
+                                                            mouse.y() - mouse.y() % Block::blockSize + (SCREEN_H % Block::blockSize) - tileOffset().y() + Block::blockSize);
 
     ALLEGRO_COLOR color = al_map_rgb(255, 0, 0);
     al_draw_rectangle(crosshairPosition.x(), crosshairPosition.y(), radius, radius, color, 1.0f);
@@ -475,8 +475,8 @@ void World::generatePixelTileMap()
     Debug::fatal(al_set_shader_sampler(m_shader, "tilemap_pixels", m_tileMapPixelsTexture, 0), Debug::Area::Graphics, "shader tilemap_pixels set failure");
 
     // to get per-pixel smooth scrolling, we get the remainders and pass it as an offset to the shader
-    float floatArray = { tileOffset().x(), tileOffset().y() };
-    Debug::fatal(al_set_shader_float_vector(m_shader, "offset", 2, &floatArray, 2), Debug::Area::Graphics, "shader offset set failure");
+    float floatArray[2] = { tileOffset().x(), tileOffset().y() };
+    Debug::fatal(al_set_shader_float_vector(m_shader, "offset", 2, floatArray, 2), Debug::Area::Graphics, "shader offset set failure");
 }
 
 Eigen::Vector2f World::tileOffset() const

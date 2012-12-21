@@ -128,7 +128,7 @@ private:
 
     Player *m_player = nullptr;
 
-    Sky *m_sky = nullptr;
+//    Sky *m_sky = nullptr;
 
     //FIXME: just a ptr to the game.cpp one :(  same with window
 //FIXME:    sf::View *m_view = nullptr;
