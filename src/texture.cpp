@@ -28,7 +28,7 @@ Texture::Texture(const char* texture)
 {
     Texture::setTexture(texture);
 
-    const Eigen::Vector2f texSize = size();
+    const Eigen::Vector2i texSize = size();
     m_origin = Eigen::Vector2f(texSize.x() * 0.5, texSize.y() * 0.5);
 }
 
