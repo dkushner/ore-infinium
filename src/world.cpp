@@ -66,17 +66,9 @@ World::World(ALLEGRO_DISPLAY *display) : m_display(display)
     m_tileTypesSuperTexture.create(textureSize, textureSize);
     */
 
-    m_tileTypesSuperImage.create(Block::blockSize * Block::blockTypeMap.size(), Block::blockSize);
-    m_tileTypesSuperTexture.create(Block::blockSize * Block::blockTypeMap.size(), Block::blockSize);
+    m_tileTypesSuperTexture = al_create_bitmap(Block::blockSize * Block::blockTypeMap.size(), Block::blockSize);
 
-    m_tileMapFinalTexture.create(SCREEN_W, SCREEN_H);
-    m_tileMapFinalSprite.setTexture(m_tileMapFinalTexture);
-
-    assert(m_shader.isAvailable()); // if the system doesn't support it, we're fucked
-
-    //FIXME/TODO: use RenderTexture, so we're not slow as all mighty fuck
-    sf::Image currentTile;
-    bool loaded;
+    m_tileMapFinalTexture = al_create_bitmap(SCREEN_W, SCREEN_H);
 
     unsigned int destX = 0;
     unsigned int destY = 0;
@@ -106,19 +98,18 @@ World::World(ALLEGRO_DISPLAY *display) : m_display(display)
         }
     */
 
+    al_set_target_bitmap(m_tileTypesSuperTexture);
+
     int i = 0;
     for (auto blockStruct : Block::blockTypeMap) {
-        loaded = currentTile.loadFromFile(blockStruct.second.texture);
-
-        //would indicate we couldn't find a tile. obviously, we need that..
-        assert(loaded);
+        ALLEGRO_BITMAP* bitmap = al_load_bitmap(blockStruct.second.texture);
 
         destX = i * Block::blockSize;
-        m_tileTypesSuperImage.copy(currentTile, destX, destY);
+        al_draw_bitmap(bitmap, destX, destY, 0);
         ++i;
     }
 
-    m_tileTypesSuperTexture.loadFromImage(m_tileTypesSuperImage);
+    al_set_target_backbuffer(m_display);
 
     loadMap();
     //FIXME: saveMap();

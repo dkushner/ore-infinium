@@ -44,7 +44,7 @@ ResourceManager* ResourceManager::instance()
     return s_instance;
 }
 
-ALLEGRO_BITMAP* ResourceManager::loadTexture(const std::string& filename)
+ALLEGRO_BITMAP* ResourceManager::loadBitmap(const std::string& filename)
 {
     // Check, whether the image already exists
     for (std::map<std::string, ALLEGRO_BITMAP*>::const_iterator it = m_bitmaps.begin();
@@ -84,19 +84,19 @@ ALLEGRO_BITMAP* ResourceManager::loadTexture(const std::string& filename)
     return m_bitmaps[filename];
 }
 
-void ResourceManager::deleteTexture(const sf::Texture& texture)
+void ResourceManager::deleteBitmap(ALLEGRO_BITMAP *bitmap)
 {
     for (std::map<std::string, ALLEGRO_BITMAP*>::const_iterator it = m_bitmaps.begin();
             it != m_bitmaps.end();
             ++it) {
-        if (&texture == &it->second) {
+        if (bitmap == &it->second) {
             m_bitmaps.erase(it);
             return;
         }
     }
 }
 
-void ResourceManager::deleteTexture(const std::string& filename)
+void ResourceManager::deleteBitmap(const std::string& filename)
 {
     std::map<std::string, ALLEGRO_BITMAP*>::const_iterator it = m_bitmaps.find(filename);
     if (it != m_bitmaps.end())

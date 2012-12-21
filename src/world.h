@@ -131,31 +131,20 @@ private:
 
     //FIXME: just a ptr to the game.cpp one :(  same with window
 //FIXME:    sf::View *m_view = nullptr;
+
     ALLEGRO_DISPLAY *m_display = nullptr;
 
-    sf::Shader m_shader;
+    ALLEGRO_BITMAP *m_tileMapFinalTexture = nullptr;
+
+    ALLEGRO_BITMAP *m_tileMapPixelsTexture = nullptr;
 
     /**
-     * Final texture that is blitted to screen, with the shader and render states
-     * (for the tilemap)
-     */
-    sf::Texture m_tileMapFinalTexture;
-    sf::Sprite m_tileMapFinalSprite;
-
-    sf::Image m_tileMapPixelsImage;
-    sf::Texture m_tileMapPixelsTexture;
-
-    /**
-     * A super image which is loaded ONLY at init, which is a tilesheet/spritesheet
+     * A super bitmap which is loaded ONLY at init, which is a tilesheet/spritesheet
      * of every tile that is possible. Used for passing it to the tile rendering shader
      * (also at init).
-     */
-    sf::Image m_tileTypesSuperImage;
-
-    /**
      * What is actually passed to the frag shader.
      */
-    sf::Texture m_tileTypesSuperTexture;
+    ALLEGRO_BITMAP *m_tileTypesSuperTexture = nullptr;
 
     bool m_mouseLeftHeld = false;
 
