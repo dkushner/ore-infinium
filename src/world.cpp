@@ -35,6 +35,7 @@
 #include <Eigen/Core>
 
 #include <allegro5/allegro.h>
+#include <allegro5/allegro_primitives.h>
 
 static World* s_instance = 0;
 
@@ -166,14 +167,8 @@ void World::render()
     Eigen::Vector2f crosshairPosition(mouse.x() - mouse.x() % Block::blockSize + (SCREEN_W % Block::blockSize) - tileOffset().x() + Block::blockSize,
                                       mouse.y() - mouse.y() % Block::blockSize + (SCREEN_H % Block::blockSize) - tileOffset().y() + Block::blockSize);
 
-    sf::RectangleShape crosshair = sf::RectangleShape();
-    crosshair.setSize(Eigen::Vector2f(radius, radius));
-    crosshair.setPosition(crosshairPosition);
-    crosshair.setFillColor(sf::Color::Transparent);
-    crosshair.setOutlineColor(sf::Color::Red);
-    crosshair.setOutlineThickness(-2.0f);
-    crosshair.setOrigin(halfRadius - halfBlockSize, halfRadius - halfBlockSize);
-    m_window->draw(crosshair);
+    ALLEGRO_COLOR color = al_map_rgb(255, 0, 0);
+    al_draw_rectangle(crossHairPosition.x(), crossHairPosition.y(), radius, radius, color, 1.0f);
     // ==================================================
 //    m_sky->render();
 }
