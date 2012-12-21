@@ -83,5 +83,6 @@ void Player::handleEvent(const ALLEGRO_EVENT& event)
         break;
     }
 
-    Entity::setVelocity(m_inputXDirection, m_inputYDirection);
+    const Eigen::Vector2f velocity(m_inputXDirection, m_inputYDirection);
+    Entity::setVelocity(velocity);
 }
