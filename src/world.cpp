@@ -498,7 +498,7 @@ void World::loadMap()
 
 void World::generateMap()
 {
-    sf::Clock stopwatch;
+    const double startTime = al_get_time();
 
     std::random_device device;
     std::mt19937 rand(device());
@@ -520,8 +520,8 @@ void World::generateMap()
         }
     }
 
-    const int elapsedTime = stopwatch.getElapsedTime().asMilliseconds();
-    std::cout << "Time taken for map generation: " << elapsedTime << " Milliseconds" << std::endl;
+    const double elapsedTime = al_get_time() - startTime;
+    Debug::log(Debug::Area::General) << "Time taken for map generation: " << elapsedTime << " Milliseconds";
 }
 
 void World::saveMap()
