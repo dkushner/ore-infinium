@@ -55,6 +55,7 @@ public:
      * and will modify the position automatically when Entity::update() is called.
      */
     void setVelocity(const Eigen::Vector2f& velocity);
+    void setVelocity(float x, float y);
 
 private:
     Eigen::Vector2f m_velocity;

@@ -35,6 +35,12 @@ void Entity::setVelocity(const Eigen::Vector2f& velocity)
     m_velocity = velocity;
 }
 
+void Entity::setVelocity(float x, float y)
+{
+    const Eigen::Vector2f velocity(x, y);
+    m_velocity = velocity;
+}
+
 void Entity::update(const float elapsedTime)
 {
 //    m_velocity.y += GRAVITY;

@@ -68,6 +68,7 @@ public:
 
     Eigen::Vector2f position() const { return m_position; };
     void setPosition(const Eigen::Vector2f& vector) { m_position = vector; };
+    void setPosition(float x, float y) { m_position = Eigen::Vector2f(x, y); };
 
 private:
     Texture();
