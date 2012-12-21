@@ -151,14 +151,14 @@ void World::render()
     al_use_shader(m_shader, false);
 
     //set our view so that the player will stay relative to the view, in the center.
-    m_window->setView(*m_view);
+//HACK    m_window->setView(*m_view);
 
     //player drawn on top... since we don't have anything like z-ordering or layering (TODO)
     for (Entity * currentEntity : m_entities) {
         currentEntity->draw_bitmap();
     }
 
-    m_window->setView(m_window->getDefaultView());
+//HACK    m_window->setView(m_window->getDefaultView());
 
     // ==================================================
     ALLEGRO_MOUSE_STATE state;
@@ -250,7 +250,7 @@ for (Entity * currentEntity : m_entities) {
         currentEntity->update(elapsedTime);
     }
 
-    m_view->setCenter(m_player->position());
+//HACK    m_view->setCenter(m_player->position());
 
     //calculateAttackPosition();
     generatePixelTileMap();
@@ -370,8 +370,8 @@ void World::performBlockAttack()
 
     const int radius = Player::blockPickingRadius / Block::blockSize;
 
-    int attackX = mouse.x() + (m_view->getCenter().x() - SCREEN_W * 0.5) / Block::blockSize;
-    int attackY = mouse.y() + (m_view->getCenter().y() - SCREEN_H * 0.5) / Block::blockSize;
+    int attackX = 0 ; //HACK= mouse.x() + (m_view->getCenter().x() - SCREEN_W * 0.5) / Block::blockSize;
+    int attackY = 0; //HACK= mouse.y() + (m_view->getCenter().y() - SCREEN_H * 0.5) / Block::blockSize;
 
     const Eigen::Vector2f playerPosition = m_player->position();
 
