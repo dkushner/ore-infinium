@@ -40,8 +40,8 @@ void Entity::update(const float elapsedTime)
 //    m_velocity.y += GRAVITY;
 
     Eigen::Vector2f dest = Eigen::Vector2f(m_velocity.x() * elapsedTime, m_velocity.y() * elapsedTime);
-    dest.x() += getPosition().x();
-    dest.y() += getPosition().y();
+    dest.x() += position().x();
+    dest.y() += position().y();
 
     if (!World::instance()->isTileSolid(dest)) {
         Texture::setPosition(dest);

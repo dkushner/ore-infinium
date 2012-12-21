@@ -66,6 +66,9 @@ public:
 
     Eigen::Vector2f origin() const { return m_origin; };
 
+    Eigen::Vector2f position() const { return m_position; };
+    void setPosition(const Eigen::Vector2f& vector) { m_position = vector; };
+
 private:
     Texture();
 
