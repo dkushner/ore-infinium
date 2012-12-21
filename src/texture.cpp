@@ -16,7 +16,7 @@
  *****************************************************************************/
 
 #include "texture.h"
-#include "imagemanager.h"
+#include "resourcemanager.h"
 #include "game.h"
 
 #include <Eigen/Core>

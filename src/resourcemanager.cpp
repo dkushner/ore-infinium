@@ -67,9 +67,11 @@ ALLEGRO_BITMAP* ResourceManager::loadBitmap(const std::string& filename)
 
     // If the image has still not been found, search all registered directories
     for (std::vector<std::string>::iterator it = m_resourceDirs.begin(); it != m_resourceDirs.end(); ++it) {
-        std::string fullName;
-        fullName << (*it);
-        fullName << filename;
+        std::stringstream fullNameStream;
+        fullNameStream << (*it);
+        fullNameStream << filename;
+
+        std::string fullName = fullNameStream.str();
 
         if (al_load_bitmap(fullName.c_str())) {
             m_bitmaps[filename] = bitmap;
@@ -78,7 +80,7 @@ ALLEGRO_BITMAP* ResourceManager::loadBitmap(const std::string& filename)
         }
     }
 
-    Debug::fatal(bitmap, Debug::Area::Graphics, "Bitmap load requested for: " << filename << ". All attempts exhausted, bitmap cannot be loaded.");
+    Debug::fatal(bitmap, Debug::Area::Graphics, "Bitmap load requested for: " + filename + ". All attempts exhausted, bitmap cannot be loaded.");
 
     m_bitmaps[filename] = bitmap;
     return m_bitmaps[filename];
@@ -89,7 +91,7 @@ void ResourceManager::deleteBitmap(ALLEGRO_BITMAP *bitmap)
     for (std::map<std::string, ALLEGRO_BITMAP*>::const_iterator it = m_bitmaps.begin();
             it != m_bitmaps.end();
             ++it) {
-        if (bitmap == &it->second) {
+        if (bitmap == *(&it->second)) {
             m_bitmaps.erase(it);
             return;
         }

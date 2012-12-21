@@ -15,12 +15,13 @@
  *   along with this program.  If not, see <http://www.gnu.org/licenses/>.    *
  *****************************************************************************/
 
-#ifndef RESORUCE_MANAGER_H
+#ifndef RESOURCE_MANAGER_H
 #define RESOURCE_MANAGER_H
 
 #include <stdlib.h>
 #include <map>
 #include <vector>
+#include <string>
 
 class ALLEGRO_BITMAP;
 
