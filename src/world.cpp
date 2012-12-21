@@ -145,15 +145,17 @@ void World::render()
 {
     //Sky at bottom layer
 
-    m_window->draw(m_tileMapFinalSprite, state);
+    al_use_shader(m_shader, true);
+    //FIXME: does this even work as i want it to? feel like i'm missing something..
+    al_draw_bitmap(m_tileMapFinalTexture, 0.0f, 0.0f, 0);
+    al_use_shader(m_shader, false);
 
     //set our view so that the player will stay relative to the view, in the center.
     m_window->setView(*m_view);
 
     //player drawn on top... since we don't have anything like z-ordering or layering (TODO)
     for (Entity * currentEntity : m_entities) {
-        m_window->draw(*currentEntity);
-        currentEntity->render(m_window);
+        currentEntity->draw_bitmap();
     }
 
     m_window->setView(m_window->getDefaultView());
@@ -173,7 +175,7 @@ void World::render()
                                       mouse.y() - mouse.y() % Block::blockSize + (SCREEN_H % Block::blockSize) - tileOffset().y() + Block::blockSize);
 
     ALLEGRO_COLOR color = al_map_rgb(255, 0, 0);
-    al_draw_rectangle(crossHairPosition.x(), crossHairPosition.y(), radius, radius, color, 1.0f);
+    al_draw_rectangle(crosshairPosition.x(), crosshairPosition.y(), radius, radius, color, 1.0f);
     // ==================================================
 //    m_sky->render();
 }
