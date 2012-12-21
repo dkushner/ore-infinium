@@ -435,10 +435,14 @@ void World::generatePixelTileMap()
     // tile map, with the red channel identifying what type of tile it is
     // x is columns..since they move from left to right, rows start at top and move to bottom
     // (and yes..i confused this fact before, leaving a headache here ;)
-    m_tileMapPixelsImage.create(endColumn - startColumn, endRow - startRow);
+    m_tileMapPixelsTexture = al_create_bitmap(endColumn - startColumn, endRow - startRow);
+
+    al_lock_bitmap(m_tileMapPixelsTexture, ALLEGRO_PIXEL_FORMAT_ANY, ALLEGRO_LOCK_WRITEONLY);
+
+    al_set_target_bitmap(m_tileMapPixelsTexture);
 
     int x = 0;
-    int  y = 0;
+    int y = 0;
 
     // [y*rowlength + x]
     for (int currentRow = startRow; currentRow < endRow; ++currentRow) {
@@ -447,20 +451,23 @@ void World::generatePixelTileMap()
             const int index = currentColumn * WORLD_ROWCOUNT + currentRow;
             assert(index < WORLD_ROWCOUNT * WORLD_COLUMNCOUNT);
 
-            const sf::Color color(m_blocks[index].primitiveType, 0, 0);
+            ALLEGRO_COLOR color = al_map_rgb(m_blocks[index].primitiveType, 0, 0);
 
-            m_tileMapPixelsImage.setPixel(x, y, color);
+            //FIXME: possibly use al_lock_bitmap and use ALLEGRO_LOCKED_REGION
+            al_put_pixel(x, y, color);
             ++x;
         }
         ++y;
         x = 0;
     }
 
+    al_unlock_bitmap(m_tileMapPixelsTexture);
+
+    al_set_target_backbuffer(m_display);
+
     //FIXME: hugely fucking expensive..fix the above loops so we *generate* it upside down
     // or...change the shader to calculate it properly
-    m_tileMapPixelsImage.flipVertically();
-
-    m_tileMapPixelsTexture.loadFromImage(m_tileMapPixelsImage);
+//HACK:  m_tileMapPixelsImage.flipVertically();
 
     m_shader.setParameter("tilemap_pixels", m_tileMapPixelsTexture);
     // to get per-pixel smooth scrolling, we get the remainders and pass it as an offset to the shader
@@ -514,6 +521,8 @@ void World::generateMap()
 
 void World::saveMap()
 {
+    //FIXME: use binary methods only, no more pixel saving/png saving/loading
+    /*
     std::cout << "saving map!" << std::endl;
     sf::Image image;
     image.create(WORLD_ROWCOUNT, WORLD_COLUMNCOUNT, sf::Color::White);
@@ -533,5 +542,5 @@ void World::saveMap()
 
     const int elapsedTime = clock.getElapsedTime().asMilliseconds();
     std::cout << "Time taken for map saving: " << elapsedTime << " Milliseconds" << std::endl;
-
+*/
 }
