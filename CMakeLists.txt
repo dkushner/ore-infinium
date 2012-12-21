@@ -142,10 +142,10 @@ src/game.cpp
 src/debug.cpp
 src/world.cpp
 src/resourcemanager.cpp
-#src/player.cpp
+src/player.cpp
 src/texture.cpp
-#src/entity.cpp
-#src/block.cpp
+src/entity.cpp
+src/block.cpp
 #src/cloudsystem.cpp
 #src/sky.cpp
 )

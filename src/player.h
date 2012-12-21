@@ -41,7 +41,7 @@ public:
     static constexpr float blockPickingRadius = Block::blockSize * 8.0f;
     static constexpr float movementSpeed = 1000.0f;
 
-    void render(ALLEGRO_DISPLAY *display);
+    virtual void draw_bitmap(int flags = 0);
 
 private:
     unsigned char health = 100;

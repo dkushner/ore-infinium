@@ -21,28 +21,27 @@
 #include <assert.h>
 
 #include <allegro5/allegro.h>
+#include <allegro5/allegro_primitives.h>
 
 #include <Eigen/Core>
 
 Player::Player(const char* texture) : Entity(texture)
 {
-    const sf::IntRect rect = Texture::getTextureRect();
-    const Eigen::Vector2f center = Eigen::Vector2f(rect.width * 0.5, rect.height * 0.5);
-    setOrigin(center);
 }
 
-void Player::render(ALLEGRO_DISPLAY *display)
+void Player::draw_bitmap(int flags)
 {
-    Texture::render(window);
+    Texture::draw_bitmap(flags);
+
+    ALLEGRO_COLOR color = al_map_rgb(255, 0, 0);
 
     //debug drawing for the radius that is within the player's reach to "pick"
-    sf::RectangleShape rect = sf::RectangleShape(Eigen::Vector2f(Player::blockPickingRadius * 2.0f, Player::blockPickingRadius * 2.0f));
-    rect.setPosition(getPosition().x - Player::blockPickingRadius, getPosition().y - Player::blockPickingRadius);
-    rect.setFillColor(sf::Color::Transparent);
-    rect.setOutlineColor(sf::Color::Red);
-    rect.setOutlineThickness(1.0f);
-    window->draw(rect);
+    //FIXME: calculations are surely off..
+//    sf::RectangleShape rect = sf::RectangleShape(Eigen::Vector2f(Player::blockPickingRadius * 2.0f, Player::blockPickingRadius * 2.0f));
+ //   rect.setPosition(getPosition().x - Player::blockPickingRadius, getPosition().y - Player::blockPickingRadius);
+    al_draw_rectangle(position().x(), position().y(), position().x() + Player::blockPickingRadius, position().y() + Player::blockPickingRadius, color, 1.0f);
 }
+
 
 void Player::handleEvent(const ALLEGRO_EVENT& event)
 {
