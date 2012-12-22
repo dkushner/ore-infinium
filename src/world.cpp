@@ -37,6 +37,8 @@
 #include <allegro5/allegro.h>
 #include <allegro5/allegro_primitives.h>
 #include <allegro5/allegro_shader.h>
+#include <allegro5/allegro_opengl.h>
+#include <allegro5/allegro_shader_glsl.h>
 
 static World* s_instance = 0;
 
@@ -45,6 +47,22 @@ World* World::instance()
     assert(s_instance);
     return s_instance;
 }
+
+static const char *glsl_vertex_source =
+   "attribute vec4 pos;\n"
+   "attribute vec4 color;\n"
+    "attribute vec2 texcoord;\n"
+    "uniform mat4 proj_matrix;\n"
+    "uniform mat4 view_matrix;\n"
+    "varying vec4 varying_color;\n"
+    "varying vec2 varying_texcoord;\n"
+    "void main()\n"
+    "{\n"
+    "  varying_color = color;\n"
+    "  varying_texcoord = texcoord;\n"
+    "  gl_Position = proj_matrix * view_matrix * pos;\n"
+    "}\n";
+
 
 void World::createInstance(ALLEGRO_DISPLAY *display)
 {
@@ -127,6 +145,9 @@ World::World(ALLEGRO_DISPLAY *display) : m_display(display)
         Debug::fatal(false, Debug::Area::Graphics, al_get_shader_log(m_shader));
     }
 
+    //FIXME: needed??
+    al_set_opengl_program_object(m_display, al_get_opengl_program_object(m_shader));
+
     //FIXME: hardcoding :(
     //m_shader.setParameter("TILE_SIZE", Block::blockSize, Block::blockSize);
     al_set_shader_sampler(m_shader, "tile_types_super_texture", m_tileMapFinalTexture, 0);
@@ -147,15 +168,17 @@ void World::render()
 
     al_use_shader(m_shader, true);
     //FIXME: does this even work as i want it to? feel like i'm missing something..
+//    al_set_target_bitmap(m_tileMapFinalTexture);
     al_draw_bitmap(m_tileMapFinalTexture, 0.0f, 0.0f, 0);
     al_use_shader(m_shader, false);
+//    al_set_target_backbuffer(m_display);
 
     //set our view so that the player will stay relative to the view, in the center.
 //HACK    m_window->setView(*m_view);
 
     //player drawn on top... since we don't have anything like z-ordering or layering (TODO)
     for (Entity * currentEntity : m_entities) {
-        currentEntity->draw_bitmap();
+//        currentEntity->draw_bitmap();
     }
 
 //HACK    m_window->setView(m_window->getDefaultView());
@@ -175,7 +198,7 @@ void World::render()
                                                             mouse.y() - mouse.y() % Block::blockSize + (SCREEN_H % Block::blockSize) - tileOffset().y() + Block::blockSize);
 
     ALLEGRO_COLOR color = al_map_rgb(255, 0, 0);
-    al_draw_rectangle(crosshairPosition.x(), crosshairPosition.y(), crosshairPosition.x() + radius, crosshairPosition.y() + radius, color, 1.0f);
+ //   al_draw_rectangle(crosshairPosition.x(), crosshairPosition.y(), crosshairPosition.x() + radius, crosshairPosition.y() + radius, color, 1.0f);
     // ==================================================
 //    m_sky->render();
 }
@@ -472,11 +495,11 @@ void World::generatePixelTileMap()
 //HACK:  m_tileMapPixelsImage.flipVertically();
 
     //TODO: al_get_shader_log here?
-    Debug::fatal(al_set_shader_sampler(m_shader, "tilemap_pixels", m_tileMapPixelsTexture, 0), Debug::Area::Graphics, "shader tilemap_pixels set failure");
+ //   Debug::fatal(al_set_shader_sampler(m_shader, "tilemap_pixels", m_tileMapPixelsTexture, 0), Debug::Area::Graphics, "shader tilemap_pixels set failure");
 
     // to get per-pixel smooth scrolling, we get the remainders and pass it as an offset to the shader
     float floatArray[2] = { tileOffset().x(), tileOffset().y() };
-    Debug::fatal(al_set_shader_float_vector(m_shader, "offset", 2, floatArray, 2), Debug::Area::Graphics, "shader offset set failure");
+//    Debug::fatal(al_set_shader_float_vector(m_shader, "offset", 2, floatArray, 2), Debug::Area::Graphics, "shader offset set failure");
     Debug::log() << " shader log: " << al_get_shader_log(m_shader);
 }
 

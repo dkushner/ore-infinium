@@ -76,6 +76,9 @@ void Game::init()
     Debug::fatal(al_install_keyboard(), Debug::Area::System, "Failure to install keyboard");
     Debug::fatal(al_install_mouse(), Debug::Area::System, "Failure to install mouse");
 
+    al_set_new_display_flags(ALLEGRO_WINDOWED | ALLEGRO_OPENGL);
+    al_set_new_display_option( ALLEGRO_VSYNC, 2, ALLEGRO_REQUIRE );
+
     m_display = al_create_display(SCREEN_W, SCREEN_H);
     Debug::fatal(m_display, Debug::Area::Graphics, "display creation failed");
 
@@ -106,7 +109,6 @@ void Game::init()
     Debug::log(Debug::Area::Graphics) << "Maximum OpenGL texture size allowed: " << textureSize;
     std::cout << "\n\n\n\n";
 
-    al_set_new_display_flags(ALLEGRO_WINDOWED | ALLEGRO_OPENGL);
 
     al_set_app_name("ore-chasm");
     al_set_window_title(m_display, "Ore Chasm");
