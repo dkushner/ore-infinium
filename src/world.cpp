@@ -121,7 +121,7 @@ World::World(ALLEGRO_DISPLAY *display) : m_display(display)
     bool shaderLoaded = al_attach_shader_source_file(m_shader, ALLEGRO_PIXEL_SHADER, "tilerenderer.frag");
     bool shaderLinked = al_link_shader(m_shader);
 
-    if (!shaderLoaded || !shaderLoaded) {
+    if (!shaderLoaded || !shaderLinked) {
         Debug::log(Debug::Area::Graphics) << "Failure to load tilemap fragment shader, returning error log...";
 
         Debug::fatal(false, Debug::Area::Graphics, al_get_shader_log(m_shader));
@@ -175,7 +175,7 @@ void World::render()
                                                             mouse.y() - mouse.y() % Block::blockSize + (SCREEN_H % Block::blockSize) - tileOffset().y() + Block::blockSize);
 
     ALLEGRO_COLOR color = al_map_rgb(255, 0, 0);
-    al_draw_rectangle(crosshairPosition.x(), crosshairPosition.y(), radius, radius, color, 1.0f);
+    al_draw_rectangle(crosshairPosition.x(), crosshairPosition.y(), crosshairPosition.x() + radius, crosshairPosition.y() + radius, color, 1.0f);
     // ==================================================
 //    m_sky->render();
 }
@@ -210,7 +210,7 @@ void World::handleEvent(const ALLEGRO_EVENT& event)
 
         if (event.keyboard.keycode == ALLEGRO_KEY_S || event.keyboard.keycode == ALLEGRO_KEY_DOWN) {
         }
- 
+
         if (event.keyboard.keycode == ALLEGRO_KEY_W || event.keyboard.keycode == ALLEGRO_KEY_UP) {
         }
 
@@ -477,6 +477,7 @@ void World::generatePixelTileMap()
     // to get per-pixel smooth scrolling, we get the remainders and pass it as an offset to the shader
     float floatArray[2] = { tileOffset().x(), tileOffset().y() };
     Debug::fatal(al_set_shader_float_vector(m_shader, "offset", 2, floatArray, 2), Debug::Area::Graphics, "shader offset set failure");
+    Debug::log() << " shader log: " << al_get_shader_log(m_shader);
 }
 
 Eigen::Vector2f World::tileOffset() const
