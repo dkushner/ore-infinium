@@ -130,11 +130,11 @@ World::World(ALLEGRO_DISPLAY *display) : m_display(display)
     }
 
     //FIXME: needed??
-    al_set_opengl_program_object(m_display, al_get_opengl_program_object(m_shader));
+//    al_set_opengl_program_object(m_display, al_get_opengl_program_object(m_shader));
 
     //FIXME: hardcoding :(
     //m_shader.setParameter("TILE_SIZE", Block::blockSize, Block::blockSize);
-    al_set_shader_sampler(m_shader, "tile_types_super_texture", m_tileMapFinalTexture, 0);
+//    al_set_shader_sampler(m_shader, "tile_types_super_texture", m_tileTypesSuperTexture, 0);
 
     //FIXME: height
 //    m_sky = new Sky(m_window, m_view, 0.0f);
@@ -153,7 +153,7 @@ void World::render()
     al_use_shader(m_shader, true);
 
     Debug::fatal(al_set_shader_sampler(m_shader, "tilemap_pixels", m_tileMapPixelsTexture, 0), Debug::Area::Graphics, "shader tilemap_pixels set failure");
-    al_set_shader_sampler(m_shader, "tile_types_super_texture", m_tileMapFinalTexture, 0);
+    Debug::fatal(al_set_shader_sampler(m_shader, "tile_types_super_texture", m_tileTypesSuperTexture, 0), Debug::Area::Graphics, "shader tilemap_pixels set failure");
     //FIXME: does this even work as i want it to? feel like i'm missing something..
 //    al_set_target_bitmap(m_tileMapFinalTexture);
     al_draw_bitmap(m_tileMapFinalTexture, 0.0f, 0.0f, 0);
@@ -482,7 +482,7 @@ void World::generatePixelTileMap()
 //HACK:  m_tileMapPixelsImage.flipVertically();
 
     //TODO: al_get_shader_log here?
-    Debug::fatal(al_set_shader_sampler(m_shader, "tilemap_pixels", m_tileMapPixelsTexture, 0), Debug::Area::Graphics, "shader tilemap_pixels set failure");
+//    Debug::fatal(al_set_shader_sampler(m_shader, "tilemap_pixels", m_tileMapPixelsTexture, 0), Debug::Area::Graphics, "shader tilemap_pixels set failure");
 
     // to get per-pixel smooth scrolling, we get the remainders and pass it as an offset to the shader
     float floatArray[2] = { tileOffset().x(), tileOffset().y() };
