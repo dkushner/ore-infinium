@@ -48,22 +48,6 @@ World* World::instance()
     return s_instance;
 }
 
-static const char *glsl_vertex_source =
-   "attribute vec4 pos;\n"
-   "attribute vec4 color;\n"
-    "attribute vec2 texcoord;\n"
-    "uniform mat4 proj_matrix;\n"
-    "uniform mat4 view_matrix;\n"
-    "varying vec4 varying_color;\n"
-    "varying vec2 varying_texcoord;\n"
-    "void main()\n"
-    "{\n"
-    "  varying_color = color;\n"
-    "  varying_texcoord = texcoord;\n"
-    "  gl_Position = proj_matrix * view_matrix * pos;\n"
-    "}\n";
-
-
 void World::createInstance(ALLEGRO_DISPLAY *display)
 {
     if (!s_instance) {
