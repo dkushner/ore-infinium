@@ -1,6 +1,6 @@
 #version 130
 //unsupported though, isn't it? FIXME?
-#extension GL_EXT_gpu_shader4 : enable
+//#extension GL_EXT_gpu_shader4 : enable
 
 // for a 1600x900 screen, this results in an image of 50x100 with each pixel representing a tile
 uniform sampler2D tilemap_pixels;
@@ -16,7 +16,7 @@ ivec2 TILE_SIZE = ivec2(16, 16);
 
 void main()
 {
-/*
+
     ivec2 tilemap_size = textureSize(tile_types_super_texture, 0);
 
     ivec2 screen_coordinates = ivec2(gl_FragCoord.x , gl_FragCoord.y  + TILE_SIZE.y);
@@ -31,9 +31,10 @@ void main()
 
     vec4 tileColor = texelFetch(tile_types_super_texture, tileCoordinate, 0);
 
-    gl_FragColor = tileColor;*/
-gl_FragColor.r = 1.0;
+    gl_FragColor = tileColor;
+/*gl_FragColor.r = 1.0;
 gl_FragColor.g = 0.0;
 gl_FragColor.b = 0.0;
 gl_FragColor.a = 1.0;
+*/
 }
