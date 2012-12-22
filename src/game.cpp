@@ -27,6 +27,10 @@
 #include <stdlib.h>
 #include <string>
 
+
+#include <GL/glew.h>
+#include <GL/gl.h>
+
 #include <allegro5/allegro.h>
 #include <allegro5/allegro_acodec.h>
 #include <allegro5/allegro_audio.h>
@@ -40,6 +44,8 @@
 #include <allegro5/allegro_ttf.h>
 #include <allegro5/keyboard.h>
 #include <allegro5/mouse.h>
+
+#include <allegro5/allegro_shader_glsl.h>
 
 Game::Game()
 {
@@ -138,6 +144,50 @@ void Game::init()
 
 void Game::tick()
 {
+    /////////////////// BEGIN ISSUE FIXME!!
+    ALLEGRO_BITMAP *m_tileMapFinalTexture = al_create_bitmap(1600, 900);
+    ALLEGRO_SHADER *m_shader;
+    m_shader = al_create_shader(ALLEGRO_SHADER_GLSL);
+    
+    bool shaderLoaded = al_attach_shader_source_file(m_shader, ALLEGRO_PIXEL_SHADER, "tilerenderer.frag");
+    bool shaderLinked = al_link_shader(m_shader);
+    
+    if (!shaderLoaded || !shaderLinked) {
+        Debug::log(Debug::Area::Graphics) << "Failure to load tilemap fragment shader, returning error log...";
+        
+        Debug::fatal(false, Debug::Area::Graphics, al_get_shader_log(m_shader));
+    }
+    
+    GLuint program = al_get_opengl_program_object(m_shader);
+    //returns 2
+    Debug::log() << "PROGRAM: " << program;
+
+    // CRASHES
+    Debug::log() << "ISPROG: " << glIsProgram(program);
+
+    //FIXME: needed??
+    //    al_set_opengl_program_object(m_display, al_get_opengl_program_object(m_shader));
+    int loc = glGetUniformLocation(program, "tile_types_super_texture");
+    glUniform1i(loc, 0);
+    glActiveTexture(GL_TEXTURE0);
+    glBindTexture(GL_TEXTURE_2D, al_get_opengl_texture(m_tileMapFinalTexture));
+
+
+
+    ////////////////////////////////////////////////// END ISSUE FIXME
+
+
+
+
+
+
+
+
+
+
+
+
+
     std::stringstream ss;
     std::string str;
 
@@ -156,7 +206,7 @@ void Game::tick()
 
         ALLEGRO_EVENT event;
         while (al_get_next_event(m_events, &event)) {
-            m_world->handleEvent(event);
+//            m_world->handleEvent(event);
             switch (event.type) {
                 // window closed
                 case ALLEGRO_EVENT_DISPLAY_CLOSE:
@@ -200,8 +250,8 @@ void Game::tick()
             str = ss.str();
             al_draw_text(m_font, al_map_rgb(255, 255, 0), 0, 0, ALLEGRO_ALIGN_LEFT, str.c_str());
 
-            m_world->update(static_cast<float>(delta));
-            m_world->render();
+//            m_world->update(static_cast<float>(delta));
+//            m_world->render();
             //rendering always before this
             al_flip_display();
     }
