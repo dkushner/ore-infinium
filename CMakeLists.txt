@@ -120,7 +120,7 @@ list(APPEND ALLEGRO_INCLUDE_DIRS
 
 find_package( PugiXML REQUIRED)
 find_package( OpenGL REQUIRED )
-
+find_package(GLEW REQUIRED)
 if (NOT PugiXML_FOUND)
     message(FATAL_ERROR "Could not find pugixml library.")
 endif()
@@ -154,8 +154,8 @@ include(FindPkgConfig)
 
 add_executable(${EXECUTABLE_NAME} ${SRC})
 
-include_directories(${CMAKE_SOURCE_DIR} ${ALLEGRO_INCLUDE_DIRS} ${EIGEN3_INCLUDE_DIR})
-target_link_libraries(${EXECUTABLE_NAME} ${ALLEGRO_LIBRARIES} ${OPENGL_LIBRARIES} ${PugiXML_LIBRARY})
+include_directories(${CMAKE_SOURCE_DIR} ${ALLEGRO_INCLUDE_DIRS} ${EIGEN3_INCLUDE_DIR} ${GLEW_INCLUDE_DIRS})
+target_link_libraries(${EXECUTABLE_NAME} ${ALLEGRO_LIBRARIES} ${OPENGL_LIBRARIES} ${PugiXML_LIBRARY} ${GLEW_LIBRARIES})
 
 # CPack packaging
 include(InstallRequiredSystemLibraries)

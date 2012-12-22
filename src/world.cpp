@@ -30,6 +30,7 @@
 #include <assert.h>
 #include <math.h>
 
+#include <GL/glew.h>
 #include <GL/gl.h>
 
 #include <Eigen/Core>
@@ -56,6 +57,8 @@ void World::createInstance(ALLEGRO_DISPLAY *display)
         assert(0);
     }
 }
+
+GLhandleARB shader;
 
 World::World(ALLEGRO_DISPLAY *display) : m_display(display)
 {
@@ -113,6 +116,7 @@ World::World(ALLEGRO_DISPLAY *display) : m_display(display)
         ++i;
     }
 
+    al_clear_to_color(al_map_rgb(255, 0, 0));
     al_set_target_backbuffer(m_display);
 
     loadMap();
@@ -129,8 +133,16 @@ World::World(ALLEGRO_DISPLAY *display) : m_display(display)
         Debug::fatal(false, Debug::Area::Graphics, al_get_shader_log(m_shader));
     }
 
+    GLuint program = al_get_opengl_program_object(m_shader);
+    Debug::log() << "PROGRAM: " << program;
+    Debug::log() << "ISPROG: " << glIsProgram(program);
     //FIXME: needed??
 //    al_set_opengl_program_object(m_display, al_get_opengl_program_object(m_shader));
+    int loc = glGetUniformLocation(program, "tile_types_super_texture");
+    glUniform1i(loc, 0);
+    glActiveTexture(GL_TEXTURE0);
+    glBindTexture(GL_TEXTURE_2D, al_get_opengl_texture(m_tileMapFinalTexture));
+
 
     //FIXME: hardcoding :(
     //m_shader.setParameter("TILE_SIZE", Block::blockSize, Block::blockSize);
@@ -152,8 +164,15 @@ void World::render()
 
     al_use_shader(m_shader, true);
 
-    Debug::fatal(al_set_shader_sampler(m_shader, "tilemap_pixels", m_tileMapPixelsTexture, 0), Debug::Area::Graphics, "shader tilemap_pixels set failure");
-    Debug::fatal(al_set_shader_sampler(m_shader, "tile_types_super_texture", m_tileTypesSuperTexture, 0), Debug::Area::Graphics, "shader tilemap_pixels set failure");
+//    glActiveTexture(GL_TEXTURE0);
+ //   glBindTexture(GL_TEXTURE_2D, al_get_opengl_texture(m_tileTypesSuperTexture));
+
+//    Debug::fatal(al_set_shader_sampler(m_shader, "tilemap_pixels", m_tileMapPixelsTexture, 0), Debug::Area::Graphics, "shader tilemap_pixels set failure");
+//    Debug::fatal(al_set_shader_sampler(m_shader, "tile_types_super_texture", m_tileTypesSuperTexture, 0), Debug::Area::Graphics, "shader tilemap_pixels set failure");
+//    al_set_shader_sampler(m_shader, "tile_types_super_texture", m_tileTypesSuperTexture, 0);
+
+
+
     //FIXME: does this even work as i want it to? feel like i'm missing something..
 //    al_set_target_bitmap(m_tileMapFinalTexture);
     al_draw_bitmap(m_tileMapFinalTexture, 0.0f, 0.0f, 0);
