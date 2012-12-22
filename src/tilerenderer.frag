@@ -9,7 +9,7 @@ uniform sampler2D tilemap_pixels;
 uniform sampler2D tile_types_super_texture;
 
 // offset (remainder of view coordinates versus tile size). to achieve per-pixel smooth scrolling
-uniform vec2 offset;
+//uniform vec2 offset;
 
 //FIXME: stop hardcoding ..
 ivec2 TILE_SIZE = ivec2(16, 16);
