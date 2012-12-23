@@ -48,7 +48,7 @@ find_package(Allegro5Image REQUIRED)
 find_package(Allegro5Audio REQUIRED)
 find_package(Allegro5ACodec REQUIRED)
 find_package(Allegro5Dialog REQUIRED)
-find_package(Allegro5Shader REQUIRED)
+#find_package(Allegro5Shader REQUIRED)
 
 if (NOT ALLEGRO5_FOUND)
     message(FATAL_ERROR "Can't find Allegro 5 library")
@@ -86,10 +86,10 @@ if (NOT ALLEGRO5_DIALOG_FOUND)
     message(FATAL_ERROR "Can't find Allegro 5 Native Dialog addon")
 endif(NOT ALLEGRO5_DIALOG_FOUND)
 
-if (NOT ALLEGRO5_SHADER_FOUND)
-    message(FATAL_ERROR "Can't find Allegro 5 Shader addon")
-endif(NOT ALLEGRO5_SHADER_FOUND)
-
+#if (NOT ALLEGRO5_SHADER_FOUND)
+#    message(FATAL_ERROR "Can't find Allegro 5 Shader addon")
+#endif(NOT ALLEGRO5_SHADER_FOUND)
+#
 list(APPEND ALLEGRO_LIBRARIES
     ${ALLEGRO5_LIBRARIES}
     ${ALLEGRO5_MAIN_LIBRARIES}
@@ -100,7 +100,7 @@ list(APPEND ALLEGRO_LIBRARIES
     ${ALLEGRO5_DIALOG_LIBRARIES}
     ${ALLEGRO5_AUDIO_LIBRARIES}
     ${ALLEGRO5_ACODEC_LIBRARIES}
-    ${ALLEGRO5_SHADER_LIBRARIES}
+#    ${ALLEGRO5_SHADER_LIBRARIES}
 )
 
 list(APPEND ALLEGRO_INCLUDE_DIRS
@@ -113,7 +113,7 @@ list(APPEND ALLEGRO_INCLUDE_DIRS
     ${ALLEGRO5_DIALOG_INCLUDE_DIRS}
     ${ALLEGRO5_AUDIO_INCLUDE_DIRS}
     ${ALLEGRO5_ACODEC_INCLUDE_DIRS}
-    ${ALLEGRO5_SHADER_INCLUDE_DIRS}
+#    ${ALLEGRO5_SHADER_INCLUDE_DIRS}
 )
 
 ########### ALLEGRO 5 ############

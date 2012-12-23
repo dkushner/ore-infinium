@@ -147,6 +147,9 @@ private:
 
     ALLEGRO_SHADER *m_shader = nullptr;
 
+    GLhandleARB shader;
+    GLhandleARB program;
+
     /**
      * A super bitmap which is loaded ONLY at init, which is a tilesheet/spritesheet
      * of every tile that is possible. Used for passing it to the tile rendering shader

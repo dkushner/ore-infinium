@@ -56,13 +56,11 @@ void World::createInstance(ALLEGRO_DISPLAY *display)
     }
 }
 
-GLhandleARB shader;
-
 World::World(ALLEGRO_DISPLAY *display) : m_display(display)
 {
     m_player = new Player("../textures/player.png");
     m_entities.insert(m_entities.end(), m_player);
-
+ 
     /*
     const int gridSize = ceil(WORLD_TILE_TYPE_COUNT / 2.0);
     std::cout << " GRIDSIZE : " << gridSize << std::endl;
@@ -118,24 +116,31 @@ World::World(ALLEGRO_DISPLAY *display) : m_display(display)
     al_set_target_backbuffer(m_display);
 
     loadMap();
+    
     //FIXME: saveMap();
-
-    ALLEGRO_BITMAP *m_tileMapFinalTexture = al_create_bitmap(1600, 900);
-
-    GLuint program;
-    GLuint shader;
-
-    program = glCreateProgram();
-    shader = glCreateShader(GL_FRAGMENT_SHADER);
+/*
+    shader = glCreateShaderObjectARB(GL_FRAGMENT_SHADER_ARB);
 
     std::string shaderFile = loadShaderSource("tilerenderer.frag");
     const char* shaderSource = shaderFile.c_str();
 
-//    glShaderSource(shader, 1, &shaderSource, NULL);
-    GLint sourceLength = shaderFile.length();
-    glShaderSource(shader, 1, &shaderSource, &sourceLength);
+   GLint sourceLength = shaderFile.length();
 
-    glCompileShader(shader);
+    glShaderSourceARB(shader, 1, &shaderSource, &sourceLength);
+    glCompileShaderARB(shader);
+
+    program = glCreateProgramObjectARB();
+
+    glAttachObjectARB(program, shader);
+    glLinkProgramARB(program);
+
+    GLuint loc = glGetUniformLocationARB(program, "backBuffer");
+    glUniform1iARB(loc, al_get_opengl_texture(m_tileMapFinalTexture));
+
+    program = glCreateProgramObjectARB();
+
+
+//    glShaderSource(shader, 1, &shaderSource, NULL);
 
     GLint didCompile;
     glGetShaderiv(shader, GL_COMPILE_STATUS, &didCompile);
@@ -145,10 +150,6 @@ World::World(ALLEGRO_DISPLAY *display) : m_display(display)
         printShaderLog(shader);
     }
 
-    glAttachShader(program, shader);
-
-    glLinkProgram(program);
-
     GLint didLink;
     glGetProgramiv(program, GL_LINK_STATUS, &didLink);
 
@@ -156,17 +157,9 @@ World::World(ALLEGRO_DISPLAY *display) : m_display(display)
     {
         printShaderLog(shader);
     }
-
-    glUseProgram(program);
-/*
-    glLinkProgram(program);
-    printShaderLog(shader);
-
-    GLuint texture = al_get_opengl_texture(m_tileMapFinalTexture);
-    assert(texture);
-    glActiveTexture(GL_TEXTURE0);
-    glBindTexture(GL_TEXTURE_2D, texture);
 */
+
+//m_shader = al_create_shader(ALLEGRO_SHADER_GLSL);
 
 
     //FIXME: hardcoding :(
@@ -182,7 +175,6 @@ World::~World()
     delete m_player;
 //    delete m_sky;
 }
-
 
 std::string World::loadShaderSource(const std::string& filename) {
     std::ifstream file;
@@ -205,7 +197,7 @@ void World::printShaderLog(GLuint shader)
     GLchar* strInfoLog = new GLchar[infoLogLength + 1];
     glGetShaderInfoLog(shader, infoLogLength, NULL, strInfoLog);
     
-    fprintf(stderr, "Compilation error in shader %s\n", strInfoLog);
+    fprintf(stderr, "Compilation error in shader? %s\n", strInfoLog);
     delete[] strInfoLog;
 }
 
@@ -214,7 +206,7 @@ void World::render()
 {
     //Sky at bottom layer
 
-    al_use_shader(m_shader, true);
+ //   al_use_shader(m_shader, true);
 
 //    glActiveTexture(GL_TEXTURE0);
  //   glBindTexture(GL_TEXTURE_2D, al_get_opengl_texture(m_tileTypesSuperTexture));
@@ -224,12 +216,31 @@ void World::render()
 //    al_set_shader_sampler(m_shader, "tile_types_super_texture", m_tileTypesSuperTexture, 0);
 
 
+    glUseProgramObjectARB(program);
+ /*   GLuint tileTypesTexture = al_get_opengl_texture(m_tileTypesSuperTexture);
+    GLuint pixelMapTexture = al_get_opengl_texture(m_tileMapPixelsTexture);
 
-    //FIXME: does this even work as i want it to? feel like i'm missing something..
-//    al_set_target_bitmap(m_tileMapFinalTexture);
+    glActiveTexture(GL_TEXTURE0);
+    glBindTexture(GL_TEXTURE_2D, tileTypesTexture);
+
+    GLint pixelMapLoc = glGetUniformLocationARB(program, "tilemap_pixels");
+    GLint tileTypesSuperTextureLoc = glGetUniformLocationARB(program, "tile_types_super_texture");
+
+    glUniform1iARB(tileTypesSuperTextureLoc, 0);
+
+
+    glActiveTexture(GL_TEXTURE0);
+    glBindTexture(GL_TEXTURE_2D, tileTypesTexture);
+
+    glUniform1iARB(pixelMapLoc, 0);
+*/
+
+    al_set_target_bitmap(al_get_backbuffer(m_display));
     al_draw_bitmap(m_tileMapFinalTexture, 0.0f, 0.0f, 0);
-    al_use_shader(m_shader, false);
-//    al_set_target_backbuffer(m_display);
+    glUseProgramObjectARB(0);
+    al_flip_display();
+
+    printShaderLog(shader);
 
     //set our view so that the player will stay relative to the view, in the center.
 //HACK    m_window->setView(*m_view);
@@ -558,7 +569,6 @@ void World::generatePixelTileMap()
     // to get per-pixel smooth scrolling, we get the remainders and pass it as an offset to the shader
     float floatArray[2] = { tileOffset().x(), tileOffset().y() };
 //    Debug::fatal(al_set_shader_float_vector(m_shader, "offset", 2, floatArray, 2), Debug::Area::Graphics, "shader offset set failure");
-    Debug::log() << " shader log: " << al_get_shader_log(m_shader);
 }
 
 Eigen::Vector2f World::tileOffset() const

@@ -41,7 +41,7 @@
 #include <allegro5/allegro_opengl.h>
 #include <allegro5/allegro_physfs.h>
 #include <allegro5/allegro_primitives.h>
-#include <allegro5/allegro_shader.h>
+//#include <allegro5/allegro_shader.h>
 #include <allegro5/allegro_ttf.h>
 #include <allegro5/keyboard.h>
 #include <allegro5/mouse.h>
@@ -76,48 +76,56 @@ void Game::init()
 
     al_init_font_addon();
     Debug::fatal(al_init_acodec_addon(), Debug::Area::System, "Failure to init acodec addon");
-    Debug::fatal(al_init_native_dialog_addon(), Debug::Area::System, "Failure to init native dialog addon");
+////FIXME:    Debug::fatal(al_init_native_dialog_addon(), Debug::Area::System, "Failure to init native dialog addon");
     Debug::fatal(al_init_primitives_addon(), Debug::Area::System, "Failure to init primitives addon");
     Debug::fatal(al_init_ttf_addon(), Debug::Area::System, "Failure to init ttf addon");
     Debug::fatal(al_init_image_addon(), Debug::Area::System, "Failure to init image addon");
     Debug::fatal(al_install_keyboard(), Debug::Area::System, "Failure to install keyboard");
     Debug::fatal(al_install_mouse(), Debug::Area::System, "Failure to install mouse");
-
-    al_set_new_display_flags(ALLEGRO_WINDOWED | ALLEGRO_OPENGL);
+//
+    al_set_new_display_flags( ALLEGRO_OPENGL | ALLEGRO_OPENGL_FORWARD_COMPATIBLE);
 //    al_set_new_display_option( ALLEGRO_VSYNC, 2, ALLEGRO_REQUIRE );
 
     m_display = al_create_display(SCREEN_W, SCREEN_H);
     Debug::fatal(m_display, Debug::Area::Graphics, "display creation failed");
 
+
+    //FIXME: WHY THE FUCK DO I NEED THIS? ALLEGRO SHOULD GIVE ME A FUCKING OPENGL CONTEXT BECAUSE I MOTHERFUCKING ASKED FOR IT
+    //FUCKING HELL..
     glewInit();
 
-    version = al_get_opengl_version();
-    major = version >> 24;
-    minor = (version >> 16) & 255;
-    revision = (version >> 8) & 255;
-
-    std::cout << "\n\n\n\n";
-    Debug::log(Debug::Area::Graphics) << "Hardware we're running on...";
-    Debug::log(Debug::Area::Graphics) << major << "." << minor << "." << revision;
-
-    int glVariant = al_get_opengl_variant();
-
-    if (glVariant & ALLEGRO_DESKTOP_OPENGL) {
-        Debug::log(Debug::Area::Graphics) << "Using desktop OpenGL variant.";
-    } else if (glVariant & ALLEGRO_OPENGL_ES) {
-        Debug::log(Debug::Area::Graphics) << "Using OpenGL ES OpenGL variant.";
+    if (!al_have_opengl_extension("GL_EXT_framebuffer_object")
+        && !al_have_opengl_extension("GL_ARB_fragment_shader")) {
+        Debug::fatal(true, Debug::Area::Graphics, ("Fragment shaders not supported.\n"));
     }
 
-    Debug::log(Debug::Area::Graphics) << "Platform: Driver Vendor: " << glGetString(GL_VENDOR);
-    Debug::log(Debug::Area::Graphics) << "Platform: Renderer: " << glGetString(GL_RENDERER);
-    Debug::log(Debug::Area::Graphics) << "OpenGL Version: " << glGetString(GL_VERSION);
-    Debug::log(Debug::Area::Graphics) << "GLSL Version: " << glGetString(GL_SHADING_LANGUAGE_VERSION);
-
-    GLint textureSize;
-    glGetIntegerv(GL_MAX_TEXTURE_SIZE, &textureSize);
-    Debug::log(Debug::Area::Graphics) << "Maximum OpenGL texture size allowed: " << textureSize;
+//    glCreateShaderObjectARB(GL_FRAGMENT_SHADER_ARB);
+//    version = al_get_opengl_version();
+//    major = version >> 24;
+//    minor = (version >> 16) & 255;
+//    revision = (version >> 8) & 255;
+//
+//    std::cout << "\n\n\n\n";
+//    Debug::log(Debug::Area::Graphics) << "Hardware we're running on...";
+//    Debug::log(Debug::Area::Graphics) << major << "." << minor << "." << revision;
+//
+//    int glVariant = al_get_opengl_variant();
+//
+//    if (glVariant & ALLEGRO_DESKTOP_OPENGL) {
+//        Debug::log(Debug::Area::Graphics) << "Using desktop OpenGL variant.";
+//    } else if (glVariant & ALLEGRO_OPENGL_ES) {
+//        Debug::log(Debug::Area::Graphics) << "Using OpenGL ES OpenGL variant.";
+//    }
+//
+//    Debug::log(Debug::Area::Graphics) << "Platform: Driver Vendor: " << glGetString(GL_VENDOR);
+//    Debug::log(Debug::Area::Graphics) << "Platform: Renderer: " << glGetString(GL_RENDERER);
+//    Debug::log(Debug::Area::Graphics) << "OpenGL Version: " << glGetString(GL_VERSION);
+//    Debug::log(Debug::Area::Graphics) << "GLSL Version: " << glGetString(GL_SHADING_LANGUAGE_VERSION);
+//
+  //  GLint textureSize;
+//    glGetIntegerv(GL_MAX_TEXTURE_SIZE, &textureSize);
+ //   Debug::log(Debug::Area::Graphics) << "Maximum OpenGL texture size allowed: " << textureSize;
     std::cout << "\n\n\n\n";
-
 
     al_set_app_name("ore-chasm");
     al_set_window_title(m_display, "Ore Chasm");
@@ -145,6 +153,34 @@ void Game::init()
     shutdown();
 }
 
+
+ALLEGRO_BITMAP *mysha;
+ALLEGRO_BITMAP *buffer;
+
+const char *tinter_shader_src[] = {
+    "uniform sampler2D backBuffer;",
+    "uniform float r;",
+    "uniform float g;",
+    "uniform float b;",
+    "uniform float ratio;",
+    "void main() {",
+    " vec4 color;",
+    " float avg, dr, dg, db;",
+    " color = texture2D(backBuffer, gl_TexCoord[0].st);",
+    " avg = (color.r + color.g + color.b) / 3.0;",
+    " dr = avg * r;",
+    " dg = avg * g;",
+    " db = avg * b;",
+    " color.r = color.r - (ratio * (color.r - dr));",
+    " color.g = color.g - (ratio * (color.g - dg));",
+    " color.b = color.b - (ratio * (color.b - db));",
+    " gl_FragColor = color;",
+    "}"
+    };
+
+
+
+
 void Game::tick()
 {
 
@@ -163,14 +199,38 @@ void Game::tick()
     ////////////////////////////////////////////////// END ISSUE FIXME
 
 
+    GLhandleARB tinter;
+    GLhandleARB tinter_shader;
+    
 
+    
+    const int TINTER_LEN = 18;
+    double start;
+    GLint loc;
+    
 
+    buffer = al_create_bitmap(320, 200);
+    mysha = al_load_bitmap("mysha.png");
+    
+    if (!al_have_opengl_extension("GL_EXT_framebuffer_object")
+        && !al_have_opengl_extension("GL_ARB_fragment_shader")) {
+        assert(0);
+        }
+        
+        tinter_shader = glCreateShaderObjectARB(GL_FRAGMENT_SHADER_ARB);
+    
+    glShaderSourceARB(tinter_shader, TINTER_LEN, tinter_shader_src, NULL);
+    glCompileShaderARB(tinter_shader);
+    tinter = glCreateProgramObjectARB();
+    glAttachObjectARB(tinter, tinter_shader);
+    glLinkProgramARB(tinter);
+    loc = glGetUniformLocationARB(tinter, "backBuffer");
+    glUniform1iARB(loc, al_get_opengl_texture(buffer));
+    
+    
 
-
-
-
-
-
+    float r = 0.5, g = 0.5, b = 1, ratio = 0;
+    
 
 
 
@@ -192,7 +252,7 @@ void Game::tick()
 
         ALLEGRO_EVENT event;
         while (al_get_next_event(m_events, &event)) {
-//            m_world->handleEvent(event);
+            m_world->handleEvent(event);
             switch (event.type) {
                 // window closed
                 case ALLEGRO_EVENT_DISPLAY_CLOSE:
@@ -215,13 +275,13 @@ void Game::tick()
                     //FIXME: resume game
                 break;
 
-                case ALLEGRO_EVENT_DISPLAY_HALT_DRAWING:
+//                case ALLEGRO_EVENT_DISPLAY_HALT_DRAWING:
                     //FIXME: for android
-                    break;
+//                    break;
 
-                case ALLEGRO_EVENT_DISPLAY_RESUME_DRAWING:
+//                case ALLEGRO_EVENT_DISPLAY_RESUME_DRAWING:
                     //FIXME: for android
-                    break;
+//                    break;
 
                 default:
                     break;
@@ -229,17 +289,39 @@ void Game::tick()
         }
 
             // if there are events to process, lets suspend drawing for a tick
-            al_clear_to_color(al_map_rgb(0,0,0));
+ //           al_clear_to_color(al_map_rgb(0,0,0));
+ 
+ al_set_target_bitmap(buffer);
+ 
+ glUseProgramObjectARB(tinter);
+ loc = glGetUniformLocationARB(tinter, "ratio");
+ glUniform1fARB(loc, ratio);
+ loc = glGetUniformLocationARB(tinter, "r");
+ glUniform1fARB(loc, r);
+ loc = glGetUniformLocationARB(tinter, "g");
+ glUniform1fARB(loc, g);
+ loc = glGetUniformLocationARB(tinter, "b");
+ glUniform1fARB(loc, b);
+ al_draw_bitmap(mysha, 0, 0, 0);
+ glUseProgramObjectARB(0);
+ 
+ 
+ 
+ al_set_target_backbuffer(m_display);
+ al_draw_bitmap(buffer, 0, 0, 0);
+ al_flip_display();
+ al_rest(0.001);
+ 
 
             ss.str("");
             ss << "FPS: " << fps;
             str = ss.str();
-            al_draw_text(m_font, al_map_rgb(255, 255, 0), 0, 0, ALLEGRO_ALIGN_LEFT, str.c_str());
+//            al_draw_text(m_font, al_map_rgb(255, 255, 0), 0, 0, ALLEGRO_ALIGN_LEFT, str.c_str());
 
-//            m_world->update(static_cast<float>(delta));
-//            m_world->render();
+  //          m_world->update(static_cast<float>(delta));
+   //         m_world->render();
             //rendering always before this
-            al_flip_display();
+//            al_flip_display();
     }
 
 shutdown:
