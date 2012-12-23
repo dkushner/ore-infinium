@@ -56,11 +56,40 @@ void World::createInstance(ALLEGRO_DISPLAY *display)
     }
 }
 
+ALLEGRO_BITMAP *mysha;
+ALLEGRO_BITMAP *buffer;
+
+const char *tinter_shader_src[] = {
+    "uniform sampler2D backBuffer;",
+    "uniform float r;",
+    "uniform float g;",
+    "uniform float b;",
+    "uniform float ratio;",
+    "void main() {",
+    " vec4 color;",
+    " float avg, dr, dg, db;",
+    " color = texture2D(backBuffer, gl_TexCoord[0].st);",
+    " avg = (color.r + color.g + color.b) / 3.0;",
+    " dr = avg * r;",
+    " dg = avg * g;",
+    " db = avg * b;",
+    " color.r = color.r - (ratio * (color.r - dr));",
+    " color.g = color.g - (ratio * (color.g - dg));",
+    " color.b = color.b - (ratio * (color.b - db));",
+    " gl_FragColor = color;",
+    "}"
+    };
+
+
+    const int TINTER_LEN = 18;
+
+    GLint loc;
+
 World::World(ALLEGRO_DISPLAY *display) : m_display(display)
 {
     m_player = new Player("../textures/player.png");
     m_entities.insert(m_entities.end(), m_player);
- 
+
     /*
     const int gridSize = ceil(WORLD_TILE_TYPE_COUNT / 2.0);
     std::cout << " GRIDSIZE : " << gridSize << std::endl;
@@ -168,6 +197,37 @@ World::World(ALLEGRO_DISPLAY *display) : m_display(display)
 
     //FIXME: height
 //    m_sky = new Sky(m_window, m_view, 0.0f);
+
+
+
+
+
+
+
+    buffer = al_create_bitmap(320, 200);
+    mysha = al_load_bitmap("mysha.png");
+    
+    if (!al_have_opengl_extension("GL_EXT_framebuffer_object")
+        && !al_have_opengl_extension("GL_ARB_fragment_shader")) {
+        assert(0);
+        }
+        
+        shader = glCreateShaderObjectARB(GL_FRAGMENT_SHADER_ARB);
+    
+    glShaderSourceARB(shader, TINTER_LEN, tinter_shader_src, NULL);
+    glCompileShaderARB(shader);
+    program = glCreateProgramObjectARB();
+    glAttachObjectARB(program, shader);
+    glLinkProgramARB(program);
+    loc = glGetUniformLocationARB(program, "backBuffer");
+    glUniform1iARB(loc, al_get_opengl_texture(buffer));
+    
+    
+
+
+
+
+
 }
 
 World::~World()
@@ -214,8 +274,28 @@ void World::render()
 //    Debug::fatal(al_set_shader_sampler(m_shader, "tilemap_pixels", m_tileMapPixelsTexture, 0), Debug::Area::Graphics, "shader tilemap_pixels set failure");
 //    Debug::fatal(al_set_shader_sampler(m_shader, "tile_types_super_texture", m_tileTypesSuperTexture, 0), Debug::Area::Graphics, "shader tilemap_pixels set failure");
 //    al_set_shader_sampler(m_shader, "tile_types_super_texture", m_tileTypesSuperTexture, 0);
+    float r = 0.5, g = 0.5, b = 1, ratio = 0;
+    
 
-
+    al_set_target_bitmap(buffer);
+    
+    glUseProgramObjectARB(program);
+    loc = glGetUniformLocationARB(program, "ratio");
+    glUniform1fARB(loc, ratio);
+    loc = glGetUniformLocationARB(program, "r");
+    glUniform1fARB(loc, r);
+    loc = glGetUniformLocationARB(program, "g");
+    glUniform1fARB(loc, g);
+    loc = glGetUniformLocationARB(program, "b");
+    glUniform1fARB(loc, b);
+    al_draw_bitmap(mysha, 0, 0, 0);
+    glUseProgramObjectARB(0);
+    
+    
+    
+    al_set_target_backbuffer(m_display);
+    al_draw_bitmap(buffer, 0.0f, 0.0f, 0);
+    
     glUseProgramObjectARB(program);
  /*   GLuint tileTypesTexture = al_get_opengl_texture(m_tileTypesSuperTexture);
     GLuint pixelMapTexture = al_get_opengl_texture(m_tileMapPixelsTexture);
@@ -234,14 +314,14 @@ void World::render()
 
     glUniform1iARB(pixelMapLoc, 0);
 */
-
+/*
     al_set_target_bitmap(al_get_backbuffer(m_display));
     al_draw_bitmap(m_tileMapFinalTexture, 0.0f, 0.0f, 0);
     glUseProgramObjectARB(0);
     al_flip_display();
 
     printShaderLog(shader);
-
+*/
     //set our view so that the player will stay relative to the view, in the center.
 //HACK    m_window->setView(*m_view);
 
