@@ -29,9 +29,7 @@
 #include <random>
 #include <assert.h>
 #include <math.h>
-
-#include <GL/glew.h>
-#include <GL/gl.h>
+#include <fstream>
 
 #include <Eigen/Core>
 
@@ -122,26 +120,53 @@ World::World(ALLEGRO_DISPLAY *display) : m_display(display)
     loadMap();
     //FIXME: saveMap();
 
-    m_shader = al_create_shader(ALLEGRO_SHADER_GLSL);
+    ALLEGRO_BITMAP *m_tileMapFinalTexture = al_create_bitmap(1600, 900);
 
-    bool shaderLoaded = al_attach_shader_source_file(m_shader, ALLEGRO_PIXEL_SHADER, "tilerenderer.frag");
-    bool shaderLinked = al_link_shader(m_shader);
+    GLuint program;
+    GLuint shader;
 
-    if (!shaderLoaded || !shaderLinked) {
-        Debug::log(Debug::Area::Graphics) << "Failure to load tilemap fragment shader, returning error log...";
+    program = glCreateProgram();
+    shader = glCreateShader(GL_FRAGMENT_SHADER);
 
-        Debug::fatal(false, Debug::Area::Graphics, al_get_shader_log(m_shader));
+    std::string shaderFile = loadShaderSource("tilerenderer.frag");
+    const char* shaderSource = shaderFile.c_str();
+
+//    glShaderSource(shader, 1, &shaderSource, NULL);
+    GLint sourceLength = shaderFile.length();
+    glShaderSource(shader, 1, &shaderSource, &sourceLength);
+
+    glCompileShader(shader);
+
+    GLint didCompile;
+    glGetShaderiv(shader, GL_COMPILE_STATUS, &didCompile);
+
+    if (didCompile == GL_FALSE)
+    {
+        printShaderLog(shader);
     }
 
-    GLuint program = al_get_opengl_program_object(m_shader);
-    Debug::log() << "PROGRAM: " << program;
-    Debug::log() << "ISPROG: " << glIsProgram(program);
-    //FIXME: needed??
-//    al_set_opengl_program_object(m_display, al_get_opengl_program_object(m_shader));
-    int loc = glGetUniformLocation(program, "tile_types_super_texture");
-    glUniform1i(loc, 0);
+    glAttachShader(program, shader);
+
+    glLinkProgram(program);
+
+    GLint didLink;
+    glGetProgramiv(program, GL_LINK_STATUS, &didLink);
+
+    if (didLink == GL_FALSE)
+    {
+        printShaderLog(shader);
+    }
+
+    glUseProgram(program);
+/*
+    glLinkProgram(program);
+    printShaderLog(shader);
+
+    GLuint texture = al_get_opengl_texture(m_tileMapFinalTexture);
+    assert(texture);
     glActiveTexture(GL_TEXTURE0);
-    glBindTexture(GL_TEXTURE_2D, al_get_opengl_texture(m_tileMapFinalTexture));
+    glBindTexture(GL_TEXTURE_2D, texture);
+*/
 
 
     //FIXME: hardcoding :(
@@ -157,6 +182,33 @@ World::~World()
     delete m_player;
 //    delete m_sky;
 }
+
+
+std::string World::loadShaderSource(const std::string& filename) {
+    std::ifstream file;
+    file.open(filename.c_str());
+
+    std::stringstream stream;
+
+    stream << file.rdbuf();
+
+    file.close();
+
+    return stream.str();
+}
+
+void World::printShaderLog(GLuint shader)
+{
+    GLint infoLogLength;
+    glGetShaderiv(shader, GL_INFO_LOG_LENGTH, &infoLogLength);
+    
+    GLchar* strInfoLog = new GLchar[infoLogLength + 1];
+    glGetShaderInfoLog(shader, infoLogLength, NULL, strInfoLog);
+    
+    fprintf(stderr, "Compilation error in shader %s\n", strInfoLog);
+    delete[] strInfoLog;
+}
+
 
 void World::render()
 {

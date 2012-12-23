@@ -25,6 +25,9 @@
 
 #include <Eigen/Core>
 
+#include <GL/glew.h>
+#include <GL/gl.h>
+
 class ALLEGRO_SHADER;
 union ALLEGRO_EVENT;
 class ALLEGRO_DISPLAY;
@@ -75,6 +78,9 @@ public:
 private:
 
     ~World();
+
+    void printShaderLog(GLuint shader);
+    std::string loadShaderSource(const std::string& filename);
 
     /**
     * From scratch, create a randomly generated tileset and store it in our array

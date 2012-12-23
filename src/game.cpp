@@ -26,6 +26,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string>
+#include <fstream>
 
 
 #include <GL/glew.h>
@@ -83,10 +84,12 @@ void Game::init()
     Debug::fatal(al_install_mouse(), Debug::Area::System, "Failure to install mouse");
 
     al_set_new_display_flags(ALLEGRO_WINDOWED | ALLEGRO_OPENGL);
-    al_set_new_display_option( ALLEGRO_VSYNC, 2, ALLEGRO_REQUIRE );
+//    al_set_new_display_option( ALLEGRO_VSYNC, 2, ALLEGRO_REQUIRE );
 
     m_display = al_create_display(SCREEN_W, SCREEN_H);
     Debug::fatal(m_display, Debug::Area::Graphics, "display creation failed");
+
+    glewInit();
 
     version = al_get_opengl_version();
     major = version >> 24;
@@ -144,34 +147,17 @@ void Game::init()
 
 void Game::tick()
 {
-    /////////////////// BEGIN ISSUE FIXME!!
-    ALLEGRO_BITMAP *m_tileMapFinalTexture = al_create_bitmap(1600, 900);
-    ALLEGRO_SHADER *m_shader;
-    m_shader = al_create_shader(ALLEGRO_SHADER_GLSL);
-    
-    bool shaderLoaded = al_attach_shader_source_file(m_shader, ALLEGRO_PIXEL_SHADER, "tilerenderer.frag");
-    bool shaderLinked = al_link_shader(m_shader);
-    
-    if (!shaderLoaded || !shaderLinked) {
-        Debug::log(Debug::Area::Graphics) << "Failure to load tilemap fragment shader, returning error log...";
-        
-        Debug::fatal(false, Debug::Area::Graphics, al_get_shader_log(m_shader));
-    }
-    
-    GLuint program = al_get_opengl_program_object(m_shader);
-    //returns 2
-    Debug::log() << "PROGRAM: " << program;
 
-    // CRASHES
-    Debug::log() << "ISPROG: " << glIsProgram(program);
+    Debug::log() << glGetString(GL_VERSION);
+
 
     //FIXME: needed??
     //    al_set_opengl_program_object(m_display, al_get_opengl_program_object(m_shader));
-    int loc = glGetUniformLocation(program, "tile_types_super_texture");
-    glUniform1i(loc, 0);
-    glActiveTexture(GL_TEXTURE0);
-    glBindTexture(GL_TEXTURE_2D, al_get_opengl_texture(m_tileMapFinalTexture));
-
+//    int loc = glGetUniformLocation(program, "tile_types_super_texture");
+//    glUniform1i(loc, 0);
+//    glActiveTexture(GL_TEXTURE0);
+//    glBindTexture(GL_TEXTURE_2D, al_get_opengl_texture(m_tileMapFinalTexture));
+//
 
 
     ////////////////////////////////////////////////// END ISSUE FIXME
