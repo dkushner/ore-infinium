@@ -1,7 +1,7 @@
 #version 130
 //uniform vec2 offset;
 
-uniform sampler2D tilemap_pixels;
+//uniform sampler2D tilemap_pixels;
 
 uniform sampler2D tile_types_super_texture;
 
@@ -12,7 +12,7 @@ ivec2 TILE_SIZE = ivec2(16, 16);
 
 void main()
 {
-
+/*
     ivec2 tilemap_size = textureSize(tile_types_super_texture, 0);
 
     ivec2 screen_coordinates = ivec2(gl_FragCoord.x + int(offset.x), gl_FragCoord.y - int(offset.y) + TILE_SIZE.y);
@@ -26,7 +26,9 @@ void main()
     tileCoordinate.y = (screen_coordinates.y) % TILE_SIZE.y;
 
     vec4 tileColor = texelFetch(tile_types_super_texture, tileCoordinate, 0);
-
+*/
+//    vec4 tileColor = texelFetch(tile_types_super_texture, ivec2(22, 12), 0);
+    vec4 tileColor = texture2D(tile_types_super_texture, vec2(0.5, 0.5), 0);
     gl_FragColor = tileColor;
 
 /*

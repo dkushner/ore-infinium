@@ -117,8 +117,9 @@ World::World(ALLEGRO_DISPLAY *display) : m_display(display)
         ++i;
     }
 
-    al_clear_to_color(al_map_rgb(255, 0, 0));
     al_set_target_backbuffer(m_display);
+
+    al_save_bitmap("tiletypes.png", m_tileTypesSuperTexture);
 
     loadMap();
 
@@ -190,7 +191,7 @@ World::World(ALLEGRO_DISPLAY *display) : m_display(display)
 
     shader = glCreateShaderObjectARB(GL_FRAGMENT_SHADER_ARB);
 
-    std::string source = loadShaderSource("test.frag");
+    std::string source = loadShaderSource("tilerenderer.frag");
     const char* shaderSource = source.c_str();
     std::cout << "shader src: " << source;
 
@@ -234,6 +235,13 @@ void World::printShaderLog(GLuint shader)
     delete[] strInfoLog;
 }
 
+void printGLError()
+{
+    GLenum glError = glGetError();
+    if (glError != GL_NO_ERROR) {
+        Debug::log(Debug::Area::Graphics) << gluErrorString(glError);
+    }
+}
 
 void World::render()
 {
@@ -254,12 +262,23 @@ void World::render()
  //   glUniform1iARB(loc, al_get_opengl_texture(buffer));
 
     glUseProgramObjectARB(program);
-    
-    
-    glActiveTexture(GL_TEXTURE0);
-    glBindTexture(GL_TEXTURE_2D, al_get_opengl_texture(buffer));
-    loc = glGetUniformLocationARB(program, "backBuffer");
-    
+
+    printGLError();
+/*
+    glBindTexture(GL_TEXTURE_2D, al_get_opengl_texture(m_tileMapPixelsTexture));
+    loc = glGetUniformLocationARB(program, "tilemap_pixels");
+    assert(loc != -1);
+    glUniform1iARB(loc, 0);
+*/
+    printGLError();
+
+    glBindTexture(GL_TEXTURE_2D, al_get_opengl_texture(m_tileTypesSuperTexture));
+    loc = glGetUniformLocationARB(program, "tile_types_super_texture");
+    assert(loc != -1);
+    glUniform1iARB(loc, 0);
+
+    printGLError();
+
   /*  loc = glGetUniformLocationARB(program, "ratio");
     glUniform1fARB(loc, ratio);
     loc = glGetUniformLocationARB(program, "r");
@@ -269,10 +288,12 @@ void World::render()
     loc = glGetUniformLocationARB(program, "b");
     glUniform1fARB(loc, b);
     */
-    al_draw_bitmap(mysha, 0, 0, 0);
+//    al_draw_bitmap(mysha, 0, 0, 0);
+    al_draw_bitmap(m_tileTypesSuperTexture, 0, 0, 0);
     glUseProgramObjectARB(0);
 
     al_set_target_backbuffer(m_display);
+
     al_draw_bitmap(buffer, 0.0f, 0.0f, 0);
 
     glUseProgramObjectARB(program);
@@ -615,6 +636,8 @@ void World::generatePixelTileMap()
     }
 
     al_unlock_bitmap(m_tileMapPixelsTexture);
+
+    al_save_bitmap("pixelmap.png", m_tileMapPixelsTexture);
 
     al_set_target_backbuffer(m_display);
 
