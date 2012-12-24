@@ -59,31 +59,7 @@ void World::createInstance(ALLEGRO_DISPLAY *display)
 ALLEGRO_BITMAP *mysha;
 ALLEGRO_BITMAP *buffer;
 
-const char *tinter_shader_src[] = {
-    "uniform sampler2D backBuffer;",
-    "uniform float r;",
-    "uniform float g;",
-    "uniform float b;",
-    "uniform float ratio;",
-    "void main() {",
-    " vec4 color;",
-    " float avg, dr, dg, db;",
-    " color = texture2D(backBuffer, gl_TexCoord[0].st);",
-    " avg = (color.r + color.g + color.b) / 3.0;",
-    " dr = avg * r;",
-    " dg = avg * g;",
-    " db = avg * b;",
-    " color.r = color.r - (ratio * (color.r - dr));",
-    " color.g = color.g - (ratio * (color.g - dg));",
-    " color.b = color.b - (ratio * (color.b - db));",
-    " gl_FragColor = color;",
-    "}"
-    };
-
-
-    const int TINTER_LEN = 18;
-
-    GLint loc;
+GLint loc;
 
 World::World(ALLEGRO_DISPLAY *display) : m_display(display)
 {
@@ -145,7 +121,7 @@ World::World(ALLEGRO_DISPLAY *display) : m_display(display)
     al_set_target_backbuffer(m_display);
 
     loadMap();
-    
+
     //FIXME: saveMap();
 /*
     shader = glCreateShaderObjectARB(GL_FRAGMENT_SHADER_ARB);
@@ -206,28 +182,25 @@ World::World(ALLEGRO_DISPLAY *display) : m_display(display)
 
     buffer = al_create_bitmap(320, 200);
     mysha = al_load_bitmap("mysha.png");
-    
+
     if (!al_have_opengl_extension("GL_EXT_framebuffer_object")
         && !al_have_opengl_extension("GL_ARB_fragment_shader")) {
         assert(0);
         }
-        
+
         shader = glCreateShaderObjectARB(GL_FRAGMENT_SHADER_ARB);
-    
-    glShaderSourceARB(shader, TINTER_LEN, tinter_shader_src, NULL);
+
+    std::string source = loadShaderSource("test.frag");
+    const char* shaderSource = source.c_str();
+    std::cout << "shader src: " << source;
+
+    glShaderSourceARB(shader, 1, &shaderSource, NULL);
     glCompileShaderARB(shader);
     program = glCreateProgramObjectARB();
     glAttachObjectARB(program, shader);
     glLinkProgramARB(program);
     loc = glGetUniformLocationARB(program, "backBuffer");
     glUniform1iARB(loc, al_get_opengl_texture(buffer));
-    
-    
-
-
-
-
-
 }
 
 World::~World()
