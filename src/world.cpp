@@ -199,8 +199,8 @@ World::World(ALLEGRO_DISPLAY *display) : m_display(display)
     program = glCreateProgramObjectARB();
     glAttachObjectARB(program, shader);
     glLinkProgramARB(program);
-    loc = glGetUniformLocationARB(program, "backBuffer");
-    glUniform1iARB(loc, al_get_opengl_texture(buffer));
+//    loc = glGetUniformLocationARB(program, "backBuffer");
+ //   glUniform1iARB(loc, al_get_opengl_texture(buffer));
 }
 
 World::~World()
@@ -248,12 +248,19 @@ void World::render()
 //    Debug::fatal(al_set_shader_sampler(m_shader, "tile_types_super_texture", m_tileTypesSuperTexture, 0), Debug::Area::Graphics, "shader tilemap_pixels set failure");
 //    al_set_shader_sampler(m_shader, "tile_types_super_texture", m_tileTypesSuperTexture, 0);
     float r = 0.5, g = 0.5, b = 1, ratio = 0;
-    
 
     al_set_target_bitmap(buffer);
-    
+//    loc = glGetUniformLocationARB(program, "backBuffer");
+ //   glUniform1iARB(loc, al_get_opengl_texture(buffer));
+
     glUseProgramObjectARB(program);
-    loc = glGetUniformLocationARB(program, "ratio");
+    
+    
+    glActiveTexture(GL_TEXTURE0);
+    glBindTexture(GL_TEXTURE_2D, al_get_opengl_texture(buffer));
+    loc = glGetUniformLocationARB(program, "backBuffer");
+    
+  /*  loc = glGetUniformLocationARB(program, "ratio");
     glUniform1fARB(loc, ratio);
     loc = glGetUniformLocationARB(program, "r");
     glUniform1fARB(loc, r);
@@ -261,14 +268,13 @@ void World::render()
     glUniform1fARB(loc, g);
     loc = glGetUniformLocationARB(program, "b");
     glUniform1fARB(loc, b);
+    */
     al_draw_bitmap(mysha, 0, 0, 0);
     glUseProgramObjectARB(0);
-    
-    
-    
+
     al_set_target_backbuffer(m_display);
     al_draw_bitmap(buffer, 0.0f, 0.0f, 0);
-    
+
     glUseProgramObjectARB(program);
  /*   GLuint tileTypesTexture = al_get_opengl_texture(m_tileTypesSuperTexture);
     GLuint pixelMapTexture = al_get_opengl_texture(m_tileMapPixelsTexture);

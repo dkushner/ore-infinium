@@ -12,7 +12,7 @@ ivec2 TILE_SIZE = ivec2(16, 16);
 
 void main()
 {
-/*
+
     ivec2 tilemap_size = textureSize(tile_types_super_texture, 0);
 
     ivec2 screen_coordinates = ivec2(gl_FragCoord.x + int(offset.x), gl_FragCoord.y - int(offset.y) + TILE_SIZE.y);
@@ -28,9 +28,11 @@ void main()
     vec4 tileColor = texelFetch(tile_types_super_texture, tileCoordinate, 0);
 
     gl_FragColor = tileColor;
-*/
+
+/*
 gl_FragColor.r = 1.0;
 gl_FragColor.g = 0.0;
 gl_FragColor.b = 0.0;
 gl_FragColor.a = 1.0;
+*/
 }
