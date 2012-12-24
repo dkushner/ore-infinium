@@ -242,17 +242,18 @@ void Game::tick()
         }
 
             // if there are events to process, lets suspend drawing for a tick
- //           al_clear_to_color(al_map_rgb(0,0,0));
+            al_clear_to_color(al_map_rgb(0,0,0));
  
 
 
             ss.str("");
             ss << "FPS: " << fps;
             str = ss.str();
-//            al_draw_text(m_font, al_map_rgb(255, 255, 0), 0, 0, ALLEGRO_ALIGN_LEFT, str.c_str());
 
             m_world->update(static_cast<float>(delta));
             m_world->render();
+
+            al_draw_text(m_font, al_map_rgb(255, 255, 0), 0, 0, ALLEGRO_ALIGN_LEFT, str.c_str());
             //rendering always before this
             al_flip_display();
     }

@@ -188,7 +188,7 @@ World::World(ALLEGRO_DISPLAY *display) : m_display(display)
         assert(0);
         }
 
-        shader = glCreateShaderObjectARB(GL_FRAGMENT_SHADER_ARB);
+    shader = glCreateShaderObjectARB(GL_FRAGMENT_SHADER_ARB);
 
     std::string source = loadShaderSource("test.frag");
     const char* shaderSource = source.c_str();
