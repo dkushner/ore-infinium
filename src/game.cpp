@@ -18,8 +18,6 @@
 #include "game.h"
 
 #include "debug.h"
-//#include "entity.h"
-//#include "imagemanager.h"
 
 #include <iostream>
 #include <sstream>
@@ -28,9 +26,11 @@
 #include <string>
 #include <fstream>
 
-
 #include <GL/glew.h>
-#include <GL/gl.h>
+
+#include <SDL/SDL.h>
+#include <SDL/SDL_ttf.h>
+#include <SDL/SDL_image.h>
 
 Game::Game()
 {
@@ -77,7 +77,7 @@ void Game::init()
  //   Debug::log(Debug::Area::Graphics) << "Maximum OpenGL texture size allowed: " << textureSize;
     std::cout << "\n\n\n\n";
 
-    Debug::fatal(m_font = al_load_ttf_font("../font/Ubuntu-L.ttf", 12, 0), Debug::Area::System, "Failure to load font");
+//    Debug::fatal(m_font = al_load_ttf_font("../font/Ubuntu-L.ttf", 12, 0), Debug::Area::System, "Failure to load font");
 
 //    ImageManager* manager = ImageManager::instance();
 //    manager->addResourceDir("../textures/");
@@ -100,18 +100,18 @@ void Game::tick()
     const int MAX_BENCH = 300;
     int benchTime = MAX_BENCH;
 
-    double oldTime = al_get_time();
+ //   double oldTime = al_get_time();
 
     while (m_running) {
-        double newTime = al_get_time();
-        double delta = newTime - oldTime;
-        double fps = 1 / (delta);
-        oldTime = newTime;
+  //      double newTime = al_get_time();
+   //     double delta = newTime - oldTime;
+     //   double fps = 1 / (delta);
+    //    oldTime = newTime;
 
-        ALLEGRO_EVENT event;
 
-        while (al_get_next_event(m_events, &event)) {
+ //       while (al_get_next_event(m_events, &event)) {
             //m_world->handleEvent(event);
+        /*
             switch (event.type) {
                 // window closed
                 case ALLEGRO_EVENT_DISPLAY_CLOSE:
@@ -130,7 +130,7 @@ void Game::tick()
                     break;
             }
         }
-
+*/
             ss.str("");
             ss << "FPS: " << fps;
             str = ss.str();
