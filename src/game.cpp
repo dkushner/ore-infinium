@@ -32,22 +32,6 @@
 #include <GL/glew.h>
 #include <GL/gl.h>
 
-#include <allegro5/allegro.h>
-#include <allegro5/allegro_acodec.h>
-#include <allegro5/allegro_audio.h>
-#include <allegro5/allegro_font.h>
-#include <allegro5/allegro_image.h>
-#include <allegro5/allegro_native_dialog.h>
-#include <allegro5/allegro_opengl.h>
-#include <allegro5/allegro_physfs.h>
-#include <allegro5/allegro_primitives.h>
-//#include <allegro5/allegro_shader.h>
-#include <allegro5/allegro_ttf.h>
-#include <allegro5/keyboard.h>
-#include <allegro5/mouse.h>
-
-#include <allegro5/allegro_shader_glsl.h>
-
 Game::Game()
 {
 }
@@ -65,41 +49,7 @@ void Game::abort_game(const char* message)
 
 void Game::init()
 {
-    uint32_t version = al_get_allegro_version();
-    int major = version >> 24;
-    int minor = (version >> 16) & 255;
-    int revision = (version >> 8) & 255;
-    int release = version & 255;
-    Debug::log(Debug::Area::System) << "Using allegro version: " << major << "." << minor << "." << revision << "." << release;
 
-    Debug::fatal(al_init(), Debug::Area::System, "Failure to init allegro");
-
-    al_init_font_addon();
-    Debug::fatal(al_init_acodec_addon(), Debug::Area::System, "Failure to init acodec addon");
-////FIXME:    Debug::fatal(al_init_native_dialog_addon(), Debug::Area::System, "Failure to init native dialog addon");
-    Debug::fatal(al_init_primitives_addon(), Debug::Area::System, "Failure to init primitives addon");
-    Debug::fatal(al_init_ttf_addon(), Debug::Area::System, "Failure to init ttf addon");
-    Debug::fatal(al_init_image_addon(), Debug::Area::System, "Failure to init image addon");
-    Debug::fatal(al_install_keyboard(), Debug::Area::System, "Failure to install keyboard");
-    Debug::fatal(al_install_mouse(), Debug::Area::System, "Failure to install mouse");
-//
-    al_set_new_display_flags( ALLEGRO_OPENGL | ALLEGRO_OPENGL_FORWARD_COMPATIBLE);
-//    al_set_new_display_option( ALLEGRO_VSYNC, 2, ALLEGRO_REQUIRE );
-
-    m_display = al_create_display(SCREEN_W, SCREEN_H);
-    Debug::fatal(m_display, Debug::Area::Graphics, "display creation failed");
-
-
-    //FIXME: WHY THE FUCK DO I NEED THIS? ALLEGRO SHOULD GIVE ME A FUCKING OPENGL CONTEXT BECAUSE I MOTHERFUCKING ASKED FOR IT
-    //FUCKING HELL..
-    glewInit();
-
-    if (!al_have_opengl_extension("GL_EXT_framebuffer_object")
-        && !al_have_opengl_extension("GL_ARB_fragment_shader")) {
-        Debug::fatal(true, Debug::Area::Graphics, ("Fragment shaders not supported.\n"));
-    }
-
-//    glCreateShaderObjectARB(GL_FRAGMENT_SHADER_ARB);
 //    version = al_get_opengl_version();
 //    major = version >> 24;
 //    minor = (version >> 16) & 255;
@@ -127,65 +77,20 @@ void Game::init()
  //   Debug::log(Debug::Area::Graphics) << "Maximum OpenGL texture size allowed: " << textureSize;
     std::cout << "\n\n\n\n";
 
-    al_set_app_name("ore-chasm");
-    al_set_window_title(m_display, "Ore Chasm");
-
-    Debug::fatal(m_events = al_create_event_queue(), Debug::Area::System, "event queue init");
-
-    al_register_event_source(m_events, al_get_display_event_source(m_display));
-    al_register_event_source(m_events, al_get_mouse_event_source());
-    al_register_event_source(m_events, al_get_keyboard_event_source());
-
     Debug::fatal(m_font = al_load_ttf_font("../font/Ubuntu-L.ttf", 12, 0), Debug::Area::System, "Failure to load font");
 
 //    ImageManager* manager = ImageManager::instance();
 //    manager->addResourceDir("../textures/");
 
-    World::createInstance(m_display);
-    m_world = World::instance();
-
-    // ----------------------------------------------------- initial render --------------------------------------------------
-    al_clear_to_color(al_map_rgb(0, 0, 0));
-
-    al_flip_display();
+    //World::createInstance(m_display);
+    //m_world = World::instance();
 
     tick();
     shutdown();
 }
 
-
-
-
-
 void Game::tick()
 {
-
-    Debug::log() << glGetString(GL_VERSION);
-
-
-    //FIXME: needed??
-    //    al_set_opengl_program_object(m_display, al_get_opengl_program_object(m_shader));
-//    int loc = glGetUniformLocation(program, "tile_types_super_texture");
-//    glUniform1i(loc, 0);
-//    glActiveTexture(GL_TEXTURE0);
-//    glBindTexture(GL_TEXTURE_2D, al_get_opengl_texture(m_tileMapFinalTexture));
-//
-
-
-    ////////////////////////////////////////////////// END ISSUE FIXME
-
-
-    GLhandleARB tinter;
-    GLhandleARB tinter_shader;
-    
-
-    
-    double start;
-    
-
-
-
-
 
     std::stringstream ss;
     std::string str;
@@ -204,8 +109,9 @@ void Game::tick()
         oldTime = newTime;
 
         ALLEGRO_EVENT event;
+
         while (al_get_next_event(m_events, &event)) {
-            m_world->handleEvent(event);
+            //m_world->handleEvent(event);
             switch (event.type) {
                 // window closed
                 case ALLEGRO_EVENT_DISPLAY_CLOSE:
@@ -220,42 +126,19 @@ void Game::tick()
                 }
                 break;
 
-                case ALLEGRO_EVENT_DISPLAY_SWITCH_OUT:
-                    //FIXME: pause game
-                break;
-
-                case ALLEGRO_EVENT_DISPLAY_SWITCH_IN:
-                    //FIXME: resume game
-                break;
-
-//                case ALLEGRO_EVENT_DISPLAY_HALT_DRAWING:
-                    //FIXME: for android
-//                    break;
-
-//                case ALLEGRO_EVENT_DISPLAY_RESUME_DRAWING:
-                    //FIXME: for android
-//                    break;
-
                 default:
                     break;
             }
         }
 
-            // if there are events to process, lets suspend drawing for a tick
-            al_clear_to_color(al_map_rgb(0,0,0));
- 
-
-
             ss.str("");
             ss << "FPS: " << fps;
             str = ss.str();
 
-            m_world->update(static_cast<float>(delta));
-            m_world->render();
+           // m_world->update(static_cast<float>(delta));
+           // m_world->render();
 
-            al_draw_text(m_font, al_map_rgb(255, 255, 0), 0, 0, ALLEGRO_ALIGN_LEFT, str.c_str());
             //rendering always before this
-            al_flip_display();
     }
 
 shutdown:
@@ -264,7 +147,5 @@ shutdown:
 
 void Game::shutdown()
 {
-    al_destroy_display(m_display);
-    al_destroy_event_queue(m_events);
     exit(0);
 }
