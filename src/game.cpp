@@ -26,6 +26,8 @@
 #include <string>
 #include <fstream>
 
+#include <assert.h>
+
 Game::Game()
 {
 }
@@ -99,7 +101,6 @@ void Game::init()
 
     checkSDLError();
 
-
     Debug::log(Debug::Area::Graphics) << "Platform: Driver Vendor: " << glGetString(GL_VENDOR);
     Debug::log(Debug::Area::Graphics) << "Platform: Renderer: " << glGetString(GL_RENDERER);
     Debug::log(Debug::Area::Graphics) << "OpenGL Version: " << glGetString(GL_VERSION);
@@ -109,6 +110,7 @@ void Game::init()
     glGetIntegerv(GL_MAX_TEXTURE_SIZE, &textureSize);
     Debug::log(Debug::Area::Graphics) << "Maximum OpenGL texture size allowed: " << textureSize;
     std::cout << "\n\n\n\n";
+
 
 //    Debug::fatal(m_font = al_load_ttf_font("../font/Ubuntu-L.ttf", 12, 0), Debug::Area::System, "Failure to load font");
 
@@ -122,9 +124,40 @@ void Game::init()
     shutdown();
 }
 
-void Game::tick()
+void Game::handleEvents()
+{
+    SDL_Event event;
+
+    while (SDL_PollEvent(&event)) {
+        switch (event.type) {
+            case SDL_KEYDOWN:
+                if (event.key.keysym.sym == SDLK_ESCAPE) {
+                    shutdown();
+                }
+                break;
+
+            case SDL_WINDOWEVENT_CLOSE:
+                shutdown();
+                break;
+
+            case SDL_QUIT:
+                exit(0);
+                break;
+
+            default:
+                break;
+        }
+    }
+}
+
+
+void Game::drawDebugText()
 {
 
+}
+
+void Game::tick()
+{
     std::stringstream ss;
     std::string str;
 
@@ -133,13 +166,13 @@ void Game::tick()
     const int MAX_BENCH = 300;
     int benchTime = MAX_BENCH;
 
- //   double oldTime = al_get_time();
+    double oldTime = SDL_GetTicks();
 
     while (m_running) {
-  //      double newTime = al_get_time();
-   //     double delta = newTime - oldTime;
-     //   double fps = 1 / (delta);
-    //    oldTime = newTime;
+        double newTime = SDL_GetTicks();
+        double delta = newTime - oldTime;
+        double fps = 1 / (delta / 60);
+        oldTime = newTime;
 
 
  //       while (al_get_next_event(m_events, &event)) {
@@ -172,6 +205,14 @@ void Game::tick()
            // m_world->render();
 
             //rendering always before this
+
+            handleEvents();
+
+            glClear(GL_COLOR_BUFFER_BIT);
+            //render some crap
+            drawDebugText();
+
+            SDL_GL_SwapWindow(m_window);
     }
 
 shutdown:

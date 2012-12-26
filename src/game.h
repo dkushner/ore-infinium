@@ -25,6 +25,7 @@
 #include <GL/glew.h>
 
 #include <SDL2/SDL.h>
+#include <SDL_log.h>
 
 //1600
 static int SCREEN_W = 1600;
@@ -34,7 +35,7 @@ static int SCREEN_H = 900;
 //FIXME: make on/off via key
 static bool DEBUG_RENDERING = true;
 
-static SDL_LogPriority SDL_LOGPRIORITY = SDL_LOG_PRIORITY_WARN;
+static int SDL_LOGPRIORITY = SDL_LOG_PRIORITY_WARN;
 
 class Game
 {
@@ -42,10 +43,15 @@ public:
     Game();
     ~Game();
 
-    void abort_game(const char* message);
     void init();
+
     void tick();
+    void handleEvents();
+
+    void abort_game(const char* message);
     void shutdown();
+
+    void drawDebugText();
 
     const float FPS = 60.0;
 
