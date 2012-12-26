@@ -132,12 +132,12 @@ void Game::handleEvents()
         switch (event.type) {
             case SDL_KEYDOWN:
                 if (event.key.keysym.sym == SDLK_ESCAPE) {
-                    shutdown();
+                    m_running = false;
                 }
                 break;
 
             case SDL_WINDOWEVENT_CLOSE:
-                shutdown();
+                m_running = false;
                 break;
 
             case SDL_QUIT:
@@ -174,29 +174,6 @@ void Game::tick()
         double fps = 1 / (delta / 60);
         oldTime = newTime;
 
-
- //       while (al_get_next_event(m_events, &event)) {
-            //m_world->handleEvent(event);
-        /*
-            switch (event.type) {
-                // window closed
-                case ALLEGRO_EVENT_DISPLAY_CLOSE:
-                m_running = false;
-                break;
-
-                // key pressed
-                case ALLEGRO_EVENT_KEY_DOWN:
-                if (event.keyboard.keycode == ALLEGRO_KEY_ESCAPE) {
-                    Debug::log(Debug::Area::System) << "shutting down...";
-                    goto shutdown;
-                }
-                break;
-
-                default:
-                    break;
-            }
-        }
-*/
             ss.str("");
             ss << "FPS: " << fps;
             str = ss.str();
