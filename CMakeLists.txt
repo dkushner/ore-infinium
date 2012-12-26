@@ -45,6 +45,7 @@ find_package(PugiXML REQUIRED)
 find_package(OpenGL REQUIRED)
 find_package(GLEW REQUIRED)
 find_package(FreeType REQUIRED)
+find_package(FTGL REQUIRED)
 
 if (NOT SDL2_FOUND)
     message(FATAL_ERROR "Could not find SDL2. Install that shit, yo.")
@@ -97,7 +98,6 @@ src/debug.cpp
 )
 
 include(FindPkgConfig)
-
 add_executable(${EXECUTABLE_NAME} ${SRC})
 
 include_directories(${CMAKE_SOURCE_DIR} ${SDL2_INCLUDE_DIR} ${SDL2IMAGE_INCLUDE_DIR} ${SDLMIXER_INCLUDE_DIR} ${FREETYPE_INCLUDE_DIRS} ${FTGL_INCLUDE_DIR} ${EIGEN3_INCLUDE_DIR} ${GLEW_INCLUDE_DIRS})

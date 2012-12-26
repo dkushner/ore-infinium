@@ -110,21 +110,15 @@ void Game::init()
     Debug::log(Debug::Area::Graphics) << "Maximum OpenGL texture size allowed: " << textureSize;
     std::cout << "\n\n\n\n";
 
-    if (FT_Init_FreeType(&m_freeType)) {
-        Debug::fatal(false, Debug::Area::System, "Failure to init FreeType");
-    }
-
-    if (FT_New_Face(m_freeType, "../font/Ubuntu-L.ttf", 0, &m_font)) {
-        Debug::fatal(false, Debug::Area::System, "Failure to load font");
-    }
-
-//    Debug::fatal(m_font = al_load_ttf_font("../font/Ubuntu-L.ttf", 12, 0), Debug::Area::System, "Failure to load font");
+    m_font = new FTGLPixmapFont("../font/Ubuntu-L.ttf");
+    Debug::fatal(!m_font->Error(), Debug::Area::System, "Failure to load font");
 
 //    ImageManager* manager = ImageManager::instance();
 //    manager->addResourceDir("../textures/");
 
     //World::createInstance(m_display);
     //m_world = World::instance();
+    m_font->FaceSize(12);
 
     tick();
     shutdown();
@@ -156,33 +150,16 @@ void Game::handleEvents()
     }
 }
 
-
-void Game::drawDebugText()
-{
-
-}
+double fps = 0.0;
 
 void Game::tick()
 {
-    std::stringstream ss;
-    std::string str;
-
-    int fps = 0;
-
-    const int MAX_BENCH = 300;
-    int benchTime = MAX_BENCH;
-
-    double oldTime = SDL_GetTicks();
+    Uint32 startTime = SDL_GetTicks();
+    int frameCount = 0;
 
     while (m_running) {
-        double newTime = SDL_GetTicks();
-        double delta = newTime - oldTime;
-        double fps = 1 / (delta / 60);
-        oldTime = newTime;
+        fps =(frameCount / float(SDL_GetTicks() - startTime)) * 1000;
 
-            ss.str("");
-            ss << "FPS: " << fps;
-            str = ss.str();
 
            // m_world->update(static_cast<float>(delta));
            // m_world->render();
@@ -196,10 +173,23 @@ void Game::tick()
             drawDebugText();
 
             SDL_GL_SwapWindow(m_window);
+
+            ++frameCount;
     }
 
 shutdown:
     shutdown();
+}
+
+void Game::drawDebugText()
+{
+    std::stringstream ss;
+    std::string str;
+
+    ss.str("");
+    ss << "FPS: " << fps;
+    str = ss.str();
+    m_font->Render(str.c_str());
 }
 
 void Game::shutdown()

@@ -30,6 +30,8 @@
 #include <ft2build.h>
 #include FT_FREETYPE_H
 
+#include <FTGL/ftgl.h>
+
 //1600
 static int SCREEN_W = 1600;
 //900
@@ -59,8 +61,7 @@ public:
     const float FPS = 60.0;
 
 private:
-    FT_Library m_freeType;
-    FT_Face m_font;
+    FTGLPixmapFont *m_font = nullptr;
 
  //   World *m_world = nullptr;
     SDL_Window *m_window = nullptr;
