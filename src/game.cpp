@@ -55,7 +55,6 @@ void checkSDLError()
 
 void Game::init()
 {
-
     Debug::log(Debug::Area::System) << "SDL on platform: " << SDL_GetPlatform();
 
     SDL_version compiled;
@@ -110,6 +109,15 @@ void Game::init()
     glGetIntegerv(GL_MAX_TEXTURE_SIZE, &textureSize);
     Debug::log(Debug::Area::Graphics) << "Maximum OpenGL texture size allowed: " << textureSize;
     std::cout << "\n\n\n\n";
+
+    if (FT_Init_FreeType(&m_freeType)) {
+        Debug::fatal(false, Debug::Area::System, "Failure to init FreeType");
+    }
+
+    if (FT_New_Face(m_freeType, "../font/Ubuntu-L.ttf", 0, &m_font)) {
+        Debug::fatal(false, Debug::Area::System, "Failure to load font");
+    }
+
 
 
 //    Debug::fatal(m_font = al_load_ttf_font("../font/Ubuntu-L.ttf", 12, 0), Debug::Area::System, "Failure to load font");
