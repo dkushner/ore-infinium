@@ -62,6 +62,11 @@ if (NOT FREETYPE_FOUND)
     message(FATAL_ERROR "Could not find FreeType. Install that shit, yo.")
 endif()
 
+if (NOT FTGL_FOUND)
+    message(FATAL_ERROR "Could not find FTGL. We use it to render fonts easily, because I'm lazy. Install that shit, yo.")
+endif()
+
+
 if (NOT PugiXML_FOUND)
     message(FATAL_ERROR "Could not find pugixml library.")
 endif()
@@ -95,8 +100,8 @@ include(FindPkgConfig)
 
 add_executable(${EXECUTABLE_NAME} ${SRC})
 
-include_directories(${CMAKE_SOURCE_DIR} ${SDL2_INCLUDE_DIR} ${SDL2IMAGE_INCLUDE_DIR} ${SDLMIXER_INCLUDE_DIR} ${FREETYPE_INCLUDE_DIRS} ${EIGEN3_INCLUDE_DIR} ${GLEW_INCLUDE_DIRS})
-target_link_libraries(${EXECUTABLE_NAME} ${SDL2_LIBRARY} ${SDL2MAIN_LIBRARY} ${SDL2IMAGE_LIBRARY} ${SDLMIXER_LIBRARY} ${FREETYPE_LIBRARY} ${OPENGL_LIBRARIES} ${PugiXML_LIBRARY} ${GLEW_LIBRARIES})
+include_directories(${CMAKE_SOURCE_DIR} ${SDL2_INCLUDE_DIR} ${SDL2IMAGE_INCLUDE_DIR} ${SDLMIXER_INCLUDE_DIR} ${FREETYPE_INCLUDE_DIRS} ${FTGL_INCLUDE_DIR} ${EIGEN3_INCLUDE_DIR} ${GLEW_INCLUDE_DIRS})
+target_link_libraries(${EXECUTABLE_NAME} ${SDL2_LIBRARY} ${SDL2MAIN_LIBRARY} ${SDL2IMAGE_LIBRARY} ${SDLMIXER_LIBRARY} ${FREETYPE_LIBRARY} ${FTGL_LIBRARY} ${OPENGL_LIBRARIES} ${PugiXML_LIBRARY} ${GLEW_LIBRARIES})
 
 # CPack packaging
 include(InstallRequiredSystemLibraries)

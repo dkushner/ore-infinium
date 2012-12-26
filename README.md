@@ -11,8 +11,8 @@ just *using* the community.
 It is a project, that is open source from the very beginning, as improving upon
 the ideas that Terraria introduced to the world when it released.
 
-It isn't written in XNA and C#, but SFML and C++, so is cross-platform and
-very fast (I use the GPU quite a bit, including fragment shaders).
+It isn't written in XNA and C#, but SDL, OpenGL and C++, so is cross-platform and
+very fast (I use all hardware accelerated rendering)
 
 * It will have modding capabilities
 * It is open source, everything..including all assets
@@ -45,8 +45,14 @@ platform just to play my game, even though I think everyone should run Linux
 anyways.. ;-)
 
 I would love to see it run on Android for instance. But for this to happen
-I'd have to wait until SFML has ports to that/those platforms. Or switch
-to a different framework if that becomes the only option.
+I'd need to run through all of my code base and make sure it runs just fine
+on OpenGL ES 2.0. Not to mention compiles and all my dependencies work on it.
+
+In theory it should work just fine, and just require a bit of OpenGL tweaking
+for it (an official port with a proper Android interface notwithstanding).
+
+I'll worry about getting more into porting to Android after I get something
+usable on the desktop. Patches welcome ;-)
 
 ## Current Status
 
@@ -92,11 +98,9 @@ We have an irc channel on chat.freenode.net #ore-chasm, feel free to drop in for
 chilling, devel questions, user questions...or whatever.
 
 ## How do I install it?
-First of all, I use SFML 2.0, which is technically unreleased.
 
-No matter, you can build it easily since I use CMake.
-
-See: http://www.sfml-dev.org/download.php
+Read the INSTALL file and it will show all the dependencies I use and where to
+get them, and hopefully how to install them ;-)
 
 After this is installed and you have followed their directions, to get my code,
 you can either click download the zip, or run `git clone git://github.com/sreich/ore-chasm.git`
@@ -108,7 +112,7 @@ and now to actually build it
 
 
 ## System Requirements
-* SFML 2.0 (unreleased, from git)
+* SDL 2.x (yet unreleased) (and SDL_image, SDL_mixer)
 * Platform of Windows, Linux/Unix, Mac OS X
 * Minimum RAM of 250 MiB. Ore Chasm uses so far.. an average of 60 MiB RES.
 This will change with world size, since we don't have chunk based loading
@@ -116,11 +120,7 @@ This will change with world size, since we don't have chunk based loading
 Which means for a 8400x2600 map (the default, soft minimum), (8400 \* 2600 \*
 2 bytes = ~44 MiB). Presently, to run the game it's about 60MiB of RAM usage on
 average. Subject to change, of course.
-* GPU capable of OpenGL 3.0+ and/or GLSL 1.30. This is what I *know* it works
-on. It may work on lesser GPUs, so please let me know if it does. In theory it
-should, but we all know how well theory works..
-
-
+* GPU and drivers capable of OpenGL 3.0+ (and hopefully OpenGL ES 2.0).
 
 ## Planned Features
 Some of these plans are merely thoughts and things to experiment with, some are

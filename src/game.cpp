@@ -118,8 +118,6 @@ void Game::init()
         Debug::fatal(false, Debug::Area::System, "Failure to load font");
     }
 
-
-
 //    Debug::fatal(m_font = al_load_ttf_font("../font/Ubuntu-L.ttf", 12, 0), Debug::Area::System, "Failure to load font");
 
 //    ImageManager* manager = ImageManager::instance();
