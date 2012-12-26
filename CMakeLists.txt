@@ -40,11 +40,11 @@ endif(NOT EIGEN3_FOUND)
 
 find_package(SDL2 REQUIRED)
 find_package(SDL2_mixer REQUIRED)
-find_package(SDL_ttf REQUIRED)
 find_package(SDL2_image REQUIRED)
 find_package(PugiXML REQUIRED)
 find_package(OpenGL REQUIRED)
 find_package(GLEW REQUIRED)
+find_package(FreeType REQUIRED)
 
 if (NOT SDL2_FOUND)
     message(FATAL_ERROR "Could not find SDL2. Install that shit, yo.")
@@ -54,14 +54,12 @@ if (NOT SDLMIXER_FOUND)
     message(FATAL_ERROR "Could not find SDL2_mixer addon. Install that shit, yo.")
 endif()
 
-message("found? " + ${SDLTTF_FOUND} + "lib: " + ${SDLTTF_LIBRARY} + ${SDLTTF_INCLUDE_DIR})
-
-if (NOT SDLTTF_FOUND)
-    message(FATAL_ERROR "Could not find SDL2_ttf addon. Install that shit, yo.")
-endif()
-
 if (NOT SDL2IMAGE_FOUND)
     message(FATAL_ERROR "Could not find SDL2_image addon. Install that shit, yo.")
+endif()
+
+if (NOT FREETYPE_FOUND)
+    message(FATAL_ERROR "Could not find FreeType. Install that shit, yo.")
 endif()
 
 if (NOT PugiXML_FOUND)
@@ -97,8 +95,8 @@ include(FindPkgConfig)
 
 add_executable(${EXECUTABLE_NAME} ${SRC})
 
-include_directories(${CMAKE_SOURCE_DIR} ${SDL2_INCLUDE_DIR} ${SDL2IMAGE_INCLUDE_DIR} ${SDLMIXER_INCLUDE_DIR} ${SDLTTF_INCLUDE_DIR} ${EIGEN3_INCLUDE_DIR} ${GLEW_INCLUDE_DIRS})
-target_link_libraries(${EXECUTABLE_NAME} ${SDL2_LIBRARY} ${SDL2MAIN_LIBRARY} ${SDL2IMAGE_LIBRARY} ${SDLMIXER_LIBRARY} ${SDLTTF_LIBRARY} ${OPENGL_LIBRARIES} ${PugiXML_LIBRARY} ${GLEW_LIBRARIES})
+include_directories(${CMAKE_SOURCE_DIR} ${SDL2_INCLUDE_DIR} ${SDL2IMAGE_INCLUDE_DIR} ${SDLMIXER_INCLUDE_DIR} ${FREETYPE_INCLUDE_DIRS} ${EIGEN3_INCLUDE_DIR} ${GLEW_INCLUDE_DIRS})
+target_link_libraries(${EXECUTABLE_NAME} ${SDL2_LIBRARY} ${SDL2MAIN_LIBRARY} ${SDL2IMAGE_LIBRARY} ${SDLMIXER_LIBRARY} ${FREETYPE_LIBRARIES} ${OPENGL_LIBRARIES} ${PugiXML_LIBRARY} ${GLEW_LIBRARIES})
 
 # CPack packaging
 include(InstallRequiredSystemLibraries)
