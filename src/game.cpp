@@ -26,12 +26,6 @@
 #include <string>
 #include <fstream>
 
-#include <GL/glew.h>
-
-#include <SDL/SDL.h>
-#include <SDL/SDL_ttf.h>
-#include <SDL/SDL_image.h>
-
 Game::Game()
 {
 }
@@ -47,34 +41,73 @@ void Game::abort_game(const char* message)
     exit(1);
 }
 
+void checkSDLError()
+{
+    std::string error = SDL_GetError();
+    if (*error.c_str() != '\0')
+    {
+        Debug::log(Debug::Area::System) << "SDL Error: " << error;
+        SDL_ClearError();
+    }
+}
+
 void Game::init()
 {
 
-//    version = al_get_opengl_version();
-//    major = version >> 24;
-//    minor = (version >> 16) & 255;
-//    revision = (version >> 8) & 255;
-//
-//    std::cout << "\n\n\n\n";
-//    Debug::log(Debug::Area::Graphics) << "Hardware we're running on...";
-//    Debug::log(Debug::Area::Graphics) << major << "." << minor << "." << revision;
-//
-//    int glVariant = al_get_opengl_variant();
-//
-//    if (glVariant & ALLEGRO_DESKTOP_OPENGL) {
-//        Debug::log(Debug::Area::Graphics) << "Using desktop OpenGL variant.";
-//    } else if (glVariant & ALLEGRO_OPENGL_ES) {
-//        Debug::log(Debug::Area::Graphics) << "Using OpenGL ES OpenGL variant.";
-//    }
-//
-//    Debug::log(Debug::Area::Graphics) << "Platform: Driver Vendor: " << glGetString(GL_VENDOR);
-//    Debug::log(Debug::Area::Graphics) << "Platform: Renderer: " << glGetString(GL_RENDERER);
-//    Debug::log(Debug::Area::Graphics) << "OpenGL Version: " << glGetString(GL_VERSION);
-//    Debug::log(Debug::Area::Graphics) << "GLSL Version: " << glGetString(GL_SHADING_LANGUAGE_VERSION);
-//
-  //  GLint textureSize;
-//    glGetIntegerv(GL_MAX_TEXTURE_SIZE, &textureSize);
- //   Debug::log(Debug::Area::Graphics) << "Maximum OpenGL texture size allowed: " << textureSize;
+    Debug::log(Debug::Area::System) << "SDL on platform: " << SDL_GetPlatform();
+
+    SDL_version compiled;
+    SDL_version linked;
+    SDL_VERSION(&compiled);
+    SDL_GetVersion(&linked);
+
+    Debug::log(Debug::Area::System) << "Compiled against SDL version: " << int(compiled.major) << "." << int(compiled.minor) << "-" << int(compiled.patch) <<
+    " Running (linked) against version: " << int(linked.major) << "." << int(linked.minor) << "-" << int(linked.patch);
+
+    if (SDL_Init(SDL_INIT_VIDEO | SDL_INIT_AUDIO | SDL_INIT_TIMER) != 0) {
+        std::string error = SDL_GetError();
+        Debug::fatal(false, Debug::Area::System, "failure to initialize SDL error: " + error);
+    }
+
+    m_window = SDL_CreateWindow("Ore Chasm", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED,
+                                SCREEN_W, SCREEN_H, SDL_WINDOW_SHOWN | SDL_WINDOW_OPENGL);
+
+    if (!m_window) {
+        checkSDLError();
+    }
+
+    SDL_GL_SetAttribute(SDL_GL_RED_SIZE, 5);
+    SDL_GL_SetAttribute(SDL_GL_GREEN_SIZE, 5);
+    SDL_GL_SetAttribute(SDL_GL_BLUE_SIZE, 5);
+
+    /* Request opengl 3.2 context.
+     * SDL doesn't have the ability to choose which profile at this time of writing,
+     * but it should default to the core profile */
+    //FIXME: i *want 3.2, but Mesa 9 only has 3.0.. :(
+    SDL_GL_SetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, 3);
+    SDL_GL_SetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, 0);
+
+    /* Turn on double buffering with a 24bit Z buffer.
+     * You may need to change this to 16 or 32 for your system */
+    SDL_GL_SetAttribute(SDL_GL_DOUBLEBUFFER, 1);
+    SDL_GL_SetAttribute(SDL_GL_DEPTH_SIZE, 24);
+
+    //TODO: we'll probably need some extension at some point in time..
+    //SDL_GL_ExtensionSupported();
+
+    m_context = SDL_GL_CreateContext(m_window);
+
+    checkSDLError();
+
+
+    Debug::log(Debug::Area::Graphics) << "Platform: Driver Vendor: " << glGetString(GL_VENDOR);
+    Debug::log(Debug::Area::Graphics) << "Platform: Renderer: " << glGetString(GL_RENDERER);
+    Debug::log(Debug::Area::Graphics) << "OpenGL Version: " << glGetString(GL_VERSION);
+    Debug::log(Debug::Area::Graphics) << "GLSL Version: " << glGetString(GL_SHADING_LANGUAGE_VERSION);
+
+    GLint textureSize;
+    glGetIntegerv(GL_MAX_TEXTURE_SIZE, &textureSize);
+    Debug::log(Debug::Area::Graphics) << "Maximum OpenGL texture size allowed: " << textureSize;
     std::cout << "\n\n\n\n";
 
 //    Debug::fatal(m_font = al_load_ttf_font("../font/Ubuntu-L.ttf", 12, 0), Debug::Area::System, "Failure to load font");
@@ -147,5 +180,6 @@ shutdown:
 
 void Game::shutdown()
 {
+    SDL_Quit();
     exit(0);
 }

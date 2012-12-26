@@ -19,10 +19,12 @@
 #define GAME_H
 
 //#include "world.h"
-
 #include <stdio.h>
 #include <stdlib.h>
 
+#include <GL/glew.h>
+
+#include <SDL2/SDL.h>
 
 //1600
 static int SCREEN_W = 1600;
@@ -31,6 +33,8 @@ static int SCREEN_H = 900;
 
 //FIXME: make on/off via key
 static bool DEBUG_RENDERING = true;
+
+static SDL_LogPriority SDL_LOGPRIORITY = SDL_LOG_PRIORITY_WARN;
 
 class Game
 {
@@ -47,6 +51,8 @@ public:
 
 private:
  //   World *m_world = nullptr;
+    SDL_Window *m_window = nullptr;
+    SDL_GLContext m_context;
     bool m_running = true;
 };
 
