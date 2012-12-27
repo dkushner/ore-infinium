@@ -70,7 +70,7 @@ void Game::init()
         Debug::fatal(false, Debug::Area::System, "failure to initialize SDL error: " + error);
     }
 
-    m_window = SDL_CreateWindow("Ore Chasm", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED,
+    m_window = SDL_CreateWindow("Ore Chasm", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED,
                                 SCREEN_W, SCREEN_H, SDL_WINDOW_SHOWN | SDL_WINDOW_OPENGL);
 
     if (!m_window) {
@@ -113,6 +113,22 @@ void Game::init()
     m_font = new FTGLPixmapFont("../font/Ubuntu-L.ttf");
     Debug::fatal(!m_font->Error(), Debug::Area::System, "Failure to load font");
 
+    glClearColor(1.0f, 0.0f, 0.0f, 0.0f);
+    glClearDepth(1.0f);
+
+    glViewport(0, 0, SCREEN_W, SCREEN_H);
+
+    glMatrixMode(GL_PROJECTION);
+    glLoadIdentity();
+
+    glOrtho(0, SCREEN_W, SCREEN_H, 0, 1, -1);
+
+    glMatrixMode(GL_MODELVIEW);
+
+    glEnable(GL_TEXTURE_2D);
+
+    glLoadIdentity();
+
 //    ImageManager* manager = ImageManager::instance();
 //    manager->addResourceDir("../textures/");
 
@@ -150,6 +166,18 @@ void Game::handleEvents()
     }
 }
 
+void Game::render()
+{
+    glLoadIdentity();
+
+    glBegin(GL_QUADS);
+    glColor3f(1, 0, 0); glVertex3f(0, 0, 0);
+    glColor3f(1, 1, 0); glVertex3f(100, 0, 0);
+    glColor3f(1, 0, 1); glVertex3f(100, 100, 0);
+    glColor3f(1, 1, 1); glVertex3f(0, 100, 0);
+    glEnd();
+}
+
 double fps = 0.0;
 
 void Game::tick()
@@ -160,7 +188,6 @@ void Game::tick()
     while (m_running) {
         fps =(frameCount / float(SDL_GetTicks() - startTime)) * 1000;
 
-
            // m_world->update(static_cast<float>(delta));
            // m_world->render();
 
@@ -168,7 +195,9 @@ void Game::tick()
 
             handleEvents();
 
-            glClear(GL_COLOR_BUFFER_BIT);
+            glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
+            render();
             //render some crap
             drawDebugText();
 

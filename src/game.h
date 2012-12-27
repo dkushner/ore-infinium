@@ -56,6 +56,7 @@ public:
     void abort_game(const char* message);
     void shutdown();
 
+    void render();
     void drawDebugText();
 
     const float FPS = 60.0;
