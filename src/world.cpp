@@ -267,7 +267,7 @@ unsigned char World::calculateTileMeshingType(const int tileX, const int tileY) 
     return result;
 }
 
-bool World::isTileSolid(const Eigen::Vector2f& vecDest) const
+bool World::isBlockSolid(Eigen::vector2f vecDest) const
 {
     const int column = int(std::ceil(vecDest.x()) / Block::blockSize);
     const int row = int(std::ceil(vecDest.y()) / Block::blockSize);
@@ -275,10 +275,25 @@ bool World::isTileSolid(const Eigen::Vector2f& vecDest) const
     int index = column * WORLD_ROWCOUNT + row;
     assert(index < WORLD_ROWCOUNT * WORLD_COLUMNCOUNT);
 
-    const unsigned char tileType = World::m_blocks[index].primitiveType;
+    const unsigned char blockType = World::m_blocks[index].primitiveType;
 
     //FIXME: do water, lava, doors..what else?
-    return  tileType != 0;
+    return  blockType != 0;
+}
+
+char World::getBlockType(Eigen::vector2f vecPoint) const
+{
+
+    const int column = int(std::ceil(vecPoint.x()) / Block::blockSize);
+    const int row = int(std::ceil(vecPoint.y()) / Block::blockSize);
+
+    int index = column * WORLD_ROWCOUNT + row;
+    assert(index < WORLD_ROWCOUNT * WORLD_COLUMNCOUNT);
+
+    const unsigned char blockType = World::m_blocks[index].primitiveType;
+
+    return  blockType;
+
 }
 
 bool World::tileBlendTypeMatch(const int sourceTileX, const int sourceTileY, const int nearbyTileX, const int nearbyTileY) const
