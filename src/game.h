@@ -56,10 +56,16 @@ public:
     void abort_game(const char* message);
     void shutdown();
 
+    void initGL();
+    void loadDefaultShaders();
     void render();
     void drawDebugText();
+    void loadTexture();
 
     const float FPS = 60.0;
+
+    void printShaderInfoLog(GLint shader);
+    char* loadFile(char *fname, GLint &fSize);
 
 private:
     FTGLPixmapFont *m_font = nullptr;
@@ -68,6 +74,8 @@ private:
     SDL_Window *m_window = nullptr;
     SDL_GLContext m_context;
     bool m_running = true;
+    
+   
 };
 
 

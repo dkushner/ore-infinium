@@ -26,6 +26,11 @@
 #include <string>
 #include <fstream>
 
+#include <vector>
+
+#include <FreeImage.h>
+#include <glm/glm.hpp>
+
 #include <assert.h>
 
 Game::Game()
@@ -53,6 +58,11 @@ void checkSDLError()
     }
 }
 
+
+
+GLuint shaderProgram;
+GLuint TextureID = 0;
+
 void Game::init()
 {
     Debug::log(Debug::Area::System) << "SDL on platform: " << SDL_GetPlatform();
@@ -63,7 +73,7 @@ void Game::init()
     SDL_GetVersion(&linked);
 
     Debug::log(Debug::Area::System) << "Compiled against SDL version: " << int(compiled.major) << "." << int(compiled.minor) << "-" << int(compiled.patch) <<
-    " Running (linked) against version: " << int(linked.major) << "." << int(linked.minor) << "-" << int(linked.patch);
+                                    " Running (linked) against version: " << int(linked.major) << "." << int(linked.minor) << "-" << int(linked.patch);
 
     if (SDL_Init(SDL_INIT_VIDEO | SDL_INIT_AUDIO | SDL_INIT_TIMER) != 0) {
         std::string error = SDL_GetError();
@@ -99,6 +109,7 @@ void Game::init()
     m_context = SDL_GL_CreateContext(m_window);
 
     checkSDLError();
+    glewInit();
 
     Debug::log(Debug::Area::Graphics) << "Platform: Driver Vendor: " << glGetString(GL_VENDOR);
     Debug::log(Debug::Area::Graphics) << "Platform: Renderer: " << glGetString(GL_RENDERER);
@@ -129,6 +140,7 @@ void Game::init()
 
     glLoadIdentity();
 
+
 //    ImageManager* manager = ImageManager::instance();
 //    manager->addResourceDir("../textures/");
 
@@ -136,8 +148,192 @@ void Game::init()
     //m_world = World::instance();
     m_font->FaceSize(12);
 
+//    loadDefaultShaders();
+
+    initGL();
+
+
+
+//FIXME    loadTexture();
+
     tick();
     shutdown();
+}
+
+// printShaderInfoLog
+// From OpenGL Shading Language 3rd Edition, p215-216
+// Display (hopefully) useful error messages if shader fails to compile
+void Game::printShaderInfoLog(GLint shader)
+{
+    int infoLogLen = 0;
+    int charsWritten = 0;
+    GLchar *infoLog;
+
+    glGetShaderiv(shader, GL_INFO_LOG_LENGTH, &infoLogLen);
+
+    // should additionally check for OpenGL errors here
+
+    if (infoLogLen > 0)
+    {
+        infoLog = new GLchar[infoLogLen];
+        // error check for fail to allocate memory omitted
+        glGetShaderInfoLog(shader,infoLogLen, &charsWritten, infoLog);
+        std::cout << "InfoLog:" << std::endl << infoLog << std::endl;
+        delete [] infoLog;
+    }
+
+    // should additionally check for OpenGL errors here
+}
+
+// loadFile - loads text file into char* fname
+// allocates memory - so need to delete after use
+// size of file returned in fSize
+char* Game::loadFile(char *fname, GLint &fSize)
+{
+    std::ifstream::pos_type size;
+    char * memblock;
+    std::string text;
+
+    // file read based on example in cplusplus.com tutorial
+    std::ifstream file (fname, std::ios::in|std::ios::binary|std::ios::ate);
+    if (file.is_open())
+    {
+        size = file.tellg();
+        fSize = (GLuint) size;
+        memblock = new char [size];
+        file.seekg (0, std::ios::beg);
+        file.read (memblock, size);
+        file.close();
+        std::cout << "file " << fname << " loaded" << std::endl;
+        text.assign(memblock);
+    }
+    else
+    {
+        std::cout << "Unable to open file " << fname << std::endl;
+        exit(1);
+    }
+    return memblock;
+}
+
+void Game::loadDefaultShaders()
+{
+    /*    GLuint p, f, v;
+
+        char *vs,*fs;
+
+        v = glCreateShader(GL_VERTEX_SHADER);
+        f = glCreateShader(GL_FRAGMENT_SHADER);
+
+        // load shaders & get length of each
+        GLint vlen;
+        GLint flen;
+        vs = loadFile("sprite.vert",vlen);
+        fs = loadFile("sprite.frag",flen);
+
+        const char * vv = vs;
+        const char * ff = fs;
+
+        glShaderSource(v, 1, &vv,&vlen);
+        glShaderSource(f, 1, &ff,&flen);
+
+        GLint compiled;
+
+        glCompileShader(v);
+        glGetShaderiv(v, GL_COMPILE_STATUS, &compiled);
+        if (!compiled)
+        {
+            std::cout << "Vertex shader not compiled." << std::endl;
+            printShaderInfoLog(v);
+        }
+
+        glCompileShader(f);
+        glGetShaderiv(f, GL_COMPILE_STATUS, &compiled);
+        if (!compiled)
+        {
+            std::cout << "Fragment shader not compiled." << std::endl;
+            printShaderInfoLog(f);
+        }
+
+        p = glCreateProgram();
+
+        glBindAttribLocation(p, 0, "in_position");
+        glBindAttribLocation(p, 1, "in_color");
+
+        glAttachShader(p,v);
+        glAttachShader(p,f);
+
+        glLinkProgram(p);
+        glUseProgram(p);
+        shaderProgram = p;
+
+        delete [] vs; // dont forget to free allocated memory
+        delete [] fs; // we allocated this in the loadFile function...
+        */
+
+
+}
+
+void Game::loadTexture()
+{
+    /////////////////////////////////////////////
+    // NEW! - This function has been completely
+    // rewritten to use FreeImage.
+    /////////////////////////////////////////////
+
+    const char* texturePath = "../textures/player.png";
+
+    // Get the image file type from FreeImage.
+    FREE_IMAGE_FORMAT fifmt = FreeImage_GetFileType(texturePath, 0);
+
+    // Actually load the image file.
+    FIBITMAP *dib = FreeImage_Load(fifmt, texturePath,0);
+
+    // Now, there is no guarantee that the image file
+    // loaded will be GL_RGB, so we force FreeImage to
+    // convert the image to GL_RGB.
+    dib = FreeImage_ConvertTo24Bits(dib);
+
+    assert(dib);
+
+    glGenTextures( 1, &TextureID );
+    glBindTexture( GL_TEXTURE_2D, TextureID );
+    glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE );
+    glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE );
+    glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR );
+    glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR );
+
+
+    // This is important to note, FreeImage loads textures in
+    // BGR format. Now we could just use the GL_BGR extension
+    // But, we will simply swap the B and R components ourselves.
+    // Firstly, allocate the new bit data doe the image.
+    BYTE *bits = new BYTE[FreeImage_GetWidth(dib) * FreeImage_GetHeight(dib) * 3];
+
+    // get a pointer to FreeImage's data.
+    BYTE *pixels = (BYTE*)FreeImage_GetBits(dib);
+
+    // Iterate through the pixels, copying the data
+    // from 'pixels' to 'bits' except in RGB format.
+    for(int pix=0; pix<FreeImage_GetWidth(dib) * FreeImage_GetHeight(dib); pix++)
+    {
+        bits[pix*3+0]=pixels[pix*3+2];
+        bits[pix*3+1]=pixels[pix*3+1];
+        bits[pix*3+2]=pixels[pix*3+0];
+
+    }
+
+    // The new 'glTexImage2D' function, the prime difference
+    // being that it gets the width, height and pixel information
+    // from 'bits', which is the RGB pixel data..
+    glTexImage2D( GL_TEXTURE_2D, 0, 3, FreeImage_GetWidth(dib), FreeImage_GetHeight(dib), 0,
+                  GL_RGB, GL_UNSIGNED_BYTE, bits );
+
+
+    // Unload the image.
+    // and free the bit data.
+    FreeImage_Unload(dib);
+    delete bits;
+
 }
 
 void Game::handleEvents()
@@ -146,36 +342,233 @@ void Game::handleEvents()
 
     while (SDL_PollEvent(&event)) {
         switch (event.type) {
-            case SDL_KEYDOWN:
-                if (event.key.keysym.sym == SDLK_ESCAPE) {
-                    m_running = false;
-                }
-                break;
-
-            case SDL_WINDOWEVENT_CLOSE:
+        case SDL_KEYDOWN:
+            if (event.key.keysym.sym == SDLK_ESCAPE) {
                 m_running = false;
-                break;
+            }
+            break;
 
-            case SDL_QUIT:
-                exit(0);
-                break;
+        case SDL_WINDOWEVENT_CLOSE:
+            m_running = false;
+            break;
 
-            default:
-                break;
+        case SDL_QUIT:
+            exit(0);
+            break;
+
+        default:
+            break;
         }
     }
 }
 
+
+// shader source code
+std::string vertex_source =
+    "#version 330\n"
+    "layout(location = 0) in vec4 vposition;\n"
+    "layout(location = 1) in vec2 vtexcoord;\n"
+    "out vec2 ftexcoord;\n"
+    "void main() {\n"
+    "   ftexcoord = vtexcoord;\n"
+    "   gl_Position = vposition;\n"
+    "}\n";
+
+std::string fragment_source =
+    "#version 330\n"
+    "uniform sampler2D tex;\n" // texture uniform
+    "in vec2 ftexcoord;\n"
+    "layout(location = 0) out vec4 FragColor;\n"
+    "void main() {\n"
+    "   FragColor = texture(tex, ftexcoord);\n"
+    "}\n";
+
+// helper to check and display for shader compiler errors
+bool check_shader_compile_status(GLuint obj)
+{
+    GLint status;
+    glGetShaderiv(obj, GL_COMPILE_STATUS, &status);
+    if(status == GL_FALSE)
+    {
+        GLint length;
+        glGetShaderiv(obj, GL_INFO_LOG_LENGTH, &length);
+        std::vector<char> log(length);
+        glGetShaderInfoLog(obj, length, &length, &log[0]);
+        std::cerr << &log[0];
+        return false;
+    }
+    return true;
+}
+
+// helper to check and display for shader linker error
+bool check_program_link_status(GLuint obj)
+{
+    GLint status;
+    glGetProgramiv(obj, GL_LINK_STATUS, &status);
+    if(status == GL_FALSE)
+    {
+        GLint length;
+        glGetProgramiv(obj, GL_INFO_LOG_LENGTH, &length);
+        std::vector<char> log(length);
+        glGetProgramInfoLog(obj, length, &length, &log[0]);
+        std::cerr << &log[0];
+        return false;
+    }
+    return true;
+}
+
+GLint texture_location;
+GLuint vao;
+GLuint texture;
+
+void Game::initGL()
+{
+    int width = 600;
+    int height = 600;
+    // program and shader handles
+    GLuint vertex_shader, fragment_shader;
+
+    // we need these to properly pass the strings
+    const char *source;
+    int length;
+
+    // create and compiler vertex shader
+    vertex_shader = glCreateShader(GL_VERTEX_SHADER);
+    source = vertex_source.c_str();
+    length = vertex_source.size();
+    glShaderSource(vertex_shader, 1, &source, &length);
+    glCompileShader(vertex_shader);
+    if(!check_shader_compile_status(vertex_shader))
+    {
+        assert(0);
+    }
+
+    // create and compiler fragment shader
+    fragment_shader = glCreateShader(GL_FRAGMENT_SHADER);
+    source = fragment_source.c_str();
+    length = fragment_source.size();
+    glShaderSource(fragment_shader, 1, &source, &length);
+    glCompileShader(fragment_shader);
+    if(!check_shader_compile_status(fragment_shader))
+    {
+        assert(0);
+    }
+
+    // create program
+    shaderProgram = glCreateProgram();
+
+    // attach shaders
+    glAttachShader(shaderProgram, vertex_shader);
+    glAttachShader(shaderProgram, fragment_shader);
+
+    // link the program and check for errors
+    glLinkProgram(shaderProgram);
+    check_program_link_status(shaderProgram);
+
+    // get texture uniform location
+    texture_location = glGetUniformLocation(shaderProgram, "tex");
+
+    // vao and vbo handle
+    GLuint vbo, ibo;
+
+    // generate and bind the vao
+    glGenVertexArrays(1, &vao);
+    glBindVertexArray(vao);
+
+    // generate and bind the vertex buffer object
+    glGenBuffers(1, &vbo);
+    glBindBuffer(GL_ARRAY_BUFFER, vbo);
+
+    // data for a fullscreen quad (this time with texture coords)
+    GLfloat vertexData[] = {
+        //  X     Y     Z           U     V
+        1.0f, 1.0f, 0.0f,       1.0f, 1.0f, // vertex 0
+        -1.0f, 1.0f, 0.0f,       0.0f, 1.0f, // vertex 1
+        1.0f,-1.0f, 0.0f,       1.0f, 0.0f, // vertex 2
+        -1.0f,-1.0f, 0.0f,       0.0f, 0.0f, // vertex 3
+    }; // 4 vertices with 5 components (floats) each
+
+    // fill with data
+    glBufferData(GL_ARRAY_BUFFER, sizeof(GLfloat)*4*5, vertexData, GL_STATIC_DRAW);
+
+    // set up generic attrib pointers
+    glEnableVertexAttribArray(0);
+    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 5*sizeof(GLfloat), (char*)0 + 0*sizeof(GLfloat));
+
+    glEnableVertexAttribArray(1);
+    glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 5*sizeof(GLfloat), (char*)0 + 3*sizeof(GLfloat));
+
+    // generate and bind the index buffer object
+    glGenBuffers(1, &ibo);
+    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, ibo);
+
+    GLuint indexData[] = {
+        0,1,2, // first triangle
+        2,1,3, // second triangle
+    };
+
+    // fill with data
+    glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(GLuint)*2*3, indexData, GL_STATIC_DRAW);
+
+    // "unbind" vao
+    glBindVertexArray(0);
+
+    // texture handle
+
+    // generate texture
+    glGenTextures(1, &texture);
+
+    // bind the texture
+    glBindTexture(GL_TEXTURE_2D, texture);
+
+    // create some image data
+    std::vector<GLubyte> image(4*width*height);
+    for(int j = 0; j<height; ++j)
+        for(int i = 0; i<width; ++i)
+        {
+            size_t index = j*width + i;
+            image[4*index + 0] = 0xFF*(j/10%2)*(i/10%2); // R
+            image[4*index + 1] = 0xFF*(j/13%2)*(i/13%2); // G
+            image[4*index + 2] = 0xFF*(j/17%2)*(i/17%2); // B
+            image[4*index + 3] = 0xFF;                   // A
+        }
+
+    // set texture parameters
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+
+    // set texture content
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA8, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, &image[0]);
+}
+
 void Game::render()
 {
-    glLoadIdentity();
+//    glLoadIdentity();
+    // use the shader program
+    glUseProgram(shaderProgram);
 
-    glBegin(GL_QUADS);
-    glColor3f(1, 0, 0); glVertex3f(0, 0, 0);
-    glColor3f(1, 1, 0); glVertex3f(100, 0, 0);
-    glColor3f(1, 0, 1); glVertex3f(100, 100, 0);
-    glColor3f(1, 1, 1); glVertex3f(0, 100, 0);
-    glEnd();
+    // bind texture to texture unit 0
+    glActiveTexture(GL_TEXTURE0);
+    glBindTexture(GL_TEXTURE_2D, texture);
+
+    // set texture uniform
+    glUniform1i(texture_location, 0);
+
+    // bind the vao
+    glBindVertexArray(vao);
+
+    // draw
+    glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
+
+    // check for errors
+    GLenum error = glGetError();
+    if(error != GL_NO_ERROR)
+    {
+        std::cerr << gluErrorString(error);
+        assert(0);
+    }
 }
 
 double fps = 0.0;
@@ -188,22 +581,22 @@ void Game::tick()
     while (m_running) {
         fps =(frameCount / float(SDL_GetTicks() - startTime)) * 1000;
 
-           // m_world->update(static_cast<float>(delta));
-           // m_world->render();
+        // m_world->update(static_cast<float>(delta));
+        // m_world->render();
 
-            //rendering always before this
+        //rendering always before this
 
-            handleEvents();
+        handleEvents();
 
-            glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-            render();
-            //render some crap
-            drawDebugText();
+        render();
+        //render some crap
+        drawDebugText();
 
-            SDL_GL_SwapWindow(m_window);
+        SDL_GL_SwapWindow(m_window);
 
-            ++frameCount;
+        ++frameCount;
     }
 
 shutdown:

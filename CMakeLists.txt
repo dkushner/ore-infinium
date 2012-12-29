@@ -40,12 +40,13 @@ endif(NOT EIGEN3_FOUND)
 
 find_package(SDL2 REQUIRED)
 find_package(SDL2_mixer REQUIRED)
-find_package(SDL2_image REQUIRED)
+find_package(FreeImage REQUIRED)
 find_package(PugiXML REQUIRED)
 find_package(OpenGL REQUIRED)
 find_package(GLEW REQUIRED)
 find_package(FreeType REQUIRED)
 find_package(FTGL REQUIRED)
+find_package(GLM REQUIRED)
 
 if (NOT SDL2_FOUND)
     message(FATAL_ERROR "Could not find SDL2. Install that shit, yo.")
@@ -55,8 +56,8 @@ if (NOT SDLMIXER_FOUND)
     message(FATAL_ERROR "Could not find SDL2_mixer addon. Install that shit, yo.")
 endif()
 
-if (NOT SDL2IMAGE_FOUND)
-    message(FATAL_ERROR "Could not find SDL2_image addon. Install that shit, yo.")
+if (NOT FREEIMAGE_FOUND)
+    message(FATAL_ERROR "Could not find Free Image lib. Unable to load images/textures. Install that shit, yo.")
 endif()
 
 if (NOT FREETYPE_FOUND)
@@ -67,6 +68,9 @@ if (NOT FTGL_FOUND)
     message(FATAL_ERROR "Could not find FTGL. We use it to render fonts easily, because I'm lazy. Install that shit, yo.")
 endif()
 
+if (NOT GLM_FOUND)
+    message(FATAL_ERROR "Could not find GLM. Used for vector/matrix math. Install that shit, yo.")
+endif()
 
 if (NOT PugiXML_FOUND)
     message(FATAL_ERROR "Could not find pugixml library.")
@@ -100,8 +104,8 @@ src/debug.cpp
 include(FindPkgConfig)
 add_executable(${EXECUTABLE_NAME} ${SRC})
 
-include_directories(${CMAKE_SOURCE_DIR} ${SDL2_INCLUDE_DIR} ${SDL2IMAGE_INCLUDE_DIR} ${SDLMIXER_INCLUDE_DIR} ${FREETYPE_INCLUDE_DIRS} ${FTGL_INCLUDE_DIR} ${EIGEN3_INCLUDE_DIR} ${GLEW_INCLUDE_DIRS})
-target_link_libraries(${EXECUTABLE_NAME} ${SDL2_LIBRARY} ${SDL2MAIN_LIBRARY} ${SDL2IMAGE_LIBRARY} ${SDLMIXER_LIBRARY} ${FREETYPE_LIBRARY} ${FTGL_LIBRARY} ${OPENGL_LIBRARIES} ${PugiXML_LIBRARY} ${GLEW_LIBRARIES})
+include_directories(${CMAKE_SOURCE_DIR} ${SDL2_INCLUDE_DIR} ${SDLMIXER_INCLUDE_DIR} ${FREEIMAGE_INCLUDE_PATH} ${FREETYPE_INCLUDE_DIRS} ${GLM_INCLUDE_DIRS} ${FTGL_INCLUDE_DIR} ${EIGEN3_INCLUDE_DIR} ${GLEW_INCLUDE_DIRS})
+target_link_libraries(${EXECUTABLE_NAME} ${SDL2_LIBRARY} ${SDL2MAIN_LIBRARY} ${SDLMIXER_LIBRARY} ${FREEIMAGE_LIBRARY} ${FREETYPE_LIBRARY} ${FTGL_LIBRARY} ${OPENGL_LIBRARIES} ${PugiXML_LIBRARY} ${GLEW_LIBRARIES})
 
 # CPack packaging
 include(InstallRequiredSystemLibraries)
@@ -117,4 +121,5 @@ install(DIRECTORY textures/ DESTINATION "textures") #FILES_MATCHING PATTERN "*")
 install(DIRECTORY font/ DESTINATION "font") #FILES_MATCHING PATTERN "*")
 
 install(DIRECTORY src/ DESTINATION bin FILES_MATCHING PATTERN "*.frag" )
+install(DIRECTORY src/ DESTINATION bin FILES_MATCHING PATTERN "*.vert" )
 install(TARGETS ${EXECUTABLE_NAME} DESTINATION bin)
