@@ -56,6 +56,18 @@ public:
      */
     void setVelocity(const Eigen::Vector2f& velocity);
     void setVelocity(float x, float y);
+    
+    /**
+     * Returns the final position the player should move to after collision checking
+     * based on initial position firstPosition, final position destPosition, and
+     * width/height dimensions.
+     */
+    Eigen::Vector2f moveOutsideSolid(Eigen::Vector2f firstPosition, Eigen::Vector2f destPosition, Eigen::Vector2f dimensions) const;
+    /**
+     * Determines if the entity will collide at position destPosition if it has
+     * dimensions as defined by dimensions.
+     */
+    bool collidingWithTile(Eigen::Vector2f destPosition, Eigen::Vector2f dimensions) const;
 
 private:
     Eigen::Vector2f m_velocity;

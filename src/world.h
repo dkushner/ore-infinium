@@ -71,7 +71,9 @@ public:
 
     void handleEvent(const ALLEGRO_EVENT& event);
 
-    bool isTileSolid(const Eigen::Vector2f& vecDest) const;
+    bool isBlockSolid(const Eigen::Vector2f& vecDest) const;
+
+    char getBlockType(Eigen::vector2f vecPoint) const
 
     //create containers of various entities, and implement a tile system
     //game.cpp calls into this each tick, which this descends downward into each entity
