@@ -91,6 +91,7 @@ set(SRC
 src/main.cpp
 src/game.cpp
 src/debug.cpp
+src/texturemanager.cpp
 #src/world.cpp
 #src/resourcemanager.cpp
 #src/player.cpp

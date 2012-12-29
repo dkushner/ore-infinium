@@ -18,6 +18,7 @@
 #include "game.h"
 
 #include "debug.h"
+#include "texturemanager.h"
 
 #include <iostream>
 #include <sstream>
@@ -153,8 +154,6 @@ void Game::init()
     initGL();
 
 
-
-//FIXME    loadTexture();
 
     tick();
     shutdown();
@@ -513,34 +512,36 @@ void Game::initGL()
     // "unbind" vao
     glBindVertexArray(0);
 
+    bool loaded = TextureManager::Inst()->LoadTexture("../textures/player.png", TextureID, GL_BGRA_EXT, GL_RGBA);
+    assert(loaded);
     // texture handle
 
-    // generate texture
-    glGenTextures(1, &texture);
-
-    // bind the texture
-    glBindTexture(GL_TEXTURE_2D, texture);
-
-    // create some image data
-    std::vector<GLubyte> image(4*width*height);
-    for(int j = 0; j<height; ++j)
-        for(int i = 0; i<width; ++i)
-        {
-            size_t index = j*width + i;
-            image[4*index + 0] = 0xFF*(j/10%2)*(i/10%2); // R
-            image[4*index + 1] = 0xFF*(j/13%2)*(i/13%2); // G
-            image[4*index + 2] = 0xFF*(j/17%2)*(i/17%2); // B
-            image[4*index + 3] = 0xFF;                   // A
-        }
-
-    // set texture parameters
+//    // generate texture
+//    glGenTextures(1, &texture);
+//
+//    // bind the texture
+//    glBindTexture(GL_TEXTURE_2D, TextureID);
+//
+//    // create some image data
+//    std::vector<GLubyte> image(4*width*height);
+//    for(int j = 0; j<height; ++j)
+//        for(int i = 0; i<width; ++i)
+//        {
+//            size_t index = j*width + i;
+//            image[4*index + 0] = 0xFF*(j/10%2)*(i/10%2); // R
+//            image[4*index + 1] = 0xFF*(j/13%2)*(i/13%2); // G
+//            image[4*index + 2] = 0xFF*(j/17%2)*(i/17%2); // B
+//            image[4*index + 3] = 0xFF;                   // A
+//        }
+//
+//    // set texture parameters
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
-
-    // set texture content
-    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA8, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, &image[0]);
+//
+//    // set texture content
+//    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA8, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, &image[0]);
 }
 
 void Game::render()
@@ -550,8 +551,9 @@ void Game::render()
     glUseProgram(shaderProgram);
 
     // bind texture to texture unit 0
-    glActiveTexture(GL_TEXTURE0);
-    glBindTexture(GL_TEXTURE_2D, texture);
+//    glActiveTexture(GL_TEXTURE0);
+//    glBindTexture(GL_TEXTURE_2D, TextureID);
+    TextureManager::Inst()->BindTexture(TextureID);
 
     // set texture uniform
     glUniform1i(texture_location, 0);
