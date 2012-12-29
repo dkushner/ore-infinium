@@ -77,7 +77,14 @@ Eigen::Vector2f Entity::moveOutsideSolid(Eigen::Vector2f firstPosition, Eigen::V
 {
     Eigen::Vector2f tempPosition = firstPosition;
     if (checkTileCollision(destPosition, dimensions)) {
-        int horDir = (m_velocity.x() > 0) ? 1 : ((m_velocity.x() < 0) ? -1 : 0);
+        int horDir;
+		if (m_velocity.x() > 0) {
+			horDir = 1;
+		} else if (m_velocity.x() < 0) {
+			horDir = -1;
+		} else {
+			horDir = 0;
+		}
         if (horDir != 0) {
             int horMove; 
             for (horMove = int(std::ceil(tempPosition.x()) / Block::blockSize) * Block::blockSize; horMove * horDir <= (tempPosition.x() + m_velocity.x()) * horDir; horMove += Block::blockSize * horDir) {
@@ -85,15 +92,25 @@ Eigen::Vector2f Entity::moveOutsideSolid(Eigen::Vector2f firstPosition, Eigen::V
                 tempDest.x() = horMove;
                 if (checkTileCollision(tempDest, dimensions)) {
                     horMove -= Block::blockSize * horDir;
+					if (horDir == 1) {
+						horMove += Block::blockSize - (dimensions.x() % Block::blockSize);
+					}
                     break;
                 }
             }
-            if (horMove > tempPosition.x() + m_velocity.x()) {
+            if (horMove * horDir > (tempPosition.x() + m_velocity.x()) * horDir) {
                 horMove = tempPosition.x() + m_velocity.x();
             }
             tempPosition.x() = horMove;
         }
-        int verDir = (m_velocity.y() > 0) ? 1 : ((m_velocity.y() < 0) ? -1 : 0);
+        int verDir;
+		if (m_velocity.y() > 0) {
+			verDir = 1;
+		} else if (m_velocity.y() < 0) {
+			verDir = -1;
+		} else {
+			verDir = 0;
+		}
         if (verDir != 0) {
             int verMove; 
             for (verMove = int(std::ceil(tempPosition.y()) / Block::blockSize) * Block::blockSize; verMove * verDir <= (tempPosition.y() + m_velocity.y()) * verDir; verMove += Block::blockSize * horDir) {
@@ -101,10 +118,13 @@ Eigen::Vector2f Entity::moveOutsideSolid(Eigen::Vector2f firstPosition, Eigen::V
                 tempDest.y() = verMove;
                 if (checkTileCollision(tempDest, dimensions)) {
                     verMove -= Block::blockSize * verDir;
+					if (verDir == 1) {
+						verMove += Block::blockSize - (dimensions.y() % Block::blockSize);
+					}
                     break;
                 }
             }
-            if (verMove > tempPosition.y() + m_velocity.y()) {
+            if (verMove * verDir <= (tempPosition.y() + m_velocity.y()) * verDir) {
                 verMove = tempPosition.y() + m_velocity.y();
             }
             tempPosition.y() = verMove;
@@ -115,7 +135,7 @@ Eigen::Vector2f Entity::moveOutsideSolid(Eigen::Vector2f firstPosition, Eigen::V
     return (tempPosition);
 }
 
-bool Entity::checkTileCollision(Eigen::Vector2f destPosition, Eigen::Vector2f dimensions) const
+bool Entity::collidingWithTile(Eigen::Vector2f destPosition, Eigen::Vector2f dimensions) const
 {
     for (int i = 0; i < dimensions.x() + Block::blockSize; i += Block::blockSize) {
         for (int j = 0; j < dimensions.y() + Block::blockSize; j += Block::blockSize) {

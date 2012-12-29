@@ -67,7 +67,7 @@ public:
      * Determines if the entity will collide at position destPosition if it has
      * dimensions as defined by dimensions.
      */
-    bool checkTileCollision(Eigen::Vector2f destPosition, Eigen::Vector2f dimensions) const;
+    bool collidingWithTile(Eigen::Vector2f destPosition, Eigen::Vector2f dimensions) const;
 
 private:
     Eigen::Vector2f m_velocity;
