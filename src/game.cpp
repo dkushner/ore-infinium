@@ -142,7 +142,8 @@ void Game::init()
     glClearColor(1.0f, 0.0f, 0.0f, 0.0f);
 
     glViewport(0, 0, SCREEN_W, SCREEN_H);
-     error = glGetError();
+    error = glGetError();
+
     if(error != GL_NO_ERROR)
     {
         std::cerr << gluErrorString(error);
@@ -151,14 +152,17 @@ void Game::init()
 
     initGL();
 
-    // Create our view matrix which will translate us back 5 units  
+    // Create our view matrix which will translate us back 5 units
     viewMatrix = glm::translate(glm::mat4(1.0f), glm::vec3(0.0f, 0.0f, -5.f));
-    // Create our model matrix which will halve the size of our model  
-    modelMatrix = glm::scale(glm::mat4(1.0f), glm::vec3(0.5f));
+
+    // Create our model matrix which will halve the size of our model
+//    modelMatrix = glm::scale(glm::mat4(1.0f), glm::vec3(0.5f));
+    modelMatrix = glm::scale(glm::mat4(1.0f), glm::vec3(1.0f));
 
     // Create our perspective projection matrix
     projectionMatrix = glm::perspective(60.0f, (float)SCREEN_W / (float)SCREEN_H, 0.1f, 100.f);
-     error = glGetError();
+
+    error = glGetError();
     if(error != GL_NO_ERROR)
     {
         std::cerr << gluErrorString(error);
@@ -214,6 +218,10 @@ void Game::init()
         assert(0);
     }
 
+
+    glEnable(GL_BLEND);
+    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+
 //    ImageManager* manager = ImageManager::instance();
 //    manager->addResourceDir("../textures/");
 
@@ -222,7 +230,6 @@ void Game::init()
     m_font->FaceSize(12);
 
 //    loadDefaultShaders();
-
 
     tick();
     shutdown();
