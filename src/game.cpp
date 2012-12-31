@@ -30,7 +30,6 @@
 #include <vector>
 
 #include <FreeImage.h>
-#include <glm/glm.hpp>
 
 #include <assert.h>
 
@@ -108,7 +107,12 @@ void Game::init()
     //SDL_GL_ExtensionSupported();
 
     m_context = SDL_GL_CreateContext(m_window);
-
+    GLenum error = glGetError();
+    if(error != GL_NO_ERROR)
+    {
+        std::cerr << gluErrorString(error);
+        assert(0);
+    }
     checkSDLError();
     glewInit();
 
@@ -116,7 +120,12 @@ void Game::init()
     Debug::log(Debug::Area::Graphics) << "Platform: Renderer: " << glGetString(GL_RENDERER);
     Debug::log(Debug::Area::Graphics) << "OpenGL Version: " << glGetString(GL_VERSION);
     Debug::log(Debug::Area::Graphics) << "GLSL Version: " << glGetString(GL_SHADING_LANGUAGE_VERSION);
-
+     error = glGetError();
+    if(error != GL_NO_ERROR)
+    {
+        std::cerr << gluErrorString(error);
+        assert(0);
+    }
     GLint textureSize;
     glGetIntegerv(GL_MAX_TEXTURE_SIZE, &textureSize);
     Debug::log(Debug::Area::Graphics) << "Maximum OpenGL texture size allowed: " << textureSize;
@@ -124,10 +133,86 @@ void Game::init()
 
     m_font = new FTGLPixmapFont("../font/Ubuntu-L.ttf");
     Debug::fatal(!m_font->Error(), Debug::Area::System, "Failure to load font");
-
+     error = glGetError();
+    if(error != GL_NO_ERROR)
+    {
+        std::cerr << gluErrorString(error);
+        assert(0);
+    }
     glClearColor(1.0f, 0.0f, 0.0f, 0.0f);
 
     glViewport(0, 0, SCREEN_W, SCREEN_H);
+     error = glGetError();
+    if(error != GL_NO_ERROR)
+    {
+        std::cerr << gluErrorString(error);
+        assert(0);
+    }
+
+    initGL();
+
+    // Create our view matrix which will translate us back 5 units  
+    viewMatrix = glm::translate(glm::mat4(1.0f), glm::vec3(0.0f, 0.0f, -5.f));
+    // Create our model matrix which will halve the size of our model  
+    modelMatrix = glm::scale(glm::mat4(1.0f), glm::vec3(0.5f));
+
+    // Create our perspective projection matrix
+    projectionMatrix = glm::perspective(60.0f, (float)SCREEN_W / (float)SCREEN_H, 0.1f, 100.f);
+     error = glGetError();
+    if(error != GL_NO_ERROR)
+    {
+        std::cerr << gluErrorString(error);
+        assert(0);
+    }
+
+    glUseProgram(shaderProgram);
+
+    // Get the location of our projection matrix in the shader
+    int projectionMatrixLocation = glGetUniformLocation(shaderProgram, "projectionMatrix");
+       error = glGetError();
+    if(error != GL_NO_ERROR)
+    {
+        std::cerr << gluErrorString(error);
+        assert(0);
+    }
+    // Get the location of our view matrix in the shader
+    int viewMatrixLocation = glGetUniformLocation(shaderProgram, "viewMatrix");
+
+    // Get the location of our model matrix in the shader
+    int modelMatrixLocation = glGetUniformLocation(shaderProgram, "modelMatrix");
+      error = glGetError();
+    if(error != GL_NO_ERROR)
+    {
+        std::cerr << gluErrorString(error);
+        assert(0);
+    }
+
+    // Send our projection matrix to the shader
+    glUniformMatrix4fv(projectionMatrixLocation, 1, GL_FALSE, &projectionMatrix[0][0]);
+         error = glGetError();
+    if(error != GL_NO_ERROR)
+    {
+        std::cerr << gluErrorString(error);
+        assert(0);
+    }
+
+    // Send our view matrix to the shader  
+    glUniformMatrix4fv(viewMatrixLocation, 1, GL_FALSE, &viewMatrix[0][0]);
+         error = glGetError();
+    if(error != GL_NO_ERROR)
+    {
+        std::cerr << gluErrorString(error);
+        assert(0);
+    }
+
+    // Send our model matrix to the shader  
+    glUniformMatrix4fv(modelMatrixLocation, 1, GL_FALSE, &modelMatrix[0][0]);
+     error = glGetError();
+    if(error != GL_NO_ERROR)
+    {
+        std::cerr << gluErrorString(error);
+        assert(0);
+    }
 
 //    ImageManager* manager = ImageManager::instance();
 //    manager->addResourceDir("../textures/");
@@ -138,11 +223,11 @@ void Game::init()
 
 //    loadDefaultShaders();
 
-    initGL();
 
     tick();
     shutdown();
 }
+
 
 void Game::printShaderInfoLog(GLint shader)
 {
@@ -280,27 +365,6 @@ void Game::handleEvents()
     }
 }
 
-
-// shader source code
-std::string vertex_source =
-    "#version 330\n"
-    "layout(location = 0) in vec4 vposition;\n"
-    "layout(location = 1) in vec2 vtexcoord;\n"
-    "out vec2 ftexcoord;\n"
-    "void main() {\n"
-    "   ftexcoord = vtexcoord;\n"
-    "   gl_Position = vposition;\n"
-    "}\n";
-
-std::string fragment_source =
-    "#version 330\n"
-    "uniform sampler2D tex;\n" // texture uniform
-    "in vec2 ftexcoord;\n"
-    "layout(location = 0) out vec4 FragColor;\n"
-    "void main() {\n"
-    "   FragColor = texture(tex, ftexcoord);\n"
-    "}\n";
-
 // helper to check and display for shader compiler errors
 bool check_shader_compile_status(GLuint obj)
 {
@@ -357,6 +421,8 @@ void Game::initGL()
     if(!check_shader_compile_status(vertex_shader))
     {
         assert(0);
+    } else {
+        Debug::log(Debug::Area::Graphics) << "vertex shader compiled!";
     }
 
     // create and compiler fragment shader
@@ -368,6 +434,8 @@ void Game::initGL()
     if(!check_shader_compile_status(fragment_shader))
     {
         assert(0);
+    } else {
+        Debug::log(Debug::Area::Graphics) << "fragment shader compiled!";
     }
 
     // create program
@@ -379,7 +447,11 @@ void Game::initGL()
 
     // link the program and check for errors
     glLinkProgram(shaderProgram);
-    check_program_link_status(shaderProgram);
+    if (check_program_link_status(shaderProgram)) {
+        Debug::log(Debug::Area::Graphics) << "shader program linked!";
+    } else {
+        Debug::fatal(false, Debug::Area::Graphics, "shader program link FAILURE");
+    }
 
     // get texture uniform location
     texture_location = glGetUniformLocation(shaderProgram, "tex");
@@ -443,7 +515,6 @@ void Game::render()
 {
 //    glLoadIdentity();
     // use the shader program
-    glUseProgram(shaderProgram);
 
     // bind texture to texture unit 0
 //    glActiveTexture(GL_TEXTURE0);

@@ -32,6 +32,11 @@
 
 #include <FTGL/ftgl.h>
 
+#include <glm/glm.hpp>
+#include <glm/gtc/matrix_transform.hpp>
+
+#include <string>
+
 //1600
 static int SCREEN_W = 1600;
 //900
@@ -66,15 +71,41 @@ public:
     void printShaderInfoLog(GLint shader);
     char* loadFile(char *fname, GLint &fSize);
 
+
+// shader source code
+std::string vertex_source =
+    "#version 330\n"
+    "layout(location = 0) in vec4 vposition;\n"
+    "layout(location = 1) in vec2 vtexcoord;\n"
+    "uniform mat4 projectionMatrix;\n"
+    "uniform mat4 viewMatrix;\n"
+    "uniform mat4 modelMatrix;\n"
+    "out vec2 ftexcoord;\n"
+    "void main() {\n"
+    "ftexcoord = vtexcoord;\n"
+    "gl_Position = projectionMatrix * viewMatrix * modelMatrix * vec4(vposition.xyz, 1.0);\n"
+    "}\n";
+
+std::string fragment_source =
+    "#version 330\n"
+    "uniform sampler2D tex;\n"
+    "in vec2 ftexcoord;\n"
+    "layout(location = 0) out vec4 FragColor;\n"
+    "void main() {\n"
+    "   FragColor = texture(tex, ftexcoord);\n"
+    "}\n";
+
 private:
     FTGLPixmapFont *m_font = nullptr;
+
+    glm::mat4 viewMatrix;
+    glm::mat4 modelMatrix;
+    glm::mat4 projectionMatrix;
 
  //   World *m_world = nullptr;
     SDL_Window *m_window = nullptr;
     SDL_GLContext m_context;
     bool m_running = true;
-    
-   
 };
 
 
