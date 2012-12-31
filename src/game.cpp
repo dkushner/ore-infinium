@@ -126,21 +126,8 @@ void Game::init()
     Debug::fatal(!m_font->Error(), Debug::Area::System, "Failure to load font");
 
     glClearColor(1.0f, 0.0f, 0.0f, 0.0f);
-    glClearDepth(1.0f);
 
     glViewport(0, 0, SCREEN_W, SCREEN_H);
-
-    glMatrixMode(GL_PROJECTION);
-    glLoadIdentity();
-
-    glOrtho(0, SCREEN_W, SCREEN_H, 0, 1, -1);
-
-    glMatrixMode(GL_MODELVIEW);
-
-    glEnable(GL_TEXTURE_2D);
-
-    glLoadIdentity();
-
 
 //    ImageManager* manager = ImageManager::instance();
 //    manager->addResourceDir("../textures/");
@@ -153,15 +140,10 @@ void Game::init()
 
     initGL();
 
-
-
     tick();
     shutdown();
 }
 
-// printShaderInfoLog
-// From OpenGL Shading Language 3rd Edition, p215-216
-// Display (hopefully) useful error messages if shader fails to compile
 void Game::printShaderInfoLog(GLint shader)
 {
     int infoLogLen = 0;
@@ -272,69 +254,6 @@ void Game::loadDefaultShaders()
 
 }
 
-void Game::loadTexture()
-{
-    /////////////////////////////////////////////
-    // NEW! - This function has been completely
-    // rewritten to use FreeImage.
-    /////////////////////////////////////////////
-
-    const char* texturePath = "../textures/player.png";
-
-    // Get the image file type from FreeImage.
-    FREE_IMAGE_FORMAT fifmt = FreeImage_GetFileType(texturePath, 0);
-
-    // Actually load the image file.
-    FIBITMAP *dib = FreeImage_Load(fifmt, texturePath,0);
-
-    // Now, there is no guarantee that the image file
-    // loaded will be GL_RGB, so we force FreeImage to
-    // convert the image to GL_RGB.
-    dib = FreeImage_ConvertTo24Bits(dib);
-
-    assert(dib);
-
-    glGenTextures( 1, &TextureID );
-    glBindTexture( GL_TEXTURE_2D, TextureID );
-    glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE );
-    glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE );
-    glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR );
-    glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR );
-
-
-    // This is important to note, FreeImage loads textures in
-    // BGR format. Now we could just use the GL_BGR extension
-    // But, we will simply swap the B and R components ourselves.
-    // Firstly, allocate the new bit data doe the image.
-    BYTE *bits = new BYTE[FreeImage_GetWidth(dib) * FreeImage_GetHeight(dib) * 3];
-
-    // get a pointer to FreeImage's data.
-    BYTE *pixels = (BYTE*)FreeImage_GetBits(dib);
-
-    // Iterate through the pixels, copying the data
-    // from 'pixels' to 'bits' except in RGB format.
-    for(int pix=0; pix<FreeImage_GetWidth(dib) * FreeImage_GetHeight(dib); pix++)
-    {
-        bits[pix*3+0]=pixels[pix*3+2];
-        bits[pix*3+1]=pixels[pix*3+1];
-        bits[pix*3+2]=pixels[pix*3+0];
-
-    }
-
-    // The new 'glTexImage2D' function, the prime difference
-    // being that it gets the width, height and pixel information
-    // from 'bits', which is the RGB pixel data..
-    glTexImage2D( GL_TEXTURE_2D, 0, 3, FreeImage_GetWidth(dib), FreeImage_GetHeight(dib), 0,
-                  GL_RGB, GL_UNSIGNED_BYTE, bits );
-
-
-    // Unload the image.
-    // and free the bit data.
-    FreeImage_Unload(dib);
-    delete bits;
-
-}
-
 void Game::handleEvents()
 {
     SDL_Event event;
@@ -422,8 +341,6 @@ GLuint texture;
 
 void Game::initGL()
 {
-    int width = 600;
-    int height = 600;
     // program and shader handles
     GLuint vertex_shader, fragment_shader;
 
@@ -514,34 +431,12 @@ void Game::initGL()
 
     bool loaded = TextureManager::Inst()->LoadTexture("../textures/player.png", TextureID, GL_BGRA_EXT, GL_RGBA);
     assert(loaded);
-    // texture handle
 
-//    // generate texture
-//    glGenTextures(1, &texture);
-//
-//    // bind the texture
-//    glBindTexture(GL_TEXTURE_2D, TextureID);
-//
-//    // create some image data
-//    std::vector<GLubyte> image(4*width*height);
-//    for(int j = 0; j<height; ++j)
-//        for(int i = 0; i<width; ++i)
-//        {
-//            size_t index = j*width + i;
-//            image[4*index + 0] = 0xFF*(j/10%2)*(i/10%2); // R
-//            image[4*index + 1] = 0xFF*(j/13%2)*(i/13%2); // G
-//            image[4*index + 2] = 0xFF*(j/17%2)*(i/17%2); // B
-//            image[4*index + 3] = 0xFF;                   // A
-//        }
-//
-//    // set texture parameters
+    // set texture parameters
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
-//
-//    // set texture content
-//    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA8, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, &image[0]);
 }
 
 void Game::render()

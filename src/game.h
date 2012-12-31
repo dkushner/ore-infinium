@@ -60,7 +60,6 @@ public:
     void loadDefaultShaders();
     void render();
     void drawDebugText();
-    void loadTexture();
 
     const float FPS = 60.0;
 
