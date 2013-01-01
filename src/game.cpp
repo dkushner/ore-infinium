@@ -155,8 +155,9 @@ void Game::init()
     // Create our view matrix which will translate us back 5 units
 //    viewMatrix = glm::translate(glm::mat4(1.0f), glm::vec3(0.0f, 0.0f, -5.f));
 
- //   modelMatrix = glm::scale(glm::mat4(1.0f), glm::vec3(1.0f));
-    modelMatrix = glm::mat4();
+    float scale = 1.0f;
+    modelMatrix = glm::scale(glm::mat4(1.0f), glm::vec3(scale));
+//    modelMatrix = glm::mat4();
     viewMatrix = glm::mat4();
 
     // Create our perspective projection matrix
@@ -220,7 +221,6 @@ void Game::init()
         std::cerr << gluErrorString(error);
         assert(0);
     }
-
 
     glEnable(GL_BLEND);
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
