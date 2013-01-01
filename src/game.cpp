@@ -526,6 +526,8 @@ void Game::render()
     // bind texture to texture unit 0
 //    glActiveTexture(GL_TEXTURE0);
 //    glBindTexture(GL_TEXTURE_2D, TextureID);
+    glUseProgram(shaderProgram);
+
     TextureManager::Inst()->BindTexture(TextureID);
 
     // set texture uniform
@@ -536,6 +538,8 @@ void Game::render()
 
     // draw
     glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
+
+    glUseProgram(0);
 
     // check for errors
     GLenum error = glGetError();
@@ -586,7 +590,7 @@ void Game::drawDebugText()
     ss.str("");
     ss << "FPS: " << fps;
     str = ss.str();
-    m_font->Render(str.c_str());
+    m_font->Render(str.c_str(), -1, FTPoint(0.0, 0.0, 0.0));
 }
 
 void Game::shutdown()
