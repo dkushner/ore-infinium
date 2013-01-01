@@ -153,14 +153,17 @@ void Game::init()
     initGL();
 
     // Create our view matrix which will translate us back 5 units
-    viewMatrix = glm::translate(glm::mat4(1.0f), glm::vec3(0.0f, 0.0f, -5.f));
+//    viewMatrix = glm::translate(glm::mat4(1.0f), glm::vec3(0.0f, 0.0f, -5.f));
 
-    // Create our model matrix which will halve the size of our model
-//    modelMatrix = glm::scale(glm::mat4(1.0f), glm::vec3(0.5f));
-    modelMatrix = glm::scale(glm::mat4(1.0f), glm::vec3(1.0f));
+ //   modelMatrix = glm::scale(glm::mat4(1.0f), glm::vec3(1.0f));
+    modelMatrix = glm::mat4();
+    viewMatrix = glm::mat4();
 
     // Create our perspective projection matrix
-    projectionMatrix = glm::perspective(60.0f, (float)SCREEN_W / (float)SCREEN_H, 0.1f, 100.f);
+    projectionMatrix = glm::ortho(0.0f, float(SCREEN_W), float(SCREEN_H), 0.0f, -1.0f, 1.0f);
+
+//    projectionMatrix = glm::perspective(60.0f, (float)SCREEN_W / (float)SCREEN_H, 0.1f, 100.f);
+
 
     error = glGetError();
     if(error != GL_NO_ERROR)
@@ -474,14 +477,27 @@ void Game::initGL()
     glGenBuffers(1, &vbo);
     glBindBuffer(GL_ARRAY_BUFFER, vbo);
 
+    float width = 50.0f;
+    float height = 80.0f;
+
     // data for a fullscreen quad (this time with texture coords)
     GLfloat vertexData[] = {
+        //  X     Y     Z           U     V
+        width, height, 0.0f,       1.0f, 0.0f, // vertex 0
+        0.0f, height, 0.0f,       0.0f, 0.0f, // vertex 1
+        width, 0.0f, 0.0f,       1.0f, 1.0f, // vertex 2
+        0.0f, 0.0f, 0.0f,       0.0f, 1.0f, // vertex 3
+    }; // 4 vertices with 5 components (floats) each
+
+    /*
+        // original
         //  X     Y     Z           U     V
         1.0f, 1.0f, 0.0f,       1.0f, 1.0f, // vertex 0
         -1.0f, 1.0f, 0.0f,       0.0f, 1.0f, // vertex 1
         1.0f,-1.0f, 0.0f,       1.0f, 0.0f, // vertex 2
         -1.0f,-1.0f, 0.0f,       0.0f, 0.0f, // vertex 3
     }; // 4 vertices with 5 components (floats) each
+    */
 
     // fill with data
     glBufferData(GL_ARRAY_BUFFER, sizeof(GLfloat)*4*5, vertexData, GL_STATIC_DRAW);
