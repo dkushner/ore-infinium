@@ -10,7 +10,7 @@
 
 TextureManager* TextureManager::m_inst(0);
 
-TextureManager* TextureManager::Inst()
+TextureManager* TextureManager::instance()
 {
         if(!m_inst)
                 m_inst = new TextureManager();

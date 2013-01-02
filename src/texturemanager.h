@@ -16,7 +16,7 @@
 class TextureManager
 {
 public:
-        static TextureManager* Inst();
+        static TextureManager* instance();
         virtual ~TextureManager();
 
         //load a texture an make it the current texture

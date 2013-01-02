@@ -89,7 +89,7 @@ void Game::init()
     }
 
     m_window = SDL_CreateWindow("Ore Chasm", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED,
-                                SCREEN_W, SCREEN_H, SDL_WINDOW_SHOWN | SDL_WINDOW_OPENGL);
+                                                        SCREEN_W, SCREEN_H, SDL_WINDOW_SHOWN | SDL_WINDOW_OPENGL);
 
     if (!m_window) {
         checkSDLError();
@@ -174,8 +174,6 @@ void Game::init()
     // Send our model matrix to the shader
     glUniformMatrix4fv(modelMatrixLocation, 1, GL_FALSE, &modelMatrix[0][0]);
 
-    glEnable(GL_BLEND);
-    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
 //    ImageManager* manager = ImageManager::instance();
 //    manager->addResourceDir("../textures/");
@@ -241,60 +239,62 @@ char* Game::loadFile(char *fname, GLint* fSize)
 
 void Game::loadDefaultShaders()
 {
-    /*    GLuint p, f, v;
+    // program and shader handles
+    GLuint vertex_shader, fragment_shader;
 
-        char *vs,*fs;
+    // create and compiler vertex shader
+    vertex_shader = glCreateShader(GL_VERTEX_SHADER);
 
-        v = glCreateShader(GL_VERTEX_SHADER);
-        f = glCreateShader(GL_FRAGMENT_SHADER);
+    GLint vertLength;
+    GLint fragLength;
 
-        // load shaders & get length of each
-        GLint vlen;
-        GLint flen;
-        vs = loadFile("sprite.vert",vlen);
-        fs = loadFile("sprite.frag",flen);
+    char* vertSource;
+    char* fragSource;
 
-        const char * vv = vs;
-        const char * ff = fs;
+    vertSource = loadFile("sprite.vert", &vertLength);
+    fragSource = loadFile("sprite.frag", &fragLength);
 
-        glShaderSource(v, 1, &vv,&vlen);
-        glShaderSource(f, 1, &ff,&flen);
+    const char* vertSourceConst = vertSource;
+    const char* fragSourceConst = fragSource;
 
-        GLint compiled;
+    glShaderSource(vertex_shader, 1, &vertSourceConst, &vertLength);
+    glCompileShader(vertex_shader);
 
-        glCompileShader(v);
-        glGetShaderiv(v, GL_COMPILE_STATUS, &compiled);
-        if (!compiled)
-        {
-            std::cout << "Vertex shader not compiled." << std::endl;
-            printShaderInfoLog(v);
-        }
+    if(!checkShaderCompileStatus(vertex_shader)) {
+        assert(0);
+    } else {
+        Debug::log(Debug::Area::Graphics) << "vertex shader compiled!";
+    }
 
-        glCompileShader(f);
-        glGetShaderiv(f, GL_COMPILE_STATUS, &compiled);
-        if (!compiled)
-        {
-            std::cout << "Fragment shader not compiled." << std::endl;
-            printShaderInfoLog(f);
-        }
+    // create and compiler fragment shader
+    fragment_shader = glCreateShader(GL_FRAGMENT_SHADER);
+    glShaderSource(fragment_shader, 1, &fragSourceConst, &fragLength);
+    glCompileShader(fragment_shader);
 
-        p = glCreateProgram();
+    if(!checkShaderCompileStatus(fragment_shader)) {
+        assert(0);
+    } else {
+        Debug::log(Debug::Area::Graphics) << "fragment shader compiled!";
+    }
 
-        glBindAttribLocation(p, 0, "in_position");
-        glBindAttribLocation(p, 1, "in_color");
+    // create program
+    shaderProgram = glCreateProgram();
 
-        glAttachShader(p,v);
-        glAttachShader(p,f);
+    // attach shaders
+    glAttachShader(shaderProgram, vertex_shader);
+    glAttachShader(shaderProgram, fragment_shader);
 
-        glLinkProgram(p);
-        glUseProgram(p);
-        shaderProgram = p;
+    // link the program and check for errors
+    glLinkProgram(shaderProgram);
 
-        delete [] vs; // dont forget to free allocated memory
-        delete [] fs; // we allocated this in the loadFile function...
-        */
+    if (checkProgramLinkStatus(shaderProgram)) {
+        Debug::log(Debug::Area::Graphics) << "shader program linked!";
+    } else {
+        Debug::fatal(false, Debug::Area::Graphics, "shader program link FAILURE");
+    }
 
-
+    delete [] vertSource;
+    delete [] fragSource;
 }
 
 void Game::handleEvents()
@@ -323,8 +323,7 @@ void Game::handleEvents()
     }
 }
 
-// helper to check and display for shader compiler errors
-bool check_shader_compile_status(GLuint obj)
+bool Game::checkShaderCompileStatus(GLuint obj)
 {
     GLint status;
     glGetShaderiv(obj, GL_COMPILE_STATUS, &status);
@@ -340,8 +339,7 @@ bool check_shader_compile_status(GLuint obj)
     return true;
 }
 
-// helper to check and display for shader linker error
-bool check_program_link_status(GLuint obj)
+bool Game::checkProgramLinkStatus(GLuint obj)
 {
     GLint status;
     glGetProgramiv(obj, GL_LINK_STATUS, &status);
@@ -363,61 +361,7 @@ GLuint texture;
 
 void Game::initGL()
 {
-    // program and shader handles
-    GLuint vertex_shader, fragment_shader;
-
-    // create and compiler vertex shader
-    vertex_shader = glCreateShader(GL_VERTEX_SHADER);
-
-    GLint vertLength;
-    GLint fragLength;
-
-    char* vertSource;
-    char* fragSource;
-
-    vertSource = loadFile("sprite.vert", &vertLength);
-    fragSource = loadFile("sprite.frag", &fragLength);
-
-    const char* vertSourceConst = vertSource;
-    const char* fragSourceConst = fragSource;
-
-    glShaderSource(vertex_shader, 1, &vertSourceConst, &vertLength);
-    glCompileShader(vertex_shader);
-
-    if(!check_shader_compile_status(vertex_shader))
-    {
-        assert(0);
-    } else {
-        Debug::log(Debug::Area::Graphics) << "vertex shader compiled!";
-    }
-
-    // create and compiler fragment shader
-    fragment_shader = glCreateShader(GL_FRAGMENT_SHADER);
-    glShaderSource(fragment_shader, 1, &fragSourceConst, &fragLength);
-    glCompileShader(fragment_shader);
-
-    if(!check_shader_compile_status(fragment_shader))
-    {
-        assert(0);
-    } else {
-        Debug::log(Debug::Area::Graphics) << "fragment shader compiled!";
-    }
-
-    // create program
-    shaderProgram = glCreateProgram();
-
-    // attach shaders
-    glAttachShader(shaderProgram, vertex_shader);
-    glAttachShader(shaderProgram, fragment_shader);
-
-    // link the program and check for errors
-    glLinkProgram(shaderProgram);
-
-    if (check_program_link_status(shaderProgram)) {
-        Debug::log(Debug::Area::Graphics) << "shader program linked!";
-    } else {
-        Debug::fatal(false, Debug::Area::Graphics, "shader program link FAILURE");
-    }
+    loadDefaultShaders();
 
     // get texture uniform location
     texture_location = glGetUniformLocation(shaderProgram, "tex");
@@ -445,16 +389,6 @@ void Game::initGL()
         0.0f, 0.0f, 0.0f,       0.0f, 1.0f, // vertex 3
     }; // 4 vertices with 5 components (floats) each
 
-    /*
-        // original
-        //  X     Y     Z           U     V
-        1.0f, 1.0f, 0.0f,       1.0f, 1.0f, // vertex 0
-        -1.0f, 1.0f, 0.0f,       0.0f, 1.0f, // vertex 1
-        1.0f,-1.0f, 0.0f,       1.0f, 0.0f, // vertex 2
-        -1.0f,-1.0f, 0.0f,       0.0f, 0.0f, // vertex 3
-    }; // 4 vertices with 5 components (floats) each
-    */
-
     // fill with data
     glBufferData(GL_ARRAY_BUFFER, sizeof(GLfloat)*4*5, vertexData, GL_STATIC_DRAW);
 
@@ -480,7 +414,7 @@ void Game::initGL()
     // "unbind" vao
     glBindVertexArray(0);
 
-    bool loaded = TextureManager::Inst()->LoadTexture("../textures/player.png", TextureID, GL_BGRA_EXT, GL_RGBA);
+    bool loaded = TextureManager::instance()->LoadTexture("../textures/player.png", TextureID, GL_BGRA_EXT, GL_RGBA);
     assert(loaded);
 
     // set texture parameters
@@ -488,13 +422,16 @@ void Game::initGL()
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+
+    glEnable(GL_BLEND);
+    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 }
 
 void Game::render()
 {
     glUseProgram(shaderProgram);
 
-    TextureManager::Inst()->BindTexture(TextureID);
+    TextureManager::instance()->BindTexture(TextureID);
 
     glUniform1i(texture_location, 0);
 

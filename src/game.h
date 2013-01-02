@@ -66,6 +66,9 @@ public:
     void render();
     void drawDebugText();
 
+    bool checkProgramLinkStatus(GLuint obj);
+    bool checkShaderCompileStatus(GLuint obj);
+
     void checkSDLError();
     void checkGLError();
 
