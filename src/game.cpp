@@ -152,18 +152,14 @@ void Game::init()
 
     initGL();
 
-    // Create our view matrix which will translate us back 5 units
-//    viewMatrix = glm::translate(glm::mat4(1.0f), glm::vec3(0.0f, 0.0f, -5.f));
-
     float scale = 1.0f;
     modelMatrix = glm::scale(glm::mat4(1.0f), glm::vec3(scale));
-//    modelMatrix = glm::mat4();
-    viewMatrix = glm::mat4();
 
-    // Create our perspective projection matrix
+    float x = 0.0f;
+    float y = 0.0f;
+    viewMatrix = glm::translate(glm::mat4(), glm::vec3(x, y, 0.0f));
+
     projectionMatrix = glm::ortho(0.0f, float(SCREEN_W), float(SCREEN_H), 0.0f, -1.0f, 1.0f);
-
-//    projectionMatrix = glm::perspective(60.0f, (float)SCREEN_W / (float)SCREEN_H, 0.1f, 100.f);
 
 
     error = glGetError();
