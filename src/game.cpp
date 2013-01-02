@@ -120,12 +120,14 @@ void Game::init()
     Debug::log(Debug::Area::Graphics) << "Platform: Renderer: " << glGetString(GL_RENDERER);
     Debug::log(Debug::Area::Graphics) << "OpenGL Version: " << glGetString(GL_VERSION);
     Debug::log(Debug::Area::Graphics) << "GLSL Version: " << glGetString(GL_SHADING_LANGUAGE_VERSION);
-     error = glGetError();
+
+    error = glGetError();
     if(error != GL_NO_ERROR)
     {
         std::cerr << gluErrorString(error);
         assert(0);
     }
+
     GLint textureSize;
     glGetIntegerv(GL_MAX_TEXTURE_SIZE, &textureSize);
     Debug::log(Debug::Area::Graphics) << "Maximum OpenGL texture size allowed: " << textureSize;
@@ -133,17 +135,12 @@ void Game::init()
 
     m_font = new FTGLPixmapFont("../font/Ubuntu-L.ttf");
     Debug::fatal(!m_font->Error(), Debug::Area::System, "Failure to load font");
-     error = glGetError();
-    if(error != GL_NO_ERROR)
-    {
-        std::cerr << gluErrorString(error);
-        assert(0);
-    }
+
     glClearColor(1.0f, 0.0f, 0.0f, 0.0f);
 
     glViewport(0, 0, SCREEN_W, SCREEN_H);
-    error = glGetError();
 
+    error = glGetError();
     if(error != GL_NO_ERROR)
     {
         std::cerr << gluErrorString(error);
@@ -160,7 +157,6 @@ void Game::init()
     viewMatrix = glm::translate(glm::mat4(), glm::vec3(x, y, 0.0f));
 
     projectionMatrix = glm::ortho(0.0f, float(SCREEN_W), float(SCREEN_H), 0.0f, -1.0f, 1.0f);
-
 
     error = glGetError();
     if(error != GL_NO_ERROR)
@@ -260,7 +256,7 @@ void Game::printShaderInfoLog(GLint shader)
 // loadFile - loads text file into char* fname
 // allocates memory - so need to delete after use
 // size of file returned in fSize
-char* Game::loadFile(char *fname, GLint &fSize)
+char* Game::loadFile(char *fname, GLint* fSize)
 {
     std::ifstream::pos_type size;
     char * memblock;
@@ -271,7 +267,7 @@ char* Game::loadFile(char *fname, GLint &fSize)
     if (file.is_open())
     {
         size = file.tellg();
-        fSize = (GLuint) size;
+        *fSize = (GLuint) size;
         memblock = new char [size];
         file.seekg (0, std::ios::beg);
         file.read (memblock, size);
@@ -414,16 +410,24 @@ void Game::initGL()
     // program and shader handles
     GLuint vertex_shader, fragment_shader;
 
-    // we need these to properly pass the strings
-    const char *source;
-    int length;
-
     // create and compiler vertex shader
     vertex_shader = glCreateShader(GL_VERTEX_SHADER);
-    source = vertex_source.c_str();
-    length = vertex_source.size();
-    glShaderSource(vertex_shader, 1, &source, &length);
+
+    GLint vertLength;
+    GLint fragLength;
+
+    char* vertSource;
+    char* fragSource;
+
+    vertSource = loadFile("sprite.vert", &vertLength);
+    fragSource = loadFile("sprite.frag", &fragLength);
+
+    const char* vertSourceConst = vertSource;
+    const char* fragSourceConst = fragSource;
+
+    glShaderSource(vertex_shader, 1, &vertSourceConst, &vertLength);
     glCompileShader(vertex_shader);
+
     if(!check_shader_compile_status(vertex_shader))
     {
         assert(0);
@@ -433,10 +437,9 @@ void Game::initGL()
 
     // create and compiler fragment shader
     fragment_shader = glCreateShader(GL_FRAGMENT_SHADER);
-    source = fragment_source.c_str();
-    length = fragment_source.size();
-    glShaderSource(fragment_shader, 1, &source, &length);
+    glShaderSource(fragment_shader, 1, &fragSourceConst, &fragLength);
     glCompileShader(fragment_shader);
+
     if(!check_shader_compile_status(fragment_shader))
     {
         assert(0);
@@ -453,6 +456,7 @@ void Game::initGL()
 
     // link the program and check for errors
     glLinkProgram(shaderProgram);
+
     if (check_program_link_status(shaderProgram)) {
         Debug::log(Debug::Area::Graphics) << "shader program linked!";
     } else {
@@ -532,23 +536,14 @@ void Game::initGL()
 
 void Game::render()
 {
-//    glLoadIdentity();
-    // use the shader program
-
-    // bind texture to texture unit 0
-//    glActiveTexture(GL_TEXTURE0);
-//    glBindTexture(GL_TEXTURE_2D, TextureID);
     glUseProgram(shaderProgram);
 
     TextureManager::Inst()->BindTexture(TextureID);
 
-    // set texture uniform
     glUniform1i(texture_location, 0);
 
-    // bind the vao
     glBindVertexArray(vao);
 
-    // draw
     glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
 
     glUseProgram(0);
