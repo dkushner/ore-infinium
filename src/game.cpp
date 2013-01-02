@@ -48,7 +48,7 @@ void Game::abort_game(const char* message)
     exit(1);
 }
 
-void checkSDLError()
+void Game::checkSDLError()
 {
     std::string error = SDL_GetError();
     if (*error.c_str() != '\0')
@@ -58,7 +58,15 @@ void checkSDLError()
     }
 }
 
-
+void Game::checkGLError()
+{
+    GLenum error = glGetError();
+    if(error != GL_NO_ERROR)
+    {
+        std::cerr << gluErrorString(error);
+        assert(0);
+    }
+}
 
 GLuint shaderProgram;
 GLuint TextureID = 0;
@@ -107,12 +115,8 @@ void Game::init()
     //SDL_GL_ExtensionSupported();
 
     m_context = SDL_GL_CreateContext(m_window);
-    GLenum error = glGetError();
-    if(error != GL_NO_ERROR)
-    {
-        std::cerr << gluErrorString(error);
-        assert(0);
-    }
+    checkGLError();
+
     checkSDLError();
     glewInit();
 
@@ -121,12 +125,7 @@ void Game::init()
     Debug::log(Debug::Area::Graphics) << "OpenGL Version: " << glGetString(GL_VERSION);
     Debug::log(Debug::Area::Graphics) << "GLSL Version: " << glGetString(GL_SHADING_LANGUAGE_VERSION);
 
-    error = glGetError();
-    if(error != GL_NO_ERROR)
-    {
-        std::cerr << gluErrorString(error);
-        assert(0);
-    }
+    checkGLError();
 
     GLint textureSize;
     glGetIntegerv(GL_MAX_TEXTURE_SIZE, &textureSize);
@@ -140,12 +139,7 @@ void Game::init()
 
     glViewport(0, 0, SCREEN_W, SCREEN_H);
 
-    error = glGetError();
-    if(error != GL_NO_ERROR)
-    {
-        std::cerr << gluErrorString(error);
-        assert(0);
-    }
+    checkGLError();
 
     initGL();
 
@@ -158,61 +152,27 @@ void Game::init()
 
     projectionMatrix = glm::ortho(0.0f, float(SCREEN_W), float(SCREEN_H), 0.0f, -1.0f, 1.0f);
 
-    error = glGetError();
-    if(error != GL_NO_ERROR)
-    {
-        std::cerr << gluErrorString(error);
-        assert(0);
-    }
-
     glUseProgram(shaderProgram);
+
+    checkGLError();
 
     // Get the location of our projection matrix in the shader
     int projectionMatrixLocation = glGetUniformLocation(shaderProgram, "projectionMatrix");
-       error = glGetError();
-    if(error != GL_NO_ERROR)
-    {
-        std::cerr << gluErrorString(error);
-        assert(0);
-    }
+
     // Get the location of our view matrix in the shader
     int viewMatrixLocation = glGetUniformLocation(shaderProgram, "viewMatrix");
 
     // Get the location of our model matrix in the shader
     int modelMatrixLocation = glGetUniformLocation(shaderProgram, "modelMatrix");
-      error = glGetError();
-    if(error != GL_NO_ERROR)
-    {
-        std::cerr << gluErrorString(error);
-        assert(0);
-    }
 
     // Send our projection matrix to the shader
     glUniformMatrix4fv(projectionMatrixLocation, 1, GL_FALSE, &projectionMatrix[0][0]);
-         error = glGetError();
-    if(error != GL_NO_ERROR)
-    {
-        std::cerr << gluErrorString(error);
-        assert(0);
-    }
 
-    // Send our view matrix to the shader  
+    // Send our view matrix to the shader
     glUniformMatrix4fv(viewMatrixLocation, 1, GL_FALSE, &viewMatrix[0][0]);
-         error = glGetError();
-    if(error != GL_NO_ERROR)
-    {
-        std::cerr << gluErrorString(error);
-        assert(0);
-    }
 
-    // Send our model matrix to the shader  
+    // Send our model matrix to the shader
     glUniformMatrix4fv(modelMatrixLocation, 1, GL_FALSE, &modelMatrix[0][0]);
-     error = glGetError();
-    if(error != GL_NO_ERROR)
-    {
-        std::cerr << gluErrorString(error);
-        assert(0);
-    }
 
     glEnable(GL_BLEND);
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
@@ -229,7 +189,6 @@ void Game::init()
     tick();
     shutdown();
 }
-
 
 void Game::printShaderInfoLog(GLint shader)
 {
@@ -264,8 +223,7 @@ char* Game::loadFile(char *fname, GLint* fSize)
 
     // file read based on example in cplusplus.com tutorial
     std::ifstream file (fname, std::ios::in|std::ios::binary|std::ios::ate);
-    if (file.is_open())
-    {
+    if (file.is_open()) {
         size = file.tellg();
         *fSize = (GLuint) size;
         memblock = new char [size];
@@ -274,9 +232,7 @@ char* Game::loadFile(char *fname, GLint* fSize)
         file.close();
         std::cout << "file " << fname << " loaded" << std::endl;
         text.assign(memblock);
-    }
-    else
-    {
+    } else {
         std::cout << "Unable to open file " << fname << std::endl;
         exit(1);
     }
@@ -548,13 +504,7 @@ void Game::render()
 
     glUseProgram(0);
 
-    // check for errors
-    GLenum error = glGetError();
-    if(error != GL_NO_ERROR)
-    {
-        std::cerr << gluErrorString(error);
-        assert(0);
-    }
+    checkGLError();
 }
 
 double fps = 0.0;

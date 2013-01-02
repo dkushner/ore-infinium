@@ -66,6 +66,9 @@ public:
     void render();
     void drawDebugText();
 
+    void checkSDLError();
+    void checkGLError();
+
     const float FPS = 60.0;
 
     void printShaderInfoLog(GLint shader);
