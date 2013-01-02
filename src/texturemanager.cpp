@@ -1,145 +1,157 @@
-//**********************************************
-//Singleton Texture Manager class
-//Written by Ben English
-//benjamin.english@oit.edu
-//
-//For use with OpenGL and the FreeImage library
-//**********************************************
+/******************************************************************************
+ *   Copyright (C) 2013 by Shaun Reich <sreich@kde.org>                       *
+ *   Based on original code from Ben English <benjamin.english@oit.edu>       *
+ *                                                                            *
+ *   This program is free software; you can redistribute it and/or            *
+ *   modify it under the terms of the GNU General Public License as           *
+ *   published by the Free Software Foundation; either version 2 of           *
+ *   the License, or (at your option) any later version.                      *
+ *                                                                            *
+ *   This program is distributed in the hope that it will be useful,          *
+ *   but WITHOUT ANY WARRANTY; without even the implied warranty of           *
+ *   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the            *
+ *   GNU General Public License for more details.                             *
+ *                                                                            *
+ *   You should have received a copy of the GNU General Public License        *
+ *   along with this program.  If not, see <http://www.gnu.org/licenses/>.    *
+ *****************************************************************************/
 
 #include "texturemanager.h"
+#include "debug.h"
 
-TextureManager* TextureManager::m_inst(0);
+TextureManager* TextureManager::s_instance(0);
 
 TextureManager* TextureManager::instance()
 {
-        if(!m_inst)
-                m_inst = new TextureManager();
+    if(!s_instance)
+        s_instance = new TextureManager();
 
-        return m_inst;
+    return s_instance;
 }
 
 TextureManager::TextureManager()
 {
-        // call this ONLY when linking with FreeImage as a static library
-        #ifdef FREEIMAGE_LIB
-                FreeImage_Initialise();
-        #endif
+    // call this ONLY when linking with FreeImage as a static library
+#ifdef FREEIMAGE_LIB
+    FreeImage_Initialise();
+#endif
 }
 
-//these should never be called
-//TextureManager::TextureManager(const TextureManager& tm){}
-//TextureManager& TextureManager::operator=(const TextureManager& tm){}
-        
 TextureManager::~TextureManager()
 {
-        // call this ONLY when linking with FreeImage as a static library
-        #ifdef FREEIMAGE_LIB
-                FreeImage_DeInitialise();
-        #endif
+    // call this ONLY when linking with FreeImage as a static library
+#ifdef FREEIMAGE_LIB
+    FreeImage_DeInitialise();
+#endif
 
-        UnloadAllTextures();
-        m_inst = 0;
+    unloadAllTextures();
+    s_instance = 0;
 }
 
-bool TextureManager::LoadTexture(const char* filename, const unsigned int texID, GLenum image_format, GLint internal_format, GLint level, GLint border)
+bool TextureManager::loadTexture(std::string filename, const unsigned int texID, GLenum image_format, GLint internal_format, GLint level, GLint border)
 {
-        //image format
-        FREE_IMAGE_FORMAT fif = FIF_UNKNOWN;
-        //pointer to the image, once loaded
-        FIBITMAP *dib(0);
-        //pointer to the image data
-        BYTE* bits(0);
-        //image width and height
-        unsigned int width(0), height(0);
-        //OpenGL's image ID to map to
-        GLuint gl_texID;
-        
-        //check the file signature and deduce its format
-        fif = FreeImage_GetFileType(filename, 0);
-        //if still unknown, try to guess the file format from the file extension
-        if(fif == FIF_UNKNOWN) 
-                fif = FreeImage_GetFIFFromFilename(filename);
-        //if still unkown, return failure
-        if(fif == FIF_UNKNOWN)
-                return false;
+    //image format
+    FREE_IMAGE_FORMAT imageFormat = FIF_UNKNOWN;
+    //pointer to the image, once loaded
+    FIBITMAP *bitmap(0);
+    //pointer to the image data
+    BYTE* bits(0);
+    //image width and height
+    unsigned int width(0), height(0);
+    //OpenGL's image ID to map to
+    GLuint gl_texID;
 
-        //check that the plugin has reading capabilities and load the file
-        if(FreeImage_FIFSupportsReading(fif))
-                dib = FreeImage_Load(fif, filename);
-        //if the image failed to load, return failure
-        if(!dib)
-                return false;
+    //check the file signature and deduce its format
+    imageFormat = FreeImage_GetFileType(filename.c_str(), 0);
 
-        //retrieve the image data
-        bits = FreeImage_GetBits(dib);
-        //get the image width and height
-        width = FreeImage_GetWidth(dib);
-        height = FreeImage_GetHeight(dib);
-        //if this somehow one of these failed (they shouldn't), return failure
-        if((bits == 0) || (width == 0) || (height == 0))
-                return false;
-        
-        //if this texture ID is in use, unload the current texture
-        if(m_texID.find(texID) != m_texID.end())
-                glDeleteTextures(1, &(m_texID[texID]));
+    //if still unknown, try to guess the file format from the file extension
+    if(imageFormat == FIF_UNKNOWN) {
+        imageFormat = FreeImage_GetFIFFromFilename(filename.c_str());
+    }
 
-        //generate an OpenGL texture ID for this texture
-        glGenTextures(1, &gl_texID);
-        //store the texture ID mapping
-        m_texID[texID] = gl_texID;
-        //bind to the new texture ID
-        glBindTexture(GL_TEXTURE_2D, gl_texID);
-        //store the texture data for OpenGL use
-        glTexImage2D(GL_TEXTURE_2D, level, internal_format, width, height,
-                border, image_format, GL_UNSIGNED_BYTE, bits);
+    //give up, don't know what image this is
+    if(imageFormat == FIF_UNKNOWN) {
+        return false;
+    }
 
-        //Free FreeImage's copy of the data
-        FreeImage_Unload(dib);
+    //check that the plugin has reading capabilities and load the file
+    if(FreeImage_FIFSupportsReading(imageFormat)) {
+        bitmap = FreeImage_Load(imageFormat, filename.c_str());
+    }
 
-        //return success
-        return true;
+    if(!bitmap) {
+        return false;
+    }
+
+    //retrieve the image data
+    bits = FreeImage_GetBits(bitmap);
+    //get the image width and height
+    width = FreeImage_GetWidth(bitmap);
+    height = FreeImage_GetHeight(bitmap);
+
+    //if this somehow one of these failed (they shouldn't), return failure
+    if((bits == 0) || (width == 0) || (height == 0)) {
+        return false;
+    }
+
+    //if this texture ID is in use, unload the current texture
+    if(m_texID.find(texID) != m_texID.end()) {
+        glDeleteTextures(1, &(m_texID[texID]));
+    }
+
+    //generate an OpenGL texture ID for this texture
+    glGenTextures(1, &gl_texID);
+
+    //store the texture ID mapping
+    m_texID[texID] = gl_texID;
+
+    //bind to the new texture ID
+    glBindTexture(GL_TEXTURE_2D, gl_texID);
+
+    //store the texture data for OpenGL use
+    glTexImage2D(GL_TEXTURE_2D, level, internal_format, width, height, border, image_format, GL_UNSIGNED_BYTE, bits);
+
+    //Free FreeImage's copy of the data
+    FreeImage_Unload(bitmap);
+
+    //return success
+    return true;
 }
 
-bool TextureManager::UnloadTexture(const unsigned int texID)
+bool TextureManager::unloadTexture(const unsigned int texID)
 {
-        bool result(true);
-        //if this texture ID mapped, unload it's texture, and remove it from the map
-        if(m_texID.find(texID) != m_texID.end())
-        {
-                glDeleteTextures(1, &(m_texID[texID]));
-                m_texID.erase(texID);
-        }
-        //otherwise, unload failed
-        else
-        {
-                result = false;
-        }
+    bool result(true);
+    //if this texture ID mapped, unload it's texture, and remove it from the map
+    if(m_texID.find(texID) != m_texID.end()) {
+        glDeleteTextures(1, &(m_texID[texID]));
+        m_texID.erase(texID);
+    } else {
+        result = false;
+    }
 
-        return result;
+    return result;
 }
 
-bool TextureManager::BindTexture(const unsigned int texID)
+bool TextureManager::bindTexture(const unsigned int texID)
 {
-        bool result(true);
-        //if this texture ID mapped, bind it's texture as current
-        if(m_texID.find(texID) != m_texID.end())
-                glBindTexture(GL_TEXTURE_2D, m_texID[texID]);
-        //otherwise, binding failed
-        else
-                result = false;
+    bool result(true);
+    //if this texture ID mapped, bind it's texture as current
+    if(m_texID.find(texID) != m_texID.end()) {
+        glBindTexture(GL_TEXTURE_2D, m_texID[texID]);
+    } else {
+        Debug::fatal(false, Debug::Area::Graphics, "bind texture attempted on a nonloaded textureID");
+    }
 
-        return result;
+    return result;
 }
 
-void TextureManager::UnloadAllTextures()
+void TextureManager::unloadAllTextures()
 {
-        //start at the begginning of the texture map
-        std::map<unsigned int, GLuint>::iterator i = m_texID.begin();
+    std::map<unsigned int, GLuint>::iterator i = m_texID.begin();
 
-        //Unload the textures untill the end of the texture map is found
-        while(i != m_texID.end())
-                UnloadTexture(i->first);
+    while(i != m_texID.end()) {
+        unloadTexture(i->first);
+    }
 
-        //clear the texture map
-        m_texID.clear();
+    m_texID.clear();
 }

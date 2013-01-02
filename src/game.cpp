@@ -381,7 +381,7 @@ void Game::initGL()
     // "unbind" vao
     glBindVertexArray(0);
 
-    bool loaded = TextureManager::instance()->LoadTexture("../textures/player.png", TextureID, GL_BGRA_EXT, GL_RGBA);
+    bool loaded = TextureManager::instance()->loadTexture("../textures/player.png", TextureID);
     assert(loaded);
 
     // set texture parameters
@@ -398,7 +398,7 @@ void Game::render()
 {
     glUseProgram(spriteShaderProgram);
 
-    TextureManager::instance()->BindTexture(TextureID);
+    TextureManager::instance()->bindTexture(TextureID);
 
     glUniform1i(texture_location, 0);
 

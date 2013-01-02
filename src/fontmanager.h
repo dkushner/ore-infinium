@@ -1,5 +1,5 @@
 /******************************************************************************
- *   Copyright (C) 2012 by Shaun Reich <sreich@kde.org>                       *
+ *   Copyright (C) 2013 by Shaun Reich <sreich@kde.org>                       *
  *                                                                            *
  *   This program is free software; you can redistribute it and/or            *
  *   modify it under the terms of the GNU General Public License as           *
@@ -15,33 +15,19 @@
  *   along with this program.  If not, see <http://www.gnu.org/licenses/>.    *
  *****************************************************************************/
 
-#ifndef RESOURCE_MANAGER_H
-#define RESOURCE_MANAGER_H
+#ifndef FONTMANAGER_H
+#define FONTMANAGER_H
 
 #include <stdlib.h>
-#include <map>
-#include <vector>
 #include <string>
 
-class ALLEGRO_BITMAP;
-
-class ResourceManager
+class FontManager
 {
 public:
-    ResourceManager();
-    static ResourceManager* instance();
-
-    ALLEGRO_BITMAP* loadBitmap(const std::string& filename);
-    void deleteBitmap(ALLEGRO_BITMAP *bitmap);
-    void deleteBitmap(const std::string& filename);
-
-    void addResourceDir(const std::string& directory);
-    void removeResourceDir(const std::string& directory);
+    FontManager();
+    static FontManager* instance();
 
 private:
-    ~ResourceManager();
-
-    std::map<std::string, ALLEGRO_BITMAP*> m_bitmaps;
-    std::vector<std::string> m_resourceDirs;
+    ~FontManager();
 };
 #endif
