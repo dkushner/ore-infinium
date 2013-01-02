@@ -47,6 +47,8 @@ static bool DEBUG_RENDERING = true;
 
 static int SDL_LOGPRIORITY = SDL_LOG_PRIORITY_WARN;
 
+static GLuint spriteShaderProgram;
+
 class Game
 {
 public:
@@ -75,7 +77,7 @@ public:
     const float FPS = 60.0;
 
     void printShaderInfoLog(GLint shader);
-    char* loadFile(char *fname, GLint* fSize);
+    char* loadFile(const char* fname, GLint* fSize);
 
 private:
     FTGLPixmapFont *m_font = nullptr;

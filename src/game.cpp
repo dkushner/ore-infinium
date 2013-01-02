@@ -68,7 +68,6 @@ void Game::checkGLError()
     }
 }
 
-GLuint shaderProgram;
 GLuint TextureID = 0;
 
 void Game::init()
@@ -99,10 +98,8 @@ void Game::init()
     SDL_GL_SetAttribute(SDL_GL_GREEN_SIZE, 5);
     SDL_GL_SetAttribute(SDL_GL_BLUE_SIZE, 5);
 
-    /* Request opengl 3.2 context.
-     * SDL doesn't have the ability to choose which profile at this time of writing,
-     * but it should default to the core profile */
-    //FIXME: i *want 3.2, but Mesa 9 only has 3.0.. :(
+    // Request opengl 3.3 context.
+    // FIXME: i *want 3.2, but Mesa 9 only has 3.0.. :(
     SDL_GL_SetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, 3);
     SDL_GL_SetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, 0);
 
@@ -152,18 +149,18 @@ void Game::init()
 
     projectionMatrix = glm::ortho(0.0f, float(SCREEN_W), float(SCREEN_H), 0.0f, -1.0f, 1.0f);
 
-    glUseProgram(shaderProgram);
+    glUseProgram(spriteShaderProgram);
 
     checkGLError();
 
     // Get the location of our projection matrix in the shader
-    int projectionMatrixLocation = glGetUniformLocation(shaderProgram, "projectionMatrix");
+    int projectionMatrixLocation = glGetUniformLocation(spriteShaderProgram, "projectionMatrix");
 
     // Get the location of our view matrix in the shader
-    int viewMatrixLocation = glGetUniformLocation(shaderProgram, "viewMatrix");
+    int viewMatrixLocation = glGetUniformLocation(spriteShaderProgram, "viewMatrix");
 
     // Get the location of our model matrix in the shader
-    int modelMatrixLocation = glGetUniformLocation(shaderProgram, "modelMatrix");
+    int modelMatrixLocation = glGetUniformLocation(spriteShaderProgram, "modelMatrix");
 
     // Send our projection matrix to the shader
     glUniformMatrix4fv(projectionMatrixLocation, 1, GL_FALSE, &projectionMatrix[0][0]);
@@ -174,15 +171,12 @@ void Game::init()
     // Send our model matrix to the shader
     glUniformMatrix4fv(modelMatrixLocation, 1, GL_FALSE, &modelMatrix[0][0]);
 
-
 //    ImageManager* manager = ImageManager::instance();
 //    manager->addResourceDir("../textures/");
 
     //World::createInstance(m_display);
     //m_world = World::instance();
     m_font->FaceSize(12);
-
-//    loadDefaultShaders();
 
     tick();
     shutdown();
@@ -213,7 +207,7 @@ void Game::printShaderInfoLog(GLint shader)
 // loadFile - loads text file into char* fname
 // allocates memory - so need to delete after use
 // size of file returned in fSize
-char* Game::loadFile(char *fname, GLint* fSize)
+char* Game::loadFile(const char* fname, GLint* fSize)
 {
     std::ifstream::pos_type size;
     char * memblock;
@@ -278,16 +272,16 @@ void Game::loadDefaultShaders()
     }
 
     // create program
-    shaderProgram = glCreateProgram();
+    spriteShaderProgram = glCreateProgram();
 
     // attach shaders
-    glAttachShader(shaderProgram, vertex_shader);
-    glAttachShader(shaderProgram, fragment_shader);
+    glAttachShader(spriteShaderProgram, vertex_shader);
+    glAttachShader(spriteShaderProgram, fragment_shader);
 
     // link the program and check for errors
-    glLinkProgram(shaderProgram);
+    glLinkProgram(spriteShaderProgram);
 
-    if (checkProgramLinkStatus(shaderProgram)) {
+    if (checkProgramLinkStatus(spriteShaderProgram)) {
         Debug::log(Debug::Area::Graphics) << "shader program linked!";
     } else {
         Debug::fatal(false, Debug::Area::Graphics, "shader program link FAILURE");
@@ -295,32 +289,6 @@ void Game::loadDefaultShaders()
 
     delete [] vertSource;
     delete [] fragSource;
-}
-
-void Game::handleEvents()
-{
-    SDL_Event event;
-
-    while (SDL_PollEvent(&event)) {
-        switch (event.type) {
-        case SDL_KEYDOWN:
-            if (event.key.keysym.sym == SDLK_ESCAPE) {
-                m_running = false;
-            }
-            break;
-
-        case SDL_WINDOWEVENT_CLOSE:
-            m_running = false;
-            break;
-
-        case SDL_QUIT:
-            exit(0);
-            break;
-
-        default:
-            break;
-        }
-    }
 }
 
 bool Game::checkShaderCompileStatus(GLuint obj)
@@ -357,14 +325,13 @@ bool Game::checkProgramLinkStatus(GLuint obj)
 
 GLint texture_location;
 GLuint vao;
-GLuint texture;
 
 void Game::initGL()
 {
     loadDefaultShaders();
 
     // get texture uniform location
-    texture_location = glGetUniformLocation(shaderProgram, "tex");
+    texture_location = glGetUniformLocation(spriteShaderProgram, "tex");
 
     // vao and vbo handle
     GLuint vbo, ibo;
@@ -429,7 +396,7 @@ void Game::initGL()
 
 void Game::render()
 {
-    glUseProgram(shaderProgram);
+    glUseProgram(spriteShaderProgram);
 
     TextureManager::instance()->BindTexture(TextureID);
 
@@ -474,6 +441,32 @@ void Game::tick()
 
 shutdown:
     shutdown();
+}
+
+void Game::handleEvents()
+{
+    SDL_Event event;
+
+    while (SDL_PollEvent(&event)) {
+        switch (event.type) {
+        case SDL_KEYDOWN:
+            if (event.key.keysym.sym == SDLK_ESCAPE) {
+                m_running = false;
+            }
+            break;
+
+        case SDL_WINDOWEVENT_CLOSE:
+            m_running = false;
+            break;
+
+        case SDL_QUIT:
+            exit(0);
+            break;
+
+        default:
+            break;
+        }
+    }
 }
 
 void Game::drawDebugText()
