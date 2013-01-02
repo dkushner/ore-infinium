@@ -57,8 +57,6 @@ public:
     //set the current texture
     bool bindTexture(const unsigned int texID);
 
-
-
 private:
     TextureManager();
     TextureManager(const TextureManager& tm);

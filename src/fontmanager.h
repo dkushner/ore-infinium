@@ -18,8 +18,11 @@
 #ifndef FONTMANAGER_H
 #define FONTMANAGER_H
 
+#include <FTGL/ftgl.h>
+
 #include <stdlib.h>
 #include <string>
+#include <map>
 
 class FontManager
 {
@@ -27,7 +30,29 @@ public:
     FontManager();
     static FontManager* instance();
 
+    /**
+     * Loads the font from disk, or if it has already been loaded,
+     * then it just returns the pointer to the existing one.
+     *
+     * You can call FTGLPixmapFont::Render on it at different positions,
+     * as well as different strings to render.
+     * 
+     * Font is refcounted. Call unloadFont to deref (when no longer used)
+     * @sa unloadFont
+     */
+    FTGLPixmapFont* loadFont(std::string fontPath);
+
+    //TODO: implement :)
+    void unloadFont(std::string fontPath);
+
 private:
     ~FontManager();
+
+    struct Font {
+        FTGLPixmapFont* font;
+        uint refCount;
+    };
+
+    std::map<std::string, Font> m_fonts;
 };
 #endif

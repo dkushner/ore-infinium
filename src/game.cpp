@@ -19,6 +19,7 @@
 
 #include "debug.h"
 #include "texturemanager.h"
+#include "fontmanager.h"
 
 #include <iostream>
 #include <sstream>
@@ -129,8 +130,7 @@ void Game::init()
     Debug::log(Debug::Area::Graphics) << "Maximum OpenGL texture size allowed: " << textureSize;
     std::cout << "\n\n\n\n";
 
-    m_font = new FTGLPixmapFont("../font/Ubuntu-L.ttf");
-    Debug::fatal(!m_font->Error(), Debug::Area::System, "Failure to load font");
+    m_font = FontManager::instance()->loadFont("../font/Ubuntu-L.ttf");
 
     glClearColor(1.0f, 0.0f, 0.0f, 0.0f);
 
@@ -170,9 +170,6 @@ void Game::init()
 
     // Send our model matrix to the shader
     glUniformMatrix4fv(modelMatrixLocation, 1, GL_FALSE, &modelMatrix[0][0]);
-
-//    ImageManager* manager = ImageManager::instance();
-//    manager->addResourceDir("../textures/");
 
     //World::createInstance(m_display);
     //m_world = World::instance();
@@ -381,8 +378,7 @@ void Game::initGL()
     // "unbind" vao
     glBindVertexArray(0);
 
-    bool loaded = TextureManager::instance()->loadTexture("../textures/player.png", TextureID);
-    assert(loaded);
+    TextureManager::instance()->loadTexture("../textures/player.png", TextureID);
 
     // set texture parameters
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
