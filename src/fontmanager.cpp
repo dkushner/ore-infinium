@@ -46,7 +46,7 @@ FTPixmapFont* FontManager::loadFont(std::string fontPath)
 
     if (it != m_fonts.end() && fontPath.compare(it->first) == 0) {
         it->second.refCount++;
-        Debug::log(Debug::Area::System) << "increasing font refcount for fontPath: " << fontPath << " now at refcount: " << it->second.refCount;
+        Debug::log(Debug::Area::System) << "font already loaded, increasing font refcount for fontPath: " << fontPath << " now at refcount: " << it->second.refCount;
         return it->second.font;
     }
 

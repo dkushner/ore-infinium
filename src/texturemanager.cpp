@@ -48,7 +48,7 @@ TextureManager::~TextureManager()
     s_instance = 0;
 }
 
-bool TextureManager::loadTexture(std::string filename, const unsigned int texID, GLenum image_format, GLint internal_format, GLint level, GLint border)
+void TextureManager::loadTexture(std::string filename, const unsigned int texID, GLenum image_format, GLint internal_format, GLint level, GLint border)
 {
     //image format
     FREE_IMAGE_FORMAT imageFormat = FIF_UNKNOWN;
@@ -69,19 +69,14 @@ bool TextureManager::loadTexture(std::string filename, const unsigned int texID,
         imageFormat = FreeImage_GetFIFFromFilename(filename.c_str());
     }
 
-    //give up, don't know what image this is
-    if(imageFormat == FIF_UNKNOWN) {
-        return false;
-    }
+    Debug::fatal(imageFormat != FIF_UNKNOWN, Debug::Area::Graphics, "failure to load font, type unknown");
 
     //check that the plugin has reading capabilities and load the file
     if(FreeImage_FIFSupportsReading(imageFormat)) {
         bitmap = FreeImage_Load(imageFormat, filename.c_str());
     }
 
-    if(!bitmap) {
-        return false;
-    }
+    Debug::fatal(bitmap, Debug::Area::Graphics, "failure to load font, bitmap pointer invalid");
 
     //retrieve the image data
     bits = FreeImage_GetBits(bitmap);
@@ -91,7 +86,7 @@ bool TextureManager::loadTexture(std::string filename, const unsigned int texID,
 
     //if this somehow one of these failed (they shouldn't), return failure
     if((bits == 0) || (width == 0) || (height == 0)) {
-        return false;
+        Debug::fatal(false, Debug::Area::Graphics, "failure to load font, bitmap sizes invalid or bits invalid");
     }
 
     //if this texture ID is in use, unload the current texture
@@ -113,9 +108,6 @@ bool TextureManager::loadTexture(std::string filename, const unsigned int texID,
 
     //Free FreeImage's copy of the data
     FreeImage_Unload(bitmap);
-
-    //return success
-    return true;
 }
 
 bool TextureManager::unloadTexture(const unsigned int texID)
@@ -135,6 +127,7 @@ bool TextureManager::unloadTexture(const unsigned int texID)
 bool TextureManager::bindTexture(const unsigned int texID)
 {
     bool result(true);
+
     //if this texture ID mapped, bind it's texture as current
     if(m_texID.find(texID) != m_texID.end()) {
         glBindTexture(GL_TEXTURE_2D, m_texID[texID]);
