@@ -1,7 +1,7 @@
-#version 330
+#version 130
 
-layout(location = 0) in vec4 vposition;
-layout(location = 1) in vec2 vtexcoord;
+in vec4 vposition;
+in vec2 vtexcoord;
 
 uniform mat4 projectionMatrix;
 uniform mat4 viewMatrix;
