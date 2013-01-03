@@ -211,11 +211,10 @@ char* Game::loadFile(const char* fname, GLint* fSize)
         file.seekg (0, std::ios::beg);
         file.read (memblock, size);
         file.close();
-        std::cout << "file " << fname << " loaded" << std::endl;
+        Debug::log(Debug::Area::Graphics) << "shader : " << fname << " loaded successfully";
         text.assign(memblock);
     } else {
-        std::cout << "Unable to open file " << fname << std::endl;
-        exit(1);
+        Debug::fatal(false,  Debug::Area::Graphics, "failed to load shader: " + std::string(fname));
     }
     return memblock;
 }

@@ -1,5 +1,5 @@
 /******************************************************************************
- *   Copyright (C) 2012 by Shaun Reich <sreich@kde.org>                       *
+ *   Copyright (C) 2012, 2013 by Shaun Reich <sreich@kde.org>                 *
  *                                                                            *
  *   This program is free software; you can redistribute it and/or            *
  *   modify it under the terms of the GNU General Public License as           *
@@ -16,7 +16,7 @@
  *****************************************************************************/
 
 #include "texture.h"
-#include "resourcemanager.h"
+#include "texturemanager.h"
 #include "game.h"
 
 #include <Eigen/Core>
@@ -24,22 +24,22 @@
 #include <allegro5/allegro.h>
 #include <allegro5/allegro_primitives.h>
 
-Texture::Texture(const char* texture)
+Texture::Texture(std::string fileName)
 {
-    Texture::setTexture(texture);
+    Texture::setTexture(fileName);
 
-    const Eigen::Vector2i texSize = size();
-    m_origin = Eigen::Vector2f(texSize.x() * 0.5, texSize.y() * 0.5);
+    const glm::vec2 texSize = size();
+    m_origin = glm::vec2(texSize.x() * 0.5, texSize.y() * 0.5);
 }
 
-void Texture::setTexture(const char* texture)
+void Texture::setTexture(std::string fileName)
 {
-    m_bitmap = ResourceManager::instance()->loadBitmap(texture);
+    TextureManager::instance()->loadTexture(fileName, &m_textureID);
 }
 
-void Texture::draw_bitmap(int flags)
+void Texture::render()
 {
-    al_draw_bitmap(m_bitmap, m_position.x() - m_origin.x(), m_position.y() - m_origin.y(), flags);
+//    al_draw_bitmap(m_bitmap, m_position.x() - m_origin.x(), m_position.y() - m_origin.y(), flags);
 
     if (DEBUG_RENDERING) {
         renderDebugDrawing();
@@ -48,16 +48,17 @@ void Texture::draw_bitmap(int flags)
 
 void Texture::renderDebugDrawing()
 {
-    ALLEGRO_COLOR color = al_map_rgb(0, 255, 0);
-    al_draw_rectangle(m_position.x() - m_origin.x(), m_position.y() - m_origin.y(), m_position.x() + size().x() - m_origin.x(), m_position.y() + size().y() - m_origin.y(), color, 1.0f);
+    //ALLEGRO_COLOR color = al_map_rgb(0, 255, 0);
+    //(m_position.x() - m_origin.x(), m_position.y() - m_origin.y(), m_position.x() + size().x() - m_origin.x(), m_position.y() + size().y() - m_origin.y(), color, 1.0f);
 }
 
-Eigen::Vector2i Texture::size() const
+glm::vec2 Texture::size() const
 {
-    return Eigen::Vector2i(al_get_bitmap_height(m_bitmap), al_get_bitmap_width(m_bitmap));
+    //FIXME:
+    return glm::vec2(0, 0);
 }
 
-void Texture::setOrigin(const Eigen::Vector2f origin)
+void Texture::setOrigin(const glm::vec2 origin)
 {
     m_origin = origin;
 }
