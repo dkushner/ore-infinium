@@ -1,0 +1,44 @@
+
+# Define sources and executable
+set(EXECUTABLE_NAME "ore-chasm")
+
+set(SRC
+main.cpp
+game.cpp
+debug.cpp
+texturemanager.cpp
+fontmanager.cpp
+camera.cpp
+#world.cpp
+#player.cpp
+#texture.cpp
+#entity.cpp
+#block.cpp
+#cloudsystem.cpp
+#sky.cpp
+)
+
+include(FindPkgConfig)
+add_executable(${EXECUTABLE_NAME} ${SRC})
+
+include_directories(${CMAKE_SOURCE_DIR} ${SDL2_INCLUDE_DIR} ${SDLMIXER_INCLUDE_DIR} ${FREEIMAGE_INCLUDE_PATH} ${FREETYPE_INCLUDE_DIRS} ${GLM_INCLUDE_DIRS} ${FTGL_INCLUDE_DIR} ${EIGEN3_INCLUDE_DIR} ${GLEW_INCLUDE_DIRS})
+target_link_libraries(${EXECUTABLE_NAME} ${SDL2_LIBRARY} ${SDL2MAIN_LIBRARY} ${SDLMIXER_LIBRARY} ${FREEIMAGE_LIBRARY} ${FREETYPE_LIBRARY} ${FTGL_LIBRARY} ${OPENGL_LIBRARIES} ${PugiXML_LIBRARY} ${GLEW_LIBRARIES})
+
+# CPack packaging
+include(InstallRequiredSystemLibraries)
+set(CPACK_RESOURCE_FILE_LICENSE "${CMAKE_SOURCE_DIR}/COPYING")
+set(CPACK_PACKAGE_VERSION_MAJOR "${ore_chasm_VERSION_MAJOR}")
+set(CPACK_PACKAGE_VERSION_MINOR "${ore_chasm_VERSION_MINOR}")
+include(CPack)
+
+
+#add_subdirectory(${CMAKE_SOURCE_DIR}/src/)
+
+# Install target
+install(DIRECTORY ../textures/ DESTINATION "textures") #FILES_MATCHING PATTERN "*")
+install(DIRECTORY ../font/ DESTINATION "font") #FILES_MATCHING PATTERN "*")
+
+install(DIRECTORY ./ DESTINATION bin FILES_MATCHING PATTERN "*.frag" )
+install(DIRECTORY ./ DESTINATION bin FILES_MATCHING PATTERN "*.vert" )
+install(TARGETS ${EXECUTABLE_NAME} DESTINATION bin)
+
