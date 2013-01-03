@@ -29,6 +29,19 @@ class Camera
 public:
     Camera(GLint _spriteShaderProgram);
 
+    /**
+     * Translates the camera's current position by the given vec2.
+     */
+    void translate(const glm::vec2 vec);
+
+    /**
+     * Zooms/scales the view (z) by the given factor.
+     * 0.5 is zoom out, 1.5 is zoom in, etc.
+     */
+    void zoom(const float factor);
+
+    void centerOn(const glm::vec2 vec);
+
 private:
     void pushViewMatrix();
 

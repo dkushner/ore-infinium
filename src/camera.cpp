@@ -17,6 +17,7 @@
 
 #include "camera.h"
 #include "game.h"
+#include "debug.h"
 
 Camera::Camera(GLint _spriteShaderProgram) :
 m_vector(glm::vec3()),
@@ -25,6 +26,24 @@ m_spriteShaderProgram(_spriteShaderProgram)
     float x = 0.0f;
     float y = 0.0f;
     m_viewMatrix = glm::translate(glm::mat4(), glm::vec3(x, y, 0.0f));
+    pushViewMatrix();
+}
+
+void Camera::translate(const glm::vec2 vec)
+{
+    m_viewMatrix = glm::translate(m_viewMatrix, glm::vec3(vec, 0.0f));
+    pushViewMatrix();
+}
+
+void Camera::zoom(const float factor)
+{
+    m_viewMatrix = glm::scale(m_viewMatrix, glm::vec3(factor));
+    pushViewMatrix();
+}
+
+void Camera::centerOn(const glm::vec2 vec)
+{
+    m_viewMatrix = glm::translate(glm::mat4(), glm::vec3(vec, 0.0f));
     pushViewMatrix();
 }
 

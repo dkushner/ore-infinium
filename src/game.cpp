@@ -154,7 +154,6 @@ void Game::init()
     // Get the location of our projection matrix in the shader
     int projectionMatrixLocation = glGetUniformLocation(m_spriteShaderProgram, "projectionMatrix");
 
-
     // Get the location of our model matrix in the shader
     int modelMatrixLocation = glGetUniformLocation(m_spriteShaderProgram, "modelMatrix");
 
