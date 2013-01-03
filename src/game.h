@@ -36,6 +36,7 @@
 #include <glm/gtc/matrix_transform.hpp>
 
 #include <string>
+#include "camera.h"
 
 //1600
 static int SCREEN_W = 1600;
@@ -47,7 +48,6 @@ static bool DEBUG_RENDERING = true;
 
 static int SDL_LOGPRIORITY = SDL_LOG_PRIORITY_WARN;
 
-static GLuint spriteShaderProgram;
 
 class Game
 {
@@ -76,16 +76,19 @@ public:
 
     const float FPS = 60.0;
 
+
     void printShaderInfoLog(GLint shader);
     char* loadFile(const char* fname, GLint* fSize);
 
 private:
     FTGLPixmapFont *m_font = nullptr;
 
-    glm::mat4 viewMatrix;
+    Camera* m_camera;
+
     glm::mat4 modelMatrix;
     glm::mat4 projectionMatrix;
 
+    GLuint m_spriteShaderProgram;
  //   World *m_world = nullptr;
     SDL_Window *m_window = nullptr;
     SDL_GLContext m_context;

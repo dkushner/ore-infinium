@@ -93,6 +93,7 @@ src/game.cpp
 src/debug.cpp
 src/texturemanager.cpp
 src/fontmanager.cpp
+src/camera.cpp
 #src/world.cpp
 #src/player.cpp
 #src/texture.cpp

@@ -143,30 +143,22 @@ void Game::init()
     float scale = 1.0f;
     modelMatrix = glm::scale(glm::mat4(1.0f), glm::vec3(scale));
 
-    float x = 0.0f;
-    float y = 0.0f;
-    viewMatrix = glm::translate(glm::mat4(), glm::vec3(x, y, 0.0f));
 
     projectionMatrix = glm::ortho(0.0f, float(SCREEN_W), float(SCREEN_H), 0.0f, -1.0f, 1.0f);
 
-    glUseProgram(spriteShaderProgram);
+    glUseProgram(m_spriteShaderProgram);
 
     checkGLError();
 
     // Get the location of our projection matrix in the shader
-    int projectionMatrixLocation = glGetUniformLocation(spriteShaderProgram, "projectionMatrix");
+    int projectionMatrixLocation = glGetUniformLocation(m_spriteShaderProgram, "projectionMatrix");
 
-    // Get the location of our view matrix in the shader
-    int viewMatrixLocation = glGetUniformLocation(spriteShaderProgram, "viewMatrix");
 
     // Get the location of our model matrix in the shader
-    int modelMatrixLocation = glGetUniformLocation(spriteShaderProgram, "modelMatrix");
+    int modelMatrixLocation = glGetUniformLocation(m_spriteShaderProgram, "modelMatrix");
 
     // Send our projection matrix to the shader
     glUniformMatrix4fv(projectionMatrixLocation, 1, GL_FALSE, &projectionMatrix[0][0]);
-
-    // Send our view matrix to the shader
-    glUniformMatrix4fv(viewMatrixLocation, 1, GL_FALSE, &viewMatrix[0][0]);
 
     // Send our model matrix to the shader
     glUniformMatrix4fv(modelMatrixLocation, 1, GL_FALSE, &modelMatrix[0][0]);
@@ -269,16 +261,16 @@ void Game::loadDefaultShaders()
     }
 
     // create program
-    spriteShaderProgram = glCreateProgram();
+    m_spriteShaderProgram = glCreateProgram();
 
     // attach shaders
-    glAttachShader(spriteShaderProgram, vertex_shader);
-    glAttachShader(spriteShaderProgram, fragment_shader);
+    glAttachShader(m_spriteShaderProgram, vertex_shader);
+    glAttachShader(m_spriteShaderProgram, fragment_shader);
 
     // link the program and check for errors
-    glLinkProgram(spriteShaderProgram);
+    glLinkProgram(m_spriteShaderProgram);
 
-    if (checkProgramLinkStatus(spriteShaderProgram)) {
+    if (checkProgramLinkStatus(m_spriteShaderProgram)) {
         Debug::log(Debug::Area::Graphics) << "shader program linked!";
     } else {
         Debug::fatal(false, Debug::Area::Graphics, "shader program link FAILURE");
@@ -328,7 +320,7 @@ void Game::initGL()
     loadDefaultShaders();
 
     // get texture uniform location
-    texture_location = glGetUniformLocation(spriteShaderProgram, "tex");
+    texture_location = glGetUniformLocation(m_spriteShaderProgram, "tex");
 
     // vao and vbo handle
     GLuint vbo, ibo;
@@ -392,7 +384,7 @@ void Game::initGL()
 
 void Game::render()
 {
-    glUseProgram(spriteShaderProgram);
+    glUseProgram(m_spriteShaderProgram);
 
     TextureManager::instance()->bindTexture(TextureID);
 

@@ -20,10 +20,8 @@
 
 #include "resourcemanager.h"
 
-#include <Eigen/Core>
-
-class ALLEGRO_DISPLAY;
-class ALLEGRO_BITMAP;
+#include <glm/glm.hpp>
+#include <glm/gtc/matrix_transform.hpp>
 
 class Texture
 {
@@ -45,15 +43,6 @@ public:
     void setTexture(const char* texture);
 
     /**
-     * Wrapper of al_draw_bitmap.
-     * Draws this texture's internal bitmap to whatever the current target is, at the current position.
-     * Fucking magic.
-     * NOTE: automatically handles debug drawing around it, if it is enabled by DEBUG_DRAWING global.
-     * @p flags same as al_draw_bitmap: ALLEGRO_FLIP_HORIZONTAL and/or ALLEGRO_FLIP_VERTICAL
-     */
-    virtual void draw_bitmap(int flags = 0);
-
-    /**
      * Returns the width and height of the bitmap of this Texture, as a Vector2i.
      */
     Eigen::Vector2i size() const;
@@ -64,9 +53,9 @@ public:
      */
     void setOrigin(const Eigen::Vector2f origin);
 
-    Eigen::Vector2f origin() const { return m_origin; };
+    glm::mat4 origin() const { return m_origin; };
 
-    Eigen::Vector2f position() const { return m_position; };
+    glm::mat4 position() const { return m_position; };
     void setPosition(const Eigen::Vector2f& vector) { m_position = vector; };
     void setPosition(float x, float y) { m_position = Eigen::Vector2f(x, y); };
 
@@ -76,9 +65,7 @@ private:
     void renderDebugDrawing();
 
 private:
-    ALLEGRO_BITMAP *m_bitmap = nullptr;
-
-    Eigen::Vector2f m_position = Eigen::Vector2f(0.0f, 0.0f);
+    Eigen::Vector2f m_position;
     Eigen::Vector2f m_origin;
 };
 
