@@ -25,6 +25,7 @@ m_spriteShaderProgram(_spriteShaderProgram)
     float x = 0.0f;
     float y = 0.0f;
     m_viewMatrix = glm::translate(glm::mat4(), glm::vec3(x, y, 0.0f));
+    pushViewMatrix();
 }
 
 void Camera::pushViewMatrix()

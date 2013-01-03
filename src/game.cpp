@@ -140,9 +140,10 @@ void Game::init()
 
     initGL();
 
+    m_camera = new Camera(m_spriteShaderProgram);
+
     float scale = 1.0f;
     modelMatrix = glm::scale(glm::mat4(1.0f), glm::vec3(scale));
-
 
     projectionMatrix = glm::ortho(0.0f, float(SCREEN_W), float(SCREEN_H), 0.0f, -1.0f, 1.0f);
 

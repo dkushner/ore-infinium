@@ -83,7 +83,7 @@ public:
 private:
     FTGLPixmapFont *m_font = nullptr;
 
-    Camera* m_camera;
+    Camera* m_camera = nullptr;
 
     glm::mat4 modelMatrix;
     glm::mat4 projectionMatrix;
