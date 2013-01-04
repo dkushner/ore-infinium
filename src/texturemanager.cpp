@@ -91,14 +91,17 @@ void TextureManager::loadTexture(std::string filename, GLuint texID, GLenum imag
 
     //if this texture ID is in use, unload the current texture
     if(m_texID.find(texID) != m_texID.end()) {
-        glDeleteTextures(1, &(m_texID[texID]));
+        glDeleteTextures(1, &(m_texID[texID].textureID));
     }
 
     //generate an OpenGL texture ID for this texture
     glGenTextures(1, &gl_texID);
 
+    auto& wrapper = m_texID[texID];
     //store the texture ID mapping
-    m_texID[texID] = gl_texID;
+    wrapper.textureID = gl_texID;
+    wrapper.width = width;
+    wrapper.height = height;
 
     //bind to the new texture ID
     glBindTexture(GL_TEXTURE_2D, gl_texID);
@@ -115,7 +118,7 @@ bool TextureManager::unloadTexture(GLuint texID)
     bool result(true);
     //if this texture ID mapped, unload it's texture, and remove it from the map
     if(m_texID.find(texID) != m_texID.end()) {
-        glDeleteTextures(1, &(m_texID[texID]));
+        glDeleteTextures(1, &(m_texID[texID].textureID));
         m_texID.erase(texID);
     } else {
         result = false;
@@ -130,7 +133,7 @@ bool TextureManager::bindTexture(GLuint texID)
 
     //if this texture ID mapped, bind it's texture as current
     if(m_texID.find(texID) != m_texID.end()) {
-        glBindTexture(GL_TEXTURE_2D, m_texID[texID]);
+        glBindTexture(GL_TEXTURE_2D, m_texID[texID].textureID);
     } else {
         Debug::fatal(false, Debug::Area::Graphics, "bind texture attempted on a nonloaded textureID");
     }
@@ -140,7 +143,7 @@ bool TextureManager::bindTexture(GLuint texID)
 
 void TextureManager::unloadAllTextures()
 {
-    std::map<unsigned int, GLuint>::iterator i = m_texID.begin();
+    std::map<unsigned int, TextureWrapper>::iterator i = m_texID.begin();
 
     while(i != m_texID.end()) {
         unloadTexture(i->first);

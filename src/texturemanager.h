@@ -62,8 +62,14 @@ private:
     TextureManager(const TextureManager& tm);
     TextureManager& operator=(const TextureManager& tm);
 
+    struct TextureWrapper {
+        GLuint textureID;
+        uint width;
+        uint height;
+    };
+
     static TextureManager* s_instance;
-    std::map<unsigned int, GLuint> m_texID;
+    std::map<unsigned int, TextureWrapper> m_texID;
 };
 
 #endif
