@@ -11,8 +11,11 @@ just *using* the community.
 It is a project, that is open source from the very beginning, as improving upon
 the ideas that Terraria introduced to the world when it released.
 
-It isn't written in XNA and C#, but SDL, OpenGL and C++, so is cross-platform and
-very fast (I use all hardware accelerated rendering)
+It is NOT written in XNA and C#.
+
+It is written in SDL (just for audio, input and OpenGL context), OpenGL
+and C++, so is cross-platform and very fast (I use all hardware
+accelerated rendering)
 
 * It will have modding capabilities
 * It is open source, everything..including all assets
@@ -112,7 +115,7 @@ and now to actually build it
 
 
 ## System Requirements
-* SDL 2.x (yet unreleased) (and SDL_image, SDL_mixer)
+* SDL 2.x (yet unreleased) (and SDL_mixer)
 * Platform of Windows, Linux/Unix, Mac OS X
 * Minimum RAM of 250 MiB. Ore Chasm uses so far.. an average of 60 MiB RES.
 This will change with world size, since we don't have chunk based loading
@@ -120,7 +123,9 @@ This will change with world size, since we don't have chunk based loading
 Which means for a 8400x2600 map (the default, soft minimum), (8400 \* 2600 \*
 2 bytes = ~44 MiB). Presently, to run the game it's about 60MiB of RAM usage on
 average. Subject to change, of course.
-* GPU and drivers capable of OpenGL 3.0+ (and hopefully OpenGL ES 2.0).
+* GPU and drivers capable of OpenGL 3.2+ (and hopefully OpenGL ES 2.0).
+In other words, if your GPU/drivers say DirectX 10+ capable, or you can run
+DirectX 10+ games then that will work.
 
 ## Planned Features
 Some of these plans are merely thoughts and things to experiment with, some are
