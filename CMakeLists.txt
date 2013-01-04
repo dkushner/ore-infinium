@@ -47,8 +47,8 @@ find_package(GLM REQUIRED)
 set_package_properties(SDL2 PROPERTIES DESCRIPTION "SDL2, used for creating an open source, cross-platform OpenGL window, audio and input" URL "http://hg.libsdl.org/SDL/")
 set_package_properties(SDL2_mixer PROPERTIES DESCRIPTION "SDL2 Mixer open source library, for audio" URL "http://hg.libsdl.org/SDL_mixer/")
 
-set_package_properties(OpenGL PROPERTIES DESCRIPTION "TODO?" URL "TODO?")
-set_package_properties(GLEW PROPERTIES DESCRIPTION "" URL "")
+set_package_properties(OpenGL PROPERTIES DESCRIPTION "OpenGL >= 3.0 is required. Version check is done at runtime" URL "-")
+set_package_properties(GLEW PROPERTIES DESCRIPTION "OpenGL Extension Wrangler, to create our function pointers and extension loading" URL "http://glew.sourceforge.net/")
 
 set_package_properties(PugiXML PROPERTIES DESCRIPTION "Cross-platform, open source, awesome XML library." URL "http://pugixml.org/")
 set_package_properties(FreeImage PROPERTIES DESCRIPTION "Cross-platform open source image loading library" URL "http://freeimage.sourceforge.net/")
