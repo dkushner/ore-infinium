@@ -48,7 +48,7 @@ TextureManager::~TextureManager()
     s_instance = 0;
 }
 
-void TextureManager::loadTexture(std::string filename, const unsigned int texID, GLenum image_format, GLint internal_format, GLint level, GLint border)
+void TextureManager::loadTexture(std::string filename, GLint texID, GLenum image_format, GLint internal_format, GLint level, GLint border)
 {
     //image format
     FREE_IMAGE_FORMAT imageFormat = FIF_UNKNOWN;
@@ -110,7 +110,7 @@ void TextureManager::loadTexture(std::string filename, const unsigned int texID,
     FreeImage_Unload(bitmap);
 }
 
-bool TextureManager::unloadTexture(const unsigned int texID)
+bool TextureManager::unloadTexture(GLint texID)
 {
     bool result(true);
     //if this texture ID mapped, unload it's texture, and remove it from the map
@@ -124,7 +124,7 @@ bool TextureManager::unloadTexture(const unsigned int texID)
     return result;
 }
 
-bool TextureManager::bindTexture(const unsigned int texID)
+bool TextureManager::bindTexture(GLint texID)
 {
     bool result(true);
 

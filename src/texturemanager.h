@@ -43,19 +43,19 @@ public:
      * @p level what mipmapping level to utilize. Default 0.
      * @p border border size. Default 0
      */
-    void loadTexture(std::string filename, const unsigned int texID, GLenum image_format = GL_BGRA, GLint internal_format = GL_RGBA, GLint level = 0, GLint border = 0);
+    void loadTexture(std::string filename, GLint texID, GLenum image_format = GL_BGRA, GLint internal_format = GL_RGBA, GLint level = 0, GLint border = 0);
 
     /**
      * free the memory for a texture
      */
-    bool unloadTexture(const unsigned int texID);
+    bool unloadTexture(GLint texID);
 
     /**
      * free all texture memory
      */
     void unloadAllTextures();
     //set the current texture
-    bool bindTexture(const unsigned int texID);
+    bool bindTexture(GLint texID);
 
 private:
     TextureManager();
