@@ -19,8 +19,6 @@
 #include "texturemanager.h"
 #include "game.h"
 
-#include <Eigen/Core>
-
 #include <allegro5/allegro.h>
 #include <allegro5/allegro_primitives.h>
 

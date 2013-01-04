@@ -21,6 +21,8 @@
 
 #include <FreeImage.h>
 
+#include <glm/glm.hpp>
+#include <glm/gtc/matrix_transform.hpp>
 #include <GL/gl.h>
 
 #include <map>
@@ -56,6 +58,12 @@ public:
     void unloadAllTextures();
     //set the current texture
     bool bindTexture(GLuint texID);
+
+    /**
+     * Returns the size of the image which represents this
+     * textureID
+     */
+    glm::vec2 size(GLuint texID);
 
 private:
     TextureManager();

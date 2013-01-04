@@ -141,6 +141,14 @@ bool TextureManager::bindTexture(GLuint texID)
     return result;
 }
 
+glm::vec2 TextureManager::size(GLuint texID)
+{
+    auto texture = m_texID.find(texID);
+    glm::vec2 imageSize(float(texture->second.width), float(texture->second.height));
+
+    return imageSize;
+}
+
 void TextureManager::unloadAllTextures()
 {
     std::map<unsigned int, TextureWrapper>::iterator i = m_texID.begin();
