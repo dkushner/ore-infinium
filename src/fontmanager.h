@@ -36,7 +36,7 @@ public:
      *
      * You can call FTGLPixmapFont::Render on it at different positions,
      * as well as different strings to render.
-     * 
+     *
      * Font is refcounted. Call unloadFont to deref (when no longer used)
      * @sa unloadFont
      */
@@ -50,7 +50,7 @@ private:
 
     struct Font {
         FTGLPixmapFont* font;
-        uint refCount;
+        unsigned int refCount;
     };
 
     std::map<std::string, Font> m_fonts;

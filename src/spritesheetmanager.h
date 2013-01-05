@@ -72,8 +72,8 @@ private:
 
     struct TextureWrapper {
         GLuint textureID;
-        uint width;
-        uint height;
+        unsigned int width;
+        unsigned int height;
     };
 
     static SpritesheetManager* s_instance;
