@@ -18,7 +18,7 @@
 #include "game.h"
 
 #include "debug.h"
-#include "texturemanager.h"
+#include "spritesheetmanager.h"
 #include "fontmanager.h"
 
 #include <iostream>
@@ -369,7 +369,7 @@ void Game::initGL()
     // "unbind" vao
     glBindVertexArray(0);
 
-    TextureManager::instance()->loadTexture("../textures/player.png", TextureID);
+    SpritesheetManager::instance()->loadTexture("../textures/player.png", TextureID);
 
     // set texture parameters
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
@@ -385,7 +385,7 @@ void Game::render()
 {
     glUseProgram(m_spriteShaderProgram);
 
-    TextureManager::instance()->bindTexture(TextureID);
+    SpritesheetManager::instance()->bindTexture(TextureID);
 
     glUniform1i(texture_location, 0);
 

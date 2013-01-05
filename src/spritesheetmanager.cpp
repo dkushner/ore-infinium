@@ -16,20 +16,20 @@
  *   along with this program.  If not, see <http://www.gnu.org/licenses/>.    *
  *****************************************************************************/
 
-#include "texturemanager.h"
+#include "spritesheetmanager.h"
 #include "debug.h"
 
-TextureManager* TextureManager::s_instance(0);
+SpritesheetManager* SpritesheetManager::s_instance(0);
 
-TextureManager* TextureManager::instance()
+SpritesheetManager* SpritesheetManager::instance()
 {
     if(!s_instance)
-        s_instance = new TextureManager();
+        s_instance = new SpritesheetManager();
 
     return s_instance;
 }
 
-TextureManager::TextureManager()
+SpritesheetManager::SpritesheetManager()
 {
     // call this ONLY when linking with FreeImage as a static library
 #ifdef FREEIMAGE_LIB
@@ -37,7 +37,7 @@ TextureManager::TextureManager()
 #endif
 }
 
-TextureManager::~TextureManager()
+SpritesheetManager::~SpritesheetManager()
 {
     // call this ONLY when linking with FreeImage as a static library
 #ifdef FREEIMAGE_LIB
@@ -48,7 +48,7 @@ TextureManager::~TextureManager()
     s_instance = 0;
 }
 
-void TextureManager::loadTexture(std::string filename, GLuint texID, GLenum image_format, GLint internal_format, GLint level, GLint border)
+void SpritesheetManager::loadTexture(std::string filename, GLuint texID, GLenum image_format, GLint internal_format, GLint level, GLint border)
 {
     //image format
     FREE_IMAGE_FORMAT imageFormat = FIF_UNKNOWN;
@@ -113,7 +113,7 @@ void TextureManager::loadTexture(std::string filename, GLuint texID, GLenum imag
     FreeImage_Unload(bitmap);
 }
 
-bool TextureManager::unloadTexture(GLuint texID)
+bool SpritesheetManager::unloadTexture(GLuint texID)
 {
     bool result(true);
     //if this texture ID mapped, unload it's texture, and remove it from the map
@@ -127,7 +127,7 @@ bool TextureManager::unloadTexture(GLuint texID)
     return result;
 }
 
-bool TextureManager::bindTexture(GLuint texID)
+bool SpritesheetManager::bindTexture(GLuint texID)
 {
     bool result(true);
 
@@ -141,7 +141,7 @@ bool TextureManager::bindTexture(GLuint texID)
     return result;
 }
 
-glm::vec2 TextureManager::size(GLuint texID)
+glm::vec2 SpritesheetManager::size(GLuint texID)
 {
     auto texture = m_texID.find(texID);
     glm::vec2 imageSize(float(texture->second.width), float(texture->second.height));
@@ -149,7 +149,7 @@ glm::vec2 TextureManager::size(GLuint texID)
     return imageSize;
 }
 
-void TextureManager::unloadAllTextures()
+void SpritesheetManager::unloadAllTextures()
 {
     std::map<unsigned int, TextureWrapper>::iterator i = m_texID.begin();
 

@@ -16,8 +16,8 @@
  *   along with this program.  If not, see <http://www.gnu.org/licenses/>.    *
  *****************************************************************************/
 
-#ifndef TEXTUREMANAGER_H
-#define TEXTUREMANAGER_H
+#ifndef SPRITESHEETMANAGER_H
+#define SPRITESHEETMANAGER_H
 
 #include <FreeImage.h>
 
@@ -28,11 +28,11 @@
 #include <map>
 #include <string>
 
-class TextureManager
+class SpritesheetManager
 {
 public:
-    static TextureManager* instance();
-    virtual ~TextureManager();
+    static SpritesheetManager* instance();
+    virtual ~SpritesheetManager();
 
     /**
      * Load an image as an OpenGL texture and make it the current texture
@@ -66,9 +66,9 @@ public:
     glm::vec2 size(GLuint texID);
 
 private:
-    TextureManager();
-    TextureManager(const TextureManager& tm);
-    TextureManager& operator=(const TextureManager& tm);
+    SpritesheetManager();
+    SpritesheetManager(const SpritesheetManager& tm);
+    SpritesheetManager& operator=(const SpritesheetManager& tm);
 
     struct TextureWrapper {
         GLuint textureID;
@@ -76,7 +76,7 @@ private:
         uint height;
     };
 
-    static TextureManager* s_instance;
+    static SpritesheetManager* s_instance;
     std::map<unsigned int, TextureWrapper> m_texID;
 };
 

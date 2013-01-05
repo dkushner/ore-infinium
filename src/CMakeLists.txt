@@ -6,12 +6,12 @@ set(SRC
 main.cpp
 game.cpp
 debug.cpp
-texturemanager.cpp
+spritesheetmanager.cpp
 fontmanager.cpp
 camera.cpp
+#sprite.cpp
 #world.cpp
 #player.cpp
-#texture.cpp
 #entity.cpp
 #block.cpp
 #cloudsystem.cpp
