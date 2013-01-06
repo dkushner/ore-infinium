@@ -18,57 +18,65 @@
 #ifndef TEXTURE_H
 #define TEXTURE_H
 
+#include "spritesheetmanager.h"
+
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 #include <GL/gl.h>
 
 #include <string>
 
-class Texture
+class Sprite
 {
 public:
 
     /**
-     * A wrapper around an OpenGL texture.
-     * Automatically uses the texturemanager.
-     * The default origin is the center of the texture.
+     * Creates a sprite with the requested framename (required)
+     * and with the category (also required)
      * @see setOrigin origin
      */
-    Texture(std::string fileName);
+    explicit Sprite(const std::string& frameName, SpriteSheetManager::SpriteSheetType spriteSheetType);
 
     /**
-     * Pass a string into @p texture and it will automatically ask the TextureManager
-     * for an already-loaded version, if possible. If not, it will load it.
-     *
+     * Sets the name of the sprite's frame to use.
+     * Used for animation.
      */
-    void setTexture(std::string fileName);
+    void setFrameName(const std::string& frameName) { m_frameName = frameName; }
+    std::string frameName() { return m_frameName; }
+
+    /// TODO: NOT IMPLEMENTED OR NEEDED RIGHT NOW.
+    /// THIS MAY REQUIRE SOME CHANGES ON THE MANAGER FRONT, TO GET IT TO CHANGE THE INTERNAL MAPPING
+    /// THIS WOULD ONLY EVER BE NEEDED TO e.g. MAKE AN ENTITY SUDDENLY LOOK LIKE A CHARACTER, aka a mimic/illusionist
+    /// enemy
+//    void setSpriteSheetType(SpriteSheetManager::SpriteSheetType spriteSheetType);
 
     /**
-     * Returns the width and height of the bitmap of this Texture, as a Vector2i.
+     * Returns the width and height of the bitmap of this Texture
      */
-    glm::vec2 size() const;
+    glm::vec2 size() const { return m_size; }
 
     /**
      * Sets the origin of this texture, to which to offset drawing.
      * Default is the center of the texture.
      */
-    void setOrigin(const glm::vec2& origin);
+    void setOrigin(const glm::vec2& origin) { m_origin = origin; }
 
-    glm::mat4 origin() const { return m_origin; };
+    glm::vec2 origin() const { return m_origin; }
 
-    glm::mat4 position() const { return m_position; };
+    void setPosition(const glm::vec2& vector) { m_position = vector; }
+    void setPosition(float x, float y) { m_position = glm::vec2(x, y); }
 
-    void setPosition(const glm::vec2& vector) { m_position = vector; };
-    void setPosition(float x, float y) { m_position = glm::vec2(x, y); };
-
-private:
-    Texture();
-
-    void renderDebugDrawing();
+    glm::vec2 position() const { return m_position; }
 
 private:
-    GLint m_textureID;
+    Sprite() {};
 
+private:
+    SpriteSheetManager::SpriteSheetType m_spriteSheetType;
+
+    std::string m_frameName;
+
+    glm::vec2 m_size;
     glm::vec2 m_position;
     glm::vec2 m_origin;
 };

@@ -38,16 +38,13 @@
 #include <string>
 #include "camera.h"
 
-//1600
 static int SCREEN_W = 1600;
-//900
 static int SCREEN_H = 900;
 
 //FIXME: make on/off via key
 static bool DEBUG_RENDERING = true;
 
 static int SDL_LOGPRIORITY = SDL_LOG_PRIORITY_WARN;
-
 
 class Game
 {
@@ -75,7 +72,6 @@ public:
     void checkGLError();
 
     const float FPS = 60.0;
-
 
     void printShaderInfoLog(GLint shader);
     char* loadFile(const char* fname, GLint* fSize);

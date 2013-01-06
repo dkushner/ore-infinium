@@ -15,48 +15,24 @@
  *   along with this program.  If not, see <http://www.gnu.org/licenses/>.    *
  *****************************************************************************/
 
-#include "texture.h"
-#include "texturemanager.h"
+#include "sprite.h"
+#include "spritesheetmanager.h"
 #include "game.h"
 
-#include <allegro5/allegro.h>
-#include <allegro5/allegro_primitives.h>
-
-Texture::Texture(std::string fileName)
+Sprite::Sprite(const std::string& frameName, SpriteSheetManager::SpriteSheetType spriteSheetType) :
+m_spriteSheetType(spriteSheetType)
 {
-    Texture::setTexture(fileName);
+    setFrameName(frameName);
 
     const glm::vec2 texSize = size();
     m_origin = glm::vec2(texSize.x() * 0.5, texSize.y() * 0.5);
+
+    SpriteSheetManager::instance()->registerSprite(m_spriteSheetType, this);
 }
 
-void Texture::setTexture(std::string fileName)
-{
-    TextureManager::instance()->loadTexture(fileName, &m_textureID);
-}
-
-void Texture::render()
-{
-//    al_draw_bitmap(m_bitmap, m_position.x() - m_origin.x(), m_position.y() - m_origin.y(), flags);
-
-    if (DEBUG_RENDERING) {
-        renderDebugDrawing();
-    }
-}
-
-void Texture::renderDebugDrawing()
-{
-    //ALLEGRO_COLOR color = al_map_rgb(0, 255, 0);
-    //(m_position.x() - m_origin.x(), m_position.y() - m_origin.y(), m_position.x() + size().x() - m_origin.x(), m_position.y() + size().y() - m_origin.y(), color, 1.0f);
-}
-
-glm::vec2 Texture::size() const
+glm::vec2 Sprite::size() const
 {
     //FIXME:
     return glm::vec2(0, 0);
 }
 
-void Texture::setOrigin(const glm::vec2 origin)
-{
-    m_origin = origin;
-}

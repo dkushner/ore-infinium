@@ -199,7 +199,7 @@ void Game::printShaderInfoLog(GLint shader)
 char* Game::loadFile(const char* fname, GLint* fSize)
 {
     std::ifstream::pos_type size;
-    char * memblock;
+    char * memblock = 0;
     std::string text;
 
     // file read based on example in cplusplus.com tutorial
@@ -369,7 +369,7 @@ void Game::initGL()
     // "unbind" vao
     glBindVertexArray(0);
 
-    SpritesheetManager::instance()->loadTexture("../textures/player.png", TextureID);
+// FIXME:   SpritesheetManager::instance()->loadTexture("../textures/player.png", TextureID);
 
     // set texture parameters
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
@@ -385,7 +385,7 @@ void Game::render()
 {
     glUseProgram(m_spriteShaderProgram);
 
-    SpritesheetManager::instance()->bindTexture(TextureID);
+//FIXME    SpriteSheetManager::instance()->bindSpriteSheet(TextureID);
 
     glUniform1i(texture_location, 0);
 

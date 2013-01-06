@@ -17,19 +17,21 @@
  *****************************************************************************/
 
 #include "spritesheetmanager.h"
+
+#include "sprite.h"
 #include "debug.h"
 
-SpritesheetManager* SpritesheetManager::s_instance(0);
+SpriteSheetManager* SpriteSheetManager::s_instance(0);
 
-SpritesheetManager* SpritesheetManager::instance()
+SpriteSheetManager* SpriteSheetManager::instance()
 {
     if(!s_instance)
-        s_instance = new SpritesheetManager();
+        s_instance = new SpriteSheetManager();
 
     return s_instance;
 }
 
-SpritesheetManager::SpritesheetManager()
+SpriteSheetManager::SpriteSheetManager()
 {
     // call this ONLY when linking with FreeImage as a static library
 #ifdef FREEIMAGE_LIB
@@ -37,18 +39,18 @@ SpritesheetManager::SpritesheetManager()
 #endif
 }
 
-SpritesheetManager::~SpritesheetManager()
+SpriteSheetManager::~SpriteSheetManager()
 {
     // call this ONLY when linking with FreeImage as a static library
 #ifdef FREEIMAGE_LIB
     FreeImage_DeInitialise();
 #endif
 
-    unloadAllTextures();
+    unloadAllSpriteSheets();
     s_instance = 0;
 }
 
-void SpritesheetManager::loadTexture(std::string filename, GLuint texID, GLenum image_format, GLint internal_format, GLint level, GLint border)
+void SpriteSheetManager::loadSpriteSheet(std::string filename, GLuint texID, GLenum image_format, GLint internal_format, GLint level, GLint border)
 {
     //image format
     FREE_IMAGE_FORMAT imageFormat = FIF_UNKNOWN;
@@ -90,14 +92,14 @@ void SpritesheetManager::loadTexture(std::string filename, GLuint texID, GLenum 
     }
 
     //if this texture ID is in use, unload the current texture
-    if(m_texID.find(texID) != m_texID.end()) {
-        glDeleteTextures(1, &(m_texID[texID].textureID));
+    if(m_spriteSheetTextures.find(texID) != m_spriteSheetTextures.end()) {
+        glDeleteTextures(1, &(m_spriteSheetTextures[texID].textureID));
     }
 
     //generate an OpenGL texture ID for this texture
     glGenTextures(1, &gl_texID);
 
-    auto& wrapper = m_texID[texID];
+    auto& wrapper = m_spriteSheetTextures[texID];
     //store the texture ID mapping
     wrapper.textureID = gl_texID;
     wrapper.width = width;
@@ -113,13 +115,13 @@ void SpritesheetManager::loadTexture(std::string filename, GLuint texID, GLenum 
     FreeImage_Unload(bitmap);
 }
 
-bool SpritesheetManager::unloadTexture(GLuint texID)
+bool SpriteSheetManager::unloadSpriteSheet(GLuint texID)
 {
     bool result(true);
     //if this texture ID mapped, unload it's texture, and remove it from the map
-    if(m_texID.find(texID) != m_texID.end()) {
-        glDeleteTextures(1, &(m_texID[texID].textureID));
-        m_texID.erase(texID);
+    if(m_spriteSheetTextures.find(texID) != m_spriteSheetTextures.end()) {
+        glDeleteTextures(1, &(m_spriteSheetTextures[texID].textureID));
+        m_spriteSheetTextures.erase(texID);
     } else {
         result = false;
     }
@@ -127,13 +129,13 @@ bool SpritesheetManager::unloadTexture(GLuint texID)
     return result;
 }
 
-bool SpritesheetManager::bindTexture(GLuint texID)
+bool SpriteSheetManager::bindSpriteSheet(GLuint texID)
 {
     bool result(true);
 
     //if this texture ID mapped, bind it's texture as current
-    if(m_texID.find(texID) != m_texID.end()) {
-        glBindTexture(GL_TEXTURE_2D, m_texID[texID].textureID);
+    if(m_spriteSheetTextures.find(texID) != m_spriteSheetTextures.end()) {
+        glBindTexture(GL_TEXTURE_2D, m_spriteSheetTextures[texID].textureID);
     } else {
         Debug::fatal(false, Debug::Area::Graphics, "bind texture attempted on a nonloaded textureID");
     }
@@ -141,21 +143,56 @@ bool SpritesheetManager::bindTexture(GLuint texID)
     return result;
 }
 
-glm::vec2 SpritesheetManager::size(GLuint texID)
+glm::vec2 SpriteSheetManager::spriteSheetSize(GLuint texID)
 {
-    auto texture = m_texID.find(texID);
+    auto texture = m_spriteSheetTextures.find(texID);
     glm::vec2 imageSize(float(texture->second.width), float(texture->second.height));
 
     return imageSize;
 }
 
-void SpritesheetManager::unloadAllTextures()
+void SpriteSheetManager::unloadAllSpriteSheets()
 {
-    std::map<unsigned int, TextureWrapper>::iterator i = m_texID.begin();
+    std::map<unsigned int, SpriteSheet>::iterator i = m_spriteSheetTextures.begin();
 
-    while(i != m_texID.end()) {
-        unloadTexture(i->first);
+    while(i != m_spriteSheetTextures.end()) {
+        unloadSpriteSheet(i->first);
     }
 
-    m_texID.clear();
+    m_spriteSheetTextures.clear();
 }
+
+void SpriteSheetManager::registerSprite(SpriteSheetManager::SpriteSheetType spriteSheetType, Sprite* sprite)
+{
+    switch (spriteSheetType) {
+        case SpriteSheetType::Character:
+            m_characterSprites.insert(m_characterSprites.end(), sprite);
+            break;
+
+        case SpriteSheetType::Entity:
+            break;
+    }
+}
+
+void SpriteSheetManager::parseAllSpriteSheets()
+{
+    m_spriteSheetCharactersDescription = parseSpriteSheet("../textures/characters.yaml");
+}
+
+std::map<std::string, SpriteSheetManager::SpriteFrameIdentifier> SpriteSheetManager::parseSpriteSheet(const std::string& filename)
+{
+    std::map<std::string, SpriteSheetManager::SpriteFrameIdentifier> description;
+
+    // load the filename (yaml file), populate the map with the information and return it.
+}
+
+void SpriteSheetManager::renderCharacters()
+{
+
+}
+
+void SpriteSheetManager::renderEntitites()
+{
+
+}
+

@@ -27,12 +27,76 @@
 
 #include <map>
 #include <string>
+#include <vector>
 
-class SpritesheetManager
+class Sprite;
+
+class SpriteSheetManager
 {
 public:
-    static SpritesheetManager* instance();
-    virtual ~SpritesheetManager();
+    static SpriteSheetManager* instance();
+    virtual ~SpriteSheetManager();
+
+    /**
+     * Indicative of which spritesheet this sprite is a type of.
+     * aka what it is considered and which category it will fall under.
+     */
+    enum class SpriteSheetType {
+        Character,
+        Entity
+    };
+
+    /**
+     * Registers the sprite, taking over rendering control.
+     * SpriteSheetManager will then fondle the privates of Sprite, by asking which frameName it is,
+     * which position, etc.
+     * @p spriteSheetType which sprite sheet it is considered to be from. A character, entity, etc.
+     */
+    void registerSprite(SpriteSheetType spriteSheetType, Sprite* sprite);
+
+    /**
+     * Renders PC's and NPC's
+     */
+    void renderCharacters();
+
+    /**
+     * Renders all entities, from the respective spritesheets
+     */
+    void renderEntitites();
+
+private:
+    struct SpriteSheet {
+        SpriteSheetType type;
+        GLuint textureID;
+        unsigned int width;
+        unsigned int height;
+    };
+
+    /**
+     * In-mem representation of each sprite frame from the spritesheets
+     * So we know the position within the frame (x,y) and size of it.
+     */
+    struct SpriteFrameIdentifier {
+        unsigned int x;
+        unsigned int y;
+        unsigned int width;
+        unsigned int height;
+    };
+
+    void parseAllSpriteSheets();
+    std::map<std::string, SpriteFrameIdentifier> parseSpriteSheet(const std::string& filename);
+
+    /**
+     * free the memory for a texture
+     */
+    bool unloadSpriteSheet(GLuint texID);
+
+    /**
+     * free all texture memory
+     */
+    void unloadAllSpriteSheets();
+
+    bool bindSpriteSheet(GLuint texID);
 
     /**
      * Load an image as an OpenGL texture and make it the current texture
@@ -45,39 +109,31 @@ public:
      * @p level what mipmapping level to utilize. Default 0.
      * @p border border size. Default 0
      */
-    void loadTexture(std::string filename, GLuint texID, GLenum image_format = GL_BGRA, GLint internal_format = GL_RGBA, GLint level = 0, GLint border = 0);
+    void loadSpriteSheet(std::string filename, GLuint texID, GLenum image_format = GL_BGRA, GLint internal_format = GL_RGBA, GLint level = 0, GLint border = 0);
+
+    glm::vec2 spriteSheetSize(GLuint texID);
 
     /**
-     * free the memory for a texture
+     * 
+     * Because it is a container of the GL textures, one for each spritesheet..
+     * there will only be a handful.
      */
-    bool unloadTexture(GLuint texID);
+    std::map<unsigned int, SpriteSheet> m_spriteSheetTextures;
 
     /**
-     * free all texture memory
+     * Map containing all the sprite frame names and their properties for this
+     * particular spritesheet. e.g. x, y, width, height.
      */
-    void unloadAllTextures();
-    //set the current texture
-    bool bindTexture(GLuint texID);
+    std::map<std::string, SpriteFrameIdentifier> m_spriteSheetCharactersDescription;
 
-    /**
-     * Returns the size of the image which represents this
-     * textureID
-     */
-    glm::vec2 size(GLuint texID);
+    std::vector<Sprite*> m_characterSprites;
 
-private:
-    SpritesheetManager();
-    SpritesheetManager(const SpritesheetManager& tm);
-    SpritesheetManager& operator=(const SpritesheetManager& tm);
+    SpriteSheetManager();
+    SpriteSheetManager(const SpriteSheetManager& tm) {};
+    SpriteSheetManager& operator=(const SpriteSheetManager& tm);
 
-    struct TextureWrapper {
-        GLuint textureID;
-        unsigned int width;
-        unsigned int height;
-    };
-
-    static SpritesheetManager* s_instance;
-    std::map<unsigned int, TextureWrapper> m_texID;
+    static SpriteSheetManager* s_instance;
+    friend class Sprite;
 };
 
 #endif
