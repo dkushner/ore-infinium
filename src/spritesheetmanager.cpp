@@ -50,7 +50,12 @@ SpriteSheetManager::~SpriteSheetManager()
     s_instance = 0;
 }
 
-void SpriteSheetManager::loadSpriteSheet(std::string filename, GLuint texID, GLenum image_format, GLint internal_format, GLint level, GLint border)
+void SpriteSheetManager::loadAllSpriteSheets()
+{
+
+}
+
+void SpriteSheetManager::loadSpriteSheet(const std::string& filename, SpriteSheetType type, GLenum image_format, GLint internal_format, GLint level, GLint border)
 {
     //image format
     FREE_IMAGE_FORMAT imageFormat = FIF_UNKNOWN;
@@ -86,24 +91,16 @@ void SpriteSheetManager::loadSpriteSheet(std::string filename, GLuint texID, GLe
     width = FreeImage_GetWidth(bitmap);
     height = FreeImage_GetHeight(bitmap);
 
-    //if this somehow one of these failed (they shouldn't), return failure
+    //if somehow one of these failed (they shouldn't), return failure
     if((bits == 0) || (width == 0) || (height == 0)) {
         Debug::fatal(false, Debug::Area::Graphics, "failure to load font, bitmap sizes invalid or bits invalid");
-    }
-
-    //if this texture ID is in use, unload the current texture
-    if(m_spriteSheetTextures.find(texID) != m_spriteSheetTextures.end()) {
-        glDeleteTextures(1, &(m_spriteSheetTextures[texID].textureID));
     }
 
     //generate an OpenGL texture ID for this texture
     glGenTextures(1, &gl_texID);
 
-    auto& wrapper = m_spriteSheetTextures[texID];
-    //store the texture ID mapping
+    auto& wrapper = m_spriteSheetTextures[type];
     wrapper.textureID = gl_texID;
-    wrapper.width = width;
-    wrapper.height = height;
 
     //bind to the new texture ID
     glBindTexture(GL_TEXTURE_2D, gl_texID);
@@ -115,51 +112,34 @@ void SpriteSheetManager::loadSpriteSheet(std::string filename, GLuint texID, GLe
     FreeImage_Unload(bitmap);
 }
 
-bool SpriteSheetManager::unloadSpriteSheet(GLuint texID)
+void SpriteSheetManager::unloadSpriteSheet(SpriteSheetManager::SpriteSheetType type)
 {
-    bool result(true);
-    //if this texture ID mapped, unload it's texture, and remove it from the map
-    if(m_spriteSheetTextures.find(texID) != m_spriteSheetTextures.end()) {
-        glDeleteTextures(1, &(m_spriteSheetTextures[texID].textureID));
-        m_spriteSheetTextures.erase(texID);
-    } else {
-        result = false;
-    }
-
-    return result;
-}
-
-bool SpriteSheetManager::bindSpriteSheet(GLuint texID)
-{
-    bool result(true);
-
-    //if this texture ID mapped, bind it's texture as current
-    if(m_spriteSheetTextures.find(texID) != m_spriteSheetTextures.end()) {
-        glBindTexture(GL_TEXTURE_2D, m_spriteSheetTextures[texID].textureID);
-    } else {
-        Debug::fatal(false, Debug::Area::Graphics, "bind texture attempted on a nonloaded textureID");
-    }
-
-    return result;
-}
-
-glm::vec2 SpriteSheetManager::spriteSheetSize(GLuint texID)
-{
-    auto texture = m_spriteSheetTextures.find(texID);
-    glm::vec2 imageSize(float(texture->second.width), float(texture->second.height));
-
-    return imageSize;
+    glDeleteTextures(1, &(m_spriteSheetTextures[type].textureID));
+    m_spriteSheetTextures.erase(type);
 }
 
 void SpriteSheetManager::unloadAllSpriteSheets()
 {
-    std::map<unsigned int, SpriteSheet>::iterator i = m_spriteSheetTextures.begin();
+    std::map<SpriteSheetManager::SpriteSheetType, SpriteSheet>::const_iterator i = m_spriteSheetTextures.begin();
 
     while(i != m_spriteSheetTextures.end()) {
         unloadSpriteSheet(i->first);
     }
 
     m_spriteSheetTextures.clear();
+}
+
+void SpriteSheetManager::bindSpriteSheet(SpriteSheetManager::SpriteSheetType type)
+{
+    glBindTexture(GL_TEXTURE_2D, m_spriteSheetTextures[type].textureID);
+}
+
+glm::vec2 SpriteSheetManager::spriteSheetSize(SpriteSheetManager::SpriteSheetType type)
+{
+    auto texture = m_spriteSheetTextures.find(type);
+    glm::vec2 imageSize(float(texture->second.width), float(texture->second.height));
+
+    return imageSize;
 }
 
 void SpriteSheetManager::registerSprite(SpriteSheetManager::SpriteSheetType spriteSheetType, Sprite* sprite)
@@ -181,14 +161,27 @@ void SpriteSheetManager::parseAllSpriteSheets()
 
 std::map<std::string, SpriteSheetManager::SpriteFrameIdentifier> SpriteSheetManager::parseSpriteSheet(const std::string& filename)
 {
-    std::map<std::string, SpriteSheetManager::SpriteFrameIdentifier> description;
+    std::map<std::string, SpriteFrameIdentifier> descriptionMap;
+
+    //FIXME hardcoded to "load" 1 character for now.
+    SpriteFrameIdentifier frame;
+    frame.x = 0;
+    frame.y = 0;
+    frame.width = 80;
+    frame.height = 80;
+    descriptionMap["player_frame1"] = frame;
 
     // load the filename (yaml file), populate the map with the information and return it.
+    return descriptionMap;
 }
 
 void SpriteSheetManager::renderCharacters()
 {
-
+    for (Sprite* sprite: m_characterSprites) {
+        auto frameIdentifier = m_spriteSheetCharactersDescription.find(sprite->frameName());
+        SpriteFrameIdentifier& frame = frameIdentifier->second;
+        frame.x; //FIXME:
+    }
 }
 
 void SpriteSheetManager::renderEntitites()

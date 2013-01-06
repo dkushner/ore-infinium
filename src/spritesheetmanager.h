@@ -85,18 +85,19 @@ private:
 
     void parseAllSpriteSheets();
     std::map<std::string, SpriteFrameIdentifier> parseSpriteSheet(const std::string& filename);
+    void loadAllSpriteSheets();
 
     /**
      * free the memory for a texture
      */
-    bool unloadSpriteSheet(GLuint texID);
+    void unloadSpriteSheet(SpriteSheetType type);
 
     /**
      * free all texture memory
      */
     void unloadAllSpriteSheets();
 
-    bool bindSpriteSheet(GLuint texID);
+    void bindSpriteSheet(SpriteSheetType type);
 
     /**
      * Load an image as an OpenGL texture and make it the current texture
@@ -109,16 +110,16 @@ private:
      * @p level what mipmapping level to utilize. Default 0.
      * @p border border size. Default 0
      */
-    void loadSpriteSheet(std::string filename, GLuint texID, GLenum image_format = GL_BGRA, GLint internal_format = GL_RGBA, GLint level = 0, GLint border = 0);
+    void loadSpriteSheet(const std::string& filename, SpriteSheetType type, GLenum image_format = GL_BGRA, GLint internal_format = GL_RGBA, GLint level = 0, GLint border = 0);
 
-    glm::vec2 spriteSheetSize(GLuint texID);
+    glm::vec2 spriteSheetSize(SpriteSheetType type);
 
     /**
-     * 
-     * Because it is a container of the GL textures, one for each spritesheet..
-     * there will only be a handful.
+     * It is a container of the GL textures, one for each spritesheet..
+     * there will only be a handful. 1 texture per sprite sheet type
+     * aka one for characters, 1 for entity, etc.
      */
-    std::map<unsigned int, SpriteSheet> m_spriteSheetTextures;
+    std::map<SpriteSheetType, SpriteSheet> m_spriteSheetTextures;
 
     /**
      * Map containing all the sprite frame names and their properties for this

@@ -31,14 +31,6 @@
 #include <math.h>
 #include <fstream>
 
-#include <Eigen/Core>
-
-#include <allegro5/allegro.h>
-#include <allegro5/allegro_primitives.h>
-#include <allegro5/allegro_shader.h>
-#include <allegro5/allegro_opengl.h>
-#include <allegro5/allegro_shader_glsl.h>
-
 static World* s_instance = 0;
 
 World* World::instance()
