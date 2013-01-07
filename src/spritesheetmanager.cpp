@@ -52,7 +52,7 @@ SpriteSheetManager::~SpriteSheetManager()
 
 void SpriteSheetManager::loadAllSpriteSheets()
 {
-
+    loadSpriteSheet("../textures/characters.png", SpriteSheetType::Character);
 }
 
 void SpriteSheetManager::loadSpriteSheet(const std::string& filename, SpriteSheetType type, GLenum image_format, GLint internal_format, GLint level, GLint border)
