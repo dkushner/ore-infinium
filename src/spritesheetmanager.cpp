@@ -44,7 +44,9 @@ SpriteSheetManager::SpriteSheetManager()
     FreeImage_Initialise();
 #endif
 
+
     initGL();
+
 
     float scale = 1.0f;
     m_modelMatrix = glm::scale(glm::mat4(1.0f), glm::vec3(scale));
@@ -64,8 +66,12 @@ SpriteSheetManager::SpriteSheetManager()
     // Send our model matrix to the shader
     glUniformMatrix4fv(modelMatrixLocation, 1, GL_FALSE, &m_modelMatrix[0][0]);
 
-    glEnable(GL_BLEND);
-    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+
+    loadAllSpriteSheets();
+    parseAllSpriteSheets();
+
+//FIXME    glEnable(GL_BLEND);
+//FIXME glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 }
 
 SpriteSheetManager::~SpriteSheetManager()
@@ -137,8 +143,10 @@ void SpriteSheetManager::loadSpriteSheet(const std::string& filename, SpriteShee
     // set texture parameters
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+//FIXME: do i want this behavior?    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+//    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
 
     glTexImage2D(GL_TEXTURE_2D, level, internal_format, width, height, border, image_format, GL_UNSIGNED_BYTE, bits);
 
@@ -219,19 +227,25 @@ void SpriteSheetManager::renderCharacters()
 
     glBindVertexArray(m_vao);
 
-    glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
-
     // Get the location of our model matrix in the shader
     int modelMatrixLocation = glGetUniformLocation(m_spriteShaderProgram, "modelMatrix");
 
-    // Send our projection matrix to the shader
-    glUniformMatrix4fv(projectionMatrixLocation, 1, GL_FALSE, &m_projectionMatrix[0][0]);
-
+    glUniformMatrix4fv(modelMatrixLocation, 1, GL_FALSE, &m_modelMatrix[0][0]);
+/*
     for (Sprite* sprite: m_characterSprites) {
         auto frameIdentifier = m_spriteSheetCharactersDescription.find(sprite->frameName());
         SpriteFrameIdentifier& frame = frameIdentifier->second;
         frame.x; //FIXME:
     }
+    */
+
+    glVertexAttribPointer(m_texture_location, 2, GL_FLOAT, GL_FALSE, sizeof(Sprite), &verts[0].s);
+    glEnableVertexAttribArray(m_texture_location);
+
+    // render
+    glDrawArrays(GL_QUADS, 0, m_characterSprites.size() * 4);
+    glDisableVertexAttribArray( texcoord_loc );
+
 
     glUseProgram(0);
     checkGLError();
@@ -397,8 +411,9 @@ void SpriteSheetManager::initGL()
 {
     loadDefaultShaders();
 
-    // get texture uniform location
     m_texture_location = glGetUniformLocation(m_spriteShaderProgram, "tex");
+/*
+    // get texture uniform location
 
     // vao and vbo handle
     GLuint vbo, ibo;
@@ -447,4 +462,5 @@ void SpriteSheetManager::initGL()
 
     // "unbind" vao
     glBindVertexArray(0);
+    */
 }
