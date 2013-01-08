@@ -22,6 +22,8 @@
 #include "debug.h"
 #include "game.h"
 
+#include <fstream>
+#include <iostream>
 #include <stdio.h>
 #include <stdlib.h>
 
