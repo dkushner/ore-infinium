@@ -63,6 +63,9 @@ SpriteSheetManager::SpriteSheetManager()
 
     // Send our model matrix to the shader
     glUniformMatrix4fv(modelMatrixLocation, 1, GL_FALSE, &m_modelMatrix[0][0]);
+
+    glEnable(GL_BLEND);
+    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 }
 
 SpriteSheetManager::~SpriteSheetManager()
@@ -131,7 +134,12 @@ void SpriteSheetManager::loadSpriteSheet(const std::string& filename, SpriteShee
     //bind to the new texture ID
     glBindTexture(GL_TEXTURE_2D, gl_texID);
 
-    //store the texture data for OpenGL use
+    // set texture parameters
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+
     glTexImage2D(GL_TEXTURE_2D, level, internal_format, width, height, border, image_format, GL_UNSIGNED_BYTE, bits);
 
     //Free FreeImage's copy of the data
@@ -212,6 +220,12 @@ void SpriteSheetManager::renderCharacters()
     glBindVertexArray(m_vao);
 
     glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
+
+    // Get the location of our model matrix in the shader
+    int modelMatrixLocation = glGetUniformLocation(m_spriteShaderProgram, "modelMatrix");
+
+    // Send our projection matrix to the shader
+    glUniformMatrix4fv(projectionMatrixLocation, 1, GL_FALSE, &m_projectionMatrix[0][0]);
 
     for (Sprite* sprite: m_characterSprites) {
         auto frameIdentifier = m_spriteSheetCharactersDescription.find(sprite->frameName());
@@ -433,15 +447,4 @@ void SpriteSheetManager::initGL()
 
     // "unbind" vao
     glBindVertexArray(0);
-
-    // FIXME:   SpritesheetManager::instance()->loadTexture("../textures/player.png", TextureID);
-
-    // set texture parameters
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
-
-    glEnable(GL_BLEND);
-    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 }
