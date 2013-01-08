@@ -69,8 +69,6 @@ void Game::checkGLError()
     }
 }
 
-GLuint TextureID = 0;
-
 void Game::init()
 {
     Debug::log(Debug::Area::System) << "SDL on platform: " << SDL_GetPlatform();
@@ -138,30 +136,9 @@ void Game::init()
 
     checkGLError();
 
-    initGL();
-
-    m_camera = new Camera(m_spriteShaderProgram);
-
-    float scale = 1.0f;
-    modelMatrix = glm::scale(glm::mat4(1.0f), glm::vec3(scale));
-
-    projectionMatrix = glm::ortho(0.0f, float(SCREEN_W), float(SCREEN_H), 0.0f, -1.0f, 1.0f);
-
-    glUseProgram(m_spriteShaderProgram);
+    m_camera = new Camera();
 
     checkGLError();
-
-    // Get the location of our projection matrix in the shader
-    int projectionMatrixLocation = glGetUniformLocation(m_spriteShaderProgram, "projectionMatrix");
-
-    // Get the location of our model matrix in the shader
-    int modelMatrixLocation = glGetUniformLocation(m_spriteShaderProgram, "modelMatrix");
-
-    // Send our projection matrix to the shader
-    glUniformMatrix4fv(projectionMatrixLocation, 1, GL_FALSE, &projectionMatrix[0][0]);
-
-    // Send our model matrix to the shader
-    glUniformMatrix4fv(modelMatrixLocation, 1, GL_FALSE, &modelMatrix[0][0]);
 
     //World::createInstance(m_display);
     //m_world = World::instance();
@@ -169,233 +146,6 @@ void Game::init()
 
     tick();
     shutdown();
-}
-
-void Game::printShaderInfoLog(GLint shader)
-{
-    int infoLogLen = 0;
-    int charsWritten = 0;
-    GLchar *infoLog;
-
-    glGetShaderiv(shader, GL_INFO_LOG_LENGTH, &infoLogLen);
-
-    // should additionally check for OpenGL errors here
-
-    if (infoLogLen > 0)
-    {
-        infoLog = new GLchar[infoLogLen];
-        // error check for fail to allocate memory omitted
-        glGetShaderInfoLog(shader,infoLogLen, &charsWritten, infoLog);
-        std::cout << "InfoLog:" << std::endl << infoLog << std::endl;
-        delete [] infoLog;
-    }
-
-    // should additionally check for OpenGL errors here
-}
-
-// loadFile - loads text file into char* fname
-// allocates memory - so need to delete after use
-// size of file returned in fSize
-char* Game::loadFile(const char* fname, GLint* fSize)
-{
-    std::ifstream::pos_type size;
-    char * memblock = 0;
-    std::string text;
-
-    // file read based on example in cplusplus.com tutorial
-    std::ifstream file (fname, std::ios::in|std::ios::binary|std::ios::ate);
-    if (file.is_open()) {
-        size = file.tellg();
-        *fSize = (GLuint) size;
-        memblock = new char [size];
-        file.seekg (0, std::ios::beg);
-        file.read (memblock, size);
-        file.close();
-        Debug::log(Debug::Area::Graphics) << "shader : " << fname << " loaded successfully";
-        text.assign(memblock);
-    } else {
-        Debug::fatal(false,  Debug::Area::Graphics, "failed to load shader: " + std::string(fname));
-    }
-    return memblock;
-}
-
-void Game::loadDefaultShaders()
-{
-    // program and shader handles
-    GLuint vertex_shader, fragment_shader;
-
-    // create and compiler vertex shader
-    vertex_shader = glCreateShader(GL_VERTEX_SHADER);
-
-    GLint vertLength;
-    GLint fragLength;
-
-    char* vertSource;
-    char* fragSource;
-
-    vertSource = loadFile("sprite.vert", &vertLength);
-    fragSource = loadFile("sprite.frag", &fragLength);
-
-    const char* vertSourceConst = vertSource;
-    const char* fragSourceConst = fragSource;
-
-    glShaderSource(vertex_shader, 1, &vertSourceConst, &vertLength);
-    glCompileShader(vertex_shader);
-
-    if(!checkShaderCompileStatus(vertex_shader)) {
-        assert(0);
-    } else {
-        Debug::log(Debug::Area::Graphics) << "vertex shader compiled!";
-    }
-
-    // create and compiler fragment shader
-    fragment_shader = glCreateShader(GL_FRAGMENT_SHADER);
-    glShaderSource(fragment_shader, 1, &fragSourceConst, &fragLength);
-    glCompileShader(fragment_shader);
-
-    if(!checkShaderCompileStatus(fragment_shader)) {
-        assert(0);
-    } else {
-        Debug::log(Debug::Area::Graphics) << "fragment shader compiled!";
-    }
-
-    // create program
-    m_spriteShaderProgram = glCreateProgram();
-
-    // attach shaders
-    glAttachShader(m_spriteShaderProgram, vertex_shader);
-    glAttachShader(m_spriteShaderProgram, fragment_shader);
-
-    // link the program and check for errors
-    glLinkProgram(m_spriteShaderProgram);
-
-    if (checkProgramLinkStatus(m_spriteShaderProgram)) {
-        Debug::log(Debug::Area::Graphics) << "shader program linked!";
-    } else {
-        Debug::fatal(false, Debug::Area::Graphics, "shader program link FAILURE");
-    }
-
-    delete [] vertSource;
-    delete [] fragSource;
-}
-
-bool Game::checkShaderCompileStatus(GLuint obj)
-{
-    GLint status;
-    glGetShaderiv(obj, GL_COMPILE_STATUS, &status);
-    if(status == GL_FALSE)
-    {
-        GLint length;
-        glGetShaderiv(obj, GL_INFO_LOG_LENGTH, &length);
-        std::vector<char> log(length);
-        glGetShaderInfoLog(obj, length, &length, &log[0]);
-        std::cerr << &log[0];
-        return false;
-    }
-    return true;
-}
-
-bool Game::checkProgramLinkStatus(GLuint obj)
-{
-    GLint status;
-    glGetProgramiv(obj, GL_LINK_STATUS, &status);
-    if(status == GL_FALSE)
-    {
-        GLint length;
-        glGetProgramiv(obj, GL_INFO_LOG_LENGTH, &length);
-        std::vector<char> log(length);
-        glGetProgramInfoLog(obj, length, &length, &log[0]);
-        std::cerr << &log[0];
-        return false;
-    }
-    return true;
-}
-
-GLint texture_location;
-GLuint vao;
-
-void Game::initGL()
-{
-    loadDefaultShaders();
-
-    // get texture uniform location
-    texture_location = glGetUniformLocation(m_spriteShaderProgram, "tex");
-
-    // vao and vbo handle
-    GLuint vbo, ibo;
-
-    // generate and bind the vao
-    glGenVertexArrays(1, &vao);
-    glBindVertexArray(vao);
-
-    // generate and bind the vertex buffer object
-    glGenBuffers(1, &vbo);
-    glBindBuffer(GL_ARRAY_BUFFER, vbo);
-
-    float width = 50.0f;
-    float height = 80.0f;
-
-    // data for a fullscreen quad (this time with texture coords)
-    GLfloat vertexData[] = {
-        //  X     Y     Z           U     V
-        width, height, 0.0f,       1.0f, 0.0f, // vertex 0
-        0.0f, height, 0.0f,       0.0f, 0.0f, // vertex 1
-        width, 0.0f, 0.0f,       1.0f, 1.0f, // vertex 2
-        0.0f, 0.0f, 0.0f,       0.0f, 1.0f, // vertex 3
-    }; // 4 vertices with 5 components (floats) each
-
-    // fill with data
-    glBufferData(GL_ARRAY_BUFFER, sizeof(GLfloat)*4*5, vertexData, GL_STATIC_DRAW);
-
-    // set up generic attrib pointers
-    glEnableVertexAttribArray(0);
-    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 5*sizeof(GLfloat), (char*)0 + 0*sizeof(GLfloat));
-
-    glEnableVertexAttribArray(1);
-    glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 5*sizeof(GLfloat), (char*)0 + 3*sizeof(GLfloat));
-
-    // generate and bind the index buffer object
-    glGenBuffers(1, &ibo);
-    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, ibo);
-
-    GLuint indexData[] = {
-        0,1,2, // first triangle
-        2,1,3, // second triangle
-    };
-
-    // fill with data
-    glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(GLuint)*2*3, indexData, GL_STATIC_DRAW);
-
-    // "unbind" vao
-    glBindVertexArray(0);
-
-// FIXME:   SpritesheetManager::instance()->loadTexture("../textures/player.png", TextureID);
-
-    // set texture parameters
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
-
-    glEnable(GL_BLEND);
-    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-}
-
-void Game::render()
-{
-    glUseProgram(m_spriteShaderProgram);
-
-//FIXME    SpriteSheetManager::instance()->bindSpriteSheet(TextureID);
-
-    glUniform1i(texture_location, 0);
-
-    glBindVertexArray(vao);
-
-    glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
-
-    glUseProgram(0);
-
-    checkGLError();
 }
 
 double fps = 0.0;
@@ -417,8 +167,6 @@ void Game::tick()
 
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-        render();
-        //render some crap
         drawDebugText();
 
         SDL_GL_SwapWindow(m_window);

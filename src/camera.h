@@ -27,7 +27,7 @@
 class Camera
 {
 public:
-    Camera(GLint _spriteShaderProgram);
+    Camera();
 
     /**
      * Translates the camera's current position by the given vec2.
@@ -47,7 +47,7 @@ private:
 
     glm::mat4 m_viewMatrix;
     glm::vec3 m_vector;
-    GLint m_spriteShaderProgram;
+    GLuint m_spriteShaderProgram;
 };
 
 #endif

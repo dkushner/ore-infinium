@@ -64,6 +64,13 @@ public:
      */
     void renderEntitites();
 
+    /**
+     * Returns the GLuint for the spritesheet renderer's shader program
+     * this shader is used for all rendering of all sprites. The tilemap renderer is ENTIRELY
+     * unrelated to this.
+     */
+    GLuint spriteSheetShaderProgram() { return m_spriteShaderProgram; }
+
 private:
     struct SpriteSheet {
         SpriteSheetType type;
@@ -114,6 +121,15 @@ private:
 
     glm::vec2 spriteSheetSize(SpriteSheetType type);
 
+    char* loadFile(const char* fname, GLint* fSize);
+    void loadDefaultShaders();
+    void printShaderInfoLog(GLint shader);
+    bool checkShaderCompileStatus(GLuint obj);
+    bool checkProgramLinkStatus(GLuint obj);
+    void checkGLError();
+
+    void initGL();
+
     /**
      * It is a container of the GL textures, one for each spritesheet..
      * there will only be a handful. 1 texture per sprite sheet type
@@ -129,6 +145,13 @@ private:
 
     std::vector<Sprite*> m_characterSprites;
 
+    GLuint m_spriteShaderProgram;
+    GLint m_texture_location;
+    GLuint m_vao;
+    glm::mat4 m_modelMatrix;
+    glm::mat4 m_projectionMatrix;
+
+private:
     SpriteSheetManager();
     SpriteSheetManager(const SpriteSheetManager& tm) {};
     SpriteSheetManager& operator=(const SpriteSheetManager& tm);

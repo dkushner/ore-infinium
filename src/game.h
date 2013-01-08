@@ -18,6 +18,7 @@
 #ifndef GAME_H
 #define GAME_H
 
+#include "camera.h"
 //#include "world.h"
 #include <stdio.h>
 #include <stdlib.h>
@@ -36,7 +37,6 @@
 #include <glm/gtc/matrix_transform.hpp>
 
 #include <string>
-#include "camera.h"
 
 static int SCREEN_W = 1600;
 static int SCREEN_H = 900;
@@ -60,31 +60,18 @@ public:
     void abort_game(const char* message);
     void shutdown();
 
-    void initGL();
-    void loadDefaultShaders();
-    void render();
     void drawDebugText();
-
-    bool checkProgramLinkStatus(GLuint obj);
-    bool checkShaderCompileStatus(GLuint obj);
 
     void checkSDLError();
     void checkGLError();
 
     const float FPS = 60.0;
 
-    void printShaderInfoLog(GLint shader);
-    char* loadFile(const char* fname, GLint* fSize);
-
 private:
     FTGLPixmapFont *m_font = nullptr;
 
     Camera* m_camera = nullptr;
 
-    glm::mat4 modelMatrix;
-    glm::mat4 projectionMatrix;
-
-    GLuint m_spriteShaderProgram;
  //   World *m_world = nullptr;
     SDL_Window *m_window = nullptr;
     SDL_GLContext m_context;

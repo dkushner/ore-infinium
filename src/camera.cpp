@@ -18,11 +18,13 @@
 #include "camera.h"
 #include "game.h"
 #include "debug.h"
+#include "spritesheetmanager.h"
 
-Camera::Camera(GLint _spriteShaderProgram) :
-m_vector(glm::vec3()),
-m_spriteShaderProgram(_spriteShaderProgram)
+Camera::Camera() :
+m_vector(glm::vec3())
 {
+    m_spriteShaderProgram = SpriteSheetManager::instance()->spriteSheetShaderProgram();
+
     float x = 0.0f;
     float y = 0.0f;
     m_viewMatrix = glm::translate(glm::mat4(), glm::vec3(x, y, 0.0f));
