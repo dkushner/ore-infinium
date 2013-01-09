@@ -246,10 +246,9 @@ void SpriteSheetManager::renderCharacters()
         }
         */
 
-
     // vertices that will be uploaded.
     spriteVertex vertices[4];
-
+/*
     // build the transformation matrix
     Matrix4 modelview = view.inverse();
     modelview.combine_affine2d(transform);
@@ -257,30 +256,47 @@ void SpriteSheetManager::renderCharacters()
 
     Matrix4 modelviewprojection = *projection;
     modelviewprojection.combine_affine3d(modelview);
-
+*/
     // transform vertices and copy them to the buffer
     vertices[0][0] = vertices[0][1] = vertices[1][0] = vertices[3][1] = 0;
+/*
     vertices[1][1] = float(tex.size().y()) * std::abs(uvrect.height);
     vertices[2][0] = float(tex.size().x()) * std::abs(uvrect.width);
     vertices[2][1] = float(tex.size().y()) * std::abs(uvrect.height);
     vertices[3][0] = float(tex.size().x()) * std::abs(uvrect.width);
-    for (size_t i = 0; i < sizeof(vertices)/sizeof(*vertices); i++)
+*/
+
+    vertices[1][1] = 0.0f;
+    vertices[2][0] = 1.0f;
+    vertices[2][1] = 0.0f;
+    vertices[3][0] = 1.0f;
+/*
+    for (size_t i = 0; i < sizeof(vertices) / sizeof(*vertices); i++)
     {
         modelviewprojection.transform_vector2d(vertices[i]);
     }
-
+*/
     // copy color to the buffer
     for (size_t i = 0; i < sizeof(vertices)/sizeof(*vertices); i++)
     {
-        u32* colorp = reinterpret_cast<unsigned int*>(&vertices[i][2]);
-        *colorp = color.bgra;
+        unsigned int* colorp = reinterpret_cast<unsigned int*>(&vertices[i][2]);
+        glm::vec3 color = glm::vec3(0.0f, 1.0f, 1.0f);
+        *colorp = color.xyz;
     }
 
     // copy texcoords to the buffer
+/*
     vertices[0][3] = vertices[1][3] = uvrect.left;
     vertices[0][4] = vertices[3][4] = uvrect.top + uvrect.height;
     vertices[1][4] = vertices[2][4] = uvrect.top;
     vertices[2][3] = vertices[3][3] = uvrect.left + uvrect.width;
+*/
+
+    vertices[0][3] = vertices[1][3] = 0.0f;
+    vertices[0][4] = vertices[3][4] = 1.0f;
+    vertices[1][4] = vertices[2][4] = 0.0f;
+    vertices[2][3] = vertices[3][3] = 1.0f;
+
 
     // finally upload everything to the actual vbo
     glBindBuffer(GL_ARRAY_BUFFER, m_vbo);

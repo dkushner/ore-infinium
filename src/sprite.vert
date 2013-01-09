@@ -4,7 +4,7 @@ uniform mat4 projectionMatrix;
 uniform mat4 viewMatrix;
 uniform mat4 modelMatrix;
 
-attribute vec4 position;
+attribute vec2 position;
 
 attribute vec2 texcoord;
 attribute vec4 color;
@@ -14,9 +14,9 @@ varying vec2 frag_texcoord;
 
 void main()
 {
-    frag_texcoord = texcoord
-    frag_color = color
+    frag_texcoord = texcoord;
+    frag_color = color;
 
 //    gl_Position = projectionMatrix * viewMatrix * modelMatrix * vec4(vposition.xyz, 1.0);
- gl_Position = projectionMatrix * viewMatrix * modelMatrix * vec4(position.xyz, 1.0);
+gl_Position = vec4(position, 0.0, 1.0);
 }
