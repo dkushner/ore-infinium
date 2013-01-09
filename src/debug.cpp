@@ -41,7 +41,7 @@ void Debug::fatal(bool value, Debug::Area area, std::string message)
 {
     if (!value) {
         Debug::log(area) << "FATAL: " << message;
-//        assert(0);
+        assert(0);
     }
 }
 
