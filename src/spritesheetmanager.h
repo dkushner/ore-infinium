@@ -146,8 +146,15 @@ private:
     std::vector<Sprite*> m_characterSprites;
 
     GLuint m_spriteShaderProgram;
+    GLuint m_vertexShader;
+    GLuint m_fragmentShader;
+
     GLint m_texture_location;
-    GLuint m_vao;
+
+    GLuint m_vao; // vertex array object
+    GLuint m_vbo; // vertex buffer object
+    GLuint m_ebo; // element buffer object
+
     glm::mat4 m_modelMatrix;
     glm::mat4 m_projectionMatrix;
 

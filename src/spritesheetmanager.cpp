@@ -44,9 +44,7 @@ SpriteSheetManager::SpriteSheetManager()
     FreeImage_Initialise();
 #endif
 
-
     initGL();
-
 
     float scale = 1.0f;
     m_modelMatrix = glm::scale(glm::mat4(1.0f), glm::vec3(scale));
@@ -66,7 +64,6 @@ SpriteSheetManager::SpriteSheetManager()
     // Send our model matrix to the shader
     glUniformMatrix4fv(modelMatrixLocation, 1, GL_FALSE, &m_modelMatrix[0][0]);
 
-
     loadAllSpriteSheets();
     parseAllSpriteSheets();
 
@@ -80,7 +77,17 @@ SpriteSheetManager::~SpriteSheetManager()
 #ifdef FREEIMAGE_LIB
     FreeImage_DeInitialise();
 #endif
+    glDeleteProgram(impl_->sp);
+    glDeleteShader(impl_->vs);
+    glDeleteShader(impl_->fs);
+    impl_->sp = 0;
+    impl_->vs = 0;
+    impl_->fs = 0;
 
+    glDeleteBuffers(1,&impl_->vbo);
+    glDeleteBuffers(1,&impl_->ebo);
+
+    glDeleteVertexArrays(1,&impl_->vao);
     unloadAllSpriteSheets();
     s_instance = 0;
 }
@@ -223,28 +230,105 @@ void SpriteSheetManager::renderCharacters()
 
     //FIXME    SpriteSheetManager::instance()->bindSpriteSheet(TextureID);
 
-    glUniform1i(m_texture_location, 0);
+//FIXME    glUniform1i(m_texture_location, 0);
 
-    glBindVertexArray(m_vao);
+//FIXME:    glBindVertexArray(m_vao);
 
     // Get the location of our model matrix in the shader
-    int modelMatrixLocation = glGetUniformLocation(m_spriteShaderProgram, "modelMatrix");
+//FIXME:   int modelMatrixLocation = glGetUniformLocation(m_spriteShaderProgram, "modelMatrix");
 
-    glUniformMatrix4fv(modelMatrixLocation, 1, GL_FALSE, &m_modelMatrix[0][0]);
-/*
-    for (Sprite* sprite: m_characterSprites) {
-        auto frameIdentifier = m_spriteSheetCharactersDescription.find(sprite->frameName());
-        SpriteFrameIdentifier& frame = frameIdentifier->second;
-        frame.x; //FIXME:
+    //FIXME:iformMatrix4fv(modelMatrixLocation, 1, GL_FALSE, &m_modelMatrix[0][0]);
+    /*
+        for (Sprite* sprite: m_characterSprites) {
+            auto frameIdentifier = m_spriteSheetCharactersDescription.find(sprite->frameName());
+            SpriteFrameIdentifier& frame = frameIdentifier->second;
+            frame.x; //FIXME:
+        }
+        */
+
+
+// vertices that will be uploaded.
+    SpriteBatch_impl::sprite_vertex vertices[4];
+
+// build the transformation matrix
+    Matrix4 modelview = view.inverse();
+    modelview.combine_affine2d(transform);
+    const Matrix4* projection = view.projection();
+    if (!projection)
+    {
+        return;
     }
-    */
 
-    glVertexAttribPointer(m_texture_location, 2, GL_FLOAT, GL_FALSE, sizeof(Sprite), &verts[0].s);
-    glEnableVertexAttribArray(m_texture_location);
+    Matrix4 modelviewprojection = *projection;
+    modelviewprojection.combine_affine3d(modelview);
 
-    // render
-    glDrawArrays(GL_QUADS, 0, m_characterSprites.size() * 4);
-    glDisableVertexAttribArray( texcoord_loc );
+// transform vertices and copy them to the buffer
+    vertices[0][0] = vertices[0][1] = vertices[1][0] = vertices[3][1] = 0;
+    vertices[1][1] = f32(tex.size().y()) * std::abs(uvrect.height);
+    vertices[2][0] = f32(tex.size().x()) * std::abs(uvrect.width);
+    vertices[2][1] = f32(tex.size().y()) * std::abs(uvrect.height);
+    vertices[3][0] = f32(tex.size().x()) * std::abs(uvrect.width);
+    for (size_t i = 0; i < sizeof(vertices)/sizeof(*vertices); i++)
+    {
+        modelviewprojection.transform_vector2d(vertices[i]);
+    }
+
+// copy color to the buffer
+    for (size_t i = 0; i < sizeof(vertices)/sizeof(*vertices); i++)
+    {
+        u32* colorp = reinterpret_cast<u32*>(&vertices[i][2]);
+        *colorp = color.bgra;
+        if (!endian::is_big_endian())
+        {
+            *colorp = endian::swap_u32(*colorp);
+        }
+    }
+
+// copy texcoords to the buffer
+    vertices[0][3] = vertices[1][3] = uvrect.left;
+    vertices[0][4] = vertices[3][4] = uvrect.top + uvrect.height;
+    vertices[1][4] = vertices[2][4] = uvrect.top;
+    vertices[2][3] = vertices[3][3] = uvrect.left + uvrect.width;
+
+// finally upload everything to the actual vbo
+    glBindBuffer(GL_ARRAY_BUFFER,impl_->vbo);
+    glBufferSubData(
+        GL_ARRAY_BUFFER,
+        batch_size_ * sizeof(vertices),
+        sizeof(vertices),
+        vertices);
+
+
+    ////////////////////////////////////////////////////////////===========================================
+    ///////////////////// RENDER BATCH
+    glEnable(GL_BLEND);
+    glBlendFunc(GL_SRC_ALPHA,GL_ONE_MINUS_SRC_ALPHA);
+
+    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER,impl_->ebo);
+    glBindBuffer(GL_ARRAY_BUFFER,impl_->vbo);
+    glBindVertexArray(impl_->vao);
+
+
+    for (size_t i = 0; i < texture_swaps_.size(); i++)
+    {
+        const size_t start = texture_swaps_[i].first;
+        const size_t end = (i+1 >= texture_swaps_.size() ? batch_size_ : texture_swaps_[i+1].first);
+
+        texture_swaps_[i].second->bind();
+
+        glDrawElements(
+            GL_TRIANGLES,
+            6*(end - start), // 6 indices per 2 triangles
+            GL_UNSIGNED_INT,
+            (const GLvoid*)(6* start * sizeof(u32)));
+
+    }
+
+    glBindVertexArray(0);
+    glBindBuffer(GL_ARRAY_BUFFER,0);
+    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER,0);
+
+    glDisable(GL_BLEND);
 
 
     glUseProgram(0);
@@ -406,61 +490,85 @@ bool SpriteSheetManager::checkProgramLinkStatus(GLuint obj)
     return true;
 }
 
-
 void SpriteSheetManager::initGL()
 {
     loadDefaultShaders();
 
     m_texture_location = glGetUniformLocation(m_spriteShaderProgram, "tex");
-/*
-    // get texture uniform location
 
-    // vao and vbo handle
-    GLuint vbo, ibo;
-
-    // generate and bind the vao
     glGenVertexArrays(1, &m_vao);
     glBindVertexArray(m_vao);
 
-    // generate and bind the vertex buffer object
-    glGenBuffers(1, &vbo);
-    glBindBuffer(GL_ARRAY_BUFFER, vbo);
+    glGenBuffers(1,&m_vbo);
+    glBindBuffer(GL_ARRAY_BUFFER,m_vbo);
+    glBufferData(
+        GL_ARRAY_BUFFER,
+        max_batch_size * 4 * sizeof(SpriteBatch_impl::sprite_vertex),
+        NULL,
+        GL_DYNAMIC_DRAW);
 
-    float width = 50.0f;
-    float height = 80.0f;
+    checkGLError();
 
-    // data for a fullscreen quad (this time with texture coords)
-    GLfloat vertexData[] = {
-        //  X     Y     Z           U     V
-        width, height, 0.0f,       1.0f, 0.0f, // vertex 0
-        0.0f, height, 0.0f,       0.0f, 0.0f, // vertex 1
-        width, 0.0f, 0.0f,       1.0f, 1.0f, // vertex 2
-        0.0f, 0.0f, 0.0f,       0.0f, 1.0f, // vertex 3
-    }; // 4 vertices with 5 components (floats) each
+    std::vector<u32> indicesv;
 
-    // fill with data
-    glBufferData(GL_ARRAY_BUFFER, sizeof(GLfloat)*4*5, vertexData, GL_STATIC_DRAW);
+    // prepare and upload indices as a one time deal
+    const u32 indices[] = { 0, 1, 2, 0, 2, 3 }; // pattern for a triangle array
+    // for each possible sprite, add the 6 index pattern
+    for (size_t j = 0; j < max_batch_size; j++)
+    {
+        for (size_t i = 0; i < sizeof(indices)/sizeof(*indices); i++)
+        {
+            indicesv.push_back(4*j + indices[i]);
+        }
+    }
 
-    // set up generic attrib pointers
-    glEnableVertexAttribArray(0);
-    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 5*sizeof(GLfloat), (char*)0 + 0*sizeof(GLfloat));
+    glGenBuffers(1,&m_ebo);
+    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER,m_ebo);
+    glBufferData(
+        GL_ELEMENT_ARRAY_BUFFER,
+        indicesv.size()*sizeof(u32),
+        indicesv.data(),
+        GL_STATIC_DRAW);
 
-    glEnableVertexAttribArray(1);
-    glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 5*sizeof(GLfloat), (char*)0 + 3*sizeof(GLfloat));
+    checkGLError();
 
-    // generate and bind the index buffer object
-    glGenBuffers(1, &ibo);
-    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, ibo);
+//FIXME: only use during devel    glValidateProgram(new_sp);
+//    glGetProgramiv(new_sp,GL_VALIDATE_STATUS,&status);
 
-    GLuint indexData[] = {
-        0,1,2, // first triangle
-        2,1,3, // second triangle
-    };
+    size_t buffer_offset = 0;
 
-    // fill with data
-    glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(GLuint)*2*3, indexData, GL_STATIC_DRAW);
+    GLint pos_attrib = glGetAttribLocation(m_spriteShaderProgram, "position");
+    glEnableVertexAttribArray(pos_attrib);
+    glVertexAttribPointer(
+        pos_attrib,
+        2,
+        GL_FLOAT,
+        GL_FALSE,
+        sizeof(SpriteBatch_impl::sprite_vertex),
+        (const GLvoid*)buffer_offset);
+    buffer_offset += sizeof(f32) * 2;
 
-    // "unbind" vao
-    glBindVertexArray(0);
-    */
+    GLint color_attrib = glGetAttribLocation(m_spriteShaderProgram, "color");
+
+    glEnableVertexAttribArray(color_attrib);
+    glVertexAttribPointer(
+        color_attrib,
+        GL_BGRA,
+        GL_UNSIGNED_BYTE,
+        GL_TRUE,
+        sizeof(SpriteBatch_impl::sprite_vertex),
+        (const GLvoid*)buffer_offset);
+    buffer_offset += sizeof(u32);
+
+    GLint texcoord_attrib = glGetAttribLocation(m_spriteShaderProgram, "texcoord");
+    glEnableVertexAttribArray(texcoord_attrib);
+    glVertexAttribPointer(
+        texcoord_attrib,
+        2,
+        GL_FLOAT,
+        GL_FALSE,
+        sizeof(SpriteBatch_impl::sprite_vertex),
+        (const GLvoid*)buffer_offset);
+
+    checkGLError();
 }

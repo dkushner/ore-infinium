@@ -12,7 +12,6 @@ void main (void)
 }
 */
 
-
 varying vec2 frag_texcoord;
 varying vec4 frag_color;
 
