@@ -197,11 +197,13 @@ void SpriteSheetManager::registerSprite(SpriteSheetManager::SpriteSheetType spri
     switch (spriteSheetType) {
     case SpriteSheetType::Character:
         m_characterSprites.insert(m_characterSprites.end(), sprite);
+        Debug::log(Debug::Area::Graphics) << "sprite registered, new sprite count: " << m_characterSprites.size();
         break;
 
     case SpriteSheetType::Entity:
         break;
     }
+
 }
 
 void SpriteSheetManager::parseAllSpriteSheets()

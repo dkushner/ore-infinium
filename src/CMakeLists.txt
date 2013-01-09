@@ -9,7 +9,7 @@ debug.cpp
 spritesheetmanager.cpp
 fontmanager.cpp
 camera.cpp
-#sprite.cpp
+sprite.cpp
 #world.cpp
 #player.cpp
 #entity.cpp

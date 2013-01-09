@@ -20,6 +20,7 @@
 #include "debug.h"
 #include "spritesheetmanager.h"
 #include "fontmanager.h"
+#include "sprite.h"
 
 #include <iostream>
 #include <sstream>
@@ -139,6 +140,8 @@ void Game::init()
     m_camera = new Camera();
 
     checkGLError();
+
+    Sprite* sprite = new Sprite("testframe", SpriteSheetManager::SpriteSheetType::Character);
 
     //World::createInstance(m_display);
     //m_world = World::instance();
