@@ -27,6 +27,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 
+
 SpriteSheetManager* SpriteSheetManager::s_instance(0);
 
 SpriteSheetManager* SpriteSheetManager::instance()
@@ -279,9 +280,14 @@ void SpriteSheetManager::renderCharacters()
     // copy color to the buffer
     for (size_t i = 0; i < sizeof(vertices)/sizeof(*vertices); i++)
     {
-        unsigned int* colorp = reinterpret_cast<unsigned int*>(&vertices[i][2]);
-        glm::vec3 color = glm::vec3(0.0f, 1.0f, 1.0f);
-        *colorp = color.xyz;
+        int32_t* colorp = reinterpret_cast<int32_t*>(&vertices[i][2]);
+//        *colorp = color.bgra;
+        int8_t red = 255;
+        int8_t blue = 0;
+        int8_t green = 255;
+        int8_t alpha = 255;
+        int32_t color = red | (green << 8) | (blue << 16) | (alpha << 24);
+        *colorp = color;
     }
 
     // copy texcoords to the buffer
