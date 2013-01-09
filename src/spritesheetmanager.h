@@ -167,6 +167,8 @@ private:
     glm::mat4 m_modelMatrix;
     glm::mat4 m_projectionMatrix;
 
+    int m_maxSpriteCount = 1000;
+
 private:
     SpriteSheetManager();
     SpriteSheetManager(const SpriteSheetManager& tm) {};

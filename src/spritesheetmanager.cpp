@@ -247,10 +247,10 @@ void SpriteSheetManager::renderCharacters()
         */
 
 
-// vertices that will be uploaded.
+    // vertices that will be uploaded.
     spriteVertex vertices[4];
 
-// build the transformation matrix
+    // build the transformation matrix
     Matrix4 modelview = view.inverse();
     modelview.combine_affine2d(transform);
     const Matrix4* projection = view.projection();
@@ -258,7 +258,7 @@ void SpriteSheetManager::renderCharacters()
     Matrix4 modelviewprojection = *projection;
     modelviewprojection.combine_affine3d(modelview);
 
-// transform vertices and copy them to the buffer
+    // transform vertices and copy them to the buffer
     vertices[0][0] = vertices[0][1] = vertices[1][0] = vertices[3][1] = 0;
     vertices[1][1] = float(tex.size().y()) * std::abs(uvrect.height);
     vertices[2][0] = float(tex.size().x()) * std::abs(uvrect.width);
@@ -269,24 +269,24 @@ void SpriteSheetManager::renderCharacters()
         modelviewprojection.transform_vector2d(vertices[i]);
     }
 
-// copy color to the buffer
+    // copy color to the buffer
     for (size_t i = 0; i < sizeof(vertices)/sizeof(*vertices); i++)
     {
         u32* colorp = reinterpret_cast<unsigned int*>(&vertices[i][2]);
         *colorp = color.bgra;
     }
 
-// copy texcoords to the buffer
+    // copy texcoords to the buffer
     vertices[0][3] = vertices[1][3] = uvrect.left;
     vertices[0][4] = vertices[3][4] = uvrect.top + uvrect.height;
     vertices[1][4] = vertices[2][4] = uvrect.top;
     vertices[2][3] = vertices[3][3] = uvrect.left + uvrect.width;
 
-// finally upload everything to the actual vbo
+    // finally upload everything to the actual vbo
     glBindBuffer(GL_ARRAY_BUFFER, m_vbo);
     glBufferSubData(
         GL_ARRAY_BUFFER,
-        batch_size_ * sizeof(vertices),
+        m_characterSprites.size() * sizeof(vertices),
         sizeof(vertices),
         vertices);
 
@@ -294,31 +294,23 @@ void SpriteSheetManager::renderCharacters()
     ////////////////////////////////////////////////////////////===========================================
     ///////////////////// RENDER BATCH
     glEnable(GL_BLEND);
-    glBlendFunc(GL_SRC_ALPHA,GL_ONE_MINUS_SRC_ALPHA);
+    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_ebo);
     glBindBuffer(GL_ARRAY_BUFFER, m_vbo);
     glBindVertexArray(m_vao);
 
-    for (size_t i = 0; i < texture_swaps_.size(); i++)
-    {
-        const size_t start = texture_swaps_[i].first;
-        const size_t end = (i+1 >= texture_swaps_.size() ? batch_size_ : texture_swaps_[i+1].first);
-
-        glDrawElements(
-            GL_TRIANGLES,
-            6*(end - start), // 6 indices per 2 triangles
-            GL_UNSIGNED_INT,
-            (const GLvoid*)(6* start * sizeof(unsigned int)));
-
-    }
+    glDrawElements(
+        GL_TRIANGLES,
+        6*(m_characterSprites.size()), // 6 indices per 2 triangles
+        GL_UNSIGNED_INT,
+        (const GLvoid*)(6 * sizeof(unsigned int)));
 
     glBindVertexArray(0);
     glBindBuffer(GL_ARRAY_BUFFER,0);
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER,0);
 
     glDisable(GL_BLEND);
-
 
     glUseProgram(0);
     checkGLError();
@@ -493,7 +485,7 @@ void SpriteSheetManager::initGL()
     glBindBuffer(GL_ARRAY_BUFFER, m_vbo);
     glBufferData(
         GL_ARRAY_BUFFER,
-        max_batch_size * 4 * sizeof(spriteVertex),
+        m_maxSpriteCount * 4 * sizeof(spriteVertex),
         NULL,
         GL_DYNAMIC_DRAW);
 
@@ -504,7 +496,7 @@ void SpriteSheetManager::initGL()
     // prepare and upload indices as a one time deal
     const unsigned int indices[] = { 0, 1, 2, 0, 2, 3 }; // pattern for a triangle array
     // for each possible sprite, add the 6 index pattern
-    for (size_t j = 0; j < max_batch_size; j++)
+    for (size_t j = 0; j < m_maxSpriteCount; j++)
     {
         for (size_t i = 0; i < sizeof(indices)/sizeof(*indices); i++)
         {
@@ -516,7 +508,7 @@ void SpriteSheetManager::initGL()
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_ebo);
     glBufferData(
         GL_ELEMENT_ARRAY_BUFFER,
-        indicesv.size()*sizeof(unsigned int),
+        indicesv.size() * sizeof(unsigned int),
         indicesv.data(),
         GL_STATIC_DRAW);
 
@@ -536,6 +528,7 @@ void SpriteSheetManager::initGL()
         GL_FALSE,
         sizeof(spriteVertex),
         (const GLvoid*)buffer_offset);
+
     buffer_offset += sizeof(float) * 2;
 
     GLint color_attrib = glGetAttribLocation(m_spriteShaderProgram, "color");
@@ -548,6 +541,7 @@ void SpriteSheetManager::initGL()
         GL_TRUE,
         sizeof(spriteVertex),
         (const GLvoid*)buffer_offset);
+
     buffer_offset += sizeof(unsigned int);
 
     GLint texcoord_attrib = glGetAttribLocation(m_spriteShaderProgram, "texcoord");
