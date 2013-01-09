@@ -79,6 +79,15 @@ private:
         unsigned int height;
     };
 
+    /* Each vertex is:
+     * two floats for the 2d coordinate
+     * four u8s for the color
+     * two f32s for the texcoords
+     * the vbo contains data of the aforementioned elements interleaved.
+     * Each sprite has four vertices.
+     */
+    typedef float spriteVertex[5];
+
     /**
      * In-mem representation of each sprite frame from the spritesheets
      * So we know the position within the frame (x,y) and size of it.
