@@ -254,10 +254,6 @@ void SpriteSheetManager::renderCharacters()
     Matrix4 modelview = view.inverse();
     modelview.combine_affine2d(transform);
     const Matrix4* projection = view.projection();
-    if (!projection)
-    {
-        return;
-    }
 
     Matrix4 modelviewprojection = *projection;
     modelviewprojection.combine_affine3d(modelview);
@@ -278,10 +274,6 @@ void SpriteSheetManager::renderCharacters()
     {
         u32* colorp = reinterpret_cast<u32*>(&vertices[i][2]);
         *colorp = color.bgra;
-        if (!endian::is_big_endian())
-        {
-            *colorp = endian::swap_u32(*colorp);
-        }
     }
 
 // copy texcoords to the buffer
@@ -291,7 +283,7 @@ void SpriteSheetManager::renderCharacters()
     vertices[2][3] = vertices[3][3] = uvrect.left + uvrect.width;
 
 // finally upload everything to the actual vbo
-    glBindBuffer(GL_ARRAY_BUFFER,impl_->vbo);
+    glBindBuffer(GL_ARRAY_BUFFER, m_vbo);
     glBufferSubData(
         GL_ARRAY_BUFFER,
         batch_size_ * sizeof(vertices),
@@ -304,17 +296,15 @@ void SpriteSheetManager::renderCharacters()
     glEnable(GL_BLEND);
     glBlendFunc(GL_SRC_ALPHA,GL_ONE_MINUS_SRC_ALPHA);
 
-    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER,impl_->ebo);
-    glBindBuffer(GL_ARRAY_BUFFER,impl_->vbo);
-    glBindVertexArray(impl_->vao);
+    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_ebo);
+    glBindBuffer(GL_ARRAY_BUFFER, m_vbo);
+    glBindVertexArray(m_vao);
 
 
     for (size_t i = 0; i < texture_swaps_.size(); i++)
     {
         const size_t start = texture_swaps_[i].first;
         const size_t end = (i+1 >= texture_swaps_.size() ? batch_size_ : texture_swaps_[i+1].first);
-
-        texture_swaps_[i].second->bind();
 
         glDrawElements(
             GL_TRIANGLES,
@@ -494,13 +484,13 @@ void SpriteSheetManager::initGL()
 {
     loadDefaultShaders();
 
-    m_texture_location = glGetUniformLocation(m_spriteShaderProgram, "tex");
+//FIXME:    m_texture_location = glGetUniformLocation(m_spriteShaderProgram, "tex");
 
     glGenVertexArrays(1, &m_vao);
     glBindVertexArray(m_vao);
 
-    glGenBuffers(1,&m_vbo);
-    glBindBuffer(GL_ARRAY_BUFFER,m_vbo);
+    glGenBuffers(1, &m_vbo);
+    glBindBuffer(GL_ARRAY_BUFFER, m_vbo);
     glBufferData(
         GL_ARRAY_BUFFER,
         max_batch_size * 4 * sizeof(SpriteBatch_impl::sprite_vertex),
@@ -522,8 +512,8 @@ void SpriteSheetManager::initGL()
         }
     }
 
-    glGenBuffers(1,&m_ebo);
-    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER,m_ebo);
+    glGenBuffers(1, &m_ebo);
+    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_ebo);
     glBufferData(
         GL_ELEMENT_ARRAY_BUFFER,
         indicesv.size()*sizeof(u32),
