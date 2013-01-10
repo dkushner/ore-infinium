@@ -270,7 +270,6 @@ void SpriteSheetManager::renderCharacters()
     vertices[2][1] = 0.0f;
     vertices[3][0] = 1.0f;
 
-
 /*
     for (size_t i = 0; i < sizeof(vertices) / sizeof(*vertices); i++)
     {
@@ -545,8 +544,14 @@ void SpriteSheetManager::initGL()
 
     checkGLError();
 
-//FIXME: only use during devel    glValidateProgram(new_sp);
-//    glGetProgramiv(new_sp,GL_VALIDATE_STATUS,&status);
+    //FIXME: remove, only use during devel..
+    GLint status;
+    glValidateProgram(m_spriteShaderProgram);
+    glGetProgramiv(m_spriteShaderProgram,GL_VALIDATE_STATUS,&status);
+
+    if (status == GL_FALSE) {
+        assert(0);
+    }
 
     size_t buffer_offset = 0;
 
