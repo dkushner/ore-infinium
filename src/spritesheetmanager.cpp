@@ -282,9 +282,9 @@ void SpriteSheetManager::renderCharacters()
     {
         int32_t* colorp = reinterpret_cast<int32_t*>(&vertices[i][2]);
 //        *colorp = color.bgra;
-        int8_t red = 120;
-        int8_t blue = 120;
-        int8_t green = 120;
+        int8_t red = 255;
+        int8_t blue = 255;
+        int8_t green = 255;
         int8_t alpha = 255;
         int32_t color = red | (green << 8) | (blue << 16) | (alpha << 24);
         *colorp = color;
@@ -309,10 +309,9 @@ void SpriteSheetManager::renderCharacters()
     glBindBuffer(GL_ARRAY_BUFFER, m_vbo);
     glBufferSubData(
         GL_ARRAY_BUFFER,
-        m_characterSprites.size() * sizeof(vertices),
+        m_characterSprites.size() * sizeof(vertices) * (m_maxSpriteCount - 1),
         sizeof(vertices),
         vertices);
-
     }
 
     checkGLError();
