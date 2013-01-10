@@ -51,6 +51,7 @@ void Camera::centerOn(const glm::vec2 vec)
 
 void Camera::pushViewMatrix()
 {
+    /*
     glUseProgram(m_spriteShaderProgram);
 
     // Get the location of our view matrix in the shader
@@ -58,4 +59,5 @@ void Camera::pushViewMatrix()
 
     // Send our view matrix to the shader
     glUniformMatrix4fv(viewMatrixLocation, 1, GL_FALSE, &m_viewMatrix[0][0]);
+    */
 }

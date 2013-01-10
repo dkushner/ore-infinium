@@ -1,9 +1,5 @@
 #version 120
 
-uniform mat4 projectionMatrix;
-uniform mat4 viewMatrix;
-uniform mat4 modelMatrix;
-
 attribute vec2 position;
 
 attribute vec2 texcoord;
@@ -16,7 +12,6 @@ void main()
 {
     frag_texcoord = texcoord;
     frag_color = color;
-
 //    gl_Position = projectionMatrix * viewMatrix * modelMatrix * vec4(vposition.xyz, 1.0);
 gl_Position = vec4(position, 0.0, 1.0);
 }

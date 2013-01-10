@@ -52,19 +52,19 @@ SpriteSheetManager::SpriteSheetManager()
     m_projectionMatrix = glm::ortho(0.0f, float(SCREEN_W), float(SCREEN_H), 0.0f, -1.0f, 1.0f);
 
     glUseProgram(m_spriteShaderProgram);
-
-    // Get the location of our projection matrix in the shader
-    int projectionMatrixLocation = glGetUniformLocation(m_spriteShaderProgram, "projectionMatrix");
-
-    // Get the location of our model matrix in the shader
-    int modelMatrixLocation = glGetUniformLocation(m_spriteShaderProgram, "modelMatrix");
-
-    // Send our projection matrix to the shader
-    glUniformMatrix4fv(projectionMatrixLocation, 1, GL_FALSE, &m_projectionMatrix[0][0]);
-
-    // Send our model matrix to the shader
-    glUniformMatrix4fv(modelMatrixLocation, 1, GL_FALSE, &m_modelMatrix[0][0]);
-
+//
+//    // Get the location of our projection matrix in the shader
+//    int projectionMatrixLocation = glGetUniformLocation(m_spriteShaderProgram, "projectionMatrix");
+//
+//    // Get the location of our model matrix in the shader
+//    int modelMatrixLocation = glGetUniformLocation(m_spriteShaderProgram, "modelMatrix");
+//
+//    // Send our projection matrix to the shader
+//    glUniformMatrix4fv(projectionMatrixLocation, 1, GL_FALSE, &m_projectionMatrix[0][0]);
+//
+//    // Send our model matrix to the shader
+//    glUniformMatrix4fv(modelMatrixLocation, 1, GL_FALSE, &m_modelMatrix[0][0]);
+//
     loadAllSpriteSheets();
     parseAllSpriteSheets();
 
@@ -203,7 +203,6 @@ void SpriteSheetManager::registerSprite(SpriteSheetManager::SpriteSheetType spri
     case SpriteSheetType::Entity:
         break;
     }
-
 }
 
 void SpriteSheetManager::parseAllSpriteSheets()
@@ -241,13 +240,10 @@ void SpriteSheetManager::renderCharacters()
 //FIXME:   int modelMatrixLocation = glGetUniformLocation(m_spriteShaderProgram, "modelMatrix");
 
     //FIXME:iformMatrix4fv(modelMatrixLocation, 1, GL_FALSE, &m_modelMatrix[0][0]);
-    /*
         for (Sprite* sprite: m_characterSprites) {
             auto frameIdentifier = m_spriteSheetCharactersDescription.find(sprite->frameName());
             SpriteFrameIdentifier& frame = frameIdentifier->second;
             frame.x; //FIXME:
-        }
-        */
 
     // vertices that will be uploaded.
     spriteVertex vertices[4];
@@ -273,6 +269,8 @@ void SpriteSheetManager::renderCharacters()
     vertices[2][0] = 1.0f;
     vertices[2][1] = 0.0f;
     vertices[3][0] = 1.0f;
+
+
 /*
     for (size_t i = 0; i < sizeof(vertices) / sizeof(*vertices); i++)
     {
@@ -285,7 +283,7 @@ void SpriteSheetManager::renderCharacters()
         int32_t* colorp = reinterpret_cast<int32_t*>(&vertices[i][2]);
 //        *colorp = color.bgra;
         int8_t red = 255;
-        int8_t blue = 0;
+        int8_t blue = 255;
         int8_t green = 255;
         int8_t alpha = 255;
         int32_t color = red | (green << 8) | (blue << 16) | (alpha << 24);
@@ -305,6 +303,7 @@ void SpriteSheetManager::renderCharacters()
     vertices[1][4] = vertices[2][4] = 0.0f;
     vertices[2][3] = vertices[3][3] = 1.0f;
 
+    checkGLError();
 
     // finally upload everything to the actual vbo
     glBindBuffer(GL_ARRAY_BUFFER, m_vbo);
@@ -314,6 +313,11 @@ void SpriteSheetManager::renderCharacters()
         sizeof(vertices),
         vertices);
 
+    }
+
+    checkGLError();
+
+    printShaderInfoLog(m_vertexShader);
 
     ////////////////////////////////////////////////////////////===========================================
     ///////////////////// RENDER BATCH
@@ -328,7 +332,7 @@ void SpriteSheetManager::renderCharacters()
         GL_TRIANGLES,
         6*(m_characterSprites.size()), // 6 indices per 2 triangles
         GL_UNSIGNED_INT,
-        (const GLvoid*)(6 * sizeof(unsigned int)));
+        (const GLvoid*)(6 * sizeof(int32_t)));
 
     glBindVertexArray(0);
     glBindBuffer(GL_ARRAY_BUFFER,0);
@@ -355,7 +359,7 @@ void SpriteSheetManager::checkGLError()
     }
 }
 
-void SpriteSheetManager::printShaderInfoLog(GLint shader)
+void SpriteSheetManager::printShaderInfoLog(GLuint shader)
 {
     int infoLogLen = 0;
     int charsWritten = 0;
@@ -370,7 +374,8 @@ void SpriteSheetManager::printShaderInfoLog(GLint shader)
         infoLog = new GLchar[infoLogLen];
         // error check for fail to allocate memory omitted
         glGetShaderInfoLog(shader,infoLogLen, &charsWritten, infoLog);
-        std::cout << "InfoLog:" << std::endl << infoLog << std::endl;
+//        std::cout << "InfoLog:" << std::endl << infoLog << std::endl;
+        std::cout << infoLog;
         delete [] infoLog;
     }
 
@@ -443,6 +448,9 @@ void SpriteSheetManager::loadDefaultShaders()
         Debug::log(Debug::Area::Graphics) << "fragment shader compiled!";
     }
 
+    m_vertexShader = vertex_shader;
+    m_fragmentShader = fragment_shader;
+
     // create program
     m_spriteShaderProgram = glCreateProgram();
 
@@ -495,7 +503,6 @@ bool SpriteSheetManager::checkProgramLinkStatus(GLuint obj)
     return true;
 }
 
-
 void SpriteSheetManager::initGL()
 {
     loadDefaultShaders();
@@ -532,7 +539,7 @@ void SpriteSheetManager::initGL()
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_ebo);
     glBufferData(
         GL_ELEMENT_ARRAY_BUFFER,
-        indicesv.size() * sizeof(unsigned int),
+        indicesv.size() * sizeof(int32_t),
         indicesv.data(),
         GL_STATIC_DRAW);
 
@@ -554,6 +561,7 @@ void SpriteSheetManager::initGL()
         (const GLvoid*)buffer_offset);
 
     buffer_offset += sizeof(float) * 2;
+    checkGLError();
 
     GLint color_attrib = glGetAttribLocation(m_spriteShaderProgram, "color");
 
@@ -566,7 +574,8 @@ void SpriteSheetManager::initGL()
         sizeof(spriteVertex),
         (const GLvoid*)buffer_offset);
 
-    buffer_offset += sizeof(unsigned int);
+    buffer_offset += sizeof(int32_t);
+    checkGLError();
 
     GLint texcoord_attrib = glGetAttribLocation(m_spriteShaderProgram, "texcoord");
     glEnableVertexAttribArray(texcoord_attrib);

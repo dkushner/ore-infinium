@@ -133,7 +133,7 @@ private:
 
     char* loadFile(const char* fname, GLint* fSize);
     void loadDefaultShaders();
-    void printShaderInfoLog(GLint shader);
+    void printShaderInfoLog(GLuint shader);
     bool checkShaderCompileStatus(GLuint obj);
     bool checkProgramLinkStatus(GLuint obj);
     void checkGLError();
