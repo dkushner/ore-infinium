@@ -171,7 +171,7 @@ void Game::tick()
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
         SpriteSheetManager::instance()->renderCharacters();
-        drawDebugText();
+//        drawDebugText();
 
         SDL_GL_SwapWindow(m_window);
 

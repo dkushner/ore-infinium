@@ -283,10 +283,10 @@ void SpriteSheetManager::renderCharacters()
         uint32_t* colorp = reinterpret_cast<uint32_t*>(&vertices[i][2]);
 //        *colorp = color.bgra;
         uint8_t red = 255;
-        uint8_t blue = 255;
+        uint8_t blue = 0;
         uint8_t green = 255;
         uint8_t alpha = 255;
-        uint32_t color = red | (green << 8) | (blue << 16) | (alpha << 24);
+        int32_t color = red | (green << 8) | (blue << 16) | (alpha << 24);
         *colorp = color;
     }
 
@@ -309,7 +309,7 @@ void SpriteSheetManager::renderCharacters()
     glBindBuffer(GL_ARRAY_BUFFER, m_vbo);
     glBufferSubData(
         GL_ARRAY_BUFFER,
-        m_characterSprites.size() * sizeof(vertices) * (m_maxSpriteCount - 1),
+        m_characterSprites.size() * sizeof(vertices),
         sizeof(vertices),
         vertices);
     }
@@ -329,9 +329,9 @@ void SpriteSheetManager::renderCharacters()
 
     glDrawElements(
         GL_TRIANGLES,
-        6*(m_characterSprites.size() * m_maxSpriteCount), // 6 indices per 2 triangles
+        6*(m_characterSprites.size()), // 6 indices per 2 triangles
         GL_UNSIGNED_INT,
-        (const GLvoid*)(6 * sizeof(uint32_t)));
+        (const GLvoid*)(0));
 
     glBindVertexArray(0);
     glBindBuffer(GL_ARRAY_BUFFER,0);
@@ -573,7 +573,7 @@ void SpriteSheetManager::initGL()
     glEnableVertexAttribArray(color_attrib);
     glVertexAttribPointer(
         color_attrib,
-        GL_BGRA,
+        4,
         GL_UNSIGNED_BYTE,
         GL_TRUE,
         sizeof(spriteVertex),
