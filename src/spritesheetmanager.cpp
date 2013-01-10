@@ -229,6 +229,7 @@ std::map<std::string, SpriteSheetManager::SpriteFrameIdentifier> SpriteSheetMana
 void SpriteSheetManager::renderCharacters()
 {
     glUseProgram(m_spriteShaderProgram);
+    bindSpriteSheet(SpriteSheetType::Character);
 
     //FIXME    SpriteSheetManager::instance()->bindSpriteSheet(TextureID);
 
