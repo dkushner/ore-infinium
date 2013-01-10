@@ -282,9 +282,9 @@ void SpriteSheetManager::renderCharacters()
     {
         int32_t* colorp = reinterpret_cast<int32_t*>(&vertices[i][2]);
 //        *colorp = color.bgra;
-        int8_t red = 255;
-        int8_t blue = 255;
-        int8_t green = 255;
+        int8_t red = 120;
+        int8_t blue = 120;
+        int8_t green = 120;
         int8_t alpha = 255;
         int32_t color = red | (green << 8) | (blue << 16) | (alpha << 24);
         *colorp = color;
@@ -330,7 +330,7 @@ void SpriteSheetManager::renderCharacters()
 
     glDrawElements(
         GL_TRIANGLES,
-        6*(m_characterSprites.size()), // 6 indices per 2 triangles
+        6*(m_characterSprites.size() * m_maxSpriteCount), // 6 indices per 2 triangles
         GL_UNSIGNED_INT,
         (const GLvoid*)(6 * sizeof(int32_t)));
 
