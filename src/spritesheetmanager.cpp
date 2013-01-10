@@ -522,10 +522,10 @@ void SpriteSheetManager::initGL()
 
     checkGLError();
 
-    std::vector<unsigned int> indicesv;
+    std::vector<int32_t> indicesv;
 
     // prepare and upload indices as a one time deal
-    const unsigned int indices[] = { 0, 1, 2, 0, 2, 3 }; // pattern for a triangle array
+    const int32_t indices[] = { 0, 1, 2, 0, 2, 3 }; // pattern for a triangle array
     // for each possible sprite, add the 6 index pattern
     for (size_t j = 0; j < m_maxSpriteCount; j++)
     {
