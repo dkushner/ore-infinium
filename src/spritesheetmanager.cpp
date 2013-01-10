@@ -280,13 +280,13 @@ void SpriteSheetManager::renderCharacters()
     // copy color to the buffer
     for (size_t i = 0; i < sizeof(vertices)/sizeof(*vertices); i++)
     {
-        int32_t* colorp = reinterpret_cast<int32_t*>(&vertices[i][2]);
+        uint32_t* colorp = reinterpret_cast<uint32_t*>(&vertices[i][2]);
 //        *colorp = color.bgra;
-        int8_t red = 255;
-        int8_t blue = 255;
-        int8_t green = 255;
-        int8_t alpha = 255;
-        int32_t color = red | (green << 8) | (blue << 16) | (alpha << 24);
+        uint8_t red = 255;
+        uint8_t blue = 255;
+        uint8_t green = 255;
+        uint8_t alpha = 255;
+        uint32_t color = red | (green << 8) | (blue << 16) | (alpha << 24);
         *colorp = color;
     }
 
@@ -331,7 +331,7 @@ void SpriteSheetManager::renderCharacters()
         GL_TRIANGLES,
         6*(m_characterSprites.size() * m_maxSpriteCount), // 6 indices per 2 triangles
         GL_UNSIGNED_INT,
-        (const GLvoid*)(6 * sizeof(int32_t)));
+        (const GLvoid*)(6 * sizeof(uint32_t)));
 
     glBindVertexArray(0);
     glBindBuffer(GL_ARRAY_BUFFER,0);
@@ -521,10 +521,10 @@ void SpriteSheetManager::initGL()
 
     checkGLError();
 
-    std::vector<int32_t> indicesv;
+    std::vector<uint32_t> indicesv;
 
     // prepare and upload indices as a one time deal
-    const int32_t indices[] = { 0, 1, 2, 0, 2, 3 }; // pattern for a triangle array
+    const uint32_t indices[] = { 0, 1, 2, 0, 2, 3 }; // pattern for a triangle array
     // for each possible sprite, add the 6 index pattern
     for (size_t j = 0; j < m_maxSpriteCount; j++)
     {
@@ -538,7 +538,7 @@ void SpriteSheetManager::initGL()
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_ebo);
     glBufferData(
         GL_ELEMENT_ARRAY_BUFFER,
-        indicesv.size() * sizeof(int32_t),
+        indicesv.size() * sizeof(uint32_t),
         indicesv.data(),
         GL_STATIC_DRAW);
 
@@ -579,7 +579,7 @@ void SpriteSheetManager::initGL()
         sizeof(spriteVertex),
         (const GLvoid*)buffer_offset);
 
-    buffer_offset += sizeof(int32_t);
+    buffer_offset += sizeof(uint32_t);
     checkGLError();
 
     GLint texcoord_attrib = glGetAttribLocation(m_spriteShaderProgram, "texcoord");
