@@ -428,11 +428,12 @@ void SpriteSheetManager::initGL()
 
     
     // bind the attribute locations (inputs)
-    glBindAttribLocation(m_spriteShaderProgram, 0, "vposition");
-    glBindAttribLocation(m_spriteShaderProgram, 1, "vcolor");
+    GLint posLoc = glGetAttribLocation(m_spriteShaderProgram, "vposition");
+    GLint colorLoc = glGetAttribLocation(m_spriteShaderProgram, "vcolor");
     
     // bind the FragDataLocation (output)
-    glBindFragDataLocation(m_spriteShaderProgram, 0, "FragColor");
+    //FIXME: not needed?
+//    glBindFragDataLocation(m_spriteShaderProgram, 0, "FragColor");
     
     // generate and bind the vao
     glGenVertexArrays(1, &m_vao);
@@ -458,10 +459,10 @@ void SpriteSheetManager::initGL()
     
     
     // set up generic attrib pointers
-    glEnableVertexAttribArray(0);
+    glEnableVertexAttribArray(posLoc);
     glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 6*sizeof(GLfloat), (char*)0 + 0*sizeof(GLfloat));
     
-    glEnableVertexAttribArray(1);
+    glEnableVertexAttribArray(colorLoc);
     glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 6*sizeof(GLfloat), (char*)0 + 3*sizeof(GLfloat));
     
     // "unbind" vao
