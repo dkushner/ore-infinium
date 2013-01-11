@@ -293,6 +293,7 @@ for (Sprite* sprite: m_characterSprites) {
             vertices);
 
         //////////////////////////////////////////////////////////////////////////////////////////
+        glEnable(GL_BLEND);
         glBlendFunc(GL_SRC_ALPHA,GL_ONE_MINUS_SRC_ALPHA);
 
         glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_ebo);
@@ -302,7 +303,6 @@ for (Sprite* sprite: m_characterSprites) {
         checkGLError();
         glUseProgram(m_spriteShaderProgram);
 
-        glUniform1i(glGetUniformLocation(m_spriteShaderProgram, "tex"), 0);
 
         checkGLError();
         glDrawElements(
