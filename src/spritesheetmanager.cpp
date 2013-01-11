@@ -256,14 +256,16 @@ for (Sprite* sprite: m_characterSprites) {
         // copy color to the buffer
         for (size_t i = 0; i < sizeof(vertices)/sizeof(*vertices); i++)
         {
-            u32* colorp = reinterpret_cast<u32*>(&vertices[i][2]);
-            *colorp = color.bgra;
-            if (!endian::is_big_endian())
-            {
-                *colorp = endian::swap_u32(*colorp);
-            }
+            uint32_t* colorp = reinterpret_cast<uint32_t*>(&vertices[i][2]);
+            //        *colorp = color.bgra;
+            uint8_t red = 255;
+            uint8_t blue = 0;
+            uint8_t green = 255;
+            uint8_t alpha = 255;
+            int32_t color = red | (green << 8) | (blue << 16) | (alpha << 24);
+            *colorp = color;
         }
-        
+
         // copy texcoords to the buffer
         vertices[0][3] = vertices[1][3] = 0.0f;
         vertices[0][4] = vertices[3][4] = 1.0f;
