@@ -22,10 +22,10 @@ void main() {
 }
 */
 
-#version 330
+#version 120
 
-in vec4 fcolor;
-out vec4 FragColor;
+varying vec4 fcolor;
+
 void main() {
-    FragColor = fcolor;
+    gl_FragColor = fcolor;
 }

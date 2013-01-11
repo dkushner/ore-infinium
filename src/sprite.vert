@@ -18,10 +18,11 @@ void main()
 gl_Position = vec4(position, 0.0, 1.0);
 }
 */
-#version 330
-in vec4 vposition;
-in vec4 vcolor;
-out vec4 fcolor;
+#version 120
+attribute vec4 vposition;
+attribute vec4 vcolor;
+
+varying vec4 fcolor;
 void main() {
     fcolor = vcolor;
     gl_Position = vposition;

@@ -426,23 +426,23 @@ void SpriteSheetManager::initGL()
 {
     loadDefaultShaders();
 
-    
+
     // bind the attribute locations (inputs)
     GLint posLoc = glGetAttribLocation(m_spriteShaderProgram, "vposition");
     GLint colorLoc = glGetAttribLocation(m_spriteShaderProgram, "vcolor");
-    
+
     // bind the FragDataLocation (output)
     //FIXME: not needed?
 //    glBindFragDataLocation(m_spriteShaderProgram, 0, "FragColor");
-    
+
     // generate and bind the vao
     glGenVertexArrays(1, &m_vao);
     glBindVertexArray(m_vao);
-    
+
     // generate and bind the buffer object
     glGenBuffers(1, &m_vbo);
     glBindBuffer(GL_ARRAY_BUFFER, m_vbo);
-    
+
     // data for a fullscreen quad
     GLfloat vertexData[] = {
         //  X     Y     Z           R     G     B         U  V
@@ -453,18 +453,17 @@ void SpriteSheetManager::initGL()
         -1.0f, 1.0f, 0.0f,       0.0f, 1.0f, 0.0f,      0.0f, 0.0f, // vertex 4
         -1.0f,-1.0f, 0.0f,       1.0f, 0.0f, 0.0f,      0.0f, 0.0f, // vertex 5
     }; // 6 vertices with 6 components (floats) each
-    
+
     // fill with data
     glBufferData(GL_ARRAY_BUFFER, sizeof(GLfloat)*8*6, vertexData, GL_STATIC_DRAW);
-    
-    
+
     // set up generic attrib pointers
     glEnableVertexAttribArray(posLoc);
     glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 8*sizeof(GLfloat), (char*)0 + 0*sizeof(GLfloat));
-    
+
     glEnableVertexAttribArray(colorLoc);
     glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 8*sizeof(GLfloat), (char*)0 + 3*sizeof(GLfloat));
-    
+
     // "unbind" vao
     glBindVertexArray(0);
     checkGLError();
