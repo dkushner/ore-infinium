@@ -412,17 +412,17 @@ void render() {
     spriteVertex vertices[4];
 
     // transform vertices and copy them to the buffer
-    vertices[0][0] = vertices[0][1] = vertices[1][0] = vertices[3][1] = 0;
+    vertices[0][0] = vertices[0][1] = vertices[1][0] = vertices[3][1] = 0.0f;
     /*    vertices[1][1] = f32(tex.size().y()) * std::abs(uvrect.height);
         vertices[2][0] = f32(tex.size().x()) * std::abs(uvrect.width);
         vertices[2][1] = f32(tex.size().y()) * std::abs(uvrect.height);
         vertices[3][0] = f32(tex.size().x()) * std::abs(uvrect.width);
         */
 
-    vertices[1][1] = f32(0.1f);
-    vertices[2][0] = f32(0.2f);
-    vertices[2][1] = f32(0.3f);
-    vertices[3][0] = f32(0.8f);
+    vertices[1][1] = f32(1.0f);
+    vertices[2][0] = f32(1.0f);
+    vertices[2][1] = f32(1.0f);
+    vertices[3][0] = f32(1.0f);
 
 
     // copy color to the buffer
