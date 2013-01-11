@@ -167,10 +167,30 @@ typedef float spriteVertex[5];
     GLuint new_sp;
 typedef uint32_t u32;
 typedef float f32;
- 
 
+
+    GLuint tex;
 static int spriteCount = 1;
 void initGL() {
+    //////////////////// create texture, checkerboard texture
+    glGenTextures( 1, &tex );
+    glActiveTexture( GL_TEXTURE0 );
+    glBindTexture( GL_TEXTURE_2D, tex );
+    glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT );
+    glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT );
+    float pixels[] = {
+        0.0f, 0.0f, 0.0f,   1.0f, 1.0f, 1.0f,
+        1.0f, 1.0f, 1.0f,   0.0f, 0.0f, 0.0f
+    };
+    glTexImage2D( GL_TEXTURE_2D, 0, GL_RGB, 2, 2, 0, GL_RGB, GL_FLOAT, pixels );
+    
+    
+    
+    
+    
+    
+    
+    //////////////////////
    
     glGenVertexArrays(1, &new_vao);
     glBindVertexArray(new_vao);
@@ -275,6 +295,7 @@ void initGL() {
             glDeleteBuffers(1,&new_vbo);
             glDeleteBuffers(1,&new_ebo);
             glDeleteShader(new_vs);
+            assert(0);
         }
         
         new_fs = glCreateShader(GL_FRAGMENT_SHADER);
@@ -398,21 +419,21 @@ void render() {
     vertices[3][0] = f32(tex.size().x()) * std::abs(uvrect.width);
     */
 
-/*    vertices[1][1] = f32(tex.size().y()) * std::abs(uvrect.height);
-    vertices[2][0] = f32(tex.size().x()) * std::abs(uvrect.width);
-    vertices[2][1] = f32(tex.size().y()) * std::abs(uvrect.height);
-    vertices[3][0] = f32(tex.size().x()) * std::abs(uvrect.width);
-    */
-   
+    vertices[1][1] = f32(1.0f);
+    vertices[2][0] = f32(0.0f);
+    vertices[2][1] = f32(1.0f);
+    vertices[3][0] = f32(0.0f);
+
+
     // copy color to the buffer
     // copy color to the buffer
     for (size_t i = 0; i < sizeof(vertices)/sizeof(*vertices); i++)
     {
         uint32_t* colorp = reinterpret_cast<uint32_t*>(&vertices[i][2]);
         //        *colorp = color.bgra;
-        uint8_t red = 255;
+        uint8_t red = 120;
         uint8_t blue = 0;
-        uint8_t green = 255;
+        uint8_t green = 120;
         uint8_t alpha = 255;
         int32_t color = red | (green << 8) | (blue << 16) | (alpha << 24);
         *colorp = color;
@@ -432,6 +453,32 @@ void render() {
                     sizeof(vertices),
                     vertices);
     
+    
+    
+    
+    
+    //////////////////////////////////////////////////////////////////////////////////////////
+       glBlendFunc(GL_SRC_ALPHA,GL_ONE_MINUS_SRC_ALPHA);
+
+    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER,new_ebo);
+    glBindBuffer(GL_ARRAY_BUFFER,new_vbo);
+    glBindVertexArray(new_vao);
+
+    glUseProgram(new_sp);
+
+
+        glDrawElements(
+            GL_TRIANGLES,
+            6*(spriteCount), // 6 indices per 2 triangles
+            GL_UNSIGNED_INT,
+            (const GLvoid*)(6* sizeof(u32)));
+
+    glUseProgram(0);
+    glBindVertexArray(0);
+    glBindBuffer(GL_ARRAY_BUFFER,0);
+    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER,0);
+
+    glDisable(GL_BLEND);
 }
 
 double fps = 0.0;
