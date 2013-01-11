@@ -165,7 +165,11 @@ typedef float spriteVertex[5];
      GLuint new_vs;
     GLuint new_fs;
     GLuint new_sp;
+typedef uint32_t u32;
+typedef float f32;
  
+
+static int spriteCount = 1;
 void initGL() {
    
     glGenVertexArrays(1, &new_vao);
@@ -175,20 +179,17 @@ void initGL() {
     glBindBuffer(GL_ARRAY_BUFFER,new_vbo);
     glBufferData(
         GL_ARRAY_BUFFER,
-        max_batch_size * 4 * sizeof(spriteVertex)),
+        spriteCount * 4 * sizeof(spriteVertex),
                  NULL,
                  GL_DYNAMIC_DRAW);
     
     GLenum err = glGetError();
     if (err)
     {
-        DebugConsole::get().gfxerr()
-        << "SpriteBatch::init::glBufferData "
-        << gl_error_string(err) << std::endl;
         
         glDeleteVertexArrays(1,&new_vao);
         glDeleteBuffers(1,&new_vbo);
-        return false;
+        assert(0);
     }
     
     std::vector<u32> indicesv;
@@ -196,7 +197,7 @@ void initGL() {
     // prepare and upload indices as a one time deal
     const u32 indices[] = { 0, 1, 2, 0, 2, 3 }; // pattern for a triangle array
     // for each possible sprite, add the 6 index pattern
-    for (size_t j = 0; j < max_batch_size; j++)
+    for (size_t j = 0; j < spriteCount; j++)
     {
         for (size_t i = 0; i < sizeof(indices)/sizeof(*indices); i++)
         {
@@ -418,16 +419,16 @@ void render() {
     }
 
     // copy texcoords to the buffer
-    vertices[0][3] = vertices[1][3] = uvrect.left;
-    vertices[0][4] = vertices[3][4] = uvrect.top + uvrect.height;
-    vertices[1][4] = vertices[2][4] = uvrect.top;
-    vertices[2][3] = vertices[3][3] = uvrect.left + uvrect.width;
+    vertices[0][3] = vertices[1][3] = 0.0f;
+    vertices[0][4] = vertices[3][4] = 1.0f;
+    vertices[1][4] = vertices[2][4] = 0.0f;
+    vertices[2][3] = vertices[3][3] = 1.0f;
     
     // finally upload everything to the actual vbo
     glBindBuffer(GL_ARRAY_BUFFER,new_vbo);
     glBufferSubData(
         GL_ARRAY_BUFFER,
-        batch_size_ * sizeof(vertices),
+        spriteCount * sizeof(vertices),
                     sizeof(vertices),
                     vertices);
     
