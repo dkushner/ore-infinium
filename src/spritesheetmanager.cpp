@@ -445,25 +445,25 @@ void SpriteSheetManager::initGL()
     
     // data for a fullscreen quad
     GLfloat vertexData[] = {
-        //  X     Y     Z           R     G     B
-        1.0f, 1.0f, 0.0f,       1.0f, 0.0f, 0.0f, // vertex 0
-        -1.0f, 1.0f, 0.0f,       0.0f, 1.0f, 0.0f, // vertex 1
-        1.0f,-1.0f, 0.0f,       0.0f, 0.0f, 1.0f, // vertex 2
-        1.0f,-1.0f, 0.0f,       0.0f, 0.0f, 1.0f, // vertex 3
-        -1.0f, 1.0f, 0.0f,       0.0f, 1.0f, 0.0f, // vertex 4
-        -1.0f,-1.0f, 0.0f,       1.0f, 0.0f, 0.0f, // vertex 5
+        //  X     Y     Z           R     G     B         U  V
+        1.0f, 1.0f, 0.0f,       1.0f, 0.0f, 0.0f,     0.0f, 0.0f,  // vertex 0
+        -1.0f, 1.0f, 0.0f,       0.0f, 1.0f, 0.0f,      0.0f, 0.0f, // vertex 1
+        1.0f,-1.0f, 0.0f,       0.0f, 0.0f, 1.0f,      0.0f, 0.0f, // vertex 2
+        1.0f,-1.0f, 0.0f,       0.0f, 0.0f, 1.0f,      0.0f, 0.0f, // vertex 3
+        -1.0f, 1.0f, 0.0f,       0.0f, 1.0f, 0.0f,      0.0f, 0.0f, // vertex 4
+        -1.0f,-1.0f, 0.0f,       1.0f, 0.0f, 0.0f,      0.0f, 0.0f, // vertex 5
     }; // 6 vertices with 6 components (floats) each
     
     // fill with data
-    glBufferData(GL_ARRAY_BUFFER, sizeof(GLfloat)*6*6, vertexData, GL_STATIC_DRAW);
+    glBufferData(GL_ARRAY_BUFFER, sizeof(GLfloat)*8*6, vertexData, GL_STATIC_DRAW);
     
     
     // set up generic attrib pointers
     glEnableVertexAttribArray(posLoc);
-    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 6*sizeof(GLfloat), (char*)0 + 0*sizeof(GLfloat));
+    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 8*sizeof(GLfloat), (char*)0 + 0*sizeof(GLfloat));
     
     glEnableVertexAttribArray(colorLoc);
-    glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 6*sizeof(GLfloat), (char*)0 + 3*sizeof(GLfloat));
+    glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 8*sizeof(GLfloat), (char*)0 + 3*sizeof(GLfloat));
     
     // "unbind" vao
     glBindVertexArray(0);
