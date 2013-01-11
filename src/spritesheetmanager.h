@@ -88,6 +88,8 @@ private:
      * Each sprite has four vertices.
      */
     typedef float spriteVertex[5];
+typedef uint32_t u32;
+typedef float f32;
 
     /**
      * In-mem representation of each sprite frame from the spritesheets
@@ -168,7 +170,7 @@ private:
     glm::mat4 m_modelMatrix;
     glm::mat4 m_projectionMatrix;
 
-    int m_maxSpriteCount = 1000;
+    int m_maxSpriteCount = 1;
 
 private:
     SpriteSheetManager();
