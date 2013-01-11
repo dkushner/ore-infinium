@@ -182,7 +182,7 @@ void SpriteSheetManager::unloadAllSpriteSheets()
 
 void SpriteSheetManager::bindSpriteSheet(SpriteSheetManager::SpriteSheetType type)
 {
-//    glBindTexture(GL_TEXTURE_2D, m_spriteSheetTextures[type].textureID);
+    glBindTexture(GL_TEXTURE_2D, m_spriteSheetTextures[type].textureID);
 }
 
 glm::vec2 SpriteSheetManager::spriteSheetSize(SpriteSheetManager::SpriteSheetType type)
