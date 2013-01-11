@@ -1,8 +1,8 @@
-# Ore Chasm
+# Ore Infinium
 
 ## What is it?
 
-Ore Chasm is a game that is greatly inspired by Terraria, but of course aims to
+Ore Infinium is a game that is greatly inspired by Terraria, but of course aims to
 be a hell of a lot more. Not to mention it will *be* the community, instead of
 just *using* the community.
 
@@ -88,7 +88,7 @@ I'll do so ruthlessly every so often. I'd rather have clean code than easy histo
 
 ## Contact?
 
-We have an irc channel on chat.freenode.net #ore-chasm, feel free to drop in for
+We have an irc channel on chat.freenode.net #ore-infinium, feel free to drop in for
 chilling, devel questions, user questions...or whatever.
 
 ## How do I install it?
@@ -99,7 +99,7 @@ No matter, you can build it easily since I use CMake.
 See: http://www.sfml-dev.org/download.php
 
 After this is installed and you have followed their directions, to get my code,
-you can either click download the zip, or run `git clone git://github.com/sreich/ore-chasm.git`
+you can either click download the zip, or run `git clone git://github.com/sreich/ore-infinium.git`
 
 After you have my code, go to the top directory of it, `mkdir build; cd build;`
 and now to actually build it
@@ -110,7 +110,7 @@ and now to actually build it
 ## System Requirements
 * SFML 2.0 (unreleased, from git)
 * Platform of Windows, Linux/Unix, Mac OS X
-* Minimum RAM of 250 MiB. Ore Chasm uses so far.. an average of 60 MiB RES.
+* Minimum RAM of 250 MiB. Ore Infinium  uses so far.. an average of 60 MiB RES.
 This will change with world size, since we don't have chunk based loading
 (yet?), Currently the size of the Block class is 2 bytes (2 unsigned chars).
 Which means for a 8400x2600 map (the default, soft minimum), (8400 \* 2600 \*
@@ -150,7 +150,7 @@ tile-based lighting.
 * Water...and I'd also like to make it pressure based, but that's going to
 be a lot more work as well
 * Weather system
-* Chunk Loading. Presently Ore Chasm just loads the whole map into memory.
+* Chunk Loading. Presently Ore Infinium just loads the whole map into memory.
 Currently this isn't much of an issue, but with larger worlds and assets,
 it could turn into something to think about.
 
