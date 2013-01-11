@@ -51,7 +51,7 @@ SpriteSheetManager::SpriteSheetManager()
     m_modelMatrix = glm::scale(glm::mat4(1.0f), glm::vec3(scale));
     m_projectionMatrix = glm::ortho(0.0f, float(SCREEN_W), float(SCREEN_H), 0.0f, -1.0f, 1.0f);
 
-    glUseProgram(m_spriteShaderProgram);
+//    glUseProgram(m_spriteShaderProgram);
 //
 //    // Get the location of our projection matrix in the shader
 //    int projectionMatrixLocation = glGetUniformLocation(m_spriteShaderProgram, "projectionMatrix");
@@ -157,6 +157,7 @@ void SpriteSheetManager::loadSpriteSheet(const std::string& filename, SpriteShee
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
 
     glTexImage2D(GL_TEXTURE_2D, level, internal_format, width, height, border, image_format, GL_UNSIGNED_BYTE, bits);
+    glBindTexture(GL_TEXTURE_2D, gl_texID);
 
     //Free FreeImage's copy of the data
     FreeImage_Unload(bitmap);
@@ -181,7 +182,7 @@ void SpriteSheetManager::unloadAllSpriteSheets()
 
 void SpriteSheetManager::bindSpriteSheet(SpriteSheetManager::SpriteSheetType type)
 {
-    glBindTexture(GL_TEXTURE_2D, m_spriteSheetTextures[type].textureID);
+//    glBindTexture(GL_TEXTURE_2D, m_spriteSheetTextures[type].textureID);
 }
 
 glm::vec2 SpriteSheetManager::spriteSheetSize(SpriteSheetManager::SpriteSheetType type)
@@ -276,7 +277,7 @@ for (Sprite* sprite: m_characterSprites) {
         glBindBuffer(GL_ARRAY_BUFFER, m_vbo);
         glBufferSubData(
             GL_ARRAY_BUFFER,
-            batch_size_ * sizeof(vertices),
+           m_characterSprites.size() /*batch_size_*/ * sizeof(vertices),
                         sizeof(vertices),
                         vertices);
         
@@ -302,8 +303,8 @@ for (Sprite* sprite: m_characterSprites) {
         
         
         
-        glEnable(GL_BLEND);
-        glBlendFunc(GL_SRC_ALPHA,GL_ONE_MINUS_SRC_ALPHA);
+//        glEnable(GL_BLEND);
+ //////       glBlendFunc(GL_SRC_ALPHA,GL_ONE_MINUS_SRC_ALPHA);
         
         glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_ebo);
         glBindBuffer(GL_ARRAY_BUFFER, m_vbo);
@@ -313,10 +314,10 @@ for (Sprite* sprite: m_characterSprites) {
         
     
             glDrawElements(
-                GL_TRIANGLES,
+                GL_POINTS,
                 6* 1, //(end - start), // 6 indices per 2 triangles
                    GL_UNSIGNED_INT,
-                   (const GLvoid*)(6* 1/*start*/ * sizeof(u32)));
+                   (const GLvoid*)(6* 1/*start*/ * sizeof(uint32_t)));
                 
         
         glUseProgram(0);
@@ -491,6 +492,8 @@ bool SpriteSheetManager::checkProgramLinkStatus(GLuint obj)
 void SpriteSheetManager::initGL()
 {
 //    loadDefaultShaders();
+    //FIXME
+    assert(sizeof(float) == sizeof(uint32_t));
 
     GLuint new_vao = 0;
     GLuint new_vbo = 0;
@@ -515,10 +518,10 @@ void SpriteSheetManager::initGL()
         assert(0);
     }
     
-    std::vector<u32> indicesv;
+    std::vector<uint32_t> indicesv;
     
     // prepare and upload indices as a one time deal
-    const u32 indices[] = { 0, 1, 2, 0, 2, 3 }; // pattern for a triangle array
+    const uint32_t indices[] = { 0, 1, 2, 0, 2, 3 }; // pattern for a triangle array
     // for each possible sprite, add the 6 index pattern
     for (size_t j = 0; j < m_maxSpriteCount; j++)
     {
@@ -532,7 +535,7 @@ void SpriteSheetManager::initGL()
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER,new_ebo);
     glBufferData(
         GL_ELEMENT_ARRAY_BUFFER,
-        indicesv.size()*sizeof(u32),
+        indicesv.size()*sizeof(uint32_t),
                  indicesv.data(),
                  GL_STATIC_DRAW);
     
@@ -575,7 +578,8 @@ void SpriteSheetManager::initGL()
         "uniform sampler2D sampler;"
         
         "void main(void) {"
-        "    gl_FragColor = frag_color * texture2D(sampler,frag_texcoord);"
+//        "vec4 c = vec4(1.0, 1.0, 1.0, 1.0);"
+        "    gl_FragColor = frag_color * texture2D(sampler,frag_texcoord) ;"
         "}";
         
         GLint status;
@@ -677,19 +681,19 @@ void SpriteSheetManager::initGL()
             GL_FALSE,
             sizeof(spriteVertex),
                               (const GLvoid*)buffer_offset);
-        buffer_offset += sizeof(f32) * 2;
+        buffer_offset += sizeof(float) * 2;
 
         GLint color_attrib = glGetAttribLocation(new_sp, "color");
 
         glEnableVertexAttribArray(color_attrib);
         glVertexAttribPointer(
             color_attrib,
-            GL_BGRA,
+            4,
             GL_UNSIGNED_BYTE,
             GL_TRUE,
             sizeof(spriteVertex),
                               (const GLvoid*)buffer_offset);
-        buffer_offset += sizeof(u32);
+        buffer_offset += sizeof(uint32_t);
         
         GLint texcoord_attrib = glGetAttribLocation(new_sp, "texcoord");
         glEnableVertexAttribArray(texcoord_attrib);

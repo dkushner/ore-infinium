@@ -131,17 +131,17 @@ void Game::init()
 
     m_font = FontManager::instance()->loadFont("../font/Ubuntu-L.ttf");
 
-    glClearColor(1.0f, 0.0f, 0.0f, 0.0f);
+    glClearColor(1.f, 1.f, 1.f, 1.0f);
 
     glViewport(0, 0, SCREEN_W, SCREEN_H);
 
     checkGLError();
 
-    m_camera = new Camera();
+ //   m_camera = new Camera();
 
     checkGLError();
 
-    Sprite* sprite = new Sprite("testframe", SpriteSheetManager::SpriteSheetType::Character);
+//    Sprite* sprite = new Sprite("testframe", SpriteSheetManager::SpriteSheetType::Character);
 
     //World::createInstance(m_display);
     //m_world = World::instance();
@@ -151,6 +151,14 @@ void Game::init()
     shutdown();
 }
 
+void initGL() {
+    
+}
+
+void render() {
+    
+}
+
 double fps = 0.0;
 
 void Game::tick()
@@ -158,6 +166,7 @@ void Game::tick()
     Uint32 startTime = SDL_GetTicks();
     int frameCount = 0;
 
+        initGL();
     while (m_running) {
         fps =(frameCount / float(SDL_GetTicks() - startTime)) * 1000;
 
@@ -169,8 +178,9 @@ void Game::tick()
         handleEvents();
 
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+        render();
 
-        SpriteSheetManager::instance()->renderCharacters();
+//        SpriteSheetManager::instance()->renderCharacters();
 //        drawDebugText();
 
         SDL_GL_SwapWindow(m_window);
