@@ -168,6 +168,15 @@ GLuint new_sp;
 typedef uint32_t u32;
 typedef float f32;
 
+void checkGLError()
+{
+    GLenum error = glGetError();
+    if(error != GL_NO_ERROR)
+    {
+        std::cerr << gluErrorString(error);
+        assert(0);
+    }
+}
 
 GLuint tex;
 static int spriteCount = 1;
@@ -178,6 +187,8 @@ void initGL() {
     glBindTexture( GL_TEXTURE_2D, tex );
     glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT );
     glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT );
+    glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR );
+    glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR );
     float pixels[] = {
         0.0f, 0.0f, 0.0f,   1.0f, 1.0f, 1.0f,
         1.0f, 1.0f, 1.0f,   0.0f, 0.0f, 0.0f
@@ -186,7 +197,7 @@ void initGL() {
 
 
 
-
+    checkGLError();
 
 
 
@@ -203,14 +214,8 @@ void initGL() {
         NULL,
         GL_DYNAMIC_DRAW);
 
-    GLenum err = glGetError();
-    if (err)
-    {
+    checkGLError();
 
-        glDeleteVertexArrays(1,&new_vao);
-        glDeleteBuffers(1,&new_vbo);
-        assert(0);
-    }
 
     std::vector<u32> indicesv;
 
@@ -233,15 +238,7 @@ void initGL() {
         indicesv.data(),
         GL_STATIC_DRAW);
 
-    err = glGetError();
-    if (err)
-    {
-
-        glDeleteVertexArrays(1,&new_vao);
-        glDeleteBuffers(1,&new_vbo);
-        glDeleteBuffers(1,&new_ebo);
-        assert(0);
-    }
+    checkGLError();
 
 
     static const char* vshader_src =
@@ -267,10 +264,10 @@ void initGL() {
         "varying vec2 frag_texcoord;"
         "varying vec4 frag_color;"
 
-        "uniform sampler2D sampler;"
+        "uniform sampler2D tex;"
 
         "void main(void) {"
-        "    gl_FragColor = frag_color * texture2D(sampler,frag_texcoord) * 0.0000001f + vec4(0.0, 1.0, 0.0, 1.0) ;"
+        "    gl_FragColor = frag_color * texture2D(tex,frag_texcoord) * 0.0000001f + texture2D(tex, frag_texcoord);"
         "}";
 
     GLint status;
@@ -373,6 +370,8 @@ void initGL() {
 
     GLint color_attrib = glGetAttribLocation(new_sp, "color");
 
+    checkGLError();
+
     glEnableVertexAttribArray(color_attrib);
     glVertexAttribPointer(
         color_attrib,
@@ -382,6 +381,9 @@ void initGL() {
         sizeof(spriteVertex),
         (const GLvoid*)buffer_offset);
     buffer_offset += sizeof(u32);
+    
+    
+    checkGLError();
 
     GLint texcoord_attrib = glGetAttribLocation(new_sp, "texcoord");
     glEnableVertexAttribArray(texcoord_attrib);
@@ -393,18 +395,7 @@ void initGL() {
         sizeof(spriteVertex),
         (const GLvoid*)buffer_offset);
 
-    err = glGetError();
-    if (err)
-    {
-
-        glDeleteVertexArrays(1,&new_vao);
-        glDeleteBuffers(1,&new_vbo);
-        glDeleteBuffers(1,&new_ebo);
-
-        assert(0);
-    }
-
-
+    checkGLError();
 }
 
 void render() {
@@ -419,11 +410,12 @@ void render() {
         vertices[3][0] = f32(tex.size().x()) * std::abs(uvrect.width);
         */
 
-    vertices[1][1] = f32(1.0f);
-    vertices[2][0] = f32(1.0f);
-    vertices[2][1] = f32(1.0f);
-    vertices[3][0] = f32(1.0f);
+    vertices[1][1] = f32(0.9f);
+    vertices[2][0] = f32(0.9f);
+    vertices[2][1] = f32(0.9f);
+    vertices[3][0] = f32(0.9f);
 
+    checkGLError();
 
     // copy color to the buffer
     // copy color to the buffer
@@ -440,10 +432,10 @@ void render() {
     }
 
     // copy texcoords to the buffer
-    vertices[0][3] = vertices[1][3] = 0.0f;
-    vertices[0][4] = vertices[3][4] = 1.0f;
-    vertices[1][4] = vertices[2][4] = 0.0f;
-    vertices[2][3] = vertices[3][3] = 1.0f;
+    vertices[0][3] = vertices[1][3] = 1.0f;
+    vertices[0][4] = vertices[3][4] = 0.0f;
+    vertices[1][4] = vertices[2][4] = 1.0f;
+    vertices[2][3] = vertices[3][3] = 0.0f;
 
     // finally upload everything to the actual vbo
     glBindBuffer(GL_ARRAY_BUFFER,new_vbo);
@@ -464,9 +456,12 @@ void render() {
     glBindBuffer(GL_ARRAY_BUFFER,new_vbo);
     glBindVertexArray(new_vao);
 
+    checkGLError();
     glUseProgram(new_sp);
+    
+    glUniform1i(glGetUniformLocation(new_sp, "tex"), 0);
 
-
+    checkGLError();
     glDrawElements(
         GL_TRIANGLES,
         6*(spriteCount), // 6 indices per 2 triangles
@@ -479,6 +474,9 @@ void render() {
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER,0);
 
     glDisable(GL_BLEND);
+    
+    
+    checkGLError();
 }
 
 double fps = 0.0;
