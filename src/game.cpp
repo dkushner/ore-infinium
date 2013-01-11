@@ -88,7 +88,7 @@ void Game::init()
     }
 
     m_window = SDL_CreateWindow("Ore Chasm", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED,
-                                                        SCREEN_W, SCREEN_H, SDL_WINDOW_SHOWN | SDL_WINDOW_OPENGL);
+                                SCREEN_W, SCREEN_H, SDL_WINDOW_SHOWN | SDL_WINDOW_OPENGL);
 
     if (!m_window) {
         checkSDLError();
@@ -137,7 +137,7 @@ void Game::init()
 
     checkGLError();
 
- //   m_camera = new Camera();
+//   m_camera = new Camera();
 
     checkGLError();
 
@@ -159,17 +159,17 @@ void Game::init()
  * Each sprite has four vertices.
  */
 typedef float spriteVertex[5];
-    GLuint new_vao = 0;
-    GLuint new_vbo = 0;
-    GLuint new_ebo = 0;
-     GLuint new_vs;
-    GLuint new_fs;
-    GLuint new_sp;
+GLuint new_vao = 0;
+GLuint new_vbo = 0;
+GLuint new_ebo = 0;
+GLuint new_vs;
+GLuint new_fs;
+GLuint new_sp;
 typedef uint32_t u32;
 typedef float f32;
 
 
-    GLuint tex;
+GLuint tex;
 static int spriteCount = 1;
 void initGL() {
     //////////////////// create texture, checkerboard texture
@@ -183,37 +183,37 @@ void initGL() {
         1.0f, 1.0f, 1.0f,   0.0f, 0.0f, 0.0f
     };
     glTexImage2D( GL_TEXTURE_2D, 0, GL_RGB, 2, 2, 0, GL_RGB, GL_FLOAT, pixels );
-    
-    
-    
-    
-    
-    
-    
+
+
+
+
+
+
+
     //////////////////////
-   
+
     glGenVertexArrays(1, &new_vao);
     glBindVertexArray(new_vao);
-    
+
     glGenBuffers(1,&new_vbo);
     glBindBuffer(GL_ARRAY_BUFFER,new_vbo);
     glBufferData(
         GL_ARRAY_BUFFER,
         spriteCount * 4 * sizeof(spriteVertex),
-                 NULL,
-                 GL_DYNAMIC_DRAW);
-    
+        NULL,
+        GL_DYNAMIC_DRAW);
+
     GLenum err = glGetError();
     if (err)
     {
-        
+
         glDeleteVertexArrays(1,&new_vao);
         glDeleteBuffers(1,&new_vbo);
         assert(0);
     }
-    
+
     std::vector<u32> indicesv;
-    
+
     // prepare and upload indices as a one time deal
     const u32 indices[] = { 0, 1, 2, 0, 2, 3 }; // pattern for a triangle array
     // for each possible sprite, add the 6 index pattern
@@ -224,187 +224,187 @@ void initGL() {
             indicesv.push_back(4*j + indices[i]);
         }
     }
-    
+
     glGenBuffers(1,&new_ebo);
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER,new_ebo);
     glBufferData(
         GL_ELEMENT_ARRAY_BUFFER,
         indicesv.size()*sizeof(u32),
-                 indicesv.data(),
-                 GL_STATIC_DRAW);
-    
+        indicesv.data(),
+        GL_STATIC_DRAW);
+
     err = glGetError();
     if (err)
     {
-        
+
         glDeleteVertexArrays(1,&new_vao);
         glDeleteBuffers(1,&new_vbo);
         glDeleteBuffers(1,&new_ebo);
         assert(0);
     }
-    
-   
-        static const char* vshader_src = 
+
+
+    static const char* vshader_src =
         "#version 120\n"
-        
+
         "attribute vec2 position;"
-        
+
         "attribute vec2 texcoord;"
         "varying vec2 frag_texcoord;"
-        
+
         "attribute vec4 color;"
         "varying vec4 frag_color;"
-        
+
         "void main() {"
         "    gl_Position = vec4( position, 0.0, 1.0 );"
         "    frag_texcoord = texcoord;"
         "    frag_color = color;"
         "}";
-        
-        static const char* fshader_src =
+
+    static const char* fshader_src =
         "#version 120\n"
-        
+
         "varying vec2 frag_texcoord;"
         "varying vec4 frag_color;"
-        
+
         "uniform sampler2D sampler;"
-        
+
         "void main(void) {"
         "    gl_FragColor = frag_color * texture2D(sampler,frag_texcoord);"
         "}";
-        
-        GLint status;
-        GLchar infolog[1024];
-        GLsizei infolog_len;
-        
-        new_vs = glCreateShader(GL_VERTEX_SHADER);
-        glShaderSource(new_vs, 1, &vshader_src, NULL);
-        glCompileShader(new_vs);
-        
-        glGetShaderiv(new_vs,GL_COMPILE_STATUS,&status);
-        
-        if (status == GL_FALSE)
-        {
-            glGetShaderInfoLog(new_vs,sizeof(infolog),&infolog_len,infolog);
-            std::cout
-            << "Failed to compile SpriteBatch vertex shader."
-            << std::endl
-            << infolog << std::endl;
-            
-            glDeleteVertexArrays(1,&new_vao);
-            glDeleteBuffers(1,&new_vbo);
-            glDeleteBuffers(1,&new_ebo);
-            glDeleteShader(new_vs);
-            assert(0);
-        }
-        
-        new_fs = glCreateShader(GL_FRAGMENT_SHADER);
-        glShaderSource(new_fs, 1, &fshader_src, NULL);
-        glCompileShader(new_fs);
-        
-        glGetShaderiv(new_fs,GL_COMPILE_STATUS,&status);
-        
-        if (status == GL_FALSE)
-        {
-            glGetShaderInfoLog(new_fs,sizeof(infolog),&infolog_len,infolog);
-            std::cout
-            << "Failed to compile SpriteBatch fragment shader."
-            << std::endl
-            << infolog << std::endl;
-            
-            glDeleteVertexArrays(1,&new_vao);
-            glDeleteBuffers(1,&new_vbo);
-            glDeleteBuffers(1,&new_ebo);
-            glDeleteShader(new_vs);
-            glDeleteShader(new_fs);
-            assert(0);
-        }
-        
-        new_sp = glCreateProgram();
-        glAttachShader(new_sp, new_vs);
-        glAttachShader(new_sp, new_fs);
-        glLinkProgram(new_sp);
-        
-        glGetProgramiv(new_sp,GL_LINK_STATUS,&status);
-        
-        if (status == GL_FALSE)
-        {
-            glGetProgramInfoLog(new_sp,sizeof(infolog),&infolog_len,infolog);
-            std::cout << "Failed to link SpriteBatch shader program."
-            << std::endl
-            << infolog << std::endl;
-            
-            glDeleteVertexArrays(1,&new_vao);
-            glDeleteBuffers(1,&new_vbo);
-            glDeleteBuffers(1,&new_ebo);
-            glDeleteShader(new_vs);
-            glDeleteShader(new_fs);
-            glDeleteProgram(new_sp);
-            assert(0);
-        }
-        
-        glValidateProgram(new_sp);
-        glGetProgramiv(new_sp,GL_VALIDATE_STATUS,&status);
-        
-        if (status == GL_FALSE)
-        {
-            
-            glDeleteVertexArrays(1,&new_vao);
-            glDeleteBuffers(1,&new_vbo);
-            glDeleteBuffers(1,&new_ebo);
-            glDeleteShader(new_vs);
-            glDeleteShader(new_fs);
-            glDeleteProgram(new_sp);
-            assert(0);
-        }
-        
-        size_t buffer_offset = 0;
-        
-        GLint pos_attrib = glGetAttribLocation(new_sp, "position");
-        glEnableVertexAttribArray(pos_attrib);
-        glVertexAttribPointer(
-            pos_attrib,
-            2,
-            GL_FLOAT,
-            GL_FALSE,
-            sizeof(spriteVertex),
-                              (const GLvoid*)buffer_offset);
-        buffer_offset += sizeof(f32) * 2;
-        
-        GLint color_attrib = glGetAttribLocation(new_sp, "color");
-        
-        glEnableVertexAttribArray(color_attrib);
-        glVertexAttribPointer(
-            color_attrib,
-            4,
-            GL_UNSIGNED_BYTE,
-            GL_TRUE,
-            sizeof(spriteVertex),
-                              (const GLvoid*)buffer_offset);
-        buffer_offset += sizeof(u32);
-        
-        GLint texcoord_attrib = glGetAttribLocation(new_sp, "texcoord");
-        glEnableVertexAttribArray(texcoord_attrib);
-        glVertexAttribPointer(
-            texcoord_attrib,
-            2,
-            GL_FLOAT,
-            GL_FALSE,
-            sizeof(spriteVertex),
-                              (const GLvoid*)buffer_offset);
-        
-        err = glGetError();
-        if (err)
-        {
 
-            glDeleteVertexArrays(1,&new_vao);
-            glDeleteBuffers(1,&new_vbo);
-            glDeleteBuffers(1,&new_ebo);
+    GLint status;
+    GLchar infolog[1024];
+    GLsizei infolog_len;
 
-            assert(0);
-        }
-        
-        
+    new_vs = glCreateShader(GL_VERTEX_SHADER);
+    glShaderSource(new_vs, 1, &vshader_src, NULL);
+    glCompileShader(new_vs);
+
+    glGetShaderiv(new_vs,GL_COMPILE_STATUS,&status);
+
+    if (status == GL_FALSE)
+    {
+        glGetShaderInfoLog(new_vs,sizeof(infolog),&infolog_len,infolog);
+        std::cout
+                << "Failed to compile SpriteBatch vertex shader."
+                << std::endl
+                << infolog << std::endl;
+
+        glDeleteVertexArrays(1,&new_vao);
+        glDeleteBuffers(1,&new_vbo);
+        glDeleteBuffers(1,&new_ebo);
+        glDeleteShader(new_vs);
+        assert(0);
+    }
+
+    new_fs = glCreateShader(GL_FRAGMENT_SHADER);
+    glShaderSource(new_fs, 1, &fshader_src, NULL);
+    glCompileShader(new_fs);
+
+    glGetShaderiv(new_fs,GL_COMPILE_STATUS,&status);
+
+    if (status == GL_FALSE)
+    {
+        glGetShaderInfoLog(new_fs,sizeof(infolog),&infolog_len,infolog);
+        std::cout
+                << "Failed to compile SpriteBatch fragment shader."
+                << std::endl
+                << infolog << std::endl;
+
+        glDeleteVertexArrays(1,&new_vao);
+        glDeleteBuffers(1,&new_vbo);
+        glDeleteBuffers(1,&new_ebo);
+        glDeleteShader(new_vs);
+        glDeleteShader(new_fs);
+        assert(0);
+    }
+
+    new_sp = glCreateProgram();
+    glAttachShader(new_sp, new_vs);
+    glAttachShader(new_sp, new_fs);
+    glLinkProgram(new_sp);
+
+    glGetProgramiv(new_sp,GL_LINK_STATUS,&status);
+
+    if (status == GL_FALSE)
+    {
+        glGetProgramInfoLog(new_sp,sizeof(infolog),&infolog_len,infolog);
+        std::cout << "Failed to link SpriteBatch shader program."
+                  << std::endl
+                  << infolog << std::endl;
+
+        glDeleteVertexArrays(1,&new_vao);
+        glDeleteBuffers(1,&new_vbo);
+        glDeleteBuffers(1,&new_ebo);
+        glDeleteShader(new_vs);
+        glDeleteShader(new_fs);
+        glDeleteProgram(new_sp);
+        assert(0);
+    }
+
+    glValidateProgram(new_sp);
+    glGetProgramiv(new_sp,GL_VALIDATE_STATUS,&status);
+
+    if (status == GL_FALSE)
+    {
+
+        glDeleteVertexArrays(1,&new_vao);
+        glDeleteBuffers(1,&new_vbo);
+        glDeleteBuffers(1,&new_ebo);
+        glDeleteShader(new_vs);
+        glDeleteShader(new_fs);
+        glDeleteProgram(new_sp);
+        assert(0);
+    }
+
+    size_t buffer_offset = 0;
+
+    GLint pos_attrib = glGetAttribLocation(new_sp, "position");
+    glEnableVertexAttribArray(pos_attrib);
+    glVertexAttribPointer(
+        pos_attrib,
+        2,
+        GL_FLOAT,
+        GL_FALSE,
+        sizeof(spriteVertex),
+        (const GLvoid*)buffer_offset);
+    buffer_offset += sizeof(f32) * 2;
+
+    GLint color_attrib = glGetAttribLocation(new_sp, "color");
+
+    glEnableVertexAttribArray(color_attrib);
+    glVertexAttribPointer(
+        color_attrib,
+        4,
+        GL_UNSIGNED_BYTE,
+        GL_TRUE,
+        sizeof(spriteVertex),
+        (const GLvoid*)buffer_offset);
+    buffer_offset += sizeof(u32);
+
+    GLint texcoord_attrib = glGetAttribLocation(new_sp, "texcoord");
+    glEnableVertexAttribArray(texcoord_attrib);
+    glVertexAttribPointer(
+        texcoord_attrib,
+        2,
+        GL_FLOAT,
+        GL_FALSE,
+        sizeof(spriteVertex),
+        (const GLvoid*)buffer_offset);
+
+    err = glGetError();
+    if (err)
+    {
+
+        glDeleteVertexArrays(1,&new_vao);
+        glDeleteBuffers(1,&new_vbo);
+        glDeleteBuffers(1,&new_ebo);
+
+        assert(0);
+    }
+
+
 }
 
 void render() {
@@ -413,11 +413,11 @@ void render() {
 
     // transform vertices and copy them to the buffer
     vertices[0][0] = vertices[0][1] = vertices[1][0] = vertices[3][1] = 0;
-/*    vertices[1][1] = f32(tex.size().y()) * std::abs(uvrect.height);
-    vertices[2][0] = f32(tex.size().x()) * std::abs(uvrect.width);
-    vertices[2][1] = f32(tex.size().y()) * std::abs(uvrect.height);
-    vertices[3][0] = f32(tex.size().x()) * std::abs(uvrect.width);
-    */
+    /*    vertices[1][1] = f32(tex.size().y()) * std::abs(uvrect.height);
+        vertices[2][0] = f32(tex.size().x()) * std::abs(uvrect.width);
+        vertices[2][1] = f32(tex.size().y()) * std::abs(uvrect.height);
+        vertices[3][0] = f32(tex.size().x()) * std::abs(uvrect.width);
+        */
 
     vertices[1][1] = f32(1.0f);
     vertices[2][0] = f32(0.0f);
@@ -444,21 +444,21 @@ void render() {
     vertices[0][4] = vertices[3][4] = 1.0f;
     vertices[1][4] = vertices[2][4] = 0.0f;
     vertices[2][3] = vertices[3][3] = 1.0f;
-    
+
     // finally upload everything to the actual vbo
     glBindBuffer(GL_ARRAY_BUFFER,new_vbo);
     glBufferSubData(
         GL_ARRAY_BUFFER,
+        0,
         spriteCount * sizeof(vertices),
-                    sizeof(vertices),
-                    vertices);
-    
-    
-    
-    
-    
+        vertices);
+
+
+
+
+
     //////////////////////////////////////////////////////////////////////////////////////////
-       glBlendFunc(GL_SRC_ALPHA,GL_ONE_MINUS_SRC_ALPHA);
+    glBlendFunc(GL_SRC_ALPHA,GL_ONE_MINUS_SRC_ALPHA);
 
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER,new_ebo);
     glBindBuffer(GL_ARRAY_BUFFER,new_vbo);
@@ -467,11 +467,11 @@ void render() {
     glUseProgram(new_sp);
 
 
-        glDrawElements(
-            GL_TRIANGLES,
-            6*(spriteCount), // 6 indices per 2 triangles
-            GL_UNSIGNED_INT,
-            (const GLvoid*)(6* sizeof(u32)));
+    glDrawElements(
+        GL_TRIANGLES,
+        6*(spriteCount), // 6 indices per 2 triangles
+        GL_UNSIGNED_INT,
+        (const GLvoid*)0);
 
     glUseProgram(0);
     glBindVertexArray(0);
@@ -488,7 +488,7 @@ void Game::tick()
     Uint32 startTime = SDL_GetTicks();
     int frameCount = 0;
 
-        initGL();
+    initGL();
     while (m_running) {
         fps =(frameCount / float(SDL_GetTicks() - startTime)) * 1000;
 
