@@ -131,7 +131,7 @@ void Game::init()
 
     m_font = FontManager::instance()->loadFont("../font/Ubuntu-L.ttf");
 
-    glClearColor(1.f, 1.f, 1.f, 1.0f);
+    glClearColor(1.f, 0.f, 0.f, 1.0f);
 
     glViewport(0, 0, SCREEN_W, SCREEN_H);
 
@@ -270,7 +270,7 @@ void initGL() {
         "uniform sampler2D sampler;"
 
         "void main(void) {"
-        "    gl_FragColor = frag_color * texture2D(sampler,frag_texcoord);"
+        "    gl_FragColor = frag_color * texture2D(sampler,frag_texcoord) * 0.0000001f + vec4(0.0, 1.0, 0.0, 1.0) ;"
         "}";
 
     GLint status;
@@ -419,10 +419,10 @@ void render() {
         vertices[3][0] = f32(tex.size().x()) * std::abs(uvrect.width);
         */
 
-    vertices[1][1] = f32(1.0f);
-    vertices[2][0] = f32(0.0f);
-    vertices[2][1] = f32(1.0f);
-    vertices[3][0] = f32(0.0f);
+    vertices[1][1] = f32(0.1f);
+    vertices[2][0] = f32(0.2f);
+    vertices[2][1] = f32(0.3f);
+    vertices[3][0] = f32(0.8f);
 
 
     // copy color to the buffer
@@ -431,9 +431,9 @@ void render() {
     {
         uint32_t* colorp = reinterpret_cast<uint32_t*>(&vertices[i][2]);
         //        *colorp = color.bgra;
-        uint8_t red = 120;
-        uint8_t blue = 0;
-        uint8_t green = 120;
+        uint8_t red = 255;
+        uint8_t blue = 255;
+        uint8_t green = 255;
         uint8_t alpha = 255;
         int32_t color = red | (green << 8) | (blue << 16) | (alpha << 24);
         *colorp = color;
