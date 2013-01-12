@@ -188,6 +188,8 @@ void SpriteSheetManager::registerSprite(SpriteSheetManager::SpriteSheetType spri
     switch (spriteSheetType) {
     case SpriteSheetType::Character:
         m_characterSprites.insert(m_characterSprites.end(), sprite);
+        // TODO: look up the size of the graphic/frame, in the spritesheet map.
+        sprite->m_size = glm::vec2(100.0f, 100.0f);
         Debug::log(Debug::Area::Graphics) << "sprite registered, new sprite count: " << m_characterSprites.size();
         break;
 
@@ -237,8 +239,12 @@ void SpriteSheetManager::renderCharacters()
         // vertices[2] -> bottom right
         // vertices[3] -> top right
 
+        std::cout << " size x: " << sprite->position().x << " size y: " << sprite->position().y << "\n";
+        
+        glm::vec2 spritePosition = sprite->position();
+        glm::vec2 spriteSize = sprite->size();
 
-        glm::vec4 rect = glm::vec4(0.0f, 0.0f, 100.0f, 100.0f);
+        glm::vec4 rect = glm::vec4(spritePosition.x, spritePosition.y, spritePosition.x + spriteSize.x, spritePosition.y + spriteSize.y);
 
         float x = rect.x;
         float width = rect.z;

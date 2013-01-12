@@ -183,7 +183,6 @@ private:
     SpriteSheetManager& operator=(const SpriteSheetManager& tm);
 
     static SpriteSheetManager* s_instance;
-    friend class Sprite;
 };
 
 #endif
