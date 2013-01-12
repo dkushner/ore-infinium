@@ -309,7 +309,7 @@ void SpriteSheetManager::renderCharacters()
     checkGLError();
     glDrawElements(
         GL_TRIANGLES,
-        6*(m_maxSpriteCount), // 6 indices per 2 triangles
+        6*(m_characterSprites.size()), // 6 indices per 2 triangles
         GL_UNSIGNED_INT,
         (const GLvoid*)0);
 

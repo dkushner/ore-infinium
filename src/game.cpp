@@ -142,10 +142,10 @@ void Game::init()
 
     checkGLError();
 
-    Sprite* sprite = new Sprite("testframe", SpriteSheetManager::SpriteSheetType::Character);
-    sprite->setPosition(200, 300);
-    Sprite* sprite2 = new Sprite("testframe", SpriteSheetManager::SpriteSheetType::Character);
-    sprite2->setPosition(500, 500);
+    for (int i = 0; i < 2; ++i) {
+        Sprite* sprite = new Sprite("testframe", SpriteSheetManager::SpriteSheetType::Character);
+        sprite->setPosition(rand() % 1600, rand() % 900);
+    }
 
     //World::createInstance(m_display);
     //m_world = World::instance();
