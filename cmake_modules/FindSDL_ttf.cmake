@@ -1,0 +1,49 @@
+#
+# this module look for SDL_TTF (http://www.libsdl.org) support
+# it will define the following values
+#
+# SDLTTF_INCLUDE_DIR  = where SDL_ttf.h can be found
+# SDLTTF_LIBRARY      = the library to link against SDL_ttf
+# SDLTTF_FOUND        = set to 1 if SDL_ttf is found
+#
+
+IF(SDL_TTF_INCLUDE_DIRS)
+
+  FIND_PATH(SDLTTF_INCLUDE_DIR SDL/SDL_ttf.h ${SDL_TTF_INCLUDE_DIRS})
+  FIND_LIBRARY(SDLTTF_LIBRARY SDL_ttf ${SDL_TTF_LIBRARY_DIRS})
+
+ELSE(SDL_TTF_INCLUDE_DIRS)
+
+  SET(TRIAL_LIBRARY_PATHS
+    $ENV{SDL_TTF_HOME}/lib
+    /usr/lib
+    /usr/local/lib
+    /sw/lib
+  )
+
+  SET(TRIAL_INCLUDE_PATHS
+    $ENV{SDL_TTF_HOME}/include/SDL
+    /usr/include/SDL
+    /usr/local/include/SDL
+    /sw/include/SDL
+  ) 
+
+  FIND_LIBRARY(SDLTTF_LIBRARY SDL_ttf ${TRIAL_LIBRARY_PATHS})
+  FIND_PATH(SDLTTF_INCLUDE_DIR SDL_ttf.h ${TRIAL_INCLUDE_PATHS})
+
+ENDIF(SDL_TTF_INCLUDE_DIRS)
+
+message("INCLUDE: " + ${SDLTTF_INCLUDE_DIR} + " LIB" + ${SDLTTF_LIBRARY})
+
+IF(SDLTTF_INCLUDE_DIR AND SDLTTF_LIBRARY)
+    SET(SDLTTF_FOUND "TRUE")
+ELSE(SDLTTF_INCLUDE_DIR AND SDLTTF_LIBRARY)
+    SET(SDLTTF_FOUND "FALSE")
+ENDIF(SDLTTF_INCLUDE_DIR AND SDLTTF_LIBRARY)
+
+#MARK_AS_ADVANCED(
+#  SDLTTF_INCLUDE_DIR
+#  SDLTTF_LIBRARY
+#  SDLTTF_FOUND
+#)
+#

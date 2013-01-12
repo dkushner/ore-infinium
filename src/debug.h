@@ -19,7 +19,6 @@
 #define DEBUG_H
 
 #include <stdlib.h>
-#include <SFML/System/Vector2.hpp>
 #include <string>
 #include <iostream>
 #include <sstream>
@@ -29,13 +28,15 @@ class LogStream;
 class Debug
 {
 public:
-    enum class Type {
-        Debug,
+    enum class Type
+    {
+        DebugType,
         Warning,
         Error,
     };
 
-    enum class Area {
+    enum class Area
+    {
         General,
         Graphics,
         System,
@@ -45,7 +46,8 @@ public:
 
     static LogStream log(Area area = Area::General);
 
-    void assertf(bool value, std::string message);
+    static void assertf(bool value, std::string message);
+    static void fatal(bool value, Area area, std::string message);
 };
 
 class LogStream : public std::stringstream

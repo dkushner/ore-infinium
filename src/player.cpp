@@ -17,62 +17,71 @@
 
 #include "player.h"
 
-#include "imagemanager.h"
+#include "resourcemanager.h"
 #include <assert.h>
+
+#include <allegro5/allegro.h>
+#include <allegro5/allegro_primitives.h>
+
+#include <Eigen/Core>
 
 Player::Player(const char* texture) : Entity(texture)
 {
-    const sf::IntRect rect = Renderable::getTextureRect();
-    const sf::Vector2f center = sf::Vector2f(rect.width * 0.5, rect.height * 0.5);
-    setOrigin(center);
 }
 
-void Player::render(sf::RenderWindow* window)
+void Player::draw_bitmap(int flags)
 {
-    Renderable::render(window);
+    Texture::draw_bitmap(flags);
+
+    ALLEGRO_COLOR color = al_map_rgb(255, 0, 0);
 
     //debug drawing for the radius that is within the player's reach to "pick"
-    sf::RectangleShape rect = sf::RectangleShape(sf::Vector2f(Player::blockPickingRadius * 2.0f, Player::blockPickingRadius * 2.0f));
-    rect.setPosition(getPosition().x - Player::blockPickingRadius, getPosition().y - Player::blockPickingRadius);
-    rect.setFillColor(sf::Color::Transparent);
-    rect.setOutlineColor(sf::Color::Red);
-    rect.setOutlineThickness(1.0f);
-    window->draw(rect);
+    //FIXME: calculations are surely off..
+//    sf::RectangleShape rect = sf::RectangleShape(Eigen::Vector2f(Player::blockPickingRadius * 2.0f, Player::blockPickingRadius * 2.0f));
+ //   rect.setPosition(getPosition().x - Player::blockPickingRadius, getPosition().y - Player::blockPickingRadius);
+    al_draw_rectangle(position().x(), position().y(), position().x() + Player::blockPickingRadius, position().y() + Player::blockPickingRadius, color, 1.0f);
 }
 
-void Player::handleEvent(const sf::Event& event)
+
+void Player::handleEvent(const ALLEGRO_EVENT& event)
 {
     switch (event.type) {
-    case sf::Event::KeyPressed:
-        if (event.key.code == sf::Keyboard::D || event.key.code == sf::Keyboard::Right) {
+        case ALLEGRO_EVENT_KEY_DOWN:
+        if (event.keyboard.keycode == ALLEGRO_KEY_D || event.keyboard.keycode == ALLEGRO_KEY_RIGHT) {
             m_inputXDirection = 1.f;
         }
-        if (event.key.code == sf::Keyboard::A || event.key.code == sf::Keyboard::Left) {
+
+        if (event.keyboard.keycode == ALLEGRO_KEY_A || event.keyboard.keycode == ALLEGRO_KEY_LEFT) {
             m_inputXDirection = -1.f;
         }
-        if (event.key.code == sf::Keyboard::S || event.key.code == sf::Keyboard::Down) {
+
+        if (event.keyboard.keycode == ALLEGRO_KEY_S || event.keyboard.keycode == ALLEGRO_KEY_DOWN) {
             m_inputYDirection = 1.f;
         }
-        if (event.key.code == sf::Keyboard::W || event.key.code == sf::Keyboard::Up) {
+
+        if (event.keyboard.keycode == ALLEGRO_KEY_W || event.keyboard.keycode == ALLEGRO_KEY_UP) {
             m_inputYDirection = -1.f;
         }
         break;
 
-    case sf::Event::KeyReleased:
-        if (event.key.code == sf::Keyboard::D || event.key.code == sf::Keyboard::Right) {
+        case ALLEGRO_EVENT_KEY_UP:
+        if (event.keyboard.keycode == ALLEGRO_KEY_D || event.keyboard.keycode == ALLEGRO_KEY_RIGHT) {
             m_inputXDirection = 0.f;
         }
-        if (event.key.code == sf::Keyboard::A || event.key.code == sf::Keyboard::Left) {
+
+        if (event.keyboard.keycode == ALLEGRO_KEY_A || event.keyboard.keycode == ALLEGRO_KEY_LEFT) {
             m_inputXDirection = 0.f;
         }
-        if (event.key.code == sf::Keyboard::S || event.key.code == sf::Keyboard::Down) {
+
+        if (event.keyboard.keycode == ALLEGRO_KEY_S || event.keyboard.keycode == ALLEGRO_KEY_DOWN) {
             m_inputYDirection = 0.f;
         }
-        if (event.key.code == sf::Keyboard::W || event.key.code == sf::Keyboard::Up) {
+
+        if (event.keyboard.keycode == ALLEGRO_KEY_W || event.keyboard.keycode == ALLEGRO_KEY_UP) {
             m_inputYDirection = 0.f;
         }
         break;
     }
 
-    Entity::setVelocity(sf::Vector2f(m_inputXDirection, m_inputYDirection));
+    Entity::setVelocity(m_inputXDirection, m_inputYDirection);
 }

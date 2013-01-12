@@ -1,0 +1,11 @@
+In order to use Ore Chasm, you must compile it (I don't have time to make
+binaries each day). Before you can do that, you must install the following:
+
+* SDL 2.x http://www.libsdl.org/hg.php
+* SDL_mixer 2.x http://hg.libsdl.org/
+* PugiXML http://pugixml.org/
+* FreeType (also for fonts)
+* FTGL (for font rendering) 'svn co
+https://ftgl.svn.sourceforge.net/svnroot/ftgl'
+
+

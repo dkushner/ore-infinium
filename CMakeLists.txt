@@ -1,5 +1,12 @@
 cmake_minimum_required(VERSION 2.6)
-project (ore_chasm)
+
+# To force which compiler to use e.g. for me for clang instead of gcc, pass CC and CCX=/usr/bin/clang++ cmake .. ; ...
+
+project(ore-chasm)
+
+include(FeatureSummary)
+
+#project (ore_chasm)
 
 # Enable debug symbols by default
 if(CMAKE_BUILD_TYPE STREQUAL "")
@@ -9,10 +16,8 @@ endif()
 if(CMAKE_BUILD_TYPE STREQUAL "Debug")
     add_definitions(-DDEBUG)
 
-    #  cmake has this annoying fucking bug that took me a while to figure out how i can use clang: http://www.cmake.org/pipermail/cmake/2011-February/042629.html
-
     set(CMAKE_CXX_FLAGS "-std=c++11 -O0 -g3 -fpermissive")
-# -Wall -Wno-unused-variable -Wno-unused-function -funroll-loops -Woverloaded-virtual -g3 -ggdb -ftrapv -fverbose-asm -Wextra -Wfloat-equal -Winit-self -Wuninitialized -Werror-implicit-function-declaration -Wundef -Wshadow  -Wpointer-arith -Wcast-align -Wstrict-overflow=5 -Wwrite-strings -Wswitch-default -Wconversion -Wno-switch -Wunreachable-code -Wformat=2 -fstack-check -Wdouble-promotion
+# -Wall -Wno-unused-variable -Wno-unused-function -Woverloaded-virtual -g3 -ggdb -ftrapv -fverbose-asm -Wextra -Wfloat-equal -Winit-self -Wuninitialized -Werror-implicit-function-declaration -Wundef -Wshadow  -Wpointer-arith -Wcast-align -Wstrict-overflow=5 -Wwrite-strings -Wswitch-default -Wconversion -Wno-switch -Wunreachable-code -Wformat=2 -fstack-check -Wdouble-promotion
     set(CMAKE_C_FLAGS "-Wall -Wno-unused-variable -Wno-unused-function -fpermissive -funroll-loops -fexpensive-optimizations -g3 -ggdb")
 else(CMAKE_BUILD_TYPE STREQUAL "")
     set(CMAKE_CXX_FLAGS "-std=c++11 -O2 -Wall -Wno-unused-variable -Wno-unused-function -fexpensive-optimizations -Woverloaded-virtual")
@@ -21,83 +26,53 @@ endif(CMAKE_BUILD_TYPE STREQUAL "Debug")
 
 # (you can also set it on the command line: -D CMAKE_BUILD_TYPE=Release)
 set(CMAKE_MODULE_PATH "${CMAKE_SOURCE_DIR}/cmake_modules" ${CMAKE_MODULE_PATH})
-message("PATH: " + ${CMAKE_MODULE_PATH})
+
 # Set version information in a config.h file
 set(ore_chasm_VERSION_MAJOR 0)
 set(ore_chasm_VERSION_MINOR 1)
 
-find_package( PugiXML REQUIRED)
-find_package( OpenGL REQUIRED )
+find_package(SDL2 REQUIRED)
+find_package(SDL2_mixer REQUIRED)
 
-set(CMAKE_MODULE_PATH "${CMAKE_SOURCE_DIR}/cmake_modules" ${CMAKE_MODULE_PATH})
+find_package(OpenGL REQUIRED)
+find_package(GLEW REQUIRED)
 
-if (NOT PugiXML_FOUND)
-    message(FATAL_ERROR "Could not find pugixml library.")
-endif()
+find_package(FreeImage REQUIRED)
+find_package(FreeType REQUIRED)
+find_package(FTGL REQUIRED)
 
-include_directories( ${CMAKE_SOURCE_DIR} ${PugiXML_INCLUDE_DIR})
+find_package(YamlCpp REQUIRED)
+
+find_package(GLM REQUIRED)
+
+set_package_properties(SDL2 PROPERTIES DESCRIPTION "SDL2, used for creating an open source, cross-platform OpenGL window, audio and input" URL "http://hg.libsdl.org/SDL/")
+set_package_properties(SDL2_mixer PROPERTIES DESCRIPTION "SDL2 Mixer open source library, for audio" URL "http://hg.libsdl.org/SDL_mixer/")
+
+set_package_properties(OpenGL PROPERTIES DESCRIPTION "OpenGL >= 3.0 is required. Version check is done at runtime" URL "-")
+set_package_properties(GLEW PROPERTIES DESCRIPTION "OpenGL Extension Wrangler, to create our function pointers and extension loading" URL "http://glew.sourceforge.net/")
+
+set_package_properties(FreeImage PROPERTIES DESCRIPTION "Cross-platform open source image loading library" URL "http://freeimage.sourceforge.net/")
+set_package_properties(FTGL PROPERTIES DESCRIPTION "Easy, open source OpenGL font rendering library" URL "http://sourceforge.net/projects/ftgl/")
+set_package_properties(FreeType PROPERTIES DESCRIPTION "FreeType >= 2" URL "http://sourceforge.net/projects/freetype/files/freetype2/")
+
+set_package_properties(Yaml-Cpp PROPERTIES DESCRIPTION "YAML CPP, for config file and sprite sheet reading" URL "http://code.google.com/p/yaml-cpp/")
+
+set_package_properties(GLM PROPERTIES DESCRIPTION "OpenGL Open Source Mathematics Library (for all our math, in a GLSL-like nature)" URL "http://glm.g-truc.net/")
+
+message("\n----------------------------------------------------------------------------------------------")
+feature_summary(WHAT REQUIRED_PACKAGES_FOUND DESCRIPTION "Successfully Enabled REQUIRED Features:\n")
+message("\n----------------------------------------------------------------------------------------------")
+feature_summary(WHAT REQUIRED_PACKAGES_NOT_FOUND DESCRIPTION "NOT FOUND REQUIRED FEATURES:\n")
+message("\n----------------------------------------------------------------------------------------------")
+
+include_directories(${CMAKE_SOURCE_DIR} ${PugiXML_INCLUDE_DIR})
 
 configure_file(
   "${PROJECT_SOURCE_DIR}/config.h.in"
   "${PROJECT_BINARY_DIR}/config.h"
   )
+
 include_directories("${PROJECT_BINARY_DIR}")
 
-# Define sources and executable
-set(EXECUTABLE_NAME "ore-chasm")
+add_subdirectory(src)
 
-set(SRC
-src/main.cpp
-src/game.cpp
-src/imagemanager.cpp
-src/player.cpp
-src/debug.cpp
-src/world.cpp
-src/renderable.cpp
-src/entity.cpp
-src/block.cpp
-src/cloudsystem.cpp
-src/sky.cpp
-)
-
-#YAML, needed later
-## pkg-config-based library
-include(FindPkgConfig)
-#pkg_check_modules(yaml-cpp REQUIRED yaml-cpp>=0.2.5)
-#if(yaml-cpp_FOUND)
-#  include_directories(${yaml-cpp_INCLUDE_DIRS})
-#  link_directories(${yaml-cpp_LIBRARY_DIRS})
-#endif()
-#add_executable(${EXECUTABLE_NAME} ${SOURCES})
-#target_link_libraries(${EXECUTABLE_NAME} ${yaml-cpp_LIBRARIES})
-#
-
-add_executable(${EXECUTABLE_NAME} ${SRC})
-
-find_package(SFML 2.0 REQUIRED system window graphics audio) #network
-
-if (NOT SFML_FOUND)
-    message(FATAL_ERROR "Could not find SFML.")
-endif()
-
-INCLUDE_DIRECTORIES( ${CMAKE_SOURCE_DIR})
-include_directories(${SFML_INCLUDE_DIR} )
-target_link_libraries(${EXECUTABLE_NAME} ${SFML_LIBRARIES} ${OPENGL_LIBRARIES} ${PugiXML_LIBRARY})
-
-
-# CPack packaging
-include(InstallRequiredSystemLibraries)
-set(CPACK_RESOURCE_FILE_LICENSE "${CMAKE_SOURCE_DIR}/COPYING")
-set(CPACK_PACKAGE_VERSION_MAJOR "${ore_chasm_VERSION_MAJOR}")
-set(CPACK_PACKAGE_VERSION_MINOR "${ore_chasm_VERSION_MINOR}")
-include(CPack)
-
-
-add_subdirectory(${CMAKE_SOURCE_DIR}/src/)
-
-# Install target
-install(DIRECTORY textures/ DESTINATION "textures") #FILES_MATCHING PATTERN "*")
-install(DIRECTORY font/ DESTINATION "font") #FILES_MATCHING PATTERN "*")
-
-install(DIRECTORY src/ DESTINATION bin FILES_MATCHING PATTERN "*.frag" )
-install(TARGETS ${EXECUTABLE_NAME} DESTINATION bin)

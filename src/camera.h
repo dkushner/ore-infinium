@@ -1,5 +1,5 @@
 /******************************************************************************
- *   Copyright (C) 2012 by Shaun Reich <sreich@kde.org>                       *
+ *   Copyright (C) 2013 by Shaun Reich <sreich@kde.org>                       *
  *                                                                            *
  *   This program is free software; you can redistribute it and/or            *
  *   modify it under the terms of the GNU General Public License as           *
@@ -15,39 +15,47 @@
  *   along with this program.  If not, see <http://www.gnu.org/licenses/>.    *
  *****************************************************************************/
 
-#ifndef PLAYER_H
-#define PLAYER_H
+#ifndef CAMERA_H
+#define CAMERA_H
 
-#include "entity.h"
-#include "block.h"
+#include <GL/glew.h>
+#include <GL/gl.h>
 
-union ALLEGRO_EVENT;
-class ALLEGRO_DISPLAY;
+#include <glm/glm.hpp>
+#include <glm/gtc/matrix_transform.hpp>
 
-class Player : public Entity
+class Camera
 {
 public:
+    Camera();
+
     /**
-     * Create a player with the starting texture @p texture
-     * the ImageLoader is used automatically, so just pass a path
-     * to the image to load.
+     * Translates the camera's current position by the given vec2.
      */
-    Player(const char* texture);
+    void translate(const glm::vec2 vec);
 
-    void handleEvent(const ALLEGRO_EVENT& event);
+    /**
+     * Zooms/scales the view (z) by the given factor.
+     * 0.5 is zoom out, 1.5 is zoom in, etc.
+     */
+    void zoom(const float factor);
 
-    // radius indicating how many pixels out the player can pick
-    // blocks
-    static constexpr float blockPickingRadius = Block::blockSize * 8.0f;
-    static constexpr float movementSpeed = 1000.0f;
+    void centerOn(const glm::vec2 vec);
 
-    virtual void draw_bitmap(int flags = 0);
+    void setShaderProgram(GLuint program) { m_shaderProgram = program; pushMatrix(); }
+
+    glm::mat4 ortho() const { return m_orthoMatrix; }
+    glm::mat4 view() const { return m_viewMatrix; }
 
 private:
-    unsigned char health = 100;
-    float m_inputXDirection = 0.0f;
-    float m_inputYDirection = 0.0f;
-};
+    void pushMatrix();
 
+private:
+    GLuint m_shaderProgram;
+
+    glm::mat4 m_viewMatrix;
+    glm::mat4 m_orthoMatrix;
+    glm::vec3 m_vector;
+};
 
 #endif

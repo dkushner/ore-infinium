@@ -16,20 +16,24 @@
  *****************************************************************************/
 
 #include "game.h"
-#include "imagemanager.h"
-#include "entity.h"
+
+#include "debug.h"
+#include "spritesheetmanager.h"
+#include "fontmanager.h"
+#include "sprite.h"
 
 #include <iostream>
 #include <sstream>
-#include <string>
 #include <stdio.h>
 #include <stdlib.h>
+#include <string>
+#include <fstream>
 
-#include <SFML/Graphics.hpp>
-#include <SFML/System.hpp>
-#include <SFML/Window.hpp>
-#include <SFML/Config.hpp>
-#include <SFML/OpenGL.hpp>
+#include <vector>
+
+#include <FreeImage.h>
+
+#include <assert.h>
 
 Game::Game()
 {
@@ -37,9 +41,6 @@ Game::Game()
 
 Game::~Game()
 {
-    delete m_view;
-    delete m_font;
-    delete m_window;
 }
 
 void Game::abort_game(const char* message)
@@ -49,205 +50,181 @@ void Game::abort_game(const char* message)
     exit(1);
 }
 
+void Game::checkSDLError()
+{
+    std::string error = SDL_GetError();
+    if (*error.c_str() != '\0')
+    {
+        Debug::log(Debug::Area::System) << "SDL Error: " << error;
+        SDL_ClearError();
+    }
+}
+
+void Game::checkGLError()
+{
+    GLenum error = glGetError();
+    if(error != GL_NO_ERROR)
+    {
+        std::cerr << gluErrorString(error);
+        assert(0);
+    }
+}
+
 void Game::init()
 {
-    /*
-    TODO:
-    unsigned int VideoModesCount = sf::VideoMode::GetModesCount();
-    for (unsigned int i = 0; i < VideoModesCount; ++i)
-    {
-        sf::VideoMode Mode = sf::VideoMode::GetMode(i);
+    Debug::log(Debug::Area::System) << "SDL on platform: " << SDL_GetPlatform();
 
-        // Mode is a valid video mode
-    }
-    // Creating a fullscreen window with the best video mode supported
-    App.Create(sf::VideoMode::GetMode(0), "SFML Window", sf::Style::Fullscreen);
+    SDL_version compiled;
+    SDL_version linked;
+    SDL_VERSION(&compiled);
+    SDL_GetVersion(&linked);
 
-    sf::VideoMode DesktopMode = sf::VideoMode::GetDesktopMode();
-    */
+    Debug::log(Debug::Area::System) << "Compiled against SDL version: " << int(compiled.major) << "." << int(compiled.minor) << "-" << int(compiled.patch) <<
+                                    " Running (linked) against version: " << int(linked.major) << "." << int(linked.minor) << "-" << int(linked.patch);
 
-    //TODO: debug only, on by default
-    //    App.SetFramerateLimit(60); // Limit to 60 frames per second
-
-    // sf::WindowSettings Settings = App.GetSettings();
-
-    sf::ContextSettings settings;
-
-    settings.depthBits = 24;
-    settings.stencilBits = 8;
-//    settings.antialiasingLevel = 4;
-//    settings.majorVersion = 3;
-//    settings.minorVersion = 0;
-
-    m_window = new sf::RenderWindow(sf::VideoMode(SCREEN_W, SCREEN_H), "Ore Chasm", sf::Style::Default, settings);
-    m_window->setVerticalSyncEnabled(false);
-//    m_app->setFramerateLimit(60);
-    // totally useless for a game.
-    m_window->setKeyRepeatEnabled(false);
-    m_window->setMouseCursorVisible(false);
-
-    settings = m_window->getSettings();
-
-    std::cout << "\n\n\n\n";
-    std::cout << "=======================================================================" << "\n";
-    std::cout << "Hardware support information" << "\n";
-    std::cout << "OpenGL Version: " << settings.majorVersion << "." << settings.minorVersion << "\n";
-    std::cout << "Depth bits: " << settings.depthBits << "\n";
-    std::cout << "Stencil bits:" << settings.stencilBits << "\n";
-    std::cout << "Antialiasing Level: " << settings.antialiasingLevel << "\n";
-    std::cout << "Maximum Texture Size: " << sf::Texture::getMaximumSize() << " pixels \n";
-    std::cout << "=======================================================================" << "\n";
-    std::cout << "\n\n\n\n";
-
-    m_view = new sf::View(sf::FloatRect(0, 0, SCREEN_W, SCREEN_H));
-    m_window->setView(*m_view);
-
-    m_font = new sf::Font();
-    if (!m_font->loadFromFile("../font/DejaVuSerif.ttf")) {
-        abort_game("unable to load font");
+    if (SDL_Init(SDL_INIT_VIDEO | SDL_INIT_AUDIO | SDL_INIT_TIMER) != 0) {
+        std::string error = SDL_GetError();
+        Debug::fatal(false, Debug::Area::System, "failure to initialize SDL error: " + error);
     }
 
-    ImageManager* manager = ImageManager::instance();
-    manager->addResourceDir("../textures/");
+    m_window = SDL_CreateWindow("Ore Chasm", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED,
+                                SCREEN_W, SCREEN_H, SDL_WINDOW_SHOWN | SDL_WINDOW_OPENGL);
 
-    // World takes ownership of m_view
-    World::createInstance(m_window, m_view);
-    m_world = World::instance();
+    if (!m_window) {
+        checkSDLError();
+    }
+
+    SDL_GL_SetAttribute(SDL_GL_RED_SIZE, 5);
+    SDL_GL_SetAttribute(SDL_GL_GREEN_SIZE, 5);
+    SDL_GL_SetAttribute(SDL_GL_BLUE_SIZE, 5);
+
+    // Request opengl 3.3 context.
+    // FIXME: i *want 3.2, but Mesa 9 only has 3.0.. :(
+    SDL_GL_SetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, 3);
+    SDL_GL_SetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, 0);
+
+    /* Turn on double buffering with a 24bit Z buffer.
+     * You may need to change this to 16 or 32 for your system */
+    SDL_GL_SetAttribute(SDL_GL_DOUBLEBUFFER, 1);
+    SDL_GL_SetAttribute(SDL_GL_DEPTH_SIZE, 24);
+
+    //TODO: we'll probably need some extension at some point in time..
+    //SDL_GL_ExtensionSupported();
+
+    m_context = SDL_GL_CreateContext(m_window);
+    checkGLError();
+
+    checkSDLError();
+    glewInit();
+
+    Debug::log(Debug::Area::Graphics) << "Platform: Driver Vendor: " << glGetString(GL_VENDOR);
+    Debug::log(Debug::Area::Graphics) << "Platform: Renderer: " << glGetString(GL_RENDERER);
+    Debug::log(Debug::Area::Graphics) << "OpenGL Version: " << glGetString(GL_VERSION);
+    Debug::log(Debug::Area::Graphics) << "GLSL Version: " << glGetString(GL_SHADING_LANGUAGE_VERSION);
+
+    checkGLError();
+
+    GLint textureSize;
+    glGetIntegerv(GL_MAX_TEXTURE_SIZE, &textureSize);
+    Debug::log(Debug::Area::Graphics) << "Maximum OpenGL texture size allowed: " << textureSize;
+    std::cout << "\n\n\n\n";
+
+    m_font = FontManager::instance()->loadFont("../font/Ubuntu-L.ttf");
+
+    glClearColor(1.f, 0.f, 0.f, 1.0f);
+
+    glViewport(0, 0, SCREEN_W, SCREEN_H);
+
+    checkGLError();
+
+   m_camera = new Camera();
+   SpriteSheetManager::instance()->setCamera(m_camera);
+
+    checkGLError();
+
+    for (int i = 0; i < 2; ++i) {
+        Sprite* sprite = new Sprite("testframe", SpriteSheetManager::SpriteSheetType::Character);
+        sprite->setPosition(rand() % 1600, rand() % 900);
+    }
+
+    //World::createInstance(m_display);
+    //m_world = World::instance();
+    m_font->FaceSize(12);
 
     tick();
     shutdown();
 }
 
+double fps = 0.0;
+
 void Game::tick()
 {
-    sf::Event event;
+    Uint32 startTime = SDL_GetTicks();
+    int frameCount = 0;
 
-//    m_player->setPosition(m_view->getCenter());
+    while (m_running) {
+        fps =(frameCount / float(SDL_GetTicks() - startTime)) * 1000;
 
-    sf::Text text;
-    text.setFont(*m_font);
-    text.setCharacterSize(12.0);
-    text.setColor(sf::Color::Yellow);
+        // m_world->update(static_cast<float>(delta));
+        // m_world->render();
 
-    std::stringstream ss;
-    std::string str;
+        //rendering always before this
 
-    sf::Clock clock;
+        handleEvents();
 
-    int fps = 0;
-    int minFps = 0;
-    int maxFps = 0;
+        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-    const int MAX_BENCH = 300;
-    int benchTime = MAX_BENCH;
+        SpriteSheetManager::instance()->renderCharacters();
+        drawDebugText();
 
+        SDL_GL_SwapWindow(m_window);
 
-    float elapsedTime = 0;
-
-    while (m_window->isOpen()) {
-        elapsedTime = clock.restart().asSeconds();
-        benchTime -= 1;
-        fps = int(1.f / elapsedTime);
-
-        // recheck the max, good amount of time passed
-        if (benchTime <= 0) {
-            maxFps = fps;
-            minFps = maxFps;
-            benchTime = MAX_BENCH;
-        }
-
-        if (fps < minFps) {
-            minFps = fps;
-        }
-
-        if (fps > maxFps) {
-            maxFps = fps;
-        }
-
-        ss.str("");
-        ss << "Framerate: " << fps << " Min: " << minFps << " Max: " << maxFps << " elapsedTime: " << elapsedTime << "";
-        str = ss.str();
-        text.setString(str);
-
-        while (m_window->pollEvent(event)) {
-
-            // bool LeftKeyDown = Input.isKeyDown(sf::Key::Left);
-            // bool RightButtonDown = Input.isMouseButtonDown(sf::Mouse::Right);
-            // unsigned int MouseX = Input.getMouseX();
-            // unsigned int MouseY = Input.getMouseY();
-
-            m_world->handleEvent(event);
-            switch (event.type) {
-                // window closed
-            case sf::Event::Closed:
-                goto shutdown;
-                break;
-
-                // key pressed
-            case sf::Event::KeyPressed:
-                if (event.key.code == sf::Keyboard::Escape) {
-                    goto shutdown;
-                }
-                break;
-
-            case sf::Event::KeyReleased:
-                break;
-
-            case sf::Event::MouseMoved:
-                // std::cout << "new mouse x: " << event.mouseMove.x << std::endl;
-                // std::cout << "new mouse y: " << event.mouseMove.y << std::endl;
-                break;
-
-            case sf::Event::GainedFocus:
-                break;
-
-            case sf::Event::LostFocus:
-                break;
-
-            case sf::Event::MouseButtonPressed:
-                break;
-
-            case sf::Event::MouseButtonReleased:
-                break;
-
-            default:
-                break;
-            }
-
-            //sf::event::LostFocus
-            //sf::event::GainedFocus
-
-            // Window closed
-//            if (event.type == sf::Event::Closed || ((event.type == sf::Event::KeyPressed) && (event.key.code == sf::Key::Escape))) {
-//               shutdown();
-            //          }
-        }
-
-        m_window->pushGLStates();
-//        m_view->move(500 * xDir * elapsedTime, 500* yDir * elapsedTime);
-
-        m_window->clear(sf::Color(0, 0, 0));
-
-        m_world->update(elapsedTime);
-        // render methods *must* exit by setting back to the default view
-        // (if they set it to a different view at the beginning of the call)
-        m_world->render();
-
-        m_window->draw(text);
-
-        m_window->popGLStates();
-
-        // always after rendering!
-        m_window->display();
+        ++frameCount;
     }
 
 shutdown:
     shutdown();
 }
 
+void Game::handleEvents()
+{
+    SDL_Event event;
+
+    while (SDL_PollEvent(&event)) {
+        switch (event.type) {
+        case SDL_KEYDOWN:
+            if (event.key.keysym.sym == SDLK_ESCAPE) {
+                m_running = false;
+            }
+            break;
+
+        case SDL_WINDOWEVENT_CLOSE:
+            m_running = false;
+            break;
+
+        case SDL_QUIT:
+            exit(0);
+            break;
+
+        default:
+            break;
+        }
+    }
+}
+
+void Game::drawDebugText()
+{
+    std::stringstream ss;
+    std::string str;
+
+    ss.str("");
+    ss << "FPS: " << fps;
+    str = ss.str();
+    m_font->Render(str.c_str(), -1, FTPoint(0.0, 0.0, 0.0));
+}
+
 void Game::shutdown()
 {
-    m_window->close();
-    delete m_window;
+    SDL_Quit();
     exit(0);
 }

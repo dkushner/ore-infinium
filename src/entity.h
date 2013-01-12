@@ -18,14 +18,13 @@
 #ifndef ENTITY_H
 #define ENTITY_H
 
-#include "renderable.h"
+#include "texture.h"
 
-#include <SFML/Graphics.hpp>
-#include <SFML/Graphics/RenderStates.hpp>
+#include <Eigen/Core>
 
 const float GRAVITY = 0.05f;
 
-class Entity : public Renderable
+class Entity : public Texture
 {
 public:
     /**
@@ -37,7 +36,7 @@ public:
     virtual void update(const float elapsedTime);
 
     //FIXME: unused
-    //FIXME: isolate and move further up the chain, and make Renderable privately inherited?
+    //FIXME: isolate and move further up the chain, and make Texture privately inherited?
 //    void draw(sf::RenderTarget& target, sf::RenderStates states = sf::RenderStates::Default) const;
 
     /**
@@ -49,16 +48,29 @@ public:
      * @see update
      */
     void setPosition(float x, float y);
-    void setPosition(sf::Vector2f vect);
+    void setPosition(const Eigen::Vector2f& vect);
 
     /**
      * Sets the velocity that this entity should have. It is affected by gravity,
      * and will modify the position automatically when Entity::update() is called.
      */
-    void setVelocity(const sf::Vector2f& velocity);
+    void setVelocity(const Eigen::Vector2f& velocity);
+    void setVelocity(float x, float y);
+    
+    /**
+     * Returns the final position the player should move to after collision checking
+     * based on initial position firstPosition, final position destPosition, and
+     * width/height dimensions.
+     */
+    Eigen::Vector2f moveOutsideSolid(Eigen::Vector2f firstPosition, Eigen::Vector2f destPosition, Eigen::Vector2f dimensions) const;
+    /**
+     * Determines if the entity will collide at position destPosition if it has
+     * dimensions as defined by dimensions.
+     */
+    bool collidingWithTile(Eigen::Vector2f destPosition, Eigen::Vector2f dimensions) const;
 
 private:
-    sf::Vector2f m_velocity;
+    Eigen::Vector2f m_velocity;
 };
 
 #endif

@@ -1,5 +1,5 @@
 /******************************************************************************
- *   Copyright (C) 2012 by Shaun Reich <sreich@kde.org>                       *
+ *   Copyright (C) 2012, 2013 by Shaun Reich <sreich@kde.org>                 *
  *                                                                            *
  *   This program is free software; you can redistribute it and/or            *
  *   modify it under the terms of the GNU General Public License as           *
@@ -15,28 +15,19 @@
  *   along with this program.  If not, see <http://www.gnu.org/licenses/>.    *
  *****************************************************************************/
 
-#ifndef IMAGE_MANAGER_H
-#define IMAGE_MANAGER_H
+#include "sprite.h"
+#include "spritesheetmanager.h"
+#include "game.h"
 
-#include <stdlib.h>
-#include <SFML/Graphics.hpp>
-
-class ImageManager
+Sprite::Sprite(const std::string& frameName, SpriteSheetManager::SpriteSheetType spriteSheetType) :
+m_spriteSheetType(spriteSheetType)
 {
-public:
-    ImageManager();
-    static ImageManager* instance();
+    setFrameName(frameName);
+/*
+    const glm::vec2 texSize = size();
+    m_origin = glm::vec2(texSize.x() * 0.5, texSize.y() * 0.5);
+    FIXME:
+*/
 
-    const sf::Texture& loadTexture(const std::string& filename);
-    void deleteTexture(const sf::Texture& texture);
-    void deleteTexture(const std::string& filename);
-    void addResourceDir(const std::string& directory);
-    void removeResourceDir(const std::string& directory);
-
-private:
-    ~ImageManager();
-
-    std::map<std::string, sf::Texture> textures;
-    std::vector<std::string> resourceDirs;
-};
-#endif
+    SpriteSheetManager::instance()->registerSprite(m_spriteSheetType, this);
+}

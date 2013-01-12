@@ -18,10 +18,7 @@
 #ifndef SKY_H
 #define SKY_H
 
-#include "renderable.h"
-
-#include <SFML/Graphics.hpp>
-#include <SFML/Graphics/RenderStates.hpp>
+#include "texture.h"
 
 class CloudSystem;
 
@@ -36,8 +33,8 @@ public:
 private:
     sf::RenderWindow *m_window;
     sf::View *m_view;
-    Renderable m_sunSprite;
-    Renderable m_moonSprite;
+    Texture m_sunSprite;
+    Texture m_moonSprite;
     CloudSystem *m_cloudSystem = nullptr;
 
     // the height of the sky

@@ -1,5 +1,5 @@
 /******************************************************************************
- *   Copyright (C) 2012 by Shaun Reich <sreich@kde.org>                       *
+ *   Copyright (C) 2013 by Shaun Reich <sreich@kde.org>                       *
  *                                                                            *
  *   This program is free software; you can redistribute it and/or            *
  *   modify it under the terms of the GNU General Public License as           *
@@ -15,47 +15,44 @@
  *   along with this program.  If not, see <http://www.gnu.org/licenses/>.    *
  *****************************************************************************/
 
-#ifndef RENDERABLE_H
-#define RENDERABLE_H
+#include "camera.h"
+#include "game.h"
+#include "debug.h"
+#include "spritesheetmanager.h"
 
-#include "imagemanager.h"
-
-#include <SFML/Graphics.hpp>
-
-class Renderable : public sf::Sprite
+Camera::Camera() :
+m_vector(glm::vec3())
 {
-public:
-    Renderable();
+    float x = 0.0f;
+    float y = 0.0f;
+    m_viewMatrix = glm::translate(glm::mat4(), glm::vec3(x, y, 0.0f));
+    m_orthoMatrix = glm::ortho(0.0f, float(SCREEN_W), float(SCREEN_H), 0.0f, -1.0f, 1.0f);
+}
 
-    /**
-     * Small basic wrapper which inherits an sf::Sprite and automagically
-     * integrates itself with the RenderManager.
-     */
-    Renderable(const char* texture);
+void Camera::translate(const glm::vec2 vec)
+{
+    m_viewMatrix = glm::translate(m_viewMatrix, glm::vec3(vec, 0.0f));
+}
 
-    /**
-     * Pass a string into @p texture and it will automatically ask the ImageManager
-     * for an already-loaded version, if possible. If not, it will load it.
-     *
-     * Internally, calls sf::Sprite::setImage with the texture it obtained.
-     */
-    void setTexture(const char* texture);
+void Camera::zoom(const float factor)
+{
+    m_viewMatrix = glm::scale(m_viewMatrix, glm::vec3(factor));
+}
 
-    /**
-     * important ONLY for debug rendering, so there's less duplication..
-     * CALL THIS AFTER m_window->draw(myrenderable)!!
-     */
-    virtual void render(sf::RenderWindow *window);
+void Camera::centerOn(const glm::vec2 vec)
+{
+    m_viewMatrix = glm::translate(glm::mat4(), glm::vec3(vec, 0.0f));
+}
 
-private:
-    /**
-     * Hidden!! So that we don't screw up and start caching stuff outside, and not using
-     * this API.
-     *
-     */
-    void setTexture(const sf::Texture texture);
+void Camera::pushMatrix()
+{
+    glUseProgram(m_shaderProgram);
 
-    ImageManager* m_imageManager = nullptr;
-};
+    glm::mat4 mvp = m_viewMatrix * m_orthoMatrix;
 
-#endif
+    int mvpLoc = glGetUniformLocation(m_shaderProgram, "mvp");
+    glUniformMatrix4fv(mvpLoc, 1, GL_FALSE, &mvp[0][0]);
+
+    glUseProgram(0);
+}
+

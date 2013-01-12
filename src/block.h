@@ -36,7 +36,8 @@ public:
      * Determines the health and texture of the Block.
      * NOTE: MUST be in sync with index of m_blockTextures
      */
-    enum class BlockType {
+    enum class BlockType
+    {
         Null = 0,
         Dirt,
         Stone,
@@ -47,7 +48,10 @@ public:
     static constexpr unsigned char blockSize = 16;
 
     struct BlockStruct {
-        BlockStruct(const char *_texture, bool _collides) { texture = _texture; collides = _collides; };
+        BlockStruct(const char *_texture, bool _collides) {
+            texture = _texture;
+            collides = _collides;
+        };
         const char* texture;
 
         // I thought about using flags..but this seems better, save for the might-be-fucking-huge-constructor
@@ -60,16 +64,49 @@ public:
     static std::map<BlockType, BlockStruct> blockTypeMap;
 
     /**
+     * A lookup table to represent the 0-255 possibilities for a tile being surrounded,
+     * as 47 possible different sprites.
+     * for more info, see http://forums.tigsource.com/index.php?topic=9859.15
+     * http://www.saltgames.com/2010/a-bitwise-method-for-applying-tilemaps/
+     * http://www.gamedev.net/page/resources/_/technical/game-programming/tilemap-based-game-techniques-handling-terrai-r934
+     * http://www.angryfishstudios.com/2011/04/adventures-in-bitmasking/
+     *
+     * My amazing illustration:
+     * |********|*********|***********
+     * |___8____|____16___|____1____*
+     * |___128__|__center_|____32___*
+     * |___4____|____64___|____2____*
+     * |********|*********|***********
+     */
+    static std::map<unsigned char, unsigned char> tileMeshingTable;
+
+    /**
      * 0-255, 0 obviously meaning this block is marked as to be destroyed.
      * higher values are for more "difficult" to break block types. e.g. sand has a very low number.
      */
     unsigned char health = 255;
 
     /**
+     * Which mesh sprite to use, aka subsprite.
+     * This is utilized to cleanly decide which exact sprite(e.g. full block, corner pieces, etc.) to show for whatever
+     * tile (e.g. dirt, grass) this is.
+     * 0-255.
+     * For example, @sa primitiveType
+     * which does not generally depend on the surroundings.
+     *
+     * meshType however, is determined by calculating the surrounding tiles and if they are of a simlar type or similar
+     * blendType, then it will change the overall look of it.
+     *
+     * Bottom line: use meshType ONLY for rendering, use primitiveType for everything else. meshType is only a displaying
+     * niche of a detail, not a gameplay mechanic
+     */
+    unsigned char meshType = 0;
+
+    /**
      * The type of tile this is, 0-255 is valid and can be compared with the world's definition of tile types
      * (an enum)
      */
-    unsigned char type = 0;
+    unsigned char primitiveType = 0;
 };
 
 #endif

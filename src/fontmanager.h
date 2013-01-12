@@ -1,5 +1,5 @@
 /******************************************************************************
- *   Copyright (C) 2012 by Shaun Reich <sreich@kde.org>                       *
+ *   Copyright (C) 2013 by Shaun Reich <sreich@kde.org>                       *
  *                                                                            *
  *   This program is free software; you can redistribute it and/or            *
  *   modify it under the terms of the GNU General Public License as           *
@@ -15,39 +15,44 @@
  *   along with this program.  If not, see <http://www.gnu.org/licenses/>.    *
  *****************************************************************************/
 
-#ifndef PLAYER_H
-#define PLAYER_H
+#ifndef FONTMANAGER_H
+#define FONTMANAGER_H
 
-#include "entity.h"
-#include "block.h"
+#include <FTGL/ftgl.h>
 
-union ALLEGRO_EVENT;
-class ALLEGRO_DISPLAY;
+#include <stdlib.h>
+#include <string>
+#include <map>
 
-class Player : public Entity
+class FontManager
 {
 public:
+    FontManager();
+    static FontManager* instance();
+
     /**
-     * Create a player with the starting texture @p texture
-     * the ImageLoader is used automatically, so just pass a path
-     * to the image to load.
+     * Loads the font from disk, or if it has already been loaded,
+     * then it just returns the pointer to the existing one.
+     *
+     * You can call FTGLPixmapFont::Render on it at different positions,
+     * as well as different strings to render.
+     *
+     * Font is refcounted. Call unloadFont to deref (when no longer used)
+     * @sa unloadFont
      */
-    Player(const char* texture);
+    FTGLPixmapFont* loadFont(std::string fontPath);
 
-    void handleEvent(const ALLEGRO_EVENT& event);
-
-    // radius indicating how many pixels out the player can pick
-    // blocks
-    static constexpr float blockPickingRadius = Block::blockSize * 8.0f;
-    static constexpr float movementSpeed = 1000.0f;
-
-    virtual void draw_bitmap(int flags = 0);
+    //TODO: implement :)
+    void unloadFont(std::string fontPath);
 
 private:
-    unsigned char health = 100;
-    float m_inputXDirection = 0.0f;
-    float m_inputYDirection = 0.0f;
+    ~FontManager();
+
+    struct Font {
+        FTGLPixmapFont* font;
+        unsigned int refCount;
+    };
+
+    std::map<std::string, Font> m_fonts;
 };
-
-
 #endif

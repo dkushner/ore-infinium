@@ -22,10 +22,19 @@
 #include "player.h"
 
 #include <stdlib.h>
-#include <SFML/Graphics/Shader.hpp>
-#include <SFML/Graphics/Texture.hpp>
+
+#include <Eigen/Core>
+
+#include <GL/glew.h>
+#include <GL/gl.h>
+
+class ALLEGRO_SHADER;
+union ALLEGRO_EVENT;
+class ALLEGRO_DISPLAY;
 
 class Sky;
+
+
 //height
 static constexpr unsigned short WORLD_ROWCOUNT = 8400;
 //width
@@ -41,24 +50,30 @@ static constexpr unsigned short WORLD_COLUMNCOUNT = 2400;
 
 */
 
+enum Mouse {
+    ALLEGRO_MOUSE_LEFT = 1,
+    ALLEGRO_MOUSE_RIGHT = 2,
+    ALLEGRO_MOUSE_MIDDLE = 4
+};
 
 class World
 {
 public:
-    World(sf::RenderWindow *window, sf::View *view);
+    World(ALLEGRO_DISPLAY* display);
 
     static World* instance();
-    static void createInstance(sf::RenderWindow *_window, sf::View *_view);
+    static void createInstance(ALLEGRO_DISPLAY *display);
 
     void update(const float elapsedTime);
     void render();
 
     void loadMap();
 
-    void handleEvent(const sf::Event& event);
+    void handleEvent(const ALLEGRO_EVENT& event);
 
+    bool isBlockSolid(const Eigen::Vector2f& vecDest) const;
 
-    bool isTileSolid(const sf::Vector2f& vecDest);
+    char getBlockType(Eigen::vector2f vecPoint) const
 
     //create containers of various entities, and implement a tile system
     //game.cpp calls into this each tick, which this descends downward into each entity
@@ -66,24 +81,51 @@ private:
 
     ~World();
 
-        /**
-     * From scratch, create a randomly generated tileset and store it in our array
-     */
+    void printShaderLog(GLuint shader);
+    std::string loadShaderSource(const std::string& filename);
+
+    /**
+    * From scratch, create a randomly generated tileset and store it in our array
+    */
     void generateMap();
 
-     /**
-     * FIXME: presently only calculates the center of the screen according to resolution.
-     * i'm not sure how zooming will be affected with this..i don't *think* it would. but verify
-     * if this is ideal or not
-     * NOTE: doesn't *actually* use m_view->getViewport, just a simple SCREEN_W,H / 2
-     */
-    sf::Vector2f viewportCenter() const;
+    /**
+    * FIXME: presently only calculates the center of the screen according to resolution.
+    * i'm not sure how zooming will be affected with this..i don't *think* it would. but verify
+    * if this is ideal or not
+    * NOTE: doesn't *actually* use m_view->getViewport, just a simple SCREEN_W,H / 2
+    */
+    Eigen::Vector2f viewportCenter() const;
     void calculateAttackPosition();
     void generatePixelTileMap();
     void performBlockAttack();
     void saveMap();
 
-    sf::Vector2f tileOffset() const;
+    Eigen::Vector2f tileOffset() const;
+
+    /**
+     * Should be called AFTER the world has been fully processed in raw block form.
+     * This translates each block type into a meshable tile frame
+     */
+    void generateTileMeshes();
+
+    /**
+     * Looks at @p tileX, @p tileY and looks at 4 sides and 4 corners of it.
+     * Returns what is the resulting meshing type that this tile should now have.
+     */
+    unsigned char calculateTileMeshingType(const int tileX, const int tileY) const;
+
+    /**
+     * Decides whether or not a blend type of the tile at the source position matches a tile at a different position.
+     *
+     * Used for seeing if the tile we are looking at has any nearby ones of similar blendtypes.
+     *
+     * Presently, blend types are only (FIXME/TODO) applicable to tiles of same type. Need to expand to e.g.
+     * blend stone and copper/gold together well.
+     *
+     * @p sourceTileX expected to be a position divided by Block::blockSize, aka 16, and already offset
+     */
+    bool tileBlendTypeMatch(const int sourceTileX, const int sourceTileY, const int nearbyTileX, const int nearbyTileY) const;
 
     std::vector<Entity*> m_entities;
 
@@ -94,42 +136,36 @@ private:
 
     Player *m_player = nullptr;
 
-    Sky *m_sky = nullptr;
+//    Sky *m_sky = nullptr;
 
     //FIXME: just a ptr to the game.cpp one :(  same with window
-    sf::View *m_view = nullptr;
-    sf::RenderWindow *m_window = nullptr;
+//FIXME:    sf::View *m_view = nullptr;
 
-    sf::Shader m_shader;
+    ALLEGRO_DISPLAY *m_display = nullptr;
 
-    /**
-     * Final texture that is blitted to screen, with the shader and render states
-     * (for the tilemap)
-     */
-    sf::Texture m_tileMapFinalTexture;
-    sf::Sprite m_tileMapFinalSprite;
+    ALLEGRO_BITMAP *m_tileMapFinalTexture = nullptr;
 
-    sf::Image m_tileMapPixelsImage;
-    sf::Texture m_tileMapPixelsTexture;
+    ALLEGRO_BITMAP *m_tileMapPixelsTexture = nullptr;
+
+    ALLEGRO_SHADER *m_shader = nullptr;
+
+    GLhandleARB shader;
+    GLhandleARB program;
 
     /**
-     * A super image which is loaded ONLY at init, which is a tilesheet/spritesheet
+     * A super bitmap which is loaded ONLY at init, which is a tilesheet/spritesheet
      * of every tile that is possible. Used for passing it to the tile rendering shader
      * (also at init).
-     */
-    sf::Image m_tileTypesSuperImage;
-
-    /**
      * What is actually passed to the frag shader.
      */
-    sf::Texture m_tileTypesSuperTexture;
+    ALLEGRO_BITMAP *m_tileTypesSuperTexture = nullptr;
 
     bool m_mouseLeftHeld = false;
 
     /**
      * In client window coordinates (relative)
      */
-    sf::Vector2f m_relativeVectorToAttack;
+    Eigen::Vector2f m_relativeVectorToAttack;
 };
 
 #endif

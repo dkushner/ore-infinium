@@ -18,20 +18,33 @@
 #ifndef GAME_H
 #define GAME_H
 
-#include "world.h"
-
+#include "camera.h"
+//#include "world.h"
 #include <stdio.h>
 #include <stdlib.h>
 
-#include <SFML/Graphics/RenderWindow.hpp>
-#include <SFML/Graphics/Font.hpp>
+#include <GL/glew.h>
 
-//1600
+#include <SDL2/SDL.h>
+#include <SDL_log.h>
+
+#include <ft2build.h>
+#include FT_FREETYPE_H
+
+#include <FTGL/ftgl.h>
+
+#include <glm/glm.hpp>
+#include <glm/gtc/matrix_transform.hpp>
+
+#include <string>
+
 static int SCREEN_W = 1600;
-//900
 static int SCREEN_H = 900;
 
+//FIXME: make on/off via key
 static bool DEBUG_RENDERING = true;
+
+static int SDL_LOGPRIORITY = SDL_LOG_PRIORITY_WARN;
 
 class Game
 {
@@ -39,18 +52,30 @@ public:
     Game();
     ~Game();
 
-    void abort_game(const char* message);
     void init();
+
     void tick();
+    void handleEvents();
+
+    void abort_game(const char* message);
     void shutdown();
+
+    void drawDebugText();
+
+    void checkSDLError();
+    void checkGLError();
 
     const float FPS = 60.0;
 
 private:
-    World *m_world = nullptr;
-    sf::RenderWindow *m_window = nullptr;
-    sf::View *m_view = nullptr;
-    sf::Font *m_font = nullptr;
+    FTGLPixmapFont *m_font = nullptr;
+
+    Camera* m_camera = nullptr;
+
+ //   World *m_world = nullptr;
+    SDL_Window *m_window = nullptr;
+    SDL_GLContext m_context;
+    bool m_running = true;
 };
 
 
