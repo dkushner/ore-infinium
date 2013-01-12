@@ -45,7 +45,9 @@ SpriteSheetManager::SpriteSheetManager()
     FreeImage_Initialise();
 #endif
 
+    loadDefaultShaders();
     initGL();
+
 
     float scale = 1.0f;
     m_modelMatrix = glm::scale(glm::mat4(1.0f), glm::vec3(scale));
@@ -524,120 +526,6 @@ void SpriteSheetManager::initGL()
 
     checkGLError();
 
-    static const char* vshader_src =
-        "#version 120\n"
-
-        "attribute vec2 position;"
-
-        "attribute vec2 texcoord;"
-        "varying vec2 frag_texcoord;"
-
-        "attribute vec4 color;"
-        "varying vec4 frag_color;"
-
-        "void main() {"
-        "    gl_Position = vec4( position, 0.0, 1.0 );"
-        "    frag_texcoord = texcoord;"
-        "    frag_color = color;"
-        "}";
-
-    static const char* fshader_src =
-        "#version 120\n"
-
-        "varying vec2 frag_texcoord;"
-        "varying vec4 frag_color;"
-
-        "uniform sampler2D tex;"
-
-        "void main(void) {"
-        "    gl_FragColor = frag_color * texture2D(tex, frag_texcoord);"
-        "}";
-
-    GLint status;
-    GLchar infolog[1024];
-    GLsizei infolog_len;
-
-    m_vertexShader = glCreateShader(GL_VERTEX_SHADER);
-    glShaderSource(m_vertexShader, 1, &vshader_src, NULL);
-    glCompileShader(m_vertexShader);
-
-    glGetShaderiv(m_vertexShader, GL_COMPILE_STATUS, &status);
-
-    if (status == GL_FALSE)
-    {
-        glGetShaderInfoLog(m_vertexShader,sizeof(infolog),&infolog_len,infolog);
-        std::cout
-                << "Failed to compile SpriteBatch vertex shader."
-                << std::endl
-                << infolog << std::endl;
-
-        glDeleteVertexArrays(1,&m_vao);
-        glDeleteBuffers(1,&m_vbo);
-        glDeleteBuffers(1,&m_ebo);
-        glDeleteShader(m_vertexShader);
-        assert(0);
-    }
-
-    m_fragmentShader = glCreateShader(GL_FRAGMENT_SHADER);
-    glShaderSource(m_fragmentShader, 1, &fshader_src, NULL);
-    glCompileShader(m_fragmentShader);
-
-    glGetShaderiv(m_fragmentShader,GL_COMPILE_STATUS,&status);
-
-    if (status == GL_FALSE)
-    {
-        glGetShaderInfoLog(m_fragmentShader,sizeof(infolog),&infolog_len,infolog);
-        std::cout
-                << "Failed to compile SpriteBatch fragment shader."
-                << std::endl
-                << infolog << std::endl;
-
-        glDeleteVertexArrays(1,&m_vao);
-        glDeleteBuffers(1,&m_vbo);
-        glDeleteBuffers(1,&m_ebo);
-        glDeleteShader(m_vertexShader);
-        glDeleteShader(m_fragmentShader);
-        assert(0);
-    }
-
-    m_spriteShaderProgram = glCreateProgram();
-    glAttachShader(m_spriteShaderProgram, m_vertexShader);
-    glAttachShader(m_spriteShaderProgram, m_fragmentShader);
-    glLinkProgram(m_spriteShaderProgram);
-
-    glGetProgramiv(m_spriteShaderProgram, GL_LINK_STATUS, &status);
-
-    if (status == GL_FALSE)
-    {
-        glGetProgramInfoLog(m_spriteShaderProgram,sizeof(infolog),&infolog_len,infolog);
-        std::cout << "Failed to link SpriteBatch shader program."
-                  << std::endl
-                  << infolog << std::endl;
-
-        glDeleteVertexArrays(1,&m_vao);
-        glDeleteBuffers(1,&m_vbo);
-        glDeleteBuffers(1,&m_ebo);
-        glDeleteShader(m_vertexShader);
-        glDeleteShader(m_fragmentShader);
-        glDeleteProgram(m_spriteShaderProgram);
-        assert(0);
-    }
-
-    glValidateProgram(m_spriteShaderProgram);
-    glGetProgramiv(m_spriteShaderProgram,GL_VALIDATE_STATUS,&status);
-
-    if (status == GL_FALSE)
-    {
-
-        glDeleteVertexArrays(1,&m_vao);
-        glDeleteBuffers(1,&m_vbo);
-        glDeleteBuffers(1,&m_ebo);
-        glDeleteShader(m_vertexShader);
-        glDeleteShader(m_fragmentShader);
-        glDeleteProgram(m_spriteShaderProgram);
-        assert(0);
-    }
-
     size_t buffer_offset = 0;
 
     GLint pos_attrib = glGetAttribLocation(m_spriteShaderProgram, "position");
@@ -665,7 +553,6 @@ void SpriteSheetManager::initGL()
         (const GLvoid*)buffer_offset);
     buffer_offset += sizeof(u32);
 
-
     checkGLError();
 
     GLint texcoord_attrib = glGetAttribLocation(m_spriteShaderProgram, "texcoord");
@@ -677,8 +564,6 @@ void SpriteSheetManager::initGL()
         GL_FALSE,
         sizeof(spriteVertex),
         (const GLvoid*)buffer_offset);
-
-    checkGLError();
 
     checkGLError();
 }

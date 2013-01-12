@@ -1,31 +1,10 @@
-//#version 120
+#version 120
 
-/*
-uniform sampler2D texture;
-
-varying vec4 fragColor;
-varying vec2 fragTexCoord;
-
-void main (void)
-{
-    gl_FragColor = fragColor * texture2D( texture, fragTexCoord );
-}
-*/
-/*
 varying vec2 frag_texcoord;
 varying vec4 frag_color;
 
-uniform sampler2D sampler;
+uniform sampler2D tex;
 
 void main() {
-    gl_FragColor = frag_color * texture2D(sampler,frag_texcoord);
-}
-*/
-
-#version 120
-
-varying vec4 fcolor;
-
-void main() {
-    gl_FragColor = fcolor;
+    gl_FragColor = frag_color * texture2D(tex, frag_texcoord);
 }
