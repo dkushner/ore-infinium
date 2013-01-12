@@ -265,7 +265,6 @@ for (Sprite* sprite: m_characterSprites) {
         checkGLError();
 
         // copy color to the buffer
-        // copy color to the buffer
         for (size_t i = 0; i < sizeof(vertices)/sizeof(*vertices); i++)
         {
             uint32_t* colorp = reinterpret_cast<uint32_t*>(&vertices[i][2]);
@@ -482,25 +481,9 @@ bool SpriteSheetManager::checkProgramLinkStatus(GLuint obj)
     return true;
 }
 
-
 GLuint tex;
 void SpriteSheetManager::initGL()
 {
-    //////////////////// create texture, checkerboard texture
-    glGenTextures( 1, &tex );
-    glActiveTexture( GL_TEXTURE0 );
-    glBindTexture( GL_TEXTURE_2D, tex );
-    glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT );
-    glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT );
-    glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR );
-    glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR );
- 
-    float pixels[] = {
-        0.0f, 0.0f, 0.0f,   1.0f, 1.0f, 1.0f,
-        1.0f, 1.0f, 1.0f,   0.0f, 0.0f, 0.0f
-    };
-    glTexImage2D( GL_TEXTURE_2D, 0, GL_RGB, 2, 2, 0, GL_RGB, GL_FLOAT, pixels );
-
     checkGLError();
 
     //////////////////////
@@ -567,7 +550,7 @@ void SpriteSheetManager::initGL()
         "uniform sampler2D tex;"
 
         "void main(void) {"
-        "    gl_FragColor = frag_color * texture2D(tex,frag_texcoord) * 0.0000001f + texture2D(tex, frag_texcoord);"
+        "    gl_FragColor = frag_color * texture2D(tex, frag_texcoord);"
         "}";
 
     GLint status;
