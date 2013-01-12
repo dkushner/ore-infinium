@@ -43,3 +43,16 @@ void Camera::centerOn(const glm::vec2 vec)
 {
     m_viewMatrix = glm::translate(glm::mat4(), glm::vec3(vec, 0.0f));
 }
+
+void Camera::pushMatrix()
+{
+    glUseProgram(m_shaderProgram);
+
+    glm::mat4 mvp = m_viewMatrix * m_orthoMatrix;
+
+    int mvpLoc = glGetUniformLocation(m_shaderProgram, "mvp");
+    glUniformMatrix4fv(mvpLoc, 1, GL_FALSE, &mvp[0][0]);
+
+    glUseProgram(0);
+}
+

@@ -80,6 +80,7 @@ SpriteSheetManager::~SpriteSheetManager()
 void SpriteSheetManager::setCamera(Camera* camera)
 {
     m_camera = camera;
+    m_camera->setShaderProgram(m_spriteShaderProgram);
 }
 
 void SpriteSheetManager::loadAllSpriteSheets()
@@ -218,20 +219,11 @@ std::map<std::string, SpriteSheetManager::SpriteFrameIdentifier> SpriteSheetMana
 
 void SpriteSheetManager::renderCharacters()
 {
-    glPolygonMode(GL_FRONT, GL_LINE);
- //   glUseProgram(m_spriteShaderProgram);
+    glUseProgram(m_spriteShaderProgram);
+
     bindSpriteSheet(SpriteSheetType::Character);
 
-//FIXME    glUniform1i(m_texture_location, 0);
-
-//FIXME:    glBindVertexArray(m_vao);
-
-    // Get the location of our model matrix in the shader
-//FIXME:   int modelMatrixLocation = glGetUniformLocation(m_spriteShaderProgram, "modelMatrix");
-
-    //FIXME:iformMatrix4fv(modelMatrixLocation, 1, GL_FALSE, &m_modelMatrix[0][0]);
-
-for (Sprite* sprite: m_characterSprites) {
+    for (Sprite* sprite: m_characterSprites) {
         auto frameIdentifier = m_spriteSheetCharactersDescription.find(sprite->frameName());
         SpriteFrameIdentifier& frame = frameIdentifier->second;
         frame.x; //FIXME:
@@ -239,26 +231,20 @@ for (Sprite* sprite: m_characterSprites) {
         // vertices that will be uploaded.
         spriteVertex vertices[4];
 
-        // transform vertices and copy them to the buffer
-        /*    vertices[1][1] = f32(tex.size().y()) * std::abs(uvrect.height);
-         *       vertices[2][0] = f32(tex.size().x()) * std::abs(uvrect.width);
-         *       vertices[2][1] = f32(tex.size().y()) * std::abs(uvrect.height);
-         *       vertices[3][0] = f32(tex.size().x()) * std::abs(uvrect.width);
-         */
         // vertices[n][0] -> X, and [1] -> Y
         // vertices[0] -> top left
         // vertices[1] -> bottom left
         // vertices[2] -> bottom right
         // vertices[3] -> top right
 
-        glm::mat4 ortho = m_camera->ortho();
-        glm::mat4 view = m_camera->view();
 
-        float x = 0.0f;
-        float width = 1.0f;
+        glm::vec4 rect = glm::vec4(0.0f, 0.0f, 100.0f, 100.0f);
 
-        float y = 0.0f;
-        float height = 1.0f;
+        float x = rect.x;
+        float width = rect.z;
+
+        float y = rect.y;
+        float height = rect.w;
 
         vertices[0][0] = x; // top left X
         vertices[0][1] = y; //top left Y
@@ -302,7 +288,7 @@ for (Sprite* sprite: m_characterSprites) {
             vertices);
     }
 
-        ////////////////////////////////FINALLY RENDER IT ALL //////////////////////////////////////////
+    ////////////////////////////////FINALLY RENDER IT ALL //////////////////////////////////////////
     glEnable(GL_BLEND);
     glBlendFunc(GL_SRC_ALPHA,GL_ONE_MINUS_SRC_ALPHA);
 
