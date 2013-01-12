@@ -52,12 +52,15 @@
     <p>
     It is a project, that is open source from the very beginning, as improving upon
     the ideas that Terraria introduced to the world when it released.
+    <br>
 
     It is NOT written in XNA and C#.
-
+    <br>
+ 
     It is written in SDL (just for audio, input and OpenGL context), OpenGL
     and C++, so is cross-platform and very fast (I use all hardware
     accelerated rendering)
+    <br>
 
     <ul>
     <li>It will have modding capabilities</li><br>
@@ -91,17 +94,23 @@
     <p>
     The goal initially is to make it run on Linux/Unixen, Mac OS X and Windows.
     I'm a developer on Linux, as that's the only real way to program, so this
-    will likely get the most support. With testers and patches, the other platforms
+    will likely get the most support.
+
+    <br>
+    With testers and patches, the other platforms
     will have exactly the same support as Linux. I don't want to force anyone onto a
     platform just to play my game, even though I think everyone should run Linux
     anyways.. ;-)
+    <br>
 
     I would love to see it run on Android for instance. But for this to happen
     I'd need to run through all of my code base and make sure it runs just fine
     on OpenGL ES 2.0. Not to mention compiles and all my dependencies work on it.
+    <br>
 
     In theory it should work just fine, and just require a bit of OpenGL tweaking
     for it (an official port with a proper Android interface notwithstanding).
+    <br>
 
     I'll worry about getting more into porting to Android after I get something
     usable on the desktop. Patches welcome ;-)
@@ -112,11 +121,14 @@
     The project is very, very preliminary right now. If there was a word for
     pre-alpha, I would use it to describe this.
 
+    <br>
     But of course, it's progressing quite quickly over just the few weeks it has
     existed
 
+    <br>
     What is working? Not much :)
 
+    <br>
     <ul>
     <li>
     I did have a working tilemap rendering fragment shader..which uses some neat
@@ -131,8 +143,10 @@
     <li>
     And as I'm typing this, I'm researching on how to further revamp the tilemap
     renderer, and implement the background (underground, and walls), in addition
-    to making the foreground tiles meshable (cleanly, seamless). The design
-    I'm planning on allows for *a lot* more flexibility than Terraria has.
+    to making the foreground tiles meshable (cleanly, seamless). 
+
+    <br>
+    The design I'm planning on allows for *a lot* more flexibility than Terraria has.
     </li>
     </ul>
 
@@ -146,8 +160,12 @@
     <li>
     Merge requests/patches. They will need to match my coding style, which isn't too
     difficult (and there's an astyle script at the root directory for ease of use).
-    And of course, fix the issue. I love features, so chances are I'm going to accept
+    And of course, fix the issue.
+
+    <br>
+    I love features, so chances are I'm going to accept
     your patch if it does the job nicely. I'm not too overlordy when it comes to code.
+    <br>
     Oh and of course, all other assets are *most* welcome. Of course, they'll also
     have to be released under a free license.
     </li><br>
@@ -175,12 +193,15 @@
     <p>
     Read the INSTALL file and it will show all the dependencies I use and where to
     get them, and hopefully how to install them ;-)
+    <br>
 
     After this is installed and you have followed their directions, to get my code,
     you can either click download the zip, or run `git clone git://github.com/sreich/ore-infinium.git`
+    <br>
 
     After you have my code, go to the top directory of it, `mkdir build; cd build;`
     and now to actually build it
+    <br>
     </p>
 
     <h3>System Requirements</h3>
@@ -193,15 +214,19 @@
 
     <li>
     Minimum RAM of 250 MiB. Ore Infinium  uses so far.. an average of 60 MiB RES.
+    <br>
     This will change with world size, since we don't have chunk based loading
     (yet?), Currently the size of the Block class is 2 bytes (2 unsigned chars).
     Which means for a 8400x2600 map (the default, soft minimum), (8400 \* 2600 \*
-    2 bytes = ~44 MiB). Presently, to run the game it's about 60MiB of RAM usage on
+    2 bytes = ~44 MiB). 
+    <br>
+    Presently, to run the game it's about 60MiB of RAM usage on
     average. Subject to change, of course.
     </li><br>
 
     <li>
     GPU and drivers capable of OpenGL 3.2+ (and hopefully OpenGL ES 2.0).
+    <br>
     In other words, if your GPU/drivers say DirectX 10+ capable, or you can run
     DirectX 10+ games then that will work.
     </li><br>
@@ -213,8 +238,10 @@
 
     <p>
     Some of these plans are merely thoughts and things to experiment with, some are
-    must haves and others are things that will hopefully come later. Of course,
-    nothing is in stone.
+    must haves and others are things that will hopefully come later. 
+
+    <br>
+    Of course, nothing is in stone.
 
     <ul>
     <li>Networking (obviously, a must ;)</li><br>
@@ -279,6 +306,7 @@
     Currently this isn't much of an issue, but with larger worlds and assets,
     it could turn into something to think about.
 
+    <br>
     It may or may not be an issue.
     </li><br>
     </ul>
