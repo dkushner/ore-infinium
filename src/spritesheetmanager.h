@@ -30,6 +30,8 @@
 #include <string>
 #include <vector>
 
+class Camera;
+
 class Sprite;
 
 class SpriteSheetManager
@@ -72,6 +74,8 @@ public:
      */
     GLuint spriteSheetShaderProgram() { return m_spriteShaderProgram; }
 
+    void setCamera(Camera* camera);
+
 private:
     struct SpriteSheet {
         SpriteSheetType type;
@@ -88,8 +92,8 @@ private:
      * Each sprite has four vertices.
      */
     typedef float spriteVertex[5];
-typedef uint32_t u32;
-typedef float f32;
+    typedef uint32_t u32;
+    typedef float f32;
 
     /**
      * In-mem representation of each sprite frame from the spritesheets
@@ -171,6 +175,7 @@ typedef float f32;
     glm::mat4 m_projectionMatrix;
 
     int m_maxSpriteCount = 1000;
+    Camera* m_camera = nullptr;
 
 private:
     SpriteSheetManager();

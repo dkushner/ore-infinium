@@ -21,12 +21,12 @@
 #include "sprite.h"
 #include "debug.h"
 #include "game.h"
+#include "camera.h"
 
 #include <fstream>
 #include <iostream>
 #include <stdio.h>
 #include <stdlib.h>
-
 
 SpriteSheetManager* SpriteSheetManager::s_instance(0);
 
@@ -48,30 +48,12 @@ SpriteSheetManager::SpriteSheetManager()
     loadDefaultShaders();
     initGL();
 
-
     float scale = 1.0f;
     m_modelMatrix = glm::scale(glm::mat4(1.0f), glm::vec3(scale));
     m_projectionMatrix = glm::ortho(0.0f, float(SCREEN_W), float(SCREEN_H), 0.0f, -1.0f, 1.0f);
 
-//    glUseProgram(m_spriteShaderProgram);
-//
-//    // Get the location of our projection matrix in the shader
-//    int projectionMatrixLocation = glGetUniformLocation(m_spriteShaderProgram, "projectionMatrix");
-//
-//    // Get the location of our model matrix in the shader
-//    int modelMatrixLocation = glGetUniformLocation(m_spriteShaderProgram, "modelMatrix");
-//
-//    // Send our projection matrix to the shader
-//    glUniformMatrix4fv(projectionMatrixLocation, 1, GL_FALSE, &m_projectionMatrix[0][0]);
-//
-//    // Send our model matrix to the shader
-//    glUniformMatrix4fv(modelMatrixLocation, 1, GL_FALSE, &m_modelMatrix[0][0]);
-//
     loadAllSpriteSheets();
     parseAllSpriteSheets();
-
-//FIXME    glEnable(GL_BLEND);
-//FIXME glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 }
 
 SpriteSheetManager::~SpriteSheetManager()
@@ -93,6 +75,11 @@ SpriteSheetManager::~SpriteSheetManager()
     glDeleteVertexArrays(1, &m_vao);
 
     s_instance = 0;
+}
+
+void SpriteSheetManager::setCamera(Camera* camera)
+{
+    m_camera = camera;
 }
 
 void SpriteSheetManager::loadAllSpriteSheets()

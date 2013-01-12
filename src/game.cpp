@@ -138,6 +138,7 @@ void Game::init()
     checkGLError();
 
    m_camera = new Camera();
+   SpriteSheetManager::instance()->setCamera(m_camera);
 
     checkGLError();
 
