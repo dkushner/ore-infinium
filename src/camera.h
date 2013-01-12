@@ -42,12 +42,13 @@ public:
 
     void centerOn(const glm::vec2 vec);
 
-private:
-    void pushViewMatrix();
+    glm::mat4 ortho() const { return m_orthoMatrix; }
+    glm::mat4 view() const { return m_viewMatrix; }
 
+private:
     glm::mat4 m_viewMatrix;
+    glm::mat4 m_orthoMatrix;
     glm::vec3 m_vector;
-    GLuint m_spriteShaderProgram;
 };
 
 #endif

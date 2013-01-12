@@ -23,41 +23,23 @@
 Camera::Camera() :
 m_vector(glm::vec3())
 {
-    m_spriteShaderProgram = SpriteSheetManager::instance()->spriteSheetShaderProgram();
-
     float x = 0.0f;
     float y = 0.0f;
     m_viewMatrix = glm::translate(glm::mat4(), glm::vec3(x, y, 0.0f));
-    pushViewMatrix();
+    m_orthoMatrix = glm::ortho(0.0f, float(SCREEN_W), float(SCREEN_H), 0.0f, -1.0f, 1.0f);
 }
 
 void Camera::translate(const glm::vec2 vec)
 {
     m_viewMatrix = glm::translate(m_viewMatrix, glm::vec3(vec, 0.0f));
-    pushViewMatrix();
 }
 
 void Camera::zoom(const float factor)
 {
     m_viewMatrix = glm::scale(m_viewMatrix, glm::vec3(factor));
-    pushViewMatrix();
 }
 
 void Camera::centerOn(const glm::vec2 vec)
 {
     m_viewMatrix = glm::translate(glm::mat4(), glm::vec3(vec, 0.0f));
-    pushViewMatrix();
-}
-
-void Camera::pushViewMatrix()
-{
-    /*
-    glUseProgram(m_spriteShaderProgram);
-
-    // Get the location of our view matrix in the shader
-    int viewMatrixLocation = glGetUniformLocation(m_spriteShaderProgram, "viewMatrix");
-
-    // Send our view matrix to the shader
-    glUniformMatrix4fv(viewMatrixLocation, 1, GL_FALSE, &m_viewMatrix[0][0]);
-    */
 }
