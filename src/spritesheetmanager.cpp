@@ -225,6 +225,7 @@ void SpriteSheetManager::renderCharacters()
 
     bindSpriteSheet(SpriteSheetType::Character);
 
+    int index = 0;
     for (Sprite* sprite: m_characterSprites) {
         auto frameIdentifier = m_spriteSheetCharactersDescription.find(sprite->frameName());
         SpriteFrameIdentifier& frame = frameIdentifier->second;
@@ -239,8 +240,6 @@ void SpriteSheetManager::renderCharacters()
         // vertices[2] -> bottom right
         // vertices[3] -> top right
 
-        std::cout << " size x: " << sprite->position().x << " size y: " << sprite->position().y << "\n";
-        
         glm::vec2 spritePosition = sprite->position();
         glm::vec2 spriteSize = sprite->size();
 
@@ -289,9 +288,11 @@ void SpriteSheetManager::renderCharacters()
         glBindBuffer(GL_ARRAY_BUFFER, m_vbo);
         glBufferSubData(
             GL_ARRAY_BUFFER,
-            0,
+            sizeof(vertices) * index,
             sizeof(vertices),
             vertices);
+
+        ++index;
     }
 
     ////////////////////////////////FINALLY RENDER IT ALL //////////////////////////////////////////

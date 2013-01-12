@@ -143,7 +143,9 @@ void Game::init()
     checkGLError();
 
     Sprite* sprite = new Sprite("testframe", SpriteSheetManager::SpriteSheetType::Character);
+    sprite->setPosition(200, 300);
     Sprite* sprite2 = new Sprite("testframe", SpriteSheetManager::SpriteSheetType::Character);
+    sprite2->setPosition(500, 500);
 
     //World::createInstance(m_display);
     //m_world = World::instance();
