@@ -218,6 +218,7 @@ std::map<std::string, SpriteSheetManager::SpriteFrameIdentifier> SpriteSheetMana
 
 void SpriteSheetManager::renderCharacters()
 {
+    glPolygonMode(GL_FRONT, GL_LINE);
  //   glUseProgram(m_spriteShaderProgram);
     bindSpriteSheet(SpriteSheetType::Character);
 
@@ -239,17 +240,37 @@ for (Sprite* sprite: m_characterSprites) {
         spriteVertex vertices[4];
 
         // transform vertices and copy them to the buffer
-        vertices[0][0] = vertices[0][1] = vertices[1][0] = vertices[3][1] = 0.0f;
         /*    vertices[1][1] = f32(tex.size().y()) * std::abs(uvrect.height);
          *       vertices[2][0] = f32(tex.size().x()) * std::abs(uvrect.width);
          *       vertices[2][1] = f32(tex.size().y()) * std::abs(uvrect.height);
          *       vertices[3][0] = f32(tex.size().x()) * std::abs(uvrect.width);
          */
+        // vertices[n][0] -> X, and [1] -> Y
+        // vertices[0] -> top left
+        // vertices[1] -> bottom left
+        // vertices[2] -> bottom right
+        // vertices[3] -> top right
 
-        vertices[1][1] = f32(0.9f);
-        vertices[2][0] = f32(0.9f);
-        vertices[2][1] = f32(0.9f);
-        vertices[3][0] = f32(0.9f);
+        glm::mat4 ortho = m_camera->ortho();
+        glm::mat4 view = m_camera->view();
+
+        float x = 0.0f;
+        float width = 1.0f;
+
+        float y = 0.0f;
+        float height = 1.0f;
+
+        vertices[0][0] = x; // top left X
+        vertices[0][1] = y; //top left Y
+
+        vertices[1][0] = x; // bottom left X
+        vertices[1][1] = height; // bottom left Y
+
+        vertices[2][0] = width; // bottom right X
+        vertices[2][1] = height; //bottom right Y
+
+        vertices[3][0] = width; // top right X
+        vertices[3][1] = y; // top right Y
 
         checkGLError();
 
