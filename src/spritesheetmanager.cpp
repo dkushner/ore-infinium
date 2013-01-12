@@ -290,38 +290,37 @@ for (Sprite* sprite: m_characterSprites) {
         glBufferSubData(
             GL_ARRAY_BUFFER,
             0,
-            m_maxSpriteCount * sizeof(vertices),
+            sizeof(vertices),
             vertices);
-
-        //////////////////////////////////////////////////////////////////////////////////////////
-        glEnable(GL_BLEND);
-        glBlendFunc(GL_SRC_ALPHA,GL_ONE_MINUS_SRC_ALPHA);
-
-        glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_ebo);
-        glBindBuffer(GL_ARRAY_BUFFER, m_vbo);
-        glBindVertexArray(m_vao);
-
-        checkGLError();
-        glUseProgram(m_spriteShaderProgram);
-
-
-        checkGLError();
-        glDrawElements(
-            GL_TRIANGLES,
-            6*(m_maxSpriteCount), // 6 indices per 2 triangles
-            GL_UNSIGNED_INT,
-            (const GLvoid*)0);
-
-        glUseProgram(0);
-        glBindVertexArray(0);
-        glBindBuffer(GL_ARRAY_BUFFER,0);
-        glBindBuffer(GL_ELEMENT_ARRAY_BUFFER,0);
-
-        glDisable(GL_BLEND);
-
-
-        checkGLError();
     }
+
+        ////////////////////////////////FINALLY RENDER IT ALL //////////////////////////////////////////
+    glEnable(GL_BLEND);
+    glBlendFunc(GL_SRC_ALPHA,GL_ONE_MINUS_SRC_ALPHA);
+
+    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_ebo);
+    glBindBuffer(GL_ARRAY_BUFFER, m_vbo);
+    glBindVertexArray(m_vao);
+
+    checkGLError();
+    glUseProgram(m_spriteShaderProgram);
+
+    checkGLError();
+    glDrawElements(
+        GL_TRIANGLES,
+        6*(m_maxSpriteCount), // 6 indices per 2 triangles
+        GL_UNSIGNED_INT,
+        (const GLvoid*)0);
+
+    glUseProgram(0);
+    glBindVertexArray(0);
+    glBindBuffer(GL_ARRAY_BUFFER,0);
+    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER,0);
+
+    glDisable(GL_BLEND);
+
+
+    checkGLError();
 }
 
 void SpriteSheetManager::renderEntitites()
