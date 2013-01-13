@@ -39,79 +39,19 @@ World* World::instance()
     return s_instance;
 }
 
-void World::createInstance(ALLEGRO_DISPLAY *display)
+void World::createInstance()
 {
     if (!s_instance) {
-        s_instance = new World(display);
+        s_instance = new World();
     } else {
         assert(0);
     }
 }
 
-ALLEGRO_BITMAP *mysha;
-ALLEGRO_BITMAP *buffer;
-
-GLint loc;
-
-World::World(ALLEGRO_DISPLAY *display) : m_display(display)
+World::World()
 {
-    m_player = new Player("../textures/player.png");
+//FIXME:    m_player = new Player("../textures/player.png");
     m_entities.insert(m_entities.end(), m_player);
-
-    /*
-    const int gridSize = ceil(WORLD_TILE_TYPE_COUNT / 2.0);
-    std::cout << " GRIDSIZE : " << gridSize << std::endl;
-    const unsigned short textureSize = gridSize * Block::blockSize;
-    m_tileTypesSuperImage.create(textureSize, textureSize);
-    m_tileTypesSuperTexture.create(textureSize, textureSize);
-    */
-
-    m_tileTypesSuperTexture = al_create_bitmap(Block::blockSize * Block::blockTypeMap.size(), Block::blockSize);
-
-    m_tileMapFinalTexture = al_create_bitmap(SCREEN_W, SCREEN_H);
-
-    unsigned int destX = 0;
-    unsigned int destY = 0;
-
-    /*
-     TODO: for when we hit the 256 tile limit ... hopefully that won't happen for a while :)
-        // iterate through each TILE_TYPE in m_blockTextures and create a super
-        // texture out of this which we can pass to the shader as a list of known
-        // tiles.
-        for (int columnIndex = 0; columnIndex < gridSize; ++columnIndex) {
-            for (int rowIndex = 0; rowIndex < gridSize; ++rowIndex) {
-                std::cout << "accfessing block texture at i value: " << i << std::endl;
-                loaded = currentTile.loadFromFile(m_blockTextures[i]);
-                //would indicate we couldn't find a tile. obviously, we need that..
-                assert(loaded);
-
-                destX = rowIndex * Block::blockSize;
-                destY = columnIndex * Block::blockSize;
-                std::cout << "placing tile at X: " << destX << " y: " << destY << std::endl;
-                m_tileTypesSuperImage.copy(currentTile, destX, destY);
-
-                ++i;
-                if (i >= WORLD_TILE_TYPE_COUNT) {
-                    break;
-                }
-            }
-        }
-    */
-
-    al_set_target_bitmap(m_tileTypesSuperTexture);
-
-    int i = 0;
-    for (auto blockStruct : Block::blockTypeMap) {
-        ALLEGRO_BITMAP* bitmap = al_load_bitmap(blockStruct.second.texture);
-
-        destX = i * Block::blockSize;
-        al_draw_bitmap(bitmap, destX, destY, 0);
-        ++i;
-    }
-
-    al_set_target_backbuffer(m_display);
-
-    al_save_bitmap("tiletypes.png", m_tileTypesSuperTexture);
 
     loadMap();
 
@@ -145,74 +85,38 @@ void World::render()
 //HACK    m_window->setView(m_window->getDefaultView());
 
     // ==================================================
-    ALLEGRO_MOUSE_STATE state;
-    al_get_mouse_state(&state);
 
-    Eigen::Vector2i mouse(state.x, state.y);
+    glm::vec2 mouse = mousePosition();
 
     const float radius = 16.0f;
     const float halfRadius = radius * 0.5;
     const float halfBlockSize = Block::blockSize * 0.5;
 
     // NOTE: (SCREEN_H % Block::blockSize) is what we add so that it is aligned properly to the tile grid, even though the screen is not evenly divisible by such.
-    Eigen::Vector2f crosshairPosition(mouse.x() - mouse.x() % Block::blockSize + (SCREEN_W % Block::blockSize) - tileOffset().x() + Block::blockSize,
+    glm::vec2 crosshairPosition(mouse.x() - mouse.x() % Block::blockSize + (SCREEN_W % Block::blockSize) - tileOffset().x() + Block::blockSize,
                                                             mouse.y() - mouse.y() % Block::blockSize + (SCREEN_H % Block::blockSize) - tileOffset().y() + Block::blockSize);
 
-    ALLEGRO_COLOR color = al_map_rgb(255, 0, 0);
+//    ALLEGRO_COLOR color = al_map_rgb(255, 0, 0);
  //   al_draw_rectangle(crosshairPosition.x(), crosshairPosition.y(), crosshairPosition.x() + radius, crosshairPosition.y() + radius, color, 1.0f);
     // ==================================================
 //    m_sky->render();
 }
 
-void World::handleEvent(const ALLEGRO_EVENT& event)
+void World::handleEvent(const SDL_Event& event)
 {
 
     //FIXME:!!!! unused, we just pass events to the player..among other children (currently just player though)
     //here, the inventory ui and other stuff may need to be factored in. who knows.
     switch (event.type) {
-        case ALLEGRO_EVENT_KEY_DOWN:
-        if (event.keyboard.keycode == ALLEGRO_KEY_D || event.keyboard.keycode == ALLEGRO_KEY_RIGHT) {
-        }
-
-        if (event.keyboard.keycode == ALLEGRO_KEY_A || event.keyboard.keycode == ALLEGRO_KEY_LEFT) {
-        }
-
-        if (event.keyboard.keycode == ALLEGRO_KEY_S || event.keyboard.keycode == ALLEGRO_KEY_DOWN) {
-        }
-
-        if (event.keyboard.keycode == ALLEGRO_KEY_W || event.keyboard.keycode == ALLEGRO_KEY_UP) {
-        }
-
-        break;
-
-        case ALLEGRO_EVENT_KEY_UP:
-        if (event.keyboard.keycode == ALLEGRO_KEY_D || event.keyboard.keycode == ALLEGRO_KEY_RIGHT) {
-        }
-
-        if (event.keyboard.keycode == ALLEGRO_KEY_A || event.keyboard.keycode == ALLEGRO_KEY_LEFT) {
-        }
-
-        if (event.keyboard.keycode == ALLEGRO_KEY_S || event.keyboard.keycode == ALLEGRO_KEY_DOWN) {
-        }
-
-        if (event.keyboard.keycode == ALLEGRO_KEY_W || event.keyboard.keycode == ALLEGRO_KEY_UP) {
-        }
-
-        break;
-
-        case ALLEGRO_EVENT_MOUSE_BUTTON_DOWN: {
-            ALLEGRO_MOUSE_STATE state;
-            al_get_mouse_state(&state);
-            if (state.buttons & ALLEGRO_MOUSE_LEFT) {
+        case SDL_MOUSEBUTTONDOWN: {
+            if (SDL_GetMouseState(nullptr, nullptr) & SDL_BUTTON(MouseButton::Left)) {
                 m_mouseLeftHeld = true;
             }
         break;
         }
 
-    case ALLEGRO_EVENT_MOUSE_BUTTON_UP: {
-            ALLEGRO_MOUSE_STATE state;
-            al_get_mouse_state(&state);
-            if (state.buttons & ~ALLEGRO_MOUSE_LEFT) {
+    case SDL_MOUSEBUTTONUP: {
+            if (SDL_GetMouseState(nullptr, nullptr) & SDL_BUTTON(MouseButton::Left)) {
                 m_mouseLeftHeld = false;
             }
         break;
@@ -237,7 +141,14 @@ for (Entity * currentEntity : m_entities) {
 //HACK    m_view->setCenter(m_player->position());
 
     //calculateAttackPosition();
-    generatePixelTileMap();
+    //FIXME generatePixelTileMap();
+}
+
+glm::vec2 mousePosition() const
+{
+    int x; int y;
+    SDL_GetMouseState(&x, &y);
+    return glm::vec2(x, y);
 }
 
 unsigned char World::calculateTileMeshingType(const int tileX, const int tileY) const
@@ -259,10 +170,10 @@ unsigned char World::calculateTileMeshingType(const int tileX, const int tileY) 
     return result;
 }
 
-bool World::isBlockSolid(Eigen::vector2f vecDest) const
+bool World::isBlockSolid(const glm::vec2& vecDest) const
 {
-    const int column = int(std::ceil(vecDest.x()) / Block::blockSize);
-    const int row = int(std::ceil(vecDest.y()) / Block::blockSize);
+    const int column = int(std::ceil(vecDest.x) / Block::blockSize);
+    const int row = int(std::ceil(vecDest.y) / Block::blockSize);
 
     int index = column * WORLD_ROWCOUNT + row;
     assert(index < WORLD_ROWCOUNT * WORLD_COLUMNCOUNT);
@@ -273,7 +184,7 @@ bool World::isBlockSolid(Eigen::vector2f vecDest) const
     return  blockType != 0;
 }
 
-char World::getBlockType(Eigen::vector2f vecPoint) const
+char World::getBlockType(const glm::vec2& vecPoint) const
 {
 
     const int column = int(std::ceil(vecPoint.x()) / Block::blockSize);
@@ -303,37 +214,37 @@ bool World::tileBlendTypeMatch(const int sourceTileX, const int sourceTileY, con
     return isMatched;
 }
 
-Eigen::Vector2f World::viewportCenter() const
+glm::vec2 World::viewportCenter() const
 {
-    return Eigen::Vector2f(SCREEN_W * 0.5, SCREEN_H * 0.5);
+    return glm::vec2(SCREEN_W * 0.5, SCREEN_H * 0.5);
 }
 
 //FIXME: unused..will be used for shooting and such. not for block breaking.
 void World::calculateAttackPosition()
 {
-    /*    const Eigen::Vector2f _viewportCenter = viewportCenter();
+    /*    const glm::vec2 _viewportCenter = viewportCenter();
 
         const sf::Vector2i mousePos = sf::Mouse::position(*m_window);
 
-        Eigen::Vector2f diffVect;
+        glm::vec2 diffVect;
         diffVect.x = mousePos.x - _viewportCenter.x;
         diffVect.y = mousePos.y - _viewportCenter.y;
 
         const double angle = atan2(diffVect.y, diffVect.x);
         const float newX = _viewportCenter.x + cos(angle) * Player::blockPickingRadius;
         const float newY= _viewportCenter.y  + sin(angle) * Player::blockPickingRadius;
-        m_relativeVectorToAttack = Eigen::Vector2f(newX, newY);
+        m_relativeVectorToAttack = glm::vec2(newX, newY);
     */
 }
 
-//FIXME: this function needs a lot of help. it's just a copy from pixelmap generation
+//FIXME: this function needs a lot of help.
 //so make it so it doesn't iterate over the whole visible screen but just the blockPickingRadius size.
 void World::performBlockAttack()
 {
     /*
-    const Eigen::Vector2f viewCenter = m_view->getCenter();
+    const glm::vec2 viewCenter = m_view->getCenter();
 
-    Eigen::Vector2f viewPosition;
+    glm::vec2 viewPosition;
     //    std::cout << "viewportcenter" << " viewportcenter y: " << viewportCenter().y << " view->getcenter() y: " << viewCenter.y << "\n";
     viewPosition.x = viewCenter.x - viewportCenter().x;
     viewPosition.y = viewCenter.y - viewportCenter().y;
@@ -347,14 +258,12 @@ void World::performBlockAttack()
     const int endColumn = (m_player->position().x / Block::blockSize) + radius;
     */
 
-    ALLEGRO_MOUSE_STATE state;
-    al_get_mouse_state(&state);
 
-    Eigen::Vector2i mouse(state.x, state.y);
+    glm::vec2 mouse = mousePosition();
 
     //FIXME: eventually will need to make this go to the players center
     // can we divide player pos by half of screen h/w ?
-    Eigen::Vector2i center(SCREEN_W * 0.5, SCREEN_H * 0.5);
+    glm::vec2 center(SCREEN_W * 0.5, SCREEN_H * 0.5);
 
     // if the attempted block pick location is out of range, do nothing.
     if (mouse.x() < center.x() - Player::blockPickingRadius ||
@@ -372,7 +281,7 @@ void World::performBlockAttack()
     int attackX = 0 ; //HACK= mouse.x() + (m_view->getCenter().x() - SCREEN_W * 0.5) / Block::blockSize;
     int attackY = 0; //HACK= mouse.y() + (m_view->getCenter().y() - SCREEN_H * 0.5) / Block::blockSize;
 
-    const Eigen::Vector2f playerPosition = m_player->position();
+    const glm::vec2 playerPosition = m_player->position();
 
     //consider block map as starting at player pos == 0,0 and going down and to the right-ward
     //tilesBefore{X,Y} is only at the center of the view though..find the whole screen real estate
@@ -404,10 +313,11 @@ void World::performBlockAttack()
 
     std::cout << "ERROR: " << " no block found to attack?" << "\n";
 }
-
+/*
+ * FIXME: USELESS, UNNEEDED, GET RID OF THAT SHIT
 void World::generatePixelTileMap()
 {
-    const Eigen::Vector2f playerPosition = m_player->position();
+    const glm::vec2 playerPosition = m_player->position();
     //consider block map as starting at player pos == 0,0 and going down and to the right-ward
     //tilesBefore{X,Y} is only at the center of the view though..find the whole screen real estate
     //column
@@ -479,12 +389,13 @@ void World::generatePixelTileMap()
     float floatArray[2] = { tileOffset().x(), tileOffset().y() };
 //    Debug::fatal(al_set_shader_float_vector(m_shader, "offset", 2, floatArray, 2), Debug::Area::Graphics, "shader offset set failure");
 }
+*/
 
-Eigen::Vector2f World::tileOffset() const
+glm::vec2 World::tileOffset() const
 {
-    const Eigen::Vector2f playerPosition = m_player->position();
+    const glm::vec2 playerPosition = m_player->position();
     // to get per-pixel smooth scrolling, we get the remainders and pass it as an offset to things that need to know the tile positions
-    const Eigen::Vector2f ret = Eigen::Vector2f(int(playerPosition.x()) & Block::blockSize - 1, int(playerPosition.y()) & Block::blockSize - 1);
+    const glm::vec2 ret = glm::vec2(int(playerPosition.x()) & Block::blockSize - 1, int(playerPosition.y()) & Block::blockSize - 1);
     return ret;
 }
 
@@ -499,7 +410,7 @@ void World::loadMap()
 
 void World::generateMap()
 {
-    const double startTime = al_get_time();
+    const double startTime = SDL_GetTicks();
 
     std::random_device device;
     std::mt19937 rand(device());
@@ -521,7 +432,7 @@ void World::generateMap()
         }
     }
 
-    const double elapsedTime = al_get_time() - startTime;
+    const double elapsedTime = SDL_GetTicks() - startTime;
     Debug::log(Debug::Area::General) << "Time taken for map generation: " << elapsedTime << " Milliseconds";
 }
 

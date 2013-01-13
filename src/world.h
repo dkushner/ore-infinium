@@ -35,6 +35,10 @@ static constexpr unsigned short WORLD_ROWCOUNT = 8400;
 //width
 static constexpr unsigned short WORLD_COLUMNCOUNT = 2400;
 
+enum class MouseButton {
+    Left = 1
+};
+
 /*
  e.g. [ ] [ ] [ ] [ ] [ ]  ... 8400
         [ ] [ ] [ ] [ ] [ ]  ... 8400
@@ -46,10 +50,10 @@ static constexpr unsigned short WORLD_COLUMNCOUNT = 2400;
 class World
 {
 public:
-    World(Camera* camera);
+    World();
 
     static World* instance();
-    static void createInstance(Camera *_camera);
+    static void createInstance();
 
     void update(const float elapsedTime);
     void render();
@@ -68,8 +72,9 @@ private:
 
     ~World();
 
-    void printShaderLog(GLuint shader);
     std::string loadShaderSource(const std::string& filename);
+
+    glm::vec2 mousePosition() const;
 
     /**
     * From scratch, create a randomly generated tileset and store it in our array
@@ -83,9 +88,11 @@ private:
     * NOTE: doesn't *actually* use m_view->getViewport, just a simple SCREEN_W,H / 2
     */
     glm::vec2 viewportCenter() const;
+
     void calculateAttackPosition();
-    void generatePixelTileMap();
+
     void performBlockAttack();
+
     void saveMap();
 
     glm::vec2 tileOffset() const;
