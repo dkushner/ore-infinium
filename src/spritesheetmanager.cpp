@@ -279,10 +279,10 @@ void SpriteSheetManager::renderCharacters()
         }
 
         // copy texcoords to the buffer
-        vertices[0][3] = vertices[1][3] = 1.0f;
-        vertices[0][4] = vertices[3][4] = 0.0f;
-        vertices[1][4] = vertices[2][4] = 1.0f;
-        vertices[2][3] = vertices[3][3] = 0.0f;
+        vertices[0][3] = vertices[1][3] = 0.0f;
+        vertices[0][4] = vertices[3][4] = 1.0f;
+        vertices[1][4] = vertices[2][4] = 0.0f;
+        vertices[2][3] = vertices[3][3] = 1.0f;
 
         // finally upload everything to the actual vbo
         glBindBuffer(GL_ARRAY_BUFFER, m_vbo);
