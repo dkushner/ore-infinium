@@ -1,6 +1,6 @@
 
 # Define sources and executable
-set(EXECUTABLE_NAME "ore-chasm")
+set(EXECUTABLE_NAME "ore-infinium")
 
 set(SRC
 main.cpp
@@ -49,8 +49,8 @@ ${GLEW_LIBRARIES}
 # CPack packaging
 include(InstallRequiredSystemLibraries)
 set(CPACK_RESOURCE_FILE_LICENSE "${CMAKE_SOURCE_DIR}/COPYING")
-set(CPACK_PACKAGE_VERSION_MAJOR "${ore_chasm_VERSION_MAJOR}")
-set(CPACK_PACKAGE_VERSION_MINOR "${ore_chasm_VERSION_MINOR}")
+set(CPACK_PACKAGE_VERSION_MAJOR "${ore_infinium_VERSION_MAJOR}")
+set(CPACK_PACKAGE_VERSION_MINOR "${ore_infinium_VERSION_MINOR}")
 include(CPack)
 
 

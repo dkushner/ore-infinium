@@ -87,7 +87,7 @@ void Game::init()
         Debug::fatal(false, Debug::Area::System, "failure to initialize SDL error: " + error);
     }
 
-    m_window = SDL_CreateWindow("Ore Chasm", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED,
+    m_window = SDL_CreateWindow("Ore Infinium", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED,
                                 SCREEN_W, SCREEN_H, SDL_WINDOW_SHOWN | SDL_WINDOW_OPENGL);
 
     if (!m_window) {

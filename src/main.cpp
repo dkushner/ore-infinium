@@ -22,7 +22,7 @@
 
 int main(int argc, char* argv[])
 {
-    std::cout << "Ore Chasm Version " << ore_chasm_VERSION_MAJOR << "." << ore_chasm_VERSION_MINOR << std::endl;
+    std::cout << "Ore Infinium Version " << ore_infinium_VERSION_MAJOR << "." << ore_infinium_VERSION_MINOR << std::endl;
 
     Game game;
     game.init();

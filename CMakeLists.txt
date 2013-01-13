@@ -2,11 +2,9 @@ cmake_minimum_required(VERSION 2.6)
 
 # To force which compiler to use e.g. for me for clang instead of gcc, pass CC and CCX=/usr/bin/clang++ cmake .. ; ...
 
-project(ore-chasm)
+project(ore-infinium)
 
 include(FeatureSummary)
-
-#project (ore_chasm)
 
 # Enable debug symbols by default
 if(CMAKE_BUILD_TYPE STREQUAL "")
@@ -28,8 +26,8 @@ endif(CMAKE_BUILD_TYPE STREQUAL "Debug")
 set(CMAKE_MODULE_PATH "${CMAKE_SOURCE_DIR}/cmake_modules" ${CMAKE_MODULE_PATH})
 
 # Set version information in a config.h file
-set(ore_chasm_VERSION_MAJOR 0)
-set(ore_chasm_VERSION_MINOR 1)
+set(ore_infinium_VERSION_MAJOR 0)
+set(ore_infinium_VERSION_MINOR 1)
 
 find_package(SDL2 REQUIRED)
 find_package(SDL2_mixer REQUIRED)
