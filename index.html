@@ -43,7 +43,8 @@
 
     <p>
     Ore Infinium is a game that is greatly inspired by Terraria, but of course aims to
-    be a hell of a lot more.
+    be a hell of a lot more. One way to describe it is a 2D Dungeon Crawler/Sandbox, with also an emphasis on survival. You can mine blocks,
+    minerals, build houses, caves, and all sorts of neato things.
     <br>
     Community is a huge part of development behind this project (hence why it's
     on github in the first place. Feel free to poke the code, make some art, and
@@ -69,13 +70,11 @@
     <ul>
     <li>It will have modding capabilities</li><br>
 
-    <li>It is open source, everything..including all assets</li><br>
-
     <li>It will have loads of features that I missed and I'm sure some others have as well.</li><br>
 
     <li>It's an ongoing project, not an end goal. And in the event that I get hit by a bus tomorrow, feel free to fork it and pick it up!</li><br>
 
-    <li>Cross-platform</li><br>
+    <li>Cross-platform (Windows, Linux, Mac OS X, with long-term plans for Android)</li><br>
 
     <li>Many, many features are planned that people only dreamed of for Terraria to have.</li><br>
 
@@ -95,14 +94,8 @@
 
     <p>
     The goal initially is to make it run on Linux/Unixen, Mac OS X and Windows.
-    I'm a developer on Linux, as that's the only real way to program, so this
-    will likely get the most support.
-
     <br>
-    With testers and patches, the other platforms
-    will have exactly the same support as Linux. I don't want to force anyone onto a
-    platform just to play my game, even though I think everyone should run Linux
-    anyways.. ;-)
+    I don't want to force anyone onto a platform just to play our game.
     <br>
 
     I would love to see it run on Android for instance. But for this to happen
@@ -128,18 +121,10 @@
     existed
 
     <br>
-    What is working? Not much :)
-
-    <br>
     <ul>
     <li>
     I did have a working tilemap rendering fragment shader..which uses some neat
     tricks to render it all in super fast manner.
-    </li>
-
-    <li>
-    I just implemented pretty stupid entity->tilemap collision, but it seems to
-    work.
     </li>
 
     <li>
@@ -148,7 +133,11 @@
     to making the foreground tiles meshable (cleanly, seamless).
 
     <br>
-    The design I'm planning on allows for *a lot* more flexibility than Terraria had.
+    The design I'm planning on allows for *a lot* more flexibility than Terraria
+    had. It means that not only is it fast and efficient on hardware, which gives me
+    breathing room to add more features whereever I can, but tiles blend together
+    very nicely based on neighboring tiles. This means that Worlds can be totally
+    different in design, but still look great.
     </li>
     </ul>
 
@@ -246,13 +235,14 @@
     Of course, nothing is in stone.
 
     <ul>
-    <li>Networking (obviously, a must ;)</li><br>
+    <li>Multiplayer (obviously, a must ;)</li><br>
 
     <li>Dungeons</li><br>
 
     <li>
-    Ladders! I hated navigation from depths in Terraria. It was terrible and
-    usually resulted in you dying or being stranded.
+    Ladders! Many games make it cumbersome to come up from your mining pit after
+    you're done, often you end up dying because you slipped. Also, portals help
+    fix that ;)
     </li><br>
 
     <li>
@@ -260,16 +250,15 @@
     </li><br>
 
     <li>
-    No guide! This NPC always lingered around your house even though you wanted to
-    be left the hell alone. It was really a piss poor replacement for a tutorial
-    anyways, and he only had a couple tid bits of information.
+    A nice tutorial system, or at least something brief to stay out of the
+    player's way, but also give them help when they need it.
     </li><br>
 
     <li>
-    NPCs/merchants you can "place" in your home?
+    NPCs/merchants you can "place" in your home.
     </li><br>
 
-    <li>Teleporters/Portals! Seriously. This is a definite want in my mind.</li><br>
+    <li>Teleporters/Portals! Seriously. This is a definite todo in my mind.</li><br>
 
     <li>
     Crafting system more simlar to Minecraft? Would people like that? Personally,
@@ -277,8 +266,9 @@
     </li><br>
 
     <li>
-    Menu system (HUD) that isn't impossible to navigate, which was something terraria lacked in my opinion. It
-    will also be customizable/fully moddable, by YAML and images.
+    Menu system (HUD) that is easy to navigate. A lot of games suffer from that
+    issue once they introduce crafting. The GUI/HUD will also be
+    customizable/fully moddable, by YAML, which is a simple text format, and images.
     </li><br>
 
     <li>
@@ -296,7 +286,9 @@
     </li><br>
 
     <li>
-    More than 1 or 2 soundtracks, unlike Terraria's which get very repetitive :-)
+    Will use some of the very useful outlets of independent music developers,
+    and have a big selection of in-game music, just so that you don't get sick of
+    the soundtracks while building that awesome castle of yours.
     </li><br>
 
     <li>
@@ -304,14 +296,8 @@
     be a lot more work as well
     </li><br>
 
-    <li> Weather system </li><br>
-    <li> Chunk Loading. Presently Ore Infinium just loads the whole map into memory.
-    Currently this isn't much of an issue, but with larger worlds and assets,
-    it could turn into something to think about.
-
+    <li> Weather system - Rain, Snow</li><br>
     <br>
-    It may or may not be an issue.
-    </li><br>
     </ul>
 
     </p>
