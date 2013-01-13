@@ -44,7 +44,8 @@ public:
      * Indicative of which spritesheet this sprite is a type of.
      * aka what it is considered and which category it will fall under.
      */
-    enum class SpriteSheetType {
+    enum class SpriteSheetType
+    {
         Character,
         Entity
     };
@@ -72,7 +73,9 @@ public:
      * this shader is used for all rendering of all sprites. The tilemap renderer is ENTIRELY
      * unrelated to this.
      */
-    GLuint spriteSheetShaderProgram() { return m_spriteShaderProgram; }
+    GLuint spriteSheetShaderProgram() {
+        return m_spriteShaderProgram;
+    }
 
     void setCamera(Camera* camera);
 

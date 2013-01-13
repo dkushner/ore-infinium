@@ -78,7 +78,7 @@ void World::render()
 //HACK    m_window->setView(*m_view);
 
     //player drawn on top... since we don't have anything like z-ordering or layering (TODO)
-    for (Entity * currentEntity : m_entities) {
+for (Entity * currentEntity : m_entities) {
 //        currentEntity->draw_bitmap();
     }
 
@@ -94,10 +94,10 @@ void World::render()
 
     // NOTE: (SCREEN_H % Block::blockSize) is what we add so that it is aligned properly to the tile grid, even though the screen is not evenly divisible by such.
     glm::vec2 crosshairPosition(mouse.x - mouse.x % Block::blockSize + (SCREEN_W % Block::blockSize) - tileOffset().x + Block::blockSize,
-                                                            mouse.y - mouse.y % Block::blockSize + (SCREEN_H % Block::blockSize) - tileOffset().y + Block::blockSize);
+                                mouse.y - mouse.y % Block::blockSize + (SCREEN_H % Block::blockSize) - tileOffset().y + Block::blockSize);
 
 //    ALLEGRO_COLOR color = al_map_rgb(255, 0, 0);
- //   al_draw_rectangle(crosshairPosition.x(), crosshairPosition.y(), crosshairPosition.x() + radius, crosshairPosition.y() + radius, color, 1.0f);
+//   al_draw_rectangle(crosshairPosition.x(), crosshairPosition.y(), crosshairPosition.x() + radius, crosshairPosition.y() + radius, color, 1.0f);
     // ==================================================
 //    m_sky->render();
 }
@@ -108,17 +108,17 @@ void World::handleEvent(const SDL_Event& event)
     //FIXME:!!!! unused, we just pass events to the player..among other children (currently just player though)
     //here, the inventory ui and other stuff may need to be factored in. who knows.
     switch (event.type) {
-        case SDL_MOUSEBUTTONDOWN: {
-            if (SDL_GetMouseState(nullptr, nullptr) & SDL_BUTTON(MouseButton::Left)) {
-                m_mouseLeftHeld = true;
-            }
-        break;
+    case SDL_MOUSEBUTTONDOWN: {
+        if (SDL_GetMouseState(nullptr, nullptr) & SDL_BUTTON(MouseButton::Left)) {
+            m_mouseLeftHeld = true;
         }
+        break;
+    }
 
     case SDL_MOUSEBUTTONUP: {
-            if (SDL_GetMouseState(nullptr, nullptr) & SDL_BUTTON(MouseButton::Left)) {
-                m_mouseLeftHeld = false;
-            }
+        if (SDL_GetMouseState(nullptr, nullptr) & SDL_BUTTON(MouseButton::Left)) {
+            m_mouseLeftHeld = false;
+        }
         break;
     }
     }
@@ -459,5 +459,5 @@ void World::saveMap()
 
     const int elapsedTime = clock.getElapsedTime().asMilliseconds();
     std::cout << "Time taken for map saving: " << elapsedTime << " Milliseconds" << std::endl;
-*/
+    */
 }

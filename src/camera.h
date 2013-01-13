@@ -42,10 +42,17 @@ public:
 
     void centerOn(const glm::vec2 vec);
 
-    void setShaderProgram(GLuint program) { m_shaderProgram = program; pushMatrix(); }
+    void setShaderProgram(GLuint program) {
+        m_shaderProgram = program;
+        pushMatrix();
+    }
 
-    glm::mat4 ortho() const { return m_orthoMatrix; }
-    glm::mat4 view() const { return m_viewMatrix; }
+    glm::mat4 ortho() const {
+        return m_orthoMatrix;
+    }
+    glm::mat4 view() const {
+        return m_viewMatrix;
+    }
 
 private:
     void pushMatrix();

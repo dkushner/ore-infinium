@@ -53,8 +53,7 @@ void Game::abort_game(const char* message)
 void Game::checkSDLError()
 {
     std::string error = SDL_GetError();
-    if (*error.c_str() != '\0')
-    {
+    if (*error.c_str() != '\0') {
         Debug::log(Debug::Area::System) << "SDL Error: " << error;
         SDL_ClearError();
     }
@@ -63,8 +62,7 @@ void Game::checkSDLError()
 void Game::checkGLError()
 {
     GLenum error = glGetError();
-    if(error != GL_NO_ERROR)
-    {
+    if (error != GL_NO_ERROR) {
         std::cerr << gluErrorString(error);
         assert(0);
     }

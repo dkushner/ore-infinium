@@ -28,7 +28,7 @@ Player::Player(const std::string& frameName): Entity(frameName, SpriteSheetManag
 void Player::handleEvent(const SDL_Event& event)
 {
     switch (event.type) {
-        case SDL_KEYDOWN:
+    case SDL_KEYDOWN:
         if (event.key.keysym.sym == SDLK_d || event.key.keysym.sym == SDLK_RIGHT) {
             m_inputXDirection = 1.f;
         }
@@ -46,7 +46,7 @@ void Player::handleEvent(const SDL_Event& event)
         }
         break;
 
-        case SDL_KEYUP:
+    case SDL_KEYUP:
         if (event.key.keysym.sym == SDLK_d || event.key.keysym.sym == SDLK_RIGHT) {
             m_inputXDirection = 0.f;
         }

@@ -20,14 +20,14 @@
 #include "game.h"
 
 Sprite::Sprite(const std::string& frameName, SpriteSheetManager::SpriteSheetType spriteSheetType) :
-m_spriteSheetType(spriteSheetType)
+    m_spriteSheetType(spriteSheetType)
 {
     setFrameName(frameName);
-/*
-    const glm::vec2 texSize = size();
-    m_origin = glm::vec2(texSize.x() * 0.5, texSize.y() * 0.5);
-    FIXME:
-*/
+    /*
+        const glm::vec2 texSize = size();
+        m_origin = glm::vec2(texSize.x() * 0.5, texSize.y() * 0.5);
+        FIXME:
+    */
 
     SpriteSheetManager::instance()->registerSprite(m_spriteSheetType, this);
 }

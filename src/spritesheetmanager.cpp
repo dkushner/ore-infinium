@@ -32,7 +32,7 @@ SpriteSheetManager* SpriteSheetManager::s_instance(0);
 
 SpriteSheetManager* SpriteSheetManager::instance()
 {
-    if(!s_instance)
+    if (!s_instance)
         s_instance = new SpriteSheetManager();
 
     return s_instance;
@@ -105,14 +105,14 @@ void SpriteSheetManager::loadSpriteSheet(const std::string& filename, SpriteShee
     imageFormat = FreeImage_GetFileType(filename.c_str(), 0);
 
     //if still unknown, try to guess the file format from the file extension
-    if(imageFormat == FIF_UNKNOWN) {
+    if (imageFormat == FIF_UNKNOWN) {
         imageFormat = FreeImage_GetFIFFromFilename(filename.c_str());
     }
 
     Debug::fatal(imageFormat != FIF_UNKNOWN, Debug::Area::Graphics, "failure to load font, type unknown");
 
     //check that the plugin has reading capabilities and load the file
-    if(FreeImage_FIFSupportsReading(imageFormat)) {
+    if (FreeImage_FIFSupportsReading(imageFormat)) {
         bitmap = FreeImage_Load(imageFormat, filename.c_str());
     }
 
@@ -125,7 +125,7 @@ void SpriteSheetManager::loadSpriteSheet(const std::string& filename, SpriteShee
     height = FreeImage_GetHeight(bitmap);
 
     //if somehow one of these failed (they shouldn't), return failure
-    if((bits == 0) || (width == 0) || (height == 0)) {
+    if ((bits == 0) || (width == 0) || (height == 0)) {
         Debug::fatal(false, Debug::Area::Graphics, "failure to load font, bitmap sizes invalid or bits invalid");
     }
 
@@ -163,7 +163,7 @@ void SpriteSheetManager::unloadAllSpriteSheets()
 {
     std::map<SpriteSheetManager::SpriteSheetType, SpriteSheet>::const_iterator i = m_spriteSheetTextures.begin();
 
-    while(i != m_spriteSheetTextures.end()) {
+    while (i != m_spriteSheetTextures.end()) {
         unloadSpriteSheet(i->first);
     }
 
@@ -226,7 +226,7 @@ void SpriteSheetManager::renderCharacters()
     bindSpriteSheet(SpriteSheetType::Character);
 
     int index = 0;
-    for (Sprite* sprite: m_characterSprites) {
+for (Sprite * sprite: m_characterSprites) {
         auto frameIdentifier = m_spriteSheetCharactersDescription.find(sprite->frameName());
         SpriteFrameIdentifier& frame = frameIdentifier->second;
         frame.x; //FIXME:
@@ -266,8 +266,7 @@ void SpriteSheetManager::renderCharacters()
         checkGLError();
 
         // copy color to the buffer
-        for (size_t i = 0; i < sizeof(vertices)/sizeof(*vertices); i++)
-        {
+        for (size_t i = 0; i < sizeof(vertices) / sizeof(*vertices); i++) {
             uint32_t* colorp = reinterpret_cast<uint32_t*>(&vertices[i][2]);
             //        *colorp = color.bgra;
             uint8_t red = 255;
@@ -297,7 +296,7 @@ void SpriteSheetManager::renderCharacters()
 
     ////////////////////////////////FINALLY RENDER IT ALL //////////////////////////////////////////
     glEnable(GL_BLEND);
-    glBlendFunc(GL_SRC_ALPHA,GL_ONE_MINUS_SRC_ALPHA);
+    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_ebo);
     glBindBuffer(GL_ARRAY_BUFFER, m_vbo);
@@ -309,14 +308,14 @@ void SpriteSheetManager::renderCharacters()
     checkGLError();
     glDrawElements(
         GL_TRIANGLES,
-        6*(m_characterSprites.size()), // 6 indices per 2 triangles
+        6 * (m_characterSprites.size()), // 6 indices per 2 triangles
         GL_UNSIGNED_INT,
         (const GLvoid*)0);
 
     glUseProgram(0);
     glBindVertexArray(0);
-    glBindBuffer(GL_ARRAY_BUFFER,0);
-    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER,0);
+    glBindBuffer(GL_ARRAY_BUFFER, 0);
+    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
 
     glDisable(GL_BLEND);
 
@@ -332,8 +331,7 @@ void SpriteSheetManager::renderEntitites()
 void SpriteSheetManager::checkGLError()
 {
     GLenum error = glGetError();
-    if(error != GL_NO_ERROR)
-    {
+    if (error != GL_NO_ERROR) {
         std::cerr << gluErrorString(error);
         assert(0);
     }
@@ -349,11 +347,10 @@ void SpriteSheetManager::printShaderInfoLog(GLuint shader)
 
     // should additionally check for OpenGL errors here
 
-    if (infoLogLen > 0)
-    {
+    if (infoLogLen > 0) {
         infoLog = new GLchar[infoLogLen];
         // error check for fail to allocate memory omitted
-        glGetShaderInfoLog(shader,infoLogLen, &charsWritten, infoLog);
+        glGetShaderInfoLog(shader, infoLogLen, &charsWritten, infoLog);
 //        std::cout << "InfoLog:" << std::endl << infoLog << std::endl;
         std::cout << infoLog;
         delete [] infoLog;
@@ -372,13 +369,13 @@ char* SpriteSheetManager::loadFile(const char* fname, GLint* fSize)
     std::string text;
 
     // file read based on example in cplusplus.com tutorial
-    std::ifstream file (fname, std::ios::in|std::ios::binary|std::ios::ate);
+    std::ifstream file(fname, std::ios::in | std::ios::binary | std::ios::ate);
     if (file.is_open()) {
         size = file.tellg();
         *fSize = (GLuint) size;
         memblock = new char [size];
-        file.seekg (0, std::ios::beg);
-        file.read (memblock, size);
+        file.seekg(0, std::ios::beg);
+        file.read(memblock, size);
         file.close();
         Debug::log(Debug::Area::Graphics) << "shader : " << fname << " loaded successfully";
         text.assign(memblock);
@@ -411,7 +408,7 @@ void SpriteSheetManager::loadDefaultShaders()
     glShaderSource(vertex_shader, 1, &vertSourceConst, &vertLength);
     glCompileShader(vertex_shader);
 
-    if(!checkShaderCompileStatus(vertex_shader)) {
+    if (!checkShaderCompileStatus(vertex_shader)) {
         assert(0);
     } else {
         Debug::log(Debug::Area::Graphics) << "vertex shader compiled!";
@@ -422,7 +419,7 @@ void SpriteSheetManager::loadDefaultShaders()
     glShaderSource(fragment_shader, 1, &fragSourceConst, &fragLength);
     glCompileShader(fragment_shader);
 
-    if(!checkShaderCompileStatus(fragment_shader)) {
+    if (!checkShaderCompileStatus(fragment_shader)) {
         assert(0);
     } else {
         Debug::log(Debug::Area::Graphics) << "fragment shader compiled!";
@@ -455,8 +452,7 @@ bool SpriteSheetManager::checkShaderCompileStatus(GLuint obj)
 {
     GLint status;
     glGetShaderiv(obj, GL_COMPILE_STATUS, &status);
-    if(status == GL_FALSE)
-    {
+    if (status == GL_FALSE) {
         GLint length;
         glGetShaderiv(obj, GL_INFO_LOG_LENGTH, &length);
         std::vector<char> log(length);
@@ -471,8 +467,7 @@ bool SpriteSheetManager::checkProgramLinkStatus(GLuint obj)
 {
     GLint status;
     glGetProgramiv(obj, GL_LINK_STATUS, &status);
-    if(status == GL_FALSE)
-    {
+    if (status == GL_FALSE) {
         GLint length;
         glGetProgramiv(obj, GL_INFO_LOG_LENGTH, &length);
         std::vector<char> log(length);
@@ -493,8 +488,8 @@ void SpriteSheetManager::initGL()
     glGenVertexArrays(1, &m_vao);
     glBindVertexArray(m_vao);
 
-    glGenBuffers(1,&m_vbo);
-    glBindBuffer(GL_ARRAY_BUFFER,m_vbo);
+    glGenBuffers(1, &m_vbo);
+    glBindBuffer(GL_ARRAY_BUFFER, m_vbo);
     glBufferData(
         GL_ARRAY_BUFFER,
         m_maxSpriteCount * 4 * sizeof(spriteVertex),
@@ -508,16 +503,14 @@ void SpriteSheetManager::initGL()
     // prepare and upload indices as a one time deal
     const u32 indices[] = { 0, 1, 2, 0, 2, 3 }; // pattern for a triangle array
     // for each possible sprite, add the 6 index pattern
-    for (size_t j = 0; j < m_maxSpriteCount; j++)
-    {
-        for (size_t i = 0; i < sizeof(indices)/sizeof(*indices); i++)
-        {
-            indicesv.push_back(4*j + indices[i]);
+    for (size_t j = 0; j < m_maxSpriteCount; j++) {
+        for (size_t i = 0; i < sizeof(indices) / sizeof(*indices); i++) {
+            indicesv.push_back(4 * j + indices[i]);
         }
     }
 
-    glGenBuffers(1,&m_ebo);
-    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER,m_ebo);
+    glGenBuffers(1, &m_ebo);
+    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_ebo);
     glBufferData(
         GL_ELEMENT_ARRAY_BUFFER,
         indicesv.size()*sizeof(u32),

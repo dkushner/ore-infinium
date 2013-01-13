@@ -21,7 +21,7 @@
 #include "spritesheetmanager.h"
 
 Camera::Camera() :
-m_vector(glm::vec3())
+    m_vector(glm::vec3())
 {
     float x = 0.0f;
     float y = 0.0f;

@@ -41,8 +41,12 @@ public:
      * Sets the name of the sprite's frame to use.
      * Used for animation.
      */
-    void setFrameName(const std::string& frameName) { m_frameName = frameName; }
-    std::string frameName() { return m_frameName; }
+    void setFrameName(const std::string& frameName) {
+        m_frameName = frameName;
+    }
+    std::string frameName() {
+        return m_frameName;
+    }
 
     /// TODO: NOT IMPLEMENTED OR NEEDED RIGHT NOW.
     /// THIS MAY REQUIRE SOME CHANGES ON THE MANAGER FRONT, TO GET IT TO CHANGE THE INTERNAL MAPPING
@@ -53,20 +57,32 @@ public:
     /**
      * Returns the width and height of the bitmap of this Texture
      */
-    glm::vec2 size() const { return m_size; }
+    glm::vec2 size() const {
+        return m_size;
+    }
 
     /**
      * Sets the origin of this texture, to which to offset drawing.
      * Default is the center of the texture.
      */
-    void setOrigin(const glm::vec2& origin) { m_origin = origin; }
+    void setOrigin(const glm::vec2& origin) {
+        m_origin = origin;
+    }
 
-    glm::vec2 origin() const { return m_origin; }
+    glm::vec2 origin() const {
+        return m_origin;
+    }
 
-    void setPosition(const glm::vec2& vector) { m_position = vector; }
-    void setPosition(float x, float y) { m_position = glm::vec2(x, y); }
+    void setPosition(const glm::vec2& vector) {
+        m_position = vector;
+    }
+    void setPosition(float x, float y) {
+        m_position = glm::vec2(x, y);
+    }
 
-    glm::vec2 position() const { return m_position; }
+    glm::vec2 position() const {
+        return m_position;
+    }
 
 private:
     Sprite() {};
