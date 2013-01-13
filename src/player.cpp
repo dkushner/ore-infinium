@@ -17,67 +17,49 @@
 
 #include "player.h"
 
-#include "resourcemanager.h"
+#include "spritesheetmanager.h"
 #include <assert.h>
 
-#include <allegro5/allegro.h>
-#include <allegro5/allegro_primitives.h>
-
-#include <Eigen/Core>
-
-Player::Player(const char* texture) : Entity(texture)
+Player::Player(const std::string& frameName): Entity(frameName, SpriteSheetManager::SpriteSheetType::Character)
 {
+
 }
 
-void Player::draw_bitmap(int flags)
-{
-    Texture::draw_bitmap(flags);
-
-    ALLEGRO_COLOR color = al_map_rgb(255, 0, 0);
-
-    //debug drawing for the radius that is within the player's reach to "pick"
-    //FIXME: calculations are surely off..
-//    sf::RectangleShape rect = sf::RectangleShape(Eigen::Vector2f(Player::blockPickingRadius * 2.0f, Player::blockPickingRadius * 2.0f));
- //   rect.setPosition(getPosition().x - Player::blockPickingRadius, getPosition().y - Player::blockPickingRadius);
-    al_draw_rectangle(position().x(), position().y(), position().x() + Player::blockPickingRadius, position().y() + Player::blockPickingRadius, color, 1.0f);
-}
-
-
-void Player::handleEvent(const ALLEGRO_EVENT& event)
+void Player::handleEvent(const SDL_Event& event)
 {
     switch (event.type) {
-        case ALLEGRO_EVENT_KEY_DOWN:
-        if (event.keyboard.keycode == ALLEGRO_KEY_D || event.keyboard.keycode == ALLEGRO_KEY_RIGHT) {
+        case SDL_KEYDOWN:
+        if (event.key.keysym.sym == SDLK_d || event.key.keysym.sym == SDLK_RIGHT) {
             m_inputXDirection = 1.f;
         }
 
-        if (event.keyboard.keycode == ALLEGRO_KEY_A || event.keyboard.keycode == ALLEGRO_KEY_LEFT) {
+        if (event.key.keysym.sym == SDLK_a || event.key.keysym.sym == SDLK_LEFT) {
             m_inputXDirection = -1.f;
         }
 
-        if (event.keyboard.keycode == ALLEGRO_KEY_S || event.keyboard.keycode == ALLEGRO_KEY_DOWN) {
+        if (event.key.keysym.sym == SDLK_s || event.key.keysym.sym == SDLK_DOWN) {
             m_inputYDirection = 1.f;
         }
 
-        if (event.keyboard.keycode == ALLEGRO_KEY_W || event.keyboard.keycode == ALLEGRO_KEY_UP) {
+        if (event.key.keysym.sym == SDLK_w || event.key.keysym.sym == SDLK_UP) {
             m_inputYDirection = -1.f;
         }
         break;
 
-        case ALLEGRO_EVENT_KEY_UP:
-        if (event.keyboard.keycode == ALLEGRO_KEY_D || event.keyboard.keycode == ALLEGRO_KEY_RIGHT) {
+        case SDL_KEYUP:
+        if (event.key.keysym.sym == SDLK_d || event.key.keysym.sym == SDLK_RIGHT) {
             m_inputXDirection = 0.f;
         }
 
-        if (event.keyboard.keycode == ALLEGRO_KEY_A || event.keyboard.keycode == ALLEGRO_KEY_LEFT) {
+        if (event.key.keysym.sym == SDLK_a || event.key.keysym.sym == SDLK_LEFT) {
             m_inputXDirection = 0.f;
         }
 
-        if (event.keyboard.keycode == ALLEGRO_KEY_S || event.keyboard.keycode == ALLEGRO_KEY_DOWN) {
+        if (event.key.keysym.sym == SDLK_s || event.key.keysym.sym == SDLK_DOWN) {
             m_inputYDirection = 0.f;
         }
 
-        if (event.keyboard.keycode == ALLEGRO_KEY_W || event.keyboard.keycode == ALLEGRO_KEY_UP) {
+        if (event.key.keysym.sym == SDLK_w || event.key.keysym.sym == SDLK_UP) {
             m_inputYDirection = 0.f;
         }
         break;

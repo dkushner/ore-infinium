@@ -23,22 +23,18 @@
 
 #include <stdlib.h>
 
-#include <Eigen/Core>
-
 #include <GL/glew.h>
 #include <GL/gl.h>
-
-class ALLEGRO_SHADER;
-union ALLEGRO_EVENT;
-class ALLEGRO_DISPLAY;
+#include <SDL2/SDL_events.h>
 
 class Sky;
-
+class Camera;
 
 //height
 static constexpr unsigned short WORLD_ROWCOUNT = 8400;
 //width
 static constexpr unsigned short WORLD_COLUMNCOUNT = 2400;
+
 /*
  e.g. [ ] [ ] [ ] [ ] [ ]  ... 8400
         [ ] [ ] [ ] [ ] [ ]  ... 8400
@@ -46,34 +42,25 @@ static constexpr unsigned short WORLD_COLUMNCOUNT = 2400;
         ...
         ...
         2400
-
-
 */
-
-enum Mouse {
-    ALLEGRO_MOUSE_LEFT = 1,
-    ALLEGRO_MOUSE_RIGHT = 2,
-    ALLEGRO_MOUSE_MIDDLE = 4
-};
-
 class World
 {
 public:
-    World(ALLEGRO_DISPLAY* display);
+    World(Camera* camera);
 
     static World* instance();
-    static void createInstance(ALLEGRO_DISPLAY *display);
+    static void createInstance(Camera *_camera);
 
     void update(const float elapsedTime);
     void render();
 
     void loadMap();
 
-    void handleEvent(const ALLEGRO_EVENT& event);
+    void handleEvent(const SDL_Event& event);
 
-    bool isBlockSolid(const Eigen::Vector2f& vecDest) const;
+    bool isBlockSolid(const glm::vec2& vecDest) const;
 
-    char getBlockType(Eigen::vector2f vecPoint) const
+    char getBlockType(const glm::vec2& vecPoint) const;
 
     //create containers of various entities, and implement a tile system
     //game.cpp calls into this each tick, which this descends downward into each entity
@@ -95,13 +82,13 @@ private:
     * if this is ideal or not
     * NOTE: doesn't *actually* use m_view->getViewport, just a simple SCREEN_W,H / 2
     */
-    Eigen::Vector2f viewportCenter() const;
+    glm::vec2 viewportCenter() const;
     void calculateAttackPosition();
     void generatePixelTileMap();
     void performBlockAttack();
     void saveMap();
 
-    Eigen::Vector2f tileOffset() const;
+    glm::vec2 tileOffset() const;
 
     /**
      * Should be called AFTER the world has been fully processed in raw block form.
@@ -141,31 +128,12 @@ private:
     //FIXME: just a ptr to the game.cpp one :(  same with window
 //FIXME:    sf::View *m_view = nullptr;
 
-    ALLEGRO_DISPLAY *m_display = nullptr;
-
-    ALLEGRO_BITMAP *m_tileMapFinalTexture = nullptr;
-
-    ALLEGRO_BITMAP *m_tileMapPixelsTexture = nullptr;
-
-    ALLEGRO_SHADER *m_shader = nullptr;
-
-    GLhandleARB shader;
-    GLhandleARB program;
-
-    /**
-     * A super bitmap which is loaded ONLY at init, which is a tilesheet/spritesheet
-     * of every tile that is possible. Used for passing it to the tile rendering shader
-     * (also at init).
-     * What is actually passed to the frag shader.
-     */
-    ALLEGRO_BITMAP *m_tileTypesSuperTexture = nullptr;
-
     bool m_mouseLeftHeld = false;
 
     /**
      * In client window coordinates (relative)
      */
-    Eigen::Vector2f m_relativeVectorToAttack;
+    glm::vec2 m_relativeVectorToAttack;
 };
 
 #endif

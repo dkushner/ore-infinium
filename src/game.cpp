@@ -137,18 +137,9 @@ void Game::init()
 
     checkGLError();
 
-   m_camera = new Camera();
-   SpriteSheetManager::instance()->setCamera(m_camera);
+    World::createInstance();
+    m_world = World::instance();
 
-    checkGLError();
-
-    for (int i = 0; i < 2; ++i) {
-        Sprite* sprite = new Sprite("testframe", SpriteSheetManager::SpriteSheetType::Character);
-        sprite->setPosition(rand() % 1600, rand() % 900);
-    }
-
-    //World::createInstance(m_display);
-    //m_world = World::instance();
     m_font->FaceSize(12);
 
     tick();
@@ -165,16 +156,14 @@ void Game::tick()
     while (m_running) {
         fps =(frameCount / float(SDL_GetTicks() - startTime)) * 1000;
 
-        // m_world->update(static_cast<float>(delta));
-        // m_world->render();
-
-        //rendering always before this
-
         handleEvents();
+
+        m_world->update(static_cast<float>(delta));
 
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-        SpriteSheetManager::instance()->renderCharacters();
+        m_world->render();
+
         drawDebugText();
 
         SDL_GL_SwapWindow(m_window);
@@ -191,6 +180,9 @@ void Game::handleEvents()
     SDL_Event event;
 
     while (SDL_PollEvent(&event)) {
+
+        m_world->handleEvent(event);
+
         switch (event.type) {
         case SDL_KEYDOWN:
             if (event.key.keysym.sym == SDLK_ESCAPE) {

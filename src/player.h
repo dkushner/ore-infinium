@@ -1,5 +1,5 @@
 /******************************************************************************
- *   Copyright (C) 2012 by Shaun Reich <sreich@kde.org>                       *
+ *   Copyright (C) 2012, 2013 by Shaun Reich <sreich@kde.org>                 *
  *                                                                            *
  *   This program is free software; you can redistribute it and/or            *
  *   modify it under the terms of the GNU General Public License as           *
@@ -21,27 +21,22 @@
 #include "entity.h"
 #include "block.h"
 
-union ALLEGRO_EVENT;
-class ALLEGRO_DISPLAY;
+#include <SDL2/SDL_events.h>
 
 class Player : public Entity
 {
 public:
     /**
-     * Create a player with the starting texture @p texture
-     * the ImageLoader is used automatically, so just pass a path
-     * to the image to load.
+     * Create a player with the starting frame texture
      */
-    Player(const char* texture);
+    Player(const std::string& frameName);
 
-    void handleEvent(const ALLEGRO_EVENT& event);
+    void handleEvent(const SDL_Event& event);
 
     // radius indicating how many pixels out the player can pick
     // blocks
     static constexpr float blockPickingRadius = Block::blockSize * 8.0f;
     static constexpr float movementSpeed = 1000.0f;
-
-    virtual void draw_bitmap(int flags = 0);
 
 private:
     unsigned char health = 100;

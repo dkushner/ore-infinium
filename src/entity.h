@@ -1,5 +1,5 @@
 /******************************************************************************
- *   Copyright (C) 2012 by Shaun Reich <sreich@kde.org>                       *
+ *   Copyright (C) 2012, 2013 by Shaun Reich <sreich@kde.org>                 *
  *                                                                            *
  *   This program is free software; you can redistribute it and/or            *
  *   modify it under the terms of the GNU General Public License as           *
@@ -18,28 +18,24 @@
 #ifndef ENTITY_H
 #define ENTITY_H
 
-#include "texture.h"
-
-#include <Eigen/Core>
+#include "sprite.h"
+#include <glm/core/type.hpp>
 
 const float GRAVITY = 0.05f;
 
-class Entity : public Texture
+class Entity : public Sprite
 {
 public:
     /**
      * Create an entity with the given texture @p texture
      * texture loading is handled automatically via textureManager.
      */
-    Entity(const char* texture);
+    Entity(const std::string& frameName, SpriteSheetManager::SpriteSheetType spriteSheetType);
 
     virtual void update(const float elapsedTime);
 
-    //FIXME: unused
-    //FIXME: isolate and move further up the chain, and make Texture privately inherited?
-//    void draw(sf::RenderTarget& target, sf::RenderStates states = sf::RenderStates::Default) const;
-
     /**
+     * Overrides/hides member functions from Sprite
      * Use only to reset the entities position to some other place.
      * ALL OTHER CASES USE VELOCITY.
      * Upon calling update, it will move it by that vector, as well as integrate
@@ -48,29 +44,30 @@ public:
      * @see update
      */
     void setPosition(float x, float y);
-    void setPosition(const Eigen::Vector2f& vect);
+    void setPosition(const glm::vec2& vect);
 
     /**
      * Sets the velocity that this entity should have. It is affected by gravity,
      * and will modify the position automatically when Entity::update() is called.
      */
-    void setVelocity(const Eigen::Vector2f& velocity);
+    void setVelocity(const glm::vec2& velocity);
     void setVelocity(float x, float y);
-    
+
     /**
      * Returns the final position the player should move to after collision checking
      * based on initial position firstPosition, final position destPosition, and
      * width/height dimensions.
      */
-    Eigen::Vector2f moveOutsideSolid(Eigen::Vector2f firstPosition, Eigen::Vector2f destPosition, Eigen::Vector2f dimensions) const;
+    glm::vec2 moveOutsideSolid(const glm::vec2& firstPosition, const glm::vec2& destPosition, const glm::vec2& dimensions) const;
+
     /**
      * Determines if the entity will collide at position destPosition if it has
      * dimensions as defined by dimensions.
      */
-    bool collidingWithTile(Eigen::Vector2f destPosition, Eigen::Vector2f dimensions) const;
+    bool collidingWithTile(const glm::vec2& destPosition, const glm::vec2& dimensions) const;
 
 private:
-    Eigen::Vector2f m_velocity;
+    glm::vec2 m_velocity;
 };
 
 #endif

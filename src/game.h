@@ -19,7 +19,7 @@
 #define GAME_H
 
 #include "camera.h"
-//#include "world.h"
+#include "world.h"
 #include <stdio.h>
 #include <stdlib.h>
 
@@ -70,9 +70,7 @@ public:
 private:
     FTGLPixmapFont *m_font = nullptr;
 
-    Camera* m_camera = nullptr;
-
- //   World *m_world = nullptr;
+    World *m_world = nullptr;
     SDL_Window *m_window = nullptr;
     SDL_GLContext m_context;
     bool m_running = true;

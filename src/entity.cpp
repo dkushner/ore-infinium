@@ -21,24 +21,20 @@
 #include "debug.h"
 #include "block.h"
 
-#include <Eigen/Core>
-
-Entity::Entity(const char* texture) : Texture(texture)
+Entity::Entity(const std::string& frameName, SpriteSheetManager::SpriteSheetType spriteSheetType) :
+Sprite(frameName, spriteSheetType)
 {
+
 }
 
-//Entity::Entity(): Texture("../textures/error.png")
-//{
-//}
-
-void Entity::setVelocity(const Eigen::Vector2f& velocity)
+void Entity::setVelocity(const glm::vec2& velocity)
 {
     m_velocity = velocity;
 }
 
 void Entity::setVelocity(float x, float y)
 {
-    const Eigen::Vector2f velocity(x, y);
+    const glm::vec2 velocity(x, y);
     m_velocity = velocity;
 }
 
@@ -46,7 +42,7 @@ void Entity::update(const float elapsedTime)
 {
 //    m_velocity.y += GRAVITY;
 
-    Eigen::Vector2f dest = Eigen::Vector2f(m_velocity.x() * elapsedTime, m_velocity.y() * elapsedTime);
+    glm::vec2 dest = glm::vec2(m_velocity.x() * elapsedTime, m_velocity.y() * elapsedTime);
     dest.x() += position().x();
     dest.y() += position().y();
     //Add the following line to the code with proper variables for width/height.
@@ -55,27 +51,26 @@ void Entity::update(const float elapsedTime)
 
     //Newer collision method, add when the line mentioned above is fixed..
     //Texture::setPosition(moveOutsideSolid(position, dest, dim));
-    
+
     //Remove this and add the above when the definition for dim is fixed.
     if (!World::instance()->isBlockSolid(dest)) {
-        Texture::setPosition(dest);
+        Sprite::setPosition(dest);
     }
-    
 }
 
 void Entity::setPosition(float x, float y)
 {
-    Texture::setPosition(x, y);
+    Sprite::setPosition(x, y);
 }
 
-void Entity::setPosition(const Eigen::Vector2f& vect)
+void Entity::setPosition(const glm::vec2& vect)
 {
-    Texture::setPosition(vect);
+    Sprite::setPosition(vect);
 }
 
-Eigen::Vector2f Entity::moveOutsideSolid(Eigen::Vector2f firstPosition, Eigen::Vector2f destPosition, Eigen::Vector2f dimensions) const
+glm::vec2 Entity::moveOutsideSolid(const glm::vec2& firstPosition, const glm::vec2& destPosition, const glm::vec2& dimensions) const
 {
-    Eigen::Vector2f tempPosition = firstPosition;
+    glm::vec2 tempPosition = firstPosition;
     if (checkTileCollision(destPosition, dimensions)) {
         int horDir;
 		if (m_velocity.x() > 0) {
@@ -88,7 +83,7 @@ Eigen::Vector2f Entity::moveOutsideSolid(Eigen::Vector2f firstPosition, Eigen::V
         if (horDir != 0) {
             int horMove; 
             for (horMove = int(std::ceil(tempPosition.x()) / Block::blockSize) * Block::blockSize; horMove * horDir <= (tempPosition.x() + m_velocity.x()) * horDir; horMove += Block::blockSize * horDir) {
-                Eigen::Vector2f tempDest = tempPosition;
+                glm::vec2 tempDest = tempPosition;
                 tempDest.x() = horMove;
                 if (checkTileCollision(tempDest, dimensions)) {
                     horMove -= Block::blockSize * horDir;
@@ -135,7 +130,7 @@ Eigen::Vector2f Entity::moveOutsideSolid(Eigen::Vector2f firstPosition, Eigen::V
     return (tempPosition);
 }
 
-bool Entity::collidingWithTile(Eigen::Vector2f destPosition, Eigen::Vector2f dimensions) const
+bool Entity::collidingWithTile(const glm::vec2& destPosition, const glm::vec2& dimensions) const
 {
     for (int i = 0; i < dimensions.x() + Block::blockSize; i += Block::blockSize) {
         for (int j = 0; j < dimensions.y() + Block::blockSize; j += Block::blockSize) {

@@ -15,8 +15,8 @@
  *   along with this program.  If not, see <http://www.gnu.org/licenses/>.    *
  *****************************************************************************/
 
-#ifndef TEXTURE_H
-#define TEXTURE_H
+#ifndef SPRITE_H
+#define SPRITE_H
 
 #include "spritesheetmanager.h"
 
