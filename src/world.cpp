@@ -86,15 +86,15 @@ void World::render()
 
     // ==================================================
 
-    glm::vec2 mouse = mousePosition();
+    glm::ivec2 mouse = mousePosition();
 
     const float radius = 16.0f;
     const float halfRadius = radius * 0.5;
     const float halfBlockSize = Block::blockSize * 0.5;
 
     // NOTE: (SCREEN_H % Block::blockSize) is what we add so that it is aligned properly to the tile grid, even though the screen is not evenly divisible by such.
-    glm::vec2 crosshairPosition(mouse.x() - mouse.x() % Block::blockSize + (SCREEN_W % Block::blockSize) - tileOffset().x() + Block::blockSize,
-                                                            mouse.y() - mouse.y() % Block::blockSize + (SCREEN_H % Block::blockSize) - tileOffset().y() + Block::blockSize);
+    glm::vec2 crosshairPosition(mouse.x - mouse.x % Block::blockSize + (SCREEN_W % Block::blockSize) - tileOffset().x + Block::blockSize,
+                                                            mouse.y - mouse.y % Block::blockSize + (SCREEN_H % Block::blockSize) - tileOffset().y + Block::blockSize);
 
 //    ALLEGRO_COLOR color = al_map_rgb(255, 0, 0);
  //   al_draw_rectangle(crosshairPosition.x(), crosshairPosition.y(), crosshairPosition.x() + radius, crosshairPosition.y() + radius, color, 1.0f);
@@ -144,14 +144,14 @@ for (Entity * currentEntity : m_entities) {
     //FIXME generatePixelTileMap();
 }
 
-glm::vec2 mousePosition() const
+glm::ivec2 World::mousePosition() const
 {
     int x; int y;
     SDL_GetMouseState(&x, &y);
-    return glm::vec2(x, y);
+    return glm::ivec2(x, y);
 }
 
-unsigned char World::calculateTileMeshingType(const int tileX, const int tileY) const
+unsigned char World::calculateTileMeshingType(int tileX, int tileY) const
 {
     const bool left = tileBlendTypeMatch(tileX, tileY, tileX - 1, tileY);
     const bool right = tileBlendTypeMatch(tileX, tileY, tileX + 1, tileY);
@@ -184,11 +184,11 @@ bool World::isBlockSolid(const glm::vec2& vecDest) const
     return  blockType != 0;
 }
 
-char World::getBlockType(const glm::vec2& vecPoint) const
+unsigned char World::getBlockType(const glm::vec2& vecPoint) const
 {
 
-    const int column = int(std::ceil(vecPoint.x()) / Block::blockSize);
-    const int row = int(std::ceil(vecPoint.y()) / Block::blockSize);
+    const int column = int(std::ceil(vecPoint.x) / Block::blockSize);
+    const int row = int(std::ceil(vecPoint.y) / Block::blockSize);
 
     int index = column * WORLD_ROWCOUNT + row;
     assert(index < WORLD_ROWCOUNT * WORLD_COLUMNCOUNT);
@@ -199,7 +199,7 @@ char World::getBlockType(const glm::vec2& vecPoint) const
 
 }
 
-bool World::tileBlendTypeMatch(const int sourceTileX, const int sourceTileY, const int nearbyTileX, const int nearbyTileY) const
+bool World::tileBlendTypeMatch(int sourceTileX, int sourceTileY, int nearbyTileX, int nearbyTileY) const
 {
     bool isMatched = false;
     const int srcIndex = sourceTileX * WORLD_ROWCOUNT + sourceTileY;
@@ -259,22 +259,22 @@ void World::performBlockAttack()
     */
 
 
-    glm::vec2 mouse = mousePosition();
+    glm::ivec2 mouse = mousePosition();
 
     //FIXME: eventually will need to make this go to the players center
     // can we divide player pos by half of screen h/w ?
     glm::vec2 center(SCREEN_W * 0.5, SCREEN_H * 0.5);
 
     // if the attempted block pick location is out of range, do nothing.
-    if (mouse.x() < center.x() - Player::blockPickingRadius ||
-            mouse.x() > center.x() + Player::blockPickingRadius ||
-            mouse.y() < center.y() - Player::blockPickingRadius ||
-            mouse.y() > center.y() + Player::blockPickingRadius) {
+    if (mouse.x < center.x - Player::blockPickingRadius ||
+            mouse.x > center.x + Player::blockPickingRadius ||
+            mouse.y < center.y - Player::blockPickingRadius ||
+            mouse.y > center.y + Player::blockPickingRadius) {
         return;
     }
 
-    mouse.x() /= int(Block::blockSize);
-    mouse.y() /= int(Block::blockSize);
+    mouse.x /= int(Block::blockSize);
+    mouse.y /= int(Block::blockSize);
 
     const int radius = Player::blockPickingRadius / Block::blockSize;
 
@@ -287,9 +287,9 @@ void World::performBlockAttack()
     //tilesBefore{X,Y} is only at the center of the view though..find the whole screen real estate
     // which is why startRow etc add and subtract half the screen
     //column
-    int tilesBeforeX = playerPosition.x() / Block::blockSize;
+    int tilesBeforeX = playerPosition.x / Block::blockSize;
     //row
-    int tilesBeforeY = playerPosition.y() / Block::blockSize;
+    int tilesBeforeY = playerPosition.y / Block::blockSize;
 
     const int startRow = tilesBeforeY - ((SCREEN_H * 0.5) / Block::blockSize);
     const int endRow = tilesBeforeY + ((SCREEN_H * 0.5) / Block::blockSize);
@@ -391,11 +391,11 @@ void World::generatePixelTileMap()
 }
 */
 
-glm::vec2 World::tileOffset() const
+glm::ivec2 World::tileOffset() const
 {
     const glm::vec2 playerPosition = m_player->position();
     // to get per-pixel smooth scrolling, we get the remainders and pass it as an offset to things that need to know the tile positions
-    const glm::vec2 ret = glm::vec2(int(playerPosition.x()) & Block::blockSize - 1, int(playerPosition.y()) & Block::blockSize - 1);
+    const glm::ivec2 ret = glm::ivec2(int(playerPosition.x) & Block::blockSize - 1, int(playerPosition.y) & Block::blockSize - 1);
     return ret;
 }
 

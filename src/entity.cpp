@@ -22,7 +22,7 @@
 #include "block.h"
 
 Entity::Entity(const std::string& frameName, SpriteSheetManager::SpriteSheetType spriteSheetType) :
-Sprite(frameName, spriteSheetType)
+    Sprite(frameName, spriteSheetType)
 {
 
 }
@@ -42,9 +42,9 @@ void Entity::update(const float elapsedTime)
 {
 //    m_velocity.y += GRAVITY;
 
-    glm::vec2 dest = glm::vec2(m_velocity.x() * elapsedTime, m_velocity.y() * elapsedTime);
-    dest.x() += position().x();
-    dest.y() += position().y();
+    glm::vec2 dest = glm::vec2(m_velocity.x * elapsedTime, m_velocity.y * elapsedTime);
+    dest.x += position().x;
+    dest.y += position().y;
     //Add the following line to the code with proper variables for width/height.
     //Then you will be able to switch to the newer collsion method.
     //Eigen::Vector2f dim = Eigen::Vector2f(width, height);
@@ -68,79 +68,88 @@ void Entity::setPosition(const glm::vec2& vect)
     Sprite::setPosition(vect);
 }
 
-glm::vec2 Entity::moveOutsideSolid(const glm::vec2& firstPosition, const glm::vec2& destPosition, const glm::vec2& dimensions) const
+glm::vec2 Entity::moveOutsideSolid(const glm::vec2& firstPosition, const glm::vec2& destPosition, const glm::ivec2& dimensions) const
 {
     glm::vec2 tempPosition = firstPosition;
-    if (checkTileCollision(destPosition, dimensions)) {
+    if (collidingWithTile(destPosition, dimensions)) {
         int horDir;
-		if (m_velocity.x() > 0) {
-			horDir = 1;
-		} else if (m_velocity.x() < 0) {
-			horDir = -1;
-		} else {
-			horDir = 0;
-		}
-        if (horDir != 0) {
-            int horMove; 
-            for (horMove = int(std::ceil(tempPosition.x()) / Block::blockSize) * Block::blockSize; horMove * horDir <= (tempPosition.x() + m_velocity.x()) * horDir; horMove += Block::blockSize * horDir) {
-                glm::vec2 tempDest = tempPosition;
-                tempDest.x() = horMove;
-                if (checkTileCollision(tempDest, dimensions)) {
-                    horMove -= Block::blockSize * horDir;
-					if (horDir == 1) {
-						horMove += Block::blockSize - (dimensions.x() % Block::blockSize);
-					}
-                    break;
-                }
-            }
-            if (horMove * horDir > (tempPosition.x() + m_velocity.x()) * horDir) {
-                horMove = tempPosition.x() + m_velocity.x();
-            }
-            tempPosition.x() = horMove;
+        if (m_velocity.x > 0) {
+            horDir = 1;
+        } else if (m_velocity.x < 0) {
+            horDir = -1;
+        } else {
+            horDir = 0;
         }
-        int verDir;
-		if (m_velocity.y() > 0) {
-			verDir = 1;
-		} else if (m_velocity.y() < 0) {
-			verDir = -1;
-		} else {
-			verDir = 0;
-		}
-        if (verDir != 0) {
-            int verMove; 
-            for (verMove = int(std::ceil(tempPosition.y()) / Block::blockSize) * Block::blockSize; verMove * verDir <= (tempPosition.y() + m_velocity.y()) * verDir; verMove += Block::blockSize * horDir) {
-                Eigen::Vector2f tempDest = tempPosition;
-                tempDest.y() = verMove;
-                if (checkTileCollision(tempDest, dimensions)) {
-                    verMove -= Block::blockSize * verDir;
-					if (verDir == 1) {
-						verMove += Block::blockSize - (dimensions.y() % Block::blockSize);
-					}
+
+        if (horDir != 0) {
+            int horMove;
+            for (horMove = int(std::ceil(tempPosition.x) / Block::blockSize) * Block::blockSize; horMove * horDir <= (tempPosition.x + m_velocity.x) * horDir; horMove += Block::blockSize * horDir) {
+                glm::vec2 tempDest = tempPosition;
+                tempDest.x = horMove;
+                if (collidingWithTile(tempDest, dimensions)) {
+                    horMove -= Block::blockSize * horDir;
+                    if (horDir == 1) {
+                        horMove += Block::blockSize - (dimensions.x % Block::blockSize);
+                    }
                     break;
                 }
             }
-            if (verMove * verDir <= (tempPosition.y() + m_velocity.y()) * verDir) {
-                verMove = tempPosition.y() + m_velocity.y();
+
+            if (horMove * horDir > (tempPosition.x + m_velocity.x) * horDir) {
+                horMove = tempPosition.x + m_velocity.x;
             }
-            tempPosition.y() = verMove;
+            tempPosition.x = horMove;
+        }
+
+        int verDir;
+        if (m_velocity.y > 0) {
+            verDir = 1;
+        } else if (m_velocity.y < 0) {
+            verDir = -1;
+        } else {
+            verDir = 0;
+        }
+
+        if (verDir != 0) {
+            int verMove;
+            for (verMove = int(std::ceil(tempPosition.y) / Block::blockSize) * Block::blockSize; verMove * verDir <= (tempPosition.y + m_velocity.y) * verDir; verMove += Block::blockSize * horDir) {
+                glm::vec2 tempDest = tempPosition;
+                tempDest.y = verMove;
+
+                if (collidingWithTile(tempDest, dimensions)) {
+                    verMove -= Block::blockSize * verDir;
+
+                    if (verDir == 1) {
+                        verMove += Block::blockSize - (dimensions.y % Block::blockSize);
+                    }
+                    break;
+                }
+            }
+
+            if (verMove * verDir <= (tempPosition.y + m_velocity.y) * verDir) {
+                verMove = tempPosition.y + m_velocity.y;
+            }
+
+            tempPosition.y = verMove;
         }
     } else {
         tempPosition = destPosition;
     }
-    return (tempPosition);
+
+    return tempPosition;
 }
 
-bool Entity::collidingWithTile(const glm::vec2& destPosition, const glm::vec2& dimensions) const
+bool Entity::collidingWithTile(const glm::vec2& destPosition, const glm::ivec2& dimensions) const
 {
-    for (int i = 0; i < dimensions.x() + Block::blockSize; i += Block::blockSize) {
-        for (int j = 0; j < dimensions.y() + Block::blockSize; j += Block::blockSize) {
-            Eigen::Vector2f tempDest = destPosition;
-            tempDest.x() += i;
-            tempDest.y() += j;
-            if (isBlockSolid(tempDest)) {
-                return (true);
+    for (int i = 0; i < dimensions.x + Block::blockSize; i += Block::blockSize) {
+        for (int j = 0; j < dimensions.y + Block::blockSize; j += Block::blockSize) {
+            glm::vec2 tempDest = destPosition;
+            tempDest.x += i;
+            tempDest.y += j;
+            if (World::instance()->isBlockSolid(tempDest)) {
+                return true;
             }
         }
     }
-    return (false);
+    return false;
 }

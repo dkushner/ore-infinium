@@ -10,10 +10,10 @@ spritesheetmanager.cpp
 fontmanager.cpp
 camera.cpp
 sprite.cpp
+block.cpp
 world.cpp
 player.cpp
 entity.cpp
-block.cpp
 #cloudsystem.cpp
 #sky.cpp
 )

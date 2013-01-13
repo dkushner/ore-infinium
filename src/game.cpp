@@ -154,7 +154,8 @@ void Game::tick()
     int frameCount = 0;
 
     while (m_running) {
-        fps =(frameCount / float(SDL_GetTicks() - startTime)) * 1000;
+        const double delta = static_cast<double>(SDL_GetTicks() - startTime);
+        fps = (frameCount / delta) * 1000;
 
         handleEvents();
 

@@ -58,13 +58,13 @@ public:
      * based on initial position firstPosition, final position destPosition, and
      * width/height dimensions.
      */
-    glm::vec2 moveOutsideSolid(const glm::vec2& firstPosition, const glm::vec2& destPosition, const glm::vec2& dimensions) const;
+    glm::vec2 moveOutsideSolid(const glm::vec2& firstPosition, const glm::vec2& destPosition, const glm::ivec2& dimensions) const;
 
     /**
      * Determines if the entity will collide at position destPosition if it has
      * dimensions as defined by dimensions.
      */
-    bool collidingWithTile(const glm::vec2& destPosition, const glm::vec2& dimensions) const;
+    bool collidingWithTile(const glm::vec2& destPosition, const glm::ivec2& dimensions) const;
 
 private:
     glm::vec2 m_velocity;
