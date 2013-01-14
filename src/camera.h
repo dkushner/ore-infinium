@@ -58,7 +58,7 @@ private:
     void pushMatrix();
 
 private:
-    GLuint m_shaderProgram;
+    GLuint m_shaderProgram = 0;
 
     glm::mat4 m_viewMatrix;
     glm::mat4 m_orthoMatrix;

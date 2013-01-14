@@ -55,6 +55,8 @@ World::World()
     m_camera = new Camera();
     SpriteSheetManager::instance()->setCamera(m_camera);
 
+    m_tileRenderer = new TileRenderer();
+
     m_player = new Player("someframe");
     m_entities.insert(m_entities.end(), m_player);
 
@@ -81,6 +83,8 @@ void World::render()
 
     //set our view so that the player will stay relative to the view, in the center.
 //HACK    m_window->setView(*m_view);
+
+    m_tileRenderer->render();
 
 //HACK    m_window->setView(m_window->getDefaultView());
     SpriteSheetManager::instance()->renderEntities();
@@ -134,11 +138,14 @@ void World::update(double elapsedTime)
 
 //    m_sky->update(elapsedTime);
 
-for (Entity * currentEntity : m_entities) {
+    for (Entity * currentEntity : m_entities) {
         currentEntity->update(elapsedTime);
     }
 
 //HACK    m_view->setCenter(m_player->position());
+
+    m_camera->centerOn(m_player->position());
+    std::cout << "play pos x: " << m_player->position().x << " y: " << m_player->position().y << "\n";
 
     //calculateAttackPosition();
     //FIXME generatePixelTileMap();
@@ -255,7 +262,6 @@ void World::performBlockAttack()
     const int endRow = (m_player->position().y / Block::blockSize) + radius;
     const int endColumn = (m_player->position().x / Block::blockSize) + radius;
     */
-
 
     glm::ivec2 mouse = mousePosition();
 

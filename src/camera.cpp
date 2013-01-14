@@ -32,20 +32,25 @@ Camera::Camera() :
 void Camera::translate(const glm::vec2 vec)
 {
     m_viewMatrix = glm::translate(m_viewMatrix, glm::vec3(vec, 0.0f));
+    pushMatrix();
 }
 
 void Camera::zoom(const float factor)
 {
     m_viewMatrix = glm::scale(m_viewMatrix, glm::vec3(factor));
+    pushMatrix();
 }
 
 void Camera::centerOn(const glm::vec2 vec)
 {
     m_viewMatrix = glm::translate(glm::mat4(), glm::vec3(vec, 0.0f));
+    pushMatrix();
 }
 
 void Camera::pushMatrix()
 {
+    Debug::assertf(m_shaderProgram, "camera shader program is 0");
+
     glUseProgram(m_shaderProgram);
 
     glm::mat4 mvp = m_viewMatrix * m_orthoMatrix;
