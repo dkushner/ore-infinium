@@ -145,6 +145,8 @@ private:
     glm::vec2 m_relativeVectorToAttack;
 
     Camera* m_camera = nullptr;
+
+    friend class TileRenderer;
 };
 
 #endif
