@@ -14,6 +14,7 @@ block.cpp
 world.cpp
 player.cpp
 entity.cpp
+tilerenderer.cpp
 #cloudsystem.cpp
 #sky.cpp
 )

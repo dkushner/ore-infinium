@@ -20,6 +20,8 @@
 
 #include "block.h"
 #include "game.h"
+#include "camera.h"
+#include "tilerenderer.h"
 //HACK #include "sky.h"
 
 #include <stdio.h>
@@ -50,7 +52,10 @@ void World::createInstance()
 
 World::World()
 {
-//FIXME:    m_player = new Player("../textures/player.png");
+    m_camera = new Camera();
+    SpriteSheetManager::instance()->setCamera(m_camera);
+
+    m_player = new Player("someframe");
     m_entities.insert(m_entities.end(), m_player);
 
     loadMap();
@@ -77,15 +82,11 @@ void World::render()
     //set our view so that the player will stay relative to the view, in the center.
 //HACK    m_window->setView(*m_view);
 
-    //player drawn on top... since we don't have anything like z-ordering or layering (TODO)
-for (Entity * currentEntity : m_entities) {
-//        currentEntity->draw_bitmap();
-    }
-
 //HACK    m_window->setView(m_window->getDefaultView());
+    SpriteSheetManager::instance()->renderEntities();
+    SpriteSheetManager::instance()->renderCharacters();
 
     // ==================================================
-
     glm::ivec2 mouse = mousePosition();
 
     const float radius = 16.0f;
@@ -104,7 +105,6 @@ for (Entity * currentEntity : m_entities) {
 
 void World::handleEvent(const SDL_Event& event)
 {
-
     //FIXME:!!!! unused, we just pass events to the player..among other children (currently just player though)
     //here, the inventory ui and other stuff may need to be factored in. who knows.
     switch (event.type) {
@@ -126,7 +126,7 @@ void World::handleEvent(const SDL_Event& event)
     m_player->handleEvent(event);
 }
 
-void World::update(const float elapsedTime)
+void World::update(double elapsedTime)
 {
     if (m_mouseLeftHeld) {
         performBlockAttack();
@@ -186,7 +186,6 @@ bool World::isBlockSolid(const glm::vec2& vecDest) const
 
 unsigned char World::getBlockType(const glm::vec2& vecPoint) const
 {
-
     const int column = int(std::ceil(vecPoint.x) / Block::blockSize);
     const int row = int(std::ceil(vecPoint.y) / Block::blockSize);
 
@@ -196,7 +195,6 @@ unsigned char World::getBlockType(const glm::vec2& vecPoint) const
     const unsigned char blockType = World::m_blocks[index].primitiveType;
 
     return  blockType;
-
 }
 
 bool World::tileBlendTypeMatch(int sourceTileX, int sourceTileY, int nearbyTileX, int nearbyTileY) const
@@ -405,7 +403,9 @@ void World::loadMap()
     std::cout << "SIZEOF m_blocks: " << sizeof(m_blocks) / 1e6 << " MiB" << std::endl;
     generateMap();
 
-    m_player->setPosition(2800, 2450);
+    // m_player->setPosition(2800, 2450);
+    //FIXME:
+    m_player->setPosition(100, 200);
 }
 
 void World::generateMap()

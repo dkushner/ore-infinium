@@ -66,7 +66,7 @@ public:
     /**
      * Renders all entities, from the respective spritesheets
      */
-    void renderEntitites();
+    void renderEntities();
 
     /**
      * Returns the GLuint for the spritesheet renderer's shader program

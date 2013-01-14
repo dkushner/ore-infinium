@@ -27,6 +27,7 @@
 #include <GL/gl.h>
 #include <SDL2/SDL_events.h>
 
+class TileRenderer;
 class Sky;
 class Camera;
 
@@ -55,7 +56,7 @@ public:
     static World* instance();
     static void createInstance();
 
-    void update(const float elapsedTime);
+    void update(double elapsedTime);
     void render();
 
     void loadMap();
@@ -128,7 +129,8 @@ private:
     // [column * WORLD_ROWCOUNT + row]
     Block m_blocks[WORLD_ROWCOUNT * WORLD_COLUMNCOUNT];
 
-    Player *m_player = nullptr;
+    TileRenderer* m_tileRenderer = nullptr;
+    Player* m_player = nullptr;
 
 //    Sky *m_sky = nullptr;
 
@@ -141,6 +143,8 @@ private:
      * In client window coordinates (relative)
      */
     glm::vec2 m_relativeVectorToAttack;
+
+    Camera* m_camera = nullptr;
 };
 
 #endif

@@ -226,7 +226,7 @@ void SpriteSheetManager::renderCharacters()
     bindSpriteSheet(SpriteSheetType::Character);
 
     int index = 0;
-for (Sprite * sprite: m_characterSprites) {
+    for (Sprite * sprite: m_characterSprites) {
         auto frameIdentifier = m_spriteSheetCharactersDescription.find(sprite->frameName());
         SpriteFrameIdentifier& frame = frameIdentifier->second;
         frame.x; //FIXME:
@@ -241,6 +241,7 @@ for (Sprite * sprite: m_characterSprites) {
         // vertices[3] -> top right
 
         glm::vec2 spritePosition = sprite->position();
+
         glm::vec2 spriteSize = sprite->size();
 
         glm::vec4 rect = glm::vec4(spritePosition.x, spritePosition.y, spritePosition.x + spriteSize.x, spritePosition.y + spriteSize.y);
@@ -319,11 +320,10 @@ for (Sprite * sprite: m_characterSprites) {
 
     glDisable(GL_BLEND);
 
-
     checkGLError();
 }
 
-void SpriteSheetManager::renderEntitites()
+void SpriteSheetManager::renderEntities()
 {
 
 }

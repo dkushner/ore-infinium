@@ -157,7 +157,7 @@ void Game::tick()
 
         handleEvents();
 
-        m_world->update(static_cast<float>(delta));
+        m_world->update(delta);
 
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
