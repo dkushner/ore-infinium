@@ -140,11 +140,6 @@ private:
 
     glm::vec2 spriteSheetSize(SpriteSheetType type);
 
-    char* loadFile(const char* fname, GLint* fSize);
-    void loadDefaultShaders();
-    void printShaderInfoLog(GLuint shader);
-    bool checkShaderCompileStatus(GLuint obj);
-    bool checkProgramLinkStatus(GLuint obj);
     void checkGLError();
 
     void initGL();
@@ -165,8 +160,8 @@ private:
     std::vector<Sprite*> m_characterSprites;
 
     GLuint m_spriteShaderProgram;
-    GLuint m_vertexShader;
-    GLuint m_fragmentShader;
+//FIXME: HACK: WHEN SHADER MANAGER GETS FIXED PROPER    GLuint m_vertexShader;
+//FIXME: HACK: WHEN SHADER MANAGER GETS FIXED PROPER    GLuint m_fragmentShader;
 
     GLint m_texture_location;
 

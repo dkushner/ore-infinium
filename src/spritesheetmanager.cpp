@@ -22,6 +22,7 @@
 #include "debug.h"
 #include "game.h"
 #include "camera.h"
+#include "shadermanager.h"
 
 #include <fstream>
 #include <iostream>
@@ -45,7 +46,7 @@ SpriteSheetManager::SpriteSheetManager()
     FreeImage_Initialise();
 #endif
 
-    loadDefaultShaders();
+    m_spriteShaderProgram = ShaderManager::instance()->loadShaders("sprite.vert", "sprite.frag");
     initGL();
 
     float scale = 1.0f;
@@ -66,8 +67,8 @@ SpriteSheetManager::~SpriteSheetManager()
     unloadAllSpriteSheets();
 
     glDeleteProgram(m_spriteShaderProgram);
-    glDeleteShader(m_vertexShader);
-    glDeleteShader(m_fragmentShader);
+    //FIXME: HACK: WHEN THE SHADER MANAGER GETS FIXED PROPERLY glDeleteShader(m_vertexShader);
+    //FIXME: HACK: WHEN THE SHADER MANAGER GETS FIXED PROPERLY glDeleteShader(m_fragmentShader);
 
     glDeleteBuffers(1, &m_vbo);
     glDeleteBuffers(1, &m_ebo);
@@ -335,147 +336,6 @@ void SpriteSheetManager::checkGLError()
         std::cerr << gluErrorString(error);
         assert(0);
     }
-}
-
-void SpriteSheetManager::printShaderInfoLog(GLuint shader)
-{
-    int infoLogLen = 0;
-    int charsWritten = 0;
-    GLchar *infoLog;
-
-    glGetShaderiv(shader, GL_INFO_LOG_LENGTH, &infoLogLen);
-
-    // should additionally check for OpenGL errors here
-
-    if (infoLogLen > 0) {
-        infoLog = new GLchar[infoLogLen];
-        // error check for fail to allocate memory omitted
-        glGetShaderInfoLog(shader, infoLogLen, &charsWritten, infoLog);
-//        std::cout << "InfoLog:" << std::endl << infoLog << std::endl;
-        std::cout << infoLog;
-        delete [] infoLog;
-    }
-
-    // should additionally check for OpenGL errors here
-}
-
-// loadFile - loads text file into char* fname
-// allocates memory - so need to delete after use
-// size of file returned in fSize
-char* SpriteSheetManager::loadFile(const char* fname, GLint* fSize)
-{
-    std::ifstream::pos_type size;
-    char * memblock = 0;
-    std::string text;
-
-    // file read based on example in cplusplus.com tutorial
-    std::ifstream file(fname, std::ios::in | std::ios::binary | std::ios::ate);
-    if (file.is_open()) {
-        size = file.tellg();
-        *fSize = (GLuint) size;
-        memblock = new char [size];
-        file.seekg(0, std::ios::beg);
-        file.read(memblock, size);
-        file.close();
-        Debug::log(Debug::Area::Graphics) << "shader : " << fname << " loaded successfully";
-        text.assign(memblock);
-    } else {
-        Debug::fatal(false,  Debug::Area::Graphics, "failed to load shader: " + std::string(fname));
-    }
-    return memblock;
-}
-
-void SpriteSheetManager::loadDefaultShaders()
-{
-    // program and shader handles
-    GLuint vertex_shader, fragment_shader;
-
-    // create and compiler vertex shader
-    vertex_shader = glCreateShader(GL_VERTEX_SHADER);
-
-    GLint vertLength;
-    GLint fragLength;
-
-    char* vertSource;
-    char* fragSource;
-
-    vertSource = loadFile("sprite.vert", &vertLength);
-    fragSource = loadFile("sprite.frag", &fragLength);
-
-    const char* vertSourceConst = vertSource;
-    const char* fragSourceConst = fragSource;
-
-    glShaderSource(vertex_shader, 1, &vertSourceConst, &vertLength);
-    glCompileShader(vertex_shader);
-
-    if (!checkShaderCompileStatus(vertex_shader)) {
-        assert(0);
-    } else {
-        Debug::log(Debug::Area::Graphics) << "vertex shader compiled!";
-    }
-
-    // create and compiler fragment shader
-    fragment_shader = glCreateShader(GL_FRAGMENT_SHADER);
-    glShaderSource(fragment_shader, 1, &fragSourceConst, &fragLength);
-    glCompileShader(fragment_shader);
-
-    if (!checkShaderCompileStatus(fragment_shader)) {
-        assert(0);
-    } else {
-        Debug::log(Debug::Area::Graphics) << "fragment shader compiled!";
-    }
-
-    m_vertexShader = vertex_shader;
-    m_fragmentShader = fragment_shader;
-
-    // create program
-    m_spriteShaderProgram = glCreateProgram();
-
-    // attach shaders
-    glAttachShader(m_spriteShaderProgram, vertex_shader);
-    glAttachShader(m_spriteShaderProgram, fragment_shader);
-
-    // link the program and check for errors
-    glLinkProgram(m_spriteShaderProgram);
-
-    if (checkProgramLinkStatus(m_spriteShaderProgram)) {
-        Debug::log(Debug::Area::Graphics) << "shader program linked!";
-    } else {
-        Debug::fatal(false, Debug::Area::Graphics, "shader program link FAILURE");
-    }
-
-    delete [] vertSource;
-    delete [] fragSource;
-}
-
-bool SpriteSheetManager::checkShaderCompileStatus(GLuint obj)
-{
-    GLint status;
-    glGetShaderiv(obj, GL_COMPILE_STATUS, &status);
-    if (status == GL_FALSE) {
-        GLint length;
-        glGetShaderiv(obj, GL_INFO_LOG_LENGTH, &length);
-        std::vector<char> log(length);
-        glGetShaderInfoLog(obj, length, &length, &log[0]);
-        std::cerr << &log[0];
-        return false;
-    }
-    return true;
-}
-
-bool SpriteSheetManager::checkProgramLinkStatus(GLuint obj)
-{
-    GLint status;
-    glGetProgramiv(obj, GL_LINK_STATUS, &status);
-    if (status == GL_FALSE) {
-        GLint length;
-        glGetProgramiv(obj, GL_INFO_LOG_LENGTH, &length);
-        std::vector<char> log(length);
-        glGetProgramInfoLog(obj, length, &length, &log[0]);
-        std::cerr << &log[0];
-        return false;
-    }
-    return true;
 }
 
 GLuint tex;
