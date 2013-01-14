@@ -32,7 +32,7 @@ public:
      */
     Entity(const std::string& frameName, SpriteSheetManager::SpriteSheetType spriteSheetType);
 
-    virtual void update(const float elapsedTime);
+    virtual void update(double elapsedTime);
 
     /**
      * Overrides/hides member functions from Sprite

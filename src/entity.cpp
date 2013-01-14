@@ -38,7 +38,7 @@ void Entity::setVelocity(float x, float y)
     m_velocity = velocity;
 }
 
-void Entity::update(const float elapsedTime)
+void Entity::update(double elapsedTime)
 {
 //    m_velocity.y += GRAVITY;
 
