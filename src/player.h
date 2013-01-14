@@ -33,10 +33,12 @@ public:
 
     void handleEvent(const SDL_Event& event);
 
-    // radius indicating how many pixels out the player can pick
-    // blocks
+    // radius indicating how many pixels out the player can pick blocks
     static constexpr float blockPickingRadius = Block::blockSize * 8.0f;
-    static constexpr float movementSpeed = 1000.0f;
+
+    //FIXME: MOVE MORE UPSTREAM, halfass attempt at making a unit system, instead of making it pixel based for movement.
+    static constexpr float movementUnits = 1.0f/100000.0f;
+    static constexpr float movementSpeed = 10.0f * movementUnits;
 
 private:
     unsigned char health = 100;

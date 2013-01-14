@@ -65,5 +65,5 @@ void Player::handleEvent(const SDL_Event& event)
         break;
     }
 
-    Entity::setVelocity(m_inputXDirection, m_inputYDirection);
+    Entity::setVelocity(m_inputXDirection * movementSpeed, m_inputYDirection * movementSpeed);
 }

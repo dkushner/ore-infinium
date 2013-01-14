@@ -53,9 +53,9 @@ void Entity::update(double elapsedTime)
     //Texture::setPosition(moveOutsideSolid(position, dest, dim));
 
     //Remove this and add the above when the definition for dim is fixed.
-    if (!World::instance()->isBlockSolid(dest)) {
+//    if (!World::instance()->isBlockSolid(dest)) {
         Sprite::setPosition(dest);
-    }
+ //   }
 }
 
 void Entity::setPosition(float x, float y)

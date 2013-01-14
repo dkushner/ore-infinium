@@ -43,7 +43,8 @@ void Camera::zoom(const float factor)
 
 void Camera::centerOn(const glm::vec2 vec)
 {
-    m_viewMatrix = glm::translate(glm::mat4(), glm::vec3(vec, 0.0f));
+    glm::vec2 screenSize(SCREEN_W, SCREEN_H);
+    m_viewMatrix = glm::translate(glm::mat4(), -glm::vec3(vec - screenSize * 0.5f, 0.0f));
     pushMatrix();
 }
 
@@ -53,7 +54,7 @@ void Camera::pushMatrix()
 
     glUseProgram(m_shaderProgram);
 
-    glm::mat4 mvp = m_viewMatrix * m_orthoMatrix;
+    glm::mat4 mvp =  m_orthoMatrix *m_viewMatrix;
 
     int mvpLoc = glGetUniformLocation(m_shaderProgram, "mvp");
     glUniformMatrix4fv(mvpLoc, 1, GL_FALSE, &mvp[0][0]);

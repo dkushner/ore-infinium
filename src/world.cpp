@@ -142,13 +142,11 @@ void World::update(double elapsedTime)
         currentEntity->update(elapsedTime);
     }
 
-//HACK    m_view->setCenter(m_player->position());
-
+    //FIXME: MAKE IT CENTER ON THE CENTER OF THE PLAYER SPRITE
     m_camera->centerOn(m_player->position());
     std::cout << "play pos x: " << m_player->position().x << " y: " << m_player->position().y << "\n";
 
     //calculateAttackPosition();
-    //FIXME generatePixelTileMap();
 }
 
 glm::ivec2 World::mousePosition() const
