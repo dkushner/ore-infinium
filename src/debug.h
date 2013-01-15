@@ -50,6 +50,10 @@ public:
     static void fatal(bool value, Area area, std::string message);
 
     static void checkGLError();
+
+    static void glDebugCallback(unsigned int source, unsigned int type,
+                                       unsigned int id, unsigned int severity,
+                                       int length, const char* message, void* userParam);
 };
 
 class LogStream : public std::stringstream

@@ -146,7 +146,6 @@ for (Entity * currentEntity : m_entities) {
 
     //FIXME: MAKE IT CENTER ON THE CENTER OF THE PLAYER SPRITE
     m_camera->centerOn(m_player->position());
-    std::cout << "play pos x: " << m_player->position().x << " y: " << m_player->position().y << "\n";
 
     //calculateAttackPosition();
 }

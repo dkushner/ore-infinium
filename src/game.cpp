@@ -113,7 +113,7 @@ void Game::init()
     checkGLError();
 
     checkSDLError();
-    glewInit();
+    Debug::assertf(glewInit() == GLEW_OK, "glewInit returned !GLEW_OK. No GL context can be formed..bailing out");
 
     Debug::log(Debug::Area::Graphics) << "Platform: Driver Vendor: " << glGetString(GL_VENDOR);
     Debug::log(Debug::Area::Graphics) << "Platform: Renderer: " << glGetString(GL_RENDERER);
@@ -126,6 +126,15 @@ void Game::init()
     glGetIntegerv(GL_MAX_TEXTURE_SIZE, &textureSize);
     Debug::log(Debug::Area::Graphics) << "Maximum OpenGL texture size allowed: " << textureSize;
     std::cout << "\n\n\n\n";
+
+    if (!GLEW_KHR_debug) {
+        Debug::log(Debug::Area::Graphics) << "GLEW_KHR_debug is not available, disabling OpenGL debug mode (TODO)";
+        assert(0);
+    }
+
+    glEnable(GL_DEBUG_OUTPUT);
+    glDebugMessageCallback(&Debug::glDebugCallback, 0);
+    glDebugMessageControl(GL_DONT_CARE,GL_DONT_CARE,GL_DONT_CARE,0,0,GL_TRUE);
 
     m_font = FontManager::instance()->loadFont("../font/Ubuntu-L.ttf");
 
