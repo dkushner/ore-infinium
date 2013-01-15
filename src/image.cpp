@@ -107,3 +107,4 @@ void Image::loadImage(const std::string& filename, GLenum image_format, GLint in
         Debug::fatal(false, Debug::Area::Graphics, "failure to load image, bitmap sizes invalid or bits invalid");
     }
 }
+

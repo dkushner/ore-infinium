@@ -84,7 +84,9 @@ void SpriteSheetManager::loadAllSpriteSheets()
 
 void SpriteSheetManager::loadSpriteSheet(const std::string& fileName, SpriteSheetManager::SpriteSheetType type)
 {
-
+    auto& wrapper = m_spriteSheetTextures[type];
+    wrapper.image = new Image(fileName);
+    wrapper.image->generate();
 }
 
 void SpriteSheetManager::unloadSpriteSheet(SpriteSheetManager::SpriteSheetType type)
@@ -160,7 +162,7 @@ void SpriteSheetManager::renderCharacters()
     bindSpriteSheet(SpriteSheetType::Character);
 
     int index = 0;
-for (Sprite * sprite: m_characterSprites) {
+    for (Sprite * sprite: m_characterSprites) {
         auto frameIdentifier = m_spriteSheetCharactersDescription.find(sprite->frameName());
         SpriteFrameIdentifier& frame = frameIdentifier->second;
         frame.x; //FIXME:
