@@ -19,8 +19,6 @@
 #ifndef SPRITESHEETMANAGER_H
 #define SPRITESHEETMANAGER_H
 
-#include <FreeImage.h>
-
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/swizzle.hpp>
@@ -117,18 +115,6 @@ private:
 
     void bindSpriteSheet(SpriteSheetType type);
 
-    /**
-     * Load an image as an OpenGL texture and make it the current texture
-     * If @p texID is already in use, it will be unloaded and replaced with this texture
-     *
-     * @p filename path relative or absolute including extension to the image to load
-     * @p texID the GLint handle to the resulting texture
-     * @p image_format which format the image on disk is in. Default is GL_BGRA
-     * @p internal_format the format to tell OpenGL how it should store it. Default GL_RGBA
-     * @p level what mipmapping level to utilize. Default 0.
-     * @p border border size. Default 0
-     */
-    void loadSpriteSheet(const std::string& filename, SpriteSheetType type, GLenum image_format = GL_BGRA, GLint internal_format = GL_RGBA, GLint level = 0, GLint border = 0);
 
     glm::vec2 spriteSheetSize(SpriteSheetType type);
 
