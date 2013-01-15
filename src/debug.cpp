@@ -17,6 +17,8 @@
 
 #include "debug.h"
 
+#include <GL/glew.h>
+
 #include <assert.h>
 #include <iostream>
 #include <sstream>
@@ -41,6 +43,15 @@ void Debug::fatal(bool value, Debug::Area area, std::string message)
 {
     if (!value) {
         Debug::log(area) << "FATAL: " << message;
+        assert(0);
+    }
+}
+
+void Debug::checkGLError()
+{
+    GLenum error = glGetError();
+    if (error != GL_NO_ERROR) {
+        Debug::log(Debug::Area::Graphics) << gluErrorString(error);
         assert(0);
     }
 }

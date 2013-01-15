@@ -161,6 +161,8 @@ void SpriteSheetManager::renderCharacters()
 
     bindSpriteSheet(SpriteSheetType::Character);
 
+    Debug::checkGLError();
+
     int index = 0;
     for (Sprite* sprite: m_characterSprites) {
         auto frameIdentifier = m_spriteSheetCharactersDescription.find(sprite->frameName());
@@ -200,7 +202,7 @@ void SpriteSheetManager::renderCharacters()
         vertices[3][0] = width; // top right X
         vertices[3][1] = y; // top right Y
 
-        checkGLError();
+        Debug::checkGLError();
 
         // copy color to the buffer
         for (size_t i = 0; i < sizeof(vertices) / sizeof(*vertices); i++) {
@@ -239,10 +241,12 @@ void SpriteSheetManager::renderCharacters()
     glBindBuffer(GL_ARRAY_BUFFER, m_vbo);
     glBindVertexArray(m_vao);
 
-    checkGLError();
+    Debug::checkGLError();
+
     m_shader->bindProgram();
 
-    checkGLError();
+    Debug::checkGLError();
+
     glDrawElements(
         GL_TRIANGLES,
         6 * (m_characterSprites.size()), // 6 indices per 2 triangles
@@ -256,7 +260,7 @@ void SpriteSheetManager::renderCharacters()
 
     glDisable(GL_BLEND);
 
-    checkGLError();
+    Debug::checkGLError();
 }
 
 void SpriteSheetManager::renderEntities()
@@ -264,19 +268,10 @@ void SpriteSheetManager::renderEntities()
 
 }
 
-void SpriteSheetManager::checkGLError()
-{
-    GLenum error = glGetError();
-    if (error != GL_NO_ERROR) {
-        std::cerr << gluErrorString(error);
-        assert(0);
-    }
-}
-
 GLuint tex;
 void SpriteSheetManager::initGL()
 {
-    checkGLError();
+    Debug::checkGLError();
 
     //////////////////////
 
@@ -291,7 +286,7 @@ void SpriteSheetManager::initGL()
         NULL,
         GL_DYNAMIC_DRAW);
 
-    checkGLError();
+    Debug::checkGLError();
 
     std::vector<u32> indicesv;
 
@@ -312,7 +307,7 @@ void SpriteSheetManager::initGL()
         indicesv.data(),
         GL_STATIC_DRAW);
 
-    checkGLError();
+    Debug::checkGLError();
 
     size_t buffer_offset = 0;
 
@@ -329,7 +324,7 @@ void SpriteSheetManager::initGL()
 
     GLint color_attrib = glGetAttribLocation(m_shader->shaderProgram(), "color");
 
-    checkGLError();
+    Debug::checkGLError();
 
     glEnableVertexAttribArray(color_attrib);
     glVertexAttribPointer(
@@ -341,7 +336,7 @@ void SpriteSheetManager::initGL()
         (const GLvoid*)buffer_offset);
     buffer_offset += sizeof(u32);
 
-    checkGLError();
+    Debug::checkGLError();
 
     GLint texcoord_attrib = glGetAttribLocation(m_shader->shaderProgram(), "texcoord");
     glEnableVertexAttribArray(texcoord_attrib);
@@ -353,5 +348,5 @@ void SpriteSheetManager::initGL()
         sizeof(spriteVertex),
         (const GLvoid*)buffer_offset);
 
-    checkGLError();
+    Debug::checkGLError();
 }

@@ -48,6 +48,8 @@ public:
 
     static void assertf(bool value, std::string message);
     static void fatal(bool value, Area area, std::string message);
+
+    static void checkGLError();
 };
 
 class LogStream : public std::stringstream

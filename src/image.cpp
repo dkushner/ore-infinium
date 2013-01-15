@@ -39,7 +39,11 @@ Image::~Image()
 
 void Image::bind()
 {
+    Debug::assertf(m_textureID, "bind called before generate on Image");
+
+    Debug::checkGLError();
     glBindTexture(GL_TEXTURE_2D, m_textureID);
+    Debug::checkGLError();
 }
 
 void Image::generate()
@@ -61,8 +65,11 @@ void Image::generate()
     Debug::assertf(bits, "Image::generate, could not gen texture, image bits are empty.");
 
     glTexImage2D(GL_TEXTURE_2D, m_level, m_internal_format, m_width, m_height, m_border, m_image_format, GL_UNSIGNED_BYTE, bits);
-}
 
+    //HACK: 2nd bind is needed for I don't know why..but it says "invalid enumerant" without it.
+    glBindTexture(GL_TEXTURE_2D, m_textureID);
+    Debug::checkGLError();
+}
 
 GLuint Image::textureHandle()
 {
@@ -99,12 +106,16 @@ void Image::loadImage(const std::string& filename, GLenum image_format, GLint in
 
     Debug::fatal(m_bitmap, Debug::Area::Graphics, "failure to load image, bitmap pointer invalid");
 
-
     m_width = FreeImage_GetWidth(m_bitmap);
     m_height = FreeImage_GetHeight(m_bitmap);
 
     if (m_width == 0 || m_height == 0) {
         Debug::fatal(false, Debug::Area::Graphics, "failure to load image, bitmap sizes invalid or bits invalid");
     }
+
+    m_image_format = image_format;
+    m_internal_format = internal_format;
+    m_level = level;
+    m_border = border;
 }
 
