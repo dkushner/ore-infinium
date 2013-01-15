@@ -31,6 +31,7 @@
 #include <vector>
 
 class Camera;
+class Shader;
 
 class Sprite;
 
@@ -160,8 +161,6 @@ private:
     std::vector<Sprite*> m_characterSprites;
 
     GLuint m_spriteShaderProgram;
-//FIXME: HACK: WHEN SHADER MANAGER GETS FIXED PROPER    GLuint m_vertexShader;
-//FIXME: HACK: WHEN SHADER MANAGER GETS FIXED PROPER    GLuint m_fragmentShader;
 
     GLint m_texture_location;
 
@@ -173,7 +172,9 @@ private:
     glm::mat4 m_projectionMatrix;
 
     int m_maxSpriteCount = 2200;
+
     Camera* m_camera = nullptr;
+    Shader* m_shader = nullptr;
 
 private:
     SpriteSheetManager();

@@ -27,14 +27,41 @@
 
 #include "debug.h"
 
-Shader::Shader(const char* vertexShader, const char* fragmentShader) : loadShaders("","")
+Shader::Shader(const char* vertexShader, const char* fragmentShader)
 {
-
+    loadShaders(vertexShader, fragmentShader);
 }
 
 Shader::~Shader()
 {
+    glDeleteProgram(m_shaderProgram);
+    glDeleteShader(m_vertexShader);
+    glDeleteShader(m_fragmentShader);
+}
 
+void Shader::bindProgram() const
+{
+    glUseProgram(m_shaderProgram);
+}
+
+void Shader::unbindProgram() const
+{
+    glUseProgram(0);
+}
+
+GLuint Shader::shaderProgram() const
+{
+    return m_shaderProgram;
+}
+
+GLuint Shader::vertexShader() const
+{
+    return m_vertexShader;
+}
+
+GLuint Shader::fragmentShader() const
+{
+    return m_fragmentShader;
 }
 
 // loadFile - loads text file into char* fname

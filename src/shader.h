@@ -33,11 +33,15 @@ public:
     explicit Shader(const char* vertexShader, const char* fragmentShader);
     ~Shader();
 
-    GLuint shaderProgram() { return m_shaderProgram; } const
-    GLuint vertexShader() { return m_vertexShader; } const
-    GLuint fragmentShader() { return m_fragmentShader; } const
+    GLuint shaderProgram() const;
+    GLuint vertexShader() const;
+    GLuint fragmentShader() const;
+
+    void bindProgram() const;
+    void unbindProgram() const;
 
 private:
+
     void loadShaders(const char* vertexShader, const char* fragmentShader);
     void printShaderInfoLog(GLuint shader);
     bool checkShaderCompileStatus(GLuint obj);

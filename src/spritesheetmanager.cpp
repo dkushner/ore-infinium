@@ -22,7 +22,7 @@
 #include "debug.h"
 #include "game.h"
 #include "camera.h"
-#include "shadermanager.h"
+#include "shader.h"
 
 #include <fstream>
 #include <iostream>
@@ -46,7 +46,9 @@ SpriteSheetManager::SpriteSheetManager()
     FreeImage_Initialise();
 #endif
 
-    m_spriteShaderProgram = ShaderManager::instance()->loadShaders("sprite.vert", "sprite.frag");
+    m_shader = new Shader("sprite.vert", "sprite.frag");
+    m_spriteShaderProgram = m_shader->shaderProgram();
+
     initGL();
 
     float scale = 1.0f;
@@ -65,10 +67,6 @@ SpriteSheetManager::~SpriteSheetManager()
 #endif
 
     unloadAllSpriteSheets();
-
-    glDeleteProgram(m_spriteShaderProgram);
-    //FIXME: HACK: WHEN THE SHADER MANAGER GETS FIXED PROPERLY glDeleteShader(m_vertexShader);
-    //FIXME: HACK: WHEN THE SHADER MANAGER GETS FIXED PROPERLY glDeleteShader(m_fragmentShader);
 
     glDeleteBuffers(1, &m_vbo);
     glDeleteBuffers(1, &m_ebo);
@@ -222,12 +220,12 @@ std::map<std::string, SpriteSheetManager::SpriteFrameIdentifier> SpriteSheetMana
 
 void SpriteSheetManager::renderCharacters()
 {
-    glUseProgram(m_spriteShaderProgram);
+    m_shader->bindProgram();
 
     bindSpriteSheet(SpriteSheetType::Character);
 
     int index = 0;
-for (Sprite * sprite: m_characterSprites) {
+    for (Sprite * sprite: m_characterSprites) {
         auto frameIdentifier = m_spriteSheetCharactersDescription.find(sprite->frameName());
         SpriteFrameIdentifier& frame = frameIdentifier->second;
         frame.x; //FIXME:
@@ -305,7 +303,7 @@ for (Sprite * sprite: m_characterSprites) {
     glBindVertexArray(m_vao);
 
     checkGLError();
-    glUseProgram(m_spriteShaderProgram);
+    m_shader->bindProgram();
 
     checkGLError();
     glDrawElements(
@@ -314,7 +312,7 @@ for (Sprite * sprite: m_characterSprites) {
         GL_UNSIGNED_INT,
         (const GLvoid*)0);
 
-    glUseProgram(0);
+    m_shader->unbindProgram();
     glBindVertexArray(0);
     glBindBuffer(GL_ARRAY_BUFFER, 0);
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
