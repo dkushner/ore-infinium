@@ -79,7 +79,7 @@ SpriteSheetManager::~SpriteSheetManager()
 void SpriteSheetManager::setCamera(Camera* camera)
 {
     m_camera = camera;
-    m_camera->setShaderProgram(m_spriteShaderProgram);
+    m_camera->setShader(m_shader);
 }
 
 void SpriteSheetManager::loadAllSpriteSheets()
@@ -225,7 +225,7 @@ void SpriteSheetManager::renderCharacters()
     bindSpriteSheet(SpriteSheetType::Character);
 
     int index = 0;
-    for (Sprite * sprite: m_characterSprites) {
+for (Sprite * sprite: m_characterSprites) {
         auto frameIdentifier = m_spriteSheetCharactersDescription.find(sprite->frameName());
         SpriteFrameIdentifier& frame = frameIdentifier->second;
         frame.x; //FIXME:

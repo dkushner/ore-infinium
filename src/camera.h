@@ -24,6 +24,8 @@
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 
+class Shader;
+
 class Camera
 {
 public:
@@ -42,23 +44,16 @@ public:
 
     void centerOn(const glm::vec2 vec);
 
-    void setShaderProgram(GLuint program) {
-        m_shaderProgram = program;
-        pushMatrix();
-    }
 
-    glm::mat4 ortho() const {
-        return m_orthoMatrix;
-    }
-    glm::mat4 view() const {
-        return m_viewMatrix;
-    }
+    void setShader(Shader* shader);
+    glm::mat4 ortho() const;
+    glm::mat4 view() const;
 
 private:
     void pushMatrix();
 
 private:
-    GLuint m_shaderProgram = 0;
+    Shader* m_shader = nullptr;
 
     glm::mat4 m_viewMatrix;
     glm::mat4 m_orthoMatrix;

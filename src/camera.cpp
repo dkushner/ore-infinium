@@ -19,6 +19,7 @@
 #include "game.h"
 #include "debug.h"
 #include "spritesheetmanager.h"
+#include "shader.h"
 
 Camera::Camera() :
     m_vector(glm::vec3())
@@ -48,17 +49,32 @@ void Camera::centerOn(const glm::vec2 vec)
     pushMatrix();
 }
 
+void Camera::setShader(Shader* shader)
+{
+    m_shader = shader;
+    pushMatrix();
+}
+
+glm::mat4 Camera::ortho() const
+{
+    return m_orthoMatrix;
+}
+glm::mat4 Camera::view() const
+{
+    return m_viewMatrix;
+}
+
 void Camera::pushMatrix()
 {
-    Debug::assertf(m_shaderProgram, "camera shader program is 0");
+    Debug::assertf(m_shader, "camera shader program is 0");
 
-    glUseProgram(m_shaderProgram);
+    m_shader->bindProgram();
 
     glm::mat4 mvp =  m_orthoMatrix * m_viewMatrix;
 
-    int mvpLoc = glGetUniformLocation(m_shaderProgram, "mvp");
+    int mvpLoc = glGetUniformLocation(m_shader->shaderProgram(), "mvp");
     glUniformMatrix4fv(mvpLoc, 1, GL_FALSE, &mvp[0][0]);
 
-    glUseProgram(0);
+    m_shader->unbindProgram();
 }
 
