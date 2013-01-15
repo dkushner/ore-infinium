@@ -47,7 +47,6 @@ SpriteSheetManager::SpriteSheetManager()
 #endif
 
     m_shader = new Shader("sprite.vert", "sprite.frag");
-    m_spriteShaderProgram = m_shader->shaderProgram();
 
     initGL();
 
@@ -379,7 +378,7 @@ void SpriteSheetManager::initGL()
 
     size_t buffer_offset = 0;
 
-    GLint pos_attrib = glGetAttribLocation(m_spriteShaderProgram, "position");
+    GLint pos_attrib = glGetAttribLocation(m_shader->shaderProgram(), "position");
     glEnableVertexAttribArray(pos_attrib);
     glVertexAttribPointer(
         pos_attrib,
@@ -390,7 +389,7 @@ void SpriteSheetManager::initGL()
         (const GLvoid*)buffer_offset);
     buffer_offset += sizeof(f32) * 2;
 
-    GLint color_attrib = glGetAttribLocation(m_spriteShaderProgram, "color");
+    GLint color_attrib = glGetAttribLocation(m_shader->shaderProgram(), "color");
 
     checkGLError();
 
@@ -406,7 +405,7 @@ void SpriteSheetManager::initGL()
 
     checkGLError();
 
-    GLint texcoord_attrib = glGetAttribLocation(m_spriteShaderProgram, "texcoord");
+    GLint texcoord_attrib = glGetAttribLocation(m_shader->shaderProgram(), "texcoord");
     glEnableVertexAttribArray(texcoord_attrib);
     glVertexAttribPointer(
         texcoord_attrib,

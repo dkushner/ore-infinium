@@ -69,15 +69,6 @@ public:
      */
     void renderEntities();
 
-    /**
-     * Returns the GLuint for the spritesheet renderer's shader program
-     * this shader is used for all rendering of all sprites. The tilemap renderer is ENTIRELY
-     * unrelated to this.
-     */
-    GLuint spriteSheetShaderProgram() {
-        return m_spriteShaderProgram;
-    }
-
     void setCamera(Camera* camera);
 
 private:
@@ -159,8 +150,6 @@ private:
     std::map<std::string, SpriteFrameIdentifier> m_spriteSheetCharactersDescription;
 
     std::vector<Sprite*> m_characterSprites;
-
-    GLuint m_spriteShaderProgram;
 
     GLint m_texture_location;
 
