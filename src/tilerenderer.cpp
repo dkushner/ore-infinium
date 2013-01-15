@@ -16,13 +16,31 @@
  *****************************************************************************/
 
 #include "tilerenderer.h"
+#include "world.h"
+#include "shader.h"
 
-TileRenderer::TileRenderer()
+TileRenderer::TileRenderer(World* world)
+: m_world(world)
+{
+    m_shader = new Shader("sprite.vert", "tilerenderer.frag");
+
+    initGL();
+}
+
+TileRenderer::~TileRenderer()
+{
+    delete m_shader;
+}
+
+void TileRenderer::initGL()
 {
 
 }
 
 void TileRenderer::render()
 {
+    m_shader->bindProgram();
 
+
+    m_shader->unbindProgram();
 }

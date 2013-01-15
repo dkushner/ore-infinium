@@ -23,14 +23,22 @@
 #include <GL/glew.h>
 #include <GL/gl.h>
 
+class World;
+class Shader;
+
 class TileRenderer
 {
 public:
-    TileRenderer();
+    explicit TileRenderer(World* world);
+    ~TileRenderer();
 
     void render();
 
 private:
+    void initGL();
+
+    World* m_world = nullptr;
+    Shader* m_shader = nullptr;
 };
 
 #endif

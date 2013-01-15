@@ -55,7 +55,7 @@ World::World()
     m_camera = new Camera();
     SpriteSheetManager::instance()->setCamera(m_camera);
 
-    m_tileRenderer = new TileRenderer();
+    m_tileRenderer = new TileRenderer(this);
 
     m_player = new Player("someframe");
     m_entities.insert(m_entities.end(), m_player);
@@ -72,6 +72,8 @@ World::World()
 World::~World()
 {
     delete m_player;
+    delete m_tileRenderer;
+    delete m_camera;
 //    delete m_sky;
 }
 
