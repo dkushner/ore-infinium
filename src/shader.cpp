@@ -27,7 +27,7 @@
 
 #include "debug.h"
 
-Shader::Shader()
+Shader::Shader(const char* vertexShader, const char* fragmentShader) : loadShaders("","")
 {
 
 }
@@ -63,11 +63,9 @@ char* Shader::loadFile(const char* fname, GLint* fSize)
     return memblock;
 }
 
-GLuint Shader::loadShaders(const char* vertexShader, const char* fragmentShader)
+void Shader::loadShaders(const char* vertexShader, const char* fragmentShader)
 {
-    GLuint program, vertex_shader, fragment_shader;
-
-    vertex_shader = glCreateShader(GL_VERTEX_SHADER);
+    m_vertexShader = glCreateShader(GL_VERTEX_SHADER);
 
     GLint vertLength;
     GLint fragLength;
@@ -81,35 +79,35 @@ GLuint Shader::loadShaders(const char* vertexShader, const char* fragmentShader)
     const char* vertSourceConst = vertSource;
     const char* fragSourceConst = fragSource;
 
-    glShaderSource(vertex_shader, 1, &vertSourceConst, &vertLength);
-    glCompileShader(vertex_shader);
+    glShaderSource(m_vertexShader, 1, &vertSourceConst, &vertLength);
+    glCompileShader(m_vertexShader);
 
-    if (!checkShaderCompileStatus(vertex_shader)) {
+    if (!checkShaderCompileStatus(m_vertexShader)) {
         assert(0);
     } else {
         Debug::log(Debug::Area::Graphics) << "vertex shader compiled!";
     }
 
-    fragment_shader = glCreateShader(GL_FRAGMENT_SHADER);
-    glShaderSource(fragment_shader, 1, &fragSourceConst, &fragLength);
-    glCompileShader(fragment_shader);
+    m_fragmentShader = glCreateShader(GL_FRAGMENT_SHADER);
+    glShaderSource(m_fragmentShader, 1, &fragSourceConst, &fragLength);
+    glCompileShader(m_fragmentShader);
 
-    if (!checkShaderCompileStatus(fragment_shader)) {
+    if (!checkShaderCompileStatus(m_fragmentShader)) {
         assert(0);
     } else {
         Debug::log(Debug::Area::Graphics) << "fragment shader compiled!";
     }
 
-    program = glCreateProgram();
+    m_shaderProgram = glCreateProgram();
 
     // attach shaders
-    glAttachShader(program, vertex_shader);
-    glAttachShader(program, fragment_shader);
+    glAttachShader(m_shaderProgram, m_vertexShader);
+    glAttachShader(m_shaderProgram, m_fragmentShader);
 
     // link the program and check for errors
-    glLinkProgram(program);
+    glLinkProgram(m_shaderProgram);
 
-    if (checkProgramLinkStatus(program)) {
+    if (checkProgramLinkStatus(m_shaderProgram)) {
         Debug::log(Debug::Area::Graphics) << "shader program linked!";
     } else {
         Debug::fatal(false, Debug::Area::Graphics, "shader program link FAILURE");
@@ -117,8 +115,6 @@ GLuint Shader::loadShaders(const char* vertexShader, const char* fragmentShader)
 
     delete [] vertSource;
     delete [] fragSource;
-
-    return program;
 }
 
 bool Shader::checkShaderCompileStatus(GLuint obj)

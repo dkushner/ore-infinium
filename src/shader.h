@@ -21,29 +21,29 @@
 #include <GL/glew.h>
 #include <GL/gl.h>
 
+/**
+* Represents the vertex, fragment shader handles,
+* as well as the shader program handle itself.
+*
+* Also has built in logging for these and binding functions.
+*/
 class Shader
 {
 public:
     explicit Shader(const char* vertexShader, const char* fragmentShader);
     ~Shader();
 
-    //FIXME: for now only. maybe later i'll turn it into a manager which allows binding and holds a list of shaders
-    //to do so properly would require some thought though, specifically in cases where i'd want to bind a certain frag and certain vert shader.
-    /**
-     * Loads given vertex, fragment shaders, compiles, links and checks them, returns program handle.
-     * FIXME: HACK: this actually leaks, because it doesn't return a handle to the frag/vert shaders
-     * so you can never delete them. Not a biggy right now, it can only happen at destruction anyways..
-     * and we only have 1 shader program at the moment. This will be remedied when we make this into an
-     * actual manager of shader programs
-     */
-    GLuint loadShaders(const char* vertexShader, const char* fragmentShader);
+    GLuint shaderProgram() { return m_shaderProgram; } const
+    GLuint vertexShader() { return m_vertexShader; } const
+    GLuint fragmentShader() { return m_fragmentShader; } const
 
 private:
+    void loadShaders(const char* vertexShader, const char* fragmentShader);
     void printShaderInfoLog(GLuint shader);
     bool checkShaderCompileStatus(GLuint obj);
     bool checkProgramLinkStatus(GLuint obj);
     char* loadFile(const char* fname, GLint* fSize);
-    
+
     GLuint m_shaderProgram = 0;
     GLuint m_vertexShader = 0;
     GLuint m_fragmentShader = 0;
