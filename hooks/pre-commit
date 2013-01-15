@@ -1,2 +1,0 @@
-../astyle.sh
-echo "pre-commit: astyle script ran."

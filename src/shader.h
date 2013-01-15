@@ -43,6 +43,10 @@ private:
     bool checkShaderCompileStatus(GLuint obj);
     bool checkProgramLinkStatus(GLuint obj);
     char* loadFile(const char* fname, GLint* fSize);
+    
+    GLuint m_shaderProgram = 0;
+    GLuint m_vertexShader = 0;
+    GLuint m_fragmentShader = 0;
 };
 
 #endif
