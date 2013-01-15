@@ -48,6 +48,7 @@ void Image::bind()
 
 void Image::generate()
 {
+    Debug::checkGLError();
     glActiveTexture(GL_TEXTURE0);
 
     glGenTextures(1, &m_textureID);
@@ -64,10 +65,9 @@ void Image::generate()
     BYTE* bits = FreeImage_GetBits(m_bitmap);
     Debug::assertf(bits, "Image::generate, could not gen texture, image bits are empty.");
 
+
     glTexImage2D(GL_TEXTURE_2D, m_level, m_internal_format, m_width, m_height, m_border, m_image_format, GL_UNSIGNED_BYTE, bits);
 
-    //HACK: 2nd bind is needed for I don't know why..but it says "invalid enumerant" without it.
-    glBindTexture(GL_TEXTURE_2D, m_textureID);
     Debug::checkGLError();
 }
 
