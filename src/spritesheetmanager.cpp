@@ -23,6 +23,7 @@
 #include "game.h"
 #include "camera.h"
 #include "shader.h"
+#include "image.h"
 
 #include <fstream>
 #include <iostream>
@@ -83,7 +84,7 @@ void SpriteSheetManager::loadAllSpriteSheets()
 
 void SpriteSheetManager::unloadSpriteSheet(SpriteSheetManager::SpriteSheetType type)
 {
-    glDeleteTextures(1, &(m_spriteSheetTextures[type].textureID));
+    delete m_spriteSheetTextures.at(type).image;
     m_spriteSheetTextures.erase(type);
 }
 
@@ -100,13 +101,13 @@ void SpriteSheetManager::unloadAllSpriteSheets()
 
 void SpriteSheetManager::bindSpriteSheet(SpriteSheetManager::SpriteSheetType type)
 {
-    glBindTexture(GL_TEXTURE_2D, m_spriteSheetTextures[type].textureID);
+    m_spriteSheetTextures[type].image->bind();
 }
 
 glm::vec2 SpriteSheetManager::spriteSheetSize(SpriteSheetManager::SpriteSheetType type)
 {
     auto texture = m_spriteSheetTextures.find(type);
-    glm::vec2 imageSize(float(texture->second.width), float(texture->second.height));
+    glm::vec2 imageSize(float(texture->second.image->width()), float(texture->second.image->height()));
 
     return imageSize;
 }

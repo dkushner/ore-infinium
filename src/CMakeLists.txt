@@ -16,6 +16,7 @@ world.cpp
 player.cpp
 entity.cpp
 tilerenderer.cpp
+image.cpp
 #cloudsystem.cpp
 #sky.cpp
 )

@@ -29,21 +29,44 @@ Image::Image(const std::string& fileName)
 Image::~Image()
 {
     // call this ONLY when linking with FreeImage as a static library
-    #ifdef FREEIMAGE_LIB
+#ifdef FREEIMAGE_LIB
     FreeImage_DeInitialise();
-    #endif
+#endif
 
+    glDeleteTextures(1, &m_textureID);
     FreeImage_Unload(m_bitmap);
 }
 
 void Image::bind()
 {
-
+    glBindTexture(GL_TEXTURE_2D, m_textureID);
 }
+
+void Image::generate()
+{
+    glActiveTexture(GL_TEXTURE0);
+
+    glGenTextures(1, &m_textureID);
+    glBindTexture(GL_TEXTURE_2D, m_textureID);
+
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+
+    //FIXME: do i want this behavior?    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+    //    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+
+    BYTE* bits = FreeImage_GetBits(m_bitmap);
+    Debug::assertf(bits) << "Image::generate, could not gen texture, image bits are empty.";
+
+    glTexImage2D(GL_TEXTURE_2D, m_level, m_internal_format, m_width, m_height, m_border, m_image_format, GL_UNSIGNED_BYTE, bits);
+}
+
 
 GLuint Image::textureHandle()
 {
-    return m_texture;
+    return m_textureID;
 }
 
 unsigned int Image::width() const
@@ -58,58 +81,29 @@ unsigned int Image::height() const
 
 void Image::loadImage(const std::string& filename, GLenum image_format, GLint internal_format, GLint level, GLint border)
 {
-    //image format
     FREE_IMAGE_FORMAT imageFormat = FIF_UNKNOWN;
-    //pointer to the image data
-    BYTE* bits(0);
-    //OpenGL's image ID to map to
-    GLuint gl_texID;
 
-    //check the file signature and deduce its format
-    imageFormat = FreeImage_GetFileType(filename.c_str(), 0);
+    imageFormat = FreeImage_GetFileType(filename.c_str());
 
     //if still unknown, try to guess the file format from the file extension
     if (imageFormat == FIF_UNKNOWN) {
         imageFormat = FreeImage_GetFIFFromFilename(filename.c_str());
     }
 
-    Debug::fatal(imageFormat != FIF_UNKNOWN, Debug::Area::Graphics, "failure to load font, type unknown");
+    Debug::fatal(imageFormat != FIF_UNKNOWN, Debug::Area::Graphics, "failure to load image, type unknown");
 
-    //check that the plugin has reading capabilities and load the file
+    //check that the plugin has reading capabilities for this file and load the file
     if (FreeImage_FIFSupportsReading(imageFormat)) {
         m_bitmap = FreeImage_Load(imageFormat, filename.c_str());
     }
 
-    Debug::fatal(m_bitmap, Debug::Area::Graphics, "failure to load font, bitmap pointer invalid");
+    Debug::fatal(m_bitmap, Debug::Area::Graphics, "failure to load image, bitmap pointer invalid");
 
-    //retrieve the image data
-    bits = FreeImage_GetBits(m_bitmap);
-    //get the image width and height
+
     m_width = FreeImage_GetWidth(m_bitmap);
     m_height = FreeImage_GetHeight(m_bitmap);
 
-    //if somehow one of these failed (they shouldn't), return failure
-    if ((bits == 0) || (m_width == 0) || (m_height == 0)) {
-        Debug::fatal(false, Debug::Area::Graphics, "failure to load font, bitmap sizes invalid or bits invalid");
+    if (m_width == 0 || m_height == 0) {
+        Debug::fatal(false, Debug::Area::Graphics, "failure to load image, bitmap sizes invalid or bits invalid");
     }
-
-    //generate an OpenGL texture ID for this texture
-    glGenTextures(1, &gl_texID);
-
-    auto& wrapper = m_spriteSheetTextures[type];
-    wrapper.textureID = gl_texID;
-
-    //bind to the new texture ID
-    glBindTexture(GL_TEXTURE_2D, gl_texID);
-
-    // set texture parameters
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-    //FIXME: do i want this behavior?    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
-    //    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
-
-    glTexImage2D(GL_TEXTURE_2D, level, internal_format, m_width, m_height, border, image_format, GL_UNSIGNED_BYTE, bits);
-    glBindTexture(GL_TEXTURE_2D, gl_texID);
 }

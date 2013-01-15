@@ -30,7 +30,7 @@
 
 class Camera;
 class Shader;
-
+class Image;
 class Sprite;
 
 class SpriteSheetManager
@@ -72,9 +72,7 @@ public:
 private:
     struct SpriteSheet {
         SpriteSheetType type;
-        GLuint textureID;
-        unsigned int width;
-        unsigned int height;
+        Image* image = nullptr;
     };
 
     /* Each vertex is:
