@@ -162,7 +162,7 @@ void SpriteSheetManager::renderCharacters()
     bindSpriteSheet(SpriteSheetType::Character);
 
     int index = 0;
-    for (Sprite * sprite: m_characterSprites) {
+    for (Sprite* sprite: m_characterSprites) {
         auto frameIdentifier = m_spriteSheetCharactersDescription.find(sprite->frameName());
         SpriteFrameIdentifier& frame = frameIdentifier->second;
         frame.x; //FIXME:
