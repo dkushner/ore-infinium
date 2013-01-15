@@ -26,10 +26,16 @@
 #include <vector>
 
 #include "debug.h"
+#include "game.h"
 
 Shader::Shader(const char* vertexShader, const char* fragmentShader)
 {
     loadShaders(vertexShader, fragmentShader);
+
+    if (DEBUG_OUTPUT) {
+        printShaderInfoLog(m_vertexShader);
+        printShaderInfoLog(m_fragmentShader);
+    }
 }
 
 Shader::~Shader()
@@ -78,12 +84,14 @@ char* Shader::loadFile(const char* fname, GLint* fSize)
     if (file.is_open()) {
         size = file.tellg();
         *fSize = (GLuint) size;
+
         memblock = new char [size];
         file.seekg(0, std::ios::beg);
         file.read(memblock, size);
         file.close();
-        Debug::log(Debug::Area::Graphics) << "shader : " << fname << " loaded successfully";
         text.assign(memblock);
+
+        Debug::log(Debug::Area::Graphics) << "shader : " << fname << " loaded successfully";
     } else {
         Debug::fatal(false,  Debug::Area::Graphics, "failed to load shader: " + std::string(fname));
     }
@@ -111,6 +119,7 @@ void Shader::loadShaders(const char* vertexShader, const char* fragmentShader)
 
     if (!checkShaderCompileStatus(m_vertexShader)) {
         assert(0);
+        Debug::assertf(false, "vertex shader failed to compile properly");
     } else {
         Debug::log(Debug::Area::Graphics) << "vertex shader compiled!";
     }
@@ -120,7 +129,7 @@ void Shader::loadShaders(const char* vertexShader, const char* fragmentShader)
     glCompileShader(m_fragmentShader);
 
     if (!checkShaderCompileStatus(m_fragmentShader)) {
-        assert(0);
+        Debug::assertf(false, "fragment shader failed to compile properly");
     } else {
         Debug::log(Debug::Area::Graphics) << "fragment shader compiled!";
     }
@@ -148,12 +157,16 @@ bool Shader::checkShaderCompileStatus(GLuint obj)
 {
     GLint status;
     glGetShaderiv(obj, GL_COMPILE_STATUS, &status);
+
     if (status == GL_FALSE) {
         GLint length;
+
         glGetShaderiv(obj, GL_INFO_LOG_LENGTH, &length);
+
         std::vector<char> log(length);
         glGetShaderInfoLog(obj, length, &length, &log[0]);
-        std::cerr << &log[0];
+
+        Debug::log(Debug::Area::Graphics) << &log[0];
         return false;
     }
     return true;
@@ -163,12 +176,17 @@ bool Shader::checkProgramLinkStatus(GLuint obj)
 {
     GLint status;
     glGetProgramiv(obj, GL_LINK_STATUS, &status);
+
     if (status == GL_FALSE) {
         GLint length;
+
         glGetProgramiv(obj, GL_INFO_LOG_LENGTH, &length);
+
         std::vector<char> log(length);
+
         glGetProgramInfoLog(obj, length, &length, &log[0]);
-        std::cerr << &log[0];
+
+        Debug::log(Debug::Area::Graphics) << &log[0];
         return false;
     }
     return true;
@@ -186,10 +204,10 @@ void Shader::printShaderInfoLog(GLuint shader)
 
     if (infoLogLen > 0) {
         infoLog = new GLchar[infoLogLen];
-        // error check for fail to allocate memory omitted
         glGetShaderInfoLog(shader, infoLogLen, &charsWritten, infoLog);
-        //        std::cout << "InfoLog:" << std::endl << infoLog << std::endl;
-        std::cout << infoLog;
+
+        Debug::log(Debug::Area::Graphics) << "Shader info log: " << infoLog;
+
         delete [] infoLog;
     }
 

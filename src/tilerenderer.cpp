@@ -20,7 +20,7 @@
 #include "shader.h"
 
 TileRenderer::TileRenderer(World* world)
-: m_world(world)
+    : m_world(world)
 {
     m_shader = new Shader("sprite.vert", "tilerenderer.frag");
 

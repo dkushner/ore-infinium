@@ -44,6 +44,9 @@ static int SCREEN_H = 900;
 //FIXME: make on/off via key
 static bool DEBUG_RENDERING = true;
 
+//turns off a lot of debug output, if off (TODO not fully used ;)
+static bool DEBUG_OUTPUT = true;
+
 static int SDL_LOGPRIORITY = SDL_LOG_PRIORITY_WARN;
 
 class Game
