@@ -35,6 +35,12 @@ public:
     explicit Image(const std::string& fileName);
     ~Image();
 
+    unsigned int width() const;
+    unsigned int height() const;
+
+    void bind();
+    GLuint textureHandle();
+
 private:
 
     /**
@@ -51,6 +57,11 @@ private:
     void loadImage(const std::string& filename, GLenum image_format = GL_BGRA, GLint internal_format = GL_RGBA, GLint level = 0, GLint border = 0);
 
     FBITMAP* m_bitmap = nullptr;
+
+    unsigned int m_width = 0;
+    unsigned int m_height = 0;
+
+    GLuint m_texture = 0;
 };
 
 #endif

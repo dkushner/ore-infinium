@@ -115,7 +115,6 @@ private:
 
     void bindSpriteSheet(SpriteSheetType type);
 
-
     glm::vec2 spriteSheetSize(SpriteSheetType type);
 
     void checkGLError();

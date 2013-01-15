@@ -17,6 +17,8 @@
 
 #include "image.h"
 
+#include "debug.h"
+
 #include <FreeImage.h>
 
 Image::Image(const std::string& fileName)
@@ -30,18 +32,36 @@ Image::~Image()
     #ifdef FREEIMAGE_LIB
     FreeImage_DeInitialise();
     #endif
+
+    FreeImage_Unload(m_bitmap);
 }
 
-void Image::loadSpriteSheet(const std::string& filename, GLenum image_format, GLint internal_format, GLint level, GLint border)
+void Image::bind()
+{
+
+}
+
+GLuint Image::textureHandle()
+{
+    return m_texture;
+}
+
+unsigned int Image::width() const
+{
+    return m_width;
+}
+
+unsigned int Image::height() const
+{
+    return m_height;
+}
+
+void Image::loadImage(const std::string& filename, GLenum image_format, GLint internal_format, GLint level, GLint border)
 {
     //image format
     FREE_IMAGE_FORMAT imageFormat = FIF_UNKNOWN;
-    //pointer to the image, once loaded
-    FIBITMAP *bitmap(0);
     //pointer to the image data
     BYTE* bits(0);
-    //image width and height
-    unsigned int width(0), height(0);
     //OpenGL's image ID to map to
     GLuint gl_texID;
 
@@ -57,19 +77,19 @@ void Image::loadSpriteSheet(const std::string& filename, GLenum image_format, GL
 
     //check that the plugin has reading capabilities and load the file
     if (FreeImage_FIFSupportsReading(imageFormat)) {
-        bitmap = FreeImage_Load(imageFormat, filename.c_str());
+        m_bitmap = FreeImage_Load(imageFormat, filename.c_str());
     }
 
-    Debug::fatal(bitmap, Debug::Area::Graphics, "failure to load font, bitmap pointer invalid");
+    Debug::fatal(m_bitmap, Debug::Area::Graphics, "failure to load font, bitmap pointer invalid");
 
     //retrieve the image data
-    bits = FreeImage_GetBits(bitmap);
+    bits = FreeImage_GetBits(m_bitmap);
     //get the image width and height
-    width = FreeImage_GetWidth(bitmap);
-    height = FreeImage_GetHeight(bitmap);
+    m_width = FreeImage_GetWidth(m_bitmap);
+    m_height = FreeImage_GetHeight(m_bitmap);
 
     //if somehow one of these failed (they shouldn't), return failure
-    if ((bits == 0) || (width == 0) || (height == 0)) {
+    if ((bits == 0) || (m_width == 0) || (m_height == 0)) {
         Debug::fatal(false, Debug::Area::Graphics, "failure to load font, bitmap sizes invalid or bits invalid");
     }
 
@@ -90,9 +110,6 @@ void Image::loadSpriteSheet(const std::string& filename, GLenum image_format, GL
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
 
-    glTexImage2D(GL_TEXTURE_2D, level, internal_format, width, height, border, image_format, GL_UNSIGNED_BYTE, bits);
+    glTexImage2D(GL_TEXTURE_2D, level, internal_format, m_width, m_height, border, image_format, GL_UNSIGNED_BYTE, bits);
     glBindTexture(GL_TEXTURE_2D, gl_texID);
-
-    //Free FreeImage's copy of the data
-    FreeImage_Unload(bitmap);
 }
