@@ -15,7 +15,7 @@
  *   along with this program.  If not, see <http://www.gnu.org/licenses/>.    *
  *****************************************************************************/
 
-#include "shadermanager.h"
+#include "shader.h"
 
 #include <fstream>
 #include <iostream>
@@ -27,22 +27,12 @@
 
 #include "debug.h"
 
-ShaderManager* ShaderManager::s_instance(0);
-
-ShaderManager* ShaderManager::instance()
-{
-    if (!s_instance)
-        s_instance = new ShaderManager();
-
-    return s_instance;
-}
-
-ShaderManager::ShaderManager()
+Shader::Shader()
 {
 
 }
 
-ShaderManager::~ShaderManager()
+Shader::~Shader()
 {
 
 }
@@ -50,7 +40,7 @@ ShaderManager::~ShaderManager()
 // loadFile - loads text file into char* fname
 // allocates memory - so need to delete after use
 // size of file returned in fSize
-char* ShaderManager::loadFile(const char* fname, GLint* fSize)
+char* Shader::loadFile(const char* fname, GLint* fSize)
 {
     std::ifstream::pos_type size;
     char * memblock = 0;
@@ -73,7 +63,7 @@ char* ShaderManager::loadFile(const char* fname, GLint* fSize)
     return memblock;
 }
 
-GLuint ShaderManager::loadShaders(const char* vertexShader, const char* fragmentShader)
+GLuint Shader::loadShaders(const char* vertexShader, const char* fragmentShader)
 {
     GLuint program, vertex_shader, fragment_shader;
 
@@ -131,7 +121,7 @@ GLuint ShaderManager::loadShaders(const char* vertexShader, const char* fragment
     return program;
 }
 
-bool ShaderManager::checkShaderCompileStatus(GLuint obj)
+bool Shader::checkShaderCompileStatus(GLuint obj)
 {
     GLint status;
     glGetShaderiv(obj, GL_COMPILE_STATUS, &status);
@@ -146,7 +136,7 @@ bool ShaderManager::checkShaderCompileStatus(GLuint obj)
     return true;
 }
 
-bool ShaderManager::checkProgramLinkStatus(GLuint obj)
+bool Shader::checkProgramLinkStatus(GLuint obj)
 {
     GLint status;
     glGetProgramiv(obj, GL_LINK_STATUS, &status);
@@ -161,7 +151,7 @@ bool ShaderManager::checkProgramLinkStatus(GLuint obj)
     return true;
 }
 
-void ShaderManager::printShaderInfoLog(GLuint shader)
+void Shader::printShaderInfoLog(GLuint shader)
 {
     int infoLogLen = 0;
     int charsWritten = 0;

@@ -54,7 +54,7 @@ void Camera::pushMatrix()
 
     glUseProgram(m_shaderProgram);
 
-    glm::mat4 mvp =  m_orthoMatrix *m_viewMatrix;
+    glm::mat4 mvp =  m_orthoMatrix * m_viewMatrix;
 
     int mvpLoc = glGetUniformLocation(m_shaderProgram, "mvp");
     glUniformMatrix4fv(mvpLoc, 1, GL_FALSE, &mvp[0][0]);

@@ -15,17 +15,17 @@
  *   along with this program.  If not, see <http://www.gnu.org/licenses/>.    *
  *****************************************************************************/
 
-#ifndef SHADERMANAGER_H
-#define SHADERMANAGER_H
+#ifndef SHADER_H
+#define SHADER_H
 
 #include <GL/glew.h>
 #include <GL/gl.h>
 
-class ShaderManager
+class Shader
 {
 public:
-    static ShaderManager* instance();
-    virtual ~ShaderManager();
+    explicit Shader(const char* vertexShader, const char* fragmentShader);
+    ~Shader();
 
     //FIXME: for now only. maybe later i'll turn it into a manager which allows binding and holds a list of shaders
     //to do so properly would require some thought though, specifically in cases where i'd want to bind a certain frag and certain vert shader.
@@ -39,12 +39,6 @@ public:
     GLuint loadShaders(const char* vertexShader, const char* fragmentShader);
 
 private:
-    ShaderManager();
-    ShaderManager(const ShaderManager& tm) {};
-    ShaderManager& operator=(const ShaderManager& tm);
-
-    static ShaderManager* s_instance;
-
     void printShaderInfoLog(GLuint shader);
     bool checkShaderCompileStatus(GLuint obj);
     bool checkProgramLinkStatus(GLuint obj);

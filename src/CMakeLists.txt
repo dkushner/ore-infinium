@@ -7,7 +7,7 @@ main.cpp
 game.cpp
 debug.cpp
 spritesheetmanager.cpp
-shadermanager.cpp
+shader.cpp
 fontmanager.cpp
 camera.cpp
 sprite.cpp

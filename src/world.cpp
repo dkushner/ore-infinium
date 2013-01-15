@@ -138,7 +138,7 @@ void World::update(double elapsedTime)
 
 //    m_sky->update(elapsedTime);
 
-    for (Entity * currentEntity : m_entities) {
+for (Entity * currentEntity : m_entities) {
         currentEntity->update(elapsedTime);
     }
 

@@ -54,8 +54,8 @@ void Entity::update(double elapsedTime)
 
     //Remove this and add the above when the definition for dim is fixed.
 //    if (!World::instance()->isBlockSolid(dest)) {
-        Sprite::setPosition(dest);
- //   }
+    Sprite::setPosition(dest);
+//   }
 }
 
 void Entity::setPosition(float x, float y)
