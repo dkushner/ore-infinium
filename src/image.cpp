@@ -58,7 +58,7 @@ void Image::generate()
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
 
     BYTE* bits = FreeImage_GetBits(m_bitmap);
-    Debug::assertf(bits) << "Image::generate, could not gen texture, image bits are empty.";
+    Debug::assertf(bits, "Image::generate, could not gen texture, image bits are empty.");
 
     glTexImage2D(GL_TEXTURE_2D, m_level, m_internal_format, m_width, m_height, m_border, m_image_format, GL_UNSIGNED_BYTE, bits);
 }

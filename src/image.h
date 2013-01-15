@@ -23,7 +23,7 @@
 
 #include <string>
 
-class FBITMAP;
+class FIBITMAP;
 
 /**
  * Allows loading an arbitrary image, return size, etc. and also has the ability to
@@ -57,7 +57,7 @@ private:
      */
     void loadImage(const std::string& filename, GLenum image_format = GL_BGRA, GLint internal_format = GL_RGBA, GLint level = 0, GLint border = 0);
 
-    FBITMAP* m_bitmap = nullptr;
+    FIBITMAP* m_bitmap = nullptr;
 
     unsigned int m_width = 0;
     unsigned int m_height = 0;

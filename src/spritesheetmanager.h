@@ -100,6 +100,7 @@ private:
     void parseAllSpriteSheets();
     std::map<std::string, SpriteFrameIdentifier> parseSpriteSheet(const std::string& filename);
     void loadAllSpriteSheets();
+    void loadSpriteSheet(const std::string& fileName, SpriteSheetType type);
 
     /**
      * free the memory for a texture

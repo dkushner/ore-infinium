@@ -82,6 +82,11 @@ void SpriteSheetManager::loadAllSpriteSheets()
     loadSpriteSheet("../textures/characters.png", SpriteSheetType::Character);
 }
 
+void SpriteSheetManager::loadSpriteSheet(const std::string& fileName, SpriteSheetManager::SpriteSheetType type)
+{
+
+}
+
 void SpriteSheetManager::unloadSpriteSheet(SpriteSheetManager::SpriteSheetType type)
 {
     delete m_spriteSheetTextures.at(type).image;
