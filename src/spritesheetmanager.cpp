@@ -170,7 +170,7 @@ void SpriteSheetManager::renderCharacters()
         frame.x; //FIXME:
 
         // vertices that will be uploaded.
-        spriteVertex vertices[4];
+        Vertex vertices[4];
 
         // vertices[n][0] -> X, and [1] -> Y
         // vertices[0] -> top left
@@ -190,37 +190,36 @@ void SpriteSheetManager::renderCharacters()
         float y = rect.y;
         float height = rect.w;
 
-        vertices[0][0] = x; // top left X
-        vertices[0][1] = y; //top left Y
+        vertices[0].x = x; // top left X
+        vertices[0].y = y; //top left Y
 
-        vertices[1][0] = x; // bottom left X
-        vertices[1][1] = height; // bottom left Y
+        vertices[1].x = x; // bottom left X
+        vertices[1].y = height; // bottom left Y
 
-        vertices[2][0] = width; // bottom right X
-        vertices[2][1] = height; //bottom right Y
+        vertices[2].x = width; // bottom right X
+        vertices[2].y = height; //bottom right Y
 
-        vertices[3][0] = width; // top right X
-        vertices[3][1] = y; // top right Y
+        vertices[3].x = width; // top right X
+        vertices[3].y = y; // top right Y
 
         Debug::checkGLError();
 
         // copy color to the buffer
         for (size_t i = 0; i < sizeof(vertices) / sizeof(*vertices); i++) {
-            uint32_t* colorp = reinterpret_cast<uint32_t*>(&vertices[i][2]);
             //        *colorp = color.bgra;
             uint8_t red = 255;
             uint8_t blue = 255;
             uint8_t green = 255;
             uint8_t alpha = 255;
             int32_t color = red | (green << 8) | (blue << 16) | (alpha << 24);
-            *colorp = color;
+            vertices[i].color = color;
         }
 
         // copy texcoords to the buffer
-        vertices[0][3] = vertices[1][3] = 0.0f;
-        vertices[0][4] = vertices[3][4] = 1.0f;
-        vertices[1][4] = vertices[2][4] = 0.0f;
-        vertices[2][3] = vertices[3][3] = 1.0f;
+        vertices[0].u = vertices[1].u = 0.0f;
+        vertices[0].v = vertices[3].v = 1.0f;
+        vertices[1].v = vertices[2].v = 0.0f;
+        vertices[2].u = vertices[3].u = 1.0f;
 
         // finally upload everything to the actual vbo
         glBindBuffer(GL_ARRAY_BUFFER, m_vbo);
@@ -282,7 +281,7 @@ void SpriteSheetManager::initGL()
     glBindBuffer(GL_ARRAY_BUFFER, m_vbo);
     glBufferData(
         GL_ARRAY_BUFFER,
-        m_maxSpriteCount * 4 * sizeof(spriteVertex),
+        m_maxSpriteCount * 4 * sizeof(Vertex),
         NULL,
         GL_DYNAMIC_DRAW);
 
@@ -318,7 +317,7 @@ void SpriteSheetManager::initGL()
         2,
         GL_FLOAT,
         GL_FALSE,
-        sizeof(spriteVertex),
+        sizeof(Vertex),
         (const GLvoid*)buffer_offset);
     buffer_offset += sizeof(f32) * 2;
 
@@ -332,7 +331,7 @@ void SpriteSheetManager::initGL()
         4,
         GL_UNSIGNED_BYTE,
         GL_TRUE,
-        sizeof(spriteVertex),
+        sizeof(Vertex),
         (const GLvoid*)buffer_offset);
     buffer_offset += sizeof(u32);
 
@@ -345,7 +344,7 @@ void SpriteSheetManager::initGL()
         2,
         GL_FLOAT,
         GL_FALSE,
-        sizeof(spriteVertex),
+        sizeof(Vertex),
         (const GLvoid*)buffer_offset);
 
     Debug::checkGLError();

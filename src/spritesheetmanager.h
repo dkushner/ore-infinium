@@ -75,16 +75,22 @@ private:
         Image* image = nullptr;
     };
 
+
+    typedef uint32_t u32;
+    typedef float f32;
+
     /* Each vertex is:
      * two floats for the 2d coordinate
      * four u8s for the color
      * two f32s for the texcoords
      * the vbo contains data of the aforementioned elements interleaved.
      * Each sprite has four vertices.
-     */
-    typedef float spriteVertex[5];
-    typedef uint32_t u32;
-    typedef float f32;
+     * */
+    struct Vertex {
+        float x, y;
+        unsigned int color; // packed with 4 u8s (unsigned chars) for color
+        float u, v;
+    };
 
     /**
      * In-mem representation of each sprite frame from the spritesheets
