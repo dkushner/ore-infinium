@@ -20,7 +20,7 @@
 
 #include "camera.h"
 #include "world.h"
-#include <install/gui/src/mainmenu.h>
+#include "src/gui/mainmenu.h"
 #include <stdio.h>
 #include <stdlib.h>
 

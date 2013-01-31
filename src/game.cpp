@@ -21,6 +21,8 @@
 #include "spritesheetmanager.h"
 #include "fontmanager.h"
 #include "sprite.h"
+#include "src/gui/gui.h"
+
 #include "gui/core/ShellRenderInterfaceOpenGL.h"
 #include "gui/core/SystemInterfaceSDL2.h"
 #include "gui/core/ShellFileInterface.h"
@@ -39,6 +41,7 @@
 #include <assert.h>
 #include <Rocket/Core.h>
 #include <Rocket/Debugger.h>
+#include <Rocket/Controls.h>
 
 Game::Game()
 {
@@ -143,16 +146,16 @@ void Game::init()
 
     m_font = FontManager::instance()->loadFont("../font/Ubuntu-L.ttf");
 
-    glClearColor(1.f, 0.f, 0.f, 1.0f);
+//    glClearColor(.5f, 0.f, 0.f, 1.0f);
 
-    glViewport(0, 0, SCREEN_W, SCREEN_H);
+//    glViewport(0, 0, SCREEN_W, SCREEN_H);
 
     checkGLError();
 
-    m_gui = new GUI();
+//    m_gui = new GUI();
 
-    World::createInstance();
-    m_world = World::instance();
+ //   World::createInstance();
+ //   m_world = World::instance();
 
     m_font->FaceSize(12);
 
@@ -163,7 +166,18 @@ void Game::init()
 double fps = 0.0;
 
 void Game::tick()
-{
+{    
+    glEnableClientState(GL_VERTEX_ARRAY);
+    glEnableClientState(GL_COLOR_ARRAY);
+    glEnable(GL_BLEND);
+    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+    
+    glMatrixMode(GL_PROJECTION);
+    glLoadIdentity();
+    glOrtho(0, 1600, 900, 0, -1, 1);
+
+    glMatrixMode(GL_MODELVIEW);
+    glLoadIdentity();
     Uint32 startTime = SDL_GetTicks();
     int frameCount = 0;
     SystemInterfaceSDL2 systemInterface;
@@ -172,15 +186,23 @@ void Game::tick()
     ShellRenderInterfaceOpenGL openglRenderer;
     Rocket::Core::SetRenderInterface(&openglRenderer);
 
-    ShellFileInterface fileInterface("gui/assets");
+    ShellFileInterface fileInterface("../gui/assets");
     Rocket::Core::SetFileInterface(&fileInterface);
 
     Debug::fatal(Rocket::Core::Initialise(), Debug::Area::System, "rocket init failure");
+    Rocket::Controls::Initialise();
 
-    Rocket::Core::Context *context = Rocket::Core::CreateContext("default", Rocket::Core::Vector2i(1600, 900));
+    Rocket::Core::Context *context = Rocket::Core::CreateContext("main", Rocket::Core::Vector2i(1600, 900));
+
     Rocket::Debugger::Initialise(context);
+    Rocket::Debugger::SetVisible(true);
 
-    Rocket::Core::ElementDocument *doc = context->LoadDocument("demo.rml");
+    bool success = Rocket::Core::FontDatabase::LoadFontFace("../gui/assets/Delicious-Roman.otf");
+    assert(success);
+
+    Rocket::Core::ElementDocument *doc = context->LoadDocument("../gui/assets/test.rml");
+    doc->Show();
+//    assert(0);
 
     while (m_running) {
         const double delta = static_cast<double>(SDL_GetTicks() - startTime);
@@ -188,13 +210,16 @@ void Game::tick()
 
         handleEvents();
 
-        m_world->update(delta);
+//        m_world->update(delta);
 
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-        m_world->render();
+//        m_world->render();
 
-        drawDebugText();
+ //       drawDebugText();
+
+        context->Update();
+        context->Render();
 
         SDL_GL_SwapWindow(m_window);
 
@@ -211,7 +236,7 @@ void Game::handleEvents()
 
     while (SDL_PollEvent(&event)) {
 
-        m_world->handleEvent(event);
+//        m_world->handleEvent(event);
 
         switch (event.type) {
         case SDL_KEYDOWN:
