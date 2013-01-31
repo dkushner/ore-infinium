@@ -23,6 +23,7 @@
 #include "sprite.h"
 #include "gui/core/ShellRenderInterfaceOpenGL.h"
 #include "gui/core/SystemInterfaceSDL2.h"
+#include "gui/core/ShellFileInterface.h"
 
 #include <iostream>
 #include <sstream>
@@ -37,6 +38,7 @@
 
 #include <assert.h>
 #include <Rocket/Core.h>
+#include <Rocket/Debugger.h>
 
 Game::Game()
 {
@@ -164,13 +166,21 @@ void Game::tick()
 {
     Uint32 startTime = SDL_GetTicks();
     int frameCount = 0;
-    
-    ShellRenderInterfaceOpenGL openglRenderer;
-    Rocket::Core::SetRenderInterface(0);
-    
     SystemInterfaceSDL2 systemInterface;
     Rocket::Core::SetSystemInterface(&systemInterface);
-    
+
+    ShellRenderInterfaceOpenGL openglRenderer;
+    Rocket::Core::SetRenderInterface(&openglRenderer);
+
+    ShellFileInterface fileInterface("gui/assets");
+    Rocket::Core::SetFileInterface(&fileInterface);
+
+    Debug::fatal(Rocket::Core::Initialise(), Debug::Area::System, "rocket init failure");
+
+    Rocket::Core::Context *context = Rocket::Core::CreateContext("default", Rocket::Core::Vector2i(1600, 900));
+    Rocket::Debugger::Initialise(context);
+
+    Rocket::Core::ElementDocument *doc = context->LoadDocument("demo.rml");
 
     while (m_running) {
         const double delta = static_cast<double>(SDL_GetTicks() - startTime);

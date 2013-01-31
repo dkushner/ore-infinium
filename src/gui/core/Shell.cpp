@@ -3,7 +3,7 @@
  *
  * For the latest information, see http://www.librocket.com
  *
- * Copyright (c) 2008-2010 Nuno Silva
+ * Copyright (c) 2008-2010 CodePoint Ltd, Shift Technology Ltd
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -14,7 +14,7 @@
  *
  * The above copyright notice and this permission notice shall be included in
  * all copies or substantial portions of the Software.
- *
+ * 
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
  * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -24,25 +24,30 @@
  * THE SOFTWARE.
  *
  */
-#ifndef SYSTEMINTERFACESDL2_H
-#define SYSTEMINTERFACESDL2_H
 
-#include <Rocket/Core/SystemInterface.h>
-#include <Rocket/Core/Input.h>
+#include "Shell.h"
+#include <Rocket/Core/FontDatabase.h>
 
-#include <SDL.h>
+Rocket::Core::String Shell::executable_path;
 
-class SystemInterfaceSDL2 : public Rocket::Core::SystemInterface
+/// Loads the default fonts from the given path.
+void Shell::LoadFonts(const char* directory)
 {
-public:
+	Rocket::Core::String font_names[4];
+	font_names[0] = "Delicious-Roman.otf";
+	font_names[1] = "Delicious-Italic.otf";
+	font_names[2] = "Delicious-Bold.otf";
+	font_names[3] = "Delicious-BoldItalic.otf";
 
-//    Rocket::Core::Input::KeyIdentifier TranslateKey(SDL_Keycode code);
- //   int GetKeyModifiers();
+	for (int i = 0; i < sizeof(font_names) / sizeof(Rocket::Core::String); i++)
+	{
+		Rocket::Core::FontDatabase::LoadFontFace(Rocket::Core::String(directory) + font_names[i]);
+	}
+}
 
-    float GetElapsedTime();
+// Returns the path to the application's executable.
+const Rocket::Core::String& Shell::GetExecutablePath()
+{
+	return executable_path;
+}
 
-  //  bool LogMessage(Rocket::Core::Log::Type type, const Rocket::Core::String& message);
-
-private:
-};
-#endif

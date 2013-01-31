@@ -18,6 +18,7 @@ entity.cpp
 tilerenderer.cpp
 image.cpp
 gui/gui.cpp
+gui/core/Shell.cpp
 gui/core/ShellFileInterface.cpp
 gui/core/ShellRenderInterfaceOpenGL.cpp
 gui/core/SystemInterfaceSDL2.cpp
@@ -54,6 +55,7 @@ ${FTGL_LIBRARY}
 ${OPENGL_LIBRARIES}
 ${GLEW_LIBRARIES}
 ${LIBROCKET_LIBRARIES}
+${LIBROCKET_DEBUGGER_LIBRARY}
 )
 
 # CPack packaging

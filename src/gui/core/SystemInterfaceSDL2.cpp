@@ -29,7 +29,7 @@
 #include <Rocket/Core.h>
 
 #include <SDL.h>
-
+/*
 int SystemInterfaceSDL2::GetKeyModifiers()
 {
     int Modifiers = 0;
@@ -46,8 +46,7 @@ int SystemInterfaceSDL2::GetKeyModifiers()
     if(Window->GetInput().IsKeyDown(sf::Key::LAlt) ||
     	Window->GetInput().IsKeyDown(sf::Key::RAlt))
 
-           */
-    Modifiers |= Rocket::Core::Input::KM_ALT;
+//    Modifiers |= Rocket::Core::Input::KM_ALT;
     return Modifiers;
 };
 
@@ -309,12 +308,14 @@ Rocket::Core::Input::KeyIdentifier SystemInterfaceSDL2::TranslateKey(SDL_Keycode
 
     return Rocket::Core::Input::KI_UNKNOWN;
 };
+*/
 
 float SystemInterfaceSDL2::GetElapsedTime()
 {
     return static_cast<float>(SDL_GetTicks()) / 1000.0f;
 };
 
+/*
 bool SystemInterfaceSDL2::LogMessage(Rocket::Core::Log::Type type, const Rocket::Core::String& message)
 {
     std::string Type;
@@ -345,3 +346,4 @@ bool SystemInterfaceSDL2::LogMessage(Rocket::Core::Log::Type type, const Rocket:
 
     return true;
 };
+*/

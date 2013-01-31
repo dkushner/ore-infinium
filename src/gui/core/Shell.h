@@ -14,7 +14,7 @@
  *
  * The above copyright notice and this permission notice shall be included in
  * all copies or substantial portions of the Software.
- *
+ * 
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
  * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -45,46 +45,46 @@
 class Shell
 {
 public:
-    /// Initialise the shell.
-    /// @param[in] path The path (relative to the current working directory) of the application's working directory.
-    static bool Initialise(const Rocket::Core::String& path);
-    /// Shutdown the shell.
-    static void Shutdown();
+	/// Initialise the shell.
+	/// @param[in] path The path (relative to the current working directory) of the application's working directory.
+	static bool Initialise(const Rocket::Core::String& path);
+	/// Shutdown the shell.
+	static void Shutdown();
 
-    /// Loads the default fonts from the given path.
-    static void LoadFonts(const char* directory);
+	/// Loads the default fonts from the given path.
+	static void LoadFonts(const char* directory);
 
-    /// Returns the path to the application's executable.
-    static const Rocket::Core::String& GetExecutablePath();
+	/// Returns the path to the application's executable.
+	static const Rocket::Core::String& GetExecutablePath();
 
-    /// Open a platform specific window, optionally initialising an OpenGL context on it.
-    /// @param[in] title Title of the window.
-    /// @param[in] attach_opengl Attach and opengl context to the window.
-    static bool OpenWindow(const char* title, bool attach_opengl);
-    /// Close the active window.
-    static void CloseWindow();
+	/// Open a platform specific window, optionally initialising an OpenGL context on it.
+	/// @param[in] title Title of the window.
+	/// @param[in] attach_opengl Attach and opengl context to the window.
+	static bool OpenWindow(const char* title, bool attach_opengl);
+	/// Close the active window.
+	static void CloseWindow();
 
-    /// Returns a platform-dependent handle to the window.
-    static void* GetWindowHandle();
+	/// Returns a platform-dependent handle to the window.
+	static void* GetWindowHandle();
 
-    /// Flips the OpenGL buffers.
-    static void FlipBuffers();
+	/// Flips the OpenGL buffers.
+	static void FlipBuffers();
 
-    /// Run the event loop, calling the idle function every frame.
-    typedef void (*ShellIdleFunction)();
-    static void EventLoop(ShellIdleFunction idle_function);
-    static void RequestExit();
+	/// Run the event loop, calling the idle function every frame.
+	typedef void (*ShellIdleFunction)();
+	static void EventLoop(ShellIdleFunction idle_function);
+	static void RequestExit();
 
-    /// Display an error message.
-    static void DisplayError(const char* fmt, ...);
-    /// Log a message to the debugger.
-    static void Log(const char* fmt, ...);
+	/// Display an error message.
+	static void DisplayError(const char* fmt, ...);
+	/// Log a message to the debugger.
+	static void Log(const char* fmt, ...);
 
-    /// Get the number of seconds that have passed since shell startup.
-    static float GetElapsedTime();
+	/// Get the number of seconds that have passed since shell startup.
+	static float GetElapsedTime();	
 
 private:
-    static Rocket::Core::String executable_path;
+	static Rocket::Core::String executable_path;
 };
 
 #include "ShellRenderInterfaceOpenGL.h"
