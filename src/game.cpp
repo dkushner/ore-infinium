@@ -21,6 +21,8 @@
 #include "spritesheetmanager.h"
 #include "fontmanager.h"
 #include "sprite.h"
+#include "gui/core/ShellRenderInterfaceOpenGL.h"
+#include "gui/core/SystemInterfaceSDL2.h"
 
 #include <iostream>
 #include <sstream>
@@ -34,6 +36,7 @@
 #include <FreeImage.h>
 
 #include <assert.h>
+#include <Rocket/Core.h>
 
 Game::Game()
 {
@@ -144,6 +147,8 @@ void Game::init()
 
     checkGLError();
 
+    m_gui = new GUI();
+
     World::createInstance();
     m_world = World::instance();
 
@@ -159,6 +164,13 @@ void Game::tick()
 {
     Uint32 startTime = SDL_GetTicks();
     int frameCount = 0;
+    
+    ShellRenderInterfaceOpenGL openglRenderer;
+    Rocket::Core::SetRenderInterface(0);
+    
+    SystemInterfaceSDL2 systemInterface;
+    Rocket::Core::SetSystemInterface(&systemInterface);
+    
 
     while (m_running) {
         const double delta = static_cast<double>(SDL_GetTicks() - startTime);

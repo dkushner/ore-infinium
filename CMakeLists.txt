@@ -30,7 +30,6 @@ set(ore_infinium_VERSION_MAJOR 0)
 set(ore_infinium_VERSION_MINOR 1)
 
 find_package(SDL2 REQUIRED)
-find_package(SDL2_mixer REQUIRED)
 
 find_package(OpenGL REQUIRED)
 find_package(GLEW REQUIRED)
@@ -42,9 +41,9 @@ find_package(FTGL REQUIRED)
 find_package(YamlCpp REQUIRED)
 
 find_package(GLM REQUIRED)
+find_package(LibRocket REQUIRED)
 
 set_package_properties(SDL2 PROPERTIES DESCRIPTION "SDL2, used for creating an open source, cross-platform OpenGL window, audio and input" URL "http://hg.libsdl.org/SDL/")
-set_package_properties(SDL2_mixer PROPERTIES DESCRIPTION "SDL2 Mixer open source library, for audio" URL "http://hg.libsdl.org/SDL_mixer/")
 
 set_package_properties(OpenGL PROPERTIES DESCRIPTION "OpenGL >= 3.0 is required. Version check is done at runtime" URL "-")
 set_package_properties(GLEW PROPERTIES DESCRIPTION "OpenGL Extension Wrangler, to create our function pointers and extension loading" URL "http://glew.sourceforge.net/")
@@ -56,6 +55,7 @@ set_package_properties(FreeType PROPERTIES DESCRIPTION "FreeType >= 2" URL "http
 set_package_properties(Yaml-Cpp PROPERTIES DESCRIPTION "YAML CPP, for config file and sprite sheet reading" URL "http://code.google.com/p/yaml-cpp/")
 
 set_package_properties(GLM PROPERTIES DESCRIPTION "OpenGL Open Source Mathematics Library (for all our math, in a GLSL-like nature)" URL "http://glm.g-truc.net/")
+set_package_properties(LibRocket PROPERTIES DESCRIPTION "LibRocket GUI library" URL "")
 
 message("\n----------------------------------------------------------------------------------------------")
 feature_summary(WHAT REQUIRED_PACKAGES_FOUND DESCRIPTION "Successfully Enabled REQUIRED Features:\n")
@@ -63,7 +63,7 @@ message("\n---------------------------------------------------------------------
 feature_summary(WHAT REQUIRED_PACKAGES_NOT_FOUND DESCRIPTION "NOT FOUND REQUIRED FEATURES:\n")
 message("\n----------------------------------------------------------------------------------------------")
 
-include_directories(${CMAKE_SOURCE_DIR} ${PugiXML_INCLUDE_DIR})
+include_directories(${CMAKE_SOURCE_DIR})
 
 configure_file(
   "${PROJECT_SOURCE_DIR}/config.h.in"

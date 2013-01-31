@@ -1,5 +1,5 @@
 /******************************************************************************
- *   Copyright (C) 2012 by Shaun Reich <sreich@kde.org>                       *
+ *   Copyright (C) 2013 by Shaun Reich <sreich@kde.org>                       *
  *                                                                            *
  *   This program is free software; you can redistribute it and/or            *
  *   modify it under the terms of the GNU General Public License as           *
@@ -15,72 +15,18 @@
  *   along with this program.  If not, see <http://www.gnu.org/licenses/>.    *
  *****************************************************************************/
 
-#ifndef GAME_H
-#define GAME_H
+#ifndef GUI_H
+#define GUI_H
 
-#include "camera.h"
-#include "world.h"
-#include <install/gui/src/mainmenu.h>
-#include <stdio.h>
-#include <stdlib.h>
-
-#include <GL/glew.h>
-
-#include <SDL2/SDL.h>
-#include <SDL_log.h>
-
-#include <ft2build.h>
-#include FT_FREETYPE_H
-
-#include <FTGL/ftgl.h>
-
-#include <glm/glm.hpp>
-#include <glm/gtc/matrix_transform.hpp>
-
-#include <string>
-
-static int SCREEN_W = 1600;
-static int SCREEN_H = 900;
-
-//FIXME: make on/off via key
-static bool DEBUG_RENDERING = true;
-
-//turns off a lot of debug output, if off (TODO not fully used ;)
-static bool DEBUG_OUTPUT = true;
-
-static int SDL_LOGPRIORITY = SDL_LOG_PRIORITY_WARN;
-
-class GUI;
-class Game
+class GUI
 {
 public:
-    Game();
-    ~Game();
+    GUI();
+    ~GUI();
 
-    void init();
-
-    void tick();
-    void handleEvents();
-
-    void abort_game(const char* message);
-    void shutdown();
-
-    void drawDebugText();
-
-    void checkSDLError();
-    void checkGLError();
-
-    const float FPS = 60.0;
+    void render();
 
 private:
-    FTGLPixmapFont *m_font = nullptr;
-
-    GUI *m_gui = nullptr;
-    World *m_world = nullptr;
-    SDL_Window *m_window = nullptr;
-    SDL_GLContext m_context;
-    bool m_running = true;
 };
-
 
 #endif

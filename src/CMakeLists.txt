@@ -17,6 +17,11 @@ player.cpp
 entity.cpp
 tilerenderer.cpp
 image.cpp
+gui/gui.cpp
+gui/core/ShellFileInterface.cpp
+gui/core/ShellRenderInterfaceOpenGL.cpp
+gui/core/SystemInterfaceSDL2.cpp
+
 #cloudsystem.cpp
 #sky.cpp
 )
@@ -35,6 +40,7 @@ ${FTGL_INCLUDE_DIR}
 ${EIGEN3_INCLUDE_DIR}
 ${YAMLCPP_INCLUDE_DIR}
 ${GLEW_INCLUDE_DIRS}
+${LIBROCKET_INCLUDE_DIRS}
 )
 
 target_link_libraries(
@@ -47,6 +53,7 @@ ${FREETYPE_LIBRARY}
 ${FTGL_LIBRARY}
 ${OPENGL_LIBRARIES}
 ${GLEW_LIBRARIES}
+${LIBROCKET_LIBRARIES}
 )
 
 # CPack packaging
