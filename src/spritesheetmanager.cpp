@@ -24,6 +24,7 @@
 #include "camera.h"
 #include "shader.h"
 #include "image.h"
+#include "settings/settings.h"
 
 #include <fstream>
 #include <iostream>
@@ -53,7 +54,7 @@ SpriteSheetManager::SpriteSheetManager()
 
     float scale = 1.0f;
     m_modelMatrix = glm::scale(glm::mat4(1.0f), glm::vec3(scale));
-    m_projectionMatrix = glm::ortho(0.0f, float(SCREEN_W), float(SCREEN_H), 0.0f, -1.0f, 1.0f);
+    m_projectionMatrix = glm::ortho(0.0f, float(Settings::instance()->screenResolutionWidth), float(), 0.0f, -1.0f, 1.0f);
 
     loadAllSpriteSheets();
     parseAllSpriteSheets();

@@ -27,12 +27,13 @@
 
 #include "debug.h"
 #include "game.h"
+#include "settings/settings.h"
 
 Shader::Shader(const char* vertexShader, const char* fragmentShader)
 {
     loadShaders(vertexShader, fragmentShader);
 
-    if (DEBUG_OUTPUT) {
+    if (Settings::instance()->debugOutput) {
         printShaderInfoLog(m_vertexShader);
         printShaderInfoLog(m_fragmentShader);
     }

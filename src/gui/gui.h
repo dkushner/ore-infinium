@@ -39,6 +39,12 @@ public:
     void handleEvent(const SDL_Event& event);
     void render();
 
+    /**
+     * Notify to the gui that the state has changed
+     * so we can decide what to do
+     */
+    void debugRenderingChanged();
+
 private:
     Rocket::Core::Context* m_context = nullptr;
 

@@ -20,6 +20,7 @@
 #include "debug.h"
 #include "spritesheetmanager.h"
 #include "shader.h"
+#include "settings/settings.h"
 
 Camera::Camera() :
     m_vector(glm::vec3())
@@ -27,7 +28,7 @@ Camera::Camera() :
     float x = 0.0f;
     float y = 0.0f;
     m_viewMatrix = glm::translate(glm::mat4(), glm::vec3(x, y, 0.0f));
-    m_orthoMatrix = glm::ortho(0.0f, float(SCREEN_W), float(SCREEN_H), 0.0f, -1.0f, 1.0f);
+    m_orthoMatrix = glm::ortho(0.0f, float(Settings::instance()->screenResolutionWidth), float(), 0.0f, -1.0f, 1.0f);
 }
 
 void Camera::translate(const glm::vec2 vec)
@@ -44,7 +45,7 @@ void Camera::zoom(const float factor)
 
 void Camera::centerOn(const glm::vec2 vec)
 {
-    glm::vec2 screenSize(SCREEN_W, SCREEN_H);
+    glm::vec2 screenSize(Settings::instance()->screenResolutionWidth, Settings::instance()->screenResolutionHeight);
     m_viewMatrix = glm::translate(glm::mat4(), -glm::vec3(vec - screenSize * 0.5f, 0.0f));
     pushMatrix();
 }

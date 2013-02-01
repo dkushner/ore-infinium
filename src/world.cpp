@@ -22,6 +22,7 @@
 #include "game.h"
 #include "camera.h"
 #include "tilerenderer.h"
+#include "settings/settings.h"
 //HACK #include "sky.h"
 
 #include <stdio.h>
@@ -99,9 +100,9 @@ void World::render()
     const float halfRadius = radius * 0.5;
     const float halfBlockSize = Block::blockSize * 0.5;
 
-    // NOTE: (SCREEN_H % Block::blockSize) is what we add so that it is aligned properly to the tile grid, even though the screen is not evenly divisible by such.
-    glm::vec2 crosshairPosition(mouse.x - mouse.x % Block::blockSize + (SCREEN_W % Block::blockSize) - tileOffset().x + Block::blockSize,
-                                mouse.y - mouse.y % Block::blockSize + (SCREEN_H % Block::blockSize) - tileOffset().y + Block::blockSize);
+    // NOTE: ( % Block::blockSize) is what we add so that it is aligned properly to the tile grid, even though the screen is not evenly divisible by such.
+    glm::vec2 crosshairPosition(mouse.x - mouse.x % Block::blockSize + (Settings::instance()->screenResolutionWidth % Block::blockSize) - tileOffset().x + Block::blockSize,
+                                mouse.y - mouse.y % Block::blockSize + (Settings::instance()->screenResolutionHeight % Block::blockSize) - tileOffset().y + Block::blockSize);
 
 //    ALLEGRO_COLOR color = al_map_rgb(255, 0, 0);
 //   al_draw_rectangle(crosshairPosition.x(), crosshairPosition.y(), crosshairPosition.x() + radius, crosshairPosition.y() + radius, color, 1.0f);
@@ -220,7 +221,7 @@ bool World::tileBlendTypeMatch(int sourceTileX, int sourceTileY, int nearbyTileX
 
 glm::vec2 World::viewportCenter() const
 {
-    return glm::vec2(SCREEN_W * 0.5, SCREEN_H * 0.5);
+    return glm::vec2(Settings::instance()->screenResolutionWidth * 0.5, Settings::instance()->screenResolutionWidth * 0.5);
 }
 
 //FIXME: unused..will be used for shooting and such. not for block breaking.
@@ -266,7 +267,7 @@ void World::performBlockAttack()
 
     //FIXME: eventually will need to make this go to the players center
     // can we divide player pos by half of screen h/w ?
-    glm::vec2 center(SCREEN_W * 0.5, SCREEN_H * 0.5);
+    glm::vec2 center(Settings::instance()->screenResolutionWidth * 0.5, Settings::instance()->screenResolutionWidth * 0.5);
 
     // if the attempted block pick location is out of range, do nothing.
     if (mouse.x < center.x - Player::blockPickingRadius ||
@@ -281,8 +282,8 @@ void World::performBlockAttack()
 
     const int radius = Player::blockPickingRadius / Block::blockSize;
 
-    int attackX = 0 ; //HACK= mouse.x() + (m_view->getCenter().x() - SCREEN_W * 0.5) / Block::blockSize;
-    int attackY = 0; //HACK= mouse.y() + (m_view->getCenter().y() - SCREEN_H * 0.5) / Block::blockSize;
+    int attackX = 0 ; //HACK= mouse.x() + (m_view->getCenter().x() - Settings::instance()->screenResolutionWidth * 0.5) / Block::blockSize;
+    int attackY = 0; //HACK= mouse.y() + (m_view->getCenter().y() -  * 0.5) / Block::blockSize;
 
     const glm::vec2 playerPosition = m_player->position();
 
@@ -294,12 +295,12 @@ void World::performBlockAttack()
     //row
     int tilesBeforeY = playerPosition.y / Block::blockSize;
 
-    const int startRow = tilesBeforeY - ((SCREEN_H * 0.5) / Block::blockSize);
-    const int endRow = tilesBeforeY + ((SCREEN_H * 0.5) / Block::blockSize);
+    const int startRow = tilesBeforeY - ((Settings::instance()->screenResolutionHeight * 0.5) / Block::blockSize);
+    const int endRow = tilesBeforeY + ((Settings::instance()->screenResolutionHeight* 0.5) / Block::blockSize);
 
     //columns are our X value, rows the Y
-    const int startColumn = tilesBeforeX - ((SCREEN_W * 0.5) / Block::blockSize);
-    const int endColumn = tilesBeforeX + ((SCREEN_W * 0.5) / Block::blockSize);
+    const int startColumn = tilesBeforeX - ((Settings::instance()->screenResolutionWidth * 0.5) / Block::blockSize);
+    const int endColumn = tilesBeforeX + ((Settings::instance()->screenResolutionWidth * 0.5) / Block::blockSize);
 
     int index = 0;
 
@@ -330,12 +331,12 @@ void World::generatePixelTileMap()
 
     //FIXME: only calculate this crap when we move/change tiles
     // -1 so that we render an additional row and column..to smoothly scroll
-    const int startRow = tilesBeforeY - ((SCREEN_H * 0.5) / Block::blockSize) - 1;
-    const int endRow = tilesBeforeY + ((SCREEN_H * 0.5) / Block::blockSize);
+    const int startRow = tilesBeforeY - (( * 0.5) / Block::blockSize) - 1;
+    const int endRow = tilesBeforeY + (( * 0.5) / Block::blockSize);
 
     //columns are our X value, rows the Y
-    const int startColumn = tilesBeforeX - ((SCREEN_W * 0.5) / Block::blockSize) - 1;
-    const int endColumn = tilesBeforeX + ((SCREEN_W * 0.5) / Block::blockSize);
+    const int startColumn = tilesBeforeX - ((Settings::instance()->screenResolutionWidth * 0.5) / Block::blockSize) - 1;
+    const int endColumn = tilesBeforeX + ((Settings::instance()->screenResolutionWidth * 0.5) / Block::blockSize);
 
     if (std::abs(startColumn) != startColumn) {
         std::cout << "FIXME, WENT INTO NEGATIVE COLUMN!!";

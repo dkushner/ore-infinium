@@ -30,33 +30,52 @@
 
 #include <SDL.h>
 
+#include <iostream>
+
 int SystemInterfaceSDL2::GetKeyModifiers()
 {
     int Modifiers = 0;
 
-//    
-//    if(Window->GetInput().IsKeyDown(sf::Key::LShift) ||
-//    	Window->GetInput().IsKeyDown(sf::Key::RShift))
-//    	Modifiers |= Rocket::Core::Input::KM_SHIFT;
-//
-//    if(Window->GetInput().IsKeyDown(sf::Key::LControl) ||
-//    	Window->GetInput().IsKeyDown(sf::Key::RControl))
-//    	Modifiers |= Rocket::Core::Input::KM_CTRL;
-//
-//    if(Window->GetInput().IsKeyDown(sf::Key::LAlt) ||
-//    	Window->GetInput().IsKeyDown(sf::Key::RAlt))
     SDL_Keymod mod = SDL_GetModState();
-    if (mod == KMOD_LSHIFT) {
-        
+    if (mod == KMOD_LSHIFT || mod == KMOD_RSHIFT) {
+        Modifiers |= Rocket::Core::Input::KM_SHIFT;
     }
 
-//    Modifiers |= Rocket::Core::Input::KM_ALT;
+    if (mod == KMOD_LCTRL || mod == KMOD_RCTRL) {
+        Modifiers |= Rocket::Core::Input::KM_CTRL;
+    }
+
+    if (mod == KMOD_LSHIFT || mod == KMOD_RSHIFT) {
+        Modifiers |= Rocket::Core::Input::KM_SHIFT;
+    }
+
+    if (mod == KMOD_LALT || mod == KMOD_RALT) {
+        Modifiers |= Rocket::Core::Input::KM_ALT;
+    }
+
+    //FIXME: not actually sure if that's meta or not
+    if (mod == KMOD_LGUI || mod == KMOD_LGUI) {
+        Modifiers |= Rocket::Core::Input::KM_META;
+    }
+
     return Modifiers;
-};
+}
+
+int SystemInterfaceSDL2::TranslateMouseButton(Uint8 button)
+{
+    switch (button) {
+        case 1: //left
+            return 0;
+        case 2: //MMB
+            return 3;
+        case 3: //right
+            return 2;
+    }
+}
 
 Rocket::Core::Input::KeyIdentifier SystemInterfaceSDL2::TranslateKey(SDL_Keycode code)
 {
-    switch(code)
+    switch (code)
     {
     case SDLK_a:
         return Rocket::Core::Input::KI_A;
@@ -311,12 +330,12 @@ Rocket::Core::Input::KeyIdentifier SystemInterfaceSDL2::TranslateKey(SDL_Keycode
     };
 
     return Rocket::Core::Input::KI_UNKNOWN;
-};
+}
 
 float SystemInterfaceSDL2::GetElapsedTime()
 {
     return static_cast<float>(SDL_GetTicks()) / 1000.0f;
-};
+}
 
 bool SystemInterfaceSDL2::LogMessage(Rocket::Core::Log::Type type, const Rocket::Core::String& message)
 {
@@ -347,4 +366,4 @@ bool SystemInterfaceSDL2::LogMessage(Rocket::Core::Log::Type type, const Rocket:
     printf("%s - %s\n", Type.c_str(), message.CString());
 
     return true;
-};
+}

@@ -34,13 +34,13 @@ void CloudSystem::update()
     for (int i = 0; i < CLOUDS_COUNT; ++i) {
         Texture *cloud = m_clouds[i];
 
-        if (cloud->getPosition().x + cloud->getTextureRect().width < SCREEN_W) {
+        if (cloud->getPosition().x + cloud->getTextureRect().width < Settings::instance()->screenResolutionWidth) {
             cloud->move(m_windspeed, 0.0f);
         } else {
             cloud->setPosition(-cloud->getTextureRect().width, cloud->getPosition().y);
         }
 
-        const float offset = (SCREEN_H * 0.5) - m_view->getCenter().y ;
+        const float offset = ( * 0.5) - m_view->getCenter().y ;
         cloud->setPosition(cloud->getPosition().x,  cloud->getTextureRect().height + offset);
     }
 }

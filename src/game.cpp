@@ -22,6 +22,7 @@
 #include "fontmanager.h"
 #include "sprite.h"
 #include "src/gui/gui.h"
+#include "settings/settings.h"
 
 #include <iostream>
 #include <sstream>
@@ -87,7 +88,7 @@ void Game::init()
     }
 
     m_window = SDL_CreateWindow("Ore Infinium", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED,
-                                SCREEN_W, SCREEN_H, SDL_WINDOW_SHOWN | SDL_WINDOW_OPENGL);
+                                Settings::instance()->screenResolutionHeight, Settings::instance()->screenResolutionWidth, SDL_WINDOW_SHOWN | SDL_WINDOW_OPENGL);
 
     if (!m_window) {
         checkSDLError();
@@ -141,7 +142,7 @@ void Game::init()
 
 //    glClearColor(.5f, 0.f, 0.f, 1.0f);
 
-//    glViewport(0, 0, SCREEN_W, SCREEN_H);
+//    glViewport(0, 0, Settings::instance()->screenResolutionWidth, );
 
     checkGLError();
 
@@ -205,6 +206,15 @@ void Game::handleEvents()
         case SDL_KEYDOWN:
             if (event.key.keysym.sym == SDLK_ESCAPE) {
                 m_running = false;
+            } else if (event.key.keysym.sym == SDLK_F5) {
+                // toggle debug logging
+                Settings::instance()->debugOutput = !Settings::instance()->debugOutput;
+            } else if (event.key.keysym.sym == SDLK_F6) {
+                Settings::instance()->debugRendererOutput = !Settings::instance()->debugRendererOutput;
+            } else if (event.key.keysym.sym == SDLK_F7) {
+                // toggle debug rendering
+                Settings::instance()->debugGUIRenderingEnabled = !Settings::instance()->debugGUIRenderingEnabled;
+                m_gui->debugRenderingChanged();
             }
             break;
 
@@ -231,6 +241,9 @@ void Game::drawDebugText()
     ss << "FPS: " << fps;
     str = ss.str();
     m_font->Render(str.c_str(), -1, FTPoint(0.0, 0.0, 0.0));
+    m_font->Render("F5 to toggle debug logging", -1, FTPoint(0.0, 15.0, 0.0));
+    m_font->Render("F6 to toggle renderer logging", -1, FTPoint(0.0, 30.0, 0.0));
+    m_font->Render("F7 to toggle GUI renderer debug", -1, FTPoint(0.0, 45.0, 0.0));
 }
 
 void Game::shutdown()

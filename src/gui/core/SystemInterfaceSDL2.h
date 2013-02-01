@@ -37,6 +37,8 @@ class SystemInterfaceSDL2 : public Rocket::Core::SystemInterface
 public:
 
     Rocket::Core::Input::KeyIdentifier TranslateKey(SDL_Keycode code);
+    int TranslateMouseButton(Uint8 button);
+
     int GetKeyModifiers();
 
     float GetElapsedTime();

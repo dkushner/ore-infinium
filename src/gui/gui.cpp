@@ -19,6 +19,7 @@
 
 #include "../game.h"
 #include "../debug.h"
+#include "../settings/settings.h"
 
 #include "core/SystemInterfaceSDL2.h"
 #include "core/ShellRenderInterfaceOpenGL.h"
@@ -57,7 +58,6 @@ GUI::GUI()
     m_context = Rocket::Core::CreateContext("main", Rocket::Core::Vector2i(1600, 900));
 
     Rocket::Debugger::Initialise(m_context);
-    Rocket::Debugger::SetVisible(true);
 
     bool success = Rocket::Core::FontDatabase::LoadFontFace("../gui/assets/Delicious-Roman.otf");
     Debug::fatal(success, Debug::Area::Graphics, "font load failure");
@@ -95,14 +95,18 @@ void GUI::handleEvent(const SDL_Event& event)
         break;
 
     case SDL_MOUSEBUTTONDOWN:
-        m_context->ProcessMouseButtonDown(0, m_system->GetKeyModifiers());
+        m_context->ProcessMouseButtonDown(m_system->TranslateMouseButton(event.button.button), m_system->GetKeyModifiers());
         break;
 
     case SDL_MOUSEBUTTONUP:
-        m_context->ProcessMouseButtonUp(0, m_system->GetKeyModifiers());
-//        m_context->ProcessMouseButtonUp(event.button.button, m_system->GetKeyModifiers());
+        m_context->ProcessMouseButtonUp(m_system->TranslateMouseButton(event.button.button), m_system->GetKeyModifiers());
         break;
     }
+}
+
+void GUI::debugRenderingChanged()
+{
+    Rocket::Debugger::SetVisible(Settings::instance()->debugGUIRenderingEnabled);
 }
 
 void GUI::render()

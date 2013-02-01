@@ -1,5 +1,5 @@
 /******************************************************************************
- *   Copyright (C) 2012 by Shaun Reich <sreich@kde.org>                       *
+ *   Copyright (C) 2013 by Shaun Reich <sreich@kde.org>                       *
  *                                                                            *
  *   This program is free software; you can redistribute it and/or            *
  *   modify it under the terms of the GNU General Public License as           *
@@ -15,64 +15,24 @@
  *   along with this program.  If not, see <http://www.gnu.org/licenses/>.    *
  *****************************************************************************/
 
-#ifndef GAME_H
-#define GAME_H
+#include "settings.h"
 
-#include "camera.h"
-#include "world.h"
-#include "src/gui/mainmenu.h"
-#include <stdio.h>
-#include <stdlib.h>
+Settings* Settings::s_instance(0);
 
-#include <GL/glew.h>
-
-#include <SDL2/SDL.h>
-#include <SDL_log.h>
-
-#include <ft2build.h>
-#include FT_FREETYPE_H
-
-#include <FTGL/ftgl.h>
-
-#include <glm/glm.hpp>
-#include <glm/gtc/matrix_transform.hpp>
-
-#include <string>
-
-class GUI;
-
-class Game
+Settings* Settings::instance()
 {
-public:
-    Game();
-    ~Game();
+    if (!s_instance)
+        s_instance = new Settings();
 
-    void init();
+    return s_instance;
+}
 
-    void tick();
-    void handleEvents();
+Settings::Settings()
+{
 
-    void abort_game(const char* message);
-    void shutdown();
+}
 
-    void drawDebugText();
+Settings::~Settings()
+{
 
-    void checkSDLError();
-    void checkGLError();
-
-    const float FPS = 60.0;
-
-private:
-    FTGLPixmapFont *m_font = nullptr;
-
-
-    GUI *m_gui = nullptr;
-    World *m_world = nullptr;
-
-    SDL_Window *m_window = nullptr;
-    SDL_GLContext m_GLcontext;
-
-    bool m_running = true;
-};
-
-#endif
+}

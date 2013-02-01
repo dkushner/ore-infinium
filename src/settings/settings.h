@@ -1,5 +1,5 @@
 /******************************************************************************
- *   Copyright (C) 2012 by Shaun Reich <sreich@kde.org>                       *
+ *   Copyright (C) 2013 by Shaun Reich <sreich@kde.org>                       *
  *                                                                            *
  *   This program is free software; you can redistribute it and/or            *
  *   modify it under the terms of the GNU General Public License as           *
@@ -15,64 +15,33 @@
  *   along with this program.  If not, see <http://www.gnu.org/licenses/>.    *
  *****************************************************************************/
 
-#ifndef GAME_H
-#define GAME_H
-
-#include "camera.h"
-#include "world.h"
-#include "src/gui/mainmenu.h"
-#include <stdio.h>
-#include <stdlib.h>
-
-#include <GL/glew.h>
-
-#include <SDL2/SDL.h>
-#include <SDL_log.h>
-
-#include <ft2build.h>
-#include FT_FREETYPE_H
-
-#include <FTGL/ftgl.h>
-
-#include <glm/glm.hpp>
-#include <glm/gtc/matrix_transform.hpp>
+#ifndef SETTINGS_H
+#define SETTINGS_H
 
 #include <string>
 
-class GUI;
-
-class Game
+class Settings
 {
 public:
-    Game();
-    ~Game();
+    static Settings* instance();
+    virtual ~Settings();
 
-    void init();
+public:
+    int screenResolutionHeight = 1600;
+    int screenResolutionWidth = 900;
 
-    void tick();
-    void handleEvents();
-
-    void abort_game(const char* message);
-    void shutdown();
-
-    void drawDebugText();
-
-    void checkSDLError();
-    void checkGLError();
-
-    const float FPS = 60.0;
+    bool debugOutput = false;
+    bool debugRendererOutput = false;
+    bool debugRenderingEnabled = false;
+    bool debugGUIRenderingEnabled = false;
+//static int SDL_LOGPRIORITY = SDL_LOG_PRIORITY_WARN;
 
 private:
-    FTGLPixmapFont *m_font = nullptr;
+    Settings();
+    Settings(const Settings& tm) {};
+    Settings& operator=(const Settings& tm);
 
-
-    GUI *m_gui = nullptr;
-    World *m_world = nullptr;
-
-    SDL_Window *m_window = nullptr;
-    SDL_GLContext m_GLcontext;
-
-    bool m_running = true;
+    static Settings* s_instance;
 };
 
 #endif

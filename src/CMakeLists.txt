@@ -22,7 +22,7 @@ gui/core/Shell.cpp
 gui/core/ShellFileInterface.cpp
 gui/core/ShellRenderInterfaceOpenGL.cpp
 gui/core/SystemInterfaceSDL2.cpp
-
+settings/settings.cpp
 #cloudsystem.cpp
 #sky.cpp
 )
