@@ -29,22 +29,26 @@
 #include <Rocket/Core.h>
 
 #include <SDL.h>
-/*
+
 int SystemInterfaceSDL2::GetKeyModifiers()
 {
     int Modifiers = 0;
 
-    /*
-    if(Window->GetInput().IsKeyDown(sf::Key::LShift) ||
-    	Window->GetInput().IsKeyDown(sf::Key::RShift))
-    	Modifiers |= Rocket::Core::Input::KM_SHIFT;
-
-    if(Window->GetInput().IsKeyDown(sf::Key::LControl) ||
-    	Window->GetInput().IsKeyDown(sf::Key::RControl))
-    	Modifiers |= Rocket::Core::Input::KM_CTRL;
-
-    if(Window->GetInput().IsKeyDown(sf::Key::LAlt) ||
-    	Window->GetInput().IsKeyDown(sf::Key::RAlt))
+//    
+//    if(Window->GetInput().IsKeyDown(sf::Key::LShift) ||
+//    	Window->GetInput().IsKeyDown(sf::Key::RShift))
+//    	Modifiers |= Rocket::Core::Input::KM_SHIFT;
+//
+//    if(Window->GetInput().IsKeyDown(sf::Key::LControl) ||
+//    	Window->GetInput().IsKeyDown(sf::Key::RControl))
+//    	Modifiers |= Rocket::Core::Input::KM_CTRL;
+//
+//    if(Window->GetInput().IsKeyDown(sf::Key::LAlt) ||
+//    	Window->GetInput().IsKeyDown(sf::Key::RAlt))
+    SDL_Keymod mod = SDL_GetModState();
+    if (mod == KMOD_LSHIFT) {
+        
+    }
 
 //    Modifiers |= Rocket::Core::Input::KM_ALT;
     return Modifiers;
@@ -308,14 +312,12 @@ Rocket::Core::Input::KeyIdentifier SystemInterfaceSDL2::TranslateKey(SDL_Keycode
 
     return Rocket::Core::Input::KI_UNKNOWN;
 };
-*/
 
 float SystemInterfaceSDL2::GetElapsedTime()
 {
     return static_cast<float>(SDL_GetTicks()) / 1000.0f;
 };
 
-/*
 bool SystemInterfaceSDL2::LogMessage(Rocket::Core::Log::Type type, const Rocket::Core::String& message)
 {
     std::string Type;
@@ -346,4 +348,3 @@ bool SystemInterfaceSDL2::LogMessage(Rocket::Core::Log::Type type, const Rocket:
 
     return true;
 };
-*/

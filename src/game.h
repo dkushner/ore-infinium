@@ -75,12 +75,14 @@ public:
 private:
     FTGLPixmapFont *m_font = nullptr;
 
+
     GUI *m_gui = nullptr;
     World *m_world = nullptr;
+
     SDL_Window *m_window = nullptr;
-    SDL_GLContext m_context;
+    SDL_GLContext m_GLcontext;
+
     bool m_running = true;
 };
-
 
 #endif

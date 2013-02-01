@@ -36,12 +36,12 @@ class SystemInterfaceSDL2 : public Rocket::Core::SystemInterface
 {
 public:
 
-//    Rocket::Core::Input::KeyIdentifier TranslateKey(SDL_Keycode code);
- //   int GetKeyModifiers();
+    Rocket::Core::Input::KeyIdentifier TranslateKey(SDL_Keycode code);
+    int GetKeyModifiers();
 
     float GetElapsedTime();
 
-  //  bool LogMessage(Rocket::Core::Log::Type type, const Rocket::Core::String& message);
+    bool LogMessage(Rocket::Core::Log::Type type, const Rocket::Core::String& message);
 
 private:
 };

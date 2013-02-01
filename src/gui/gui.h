@@ -18,15 +18,33 @@
 #ifndef GUI_H
 #define GUI_H
 
+namespace Rocket {
+    namespace Core {
+        class Context;
+    }
+}
+
+class ShellRenderInterfaceOpenGL;
+class ShellFileInterface;
+class SystemInterfaceSDL2;
+
+union SDL_Event;
+
 class GUI
 {
 public:
     GUI();
     ~GUI();
 
+    void handleEvent(const SDL_Event& event);
     void render();
 
 private:
+    Rocket::Core::Context* m_context = nullptr;
+
+    ShellRenderInterfaceOpenGL* m_renderer = nullptr;
+    ShellFileInterface* m_fileInterface = nullptr;
+    SystemInterfaceSDL2* m_system = nullptr;
 };
 
 #endif

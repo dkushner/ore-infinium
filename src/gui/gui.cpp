@@ -18,13 +18,52 @@
 #include "gui.h"
 
 #include "../game.h"
+#include "../debug.h"
+
+#include "core/SystemInterfaceSDL2.h"
+#include "core/ShellRenderInterfaceOpenGL.h"
+#include "core/ShellFileInterface.h"
 
 #include <Rocket/Core.h>
 #include <Rocket/Debugger.h>
+#include <Rocket/Controls.h>
 
 GUI::GUI()
 {
+    glEnableClientState(GL_VERTEX_ARRAY);
+    glEnableClientState(GL_COLOR_ARRAY);
+    glEnable(GL_BLEND);
+    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
+    glMatrixMode(GL_PROJECTION);
+    glLoadIdentity();
+    glOrtho(0, 1600, 900, 0, -1, 1);
+
+    glMatrixMode(GL_MODELVIEW);
+    glLoadIdentity();
+
+    m_system = new SystemInterfaceSDL2();
+    Rocket::Core::SetSystemInterface(m_system);
+
+    m_renderer = new ShellRenderInterfaceOpenGL();
+    Rocket::Core::SetRenderInterface(m_renderer);
+
+    m_fileInterface = new ShellFileInterface("../gui/assets");
+    Rocket::Core::SetFileInterface(m_fileInterface);
+
+    Debug::fatal(Rocket::Core::Initialise(), Debug::Area::Graphics, "rocket init failure");
+    Rocket::Controls::Initialise();
+
+    m_context = Rocket::Core::CreateContext("main", Rocket::Core::Vector2i(1600, 900));
+
+    Rocket::Debugger::Initialise(m_context);
+    Rocket::Debugger::SetVisible(true);
+
+    bool success = Rocket::Core::FontDatabase::LoadFontFace("../gui/assets/Delicious-Roman.otf");
+    Debug::fatal(success, Debug::Area::Graphics, "font load failure");
+
+    Rocket::Core::ElementDocument *doc = m_context->LoadDocument("../gui/assets/test.rml");
+    doc->Show();
 }
 
 GUI::~GUI()
@@ -32,7 +71,43 @@ GUI::~GUI()
 
 }
 
+void GUI::handleEvent(const SDL_Event& event)
+{
+    switch(event.type) {
+    case SDL_KEYDOWN:
+        m_context->ProcessKeyDown(m_system->TranslateKey(event.key.keysym.sym), m_system->GetKeyModifiers());
+        break;
+
+    case SDL_KEYUP:
+        m_context->ProcessKeyUp(m_system->TranslateKey(event.key.keysym.sym), m_system->GetKeyModifiers());
+        break;
+
+    case SDL_TEXTINPUT:
+        m_context->ProcessTextInput(event.text.text[0]);
+        break;
+
+    case SDL_TEXTEDITING:
+        //FIXME: HANDLE THAT i guess? http://wiki.libsdl.org/moin.cgi/Tutorials/TextInput
+        break;
+
+    case SDL_MOUSEMOTION:
+        m_context->ProcessMouseMove(event.motion.x, event.motion.y, m_system->GetKeyModifiers());
+        break;
+
+    case SDL_MOUSEBUTTONDOWN:
+        m_context->ProcessMouseButtonDown(0, m_system->GetKeyModifiers());
+        break;
+
+    case SDL_MOUSEBUTTONUP:
+        m_context->ProcessMouseButtonUp(0, m_system->GetKeyModifiers());
+//        m_context->ProcessMouseButtonUp(event.button.button, m_system->GetKeyModifiers());
+        break;
+    }
+}
+
 void GUI::render()
 {
+    m_context->Update();
+    m_context->Render();
 }
 
