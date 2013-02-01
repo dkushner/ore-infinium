@@ -45,6 +45,8 @@ public:
      */
     void debugRenderingChanged();
 
+    Rocket::Core::Context* context() { return m_context; }
+
 private:
     Rocket::Core::Context* m_context = nullptr;
 

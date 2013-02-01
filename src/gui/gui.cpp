@@ -62,7 +62,8 @@ GUI::GUI()
     bool success = Rocket::Core::FontDatabase::LoadFontFace("../gui/assets/Delicious-Roman.otf");
     Debug::fatal(success, Debug::Area::Graphics, "font load failure");
 
-    Rocket::Core::ElementDocument *doc = m_context->LoadDocument("../gui/assets/test.rml");
+    Rocket::Core::ElementDocument *doc = m_context->LoadDocument("../gui/assets/demo.rml");
+    assert(doc);
     doc->Show();
 }
 
@@ -93,6 +94,16 @@ void GUI::handleEvent(const SDL_Event& event)
     case SDL_MOUSEMOTION:
         m_context->ProcessMouseMove(event.motion.x, event.motion.y, m_system->GetKeyModifiers());
         break;
+
+    case SDL_MOUSEWHEEL: {
+        const int y = event.wheel.y;
+        if (y > 0) {
+            //scroll down
+        } else if (y < 0) {
+            m_context->ProcessMouseWheel(y, m_system->GetKeyModifiers());
+        }
+        break;
+    }
 
     case SDL_MOUSEBUTTONDOWN:
         m_context->ProcessMouseButtonDown(m_system->TranslateMouseButton(event.button.button), m_system->GetKeyModifiers());
