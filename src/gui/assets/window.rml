@@ -1,12 +1,12 @@
 <template name="window" content="content">
 <head>
 	<link type="text/rcss" href="rkt.rcss"/>
-	<link type="text/rcss" href="invader.rcss"/>
+	<link type="text/rcss" href="gui.rcss"/>
 </head>
 <body class="window">
 	<div id="title_bar">
 		<handle move_target="#document">
-			<div id="icon"></div>
+			<!--><div id="icon"></div> unused, see gui.rcss<!-->
 			<div id="title">Title</div>
 		</handle>
 	</div>
