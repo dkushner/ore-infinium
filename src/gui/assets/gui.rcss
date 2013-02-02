@@ -312,10 +312,10 @@ dataselect selectbox option:hover
 
 input.range slidertrack
 {
-        background-decorator: tiled-vertical;
-        background-top-image: gui.tga 70px 199px 97px 201px;
+        background-decorator: tiled-horizontal;
+        background-left-image: gui.tga 70px 199px 97px 201px;
         background-center-image: gui.tga stretch 70px 201px 97px 202px;
-        background-bottom-image: gui.tga 70px 203px 97px 204px;
+        background-right-image: gui.tga 70px 203px 97px 204px;
 }
 
 input.range sliderbar
@@ -324,10 +324,10 @@ input.range sliderbar
         width: 23px;
         min-height: 46px;
 
-        background-decorator: tiled-vertical;
-        background-top-image: gui.tga 56px 152px 79px 175px;
+        background-decorator: tiled-horizontal;
+        background-left-image: gui.tga 56px 152px 79px 175px;
         background-center-image: gui.tga stretch 56px 175px 79px 175px;
-        background-bottom-image: gui.tga 56px 176px 79px 198px;
+        background-right-image: gui.tga 56px 176px 79px 198px;
 }
 
 /* Animate the bar's decorator on hover. */
