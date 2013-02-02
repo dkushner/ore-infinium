@@ -19,7 +19,7 @@ tilerenderer.cpp
 image.cpp
 gui/gui.cpp
 gui/mainmenu.cpp
-gui/mainmenulistener.cpp
+gui/optionsdialog.cpp
 
 gui/core/Shell.cpp
 gui/core/ShellFileInterface.cpp

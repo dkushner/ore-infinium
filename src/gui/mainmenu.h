@@ -18,6 +18,9 @@
 #ifndef MAINMENU_H
 #define MAINMENU_H
 
+#include <Rocket/Core.h>
+#include "optionsdialog.h"
+
 namespace Rocket {
     namespace Core {
         class ElementDocument;
@@ -25,20 +28,21 @@ namespace Rocket {
 }
 
 class Game;
-class MainMenuListener;
 
-class MainMenu
+class MainMenu : public Rocket::Core::EventListener
 {
 public:
     MainMenu(Game* game);
     ~MainMenu();
 
+    /// reimplemented from Rocket::Core::EventListener
+    virtual void ProcessEvent(Rocket::Core::Event& event);
+
     void toggleShown();
 
 private:
     Game* m_game = nullptr;
-
-    MainMenuListener* m_listener = nullptr;
+    OptionsDialog* m_optionsDialog = nullptr;
 
     Rocket::Core::ElementDocument* m_menu = nullptr;
 };

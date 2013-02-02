@@ -22,10 +22,8 @@
 		</style>
 	</head>
 	<body template="window">
-		<button id="element1" onclick="startgame">Start Game</button><br />
-		<button onclick="goto high_score; close logo">High Scores</button><br />
-		<button onclick="goto options; close logo">Options</button><br />
-		<button onclick="goto help; close logo">Help</button><br />
-		<button onclick="exit">Exit</button>
+		<button id="start">Start Game</button><br />
+		<button id="options">Options</button><br />
+		<button id="quit">Quit</button>
 	</body>
 </rml>

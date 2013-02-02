@@ -17,11 +17,12 @@
 
 #include "mainmenu.h"
 #include "gui.h"
-#include "mainmenulistener.h"
 
 #include "../game.h"
 
 #include <Rocket/Core.h>
+
+#include <iostream>
 
 #include <assert.h>
 
@@ -31,15 +32,34 @@ MainMenu::MainMenu(Game* game) : m_game(game)
     assert(m_menu);
     m_menu->GetElementById("title")->SetInnerRML("fuck yeah, runtime text");
 
-    m_listener = new MainMenuListener(m_game);
-
-    m_menu->GetElementById("element1")->AddEventListener("click", m_listener);
+    m_menu->GetElementById("start")->AddEventListener("click", this);
+    m_menu->GetElementById("options")->AddEventListener("click", this);
+    m_menu->GetElementById("quit")->AddEventListener("click", this);
 }
 
 MainMenu::~MainMenu()
 {
 
 }
+
+void MainMenu::ProcessEvent(Rocket::Core::Event& event)
+{
+    std::cout << "Processing element: " << event.GetCurrentElement()->GetId().CString() << " type: " << event.GetType().CString() << '\n';
+    const Rocket::Core::String& id = event.GetCurrentElement()->GetId();
+
+    if (id == "start") {
+
+    } else if (id == "options") {
+        if (!m_optionsDialog) {
+           m_optionsDialog = new OptionsDialog(m_game);
+        }
+
+        m_optionsDialog->show();
+    } else if (id == "quit") {
+
+    }
+}
+
 
 void MainMenu::toggleShown()
 {

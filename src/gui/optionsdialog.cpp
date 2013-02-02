@@ -15,38 +15,40 @@
  *   along with this program.  If not, see <http://www.gnu.org/licenses/>.    *
  *****************************************************************************/
 
-#include "mainmenu.h"
+#include "optionsdialog.h"
 #include "gui.h"
-#include "mainmenulistener.h"
 
 #include "../game.h"
 
 #include <Rocket/Core.h>
 
+#include <iostream>
+
 #include <assert.h>
 
-MainMenu::MainMenu(Game* game) : m_game(game)
+OptionsDialog::OptionsDialog(Game* game) : m_game(game)
 {
-    m_menu = GUI::instance()->context()->LoadDocument("../gui/assets/mainMenu.rml");
-    assert(m_menu);
-    m_menu->GetElementById("title")->SetInnerRML("fuck yeah, runtime text");
+    m_options = GUI::instance()->context()->LoadDocument("../gui/assets/optionsDialog.rml");
+    assert(m_options);
+//    m_options->GetElementById("title")->SetInnerRML("fuck yeah, runtime text");
 
-    m_listener = new MainMenuListener(m_game);
-
-    m_menu->GetElementById("element1")->AddEventListener("click", m_listener);
+ //   m_options->GetElementById("element1")->AddEventListener("click", this);
+    m_options->Show();
+    std::cout << "OPTIONS DIALOG CTOR \n";
 }
 
-MainMenu::~MainMenu()
+OptionsDialog::~OptionsDialog()
 {
 
 }
 
-void MainMenu::toggleShown()
+void OptionsDialog::ProcessEvent(Rocket::Core::Event& event)
 {
-    if (m_menu->IsVisible()) {
-        m_menu->Hide();
-    } else {
-        m_menu->Show();
-    }
+    std::cout << "Processing element: " << event.GetCurrentElement()->GetId().CString() << " type: " << event.GetType().CString() << '\n';
+}
+
+void OptionsDialog::show()
+{
+    m_options->Show();
 }
 
