@@ -34,7 +34,6 @@ MainMenu::MainMenu(Game* game) : m_game(game)
 
     m_menu->GetElementById("start")->AddEventListener("click", this);
     m_menu->GetElementById("options")->AddEventListener("click", this);
-    m_menu->GetElementById("quit")->AddEventListener("click", this);
 }
 
 MainMenu::~MainMenu()
@@ -44,7 +43,8 @@ MainMenu::~MainMenu()
 
 void MainMenu::ProcessEvent(Rocket::Core::Event& event)
 {
-    std::cout << "Processing element: " << event.GetCurrentElement()->GetId().CString() << " type: " << event.GetType().CString() << '\n';
+    std::cout << "mainmenu Processing element: " << event.GetCurrentElement()->GetId().CString() << " type: " << event.GetType().CString() << '\n';
+
     const Rocket::Core::String& id = event.GetCurrentElement()->GetId();
 
     if (id == "start") {

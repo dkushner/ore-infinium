@@ -310,6 +310,13 @@ dataselect selectbox option:hover
 }
 
 
+input.range slidertrack
+{
+        background-decorator: tiled-vertical;
+        background-top-image: gui.tga 70px 199px 97px 201px;
+        background-center-image: gui.tga stretch 70px 201px 97px 202px;
+        background-bottom-image: gui.tga 70px 203px 97px 204px;
+}
 
 input.radio,
 input.checkbox

@@ -21,6 +21,7 @@
 #include "../game.h"
 
 #include <Rocket/Core.h>
+#include <Rocket/Controls.h>
 
 #include <iostream>
 
@@ -30,25 +31,77 @@ OptionsDialog::OptionsDialog(Game* game) : m_game(game)
 {
     m_options = GUI::instance()->context()->LoadDocument("../gui/assets/optionsDialog.rml");
     assert(m_options);
-//    m_options->GetElementById("title")->SetInnerRML("fuck yeah, runtime text");
 
- //   m_options->GetElementById("element1")->AddEventListener("click", this);
-    m_options->Show();
-    std::cout << "OPTIONS DIALOG CTOR \n";
+    m_options->GetElementById("title")->SetInnerRML("fuck yeah, runtime options");
+
+    m_options->GetElementById("form")->AddEventListener("submit", this);
+
+//    m_options->GetElementById("form")->AddEventListener("submit", this);
+//    Rocket::Controls::WidgetDropDown* resolution = dynamic_cast<Rocket::Controls::WidgetDropDown*>( m_options->GetElementById("resolution"));
 }
 
 OptionsDialog::~OptionsDialog()
 {
-
 }
 
 void OptionsDialog::ProcessEvent(Rocket::Core::Event& event)
 {
-    std::cout << "Processing element: " << event.GetCurrentElement()->GetId().CString() << " type: " << event.GetType().CString() << '\n';
+    std::cout << "Options Processing element: " << event.GetCurrentElement()->GetId().CString() << " type: " << event.GetType().CString() << '\n';
+
+    if (event.GetParameter< Rocket::Core::String >("submit", "") == "accept") {
+
+    std::cout << "accepted\n";
+    }
+
+    /*
+     *        Rocket::Controls::ElementFormControlInput* spatialisation_option = dynamic_cast< Rocket::Controls::ElementFormControlInput* >(options_body->GetElementById("3d"));
+     *                if (spatialisation_option != NULL)
+     *                {
+     *                        if (GameDetails::Get3DSpatialisation())
+     *                                spatialisation_option->SetAttribute("checked", "");
+     *                        else
+     *                                spatialisation_option->RemoveAttribute("checked");
+     }
+     }
+
+     // Sent from the 'onsubmit' action of the options menu; we read the values sent from the form and make the
+     // necessary changes on the game details structure.
+     else if (value == "store")
+     {
+         // First check which button was clicked to submit the form; if it was 'cancel', then we don't want to
+         // propagate the changes.
+         if (event.GetParameter< Rocket::Core::String >("submit", "cancel") == "accept")
+         {
+             // Fetch the results of the form submission. These are stored as parameters directly on the event itself.
+             // Like HTML form events, the name of the parameter is the 'name' attribute of the control, and the value
+             // is whatever was put into the 'value' attribute. Checkbox values are only sent through if the box was
+             // clicked. Radio buttons send through one value for the active button.
+             Rocket::Core::String graphics = event.GetParameter< Rocket::Core::String >("graphics", "ok");
+             bool reverb = event.GetParameter< Rocket::Core::String >("reverb", "") == "true";
+             bool spatialisation = event.GetParameter< Rocket::Core::String >("3d", "") == "true";
+
+             if (graphics == "good")
+                 GameDetails::SetGraphicsQuality(GameDetails::GOOD);
+             else if (graphics == "ok")
+                 GameDetails::SetGraphicsQuality(GameDetails::OK);
+             else if (graphics == "bad")
+                 GameDetails::SetGraphicsQuality(GameDetails::BAD);
+
+             GameDetails::SetReverb(reverb);
+             GameDetails::Set3DSpatialisation(spatialisation);
+     }
+     }
+     */
+
 }
 
 void OptionsDialog::show()
 {
-    m_options->Show();
+    m_options->Show();//Rocket::Core::ElementDocument::MODAL);
+}
+
+Rocket::Core::ElementDocument* OptionsDialog::document()
+{
+    return m_options;
 }
 

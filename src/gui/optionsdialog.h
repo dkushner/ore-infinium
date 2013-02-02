@@ -39,6 +39,8 @@ public:
 
     void show();
 
+    Rocket::Core::ElementDocument* document();
+
 private:
     Game* m_game = nullptr;
 
