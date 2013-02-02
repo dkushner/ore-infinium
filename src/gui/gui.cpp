@@ -29,6 +29,16 @@
 #include <Rocket/Debugger.h>
 #include <Rocket/Controls.h>
 
+GUI* GUI::s_instance(0);
+
+GUI* GUI::instance()
+{
+    if (!s_instance)
+        s_instance = new GUI();
+
+    return s_instance;
+}
+
 GUI::GUI()
 {
     glEnableClientState(GL_VERTEX_ARRAY);
@@ -62,9 +72,7 @@ GUI::GUI()
     bool success = Rocket::Core::FontDatabase::LoadFontFace("../gui/assets/Delicious-Roman.otf");
     Debug::fatal(success, Debug::Area::Graphics, "font load failure");
 
-    Rocket::Core::ElementDocument *doc = m_context->LoadDocument("../gui/assets/demo.rml");
-    assert(doc);
-    doc->Show();
+    m_context->LoadMouseCursor("../gui/assets/cursor.rml");
 }
 
 GUI::~GUI()

@@ -21,7 +21,10 @@
 #include "spritesheetmanager.h"
 #include "fontmanager.h"
 #include "sprite.h"
+
 #include "src/gui/gui.h"
+#include "src/gui/mainmenu.h"
+
 #include "settings/settings.h"
 
 #include <iostream>
@@ -114,6 +117,8 @@ void Game::init()
     m_GLcontext = SDL_GL_CreateContext(m_window);
     checkGLError();
 
+    SDL_ShowCursor(0);
+
     checkSDLError();
     Debug::assertf(glewInit() == GLEW_OK, "glewInit returned !GLEW_OK. No GL context can be formed..bailing out");
 
@@ -146,7 +151,9 @@ void Game::init()
 
     checkGLError();
 
-    m_gui = new GUI();
+    m_gui = GUI::instance();
+    m_mainMenu = new MainMenu(this);
+    m_mainMenu->toggleShown();
 
 //   World::createInstance();
 //   m_world = World::instance();
@@ -205,7 +212,7 @@ void Game::handleEvents()
         switch (event.type) {
         case SDL_KEYDOWN:
             if (event.key.keysym.sym == SDLK_ESCAPE) {
-                m_running = false;
+                m_mainMenu->toggleShown();
             } else if (event.key.keysym.sym == SDLK_F5) {
                 // toggle debug logging
                 Settings::instance()->debugOutput = !Settings::instance()->debugOutput;
@@ -219,7 +226,7 @@ void Game::handleEvents()
             break;
 
         case SDL_WINDOWEVENT_CLOSE:
-            m_running = false;
+                m_mainMenu->toggleShown();
             break;
 
         case SDL_QUIT:

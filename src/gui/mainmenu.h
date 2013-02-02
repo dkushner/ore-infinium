@@ -18,18 +18,29 @@
 #ifndef MAINMENU_H
 #define MAINMENU_H
 
+namespace Rocket {
+    namespace Core {
+        class ElementDocument;
+    }
+}
+
+class Game;
+class MainMenuListener;
+
 class MainMenu
 {
 public:
-    static MainMenu* instance();
-    virtual ~MainMenu();
+    MainMenu(Game* game);
+    ~MainMenu();
+
+    void toggleShown();
 
 private:
-    MainMenu();
-    MainMenu(const MainMenu& tm) {};
-    MainMenu& operator=(const MainMenu& tm);
+    Game* m_game = nullptr;
 
-    static MainMenu* s_instance;
+    MainMenuListener* m_listener = nullptr;
+
+    Rocket::Core::ElementDocument* m_menu = nullptr;
 };
 
 #endif

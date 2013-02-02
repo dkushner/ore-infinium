@@ -17,26 +17,36 @@
 
 #include "mainmenu.h"
 #include "gui.h"
+#include "mainmenulistener.h"
+
 #include "../game.h"
 
-#include <CEGUI/CEGUI.h>
+#include <Rocket/Core.h>
+
 #include <assert.h>
 
-MainMenu* MainMenu::s_instance(0);
-
-MainMenu* MainMenu::instance()
+MainMenu::MainMenu(Game* game) : m_game(game)
 {
-    if (!s_instance)
-        s_instance = new MainMenu();
+    m_menu = GUI::instance()->context()->LoadDocument("../gui/assets/mainMenu.rml");
+    assert(m_menu);
+    m_menu->GetElementById("title")->SetInnerRML("fuck yeah");
 
-    return s_instance;
-}
+    m_listener = new MainMenuListener(m_game);
 
-MainMenu::MainMenu()
-{
+    m_menu->GetElementById("element1")->AddEventListener("click", m_listener);
 }
 
 MainMenu::~MainMenu()
 {
 
 }
+
+void MainMenu::toggleShown()
+{
+    if (m_menu->IsVisible()) {
+        m_menu->Hide();
+    } else {
+        m_menu->Show();
+    }
+}
+

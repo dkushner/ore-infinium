@@ -18,6 +18,9 @@ entity.cpp
 tilerenderer.cpp
 image.cpp
 gui/gui.cpp
+gui/mainmenu.cpp
+gui/mainmenulistener.cpp
+
 gui/core/Shell.cpp
 gui/core/ShellFileInterface.cpp
 gui/core/ShellRenderInterfaceOpenGL.cpp

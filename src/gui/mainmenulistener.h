@@ -15,51 +15,23 @@
  *   along with this program.  If not, see <http://www.gnu.org/licenses/>.    *
  *****************************************************************************/
 
-#ifndef GUI_H
-#define GUI_H
+#ifndef MAINMENULISTENER_H
+#define MAINMENULISTENER_H
 
-namespace Rocket {
-    namespace Core {
-        class Context;
-    }
-}
+#include <Rocket/Core.h>
 
-class ShellRenderInterfaceOpenGL;
-class ShellFileInterface;
-class SystemInterfaceSDL2;
+class Game;
 
-union SDL_Event;
-
-class GUI
+class MainMenuListener : public Rocket::Core::EventListener
 {
 public:
-    static GUI* instance();
-    virtual ~GUI();
+    MainMenuListener(Game* game);
+    ~MainMenuListener();
 
-    void handleEvent(const SDL_Event& event);
-    void render();
-
-    /**
-     * Notify to the gui that the state has changed
-     * so we can decide what to do
-     */
-    void debugRenderingChanged();
-
-    Rocket::Core::Context* context() { return m_context; }
+    virtual void ProcessEvent(Rocket::Core::Event& event);
 
 private:
-    Rocket::Core::Context* m_context = nullptr;
-
-    ShellRenderInterfaceOpenGL* m_renderer = nullptr;
-    ShellFileInterface* m_fileInterface = nullptr;
-    SystemInterfaceSDL2* m_system = nullptr;
-
-private:
-    GUI();
-    GUI(const GUI& tm) {};
-    GUI& operator=(const GUI& tm);
-
-    static GUI* s_instance;
+    Game* m_game = nullptr;
 };
 
 #endif

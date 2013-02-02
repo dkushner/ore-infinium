@@ -15,51 +15,25 @@
  *   along with this program.  If not, see <http://www.gnu.org/licenses/>.    *
  *****************************************************************************/
 
-#ifndef GUI_H
-#define GUI_H
+#include "mainmenulistener.h"
 
-namespace Rocket {
-    namespace Core {
-        class Context;
-    }
+#include "../game.h"
+
+#include <iostream>
+
+#include <assert.h>
+
+MainMenuListener::MainMenuListener(Game* game)
+{
+
 }
 
-class ShellRenderInterfaceOpenGL;
-class ShellFileInterface;
-class SystemInterfaceSDL2;
-
-union SDL_Event;
-
-class GUI
+MainMenuListener::~MainMenuListener()
 {
-public:
-    static GUI* instance();
-    virtual ~GUI();
 
-    void handleEvent(const SDL_Event& event);
-    void render();
+}
 
-    /**
-     * Notify to the gui that the state has changed
-     * so we can decide what to do
-     */
-    void debugRenderingChanged();
-
-    Rocket::Core::Context* context() { return m_context; }
-
-private:
-    Rocket::Core::Context* m_context = nullptr;
-
-    ShellRenderInterfaceOpenGL* m_renderer = nullptr;
-    ShellFileInterface* m_fileInterface = nullptr;
-    SystemInterfaceSDL2* m_system = nullptr;
-
-private:
-    GUI();
-    GUI(const GUI& tm) {};
-    GUI& operator=(const GUI& tm);
-
-    static GUI* s_instance;
-};
-
-#endif
+void MainMenuListener::ProcessEvent(Rocket::Core::Event& event)
+{
+    std::cout << "Processing element: " << event.GetCurrentElement()->GetId().CString() << " type: " << event.GetType().CString() << '\n';
+}

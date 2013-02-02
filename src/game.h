@@ -20,7 +20,6 @@
 
 #include "camera.h"
 #include "world.h"
-#include "src/gui/mainmenu.h"
 #include <stdio.h>
 #include <stdlib.h>
 
@@ -40,6 +39,7 @@
 #include <string>
 
 class GUI;
+class MainMenu;
 
 class Game
 {
@@ -66,7 +66,8 @@ private:
     FTGLPixmapFont *m_font = nullptr;
 
 
-    GUI *m_gui = nullptr;
+    GUI* m_gui = nullptr;
+    MainMenu* m_mainMenu = nullptr;
     World *m_world = nullptr;
 
     SDL_Window *m_window = nullptr;
