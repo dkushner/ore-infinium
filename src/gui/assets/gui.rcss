@@ -318,6 +318,67 @@ input.range slidertrack
         background-bottom-image: gui.tga 70px 203px 97px 204px;
 }
 
+input.range sliderbar
+{
+        margin-left: 4px;
+        width: 23px;
+        min-height: 46px;
+
+        background-decorator: tiled-vertical;
+        background-top-image: gui.tga 56px 152px 79px 175px;
+        background-center-image: gui.tga stretch 56px 175px 79px 175px;
+        background-bottom-image: gui.tga 56px 176px 79px 198px;
+}
+
+/* Animate the bar's decorator on hover. */
+input.range sliderbar:hover
+{
+        background-top-image-s: 80px 103px;
+        background-center-image-s: 80px 103px;
+        background-bottom-image-s: 80px 103px;
+}
+
+/* Animate the bar's decorator on active. */
+input.range sliderbar:active
+{
+        background-top-image-s: 104px 127px;
+        background-center-image-s: 104px 127px;
+        background-bottom-image-s: 104px 127px;
+}
+
+/* Fix the size of the 'page up' slider arrow and decorate it appropriately. */
+input.range sliderarrowdec
+{
+        width: 27px;
+        height: 24px;
+
+        icon-decorator: image;
+        icon-image: gui.tga 0px 152px 27px 176px;
+}
+
+/* Fix the size of the 'page down' slider arrow and decorate it appropriately. */
+input.range sliderarrowinc
+{
+        width: 27px;
+        height: 24px;
+
+        icon-decorator: image;
+        icon-image: gui.tga 28px 152px 55px 176px;
+}
+
+input.range sliderarrowdec:hover,
+input.range sliderarrowinc:hover
+{
+        icon-image-t: 177px 201px;
+}
+
+/* Animate the arrows on active. */
+input.range sliderarrowdec:active,
+input.range sliderarrowinc:active
+{
+        icon-image-t: 202px 226px;
+}
+
 input.radio,
 input.checkbox
 {
