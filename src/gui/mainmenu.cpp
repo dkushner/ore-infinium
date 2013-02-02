@@ -29,7 +29,7 @@ MainMenu::MainMenu(Game* game) : m_game(game)
 {
     m_menu = GUI::instance()->context()->LoadDocument("../gui/assets/mainMenu.rml");
     assert(m_menu);
-    m_menu->GetElementById("title")->SetInnerRML("fuck yeah");
+    m_menu->GetElementById("title")->SetInnerRML("fuck yeah, runtime text");
 
     m_listener = new MainMenuListener(m_game);
 
