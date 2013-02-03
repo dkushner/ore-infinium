@@ -53,15 +53,15 @@ void World::createInstance()
 
 World::World()
 {
- //   m_camera = new Camera();
-//    SpriteSheetManager::instance()->setCamera(m_camera);
+    m_camera = new Camera();
+    SpriteSheetManager::instance()->setCamera(m_camera);
 
-//    m_tileRenderer = new TileRenderer(this);
+    m_tileRenderer = new TileRenderer(this);
 
     m_player = new Player("someframe");
- //   m_entities.insert(m_entities.end(), m_player);
+    m_entities.insert(m_entities.end(), m_player);
 
-  //  loadMap();
+    loadMap();
 
     //FIXME: saveMap();
 
@@ -86,11 +86,11 @@ void World::render()
     //set our view so that the player will stay relative to the view, in the center.
 //HACK    m_window->setView(*m_view);
 
-  //  m_tileRenderer->render();
+    m_tileRenderer->render();
 
 //HACK    m_window->setView(m_window->getDefaultView());
-//    SpriteSheetManager::instance()->renderEntities();
- //   SpriteSheetManager::instance()->renderCharacters();
+    SpriteSheetManager::instance()->renderEntities();
+    SpriteSheetManager::instance()->renderCharacters();
 
     // ==================================================
     glm::ivec2 mouse = mousePosition();

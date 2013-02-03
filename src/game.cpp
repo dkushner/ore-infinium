@@ -181,11 +181,11 @@ void Game::tick()
 
         handleEvents();
 
-//        m_world->update(delta);
+        m_world->update(delta);
 
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-//        m_world->render();
+        m_world->render();
 
         m_gui->render();
 
@@ -207,7 +207,7 @@ void Game::handleEvents()
     while (SDL_PollEvent(&event)) {
 
         m_gui->handleEvent(event);
-//        m_world->handleEvent(event);
+        m_world->handleEvent(event);
 
         switch (event.type) {
         case SDL_KEYDOWN:

@@ -158,12 +158,53 @@ std::map<std::string, SpriteSheetManager::SpriteFrameIdentifier> SpriteSheetMana
 
 void SpriteSheetManager::renderCharacters()
 {
+    /*
     m_shader->bindProgram();
 
     bindSpriteSheet(SpriteSheetType::Character);
 
     Debug::checkGLError();
+    size_t buffer_offset = 0;
 
+    GLint pos_attrib = glGetAttribLocation(m_shader->shaderProgram(), "position");
+    glEnableVertexAttribArray(pos_attrib);
+    glVertexAttribPointer(
+        pos_attrib,
+        2,
+        GL_FLOAT,
+        GL_FALSE,
+        sizeof(Vertex),
+                          (const GLvoid*)buffer_offset);
+    buffer_offset += sizeof(f32) * 2;
+
+    GLint color_attrib = glGetAttribLocation(m_shader->shaderProgram(), "color");
+
+    Debug::checkGLError();
+
+    glEnableVertexAttribArray(color_attrib);
+    glVertexAttribPointer(
+        color_attrib,
+        4,
+        GL_UNSIGNED_BYTE,
+        GL_TRUE,
+        sizeof(Vertex),
+                          (const GLvoid*)buffer_offset);
+    buffer_offset += sizeof(u32);
+
+    Debug::checkGLError();
+
+    GLint texcoord_attrib = glGetAttribLocation(m_shader->shaderProgram(), "texcoord");
+    glEnableVertexAttribArray(texcoord_attrib);
+    glVertexAttribPointer(
+        texcoord_attrib,
+        2,
+        GL_FLOAT,
+        GL_FALSE,
+        sizeof(Vertex),
+                          (const GLvoid*)buffer_offset);
+    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_ebo);
+    glBindBuffer(GL_ARRAY_BUFFER, m_vbo);
+    glBindVertexArray(m_vao);
     int index = 0;
     for (Sprite* sprite: m_characterSprites) {
         auto frameIdentifier = m_spriteSheetCharactersDescription.find(sprite->frameName());
@@ -237,13 +278,10 @@ void SpriteSheetManager::renderCharacters()
     glEnable(GL_BLEND);
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
-    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_ebo);
-    glBindBuffer(GL_ARRAY_BUFFER, m_vbo);
-    glBindVertexArray(m_vao);
+
 
     Debug::checkGLError();
 
-    m_shader->bindProgram();
 
     Debug::checkGLError();
 
@@ -258,9 +296,10 @@ void SpriteSheetManager::renderCharacters()
     glBindBuffer(GL_ARRAY_BUFFER, 0);
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
 
-    glDisable(GL_BLEND);
+///    glDisable(GL_BLEND);
 
     Debug::checkGLError();
+    */
 }
 
 void SpriteSheetManager::renderEntities()
@@ -347,6 +386,11 @@ void SpriteSheetManager::initGL()
         GL_FALSE,
         sizeof(Vertex),
         (const GLvoid*)buffer_offset);
+
+    m_shader->unbindProgram();
+    glBindVertexArray(0);
+    glBindBuffer(GL_ARRAY_BUFFER, 0);
+    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
 
     Debug::checkGLError();
 }
