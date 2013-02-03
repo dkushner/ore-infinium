@@ -401,10 +401,10 @@ input.range sliderarrowinc:active
 input.radio,
 input.checkbox
 {
-        width: 30px;
-        height: 30px;
+        width: 14px;
+        height: 14px;
 
-        vertical-align: -11px;
+        vertical-align: -3px;
 }
 
 input.radio
