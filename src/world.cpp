@@ -53,21 +53,20 @@ void World::createInstance()
 
 World::World()
 {
-    m_camera = new Camera();
-    SpriteSheetManager::instance()->setCamera(m_camera);
+ //   m_camera = new Camera();
+//    SpriteSheetManager::instance()->setCamera(m_camera);
 
-    m_tileRenderer = new TileRenderer(this);
+//    m_tileRenderer = new TileRenderer(this);
 
     m_player = new Player("someframe");
-    m_entities.insert(m_entities.end(), m_player);
+ //   m_entities.insert(m_entities.end(), m_player);
 
-    loadMap();
+  //  loadMap();
 
     //FIXME: saveMap();
 
     //FIXME: height
 //    m_sky = new Sky(m_window, m_view, 0.0f);
-
 }
 
 World::~World()
@@ -87,11 +86,11 @@ void World::render()
     //set our view so that the player will stay relative to the view, in the center.
 //HACK    m_window->setView(*m_view);
 
-    m_tileRenderer->render();
+  //  m_tileRenderer->render();
 
 //HACK    m_window->setView(m_window->getDefaultView());
-    SpriteSheetManager::instance()->renderEntities();
-    SpriteSheetManager::instance()->renderCharacters();
+//    SpriteSheetManager::instance()->renderEntities();
+ //   SpriteSheetManager::instance()->renderCharacters();
 
     // ==================================================
     glm::ivec2 mouse = mousePosition();
@@ -130,7 +129,7 @@ void World::handleEvent(const SDL_Event& event)
     }
     }
 
-    m_player->handleEvent(event);
+//    m_player->handleEvent(event);
 }
 
 void World::update(double elapsedTime)
@@ -146,7 +145,7 @@ for (Entity * currentEntity : m_entities) {
     }
 
     //FIXME: MAKE IT CENTER ON THE CENTER OF THE PLAYER SPRITE
-    m_camera->centerOn(m_player->position());
+//    m_camera->centerOn(m_player->position());
 
     //calculateAttackPosition();
 }
@@ -411,7 +410,7 @@ void World::loadMap()
 
     // m_player->setPosition(2800, 2450);
     //FIXME:
-    m_player->setPosition(100, 200);
+//    m_player->setPosition(100, 200);
 }
 
 void World::generateMap()

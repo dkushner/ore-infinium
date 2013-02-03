@@ -52,12 +52,12 @@ SpriteSheetManager::SpriteSheetManager()
 
     initGL();
 
-    float scale = 1.0f;
-    m_modelMatrix = glm::scale(glm::mat4(1.0f), glm::vec3(scale));
-    m_projectionMatrix = glm::ortho(0.0f, float(Settings::instance()->screenResolutionWidth), float(), 0.0f, -1.0f, 1.0f);
-
-    loadAllSpriteSheets();
-    parseAllSpriteSheets();
+  //  float scale = 1.0f;
+   // m_modelMatrix = glm::scale(glm::mat4(1.0f), glm::vec3(scale));
+    //m_projectionMatrix = glm::ortho(0.0f, float(Settings::instance()->screenResolutionWidth), float(), 0.0f, -1.0f, 1.0f);
+//
+ //   loadAllSpriteSheets();
+  //  parseAllSpriteSheets();
 }
 
 SpriteSheetManager::~SpriteSheetManager()
@@ -240,6 +240,82 @@ void SpriteSheetManager::renderCharacters()
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_ebo);
     glBindBuffer(GL_ARRAY_BUFFER, m_vbo);
     glBindVertexArray(m_vao);
+    Debug::checkGLError();
+
+    //////////////////////
+
+    glGenVertexArrays(1, &m_vao);
+    glBindVertexArray(m_vao);
+
+    glGenBuffers(1, &m_vbo);
+    glBindBuffer(GL_ARRAY_BUFFER, m_vbo);
+    glBufferData(
+        GL_ARRAY_BUFFER,
+        m_maxSpriteCount * 4 * sizeof(Vertex),
+                 NULL,
+                 GL_DYNAMIC_DRAW);
+
+    Debug::checkGLError();
+
+    std::vector<u32> indicesv;
+
+    // prepare and upload indices as a one time deal
+    const u32 indices[] = { 0, 1, 2, 0, 2, 3 }; // pattern for a triangle array
+    // for each possible sprite, add the 6 index pattern
+    for (size_t j = 0; j < m_maxSpriteCount; j++) {
+        for (size_t i = 0; i < sizeof(indices) / sizeof(*indices); i++) {
+            indicesv.push_back(4 * j + indices[i]);
+        }
+    }
+
+    glGenBuffers(1, &m_ebo);
+    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_ebo);
+    glBufferData(
+        GL_ELEMENT_ARRAY_BUFFER,
+        indicesv.size()*sizeof(u32),
+                 indicesv.data(),
+                 GL_STATIC_DRAW);
+
+    Debug::checkGLError();
+
+    size_t buffer_offset = 0;
+
+    GLint pos_attrib = glGetAttribLocation(m_shader->shaderProgram(), "position");
+    glEnableVertexAttribArray(pos_attrib);
+    glVertexAttribPointer(
+        pos_attrib,
+        2,
+        GL_FLOAT,
+        GL_FALSE,
+        sizeof(Vertex),
+                          (const GLvoid*)buffer_offset);
+    buffer_offset += sizeof(f32) * 2;
+
+    GLint color_attrib = glGetAttribLocation(m_shader->shaderProgram(), "color");
+
+    Debug::checkGLError();
+
+    glEnableVertexAttribArray(color_attrib);
+    glVertexAttribPointer(
+        color_attrib,
+        4,
+        GL_UNSIGNED_BYTE,
+        GL_TRUE,
+        sizeof(Vertex),
+                          (const GLvoid*)buffer_offset);
+    buffer_offset += sizeof(u32);
+
+    Debug::checkGLError();
+
+    GLint texcoord_attrib = glGetAttribLocation(m_shader->shaderProgram(), "texcoord");
+    glEnableVertexAttribArray(texcoord_attrib);
+    glVertexAttribPointer(
+        texcoord_attrib,
+        2,
+        GL_FLOAT,
+        GL_FALSE,
+        sizeof(Vertex),
+                          (const GLvoid*)buffer_offset);
 
     Debug::checkGLError();
 
@@ -307,46 +383,10 @@ void SpriteSheetManager::initGL()
         indicesv.data(),
         GL_STATIC_DRAW);
 
-    Debug::checkGLError();
 
-    size_t buffer_offset = 0;
-
-    GLint pos_attrib = glGetAttribLocation(m_shader->shaderProgram(), "position");
-    glEnableVertexAttribArray(pos_attrib);
-    glVertexAttribPointer(
-        pos_attrib,
-        2,
-        GL_FLOAT,
-        GL_FALSE,
-        sizeof(Vertex),
-        (const GLvoid*)buffer_offset);
-    buffer_offset += sizeof(f32) * 2;
-
-    GLint color_attrib = glGetAttribLocation(m_shader->shaderProgram(), "color");
-
-    Debug::checkGLError();
-
-    glEnableVertexAttribArray(color_attrib);
-    glVertexAttribPointer(
-        color_attrib,
-        4,
-        GL_UNSIGNED_BYTE,
-        GL_TRUE,
-        sizeof(Vertex),
-        (const GLvoid*)buffer_offset);
-    buffer_offset += sizeof(u32);
-
-    Debug::checkGLError();
-
-    GLint texcoord_attrib = glGetAttribLocation(m_shader->shaderProgram(), "texcoord");
-    glEnableVertexAttribArray(texcoord_attrib);
-    glVertexAttribPointer(
-        texcoord_attrib,
-        2,
-        GL_FLOAT,
-        GL_FALSE,
-        sizeof(Vertex),
-        (const GLvoid*)buffer_offset);
+    glBindVertexArray(0);
+    glBindBuffer(GL_ARRAY_BUFFER, 0);
+    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
 
     Debug::checkGLError();
 }

@@ -155,8 +155,8 @@ void Game::init()
     m_mainMenu = new MainMenu(this);
     m_mainMenu->toggleShown();
 
-//   World::createInstance();
-//   m_world = World::instance();
+   World::createInstance();
+    m_world = World::instance();
 
     m_font->FaceSize(12);
 

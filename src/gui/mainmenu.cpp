@@ -30,8 +30,11 @@ MainMenu::MainMenu(Game* game) : m_game(game)
 {
     m_menu = GUI::instance()->context()->LoadDocument("../gui/assets/mainMenu.rml");
     assert(m_menu);
-    m_menu->GetElementById("start")->AddEventListener("click", this);
+
+    m_menu->GetElementById("singleplayer")->AddEventListener("click", this);
+    m_menu->GetElementById("multiplayer")->AddEventListener("click", this);
     m_menu->GetElementById("options")->AddEventListener("click", this);
+    m_menu->GetElementById("quit")->AddEventListener("click", this);
 }
 
 MainMenu::~MainMenu()
@@ -45,7 +48,7 @@ void MainMenu::ProcessEvent(Rocket::Core::Event& event)
 
     const Rocket::Core::String& id = event.GetCurrentElement()->GetId();
 
-    if (id == "start") {
+    if (id == "singleplayer") {
 
     } else if (id == "options") {
         if (!m_optionsDialog) {
@@ -54,7 +57,7 @@ void MainMenu::ProcessEvent(Rocket::Core::Event& event)
 
         m_optionsDialog->show();
     } else if (id == "quit") {
-
+        m_game->shutdown();
     }
 }
 

@@ -14,7 +14,8 @@
 		</style>
 	</head>
 	<body template="barlessWindow">
-		<button id="start">Start Game</button><br />
+		<button id="singleplayer">Singleplayer</button><br />
+                <button id="multiplayer">Multiplayer</button><br />
 		<button id="options">Options</button><br />
 		<button id="quit">Quit</button>
 	</body>
