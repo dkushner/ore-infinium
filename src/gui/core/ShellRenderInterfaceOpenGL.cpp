@@ -57,7 +57,12 @@ void ShellRenderInterfaceOpenGL::RenderGeometry(Rocket::Core::Vertex* vertices, 
         glTexCoordPointer(2, GL_FLOAT, sizeof(Rocket::Core::Vertex), &vertices[0].tex_coord);
     }
 
+    glEnable(GL_BLEND);
+    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+
     glDrawElements(GL_TRIANGLES, num_indices, GL_UNSIGNED_INT, indices);
+
+    glDisable(GL_BLEND);
 
     glPopMatrix();
 }

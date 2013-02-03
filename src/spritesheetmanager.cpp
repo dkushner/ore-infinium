@@ -274,10 +274,12 @@ void SpriteSheetManager::renderCharacters()
         ++index;
     }
 
+    */
     ////////////////////////////////FINALLY RENDER IT ALL //////////////////////////////////////////
     glEnable(GL_BLEND);
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
+    /*
 
 
     Debug::checkGLError();
@@ -295,11 +297,11 @@ void SpriteSheetManager::renderCharacters()
     glBindVertexArray(0);
     glBindBuffer(GL_ARRAY_BUFFER, 0);
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
+    */
 
-///    glDisable(GL_BLEND);
+    glDisable(GL_BLEND);
 
     Debug::checkGLError();
-    */
 }
 
 void SpriteSheetManager::renderEntities()
