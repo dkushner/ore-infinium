@@ -187,7 +187,7 @@ void Game::tick()
 
         m_world->render();
 
-    //    m_gui->render();
+        m_gui->render();
 
         drawDebugText();
 
