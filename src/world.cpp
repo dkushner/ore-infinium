@@ -22,8 +22,8 @@
 #include "game.h"
 #include "camera.h"
 #include "tilerenderer.h"
-#include "settings/settings.h"
 //HACK #include "sky.h"
+#include "settings/settings.h"
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -66,7 +66,8 @@ World::World()
     //FIXME: saveMap();
 
     //FIXME: height
-//    m_sky = new Sky(m_window, m_view, 0.0f);
+    //    m_sky = new Sky(m_window, m_view, 0.0f);
+
 }
 
 World::~World()
@@ -74,7 +75,7 @@ World::~World()
     delete m_player;
     delete m_tileRenderer;
     delete m_camera;
-//    delete m_sky;
+    //    delete m_sky;
 }
 
 void World::render()
@@ -84,11 +85,11 @@ void World::render()
     //TODO render tilemap..
 
     //set our view so that the player will stay relative to the view, in the center.
-//HACK    m_window->setView(*m_view);
+    //HACK    m_window->setView(*m_view);
 
     m_tileRenderer->render();
 
-//HACK    m_window->setView(m_window->getDefaultView());
+    //HACK    m_window->setView(m_window->getDefaultView());
     SpriteSheetManager::instance()->renderEntities();
     SpriteSheetManager::instance()->renderCharacters();
 
@@ -99,14 +100,14 @@ void World::render()
     const float halfRadius = radius * 0.5;
     const float halfBlockSize = Block::blockSize * 0.5;
 
-    // NOTE: ( % Block::blockSize) is what we add so that it is aligned properly to the tile grid, even though the screen is not evenly divisible by such.
+    // NOTE: (Settings::instance()->screenResolutionHeight % Block::blockSize) is what we add so that it is aligned properly to the tile grid, even though the screen is not evenly divisible by such.
     glm::vec2 crosshairPosition(mouse.x - mouse.x % Block::blockSize + (Settings::instance()->screenResolutionWidth % Block::blockSize) - tileOffset().x + Block::blockSize,
                                 mouse.y - mouse.y % Block::blockSize + (Settings::instance()->screenResolutionHeight % Block::blockSize) - tileOffset().y + Block::blockSize);
 
-//    ALLEGRO_COLOR color = al_map_rgb(255, 0, 0);
-//   al_draw_rectangle(crosshairPosition.x(), crosshairPosition.y(), crosshairPosition.x() + radius, crosshairPosition.y() + radius, color, 1.0f);
+    //    ALLEGRO_COLOR color = al_map_rgb(255, 0, 0);
+    //   al_draw_rectangle(crosshairPosition.x(), crosshairPosition.y(), crosshairPosition.x() + radius, crosshairPosition.y() + radius, color, 1.0f);
     // ==================================================
-//    m_sky->render();
+    //    m_sky->render();
 }
 
 void World::handleEvent(const SDL_Event& event)
@@ -114,22 +115,22 @@ void World::handleEvent(const SDL_Event& event)
     //FIXME:!!!! unused, we just pass events to the player..among other children (currently just player though)
     //here, the inventory ui and other stuff may need to be factored in. who knows.
     switch (event.type) {
-    case SDL_MOUSEBUTTONDOWN: {
-        if (SDL_GetMouseState(nullptr, nullptr) & SDL_BUTTON(MouseButton::Left)) {
-            m_mouseLeftHeld = true;
+        case SDL_MOUSEBUTTONDOWN: {
+            if (SDL_GetMouseState(nullptr, nullptr) & SDL_BUTTON(MouseButton::Left)) {
+                m_mouseLeftHeld = true;
+            }
+            break;
         }
-        break;
+
+        case SDL_MOUSEBUTTONUP: {
+            if (SDL_GetMouseState(nullptr, nullptr) & SDL_BUTTON(MouseButton::Left)) {
+                m_mouseLeftHeld = false;
+            }
+            break;
+        }
     }
 
-    case SDL_MOUSEBUTTONUP: {
-        if (SDL_GetMouseState(nullptr, nullptr) & SDL_BUTTON(MouseButton::Left)) {
-            m_mouseLeftHeld = false;
-        }
-        break;
-    }
-    }
-
-//    m_player->handleEvent(event);
+    m_player->handleEvent(event);
 }
 
 void World::update(double elapsedTime)
@@ -138,14 +139,14 @@ void World::update(double elapsedTime)
         performBlockAttack();
     }
 
-//    m_sky->update(elapsedTime);
+    //    m_sky->update(elapsedTime);
 
-for (Entity * currentEntity : m_entities) {
+    for (Entity * currentEntity : m_entities) {
         currentEntity->update(elapsedTime);
     }
 
     //FIXME: MAKE IT CENTER ON THE CENTER OF THE PLAYER SPRITE
-//    m_camera->centerOn(m_player->position());
+    m_camera->centerOn(m_player->position());
 
     //calculateAttackPosition();
 }
@@ -220,25 +221,25 @@ bool World::tileBlendTypeMatch(int sourceTileX, int sourceTileY, int nearbyTileX
 
 glm::vec2 World::viewportCenter() const
 {
-    return glm::vec2(Settings::instance()->screenResolutionWidth * 0.5, Settings::instance()->screenResolutionWidth * 0.5);
+    return glm::vec2(Settings::instance()->screenResolutionWidth * 0.5, Settings::instance()->screenResolutionHeight * 0.5);
 }
 
 //FIXME: unused..will be used for shooting and such. not for block breaking.
 void World::calculateAttackPosition()
 {
     /*    const glm::vec2 _viewportCenter = viewportCenter();
-
-        const sf::Vector2i mousePos = sf::Mouse::position(*m_window);
-
-        glm::vec2 diffVect;
-        diffVect.x = mousePos.x - _viewportCenter.x;
-        diffVect.y = mousePos.y - _viewportCenter.y;
-
-        const double angle = atan2(diffVect.y, diffVect.x);
-        const float newX = _viewportCenter.x + cos(angle) * Player::blockPickingRadius;
-        const float newY= _viewportCenter.y  + sin(angle) * Player::blockPickingRadius;
-        m_relativeVectorToAttack = glm::vec2(newX, newY);
-    */
+     *
+     *       const sf::Vector2i mousePos = sf::Mouse::position(*m_window);
+     *
+     *       glm::vec2 diffVect;
+     *       diffVect.x = mousePos.x - _viewportCenter.x;
+     *       diffVect.y = mousePos.y - _viewportCenter.y;
+     *
+     *       const double angle = atan2(diffVect.y, diffVect.x);
+     *       const float newX = _viewportCenter.x + cos(angle) * Player::blockPickingRadius;
+     *       const float newY= _viewportCenter.y  + sin(angle) * Player::blockPickingRadius;
+     *       m_relativeVectorToAttack = glm::vec2(newX, newY);
+     */
 }
 
 //FIXME: this function needs a lot of help.
@@ -246,43 +247,43 @@ void World::calculateAttackPosition()
 void World::performBlockAttack()
 {
     /*
-    const glm::vec2 viewCenter = m_view->getCenter();
-
-    glm::vec2 viewPosition;
-    //    std::cout << "viewportcenter" << " viewportcenter y: " << viewportCenter().y << " view->getcenter() y: " << viewCenter.y << "\n";
-    viewPosition.x = viewCenter.x - viewportCenter().x;
-    viewPosition.y = viewCenter.y - viewportCenter().y;
-    const int column = int((m_relativeVectorToAttack.x + viewPosition.x) / Block::blockSize);
-    const int row = int((m_relativeVectorToAttack.y + viewPosition.y) / Block::blockSize);
-    //    std::cout << "relativevector y: " << m_relativeVectorToAttack.y << " view position y: " << viewPosition.y << "\n";
-
-    const int startRow = (m_player->position().y / Block::blockSize) - radius;
-    const int startColumn = (m_player->position().x / Block::blockSize) - radius;
-    const int endRow = (m_player->position().y / Block::blockSize) + radius;
-    const int endColumn = (m_player->position().x / Block::blockSize) + radius;
-    */
+     *   const glm::vec2 viewCenter = m_view->getCenter();
+     *
+     *   glm::vec2 viewPosition;
+     *   //    std::cout << "viewportcenter" << " viewportcenter y: " << viewportCenter().y << " view->getcenter() y: " << viewCenter.y << "\n";
+     *   viewPosition.x = viewCenter.x - viewportCenter().x;
+     *   viewPosition.y = viewCenter.y - viewportCenter().y;
+     *   const int column = int((m_relativeVectorToAttack.x + viewPosition.x) / Block::blockSize);
+     *   const int row = int((m_relativeVectorToAttack.y + viewPosition.y) / Block::blockSize);
+     *   //    std::cout << "relativevector y: " << m_relativeVectorToAttack.y << " view position y: " << viewPosition.y << "\n";
+     *
+     *   const int startRow = (m_player->position().y / Block::blockSize) - radius;
+     *   const int startColumn = (m_player->position().x / Block::blockSize) - radius;
+     *   const int endRow = (m_player->position().y / Block::blockSize) + radius;
+     *   const int endColumn = (m_player->position().x / Block::blockSize) + radius;
+     */
 
     glm::ivec2 mouse = mousePosition();
 
     //FIXME: eventually will need to make this go to the players center
     // can we divide player pos by half of screen h/w ?
-    glm::vec2 center(Settings::instance()->screenResolutionWidth * 0.5, Settings::instance()->screenResolutionWidth * 0.5);
+    glm::vec2 center(Settings::instance()->screenResolutionWidth * 0.5, Settings::instance()->screenResolutionHeight * 0.5);
 
     // if the attempted block pick location is out of range, do nothing.
     if (mouse.x < center.x - Player::blockPickingRadius ||
-            mouse.x > center.x + Player::blockPickingRadius ||
-            mouse.y < center.y - Player::blockPickingRadius ||
-            mouse.y > center.y + Player::blockPickingRadius) {
+        mouse.x > center.x + Player::blockPickingRadius ||
+        mouse.y < center.y - Player::blockPickingRadius ||
+        mouse.y > center.y + Player::blockPickingRadius) {
         return;
-    }
+        }
 
-    mouse.x /= int(Block::blockSize);
+        mouse.x /= int(Block::blockSize);
     mouse.y /= int(Block::blockSize);
 
     const int radius = Player::blockPickingRadius / Block::blockSize;
 
     int attackX = 0 ; //HACK= mouse.x() + (m_view->getCenter().x() - Settings::instance()->screenResolutionWidth * 0.5) / Block::blockSize;
-    int attackY = 0; //HACK= mouse.y() + (m_view->getCenter().y() -  * 0.5) / Block::blockSize;
+    int attackY = 0; //HACK= mouse.y() + (m_view->getCenter().y() - Settings::instance()->screenResolutionHeight * 0.5) / Block::blockSize;
 
     const glm::vec2 playerPosition = m_player->position();
 
@@ -295,7 +296,7 @@ void World::performBlockAttack()
     int tilesBeforeY = playerPosition.y / Block::blockSize;
 
     const int startRow = tilesBeforeY - ((Settings::instance()->screenResolutionHeight * 0.5) / Block::blockSize);
-    const int endRow = tilesBeforeY + ((Settings::instance()->screenResolutionHeight* 0.5) / Block::blockSize);
+    const int endRow = tilesBeforeY + ((Settings::instance()->screenResolutionHeight * 0.5) / Block::blockSize);
 
     //columns are our X value, rows the Y
     const int startColumn = tilesBeforeX - ((Settings::instance()->screenResolutionWidth * 0.5) / Block::blockSize);
@@ -318,81 +319,81 @@ void World::performBlockAttack()
 }
 /*
  * FIXME: USELESS, UNNEEDED, GET RID OF THAT SHIT
-void World::generatePixelTileMap()
-{
-    const glm::vec2 playerPosition = m_player->position();
-    //consider block map as starting at player pos == 0,0 and going down and to the right-ward
-    //tilesBefore{X,Y} is only at the center of the view though..find the whole screen real estate
-    //column
-    int tilesBeforeX = playerPosition.x() / Block::blockSize;
-    //row
-    int tilesBeforeY = playerPosition.y() / Block::blockSize;
+ v *oid World::generatePixelTileMap()
+ {
+     const glm::vec2 playerPosition = m_player->position();
+     //consider block map as starting at player pos == 0,0 and going down and to the right-ward
+     //tilesBefore{X,Y} is only at the center of the view though..find the whole screen real estate
+     //column
+     int tilesBeforeX = playerPosition.x() / Block::blockSize;
+     //row
+     int tilesBeforeY = playerPosition.y() / Block::blockSize;
 
-    //FIXME: only calculate this crap when we move/change tiles
-    // -1 so that we render an additional row and column..to smoothly scroll
-    const int startRow = tilesBeforeY - (( * 0.5) / Block::blockSize) - 1;
-    const int endRow = tilesBeforeY + (( * 0.5) / Block::blockSize);
+     //FIXME: only calculate this crap when we move/change tiles
+     // -1 so that we render an additional row and column..to smoothly scroll
+     const int startRow = tilesBeforeY - ((Settings::instance()->screenResolutionHeight * 0.5) / Block::blockSize) - 1;
+     const int endRow = tilesBeforeY + ((Settings::instance()->screenResolutionHeight * 0.5) / Block::blockSize);
 
-    //columns are our X value, rows the Y
-    const int startColumn = tilesBeforeX - ((Settings::instance()->screenResolutionWidth * 0.5) / Block::blockSize) - 1;
-    const int endColumn = tilesBeforeX + ((Settings::instance()->screenResolutionWidth * 0.5) / Block::blockSize);
+     //columns are our X value, rows the Y
+     const int startColumn = tilesBeforeX - ((Settings::instance()->screenResolutionWidth * 0.5) / Block::blockSize) - 1;
+     const int endColumn = tilesBeforeX + ((Settings::instance()->screenResolutionWidth * 0.5) / Block::blockSize);
 
-    if (std::abs(startColumn) != startColumn) {
-        std::cout << "FIXME, WENT INTO NEGATIVE COLUMN!!";
-        assert(0);
-    } else if (std::abs(startRow) != startRow) {
-        std::cout << "FIXME, WENT INTO NEGATIVE ROW!!";
-        assert(0);
-    }
+     if (std::abs(startColumn) != startColumn) {
+         std::cout << "FIXME, WENT INTO NEGATIVE COLUMN!!";
+         assert(0);
+     } else if (std::abs(startRow) != startRow) {
+         std::cout << "FIXME, WENT INTO NEGATIVE ROW!!";
+         assert(0);
+     }
 
-    // only make it as big as we need it, remember this is a pixel representation of the visible
-    // tile map, with the red channel identifying what type of tile it is
-    // x is columns..since they move from left to right, rows start at top and move to bottom
-    // (and yes..i confused this fact before, leaving a headache here ;)
-    m_tileMapPixelsTexture = al_create_bitmap(endColumn - startColumn, endRow - startRow);
+     // only make it as big as we need it, remember this is a pixel representation of the visible
+     // tile map, with the red channel identifying what type of tile it is
+     // x is columns..since they move from left to right, rows start at top and move to bottom
+     // (and yes..i confused this fact before, leaving a headache here ;)
+     m_tileMapPixelsTexture = al_create_bitmap(endColumn - startColumn, endRow - startRow);
 
-    al_lock_bitmap(m_tileMapPixelsTexture, ALLEGRO_PIXEL_FORMAT_ANY, ALLEGRO_LOCK_WRITEONLY);
+     al_lock_bitmap(m_tileMapPixelsTexture, ALLEGRO_PIXEL_FORMAT_ANY, ALLEGRO_LOCK_WRITEONLY);
 
-    al_set_target_bitmap(m_tileMapPixelsTexture);
+     al_set_target_bitmap(m_tileMapPixelsTexture);
 
-    int x = 0;
-    int y = 0;
+     int x = 0;
+     int y = 0;
 
-    // [y*rowlength + x]
-    for (int currentRow = startRow; currentRow < endRow; ++currentRow) {
-        for (int currentColumn = startColumn; currentColumn < endColumn; ++currentColumn) {
+     // [y*rowlength + x]
+     for (int currentRow = startRow; currentRow < endRow; ++currentRow) {
+         for (int currentColumn = startColumn; currentColumn < endColumn; ++currentColumn) {
 
-            const int index = currentColumn * WORLD_ROWCOUNT + currentRow;
-            assert(index < WORLD_ROWCOUNT * WORLD_COLUMNCOUNT);
+             const int index = currentColumn * WORLD_ROWCOUNT + currentRow;
+             assert(index < WORLD_ROWCOUNT * WORLD_COLUMNCOUNT);
 
-            ALLEGRO_COLOR color = al_map_rgb(m_blocks[index].primitiveType, 0, 0);
+             ALLEGRO_COLOR color = al_map_rgb(m_blocks[index].primitiveType, 0, 0);
 
-            //FIXME: possibly use al_lock_bitmap and use ALLEGRO_LOCKED_REGION
-            al_put_pixel(x, y, color);
-            ++x;
-        }
-        ++y;
-        x = 0;
-    }
+             //FIXME: possibly use al_lock_bitmap and use ALLEGRO_LOCKED_REGION
+             al_put_pixel(x, y, color);
+             ++x;
+         }
+         ++y;
+         x = 0;
+     }
 
-    al_unlock_bitmap(m_tileMapPixelsTexture);
+     al_unlock_bitmap(m_tileMapPixelsTexture);
 
-    al_save_bitmap("pixelmap.png", m_tileMapPixelsTexture);
+     al_save_bitmap("pixelmap.png", m_tileMapPixelsTexture);
 
-    al_set_target_backbuffer(m_display);
+     al_set_target_backbuffer(m_display);
 
-    //FIXME: hugely fucking expensive..fix the above loops so we *generate* it upside down
-    // or...change the shader to calculate it properly
-//HACK:  m_tileMapPixelsImage.flipVertically();
+     //FIXME: hugely fucking expensive..fix the above loops so we *generate* it upside down
+     // or...change the shader to calculate it properly
+     //HACK:  m_tileMapPixelsImage.flipVertically();
 
-    //TODO: al_get_shader_log here?
-//    Debug::fatal(al_set_shader_sampler(m_shader, "tilemap_pixels", m_tileMapPixelsTexture, 0), Debug::Area::Graphics, "shader tilemap_pixels set failure");
+     //TODO: al_get_shader_log here?
+     //    Debug::fatal(al_set_shader_sampler(m_shader, "tilemap_pixels", m_tileMapPixelsTexture, 0), Debug::Area::Graphics, "shader tilemap_pixels set failure");
 
-    // to get per-pixel smooth scrolling, we get the remainders and pass it as an offset to the shader
-    float floatArray[2] = { tileOffset().x(), tileOffset().y() };
-//    Debug::fatal(al_set_shader_float_vector(m_shader, "offset", 2, floatArray, 2), Debug::Area::Graphics, "shader offset set failure");
-}
-*/
+     // to get per-pixel smooth scrolling, we get the remainders and pass it as an offset to the shader
+     float floatArray[2] = { tileOffset().x(), tileOffset().y() };
+     //    Debug::fatal(al_set_shader_float_vector(m_shader, "offset", 2, floatArray, 2), Debug::Area::Graphics, "shader offset set failure");
+     }
+     */
 
 glm::ivec2 World::tileOffset() const
 {
@@ -408,7 +409,7 @@ void World::loadMap()
     std::cout << "SIZEOF m_blocks: " << sizeof(m_blocks) / 1e6 << " MiB" << std::endl;
     generateMap();
 
-    // m_player->setPosition(2800, 2450);
+     m_player->setPosition(2800, 2450);
     //FIXME:
 //    m_player->setPosition(100, 200);
 }
@@ -445,24 +446,24 @@ void World::saveMap()
 {
     //FIXME: use binary methods only, no more pixel saving/png saving/loading
     /*
-    std::cout << "saving map!" << std::endl;
-    sf::Image image;
-    image.create(WORLD_ROWCOUNT, WORLD_COLUMNCOUNT, sf::Color::White);
+     *   std::cout << "saving map!" << std::endl;
+     *   sf::Image image;
+     *   image.create(WORLD_ROWCOUNT, WORLD_COLUMNCOUNT, sf::Color::White);
+     *
+     *   sf::Color color(0, 0, 0, 255);
+     *   sf::Clock clock;
+     *
+     *   for (int row = 0; row < WORLD_ROWCOUNT; ++row) {
+     *       for (int column = 0; column < WORLD_COLUMNCOUNT; ++column) {
+     *           color.r = m_blocks[column * WORLD_ROWCOUNT + row].primitiveType;
+     *           image.setPixel(row, column, color);
+     }
+     }
 
-    sf::Color color(0, 0, 0, 255);
-    sf::Clock clock;
+     bool saved = image.saveToFile("levelsave.png");
+     assert(saved);
 
-    for (int row = 0; row < WORLD_ROWCOUNT; ++row) {
-        for (int column = 0; column < WORLD_COLUMNCOUNT; ++column) {
-            color.r = m_blocks[column * WORLD_ROWCOUNT + row].primitiveType;
-            image.setPixel(row, column, color);
-        }
-    }
-
-    bool saved = image.saveToFile("levelsave.png");
-    assert(saved);
-
-    const int elapsedTime = clock.getElapsedTime().asMilliseconds();
-    std::cout << "Time taken for map saving: " << elapsedTime << " Milliseconds" << std::endl;
-    */
-}
+     const int elapsedTime = clock.getElapsedTime().asMilliseconds();
+     std::cout << "Time taken for map saving: " << elapsedTime << " Milliseconds" << std::endl;
+     */
+     }

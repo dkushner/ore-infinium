@@ -44,9 +44,9 @@ SpriteSheetManager* SpriteSheetManager::instance()
 SpriteSheetManager::SpriteSheetManager()
 {
     // call this ONLY when linking with FreeImage as a static library
-#ifdef FREEIMAGE_LIB
+    #ifdef FREEIMAGE_LIB
     FreeImage_Initialise();
-#endif
+    #endif
 
     m_shader = new Shader("sprite.vert", "sprite.frag");
 
@@ -54,7 +54,7 @@ SpriteSheetManager::SpriteSheetManager()
 
     float scale = 1.0f;
     m_modelMatrix = glm::scale(glm::mat4(1.0f), glm::vec3(scale));
-    m_projectionMatrix = glm::ortho(0.0f, float(Settings::instance()->screenResolutionWidth), float(), 0.0f, -1.0f, 1.0f);
+    m_projectionMatrix = glm::ortho(0.0f, float(Settings::instance()->screenResolutionWidth), float(Settings::instance()->screenResolutionHeight), 0.0f, -1.0f, 1.0f);
 
     loadAllSpriteSheets();
     parseAllSpriteSheets();
@@ -123,15 +123,15 @@ glm::vec2 SpriteSheetManager::spriteSheetSize(SpriteSheetManager::SpriteSheetTyp
 void SpriteSheetManager::registerSprite(SpriteSheetManager::SpriteSheetType spriteSheetType, Sprite* sprite)
 {
     switch (spriteSheetType) {
-    case SpriteSheetType::Character:
-        m_characterSprites.insert(m_characterSprites.end(), sprite);
-        // TODO: look up the size of the graphic/frame, in the spritesheet map.
-        sprite->m_size = glm::vec2(100.0f, 100.0f);
-        Debug::log(Debug::Area::Graphics) << "sprite registered, new sprite count: " << m_characterSprites.size();
-        break;
+        case SpriteSheetType::Character:
+            m_characterSprites.insert(m_characterSprites.end(), sprite);
+            // TODO: look up the size of the graphic/frame, in the spritesheet map.
+            sprite->m_size = glm::vec2(100.0f, 100.0f);
+            Debug::log(Debug::Area::Graphics) << "sprite registered, new sprite count: " << m_characterSprites.size();
+            break;
 
-    case SpriteSheetType::Entity:
-        break;
+        case SpriteSheetType::Entity:
+            break;
     }
 }
 
@@ -158,53 +158,12 @@ std::map<std::string, SpriteSheetManager::SpriteFrameIdentifier> SpriteSheetMana
 
 void SpriteSheetManager::renderCharacters()
 {
-    /*
     m_shader->bindProgram();
 
     bindSpriteSheet(SpriteSheetType::Character);
 
     Debug::checkGLError();
-    size_t buffer_offset = 0;
 
-    GLint pos_attrib = glGetAttribLocation(m_shader->shaderProgram(), "position");
-    glEnableVertexAttribArray(pos_attrib);
-    glVertexAttribPointer(
-        pos_attrib,
-        2,
-        GL_FLOAT,
-        GL_FALSE,
-        sizeof(Vertex),
-                          (const GLvoid*)buffer_offset);
-    buffer_offset += sizeof(f32) * 2;
-
-    GLint color_attrib = glGetAttribLocation(m_shader->shaderProgram(), "color");
-
-    Debug::checkGLError();
-
-    glEnableVertexAttribArray(color_attrib);
-    glVertexAttribPointer(
-        color_attrib,
-        4,
-        GL_UNSIGNED_BYTE,
-        GL_TRUE,
-        sizeof(Vertex),
-                          (const GLvoid*)buffer_offset);
-    buffer_offset += sizeof(u32);
-
-    Debug::checkGLError();
-
-    GLint texcoord_attrib = glGetAttribLocation(m_shader->shaderProgram(), "texcoord");
-    glEnableVertexAttribArray(texcoord_attrib);
-    glVertexAttribPointer(
-        texcoord_attrib,
-        2,
-        GL_FLOAT,
-        GL_FALSE,
-        sizeof(Vertex),
-                          (const GLvoid*)buffer_offset);
-    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_ebo);
-    glBindBuffer(GL_ARRAY_BUFFER, m_vbo);
-    glBindVertexArray(m_vao);
     int index = 0;
     for (Sprite* sprite: m_characterSprites) {
         auto frameIdentifier = m_spriteSheetCharactersDescription.find(sprite->frameName());
@@ -268,36 +227,36 @@ void SpriteSheetManager::renderCharacters()
         glBufferSubData(
             GL_ARRAY_BUFFER,
             sizeof(vertices) * index,
-            sizeof(vertices),
-            vertices);
+                        sizeof(vertices),
+                        vertices);
 
         ++index;
     }
 
-    */
     ////////////////////////////////FINALLY RENDER IT ALL //////////////////////////////////////////
     glEnable(GL_BLEND);
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
-    /*
-
+    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_ebo);
+    glBindBuffer(GL_ARRAY_BUFFER, m_vbo);
+    glBindVertexArray(m_vao);
 
     Debug::checkGLError();
 
+    m_shader->bindProgram();
 
     Debug::checkGLError();
 
     glDrawElements(
         GL_TRIANGLES,
         6 * (m_characterSprites.size()), // 6 indices per 2 triangles
-        GL_UNSIGNED_INT,
-        (const GLvoid*)0);
+                   GL_UNSIGNED_INT,
+                   (const GLvoid*)0);
 
     m_shader->unbindProgram();
     glBindVertexArray(0);
     glBindBuffer(GL_ARRAY_BUFFER, 0);
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
-    */
 
     glDisable(GL_BLEND);
 
@@ -324,8 +283,8 @@ void SpriteSheetManager::initGL()
     glBufferData(
         GL_ARRAY_BUFFER,
         m_maxSpriteCount * 4 * sizeof(Vertex),
-        NULL,
-        GL_DYNAMIC_DRAW);
+                 NULL,
+                 GL_DYNAMIC_DRAW);
 
     Debug::checkGLError();
 
@@ -345,8 +304,8 @@ void SpriteSheetManager::initGL()
     glBufferData(
         GL_ELEMENT_ARRAY_BUFFER,
         indicesv.size()*sizeof(u32),
-        indicesv.data(),
-        GL_STATIC_DRAW);
+                 indicesv.data(),
+                 GL_STATIC_DRAW);
 
     Debug::checkGLError();
 
@@ -360,7 +319,7 @@ void SpriteSheetManager::initGL()
         GL_FLOAT,
         GL_FALSE,
         sizeof(Vertex),
-        (const GLvoid*)buffer_offset);
+                          (const GLvoid*)buffer_offset);
     buffer_offset += sizeof(f32) * 2;
 
     GLint color_attrib = glGetAttribLocation(m_shader->shaderProgram(), "color");
@@ -374,7 +333,7 @@ void SpriteSheetManager::initGL()
         GL_UNSIGNED_BYTE,
         GL_TRUE,
         sizeof(Vertex),
-        (const GLvoid*)buffer_offset);
+                          (const GLvoid*)buffer_offset);
     buffer_offset += sizeof(u32);
 
     Debug::checkGLError();
@@ -387,12 +346,7 @@ void SpriteSheetManager::initGL()
         GL_FLOAT,
         GL_FALSE,
         sizeof(Vertex),
-        (const GLvoid*)buffer_offset);
-
-    m_shader->unbindProgram();
-    glBindVertexArray(0);
-    glBindBuffer(GL_ARRAY_BUFFER, 0);
-    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
+                          (const GLvoid*)buffer_offset);
 
     Debug::checkGLError();
 }

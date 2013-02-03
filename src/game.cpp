@@ -91,7 +91,7 @@ void Game::init()
     }
 
     m_window = SDL_CreateWindow("Ore Infinium", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED,
-                                Settings::instance()->screenResolutionHeight, Settings::instance()->screenResolutionWidth, SDL_WINDOW_SHOWN | SDL_WINDOW_OPENGL);
+                                Settings::instance()->screenResolutionWidth, Settings::instance()->screenResolutionHeight, SDL_WINDOW_SHOWN | SDL_WINDOW_OPENGL);
 
     if (!m_window) {
         checkSDLError();
@@ -145,9 +145,9 @@ void Game::init()
 
     m_font = FontManager::instance()->loadFont("../font/Ubuntu-L.ttf");
 
-//    glClearColor(.5f, 0.f, 0.f, 1.0f);
+    glClearColor(.5f, 0.f, 0.f, 1.0f);
 
-//    glViewport(0, 0, Settings::instance()->screenResolutionWidth, );
+    glViewport(0, 0, Settings::instance()->screenResolutionWidth, Settings::instance()->screenResolutionHeight);
 
     checkGLError();
 
@@ -187,7 +187,7 @@ void Game::tick()
 
         m_world->render();
 
-        m_gui->render();
+    //    m_gui->render();
 
         drawDebugText();
 

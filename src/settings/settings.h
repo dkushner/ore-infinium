@@ -27,10 +27,10 @@ public:
     virtual ~Settings();
 
 public:
-    int screenResolutionHeight = 1600;
-    int screenResolutionWidth = 900;
+    int screenResolutionWidth = 1600;
+    int screenResolutionHeight = 900;
 
-    bool debugOutput = false;
+    bool debugOutput = true;
     bool debugRendererOutput = false;
     bool debugRenderingEnabled = false;
     bool debugGUIRenderingEnabled = false;
