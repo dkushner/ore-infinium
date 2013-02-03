@@ -443,34 +443,34 @@ input.radio:checked:active
 input.checkbox
 {
         icon-decorator: image;
-        icon-image: gui.tga 407px 60px 437px 90px;
+        icon-image: gui.tga 99px 81px 113px 95px;
 }
 
 input.checkbox:hover
 {
-        icon-image-s: 437px 467px;
+        icon-image-t: 101px 115px;
 }
 
 input.checkbox:active
 {
-        icon-image-s: 467px 497px;
+        icon-image-t: 121px 135px;
 }
 
 input.checkbox:checked
 {
-        icon-image-t: 90px 120px;
+        icon-image-s: 119px 133px;
 }
 
 input.checkbox:checked:hover
 {
-        icon-image-s: 437px 467px;
-        icon-image-t: 90px 120px;
+        icon-image-s: 119px 133px;
+        icon-image-t: 101px 115px;
 }
 
 input.checkbox:checked:active
 {
-        icon-image-s: 467px 497px;
-        icon-image-t: 90px 120px;
+        icon-image-s: 119px 133px;
+        icon-image-t: 121px 135px;
 }
 
 
