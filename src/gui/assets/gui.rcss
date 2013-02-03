@@ -410,34 +410,34 @@ input.checkbox
 input.radio
 {
         icon-decorator: image;
-        icon-image: gui.tga 407px 0px 437px 30px;
+        icon-image: gui.tga 100px 12px 114px 26px;
 }
 
 input.radio:hover
 {
-        icon-image-s: 437px 467px;
+        icon-image-t: 32px 46px;
 }
 
 input.radio:active
 {
-        icon-image-s: 467px 497px;
+        icon-image-t: 52px 66px;
 }
 
 input.radio:checked
 {
-        icon-image-t: 30px 60px;
+        icon-image-s: 118px 132px;
 }
 
 input.radio:checked:hover
 {
-        icon-image-s: 437px 467px;
-        icon-image-t: 30px 60px;
+        icon-image-s: 118px 132px;
+        icon-image-t: 32px 46px;
 }
 
 input.radio:checked:active
 {
-        icon-image-s: 467px 497px;
-        icon-image-t: 30px 60px;
+        icon-image-s: 118px 132px;
+        icon-image-t: 52px 66px;
 }
 
 input.checkbox
