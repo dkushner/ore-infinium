@@ -26,7 +26,7 @@ div#title_bar
 	z-index: 1;
 
 	position: absolute;
-	top: 25px;
+	top: 8px;
 	left: 0px;
 	
 	text-align: center;
@@ -63,27 +63,53 @@ div#title_bar
 	outline-color: black;
 
         background-decorator: tiled-horizontal;
-        background-left-image: gui.tga 153px 14px 179px 50px;
-        background-center-image: gui.tga stretch 177px 14px 210px 50px;
-        background-right-image: gui.tga 202px 14px 230px 50px;
+        background-left-image: gui.tga 523px 37px 557px 71px;
+        background-center-image: gui.tga stretch 548px 37px 582px 71px;
+        background-right-image: gui.tga 566px 37px 600px 71px;
 }
 
+/*
+        background-top-left-image: gui.tga 0px 0px 133px 140px;
+        background-top-right-image: gui.tga 136px 0px 146px 140px;
+        background-top-image: gui.tga stretch 134px 0px 135px 140px;
 
+        background-bottom-left-image: gui.tga 0px 140px 11px 151px;
+        background-bottom-right-image: gui.tga 136px 140px 146px 151px;
+        background-bottom-image: gui.tga stretch 11px 140px 12px 151px;
+        background-left-image: gui.tga stretch 0px 139px 10px 140px;
+        background-center-image: gui.tga stretch 11px 139px 12px 140px;
+*/
+/*
+        background-top-left-image: gui.tga 9px 404px 305px 579px;
+        background-top-right-image: gui.tga 305px 404px 601px 579px;
 
+        background-bottom-left-image: gui.tga 9px 578px 21px 589px;
+        background-bottom-right-image: gui.tga 295px 578px 314px 589px;
+        background-bottom-image: gui.tga stretch 19px 582px 20px 589px;
+
+        background-top-image: gui.tga stretch 304px 404px 305px 579px;
+
+        background-left-image: gui.tga stretch 9px 578px 19px 579px;
+        background-center-image: gui.tga stretch 14px 582px 15px 583px;
+*/
 div#window
 {
 	width: auto;
 	padding: 10px 15px;
 
 	background-decorator: tiled-box;
-	background-top-left-image: gui.tga 0px 0px 133px 140px;
-	background-top-right-image: gui.tga 136px 0px 146px 140px;
-	background-top-image: gui.tga stretch 134px 0px 135px 140px;
-	background-bottom-left-image: gui.tga 0px 140px 11px 151px;
-	background-bottom-right-image: gui.tga 136px 140px 146px 151px;
-	background-bottom-image: gui.tga stretch 11px 140px 12px 151px;
-	background-left-image: gui.tga stretch 0px 139px 10px 140px;
-	background-center-image: gui.tga stretch 11px 139px 12px 140px;
+
+	background-top-left-image: gui.tga 9px 404px 305px 579px;
+	background-top-right-image: gui.tga 305px 404px 314px 415px;
+
+	background-bottom-left-image: gui.tga 9px 578px 21px 589px;
+	background-bottom-right-image: gui.tga 295px 578px 314px 589px;
+	background-bottom-image: gui.tga stretch 19px 582px 20px 589px;
+
+        background-top-image: gui.tga stretch 304px 404px 305px 579px;
+
+	background-left-image: gui.tga stretch 9px 578px 19px 579px;
+	background-center-image: gui.tga stretch 44px 428px 277px 569px;
 }
 
 div#content
