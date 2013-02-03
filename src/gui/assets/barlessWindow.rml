@@ -1,0 +1,12 @@
+<template name="barlessWindow" content="content">
+<head>
+	<link type="text/rcss" href="rkt.rcss"/>
+	<link type="text/rcss" href="gui.rcss"/>
+</head>
+<body class="transparentWindow">
+	<div id="transparentWindow">
+		<div id="content">
+		</div>
+	</div>
+</body>
+</template>

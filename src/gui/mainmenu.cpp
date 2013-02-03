@@ -30,8 +30,6 @@ MainMenu::MainMenu(Game* game) : m_game(game)
 {
     m_menu = GUI::instance()->context()->LoadDocument("../gui/assets/mainMenu.rml");
     assert(m_menu);
-    m_menu->GetElementById("title")->SetInnerRML("fuck yeah, runtime text");
-
     m_menu->GetElementById("start")->AddEventListener("click", this);
     m_menu->GetElementById("options")->AddEventListener("click", this);
 }

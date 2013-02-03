@@ -92,6 +92,14 @@ div#title_bar
         background-left-image: gui.tga stretch 9px 578px 19px 579px;
         background-center-image: gui.tga stretch 14px 582px 15px 583px;
 */
+div#transparentWindow
+{
+        width: auto;
+        padding: 10px 15px;
+
+
+}
+
 div#window
 {
         width: auto;
@@ -111,6 +119,7 @@ div#window
         background-left-image: gui.tga stretch 9px 578px 19px 579px;
         background-center-image: gui.tga stretch 44px 428px 277px 569px;
 }
+
 
 div#content
 {
