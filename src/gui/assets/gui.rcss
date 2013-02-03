@@ -168,10 +168,10 @@ input.submit
         display: inline-block;
 
         width: 159px;
-        height: 37px;
+        height: 30px;
 
-        padding-top: 8px;
-        vertical-align: -18px;
+        padding-top: 0px;
+        vertical-align: 6px;
 
         font-size: 18;
         text-align: center;
