@@ -118,12 +118,14 @@ void World::handleEvent(const SDL_Event& event)
         case SDL_MOUSEBUTTONDOWN: {
             if (SDL_GetMouseState(nullptr, nullptr) & SDL_BUTTON(MouseButton::Left)) {
                 m_mouseLeftHeld = true;
+                Debug::log() << "mouse held = true";
             }
             break;
         }
 
         case SDL_MOUSEBUTTONUP: {
-            if (SDL_GetMouseState(nullptr, nullptr) & SDL_BUTTON(MouseButton::Left)) {
+            if (!SDL_GetMouseState(nullptr, nullptr) & SDL_BUTTON(MouseButton::Left)) {
+                Debug::log() << "mouse held = false";
                 m_mouseLeftHeld = false;
             }
             break;
