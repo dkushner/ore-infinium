@@ -51,7 +51,7 @@ void MainMenu::ProcessEvent(Rocket::Core::Event& event)
     if (id == "singleplayer") {
 
     } else if (id == "options") {
-        m_optionsDialog = new OptionsDialog(m_game);
+        m_optionsDialog = new OptionsDialog(m_game, this);
 
         m_optionsDialog->show();
     } else if (id == "quit") {
@@ -65,12 +65,21 @@ void MainMenu::toggleShown()
         GUI::instance()->removeInputDemand();
         m_menu->Hide();
 
-        if (m_optionsDialog && m_optionsDialog->visible()) {
-            m_optionsDialog->hide();
+        if (m_optionsDialog) {
+            m_optionsDialog->close();
+            delete m_optionsDialog;
+            m_optionsDialog = 0;
         }
     } else {
         GUI::instance()->addInputDemand();
         m_menu->Show();
     }
 }
+
+void MainMenu::optionsClosedCallback()
+{
+    delete m_optionsDialog;
+    m_optionsDialog = 0;
+}
+
 

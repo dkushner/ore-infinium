@@ -27,18 +27,19 @@ namespace Rocket {
 }
 
 class Game;
+class MainMenu;
 
 class OptionsDialog : public Rocket::Core::EventListener
 {
 public:
-    OptionsDialog(Game* game);
+    OptionsDialog(Game* game, MainMenu* parent);
     ~OptionsDialog();
 
     /// reimplemented from Rocket::Core::EventListener
     virtual void ProcessEvent(Rocket::Core::Event& event);
 
     void show();
-    void hide();
+    void close();
     bool visible();
 
     Rocket::Core::ElementDocument* document();
@@ -47,6 +48,7 @@ private:
 
 private:
     Game* m_game = nullptr;
+    MainMenu* m_parent = nullptr;
 
     Rocket::Core::ElementDocument* m_options = nullptr;
 };

@@ -40,6 +40,8 @@ public:
 
     void toggleShown();
 
+    void optionsClosedCallback();
+
 private:
     Game* m_game = nullptr;
     OptionsDialog* m_optionsDialog = nullptr;

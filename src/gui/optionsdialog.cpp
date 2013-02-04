@@ -16,6 +16,7 @@
  *****************************************************************************/
 
 #include "optionsdialog.h"
+#include "mainmenu.h"
 #include "gui.h"
 
 #include "../game.h"
@@ -27,17 +28,9 @@
 
 #include <assert.h>
 
-OptionsDialog::OptionsDialog(Game* game) : m_game(game)
+OptionsDialog::OptionsDialog(Game* game, MainMenu* parent) : m_game(game), m_parent(parent)
 {
-    m_options = GUI::instance()->context()->LoadDocument("../gui/assets/optionsDialog.rml");
-    assert(m_options);
 
-    m_options->GetElementById("title")->SetInnerRML("fuck yeah, runtime options");
-
-    m_options->GetElementById("form")->AddEventListener("submit", this);
-
-//    m_options->GetElementById("form")->AddEventListener("submit", this);
-//    Rocket::Controls::WidgetDropDown* resolution = dynamic_cast<Rocket::Controls::WidgetDropDown*>( m_options->GetElementById("resolution"));
 }
 
 OptionsDialog::~OptionsDialog()
@@ -51,11 +44,10 @@ void OptionsDialog::ProcessEvent(Rocket::Core::Event& event)
     if (event.GetParameter< Rocket::Core::String >("submit", "") == "accept") {
         //TODO: save and apply settings
 
-        hide();
+        close();
         //FIXME: there's *got* to be a better way. I hate myself for writing this statement. I've tried
         // making the main menu delete us, but there's no way to remove event listeners short of iterating over each one, which we'd have to store manually
         // hopefully i'm just wrong and there's a way better way
-        delete this;
     }
 
     /*
@@ -103,13 +95,25 @@ void OptionsDialog::ProcessEvent(Rocket::Core::Event& event)
 void OptionsDialog::show()
 {
     GUI::instance()->addInputDemand();
-    m_options->Show();//Rocket::Core::ElementDocument::MODAL);
+    m_options = GUI::instance()->context()->LoadDocument("../gui/assets/optionsDialog.rml");
+    m_options->GetElementById("title")->SetInnerRML("fuck yeah, runtime options");
+
+    m_options->GetElementById("form")->AddEventListener("submit", this);
+
+//    m_options->GetElementById("form")->AddEventListener("submit", this);
+//    Rocket::Controls::WidgetDropDown* resolution = dynamic_cast<Rocket::Controls::WidgetDropDown*>( m_options->GetElementById("resolution"));
+
+    m_options->Show(Rocket::Core::ElementDocument::MODAL);
 }
 
-void OptionsDialog::hide()
+void OptionsDialog::close()
 {
     GUI::instance()->removeInputDemand();
-    m_options->Hide();//Rocket::Core::ElementDocument::MODAL);
+    m_options->Close();
+    GUI::instance()->context()->UnloadDocument(m_options);
+    //FIXME: gosh i hate this with a passion. but it's more complicated than it seems to do right. or at least i think it is.
+    //also, notice i don't delete m_options. i'm seriously hoping that rocket does that. if i call delete on it, it crashsee.
+    delete m_options;
 }
 
 bool OptionsDialog::visible()

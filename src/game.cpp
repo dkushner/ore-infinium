@@ -174,8 +174,6 @@ void Game::tick()
 
     SDL_StartTextInput();
 
-//    assert(0);
-
     while (m_running) {
         const double delta = static_cast<double>(SDL_GetTicks() - startTime);
         fps = (frameCount / delta) * 1000;

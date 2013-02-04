@@ -22,7 +22,7 @@
 TileRenderer::TileRenderer(World* world)
     : m_world(world)
 {
-    m_shader = new Shader("sprite.vert", "tilerenderer.frag");
+    m_shader = new Shader("tilerenderer.vert", "tilerenderer.frag");
 
     initGL();
 }
