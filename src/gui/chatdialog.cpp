@@ -15,7 +15,7 @@
  *   along with this program.  If not, see <http://www.gnu.org/licenses/>.    *
  *****************************************************************************/
 
-#include "optionsdialog.h"
+#include "chatdialog.h"
 #include "mainmenu.h"
 #include "gui.h"
 
@@ -28,16 +28,16 @@
 
 #include <assert.h>
 
-OptionsDialog::OptionsDialog(Game* game, MainMenu* parent) : m_game(game), m_parent(parent)
+ChatDialog::ChatDialog(Game* game, MainMenu* parent) : m_game(game), m_parent(parent)
 {
-    loadDocument();
+
 }
 
-OptionsDialog::~OptionsDialog()
+ChatDialog::~ChatDialog()
 {
 }
 
-void OptionsDialog::ProcessEvent(Rocket::Core::Event& event)
+void ChatDialog::ProcessEvent(Rocket::Core::Event& event)
 {
     std::cout << "Options Processing element: " << event.GetCurrentElement()->GetId().CString() << " type: " << event.GetType().CString() << '\n';
 
@@ -92,44 +92,37 @@ void OptionsDialog::ProcessEvent(Rocket::Core::Event& event)
 
 }
 
-void OptionsDialog::loadDocument()
+void ChatDialog::show()
 {
-    m_options = GUI::instance()->context()->LoadDocument("../gui/assets/optionsDialog.rml");
-    m_options->RemoveReference();
-    m_options->GetElementById("title")->SetInnerRML("fuck yeah, runtime options");
+    GUI::instance()->addInputDemand();
+    m_chat = GUI::instance()->context()->LoadDocument("../gui/assets/chatDialog.rml");
+    m_chat->GetElementById("title")->SetInnerRML("fuck yeah, runtime chat");
 
-    m_options->GetElementById("form")->AddEventListener("submit", this);
+    m_chat->GetElementById("form")->AddEventListener("submit", this);
 
 //    m_options->GetElementById("form")->AddEventListener("submit", this);
 //    Rocket::Controls::WidgetDropDown* resolution = dynamic_cast<Rocket::Controls::WidgetDropDown*>( m_options->GetElementById("resolution"));
 
+    m_chat->Show(Rocket::Core::ElementDocument::MODAL);
 }
 
-void OptionsDialog::show()
+void ChatDialog::close()
 {
-    GUI::instance()->addInputDemand();
-
-    loadDocument();
-    m_options->Show(Rocket::Core::ElementDocument::MODAL);
+    GUI::instance()->removeInputDemand();
+    m_chat->Close();
+    GUI::instance()->context()->UnloadDocument(m_chat);
+    //FIXME: gosh i hate this with a passion. but it's more complicated than it seems to do right. or at least i think it is.
+    //also, notice i don't delete m_options. i'm seriously hoping that rocket does that. if i call delete on it, it crashsee.
+    delete m_chat;
 }
 
-void OptionsDialog::close()
+bool ChatDialog::visible()
 {
-    if (m_options) {
-        GUI::instance()->removeInputDemand();
-        m_options->Close();
-        GUI::instance()->context()->UnloadDocument(m_options);
-        m_options = nullptr;
-    }
+    return m_chat->IsVisible();
 }
 
-bool OptionsDialog::visible()
+Rocket::Core::ElementDocument* ChatDialog::document()
 {
-    return m_options->IsVisible();
-}
-
-Rocket::Core::ElementDocument* OptionsDialog::document()
-{
-    return m_options;
+    return m_chat;
 }
 

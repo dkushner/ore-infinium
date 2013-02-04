@@ -15,8 +15,8 @@
  *   along with this program.  If not, see <http://www.gnu.org/licenses/>.    *
  *****************************************************************************/
 
-#ifndef OPTIONSDIALOG_H
-#define OPTIONSDIALOG_H
+#ifndef CHATDIALOG_H
+#define CHATDIALOG_H
 
 #include <Rocket/Core.h>
 
@@ -29,11 +29,11 @@ namespace Rocket {
 class Game;
 class MainMenu;
 
-class OptionsDialog : public Rocket::Core::EventListener
+class ChatDialog : public Rocket::Core::EventListener
 {
 public:
-    OptionsDialog(Game* game, MainMenu* parent);
-    ~OptionsDialog();
+    ChatDialog(Game* game, MainMenu* parent);
+    ~ChatDialog();
 
     /// reimplemented from Rocket::Core::EventListener
     virtual void ProcessEvent(Rocket::Core::Event& event);
@@ -45,13 +45,10 @@ public:
     Rocket::Core::ElementDocument* document();
 
 private:
-    void loadDocument();
-
-private:
     Game* m_game = nullptr;
     MainMenu* m_parent = nullptr;
 
-    Rocket::Core::ElementDocument* m_options = nullptr;
+    Rocket::Core::ElementDocument* m_chat = nullptr;
 };
 
 #endif

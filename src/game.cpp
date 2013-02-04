@@ -188,7 +188,7 @@ void Game::tick()
 
         m_gui->render();
 
-        drawDebugText();
+        drawDebugText(delta);
 
         SDL_GL_SwapWindow(m_window);
 
@@ -241,13 +241,14 @@ void Game::handleEvents()
     }
 }
 
-void Game::drawDebugText()
+void Game::drawDebugText(double frametime)
 {
     std::stringstream ss;
     std::string str;
 
     ss.str("");
     ss << "FPS: " << fps;
+    ss << " Frametime: " << frametime;
     str = ss.str();
     m_font->Render(str.c_str(), -1, FTPoint(0.0, 0.0, 0.0));
     m_font->Render("F5 to toggle debug logging", -1, FTPoint(0.0, 15.0, 0.0));

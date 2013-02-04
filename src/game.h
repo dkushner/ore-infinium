@@ -55,7 +55,7 @@ public:
     void abort_game(const char* message);
     void shutdown();
 
-    void drawDebugText();
+    void drawDebugText(double frametime);
 
     void checkSDLError();
     void checkGLError();

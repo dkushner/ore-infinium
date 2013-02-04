@@ -20,6 +20,7 @@ image.cpp
 gui/gui.cpp
 gui/mainmenu.cpp
 gui/optionsdialog.cpp
+gui/chatdialog.cpp
 
 gui/core/Shell.cpp
 gui/core/ShellFileInterface.cpp
