@@ -97,7 +97,19 @@ void OptionsDialog::ProcessEvent(Rocket::Core::Event& event)
 
 void OptionsDialog::show()
 {
+    GUI::instance()->addInputDemand();
     m_options->Show();//Rocket::Core::ElementDocument::MODAL);
+}
+
+void OptionsDialog::hide()
+{
+    GUI::instance()->removeInputDemand();
+    m_options->Hide();//Rocket::Core::ElementDocument::MODAL);
+}
+
+bool OptionsDialog::visible()
+{
+    return m_options->IsVisible();
 }
 
 Rocket::Core::ElementDocument* OptionsDialog::document()

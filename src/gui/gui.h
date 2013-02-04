@@ -47,12 +47,18 @@ public:
 
     Rocket::Core::Context* context() { return m_context; }
 
+    void addInputDemand();
+    void removeInputDemand();
+    bool  inputDemanded();
+
 private:
     Rocket::Core::Context* m_context = nullptr;
 
     ShellRenderInterfaceOpenGL* m_renderer = nullptr;
     ShellFileInterface* m_fileInterface = nullptr;
     SystemInterfaceSDL2* m_system = nullptr;
+
+    int m_inputDemand = 0;
 
 private:
     GUI();

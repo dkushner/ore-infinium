@@ -61,12 +61,17 @@ void MainMenu::ProcessEvent(Rocket::Core::Event& event)
     }
 }
 
-
 void MainMenu::toggleShown()
 {
     if (m_menu->IsVisible()) {
+        GUI::instance()->removeInputDemand();
         m_menu->Hide();
+
+        if (m_optionsDialog && m_optionsDialog->visible()) {
+            m_optionsDialog->hide();
+        }
     } else {
+        GUI::instance()->addInputDemand();
         m_menu->Show();
     }
 }

@@ -38,8 +38,12 @@ public:
     virtual void ProcessEvent(Rocket::Core::Event& event);
 
     void show();
+    void hide();
+    bool visible();
 
     Rocket::Core::ElementDocument* document();
+
+private:
 
 private:
     Game* m_game = nullptr;

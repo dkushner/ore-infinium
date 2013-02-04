@@ -207,7 +207,10 @@ void Game::handleEvents()
     while (SDL_PollEvent(&event)) {
 
         m_gui->handleEvent(event);
-        m_world->handleEvent(event);
+
+        if (!m_gui->inputDemanded()) {
+            m_world->handleEvent(event);
+        }
 
         switch (event.type) {
         case SDL_KEYDOWN:
