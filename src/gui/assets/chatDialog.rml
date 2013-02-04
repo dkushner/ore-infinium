@@ -11,12 +11,15 @@
                                 width: 40%;
                                 height: 30%;
                                 margin: auto;
-padding-bottom: 100px;
+
                         }
 
                         div#content
                         {
-                                overflow-y: scroll;
+                                text-align: left;
+                        }
+                  div#framecontent
+                        {
                                 text-align: left;
                         }
 
@@ -25,207 +28,118 @@ padding-bottom: 100px;
 
 
         <body template="window">
+            <tabset>
+                <tab id="tab2">Fucking fuck in the chat chat</tab>
+                        <panel>
+                            Welcome to the second tab!
+                            THIS IS  SOME TEXT
+                            <br/>
+                            THIS IS  SOME TEXT
+                            <br/>
+                            THIS IS  SOME TEXT
+                            <br/>
+                            THIS IS  SOME TEXT
+                            <br/>
+                            THIS IS  SOME TEXT
+                            <br/>
+                            THIS IS  SOME TEXT
+                            <br/>
+                            THIS IS  SOME TEXT
+                            <br/>
+                            THIS IS  SOME TEXT
+                            <br/>
+                            THIS IS  SOME TEXT
+                            <br/>
+                            THIS IS  SOME TEXT
+                            <br/>
+                            THIS IS  SOME TEXT
+                            <br/>
+                            THIS IS  SOME TEXT
+                            <br/>
+                            THIS IS  SOME TEXT
+                            <br/>
+                            THIS IS  SOME TEXT
+                            <br/>
+                            THIS IS  SOME TEXT
+                            <br/>
+                            THIS IS  SOME TEXT
+                            <br/>
+                            THIS IS  SOME TEXT
+                            <br/>
+                            THIS IS  SOME TEXT
+                            <br/>
+                            THIS IS  SOME TEXT
+                            <br/>
+                            THIS IS  SOME TEXT
+                            <br/>
+                        
+                            <br/>
+                            THIS IS  SOME TEXT
+                            <br/>
+                        
+                            <br/>
+                            THIS IS  SOME TEXT
+                            <br/>
+                        
+                        <br/>
+                    THIS IS  SOME TEXT
+                    <br/>
+                    
+                    <br/>
+                    THIS IS  SOME TEXT
+                    <br/>
+                    
+                    <br/>
+                    THIS IS  SOME TEXT
+                    <br/>
+                    
+                    <br/>
+                    THIS IS  SOME TEXT
+                    <br/>
+                    
+                    <br/>
+                    THIS IS  SOME TEXT
+                    <br/>
+                    
+                    <br/>
+                    THIS IS  SOME TEXT
+                    <br/>
+                    
+                    <br/>
+                    THIS IS  SOME TEXT
+                    <br/>
+                    
+                    <br/>
+                    THIS IS  SOME TEXT
+                    <br/>
+                    
+                    <br/>
+                    THIS IS  SOME TEXT
+                    <br/>
+                    
+                    <br/>
+                    THIS IS  SOME TEXT
+                    <br/>
+                    
+                    <br/>
+                    THIS IS  SOME TEXT
+                    <br/>
+                    
+                    <br/>
+                    THIS IS  SOME TEXT
+                    <br/>
+                    
+                    <br/>
+                    THIS IS  SOME TEXT
+                    <br/>
+                </panel>
+            </tabset>
 
-THIS IS  SOME TEXT
-<br/>
-THIS IS  SOME TEXT
-<br/>
-THIS IS  SOME TEXT
-<br/>
-THIS IS  SOME TEXT
-<br/>
-THIS IS  SOME TEXT
-<br/>
-THIS IS  SOME TEXT
-<br/>
-THIS IS  SOME TEXT
-<br/>
-THIS IS  SOME TEXT
-<br/>
-THIS IS  SOME TEXT
-<br/>
-THIS IS  SOME TEXT
-<br/>
-THIS IS  SOME TEXT
-<br/>
-THIS IS  SOME TEXT
-<br/>
-THIS IS  SOME TEXT
-<br/>
-THIS IS  SOME TEXT
-<br/>
-THIS IS  SOME TEXT
-<br/>
-THIS IS  SOME TEXT
-<br/>
-THIS IS  SOME TEXT
-<br/>
-THIS IS  SOME TEXT
-<br/>
-THIS IS  SOME TEXT
-<br/>
-THIS IS  SOME TEXT
-<br/>
-
-<br/>
-THIS IS  SOME TEXT
-<br/>
-
-<br/>
-THIS IS  SOME TEXT
-<br/>
-
-<br/>
-THIS IS  SOME TEXT
-<br/>
-
-<br/>
-THIS IS  SOME TEXT
-<br/>
-
-<br/>
-THIS IS  SOME TEXT
-<br/>
-
-<br/>
-THIS IS  SOME TEXT
-<br/>
-
-<br/>
-THIS IS  SOME TEXT
-<br/>
-
-<br/>
-THIS IS  SOME TEXT
-<br/>
-
-<br/>
-THIS IS  SOME TEXT
-<br/>
-
-<br/>
-THIS IS  SOME TEXT
-<br/>
-
-<br/>
-THIS IS  SOME TEXT
-<br/>
-
-<br/>
-THIS IS  SOME TEXT
-<br/>
-
-<br/>
-THIS IS  SOME TEXT
-<br/>
-
-<br/>
-THIS IS  SOME TEXT
-<br/>
-
-<br/>
-THIS IS  SOME TEXT
-<br/>
-
-<br/>
-THIS IS  SOME TEXT
-<br/>
-
-<br/>
-THIS IS  SOME TEXT
-<br/>
-
-<br/>
-THIS IS  SOME TEXT
-<br/>
-
-<br/>
-THIS IS  SOME TEXT
-<br/>
-
-<br/>
-THIS IS  SOME TEXT
-<br/>
-
-<br/>
-THIS IS  SOME TEXT
-<br/>
-
-<br/>
-THIS IS  SOME TEXT
-<br/>
-
-<br/>
-THIS IS  SOME TEXT
-<br/>
-
-<br/>
-THIS IS  SOME TEXT
-<br/>
-
-
-<br/>
-THIS IS  SOME TEXT
-<br/>
-
-<br/>
-THIS IS  SOME TEXT
-<br/>
-
-<br/>
-THIS IS  SOME TEXT
-<br/>
-
-<br/>
-THIS IS  SOME TEXT
-<br/>
-
-<br/>
-THIS IS  SOME TEXT
-<br/>
-
-<br/>
-THIS IS  SOME TEXT
-<br/>
-
-<br/>
-THIS IS  SOME TEXT
-<br/>
-
-<br/>
-THIS IS  SOME TEXT
-<br/>
-
-<br/>
-THIS IS  SOME TEXT
-<br/>
-
-<br/>
-THIS IS  SOME TEXT
-<br/>
-
-<br/>
-THIS IS  SOME TEXT
-<br/>
-
-<br/>
-THIS IS  SOME TEXT
-<br/>
-
-<br/>
-THIS IS  SOME TEXT
-<br/>
-<br/>
-THIS IS  SOME TEXT
-<br/>
-
-        </body>
-        <body id="history" template="frame">
-            <form id="form">
-                <div>
-                    <input id="good" type="text" value="VALUE" />
+                    <input id="good" type="text" value="PUT YOUR SHIT IN HERE" />
                     <button>send</button>
-                </div>
-            </form>
+        </body>
+
+        <body id="history" template="frame">
+
         </body>
 </rml>
