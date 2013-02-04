@@ -45,6 +45,9 @@ public:
     Rocket::Core::ElementDocument* document();
 
 private:
+    void loadDocument();
+
+private:
     Game* m_game = nullptr;
     MainMenu* m_parent = nullptr;
 

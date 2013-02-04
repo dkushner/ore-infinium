@@ -40,6 +40,7 @@
 
 class GUI;
 class MainMenu;
+class ChatDialog;
 
 class Game
 {
@@ -66,6 +67,7 @@ private:
     FTGLPixmapFont *m_font = nullptr;
 
 
+    ChatDialog* m_chat = nullptr;
     GUI* m_gui = nullptr;
     MainMenu* m_mainMenu = nullptr;
     World *m_world = nullptr;

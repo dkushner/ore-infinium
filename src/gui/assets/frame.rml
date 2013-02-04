@@ -1,0 +1,12 @@
+<template name="frame" content="framecontent">
+<head>
+	<link type="text/rcss" href="rkt.rcss"/>
+	<link type="text/rcss" href="gui.rcss"/>
+</head>
+<body class="window">
+	<div id="frame">
+		<div id="framecontent">
+		</div>
+	</div>
+</body>
+</template>

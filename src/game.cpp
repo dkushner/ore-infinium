@@ -24,6 +24,7 @@
 
 #include "src/gui/gui.h"
 #include "src/gui/mainmenu.h"
+#include "src/gui/chatdialog.h"
 
 #include "settings/settings.h"
 
@@ -158,6 +159,9 @@ void Game::init()
 
    World::createInstance();
     m_world = World::instance();
+
+    m_chat = new ChatDialog(this, m_mainMenu);
+    m_chat->show();
 
     m_font->FaceSize(12);
 

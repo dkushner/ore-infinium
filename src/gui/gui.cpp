@@ -58,6 +58,7 @@ GUI::GUI()
     Rocket::Core::SetSystemInterface(m_system);
 
     m_renderer = new ShellRenderInterfaceOpenGL();
+    m_renderer->SetViewport(1600, 900);
     Rocket::Core::SetRenderInterface(m_renderer);
 
     m_fileInterface = new ShellFileInterface("../gui/assets");

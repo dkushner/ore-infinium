@@ -30,7 +30,7 @@
 
 ChatDialog::ChatDialog(Game* game, MainMenu* parent) : m_game(game), m_parent(parent)
 {
-
+    loadDocument();
 }
 
 ChatDialog::~ChatDialog()
@@ -92,18 +92,22 @@ void ChatDialog::ProcessEvent(Rocket::Core::Event& event)
 
 }
 
-void ChatDialog::show()
+void ChatDialog::loadDocument()
 {
     GUI::instance()->addInputDemand();
     m_chat = GUI::instance()->context()->LoadDocument("../gui/assets/chatDialog.rml");
     m_chat->GetElementById("title")->SetInnerRML("fuck yeah, runtime chat");
 
-    m_chat->GetElementById("form")->AddEventListener("submit", this);
+//    m_chat->GetElementById("form")->AddEventListener("submit", this);
 
-//    m_options->GetElementById("form")->AddEventListener("submit", this);
-//    Rocket::Controls::WidgetDropDown* resolution = dynamic_cast<Rocket::Controls::WidgetDropDown*>( m_options->GetElementById("resolution"));
+    //    m_options->GetElementById("form")->AddEventListener("submit", this);
+    //    Rocket::Controls::WidgetDropDown* resolution = dynamic_cast<Rocket::Controls::WidgetDropDown*>( m_options->GetElementById("resolution"));
 
-    m_chat->Show(Rocket::Core::ElementDocument::MODAL);
+}
+
+void ChatDialog::show()
+{
+    m_chat->Show();//Rocket::Core::ElementDocument::MODAL);
 }
 
 void ChatDialog::close()
