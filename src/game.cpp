@@ -46,6 +46,7 @@ Game::Game()
 
 Game::~Game()
 {
+    SDL_DestroyWindow(m_window);
 }
 
 void Game::abort_game(const char* message)

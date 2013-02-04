@@ -41,6 +41,7 @@ GUI* GUI::instance()
 
 GUI::GUI()
 {
+    Debug::log() << "GUI CTOR HIT!";
     glEnableClientState(GL_VERTEX_ARRAY);
     glEnableClientState(GL_COLOR_ARRAY);
     glEnable(GL_BLEND);

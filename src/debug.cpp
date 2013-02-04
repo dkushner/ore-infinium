@@ -33,7 +33,7 @@ LogStream Debug::log(Debug::Area area)
     return LogStream(area);
 }
 
-void Debug::assertf(bool value, std::string message)
+void Debug::assertf(bool value, const std::string& message)
 {
     if (!value) {
         std::cout << message << "\n";
@@ -41,7 +41,7 @@ void Debug::assertf(bool value, std::string message)
     }
 }
 
-void Debug::fatal(bool value, Debug::Area area, std::string message)
+void Debug::fatal(bool value, Debug::Area area, const std::string& message)
 {
     if (!value) {
         Debug::log(area) << "FATAL: " << message;

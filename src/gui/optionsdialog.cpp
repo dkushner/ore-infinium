@@ -49,8 +49,13 @@ void OptionsDialog::ProcessEvent(Rocket::Core::Event& event)
     std::cout << "Options Processing element: " << event.GetCurrentElement()->GetId().CString() << " type: " << event.GetType().CString() << '\n';
 
     if (event.GetParameter< Rocket::Core::String >("submit", "") == "accept") {
+        //TODO: save and apply settings
 
-    std::cout << "accepted\n";
+        hide();
+        //FIXME: there's *got* to be a better way. I hate myself for writing this statement. I've tried
+        // making the main menu delete us, but there's no way to remove event listeners short of iterating over each one, which we'd have to store manually
+        // hopefully i'm just wrong and there's a way better way
+        delete this;
     }
 
     /*
