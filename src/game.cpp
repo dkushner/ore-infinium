@@ -46,7 +46,7 @@ Game::Game()
 
 Game::~Game()
 {
-    SDL_DestroyWindow(m_window);
+//    delete m_world;
 }
 
 void Game::abort_game(const char* message)
@@ -234,7 +234,7 @@ void Game::handleEvents()
             break;
 
         case SDL_QUIT:
-            exit(0);
+            shutdown();
             break;
 
         default:
@@ -259,6 +259,7 @@ void Game::drawDebugText()
 
 void Game::shutdown()
 {
+    SDL_DestroyWindow(m_window);
     SDL_Quit();
     exit(0);
 }
