@@ -544,29 +544,31 @@ scrollbarvertical
         margin-top: -6px;
         margin-bottom: -6px;
         margin-right: -11px;
-        width: 27px;
+        width: 20px;
 }
 
 scrollbarvertical slidertrack
 {
         background-decorator: tiled-vertical;
-        background-top-image: gui.tga 70px 199px 97px 201px;
-        background-center-image: gui.tga stretch 70px 201px 97px 202px;
-        background-bottom-image: gui.tga 70px 203px 97px 204px;
+        background-top-image: gui.tga 772px 401px 792px 445px;
+        background-center-image: gui.tga stretch 772px 450px 792px 539px;
+        background-bottom-image: gui.tga 772px 544px 792px 599px;
 }
 
 scrollbarvertical sliderbar
 {
-        margin-left: 4px;
-        width: 23px;
+        margin-left: 5px;
+        width: 9px;
         min-height: 46px;
+padding-bottom: 10px;
 
         background-decorator: tiled-vertical;
-        background-top-image: gui.tga 56px 152px 79px 175px;
-        background-center-image: gui.tga stretch 56px 175px 79px 175px;
-        background-bottom-image: gui.tga 56px 176px 79px 198px;
+        background-top-image: gui.tga 746px 419px 755px 451px;
+        background-center-image: gui.tga stretch 746px 451px 755px 453px;
+        background-bottom-image: gui.tga 746px 453px 755px 486px;
 }
 
+/*
 scrollbarvertical sliderbar:hover
 {
         background-top-image-s: 80px 103px;
@@ -581,43 +583,57 @@ scrollbarvertical sliderbar:active
         background-bottom-image-s: 104px 127px;
 }
 
+*/
+
 scrollbarvertical sliderarrowdec
 {
-        width: 27px;
-        height: 24px;
+        width: 20px;
+        height: 11px;
 
         icon-decorator: image;
-        icon-image: gui.tga 0px 152px 27px 176px;
+        icon-image: gui.tga 751px 401px 771px 413px;
 }
 
 scrollbarvertical sliderarrowdec:hover,
-scrollbarvertical sliderarrowinc:hover
 {
-        icon-image-t: 177px 201px;
+        icon-image-s: 729px 749px;
+        icon-image-t: 401px 413px;
 }
 
 scrollbarvertical sliderarrowdec:active,
-scrollbarvertical sliderarrowinc:active
 {
-        icon-image-t: 202px 226px;
+        icon-image-s: 729px 749px;
+        icon-image-t: 401px 413px;
 }
 
 scrollbarvertical sliderarrowinc
 {
-        width: 27px;
-        height: 24px;
+        width: 20px;
+        height: 11px;
 
         icon-decorator: image;
-        icon-image: gui.tga 28px 152px 55px 176px;
+        icon-image: gui.tga 751px 588px 771px 599px;
+}
+
+scrollbarvertical sliderarrowinc:active
+{
+        icon-image-s: 729px 749px;
+        icon-image-t: 588px 599px;
+}
+scrollbarvertical sliderarrowinc:hover
+{
+        icon-image-s: 729px 749px;
+        icon-image-t: 588px 599px;
 }
 
 
-
+/*
 scrollbarhorizontal
 {
         width: 0px;
         height: 0px;
 }
+*/
 
 /* Force the tabset element to a fixed size. */
 tabset
