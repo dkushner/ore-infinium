@@ -73,8 +73,9 @@ void ChatDialog::reloadChatHistory()
     for (auto& currentLine : m_chatHistory) {
         ss << currentLine;
     }
-
     m_tabSet->GetElementById("panel1")->SetInnerRML(ss.str().c_str());
+    //somewhat big numbah to get it to want to scroll to the bottom all the time
+    m_tabSet->GetElementById("panel1")->SetScrollTop(20500.0f);
 }
 
 
