@@ -227,6 +227,12 @@ Rocket::Core::Input::KeyIdentifier SystemInterfaceSDL2::TranslateKey(SDL_Keycode
     case SDLK_DOWN:
         return Rocket::Core::Input::KI_DOWN;
         break;
+    case SDLK_DELETE:
+        return Rocket::Core::Input::KI_DELETE;
+        break;
+    case SDLK_BACKSPACE:
+        return Rocket::Core::Input::KI_BACK;
+        break;
     case SDLK_KP_PLUS:
         return Rocket::Core::Input::KI_ADD;
         break;

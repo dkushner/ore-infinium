@@ -94,7 +94,6 @@ void ChatDialog::ProcessEvent(Rocket::Core::Event& event)
 
 void ChatDialog::loadDocument()
 {
-    GUI::instance()->addInputDemand();
     m_chat = GUI::instance()->context()->LoadDocument("../gui/assets/chatDialog.rml");
     m_chat->GetElementById("title")->SetInnerRML("fuck yeah, runtime chat");
 
@@ -107,12 +106,11 @@ void ChatDialog::loadDocument()
 
 void ChatDialog::show()
 {
-    m_chat->Show();//Rocket::Core::ElementDocument::MODAL);
+    m_chat->Show();
 }
 
 void ChatDialog::close()
 {
-    GUI::instance()->removeInputDemand();
     m_chat->Close();
     GUI::instance()->context()->UnloadDocument(m_chat);
     //FIXME: gosh i hate this with a passion. but it's more complicated than it seems to do right. or at least i think it is.

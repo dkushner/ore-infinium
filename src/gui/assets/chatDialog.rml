@@ -7,13 +7,13 @@
                 <style>
                         body
                         {
-                            min-width: 34%;
-                            min-height: 27%;
+                            min-width: 36%;
+                            min-height: 28%;
 
-                            width: 34%;
-                            height: 27%;
+                            width: 36%;
+                            height: 28%;
 
-                            margin: auto;
+                            margin-top: auto;
                         }
 
                         div#content
