@@ -254,10 +254,14 @@ void Game::drawDebugText(double frametime)
     ss << "FPS: " << fps;
     ss << " Frametime: " << frametime;
     str = ss.str();
-    m_font->Render(str.c_str(), -1, FTPoint(0.0, 0.0, 0.0));
-    m_font->Render("F5 to toggle debug logging", -1, FTPoint(0.0, 15.0, 0.0));
-    m_font->Render("F6 to toggle renderer logging", -1, FTPoint(0.0, 30.0, 0.0));
-    m_font->Render("F7 to toggle GUI renderer debug", -1, FTPoint(0.0, 45.0, 0.0));
+
+    const int height = Settings::instance()->screenResolutionHeight - 15;
+    const int width = Settings::instance()->screenResolutionWidth;
+
+    m_font->Render(str.c_str(), -1, FTPoint(0.0, height - 0.0, 0.0));
+    m_font->Render("F5 to toggle debug logging", -1, FTPoint(0.0, height - 15.0, 0.0));
+    m_font->Render("F6 to toggle renderer logging", -1, FTPoint(0.0, height - 30.0, 0.0));
+    m_font->Render("F7 to toggle GUI renderer debug", -1, FTPoint(0.0, height - 45.0, 0.0));
 }
 
 void Game::shutdown()

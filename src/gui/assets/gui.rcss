@@ -172,8 +172,6 @@ input.submit
         margin-left: 0px;
 }
 
-
-
 button,
 input.submit
 {
@@ -219,12 +217,14 @@ input.submit:active
 
 input.text
 {
-        height: 31px;
-        padding: 10px 10px 0px;
+        height: 32px;
 
-        background-decorator: tiled-horizontal;
-        background-left-image: gui.tga 162px 192px 176px 223px;
-        background-center-image: gui.tga stretch 176px 192px 177px 223px;
+        padding: 10px 10px 6px;
+
+        margin-right: 8px;
+
+        background-decorator: image;
+        background-image: gui.tga 161px 110px 384px 138px;
 }
 
 input.text,
@@ -630,12 +630,11 @@ scrollbarhorizontal
 }
 */
 
-/* Force the tabset element to a fixed size. */
 tabset
 {
         display: block;
-        width: 300px;
-        height: 200px;
+
+        width: auto;
 }
 
 /* Display the tab container as a block element 20 pixels high; it will
@@ -644,12 +643,13 @@ tabset tabs
 {
         display: block;
         height: 20px;
+        width: auto;
 }
 
 /* Force each tab to only take up 50 pixels across the tabs element. */
 tabset tab
 {
-        width: 50px;
+        width: auto;
 }
 
 /* Display the panel container as a block element 180 pixels high; it will
@@ -660,7 +660,7 @@ tabset panels
         overflow-y: scroll;
         display: block;
         height: 180px;
-
+        width: auto;
 }
 
 /* Fix each panel to take up exactly the panelled space. */
@@ -668,6 +668,6 @@ tabset panels panel
 {
         overflow-y: scroll;
         display: block;
-        width: 100%;
+        width: auto;
         height: 100%;
 }

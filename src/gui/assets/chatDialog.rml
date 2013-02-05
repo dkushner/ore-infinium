@@ -7,22 +7,45 @@
                 <style>
                         body
                         {
-                                min-width: 40%;
-                                width: 40%;
-                                height: 30%;
-                                margin: auto;
+                            min-width: 34%;
+                            min-height: 27%;
 
+                            width: 34%;
+                            height: 27%;
+
+                            margin: auto;
                         }
 
                         div#content
                         {
-                                text-align: left;
-                        }
-                  div#framecontent
-                        {
-                                text-align: left;
+                            text-align: left;
                         }
 
+                        div#framecontent
+                        {
+                            text-align: left;
+                        }
+                        input.text
+                        {
+                            margin-left: 0px;
+                        }
+
+                        button,
+                        input.submit
+                        {
+                            display: inline-block;
+
+                            width: 159px;
+                            height: 30px;
+
+                            padding-top: 0px;
+                            vertical-align: -6px;
+                        }
+
+                        tabset
+                        {
+                            padding-bottom: 10px;
+                        }
                 </style>
         </head>
 
