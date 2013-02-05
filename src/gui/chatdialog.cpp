@@ -20,6 +20,7 @@
 #include "gui.h"
 
 #include "../game.h"
+#include <src/debug.h>
 
 #include <Rocket/Core.h>
 #include <Rocket/Controls.h>
@@ -70,18 +71,45 @@ void ChatDialog::reloadChatHistory()
     m_tabSet->GetElementById("panel1")->SetInnerRML(ss.str().c_str());
 }
 
+
+void ChatDialog::replaceAll(std::string& str, const std::string& from, const std::string& to) {
+    if(from.empty()) {
+        return;
+    }
+
+    size_t startPos = 0;
+    while ((startPos = str.find(from, startPos)) != std::string::npos) {
+        str.replace(startPos, from.length(), to);
+        startPos += to.length(); // In case 'to' contains 'from', like replacing 'x' with 'yx'
+    }
+}
+
 void ChatDialog::addChatLine(const std::string& message)
 {
-    std::string finalString;
-    std::stringstream ss;
+    if (message != "") {
+        std::string formattedMessage = message;
 
-    ss << message;
-    ss << "<br/>";
-    finalString = ss.str();
+        std::string finalString;
+        std::stringstream ss;
 
-    m_chatHistory.insert(m_chatHistory.end(), finalString);
+        Debug::assertf(message.length() < maximumChatCharCount, "FATAL, ChatDialog::addChatLine was given an input string larger than the  maximum char count, for buffer overflow prevention. This is a BUG, likely in the networking stack.");
 
-    reloadChatHistory();
+        ss << "playername: ";
+
+        // for sanitizing, so clients can't inject arbitrary html(!), which would mean they could
+        // do all kinds of crazy shit.
+        replaceAll(formattedMessage, "<", "&lt;");
+        replaceAll(formattedMessage, ">", "&gt;");
+
+        ss << formattedMessage;
+
+        ss << "<br/>";
+        finalString = ss.str();
+
+        m_chatHistory.insert(m_chatHistory.end(), finalString);
+
+        reloadChatHistory();
+    }
 }
 
 void ChatDialog::consumeInputLine()

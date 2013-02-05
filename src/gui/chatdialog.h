@@ -46,16 +46,21 @@ public:
     bool visible();
 
     void clearChatHistory();
+    //FIXME: perform sanitization checks on all input
 
     //FIXME: impose hard chat line insertion limits....overflow easily possible
     void addChatLine(const std::string& message);
 
     Rocket::Core::ElementDocument* document();
 
+    static constexpr int maximumChatCharCount = 256;
+
 private:
     void loadDocument();
     void reloadChatHistory();
     void consumeInputLine();
+
+void replaceAll(std::string& str, const std::string& from, const std::string& to);
 
 private:
     Game* m_game = nullptr;
