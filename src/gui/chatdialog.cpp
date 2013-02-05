@@ -25,6 +25,7 @@
 #include <Rocket/Controls.h>
 
 #include <iostream>
+#include <sstream>
 
 #include <assert.h>
 
@@ -40,56 +41,11 @@ ChatDialog::~ChatDialog()
 void ChatDialog::ProcessEvent(Rocket::Core::Event& event)
 {
     std::cout << "Options Processing element: " << event.GetCurrentElement()->GetId().CString() << " type: " << event.GetType().CString() << '\n';
+    const Rocket::Core::String& id = event.GetCurrentElement()->GetId();
 
-    if (event.GetParameter< Rocket::Core::String >("submit", "") == "accept") {
-        //TODO: save and apply settings
-
-        close();
-        //FIXME: there's *got* to be a better way. I hate myself for writing this statement. I've tried
-        // making the main menu delete us, but there's no way to remove event listeners short of iterating over each one, which we'd have to store manually
-        // hopefully i'm just wrong and there's a way better way
+    if (id == "sendButton") {
+        consumeInputLine();
     }
-
-    /*
-     *        Rocket::Controls::ElementFormControlInput* spatialisation_option = dynamic_cast< Rocket::Controls::ElementFormControlInput* >(options_body->GetElementById("3d"));
-     *                if (spatialisation_option != NULL)
-     *                {
-     *                        if (GameDetails::Get3DSpatialisation())
-     *                                spatialisation_option->SetAttribute("checked", "");
-     *                        else
-     *                                spatialisation_option->RemoveAttribute("checked");
-     }
-     }
-
-     // Sent from the 'onsubmit' action of the options menu; we read the values sent from the form and make the
-     // necessary changes on the game details structure.
-     else if (value == "store")
-     {
-         // First check which button was clicked to submit the form; if it was 'cancel', then we don't want to
-         // propagate the changes.
-         if (event.GetParameter< Rocket::Core::String >("submit", "cancel") == "accept")
-         {
-             // Fetch the results of the form submission. These are stored as parameters directly on the event itself.
-             // Like HTML form events, the name of the parameter is the 'name' attribute of the control, and the value
-             // is whatever was put into the 'value' attribute. Checkbox values are only sent through if the box was
-             // clicked. Radio buttons send through one value for the active button.
-             Rocket::Core::String graphics = event.GetParameter< Rocket::Core::String >("graphics", "ok");
-             bool reverb = event.GetParameter< Rocket::Core::String >("reverb", "") == "true";
-             bool spatialisation = event.GetParameter< Rocket::Core::String >("3d", "") == "true";
-
-             if (graphics == "good")
-                 GameDetails::SetGraphicsQuality(GameDetails::GOOD);
-             else if (graphics == "ok")
-                 GameDetails::SetGraphicsQuality(GameDetails::OK);
-             else if (graphics == "bad")
-                 GameDetails::SetGraphicsQuality(GameDetails::BAD);
-
-             GameDetails::SetReverb(reverb);
-             GameDetails::Set3DSpatialisation(spatialisation);
-     }
-     }
-     */
-
 }
 
 void ChatDialog::loadDocument()
@@ -97,11 +53,52 @@ void ChatDialog::loadDocument()
     m_chat = GUI::instance()->context()->LoadDocument("../gui/assets/chatDialog.rml");
     m_chat->GetElementById("title")->SetInnerRML("fuck yeah, runtime chat");
 
-//    m_chat->GetElementById("form")->AddEventListener("submit", this);
+    m_tabSet = dynamic_cast<Rocket::Controls::ElementTabSet*>(m_chat->GetElementById("tabset"));
 
-    //    m_options->GetElementById("form")->AddEventListener("submit", this);
-    //    Rocket::Controls::WidgetDropDown* resolution = dynamic_cast<Rocket::Controls::WidgetDropDown*>( m_options->GetElementById("resolution"));
+    m_chat->GetElementById("sendButton")->AddEventListener("click", this);
+    reloadChatHistory();
+}
 
+void ChatDialog::reloadChatHistory()
+{
+    std::stringstream ss;
+
+    for (auto& currentLine : m_chatHistory) {
+        ss << currentLine;
+    }
+
+    m_tabSet->GetElementById("panel1")->SetInnerRML(ss.str().c_str());
+}
+
+void ChatDialog::addChatLine(const std::string& message)
+{
+    std::string finalString;
+    std::stringstream ss;
+
+    ss << message;
+    ss << "<br/>";
+    finalString = ss.str();
+
+    m_chatHistory.insert(m_chatHistory.end(), finalString);
+
+    reloadChatHistory();
+}
+
+void ChatDialog::consumeInputLine()
+{
+    Rocket::Controls::ElementFormControlInput* inputLine = dynamic_cast<Rocket::Controls::ElementFormControlInput*>(m_chat->GetElementById("inputLine"));
+    const std::string& input = inputLine->GetAttribute<Rocket::Core::String>("value", "").CString();
+
+    addChatLine(input);
+    inputLine->SetAttribute<Rocket::Core::String>("value", "");
+
+    reloadChatHistory();
+}
+
+void ChatDialog::clearChatHistory()
+{
+    m_chatHistory.clear();
+    reloadChatHistory();
 }
 
 void ChatDialog::show()

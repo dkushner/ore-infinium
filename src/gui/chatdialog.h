@@ -24,6 +24,9 @@ namespace Rocket {
     namespace Core {
         class ElementDocument;
     }
+    namespace Controls{
+        class ElementTabSet;
+    }
 }
 
 class Game;
@@ -42,16 +45,26 @@ public:
     void close();
     bool visible();
 
+    void clearChatHistory();
+
+    //FIXME: impose hard chat line insertion limits....overflow easily possible
+    void addChatLine(const std::string& message);
+
     Rocket::Core::ElementDocument* document();
 
 private:
     void loadDocument();
+    void reloadChatHistory();
+    void consumeInputLine();
 
 private:
     Game* m_game = nullptr;
     MainMenu* m_parent = nullptr;
 
     Rocket::Core::ElementDocument* m_chat = nullptr;
+    Rocket::Controls::ElementTabSet* m_tabSet = nullptr;
+
+    std::deque<std::string> m_chatHistory;
 };
 
 #endif

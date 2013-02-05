@@ -51,118 +51,114 @@
 
 
         <body template="window">
-            <tabset>
-                <tab id="tab2">Fucking fuck in the chat chat</tab>
-                        <panel>
-                            Welcome to the second tab!
-                            THIS IS  SOME TEXT
-                            <br/>
-                            THIS IS  SOME TEXT
-                            <br/>
-                            THIS IS  SOME TEXT
-                            <br/>
-                            THIS IS  SOME TEXT
-                            <br/>
-                            THIS IS  SOME TEXT
-                            <br/>
-                            THIS IS  SOME TEXT
-                            <br/>
-                            THIS IS  SOME TEXT
-                            <br/>
-                            THIS IS  SOME TEXT
-                            <br/>
-                            THIS IS  SOME TEXT
-                            <br/>
-                            THIS IS  SOME TEXT
-                            <br/>
-                            THIS IS  SOME TEXT
-                            <br/>
-                            THIS IS  SOME TEXT
-                            <br/>
-                            THIS IS  SOME TEXT
-                            <br/>
-                            THIS IS  SOME TEXT
-                            <br/>
-                            THIS IS  SOME TEXT
-                            <br/>
-                            THIS IS  SOME TEXT
-                            <br/>
-                            THIS IS  SOME TEXT
-                            <br/>
-                            THIS IS  SOME TEXT
-                            <br/>
-                            THIS IS  SOME TEXT
-                            <br/>
-                            THIS IS  SOME TEXT
-                            <br/>
-                        
-                            <br/>
-                            THIS IS  SOME TEXT
-                            <br/>
-                        
-                            <br/>
-                            THIS IS  SOME TEXT
-                            <br/>
-                        
+            <tabset id="tabset">
+                <tab>Fucking fuck in the chat chat</tab>
+                    <panel id="panel1">
+                        Welcome to the second tab!
+                        THIS IS  SOME TEXT
                         <br/>
-                    THIS IS  SOME TEXT
-                    <br/>
+                        THIS IS  SOME TEXT
+                        <br/>
+                        THIS IS  SOME TEXT
+                        <br/>
+                        THIS IS  SOME TEXT
+                        <br/>
+                        THIS IS  SOME TEXT
+                        <br/>
+                        THIS IS  SOME TEXT
+                        <br/>
+                        THIS IS  SOME TEXT
+                        <br/>
+                        THIS IS  SOME TEXT
+                        <br/>
+                        THIS IS  SOME TEXT
+                        <br/>
+                        THIS IS  SOME TEXT
+                        <br/>
+                        THIS IS  SOME TEXT
+                        <br/>
+                        THIS IS  SOME TEXT
+                        <br/>
+                        THIS IS  SOME TEXT
+                        <br/>
+                        THIS IS  SOME TEXT
+                        <br/>
+                        THIS IS  SOME TEXT
+                        <br/>
+                        THIS IS  SOME TEXT
+                        <br/>
+                        THIS IS  SOME TEXT
+                        <br/>
+                        THIS IS  SOME TEXT
+                        <br/>
+                        THIS IS  SOME TEXT
+                        <br/>
+                        THIS IS  SOME TEXT
+                        <br/>
+                    
+                        <br/>
+                        THIS IS  SOME TEXT
+                        <br/>
+                    
+                        <br/>
+                        THIS IS  SOME TEXT
+                        <br/>
                     
                     <br/>
-                    THIS IS  SOME TEXT
-                    <br/>
-                    
-                    <br/>
-                    THIS IS  SOME TEXT
-                    <br/>
-                    
-                    <br/>
-                    THIS IS  SOME TEXT
-                    <br/>
-                    
-                    <br/>
-                    THIS IS  SOME TEXT
-                    <br/>
-                    
-                    <br/>
-                    THIS IS  SOME TEXT
-                    <br/>
-                    
-                    <br/>
-                    THIS IS  SOME TEXT
-                    <br/>
-                    
-                    <br/>
-                    THIS IS  SOME TEXT
-                    <br/>
-                    
-                    <br/>
-                    THIS IS  SOME TEXT
-                    <br/>
-                    
-                    <br/>
-                    THIS IS  SOME TEXT
-                    <br/>
-                    
-                    <br/>
-                    THIS IS  SOME TEXT
-                    <br/>
-                    
-                    <br/>
-                    THIS IS  SOME TEXT
-                    <br/>
-                    
-                    <br/>
-                    THIS IS  SOME TEXT
-                    <br/>
-                </panel>
+                THIS IS  SOME TEXT
+                <br/>
+                
+                <br/>
+                THIS IS  SOME TEXT
+                <br/>
+                
+                <br/>
+                THIS IS  SOME TEXT
+                <br/>
+                
+                <br/>
+                THIS IS  SOME TEXT
+                <br/>
+                
+                <br/>
+                THIS IS  SOME TEXT
+                <br/>
+                
+                <br/>
+                THIS IS  SOME TEXT
+                <br/>
+                
+                <br/>
+                THIS IS  SOME TEXT
+                <br/>
+                
+                <br/>
+                THIS IS  SOME TEXT
+                <br/>
+                
+                <br/>
+                THIS IS  SOME TEXT
+                <br/>
+                
+                <br/>
+                THIS IS  SOME TEXT
+                <br/>
+                
+                <br/>
+                THIS IS  SOME TEXT
+                <br/>
+                
+                <br/>
+                THIS IS  SOME TEXT
+                <br/>
+                
+                <br/>
+                THIS IS  SOME TEXT
+                <br/>
+            </panel>
             </tabset>
 
-                    <input id="good" type="text" value="PUT YOUR SHIT IN HERE" />
-                    <button>send</button>
-        </body>
-
-        <body id="history" template="frame">
-
+                    <input id="inputLine" type="text" value="PUT YOUR SHIT IN HERE" />
+                    <button id="sendButton">send</button>
         </body>
 </rml>
