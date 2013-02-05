@@ -508,8 +508,6 @@ datagrid datagridbody
         padding: 0px 4px 4px 4px;
 }
 
-
-
 datagridexpand
 {
         display: block;
@@ -537,8 +535,6 @@ datagridexpand.collapsed
         icon-image-t: 250px 267px;
 }
 
-
-
 scrollbarvertical
 {
         margin-top: -6px;
@@ -558,14 +554,13 @@ scrollbarvertical slidertrack
 scrollbarvertical sliderbar
 {
         margin-left: 5px;
-        width: 9px;
+        width: 11px;
         min-height: 46px;
-padding-bottom: 10px;
 
         background-decorator: tiled-vertical;
-        background-top-image: gui.tga 746px 419px 755px 451px;
-        background-center-image: gui.tga stretch 746px 451px 755px 453px;
-        background-bottom-image: gui.tga 746px 453px 755px 486px;
+        background-top-image: gui.tga 756px 421px 767px 459px;
+        background-center-image: gui.tga stretch 756px 459px 767px 461px;
+        background-bottom-image: gui.tga 756px 461px 767px 500px;
 }
 
 /*
