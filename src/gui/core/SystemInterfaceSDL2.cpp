@@ -31,6 +31,7 @@
 #include <SDL.h>
 
 #include <iostream>
+#include <assert.h>
 
 int SystemInterfaceSDL2::GetKeyModifiers()
 {
@@ -319,6 +320,7 @@ Rocket::Core::Input::KeyIdentifier SystemInterfaceSDL2::TranslateKey(SDL_Keycode
         return Rocket::Core::Input::KI_RCONTROL;
         break;
     case SDLK_RETURN:
+    case SDLK_RETURN2:
         return Rocket::Core::Input::KI_RETURN;
         break;
     case SDLK_RSHIFT:

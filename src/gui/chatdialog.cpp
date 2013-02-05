@@ -43,9 +43,14 @@ void ChatDialog::ProcessEvent(Rocket::Core::Event& event)
 {
     std::cout << "Options Processing element: " << event.GetCurrentElement()->GetId().CString() << " type: " << event.GetType().CString() << '\n';
     const Rocket::Core::String& id = event.GetCurrentElement()->GetId();
+    const Rocket::Core::String& type = event.GetType();
 
     if (id == "sendButton") {
         consumeInputLine();
+    } else if (type == "keydown") {
+        if (event.GetParameter<int>("key_identifier", Rocket::Core::Input::KI_0) == Rocket::Core::Input::KI_RETURN) {
+            consumeInputLine();
+        }
     }
 }
 
@@ -57,6 +62,7 @@ void ChatDialog::loadDocument()
     m_tabSet = dynamic_cast<Rocket::Controls::ElementTabSet*>(m_chat->GetElementById("tabset"));
 
     m_chat->GetElementById("sendButton")->AddEventListener("click", this);
+    m_chat->GetElementById("inputLine")->AddEventListener("keydown", this);
     reloadChatHistory();
 }
 
