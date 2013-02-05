@@ -107,10 +107,8 @@ void GUI::handleEvent(const SDL_Event& event)
 
     case SDL_MOUSEWHEEL: {
         const int y = event.wheel.y;
-        if (y > 0) {
-            //scroll down
-        } else if (y < 0) {
-            m_context->ProcessMouseWheel(y, m_system->GetKeyModifiers());
+        if (y != 0) {
+            m_context->ProcessMouseWheel(-y, m_system->GetKeyModifiers());
         }
         break;
     }
