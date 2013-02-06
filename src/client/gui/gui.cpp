@@ -17,9 +17,10 @@
 
 #include "gui.h"
 
-#include "../game.h"
-#include "../debug.h"
-#include "../settings/settings.h"
+#include "src/game.h"
+#include "src/debug.h"
+#include "src/settings/settings.h"
+#include "src/settings/settings.h"
 
 #include "core/SystemInterfaceSDL2.h"
 #include "core/ShellRenderInterfaceOpenGL.h"
@@ -61,7 +62,7 @@ GUI::GUI()
     m_renderer->SetViewport(1600, 900);
     Rocket::Core::SetRenderInterface(m_renderer);
 
-    m_fileInterface = new ShellFileInterface("../gui/assets");
+    m_fileInterface = new ShellFileInterface("../client/gui/assets");
     Rocket::Core::SetFileInterface(m_fileInterface);
 
     Debug::fatal(Rocket::Core::Initialise(), Debug::Area::Graphics, "rocket init failure");
@@ -71,7 +72,7 @@ GUI::GUI()
 
     Rocket::Debugger::Initialise(m_context);
 
-    bool success = Rocket::Core::FontDatabase::LoadFontFace("../gui/assets/Delicious-Roman.otf");
+    bool success = Rocket::Core::FontDatabase::LoadFontFace("../client/gui/assets/Delicious-Roman.otf");
     Debug::fatal(success, Debug::Area::Graphics, "font load failure");
 
     m_context->LoadMouseCursor("../gui/assets/cursor.rml");

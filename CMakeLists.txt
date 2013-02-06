@@ -42,6 +42,7 @@ find_package(YamlCpp REQUIRED)
 
 find_package(GLM REQUIRED)
 find_package(LibRocket REQUIRED)
+find_package(enet REQUIRED)
 
 set_package_properties(SDL2 PROPERTIES DESCRIPTION "SDL2, used for creating an open source, cross-platform OpenGL window, audio and input" URL "http://hg.libsdl.org/SDL/")
 
@@ -56,6 +57,7 @@ set_package_properties(Yaml-Cpp PROPERTIES DESCRIPTION "YAML CPP, for config fil
 
 set_package_properties(GLM PROPERTIES DESCRIPTION "OpenGL Open Source Mathematics Library (for all our math, in a GLSL-like nature)" URL "http://glm.g-truc.net/")
 set_package_properties(LibRocket PROPERTIES DESCRIPTION "LibRocket GUI library" URL "")
+set_package_properties(enet PROPERTIES DESCRIPTION "enet UDP networking library" URL "http://enet.bespin.org/index.html")
 
 message("\n----------------------------------------------------------------------------------------------")
 feature_summary(WHAT REQUIRED_PACKAGES_FOUND DESCRIPTION "Successfully Enabled REQUIRED Features:\n")

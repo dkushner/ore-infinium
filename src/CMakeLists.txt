@@ -17,15 +17,20 @@ player.cpp
 entity.cpp
 tilerenderer.cpp
 image.cpp
-gui/gui.cpp
-gui/mainmenu.cpp
-gui/optionsdialog.cpp
-gui/chatdialog.cpp
 
-gui/core/Shell.cpp
-gui/core/ShellFileInterface.cpp
-gui/core/ShellRenderInterfaceOpenGL.cpp
-gui/core/SystemInterfaceSDL2.cpp
+client/client.cpp
+client/gui/gui.cpp
+client/gui/mainmenu.cpp
+client/gui/optionsdialog.cpp
+client/gui/chatdialog.cpp
+
+client/gui/core/Shell.cpp
+client/gui/core/ShellFileInterface.cpp
+client/gui/core/ShellRenderInterfaceOpenGL.cpp
+client/gui/core/SystemInterfaceSDL2.cpp
+
+server/server.cpp
+
 settings/settings.cpp
 #cloudsystem.cpp
 #sky.cpp
@@ -46,6 +51,7 @@ ${EIGEN3_INCLUDE_DIR}
 ${YAMLCPP_INCLUDE_DIR}
 ${GLEW_INCLUDE_DIRS}
 ${LIBROCKET_INCLUDE_DIRS}
+${ENET_INCLUDE_DIRS}
 )
 
 target_link_libraries(
@@ -61,6 +67,7 @@ ${GLEW_LIBRARIES}
 ${LIBROCKET_LIBRARIES}
 ${LIBROCKET_DEBUGGER_LIBRARY}
 ${LIBROCKET_CONTROLS_LIBRARY}
+${ENET_LIBRARIES}
 )
 
 # CPack packaging
@@ -76,7 +83,7 @@ include(CPack)
 # Install target
 install(DIRECTORY ../textures/ DESTINATION "textures") #FILES_MATCHING PATTERN "*")
 install(DIRECTORY ../font/ DESTINATION "font") #FILES_MATCHING PATTERN "*")
-install(DIRECTORY ./gui/ DESTINATION "gui") #FILES_MATCHING PATTERN "*")
+install(DIRECTORY ./client/ DESTINATION "client") #FILES_MATCHING PATTERN "*")
 
 install(DIRECTORY ./ DESTINATION bin FILES_MATCHING PATTERN "*.frag" )
 install(DIRECTORY ./ DESTINATION bin FILES_MATCHING PATTERN "*.vert" )

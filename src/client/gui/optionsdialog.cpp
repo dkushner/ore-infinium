@@ -19,7 +19,7 @@
 #include "mainmenu.h"
 #include "gui.h"
 
-#include "../game.h"
+#include "src/game.h"
 
 #include <Rocket/Core.h>
 #include <Rocket/Controls.h>

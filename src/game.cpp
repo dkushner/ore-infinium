@@ -22,9 +22,9 @@
 #include "fontmanager.h"
 #include "sprite.h"
 
-#include "src/gui/gui.h"
-#include "src/gui/mainmenu.h"
-#include "src/gui/chatdialog.h"
+#include "src/client/gui/gui.h"
+#include "src/client/gui/mainmenu.h"
+#include "src/client/gui/chatdialog.h"
 
 #include "settings/settings.h"
 
