@@ -132,6 +132,8 @@ private:
     TileRenderer* m_tileRenderer = nullptr;
     Player* m_player = nullptr;
 
+    //HACK: remove when we get beyond just testing stupid shit
+    Entity* m_uselessEntity = nullptr;
 //    Sky *m_sky = nullptr;
 
     bool m_mouseLeftHeld = false;

@@ -61,6 +61,10 @@ World::World()
     m_player = new Player("someframe");
     m_entities.insert(m_entities.end(), m_player);
 
+    m_uselessEntity = new Entity("test", SpriteSheetManager::SpriteSheetType::Character);
+    m_uselessEntity->setPosition(2200, 2490);
+    m_entities.insert(m_entities.end(), m_uselessEntity);
+
     loadMap();
 
     //FIXME: saveMap();
@@ -146,6 +150,17 @@ void World::update(double elapsedTime)
     for (Entity * currentEntity : m_entities) {
         currentEntity->update(elapsedTime);
     }
+
+    float x = m_uselessEntity->position().x;
+    float y = m_uselessEntity->position().y;
+
+    if (x > 3200) {
+        x = 2200;
+    } else {
+        x += 1.0f;
+    }
+
+    m_uselessEntity->setPosition(x, y);
 
     //FIXME: MAKE IT CENTER ON THE CENTER OF THE PLAYER SPRITE
     m_camera->centerOn(m_player->position());
@@ -411,7 +426,7 @@ void World::loadMap()
     std::cout << "SIZEOF m_blocks: " << sizeof(m_blocks) / 1e6 << " MiB" << std::endl;
     generateMap();
 
-     m_player->setPosition(2800, 2450);
+    m_player->setPosition(2800, 2450);
     //FIXME:
 //    m_player->setPosition(100, 200);
 }
