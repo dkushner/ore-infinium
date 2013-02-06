@@ -223,6 +223,9 @@ LogStream::~LogStream()
         case Debug::Area::General:
             areaString.append("[General]");
             break;
+        case Debug::Area::Network:
+            areaString.append("[Network]");
+            break;
         case Debug::Area::Graphics:
             areaString.append("[Graphics]");
             break;

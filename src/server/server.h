@@ -18,12 +18,20 @@
 #ifndef SERVER_H
 #define SERVER_H
 
+#include <enet/enet.h>
+
 class Server
 {
 public:
-    Server();
+    /// we use port 44543 for our server by default..
+    Server(const char* address, unsigned int port);
     ~Server();
 
+    static constexpr int MAXPLAYERS = 8;
+
+private:
+    ENetHost* m_server = nullptr;
+    ENetAddress* m_address = nullptr;
 };
 
 #endif

@@ -18,11 +18,16 @@
 #ifndef CLIENT_H
 #define CLIENT_H
 
+#include <enet/enet.h>
+
 class Client
 {
 public:
     Client();
     ~Client();
+
+private:
+    ENetHost* m_client = nullptr;
 };
 
 #endif

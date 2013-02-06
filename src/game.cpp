@@ -28,6 +28,8 @@
 
 #include "settings/settings.h"
 
+#include <enet/enet.h>
+
 #include <iostream>
 #include <sstream>
 #include <stdio.h>
@@ -48,6 +50,7 @@ Game::Game()
 Game::~Game()
 {
 //    delete m_world;
+    enet_deinitialize();
 }
 
 void Game::abort_game(const char* message)
@@ -144,6 +147,8 @@ void Game::init()
     glEnable(GL_DEBUG_OUTPUT);
     glDebugMessageCallback(&Debug::glDebugCallback, 0);
     glDebugMessageControl(GL_DONT_CARE,GL_DONT_CARE,GL_DONT_CARE,0,0,GL_TRUE);
+
+    Debug::fatal(enet_initialize != 0, Debug::Area::Network, "An error occurred during ENet init (network init failure");
 
     m_font = FontManager::instance()->loadFont("../font/Ubuntu-L.ttf");
 

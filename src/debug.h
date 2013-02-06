@@ -39,6 +39,7 @@ public:
     {
         General,
         Graphics,
+        Network,
         System,
         Physics,
         Sound

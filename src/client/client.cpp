@@ -17,12 +17,20 @@
 
 #include "client.h"
 
+#include "src/debug.h"
+
 Client::Client()
 {
+    m_client = enet_host_create (nullptr /* create a client host */,
+                               1 /* only allow 1 outgoing connection */,
+                               2 /* allow up 2 channels to be used, 0 and 1 */,
+                               57600 / 8 /* 56K modem with 56 Kbps downstream bandwidth */,
+                               14400 / 8 /* 56K modem with 14 Kbps upstream bandwidth */);
 
+    Debug::assertf(m_client, "failed to create ENet client host");
 }
 
 Client::~Client()
 {
-
+    enet_host_destroy(m_client);
 }
