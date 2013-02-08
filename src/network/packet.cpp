@@ -15,26 +15,14 @@
  *   along with this program.  If not, see <http://www.gnu.org/licenses/>.    *
  *****************************************************************************/
 
-#ifndef SERVER_H
-#define SERVER_H
+#include "packet.h"
 
-#include <enet/enet.h>
-
-class Server
+Packet::Packet()
 {
-public:
-    /// we use port 44543 for our server by default..
-    Server(unsigned int port = 44543);
-    ~Server();
 
-    void poll();
-    void processMessage(ENetEvent& event);
+}
 
-    static constexpr int MAXPLAYERS = 8;
+Packet::~Packet()
+{
 
-private:
-    ENetHost* m_server = nullptr;
-    ENetAddress m_address;
-};
-
-#endif
+}

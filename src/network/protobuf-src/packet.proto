@@ -1,0 +1,5 @@
+package PacketBuf;
+
+message ChatMessage {
+  optional string message = 3;
+}

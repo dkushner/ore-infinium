@@ -38,6 +38,8 @@
 
 #include <string>
 
+class Server;
+class Client;
 class GUI;
 class MainMenu;
 class ChatDialog;
@@ -64,6 +66,9 @@ public:
     const float FPS = 60.0;
 
 private:
+    Client* m_client = nullptr;
+    Server* m_server = nullptr;
+
     FTGLPixmapFont *m_font = nullptr;
 
 

@@ -29,6 +29,8 @@ set(CMAKE_MODULE_PATH "${CMAKE_SOURCE_DIR}/cmake_modules" ${CMAKE_MODULE_PATH})
 set(ore_infinium_VERSION_MAJOR 0)
 set(ore_infinium_VERSION_MINOR 1)
 
+include(FindProtobuf)
+
 find_package(SDL2 REQUIRED)
 
 find_package(OpenGL REQUIRED)
@@ -43,6 +45,7 @@ find_package(YamlCpp REQUIRED)
 find_package(GLM REQUIRED)
 find_package(LibRocket REQUIRED)
 find_package(enet REQUIRED)
+find_package(Protobuf REQUIRED)
 
 set_package_properties(SDL2 PROPERTIES DESCRIPTION "SDL2, used for creating an open source, cross-platform OpenGL window, audio and input" URL "http://hg.libsdl.org/SDL/")
 

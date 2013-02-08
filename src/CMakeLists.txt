@@ -32,6 +32,9 @@ client/gui/core/SystemInterfaceSDL2.cpp
 server/server.cpp
 
 settings/settings.cpp
+
+network/packet.cpp
+network/protobuf-compiled/packet.pb.cc
 #cloudsystem.cpp
 #sky.cpp
 )
@@ -52,6 +55,7 @@ ${YAMLCPP_INCLUDE_DIR}
 ${GLEW_INCLUDE_DIRS}
 ${LIBROCKET_INCLUDE_DIRS}
 ${ENET_INCLUDE_DIRS}
+${PROTOBUF_INCLUDE_DIR}
 )
 
 target_link_libraries(
@@ -68,6 +72,7 @@ ${LIBROCKET_LIBRARIES}
 ${LIBROCKET_DEBUGGER_LIBRARY}
 ${LIBROCKET_CONTROLS_LIBRARY}
 ${ENET_LIBRARIES}
+${PROTOBUF_LIBRARY}
 )
 
 # CPack packaging

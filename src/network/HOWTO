@@ -1,0 +1,2 @@
+protoc -I=protobuf-src --cpp_out=protobuf-compiled protobuf-src/test.proto
+

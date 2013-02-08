@@ -1,0 +1,5 @@
+package OC;
+
+message ChatMessagePacket {
+  optional string message = 3;
+}

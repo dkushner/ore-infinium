@@ -23,11 +23,15 @@
 class Client
 {
 public:
-    Client();
+    Client(const char* address = "127.0.0.1", unsigned int port = 44543);
     ~Client();
+
+    void poll();
 
 private:
     ENetHost* m_client = nullptr;
+    ENetAddress m_address;
+    ENetPeer* peer = nullptr;
 };
 
 #endif

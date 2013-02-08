@@ -15,26 +15,36 @@
  *   along with this program.  If not, see <http://www.gnu.org/licenses/>.    *
  *****************************************************************************/
 
-#ifndef SERVER_H
-#define SERVER_H
+#ifndef PACKET_H
+#define PACKET_H
 
-#include <enet/enet.h>
-
-class Server
+class Packet
 {
-public:
-    /// we use port 44543 for our server by default..
-    Server(unsigned int port = 44543);
-    ~Server();
+    Packet();
+    ~Packet();
 
-    void poll();
-    void processMessage(ENetEvent& event);
+    /**
+     * Packet command/contents sent *from* client to a server
+     */
+    enum FromClientPacketContents {
+       InvalidFromClientPacket = 0,
+       /// to send stuff like the name of the player, version of game client, etc.
+      ClientInitialConnectionDataFromClientPacket,
+      ChatMessageFromClientPacket,
+      PlayerInitialDataFromClientPacket,
+      PlayerStateFromClientPacket,
+    };
 
-    static constexpr int MAXPLAYERS = 8;
+    /**
+     * Packet command/contents sent *from server* to (a) client(s).
+     */
+    enum FromServerPacketContents {
+        InvalidFromServerPacket = 0,
+        ChatMessageFromServerPacket
+    };
 
-private:
-    ENetHost* m_server = nullptr;
-    ENetAddress m_address;
+    unsigned short packetContents = 0;
+    void* data;
 };
 
 #endif

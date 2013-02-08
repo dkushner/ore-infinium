@@ -22,9 +22,14 @@
 #include "fontmanager.h"
 #include "sprite.h"
 
+#include "client/client.h"
+#include "server/server.h"
+
 #include "src/client/gui/gui.h"
 #include "src/client/gui/mainmenu.h"
 #include "src/client/gui/chatdialog.h"
+
+#include "src/network/protobuf-compiled/packet.pb.h"
 
 #include "settings/settings.h"
 
@@ -51,6 +56,8 @@ Game::~Game()
 {
 //    delete m_world;
     enet_deinitialize();
+    // Optional:  Delete all global objects allocated by libprotobuf.
+    google::protobuf::ShutdownProtobufLibrary();
 }
 
 void Game::abort_game(const char* message)
@@ -80,6 +87,10 @@ void Game::checkGLError()
 
 void Game::init()
 {
+    // Verify that the version of the library that we linked against is
+    // compatible with the version of the headers we compiled against.
+    GOOGLE_PROTOBUF_VERIFY_VERSION;
+
     Debug::log(Debug::Area::System) << "SDL on platform: " << SDL_GetPlatform();
 
     SDL_version compiled;
@@ -170,6 +181,10 @@ void Game::init()
 
     m_font->FaceSize(12);
 
+    m_server = new Server();
+    m_client = new Client();
+
+
     tick();
     shutdown();
 }
@@ -196,6 +211,9 @@ void Game::tick()
         m_world->render();
 
         m_gui->render();
+
+        m_server->poll();
+        m_client->poll();
 
         drawDebugText(delta);
 
