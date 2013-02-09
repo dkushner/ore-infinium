@@ -91,7 +91,12 @@ void Client::poll()
 
     PacketBuf::ChatMessage message;
     message.set_message("THIS IS A TEST PROTOBUF MESSAGE FROM CLIENT");
+
+    PacketBuf::Packet packetmsg;
+    packetmsg.set_type(666);
+
     std::stringstream ss(std::stringstream::out | std::stringstream::binary);
+    packetmsg.SerializeToOstream(&ss);
     message.SerializeToOstream(&ss);
     ss.str();
     ss.str().size();

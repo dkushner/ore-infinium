@@ -89,14 +89,22 @@ void Server::poll()
 
 void Server::processMessage(ENetEvent& event)
 {
-    std::cout << "(Server) Message from client : " << event.packet->data << "\n";
+//    std::cout << "(Server) Message from client : " << event.packet->data << "\n";
     std::cout << "(Server) Message from client, our client->server round trip latency is: " << event.peer->roundTripTime  << "\n";
 
     std::cout << "(Server) ping interval is: " << event.peer->pingInterval  << "\n";
     std::cout << "(Server) latency is: " << event.peer->lowestRoundTripTime  << "\n";
 
+
+
     std::stringstream ss;
+
     ss << event.packet->data;
+
+
+    char c;
+    ss.readsome(&c, sizeof(PacketBuf::Packet));
+    std::cout << " INT VAL: " << c << '\n';
 
     PacketBuf::ChatMessage message;
     message.ParseFromIstream(&ss);

@@ -32,9 +32,112 @@ void  protobuf_AddDesc_packet_2eproto();
 void protobuf_AssignDesc_packet_2eproto();
 void protobuf_ShutdownFile_packet_2eproto();
 
+class Packet;
 class ChatMessage;
 
+enum PhoneType {
+  MOBILE = 0,
+  HOME = 1,
+  WORK = 2
+};
+bool PhoneType_IsValid(int value);
+const PhoneType PhoneType_MIN = MOBILE;
+const PhoneType PhoneType_MAX = WORK;
+const int PhoneType_ARRAYSIZE = PhoneType_MAX + 1;
+
+const ::google::protobuf::EnumDescriptor* PhoneType_descriptor();
+inline const ::std::string& PhoneType_Name(PhoneType value) {
+  return ::google::protobuf::internal::NameOfEnum(
+    PhoneType_descriptor(), value);
+}
+inline bool PhoneType_Parse(
+    const ::std::string& name, PhoneType* value) {
+  return ::google::protobuf::internal::ParseNamedEnum<PhoneType>(
+    PhoneType_descriptor(), name, value);
+}
 // ===================================================================
+
+class Packet : public ::google::protobuf::Message {
+ public:
+  Packet();
+  virtual ~Packet();
+  
+  Packet(const Packet& from);
+  
+  inline Packet& operator=(const Packet& from) {
+    CopyFrom(from);
+    return *this;
+  }
+  
+  inline const ::google::protobuf::UnknownFieldSet& unknown_fields() const {
+    return _unknown_fields_;
+  }
+  
+  inline ::google::protobuf::UnknownFieldSet* mutable_unknown_fields() {
+    return &_unknown_fields_;
+  }
+  
+  static const ::google::protobuf::Descriptor* descriptor();
+  static const Packet& default_instance();
+  
+  void Swap(Packet* other);
+  
+  // implements Message ----------------------------------------------
+  
+  Packet* New() const;
+  void CopyFrom(const ::google::protobuf::Message& from);
+  void MergeFrom(const ::google::protobuf::Message& from);
+  void CopyFrom(const Packet& from);
+  void MergeFrom(const Packet& from);
+  void Clear();
+  bool IsInitialized() const;
+  
+  int ByteSize() const;
+  bool MergePartialFromCodedStream(
+      ::google::protobuf::io::CodedInputStream* input);
+  void SerializeWithCachedSizes(
+      ::google::protobuf::io::CodedOutputStream* output) const;
+  ::google::protobuf::uint8* SerializeWithCachedSizesToArray(::google::protobuf::uint8* output) const;
+  int GetCachedSize() const { return _cached_size_; }
+  private:
+  void SharedCtor();
+  void SharedDtor();
+  void SetCachedSize(int size) const;
+  public:
+  
+  ::google::protobuf::Metadata GetMetadata() const;
+  
+  // nested types ----------------------------------------------------
+  
+  // accessors -------------------------------------------------------
+  
+  // optional int32 type = 1;
+  inline bool has_type() const;
+  inline void clear_type();
+  static const int kTypeFieldNumber = 1;
+  inline ::google::protobuf::int32 type() const;
+  inline void set_type(::google::protobuf::int32 value);
+  
+  // @@protoc_insertion_point(class_scope:PacketBuf.Packet)
+ private:
+  inline void set_has_type();
+  inline void clear_has_type();
+  
+  ::google::protobuf::UnknownFieldSet _unknown_fields_;
+  
+  ::google::protobuf::int32 type_;
+  
+  mutable int _cached_size_;
+  ::google::protobuf::uint32 _has_bits_[(1 + 31) / 32];
+  
+  friend void  protobuf_AddDesc_packet_2eproto();
+  friend void protobuf_AssignDesc_packet_2eproto();
+  friend void protobuf_ShutdownFile_packet_2eproto();
+  
+  void InitAsDefaultInstance();
+  static Packet* default_instance_;
+};
+// -------------------------------------------------------------------
 
 class ChatMessage : public ::google::protobuf::Message {
  public:
@@ -125,6 +228,32 @@ class ChatMessage : public ::google::protobuf::Message {
 
 // ===================================================================
 
+// Packet
+
+// optional int32 type = 1;
+inline bool Packet::has_type() const {
+  return (_has_bits_[0] & 0x00000001u) != 0;
+}
+inline void Packet::set_has_type() {
+  _has_bits_[0] |= 0x00000001u;
+}
+inline void Packet::clear_has_type() {
+  _has_bits_[0] &= ~0x00000001u;
+}
+inline void Packet::clear_type() {
+  type_ = 0;
+  clear_has_type();
+}
+inline ::google::protobuf::int32 Packet::type() const {
+  return type_;
+}
+inline void Packet::set_type(::google::protobuf::int32 value) {
+  set_has_type();
+  type_ = value;
+}
+
+// -------------------------------------------------------------------
+
 // ChatMessage
 
 // optional string message = 3;
@@ -194,6 +323,10 @@ inline ::std::string* ChatMessage::release_message() {
 namespace google {
 namespace protobuf {
 
+template <>
+inline const EnumDescriptor* GetEnumDescriptor< PacketBuf::PhoneType>() {
+  return PacketBuf::PhoneType_descriptor();
+}
 
 }  // namespace google
 }  // namespace protobuf
