@@ -17,6 +17,18 @@
 
 #include "packet.h"
 
+#include "src/network/protobuf-compiled/packet.pb.h"
+
+#include <google/protobuf/stubs/common.h>
+#include <google/protobuf/io/zero_copy_stream.h>
+#include <google/protobuf/io/zero_copy_stream_impl.h>
+#include <google/protobuf/io/coded_stream.h>
+
+#include "src/debug.h"
+
+#include <iostream>
+#include <fstream>
+
 Packet::Packet()
 {
 
@@ -25,4 +37,65 @@ Packet::Packet()
 Packet::~Packet()
 {
 
+}
+
+void Packet::serialize(std::stringstream& out)
+{
+    google::protobuf::io::ZeroCopyOutputStream *raw_out = new ::google::protobuf::io::OstreamOutputStream(&out);
+    google::protobuf::io::CodedOutputStream *coded_out = new ::google::protobuf::io::CodedOutputStream(raw_out);
+
+    std::string s;
+
+    // write packet header, containing type of message we're sending
+    PacketBuf::Packet p;
+    p.set_type(7);
+    p.SerializeToString(&s);
+
+    coded_out->WriteVarint32(s.size());
+    coded_out->WriteRaw(s.data(), s.size()); // ->WriteString(s)
+
+    // write actual contents
+    PacketBuf::ChatMessage msg;
+    msg.set_message("THIS IS A CHAT MSG");
+    msg .SerializeToString(&s);
+
+    coded_out->WriteVarint32(s.size());
+    coded_out->WriteString(s);
+
+    delete coded_out;
+    delete raw_out;
+}
+
+void Packet::deserialize(std::stringstream& in)
+{
+    google::protobuf::io::ZeroCopyInputStream *raw_in = new ::google::protobuf::io::IstreamInputStream(&in);
+    google::protobuf::io::CodedInputStream *coded_in = new ::google::protobuf::io::CodedInputStream(raw_in);
+
+    std::string s;
+
+    //packet header
+    uint32_t msgSize;
+    coded_in->ReadVarint32(&msgSize);
+    assert(msgSize > 0);
+
+    if (coded_in->ReadString(&s, msgSize)) {
+        PacketBuf::Packet p;
+        p.ParseFromString(s);
+    } else {
+        assert(0);
+    }
+
+    //packet contents
+    coded_in->ReadVarint32(&msgSize);
+    if (coded_in->ReadString(&s, msgSize)) {
+        PacketBuf::ChatMessage msg;
+        msg.ParseFromString(s);
+        std::cout << "PACKET CONTENTS CHATMSG: " << msg.message() << "\n";
+    } else {
+        assert(0);
+    }
+
+
+    delete coded_in;
+    delete raw_in;
 }

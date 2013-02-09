@@ -18,8 +18,11 @@
 #ifndef PACKET_H
 #define PACKET_H
 
+#include <iostream>
+
 class Packet
 {
+public:
     Packet();
     ~Packet();
 
@@ -45,6 +48,9 @@ class Packet
 
     unsigned short packetContents = 0;
     void* data;
+
+    static void serialize(std::stringstream& out);
+    static void deserialize(std::stringstream& in);
 };
 
 #endif

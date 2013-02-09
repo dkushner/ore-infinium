@@ -21,6 +21,11 @@
 
 #include "src/network/protobuf-compiled/packet.pb.h"
 
+#include <google/protobuf/stubs/common.h>
+#include <google/protobuf/io/zero_copy_stream.h>
+#include <google/protobuf/io/zero_copy_stream_impl.h>
+#include <google/protobuf/io/coded_stream.h>
+
 #include "src/debug.h"
 
 #include <iostream>
@@ -101,13 +106,12 @@ void Server::processMessage(ENetEvent& event)
 
     ss << event.packet->data;
 
-
-    char c;
-    ss.readsome(&c, sizeof(PacketBuf::Packet));
-    std::cout << " INT VAL: " << c << '\n';
+//    char c;
+ //   ss.readsome(&c, sizeof(PacketBuf::Packet));
+  //  std::cout << " INT VAL: " << c << '\n';
 
     PacketBuf::ChatMessage message;
-    message.ParseFromIstream(&ss);
+    message.ParseFromString(ss.str());
 
     std::cout << "(Server) chat message processed, serial contents: " << message.message() << "\n";
 
