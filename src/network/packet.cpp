@@ -56,7 +56,6 @@ void Packet::serialize(std::stringstream* out, const google::protobuf::Message* 
 
 int Packet::deserializePacketType(std::stringstream& in)
 {
-    /*
     google::protobuf::io::IstreamInputStream raw_in(&in);
     google::protobuf::io::CodedInputStream coded_in(&raw_in);
 
@@ -71,11 +70,14 @@ int Packet::deserializePacketType(std::stringstream& in)
     if (coded_in.ReadString(&s, msgSize)) {
         PacketBuf::Packet p;
         p.ParseFromString(s);
+
+        in.clear();
+        in.seekg(0, std::ios::beg);
+
         return p.type();
     } else {
         assert(0);
     }
-    */
 }
 
 void Packet::deserialize(std::stringstream& in, google::protobuf::Message* message)
@@ -107,4 +109,7 @@ void Packet::deserialize(std::stringstream& in, google::protobuf::Message* messa
     } else {
         assert(0);
     }
+
+    in.clear();
+    in.seekg(0, std::ios::beg);
 }
