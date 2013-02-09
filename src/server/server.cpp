@@ -105,15 +105,16 @@ void Server::processMessage(ENetEvent& event)
     std::stringstream ss;
 
     ss << event.packet->data;
-
+//    std::stringstream ss(std::stringstream::out | std::stringstream::binary);
+    Packet::deserialize(ss);
 //    char c;
  //   ss.readsome(&c, sizeof(PacketBuf::Packet));
   //  std::cout << " INT VAL: " << c << '\n';
 
-    PacketBuf::ChatMessage message;
-    message.ParseFromString(ss.str());
+//    PacketBuf::ChatMessage message;
+ //   message.ParseFromString(ss.str());
 
-    std::cout << "(Server) chat message processed, serial contents: " << message.message() << "\n";
+  //  std::cout << "(Server) chat message processed, serial contents: " << message.message() << "\n";
 
     enet_packet_destroy(event.packet);
 

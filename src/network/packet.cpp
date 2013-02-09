@@ -81,6 +81,7 @@ void Packet::deserialize(std::stringstream& in)
     if (coded_in->ReadString(&s, msgSize)) {
         PacketBuf::Packet p;
         p.ParseFromString(s);
+        std::cout << "PACKET CONTENTS, PACKET TYPE:: " << p.type() << "\n";
     } else {
         assert(0);
     }
