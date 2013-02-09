@@ -29,29 +29,26 @@
 #include <iostream>
 #include <fstream>
 
-void Packet::serialize(std::stringstream* out, const google::protobuf::Message* message)
+void Packet::serialize(std::stringstream* out, const google::protobuf::Message* message, uint32_t packetType)
 {
-    google::protobuf::io::ZeroCopyOutputStream *raw_out = new ::google::protobuf::io::OstreamOutputStream(out);
-    google::protobuf::io::CodedOutputStream *coded_out = new ::google::protobuf::io::CodedOutputStream(raw_out);
+    google::protobuf::io::OstreamOutputStream raw_out(out);
+    google::protobuf::io::CodedOutputStream coded_out(&raw_out);
 
     std::string s;
 
     // write packet header, containing type of message we're sending
     PacketBuf::Packet p;
-    p.set_type(7);
+    p.set_type(packetType);
     p.SerializeToString(&s);
 
-    coded_out->WriteVarint32(s.size());
-    coded_out->WriteRaw(s.data(), s.size()); // ->WriteString(s)
+    coded_out.WriteVarint32(s.size());
+    coded_out.WriteRaw(s.data(), s.size());
 
     // write actual contents
     message->SerializeToString(&s);
 
-    coded_out->WriteVarint32(s.size());
-    coded_out->WriteString(s);
-
-    delete coded_out;
-    delete raw_out;
+    coded_out.WriteVarint32(s.size());
+    coded_out.WriteString(s);
 }
 
 int Packet::deserializePacketType(std::stringstream& in)
@@ -80,9 +77,9 @@ int Packet::deserializePacketType(std::stringstream& in)
     }
 }
 
-void Packet::deserialize(std::stringstream& in, google::protobuf::Message* message)
+void Packet::deserialize(std::stringstream* in, google::protobuf::Message* message)
 {
-    google::protobuf::io::IstreamInputStream raw_in(&in);
+    google::protobuf::io::IstreamInputStream raw_in(in);
     google::protobuf::io::CodedInputStream coded_in(&raw_in);
 
     std::string s;
@@ -110,6 +107,6 @@ void Packet::deserialize(std::stringstream& in, google::protobuf::Message* messa
         assert(0);
     }
 
-    in.clear();
-    in.seekg(0, std::ios::beg);
+    in->clear();
+    in->seekg(0, std::ios::beg);
 }

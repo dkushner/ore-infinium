@@ -94,7 +94,7 @@ void Client::poll()
     PacketBuf::ChatMessage message;
     message.set_message("THIS IS A TEST PROTOBUF (FUCK YEAH) MESSAGE FROM CLIENT");
 
-    Packet::serialize(&ss, &message);
+    Packet::serialize(&ss, &message, Packet::FromClientPacketContents::ChatMessageFromClientPacket);
 
     ENetPacket *packet = enet_packet_create(ss.str().c_str(), ss.str().size(), ENET_PACKET_FLAG_RELIABLE);
     enet_peer_send(peer, 0, packet);

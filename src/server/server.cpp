@@ -96,27 +96,19 @@ void Server::processMessage(ENetEvent& event)
 {
 //    std::cout << "(Server) Message from client : " << event.packet->data << "\n";
     std::cout << "(Server) Message from client, our client->server round trip latency is: " << event.peer->roundTripTime  << "\n";
-
-    std::cout << "(Server) latency is: " << event.peer->lowestRoundTripTime  << "\n";
+//    std::cout << "(Server) latency is: " << event.peer->lowestRoundTripTime  << "\n";
 
     std::stringstream ss;
     ss << event.packet->data;
 
     int packetType = Packet::deserializePacketType(ss);
 
- //   ss << event.packet->data;
     switch (packetType) {
-        case 7:
+        case Packet::FromClientPacketContents::ChatMessageFromClientPacket:
             PacketBuf::ChatMessage chatMessage;
-            Packet::deserialize(ss, &chatMessage);
-            std::cout << "SERVER PROCESS, chat msg: " << chatMessage.message() << "\n";
+            Packet::deserialize(&ss, &chatMessage);
             break;
     }
-
-//    PacketBuf::ChatMessage message;
- //   message.ParseFromString(ss.str());
-
-  //  std::cout << "(Server) chat message processed, serial contents: " << message.message() << "\n";
 
     enet_packet_destroy(event.packet);
 

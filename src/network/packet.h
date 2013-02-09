@@ -46,9 +46,26 @@ public:
         ChatMessageFromServerPacket
     };
 
-    static void serialize(std::stringstream* out, const google::protobuf::Message* message);
-    static void deserialize(std::stringstream& in, google::protobuf::Message* message);
+    /**
+     * Serializes the @p message into a stringstream, along with the packet header and @p packetType which specifies
+     * what kind of data is inside it.
+     *
+     * @p out, the parameter-specified stringstream, now filled with the message data and a packet header
+     * Seeks the stream pointer back to zero when done.
+     */
+    static void serialize(std::stringstream* out, const google::protobuf::Message* message, uint32_t packetType);
 
+    /**
+     * Deserializes the provided stringstream, @p in and puts the data into @p message
+     * Seeks the stream pointer back to zero when done.
+     */
+    static void deserialize(std::stringstream* in, google::protobuf::Message* message);
+
+    /**
+     * Returns the packettype, representing an enum of either @sa FromClientPacketContents
+     * or @sa FromServerPacketContents
+     * Seeks the stream pointer back to zero when done.
+     */
     static int deserializePacketType(std::stringstream& in);
 
 private:
