@@ -89,14 +89,12 @@ void Client::poll()
         }
     }
 
-    PacketBuf::ChatMessage message;
-    message.set_message("THIS IS A TEST PROTOBUF MESSAGE FROM CLIENT");
-
-    PacketBuf::Packet packetmsg;
-    packetmsg.set_type(666);
-
     std::stringstream ss(std::stringstream::out | std::stringstream::binary);
-    Packet::serialize(ss);
+
+    PacketBuf::ChatMessage message;
+    message.set_message("THIS IS A TEST PROTOBUF (FUCK YEAH) MESSAGE FROM CLIENT");
+
+    Packet::serialize(&ss, &message);
 
     ENetPacket *packet = enet_packet_create(ss.str().c_str(), ss.str().size(), ENET_PACKET_FLAG_RELIABLE);
     enet_peer_send(peer, 0, packet);

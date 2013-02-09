@@ -29,19 +29,9 @@
 #include <iostream>
 #include <fstream>
 
-Packet::Packet()
+void Packet::serialize(std::stringstream* out, const google::protobuf::Message* message)
 {
-
-}
-
-Packet::~Packet()
-{
-
-}
-
-void Packet::serialize(std::stringstream& out)
-{
-    google::protobuf::io::ZeroCopyOutputStream *raw_out = new ::google::protobuf::io::OstreamOutputStream(&out);
+    google::protobuf::io::ZeroCopyOutputStream *raw_out = new ::google::protobuf::io::OstreamOutputStream(out);
     google::protobuf::io::CodedOutputStream *coded_out = new ::google::protobuf::io::CodedOutputStream(raw_out);
 
     std::string s;
@@ -55,9 +45,7 @@ void Packet::serialize(std::stringstream& out)
     coded_out->WriteRaw(s.data(), s.size()); // ->WriteString(s)
 
     // write actual contents
-    PacketBuf::ChatMessage msg;
-    msg.set_message("THIS IS A CHAT MSG");
-    msg .SerializeToString(&s);
+    message->SerializeToString(&s);
 
     coded_out->WriteVarint32(s.size());
     coded_out->WriteString(s);
@@ -66,37 +54,57 @@ void Packet::serialize(std::stringstream& out)
     delete raw_out;
 }
 
-void Packet::deserialize(std::stringstream& in)
+int Packet::deserializePacketType(std::stringstream& in)
 {
-    google::protobuf::io::ZeroCopyInputStream *raw_in = new ::google::protobuf::io::IstreamInputStream(&in);
-    google::protobuf::io::CodedInputStream *coded_in = new ::google::protobuf::io::CodedInputStream(raw_in);
+    /*
+    google::protobuf::io::IstreamInputStream raw_in(&in);
+    google::protobuf::io::CodedInputStream coded_in(&raw_in);
 
     std::string s;
 
     //packet header
     uint32_t msgSize;
-    coded_in->ReadVarint32(&msgSize);
+    coded_in.ReadVarint32(&msgSize);
+
     assert(msgSize > 0);
 
-    if (coded_in->ReadString(&s, msgSize)) {
+    if (coded_in.ReadString(&s, msgSize)) {
         PacketBuf::Packet p;
         p.ParseFromString(s);
-        std::cout << "PACKET CONTENTS, PACKET TYPE:: " << p.type() << "\n";
+        return p.type();
+    } else {
+        assert(0);
+    }
+    */
+}
+
+void Packet::deserialize(std::stringstream& in, google::protobuf::Message* message)
+{
+    google::protobuf::io::IstreamInputStream raw_in(&in);
+    google::protobuf::io::CodedInputStream coded_in(&raw_in);
+
+    std::string s;
+
+    //packet header
+    uint32_t msgSize;
+    coded_in.ReadVarint32(&msgSize);
+    assert(msgSize > 0);
+
+    if (coded_in.ReadString(&s, msgSize)) {
+        //unused, since deserializePacketType exists
+        //PacketBuf::Packet p;
+        //p.ParseFromString(s);
+        //std::cout << "PACKET CONTENTS, PACKET TYPE:: " << p.type() << "\n";
     } else {
         assert(0);
     }
 
     //packet contents
-    coded_in->ReadVarint32(&msgSize);
-    if (coded_in->ReadString(&s, msgSize)) {
-        PacketBuf::ChatMessage msg;
-        msg.ParseFromString(s);
-        std::cout << "PACKET CONTENTS CHATMSG: " << msg.message() << "\n";
+    coded_in.ReadVarint32(&msgSize);
+
+    if (coded_in.ReadString(&s, msgSize)) {
+        message->ParseFromString(s);
     } else {
         assert(0);
     }
-
-
-    delete coded_in;
-    delete raw_in;
 }

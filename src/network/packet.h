@@ -18,13 +18,13 @@
 #ifndef PACKET_H
 #define PACKET_H
 
+#include "src/network/protobuf-compiled/packet.pb.h"
+
 #include <iostream>
 
 class Packet
 {
 public:
-    Packet();
-    ~Packet();
 
     /**
      * Packet command/contents sent *from* client to a server
@@ -46,11 +46,14 @@ public:
         ChatMessageFromServerPacket
     };
 
-    unsigned short packetContents = 0;
-    void* data;
+    static void serialize(std::stringstream* out, const google::protobuf::Message* message);
+    static void deserialize(std::stringstream& in, google::protobuf::Message* message);
 
-    static void serialize(std::stringstream& out);
-    static void deserialize(std::stringstream& in);
+    static int deserializePacketType(std::stringstream& in);
+
+private:
+    Packet();
+    ~Packet();
 };
 
 #endif
