@@ -28,6 +28,7 @@ public:
     ~Server();
 
     void poll();
+    void tick();
     void processMessage(ENetEvent& event);
 
     static constexpr int MAXPLAYERS = 8;

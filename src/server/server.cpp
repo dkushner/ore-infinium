@@ -51,6 +51,11 @@ Server::~Server()
     enet_host_destroy(m_server);
 }
 
+void Server::tick()
+{
+
+}
+
 void Server::poll()
 {
     ENetEvent event;

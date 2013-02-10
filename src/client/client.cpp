@@ -19,6 +19,7 @@
 
 #include "src/network/packet.h"
 #include "src/network/protobuf-compiled/packet.pb.h"
+#include "src/server/server.h"
 
 #include "src/fontmanager.h"
 #include "gui/gui.h"
@@ -226,6 +227,10 @@ void Client::render(double elapsedTime)
 
 void Client::tick(double elapsedTime, double fps)
 {
+    if (m_server) {
+        m_server->tick();
+    }
+
     m_fps = fps;
 
     handleInputEvents();

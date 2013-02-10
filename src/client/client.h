@@ -33,6 +33,7 @@ class GUI;
 class MainMenu;
 class ChatDialog;
 class World;
+class Server;
 
 class Client
 {
@@ -57,6 +58,7 @@ private:
     void poll();
 
 private:
+    Server* m_server = nullptr;
     World* m_world = nullptr;
 
     GUI* m_gui = nullptr;

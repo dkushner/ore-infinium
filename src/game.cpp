@@ -67,7 +67,6 @@ void Game::init()
     // compatible with the version of the headers we compiled against.
     GOOGLE_PROTOBUF_VERIFY_VERSION;
 
-    m_server = new Server();
     m_client = new Client();
 
     tick();
@@ -86,8 +85,6 @@ void Game::tick()
     while (m_running) {
         const double delta = static_cast<double>(SDL_GetTicks() - startTime);
         fps = (frameCount / delta) * 1000;
-
-        m_server->poll();
 
         m_client->tick(delta, fps);
         m_client->render(delta);
