@@ -287,7 +287,10 @@ void Client::handleInputEvents()
         switch (event.type) {
             case SDL_KEYDOWN:
                 if (event.key.keysym.sym == SDLK_ESCAPE) {
-                    m_mainMenu->toggleShown();
+                    //only if we are connected, do we allow hiding and showing the main menu (escape menu)
+                    if (m_peer) {
+                        m_mainMenu->toggleShown();
+                    }
                 } else if (event.key.keysym.sym == SDLK_F5) {
                     // toggle debug logging
                     Settings::instance()->debugOutput = !Settings::instance()->debugOutput;
