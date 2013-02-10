@@ -37,15 +37,13 @@ class World;
 class Client
 {
 public:
-    Client(const char* address = "127.0.0.1", unsigned int port = 44543);
+    Client();
     ~Client();
 
-    void poll();
+    void connect(const char* address = "127.0.0.1", unsigned int port = 44543);
 
-    void tick(double elapsedTime);
+    void tick(double elapsedTime, double fps);
     void render(double elapsedTime);
-
-    void drawDebugText(double frametime);
 
     const float FPS = 60.0;
 
@@ -55,6 +53,8 @@ private:
     void initSDL();
 
     void handleInputEvents();
+    void drawDebugText(double frametime);
+    void poll();
 
 private:
     World* m_world = nullptr;
@@ -67,6 +67,8 @@ private:
 
     SDL_Window *m_window = nullptr;
     SDL_GLContext m_GLcontext;
+
+    double m_fps = 0.0;
 
 private:
     ENetHost* m_client = nullptr;

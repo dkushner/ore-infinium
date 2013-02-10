@@ -74,21 +74,22 @@ void Game::init()
     shutdown();
 }
 
-double _fps = 0.0;
 void Game::tick()
 {
+    //FIXME: USE STD CHRONO, this breaks down heavily when in server mode(no SDL context)
     Uint32 startTime = SDL_GetTicks();
     int frameCount = 0;
 
     SDL_StartTextInput();
 
+    double fps = 0.0;
     while (m_running) {
         const double delta = static_cast<double>(SDL_GetTicks() - startTime);
-        _fps = (frameCount / delta) * 1000;
+        fps = (frameCount / delta) * 1000;
 
         m_server->poll();
 
-        m_client->tick(delta);
+        m_client->tick(delta, fps);
         m_client->render(delta);
 
         ++frameCount;

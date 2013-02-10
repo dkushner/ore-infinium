@@ -32,7 +32,31 @@
 
 #include <GL/glew.h>
 
-Client::Client(const char* address, unsigned int port)
+Client::Client()
+{
+    initSDL();
+
+    m_font = FontManager::instance()->loadFont("../font/Ubuntu-L.ttf");
+    m_font->FaceSize(12);
+
+    m_gui = GUI::instance();
+    m_mainMenu = new MainMenu(this);
+    m_mainMenu->toggleShown();
+
+    m_chat = new ChatDialog(this, m_mainMenu);
+    m_chat->show();
+
+}
+
+Client::~Client()
+{
+    enet_host_destroy(m_client);
+
+    SDL_DestroyWindow(m_window);
+    SDL_Quit();
+}
+
+void Client::connect(const char* address, unsigned int port)
 {
     m_client = enet_host_create (nullptr /* create a client host */,
                                1 /* only allow 1 outgoing connection */,
@@ -52,27 +76,8 @@ Client::Client(const char* address, unsigned int port)
         exit(EXIT_FAILURE);
     }
 
-    m_font = FontManager::instance()->loadFont("../font/Ubuntu-L.ttf");
-    m_font->FaceSize(12);
-
-    m_gui = GUI::instance();
-    m_mainMenu = new MainMenu(this);
-    m_mainMenu->toggleShown();
-
-    m_chat = new ChatDialog(this, m_mainMenu);
-    m_chat->show();
-
     m_world = new World();
 }
-
-Client::~Client()
-{
-    enet_host_destroy(m_client);
-
-    SDL_DestroyWindow(m_window);
-    SDL_Quit();
-}
-
 
 void Client::initSDL()
 {
@@ -205,13 +210,13 @@ void Client::poll()
     enet_peer_send(m_peer, 0, packet);
 }
 
-double fps = 0.0;
-
 void Client::render(double elapsedTime)
 {
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-    m_world->render();
+    if (m_world) {
+        m_world->render();
+    }
 
     m_gui->render();
     drawDebugText(elapsedTime);
@@ -219,10 +224,15 @@ void Client::render(double elapsedTime)
     SDL_GL_SwapWindow(m_window);
 }
 
-void Client::tick(double elapsedTime)
+void Client::tick(double elapsedTime, double fps)
 {
+    m_fps = fps;
+
     handleInputEvents();
-    m_world->update(elapsedTime);
+
+    if (m_world) {
+        m_world->update(elapsedTime);
+    }
 }
 
 void Client::drawDebugText(double frametime)
@@ -231,17 +241,28 @@ void Client::drawDebugText(double frametime)
     std::string str;
 
     ss.str("");
-    ss << "FPS: " << fps;
-    ss << " Frametime: " << frametime;
+    ss << "FPS: " << m_fps;
+    ss << " Frametime: " << "fucking hell";//frametime;
     str = ss.str();
 
     const int height = Settings::instance()->screenResolutionHeight - 15;
     const int width = Settings::instance()->screenResolutionWidth;
 
+    ss.str("");
+    ss << "Client Connection Status: ";
+    if (m_peer) {
+        ss << "Connected!";
+    } else {
+       ss << "Disconnected";
+    }
+
+    std::string connectedString = ss.str();
+
     m_font->Render(str.c_str(), -1, FTPoint(0.0, height - 0.0, 0.0));
     m_font->Render("F5 to toggle debug logging", -1, FTPoint(0.0, height - 15.0, 0.0));
     m_font->Render("F6 to toggle renderer logging", -1, FTPoint(0.0, height - 30.0, 0.0));
     m_font->Render("F7 to toggle GUI renderer debug", -1, FTPoint(0.0, height - 45.0, 0.0));
+    m_font->Render(connectedString.c_str(), -1, FTPoint(0.0, height - 60.0, 0.0));
 }
 
 void Client::handleInputEvents()
@@ -253,7 +274,9 @@ void Client::handleInputEvents()
         m_gui->handleEvent(event);
 
         if (!m_gui->inputDemanded()) {
-            m_world->handleEvent(event);
+            if (m_world) {
+                m_world->handleEvent(event);
+            }
         }
 
         switch (event.type) {
