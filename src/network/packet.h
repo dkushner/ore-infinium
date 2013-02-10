@@ -66,7 +66,7 @@ public:
      * or @sa FromServerPacketContents
      * Seeks the stream pointer back to zero when done.
      */
-    static int deserializePacketType(std::stringstream& in);
+    static uint32_t deserializePacketType(std::stringstream& in);
 
 private:
     Packet();

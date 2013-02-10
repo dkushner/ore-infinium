@@ -73,7 +73,6 @@ private:
 
     ~World();
 
-    std::string loadShaderSource(const std::string& filename);
 
     glm::ivec2 mousePosition() const;
 

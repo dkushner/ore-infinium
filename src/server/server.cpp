@@ -95,13 +95,13 @@ void Server::poll()
 void Server::processMessage(ENetEvent& event)
 {
 //    std::cout << "(Server) Message from client : " << event.packet->data << "\n";
-    std::cout << "(Server) Message from client, our client->server round trip latency is: " << event.peer->roundTripTime  << "\n";
+//    std::cout << "(Server) Message from client, our client->server round trip latency is: " << event.peer->roundTripTime  << "\n";
 //    std::cout << "(Server) latency is: " << event.peer->lowestRoundTripTime  << "\n";
 
     std::stringstream ss;
     ss << event.packet->data;
 
-    int packetType = Packet::deserializePacketType(ss);
+    uint32_t packetType = Packet::deserializePacketType(ss);
 
     switch (packetType) {
         case Packet::FromClientPacketContents::ChatMessageFromClientPacket:
@@ -116,4 +116,3 @@ void Server::processMessage(ENetEvent& event)
     //                enet_host_broadcast(m_server, 0, event.packet);
     //                enet_peer_send()
 }
-

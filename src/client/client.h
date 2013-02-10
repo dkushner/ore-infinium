@@ -18,7 +18,21 @@
 #ifndef CLIENT_H
 #define CLIENT_H
 
+#include <ft2build.h>
+#include FT_FREETYPE_H
+
+#include <FTGL/ftgl.h>
+
 #include <enet/enet.h>
+#include <string>
+
+#include <SDL2/SDL.h>
+#include <SDL_log.h>
+
+class GUI;
+class MainMenu;
+class ChatDialog;
+class World;
 
 class Client
 {
@@ -28,10 +42,34 @@ public:
 
     void poll();
 
+    void update(double elapsedTime);
+    void render(double elapsedTime);
+
+    void drawDebugText(double frametime);
+
+    const float FPS = 60.0;
+
+private:
+    void initSDL();
+
+    void checkSDLError();
+
+private:
+    World* m_world = nullptr;
+
+    GUI* m_gui = nullptr;
+    MainMenu* m_mainMenu = nullptr;
+    ChatDialog* m_chat = nullptr;
+
+    FTGLPixmapFont *m_font = nullptr;
+
+    SDL_Window *m_window = nullptr;
+    SDL_GLContext m_GLcontext;
+
 private:
     ENetHost* m_client = nullptr;
+    ENetPeer* m_peer = nullptr;
     ENetAddress m_address;
-    ENetPeer* peer = nullptr;
 };
 
 #endif

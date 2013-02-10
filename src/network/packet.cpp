@@ -51,7 +51,7 @@ void Packet::serialize(std::stringstream* out, const google::protobuf::Message* 
     coded_out.WriteString(s);
 }
 
-int Packet::deserializePacketType(std::stringstream& in)
+uint32_t Packet::deserializePacketType(std::stringstream& in)
 {
     google::protobuf::io::IstreamInputStream raw_in(&in);
     google::protobuf::io::CodedInputStream coded_in(&raw_in);

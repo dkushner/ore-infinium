@@ -28,11 +28,6 @@
 #include <SDL2/SDL.h>
 #include <SDL_log.h>
 
-#include <ft2build.h>
-#include FT_FREETYPE_H
-
-#include <FTGL/ftgl.h>
-
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 
@@ -40,9 +35,6 @@
 
 class Server;
 class Client;
-class GUI;
-class MainMenu;
-class ChatDialog;
 
 class Game
 {
@@ -58,27 +50,13 @@ public:
     void abort_game(const char* message);
     void shutdown();
 
-    void drawDebugText(double frametime);
-
-    void checkSDLError();
-    void checkGLError();
-
-    const float FPS = 60.0;
 
 private:
     Client* m_client = nullptr;
     Server* m_server = nullptr;
 
-    FTGLPixmapFont *m_font = nullptr;
-
-
-    ChatDialog* m_chat = nullptr;
-    GUI* m_gui = nullptr;
-    MainMenu* m_mainMenu = nullptr;
     World *m_world = nullptr;
 
-    SDL_Window *m_window = nullptr;
-    SDL_GLContext m_GLcontext;
 
     bool m_running = true;
 };
