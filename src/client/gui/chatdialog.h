@@ -29,13 +29,13 @@ namespace Rocket {
     }
 }
 
-class Game;
+class Client;
 class MainMenu;
 
 class ChatDialog : public Rocket::Core::EventListener
 {
 public:
-    ChatDialog(Game* game, MainMenu* parent);
+    ChatDialog(Client* client, MainMenu* parent);
     ~ChatDialog();
 
     /// reimplemented from Rocket::Core::EventListener
@@ -61,7 +61,7 @@ private:
 void replaceAll(std::string& str, const std::string& from, const std::string& to);
 
 private:
-    Game* m_game = nullptr;
+    Client* m_client = nullptr;
     MainMenu* m_parent = nullptr;
 
     Rocket::Core::ElementDocument* m_chat = nullptr;

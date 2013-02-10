@@ -23,13 +23,6 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-#include <GL/glew.h>
-
-#include <SDL2/SDL.h>
-#include <SDL_log.h>
-
-#include <glm/glm.hpp>
-#include <glm/gtc/matrix_transform.hpp>
 
 #include <string>
 
@@ -45,7 +38,6 @@ public:
     void init();
 
     void tick();
-    void handleEvents();
 
     void abort_game(const char* message);
     void shutdown();

@@ -49,10 +49,12 @@ public:
 
     const float FPS = 60.0;
 
+    void shutdown();
+
 private:
     void initSDL();
 
-    void checkSDLError();
+    void handleInputEvents();
 
 private:
     World* m_world = nullptr;

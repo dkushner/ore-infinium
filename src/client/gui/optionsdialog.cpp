@@ -19,7 +19,7 @@
 #include "mainmenu.h"
 #include "gui.h"
 
-#include "src/game.h"
+#include "src/client/client.h"
 
 #include <Rocket/Core.h>
 #include <Rocket/Controls.h>
@@ -28,7 +28,7 @@
 
 #include <assert.h>
 
-OptionsDialog::OptionsDialog(Game* game, MainMenu* parent) : m_game(game), m_parent(parent)
+OptionsDialog::OptionsDialog(Client* client, MainMenu* parent) : m_client(client), m_parent(parent)
 {
     loadDocument();
 }

@@ -58,6 +58,15 @@ void Debug::checkGLError()
     }
 }
 
+void Debug::checkSDLError()
+{
+    std::string error = SDL_GetError();
+    if (*error.c_str() != '\0') {
+        Debug::log(Debug::Area::System) << "SDL Error: " << error;
+        SDL_ClearError();
+    }
+}
+
 //COLOR HOWTO: http://www.ibm.com/developerworks/linux/library/l-tip-prompt/ , only for linux..obviously
 void Debug::glDebugCallback(unsigned int source, unsigned int type, unsigned int id, unsigned int severity, int length, const char* message, void* userParam)
 {

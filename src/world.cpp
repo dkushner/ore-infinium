@@ -433,7 +433,8 @@ void World::loadMap()
 
 void World::generateMap()
 {
-    const double startTime = SDL_GetTicks();
+    //FIXME: use std::chrono
+//    const double startTime = SDL_GetTicks();
 
     std::random_device device;
     std::mt19937 rand(device());
@@ -455,8 +456,8 @@ void World::generateMap()
         }
     }
 
-    const double elapsedTime = SDL_GetTicks() - startTime;
-    Debug::log(Debug::Area::General) << "Time taken for map generation: " << elapsedTime << " Milliseconds";
+//    const double elapsedTime = SDL_GetTicks() - startTime;
+ //   Debug::log(Debug::Area::General) << "Time taken for map generation: " << elapsedTime << " Milliseconds";
 }
 
 void World::saveMap()

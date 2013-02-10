@@ -19,7 +19,7 @@
 #include "mainmenu.h"
 #include "gui.h"
 
-#include "src/game.h"
+#include "src/client/client.h"
 #include <src/debug.h>
 
 #include <Rocket/Core.h>
@@ -30,7 +30,7 @@
 
 #include <assert.h>
 
-ChatDialog::ChatDialog(Game* game, MainMenu* parent) : m_game(game), m_parent(parent)
+ChatDialog::ChatDialog(Client* client, MainMenu* parent) : m_client(client), m_parent(parent)
 {
     loadDocument();
 }

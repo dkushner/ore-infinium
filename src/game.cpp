@@ -20,7 +20,8 @@
 #include "debug.h"
 #include "spritesheetmanager.h"
 #include "fontmanager.h"
-#include "sprite.h"
+
+#include <google/protobuf/stubs/common.h>
 
 #include "client/client.h"
 #include "server/server.h"
@@ -37,8 +38,6 @@
 #include <fstream>
 
 #include <vector>
-
-#include <FreeImage.h>
 
 #include <assert.h>
 
@@ -75,6 +74,7 @@ void Game::init()
     shutdown();
 }
 
+double _fps = 0.0;
 void Game::tick()
 {
     Uint32 startTime = SDL_GetTicks();
@@ -84,9 +84,7 @@ void Game::tick()
 
     while (m_running) {
         const double delta = static_cast<double>(SDL_GetTicks() - startTime);
-        fps = (frameCount / delta) * 1000;
-
-        handleEvents();
+        _fps = (frameCount / delta) * 1000;
 
         m_world->render();
 
@@ -98,48 +96,6 @@ void Game::tick()
 
 shutdown:
     shutdown();
-}
-
-void Game::handleEvents()
-{
-    SDL_Event event;
-
-    while (SDL_PollEvent(&event)) {
-
-        m_gui->handleEvent(event);
-
-        if (!m_gui->inputDemanded()) {
-            m_world->handleEvent(event);
-        }
-
-        switch (event.type) {
-        case SDL_KEYDOWN:
-            if (event.key.keysym.sym == SDLK_ESCAPE) {
-                m_mainMenu->toggleShown();
-            } else if (event.key.keysym.sym == SDLK_F5) {
-                // toggle debug logging
-                Settings::instance()->debugOutput = !Settings::instance()->debugOutput;
-            } else if (event.key.keysym.sym == SDLK_F6) {
-                Settings::instance()->debugRendererOutput = !Settings::instance()->debugRendererOutput;
-            } else if (event.key.keysym.sym == SDLK_F7) {
-                // toggle debug rendering
-                Settings::instance()->debugGUIRenderingEnabled = !Settings::instance()->debugGUIRenderingEnabled;
-                m_gui->debugRenderingChanged();
-            }
-            break;
-
-        case SDL_WINDOWEVENT_CLOSE:
-                m_mainMenu->toggleShown();
-            break;
-
-        case SDL_QUIT:
-            shutdown();
-            break;
-
-        default:
-            break;
-        }
-    }
 }
 
 void Game::shutdown()

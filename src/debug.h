@@ -51,6 +51,7 @@ public:
     static void fatal(bool value, Area area, const std::string& message);
 
     static void checkGLError();
+    static void checkSDLError();
 
     static void glDebugCallback(unsigned int source, unsigned int type,
                                        unsigned int id, unsigned int severity,

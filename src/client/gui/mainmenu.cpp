@@ -18,7 +18,7 @@
 #include "mainmenu.h"
 #include "gui.h"
 
-#include "src/game.h"
+#include "src/client/client.h"
 
 #include <Rocket/Core.h>
 
@@ -26,7 +26,7 @@
 
 #include <assert.h>
 
-MainMenu::MainMenu(Game* game) : m_game(game)
+MainMenu::MainMenu(Client* client) : m_client(client)
 {
     m_menu = GUI::instance()->context()->LoadDocument("../gui/assets/mainMenu.rml");
     assert(m_menu);
@@ -52,12 +52,12 @@ void MainMenu::ProcessEvent(Rocket::Core::Event& event)
 
     } else if (id == "options") {
         if (!m_optionsDialog) {
-            m_optionsDialog = new OptionsDialog(m_game, this);
+            m_optionsDialog = new OptionsDialog(m_client, this);
         }
 
         m_optionsDialog->show();
     } else if (id == "quit") {
-        m_game->shutdown();
+        m_client->shutdown();
     }
 }
 

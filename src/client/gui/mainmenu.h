@@ -27,12 +27,12 @@ namespace Rocket {
     }
 }
 
-class Game;
+class Client;
 
 class MainMenu : public Rocket::Core::EventListener
 {
 public:
-    MainMenu(Game* game);
+    MainMenu(Client* client);
     ~MainMenu();
 
     /// reimplemented from Rocket::Core::EventListener
@@ -43,7 +43,7 @@ public:
     void optionsClosedCallback();
 
 private:
-    Game* m_game = nullptr;
+    Client* m_client = nullptr;
     OptionsDialog* m_optionsDialog = nullptr;
 
     Rocket::Core::ElementDocument* m_menu = nullptr;
