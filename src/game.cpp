@@ -86,6 +86,11 @@ void Game::tick()
         const double delta = static_cast<double>(SDL_GetTicks() - startTime);
         fps = (frameCount / delta) * 1000;
 
+        //dedicated server, no client.
+        //if (m_server) {
+
+        //}
+
         m_client->tick(delta, fps);
         m_client->render(delta);
 

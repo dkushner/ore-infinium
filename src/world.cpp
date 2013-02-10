@@ -34,7 +34,7 @@
 #include <math.h>
 #include <fstream>
 
-World::World()
+World::World(bool isServer) : m_isServer(isServer)
 {
     m_camera = new Camera();
     SpriteSheetManager::instance()->setCamera(m_camera);
@@ -67,6 +67,8 @@ World::~World()
 
 void World::render()
 {
+    assert(!m_isServer);
+
     //Sky at bottom layer
 
     //TODO render tilemap..

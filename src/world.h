@@ -51,7 +51,12 @@ enum MouseButton {
 class World
 {
 public:
-    World();
+    /**
+     * @p isServer true if this worlld will be used for the server,
+     * or if it will be used on a client
+     * Determines how we do collisions checking and so on.
+     */
+    World(bool isServer);
     ~World();
 
     void update(double elapsedTime);
@@ -138,6 +143,8 @@ private:
     glm::vec2 m_relativeVectorToAttack;
 
     Camera* m_camera = nullptr;
+
+    bool m_isServer = false;
 
     friend class TileRenderer;
 };

@@ -41,6 +41,7 @@ public:
     Client();
     ~Client();
 
+    void startSinglePlayer(const std::string& playername);
     void connect(const char* address = "127.0.0.1", unsigned int port = 44543);
 
     void tick(double elapsedTime, double fps);

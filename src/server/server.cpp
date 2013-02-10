@@ -31,14 +31,14 @@
 #include <iostream>
 #include <fstream>
 
-Server::Server(unsigned int port)
+Server::Server(unsigned int maxClients, unsigned int port)
 {
     Debug::log(Debug::Area::Network) << "creating server at port: " << port;
 
     m_address.host = ENET_HOST_ANY;
     m_address.port = port;
 
-    m_server = enet_host_create (&m_address, 32 /* allow up to 32 clients and/or outgoing connections */,
+    m_server = enet_host_create (&m_address, maxClients /* allow up to 32 clients and/or outgoing connections */,
                                                             2 /* allow up to 2 channels to be used, 0 and 1 */,
                                                             0 /* assume any amount of incoming bandwidth */,
                                                             0 /* assume any amount of outgoing bandwidth */ );

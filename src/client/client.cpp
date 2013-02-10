@@ -43,10 +43,6 @@ Client::Client()
     m_gui = GUI::instance();
     m_mainMenu = new MainMenu(this);
     m_mainMenu->toggleShown();
-
-    m_chat = new ChatDialog(this, m_mainMenu);
-    m_chat->show();
-
 }
 
 Client::~Client()
@@ -77,7 +73,7 @@ void Client::connect(const char* address, unsigned int port)
         exit(EXIT_FAILURE);
     }
 
-    m_world = new World();
+    m_world = new World(false);
 }
 
 void Client::initSDL()
@@ -228,6 +224,7 @@ void Client::render(double elapsedTime)
 void Client::tick(double elapsedTime, double fps)
 {
     if (m_server) {
+        m_server->poll();
         m_server->tick();
     }
 
@@ -304,11 +301,19 @@ void Client::handleInputEvents()
                 break;
 
             case SDL_WINDOWEVENT_CLOSE:
-                m_mainMenu->toggleShown();
+                   // if (m_peer) {
+                   //     m_mainMenu->toggleShown();
+                   // } else {
+                   //     shutdown();
+                   // }
                 break;
 
             case SDL_QUIT:
-                shutdown();
+                     if (m_peer) {
+                        m_mainMenu->toggleShown();
+                    } else {
+                        shutdown();
+                    }
                 break;
 
             default:
@@ -319,5 +324,20 @@ void Client::handleInputEvents()
 
 void Client::shutdown()
 {
-
+    //FIXME: graceful client shutdown needed..
+    exit(0);
 }
+
+void Client::startSinglePlayer(const std::string& playername)
+{
+    Debug::log() << "starting singleplayer! Playername: " << playername;
+    m_mainMenu->toggleShown();
+
+    m_chat = new ChatDialog(this, m_mainMenu);
+    m_chat->show();
+
+    //create a local server, and connect to it.
+    m_server = new Server(1);
+    connect();
+}
+

@@ -49,6 +49,8 @@ void MainMenu::ProcessEvent(Rocket::Core::Event& event)
     const Rocket::Core::String& id = event.GetCurrentElement()->GetId();
 
     if (id == "singleplayer") {
+        m_client->startSinglePlayer("Shaun");
+    } else if (id == "multiplayer") {
 
     } else if (id == "options") {
         if (!m_optionsDialog) {
