@@ -211,15 +211,18 @@ void Client::render(double elapsedTime)
 {
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
+    m_world->render();
+
     m_gui->render();
     drawDebugText(elapsedTime);
+
     SDL_GL_SwapWindow(m_window);
 }
 
-void Client::update(double elapsedTime)
+void Client::tick(double elapsedTime)
 {
+    handleInputEvents();
     m_world->update(elapsedTime);
-
 }
 
 void Client::drawDebugText(double frametime)

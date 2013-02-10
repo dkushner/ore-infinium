@@ -52,9 +52,7 @@ class World
 {
 public:
     World();
-
-    static World* instance();
-    static void createInstance();
+    ~World();
 
     void update(double elapsedTime);
     void render();
@@ -70,9 +68,6 @@ public:
     //create containers of various entities, and implement a tile system
     //game.cpp calls into this each tick, which this descends downward into each entity
 private:
-
-    ~World();
-
 
     glm::ivec2 mousePosition() const;
 

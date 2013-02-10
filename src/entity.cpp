@@ -38,7 +38,7 @@ void Entity::setVelocity(float x, float y)
     m_velocity = velocity;
 }
 
-void Entity::update(double elapsedTime)
+void Entity::update(double elapsedTime, World* world)
 {
 //    m_velocity.y += GRAVITY;
 
@@ -50,7 +50,7 @@ void Entity::update(double elapsedTime)
     //Eigen::Vector2f dim = Eigen::Vector2f(width, height);
 
     //Newer collision method, add when the line mentioned above is fixed..
-    //Texture::setPosition(moveOutsideSolid(position, dest, dim));
+    //Texture::setPosition(moveOutsideSolid(position, dest, dim)); FIXME <--- pass world pointer to that
 
     //Remove this and add the above when the definition for dim is fixed.
 //    if (!World::instance()->isBlockSolid(dest)) {
@@ -68,10 +68,10 @@ void Entity::setPosition(const glm::vec2& vect)
     Sprite::setPosition(vect);
 }
 
-glm::vec2 Entity::moveOutsideSolid(const glm::vec2& firstPosition, const glm::vec2& destPosition, const glm::ivec2& dimensions) const
+glm::vec2 Entity::moveOutsideSolid(const glm::vec2& firstPosition, const glm::vec2& destPosition, const glm::ivec2& dimensions, World* world) const
 {
     glm::vec2 tempPosition = firstPosition;
-    if (collidingWithTile(destPosition, dimensions)) {
+    if (collidingWithTile(destPosition, dimensions, world)) {
         int horDir;
         if (m_velocity.x > 0) {
             horDir = 1;
@@ -86,7 +86,7 @@ glm::vec2 Entity::moveOutsideSolid(const glm::vec2& firstPosition, const glm::ve
             for (horMove = int(std::ceil(tempPosition.x) / Block::blockSize) * Block::blockSize; horMove * horDir <= (tempPosition.x + m_velocity.x) * horDir; horMove += Block::blockSize * horDir) {
                 glm::vec2 tempDest = tempPosition;
                 tempDest.x = horMove;
-                if (collidingWithTile(tempDest, dimensions)) {
+                if (collidingWithTile(tempDest, dimensions, world)) {
                     horMove -= Block::blockSize * horDir;
                     if (horDir == 1) {
                         horMove += Block::blockSize - (dimensions.x % Block::blockSize);
@@ -116,7 +116,7 @@ glm::vec2 Entity::moveOutsideSolid(const glm::vec2& firstPosition, const glm::ve
                 glm::vec2 tempDest = tempPosition;
                 tempDest.y = verMove;
 
-                if (collidingWithTile(tempDest, dimensions)) {
+                if (collidingWithTile(tempDest, dimensions, world)) {
                     verMove -= Block::blockSize * verDir;
 
                     if (verDir == 1) {
@@ -139,14 +139,14 @@ glm::vec2 Entity::moveOutsideSolid(const glm::vec2& firstPosition, const glm::ve
     return tempPosition;
 }
 
-bool Entity::collidingWithTile(const glm::vec2& destPosition, const glm::ivec2& dimensions) const
+bool Entity::collidingWithTile(const glm::vec2& destPosition, const glm::ivec2& dimensions, World* world) const
 {
     for (int i = 0; i < dimensions.x + Block::blockSize; i += Block::blockSize) {
         for (int j = 0; j < dimensions.y + Block::blockSize; j += Block::blockSize) {
             glm::vec2 tempDest = destPosition;
             tempDest.x += i;
             tempDest.y += j;
-            if (World::instance()->isBlockSolid(tempDest)) {
+            if (world->isBlockSolid(tempDest)) {
                 return true;
             }
         }

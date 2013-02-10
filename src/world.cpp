@@ -34,23 +34,6 @@
 #include <math.h>
 #include <fstream>
 
-static World* s_instance = 0;
-
-World* World::instance()
-{
-    assert(s_instance);
-    return s_instance;
-}
-
-void World::createInstance()
-{
-    if (!s_instance) {
-        s_instance = new World();
-    } else {
-        assert(0);
-    }
-}
-
 World::World()
 {
     m_camera = new Camera();
@@ -148,7 +131,7 @@ void World::update(double elapsedTime)
     //    m_sky->update(elapsedTime);
 
     for (Entity * currentEntity : m_entities) {
-        currentEntity->update(elapsedTime);
+        currentEntity->update(elapsedTime, this);
     }
 
     float x = m_uselessEntity->position().x;

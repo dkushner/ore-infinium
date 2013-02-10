@@ -86,10 +86,10 @@ void Game::tick()
         const double delta = static_cast<double>(SDL_GetTicks() - startTime);
         _fps = (frameCount / delta) * 1000;
 
-        m_world->render();
-
         m_server->poll();
-        m_client->poll();
+
+        m_client->tick(delta);
+        m_client->render(delta);
 
         ++frameCount;
     }

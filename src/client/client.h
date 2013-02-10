@@ -42,7 +42,7 @@ public:
 
     void poll();
 
-    void update(double elapsedTime);
+    void tick(double elapsedTime);
     void render(double elapsedTime);
 
     void drawDebugText(double frametime);

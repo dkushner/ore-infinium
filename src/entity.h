@@ -23,6 +23,8 @@
 
 const float GRAVITY = 0.05f;
 
+class World;
+
 class Entity : public Sprite
 {
 public:
@@ -32,7 +34,7 @@ public:
      */
     Entity(const std::string& frameName, SpriteSheetManager::SpriteSheetType spriteSheetType);
 
-    virtual void update(double elapsedTime);
+    virtual void update(double elapsedTime, World* world);
 
     /**
      * Overrides/hides member functions from Sprite
@@ -58,13 +60,13 @@ public:
      * based on initial position firstPosition, final position destPosition, and
      * width/height dimensions.
      */
-    glm::vec2 moveOutsideSolid(const glm::vec2& firstPosition, const glm::vec2& destPosition, const glm::ivec2& dimensions) const;
+    glm::vec2 moveOutsideSolid(const glm::vec2& firstPosition, const glm::vec2& destPosition, const glm::ivec2& dimensions, World* world) const;
 
     /**
      * Determines if the entity will collide at position destPosition if it has
      * dimensions as defined by dimensions.
      */
-    bool collidingWithTile(const glm::vec2& destPosition, const glm::ivec2& dimensions) const;
+    bool collidingWithTile(const glm::vec2& destPosition, const glm::ivec2& dimensions, World* world) const;
 
 private:
     glm::vec2 m_velocity;

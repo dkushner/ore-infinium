@@ -58,7 +58,7 @@ private:
     void reloadChatHistory();
     void consumeInputLine();
 
-void replaceAll(std::string& str, const std::string& from, const std::string& to);
+    void replaceAll(std::string& str, const std::string& from, const std::string& to);
 
 private:
     Client* m_client = nullptr;
