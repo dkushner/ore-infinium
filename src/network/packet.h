@@ -20,6 +20,8 @@
 
 #include "src/network/protobuf-compiled/packet.pb.h"
 
+#include <enet/enet.h>
+
 #include <iostream>
 
 class Packet
@@ -67,6 +69,12 @@ public:
      * Seeks the stream pointer back to zero when done.
      */
     static uint32_t deserializePacketType(std::stringstream& in);
+
+    /**
+     * Send a packet containing the message @p message to the peer @p peer with the packet type (e.g. InvalidFromClientPacket, InvalidFromServerPacket, etc.)
+     * @p enetPacketType e.g. whether ENET_PACKET_FLAG_RELIABLE or something else..
+     */
+    static void sendPacket(ENetPeer* peer, const google::protobuf::Message* message, uint32_t packetType, uint32_t enetPacketType);
 
 private:
     Packet();

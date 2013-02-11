@@ -33,7 +33,7 @@
 
 Server::Server(unsigned int maxClients, unsigned int port)
 {
-    Debug::log(Debug::Area::Network) << "creating server at port: " << port;
+    Debug::log(Debug::Area::NetworkServer) << "creating server at port: " << port;
 
     m_address.host = ENET_HOST_ANY;
     m_address.port = port;
@@ -78,7 +78,7 @@ void Server::poll()
 
         switch(event.type) {
             case ENET_EVENT_TYPE_CONNECT:
-                printf("(Server) We got a new connection from %x:%u \n", event.peer->address.host, event.peer->address.port);
+                Debug::log(Debug::Area::NetworkServer) << "Received a new peer connection from host:  " << event.peer->address.host << " at port: " << event.peer->address.port;
                 break;
 
             case ENET_EVENT_TYPE_RECEIVE:
@@ -86,6 +86,7 @@ void Server::poll()
                 break;
 
             case ENET_EVENT_TYPE_DISCONNECT:
+                Debug::log(Debug::Area::NetworkServer) << "Peer has disconnected:  " << event.peer->address.host << " at port: " << event.peer->address.port;
                 printf("%s disconnected.\n", event.peer->data);
 
                 // Reset client's information
@@ -109,9 +110,20 @@ void Server::processMessage(ENetEvent& event)
     uint32_t packetType = Packet::deserializePacketType(ss);
 
     switch (packetType) {
+        case Packet::FromClientPacketContents::ClientInitialConnectionDataFromClientPacket:
+           // receiveInitialClientData(&ss);
+        {
+            PacketBuf::ClientInitialConnection message;
+            Packet::deserialize(&ss, &message);
+
+    Debug::log(Debug::Area::NetworkServer) << "client sent player name and version data name: " << message.playername() << " version major: " << message.versionmajor() << " minor: " << message.versionminor();
+        }
+            break;
+
         case Packet::FromClientPacketContents::ChatMessageFromClientPacket:
             PacketBuf::ChatMessage chatMessage;
             Packet::deserialize(&ss, &chatMessage);
+            Debug::log(Debug::Area::NetworkServer) << "(Server) chat message received: " << chatMessage.message();
             break;
     }
 
@@ -120,4 +132,12 @@ void Server::processMessage(ENetEvent& event)
     // Lets broadcast this message to all
     //                enet_host_broadcast(m_server, 0, event.packet);
     //                enet_peer_send()
+}
+
+void Server::receiveInitialClientData(std::stringstream* ss)
+{
+    PacketBuf::ClientInitialConnection message;
+    Packet::deserialize(ss, &message);
+
+    Debug::log(Debug::Area::NetworkServer) << "client sent player name and version data name: " << message.playername() << " version major: " << message.versionmajor() << " minor: " << message.versionminor();
 }

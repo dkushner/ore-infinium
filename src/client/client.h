@@ -42,14 +42,23 @@ public:
     ~Client();
 
     void startSinglePlayer(const std::string& playername);
-    void connect(const char* address = "127.0.0.1", unsigned int port = 44543);
 
     void tick(double elapsedTime, double fps);
     void render(double elapsedTime);
 
+
     const float FPS = 60.0;
 
     void shutdown();
+
+///////////////// Network Communication ////////////////////
+public:
+    void sendChatMessage(const std::string& message);
+
+private:
+    void connect(const char* address = "127.0.0.1", unsigned int port = 44543);
+    void sendInitialConnectionData();
+///////////////////////////////////////////////
 
 private:
     void initSDL();
@@ -72,6 +81,8 @@ private:
     SDL_GLContext m_GLcontext;
 
     double m_fps = 0.0;
+
+    std::string m_playerName;
 
 private:
     ENetHost* m_client = nullptr;

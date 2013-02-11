@@ -20,6 +20,8 @@
 
 #include <enet/enet.h>
 
+#include <sstream>
+
 class Server
 {
 public:
@@ -32,6 +34,9 @@ public:
     void processMessage(ENetEvent& event);
 
     static constexpr int MAXPLAYERS = 8;
+
+private:
+    void receiveInitialClientData(std::stringstream* ss);
 
 private:
     ENetHost* m_server = nullptr;

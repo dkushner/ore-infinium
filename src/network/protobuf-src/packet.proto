@@ -1,15 +1,15 @@
 package PacketBuf;
 
-  enum PhoneType {
-    MOBILE = 0;
-    HOME = 1;
-    WORK = 2;
-  }
-
 message Packet {
    optional int32 type = 1;
 }
 
+message ClientInitialConnection {
+    optional string playerName = 1;
+    optional int32 versionMajor = 2;
+    optional int32 versionMinor = 3;
+}
+
 message ChatMessage {
-  optional string message = 3;
+  optional string message = 1;
 }

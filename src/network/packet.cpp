@@ -46,6 +46,7 @@ void Packet::serialize(std::stringstream* out, const google::protobuf::Message* 
 
     // write actual contents
     message->SerializeToString(&s);
+//    Debug::log() << "serializing mesasge to string, contents: " << s << "end";
 
     coded_out.WriteVarint32(s.size());
     coded_out.WriteString(s);
@@ -109,4 +110,18 @@ void Packet::deserialize(std::stringstream* in, google::protobuf::Message* messa
 
     in->clear();
     in->seekg(0, std::ios::beg);
+}
+
+void Packet::sendPacket(ENetPeer* peer, const google::protobuf::Message* message, uint32_t packetType, uint32_t enetPacketType)
+{
+    assert(peer && message);
+
+    std::stringstream ss(std::stringstream::out | std::stringstream::binary);
+
+    Packet::serialize(&ss, message, packetType);
+
+    ENetPacket *packet = enet_packet_create(ss.str().c_str(), ss.str().size(), enetPacketType);
+    assert(packet);
+
+    enet_peer_send(peer, 0, packet);
 }

@@ -40,6 +40,8 @@ public:
         General,
         Graphics,
         Network,
+        NetworkClient,
+        NetworkServer,
         System,
         Physics,
         Sound

@@ -30,6 +30,7 @@
 
 #include "src/world.h"
 #include "src/debug.h"
+#include "src/../config.h"
 
 #include <GL/glew.h>
 
@@ -51,29 +52,6 @@ Client::~Client()
 
     SDL_DestroyWindow(m_window);
     SDL_Quit();
-}
-
-void Client::connect(const char* address, unsigned int port)
-{
-    m_client = enet_host_create (nullptr /* create a client host */,
-                               1 /* only allow 1 outgoing connection */,
-                               2 /* allow up 2 channels to be used, 0 and 1 */,
-                               57600 / 8 /* 56K modem with 56 Kbps downstream bandwidth */,
-                               14400 / 8 /* 56K modem with 14 Kbps upstream bandwidth */);
-
-    Debug::assertf(m_client, "failed to create ENet client host");
-
-    enet_address_set_host(&m_address, address);
-    m_address.port = port;
-
-    m_peer = enet_host_connect(m_client, &m_address, 2, 0);
-
-    if (m_peer == NULL) {
-        fprintf(stderr, "Client failed to connect to server");
-        exit(EXIT_FAILURE);
-    }
-
-    m_world = new World(false);
 }
 
 void Client::initSDL()
@@ -195,16 +173,8 @@ void Client::poll()
                 break;
         }
     }
+    sendInitialConnectionData();
 
-    std::stringstream ss(std::stringstream::out | std::stringstream::binary);
-
-    PacketBuf::ChatMessage message;
-    message.set_message("THIS IS A TEST PROTOBUF (FUCK YEAH) MESSAGE FROM CLIENT");
-
-    Packet::serialize(&ss, &message, Packet::FromClientPacketContents::ChatMessageFromClientPacket);
-
-    ENetPacket *packet = enet_packet_create(ss.str().c_str(), ss.str().size(), ENET_PACKET_FLAG_RELIABLE);
-    enet_peer_send(m_peer, 0, packet);
 }
 
 void Client::render(double elapsedTime)
@@ -231,6 +201,10 @@ void Client::tick(double elapsedTime, double fps)
     m_fps = fps;
 
     handleInputEvents();
+
+    if (m_peer) {
+        poll();
+    }
 
     if (m_world) {
         m_world->update(elapsedTime);
@@ -328,9 +302,35 @@ void Client::shutdown()
     exit(0);
 }
 
+void Client::connect(const char* address, unsigned int port)
+{
+    m_client = enet_host_create (nullptr /* create a client host */,
+                               1 /* only allow 1 outgoing connection */,
+                               2 /* allow up 2 channels to be used, 0 and 1 */,
+                               57600 / 8 /* 56K modem with 56 Kbps downstream bandwidth */,
+                               14400 / 8 /* 56K modem with 14 Kbps upstream bandwidth */);
+
+    Debug::assertf(m_client, "failed to create ENet client host");
+
+    enet_address_set_host(&m_address, address);
+    m_address.port = port;
+
+    m_peer = enet_host_connect(m_client, &m_address, 2, 0);
+
+    if (m_peer == NULL) {
+        fprintf(stderr, "Client failed to connect to server");
+        exit(EXIT_FAILURE);
+    }
+
+//FIXME:    sendInitialConnectionData();
+
+    m_world = new World(false);
+}
+
 void Client::startSinglePlayer(const std::string& playername)
 {
     Debug::log() << "starting singleplayer! Playername: " << playername;
+    m_playerName = playername;
     m_mainMenu->toggleShown();
 
     m_chat = new ChatDialog(this, m_mainMenu);
@@ -341,3 +341,20 @@ void Client::startSinglePlayer(const std::string& playername)
     connect();
 }
 
+void Client::sendInitialConnectionData()
+{
+    PacketBuf::ClientInitialConnection message;
+    message.set_playername(m_playerName);
+    message.set_versionmajor(0);//ore_infinium_VERSION_MAJOR);
+    message.set_versionminor(9);//ore_infinium_VERSION_MINOR);
+
+    Packet::sendPacket(m_peer, &message, Packet::FromClientPacketContents::ClientInitialConnectionDataFromClientPacket, ENET_PACKET_FLAG_RELIABLE);
+}
+
+void Client::sendChatMessage(const std::string& message)
+{
+    PacketBuf::ChatMessage messagestruct;
+    messagestruct.set_message(message);
+
+    Packet::sendPacket(m_peer, &messagestruct, Packet::FromClientPacketContents::ChatMessageFromClientPacket, ENET_PACKET_FLAG_RELIABLE);
+}

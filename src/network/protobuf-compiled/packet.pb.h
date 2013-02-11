@@ -33,28 +33,9 @@ void protobuf_AssignDesc_packet_2eproto();
 void protobuf_ShutdownFile_packet_2eproto();
 
 class Packet;
+class ClientInitialConnection;
 class ChatMessage;
 
-enum PhoneType {
-  MOBILE = 0,
-  HOME = 1,
-  WORK = 2
-};
-bool PhoneType_IsValid(int value);
-const PhoneType PhoneType_MIN = MOBILE;
-const PhoneType PhoneType_MAX = WORK;
-const int PhoneType_ARRAYSIZE = PhoneType_MAX + 1;
-
-const ::google::protobuf::EnumDescriptor* PhoneType_descriptor();
-inline const ::std::string& PhoneType_Name(PhoneType value) {
-  return ::google::protobuf::internal::NameOfEnum(
-    PhoneType_descriptor(), value);
-}
-inline bool PhoneType_Parse(
-    const ::std::string& name, PhoneType* value) {
-  return ::google::protobuf::internal::ParseNamedEnum<PhoneType>(
-    PhoneType_descriptor(), name, value);
-}
 // ===================================================================
 
 class Packet : public ::google::protobuf::Message {
@@ -139,6 +120,112 @@ class Packet : public ::google::protobuf::Message {
 };
 // -------------------------------------------------------------------
 
+class ClientInitialConnection : public ::google::protobuf::Message {
+ public:
+  ClientInitialConnection();
+  virtual ~ClientInitialConnection();
+  
+  ClientInitialConnection(const ClientInitialConnection& from);
+  
+  inline ClientInitialConnection& operator=(const ClientInitialConnection& from) {
+    CopyFrom(from);
+    return *this;
+  }
+  
+  inline const ::google::protobuf::UnknownFieldSet& unknown_fields() const {
+    return _unknown_fields_;
+  }
+  
+  inline ::google::protobuf::UnknownFieldSet* mutable_unknown_fields() {
+    return &_unknown_fields_;
+  }
+  
+  static const ::google::protobuf::Descriptor* descriptor();
+  static const ClientInitialConnection& default_instance();
+  
+  void Swap(ClientInitialConnection* other);
+  
+  // implements Message ----------------------------------------------
+  
+  ClientInitialConnection* New() const;
+  void CopyFrom(const ::google::protobuf::Message& from);
+  void MergeFrom(const ::google::protobuf::Message& from);
+  void CopyFrom(const ClientInitialConnection& from);
+  void MergeFrom(const ClientInitialConnection& from);
+  void Clear();
+  bool IsInitialized() const;
+  
+  int ByteSize() const;
+  bool MergePartialFromCodedStream(
+      ::google::protobuf::io::CodedInputStream* input);
+  void SerializeWithCachedSizes(
+      ::google::protobuf::io::CodedOutputStream* output) const;
+  ::google::protobuf::uint8* SerializeWithCachedSizesToArray(::google::protobuf::uint8* output) const;
+  int GetCachedSize() const { return _cached_size_; }
+  private:
+  void SharedCtor();
+  void SharedDtor();
+  void SetCachedSize(int size) const;
+  public:
+  
+  ::google::protobuf::Metadata GetMetadata() const;
+  
+  // nested types ----------------------------------------------------
+  
+  // accessors -------------------------------------------------------
+  
+  // optional string playerName = 1;
+  inline bool has_playername() const;
+  inline void clear_playername();
+  static const int kPlayerNameFieldNumber = 1;
+  inline const ::std::string& playername() const;
+  inline void set_playername(const ::std::string& value);
+  inline void set_playername(const char* value);
+  inline void set_playername(const char* value, size_t size);
+  inline ::std::string* mutable_playername();
+  inline ::std::string* release_playername();
+  
+  // optional int32 versionMajor = 2;
+  inline bool has_versionmajor() const;
+  inline void clear_versionmajor();
+  static const int kVersionMajorFieldNumber = 2;
+  inline ::google::protobuf::int32 versionmajor() const;
+  inline void set_versionmajor(::google::protobuf::int32 value);
+  
+  // optional int32 versionMinor = 3;
+  inline bool has_versionminor() const;
+  inline void clear_versionminor();
+  static const int kVersionMinorFieldNumber = 3;
+  inline ::google::protobuf::int32 versionminor() const;
+  inline void set_versionminor(::google::protobuf::int32 value);
+  
+  // @@protoc_insertion_point(class_scope:PacketBuf.ClientInitialConnection)
+ private:
+  inline void set_has_playername();
+  inline void clear_has_playername();
+  inline void set_has_versionmajor();
+  inline void clear_has_versionmajor();
+  inline void set_has_versionminor();
+  inline void clear_has_versionminor();
+  
+  ::google::protobuf::UnknownFieldSet _unknown_fields_;
+  
+  ::std::string* playername_;
+  ::google::protobuf::int32 versionmajor_;
+  ::google::protobuf::int32 versionminor_;
+  
+  mutable int _cached_size_;
+  ::google::protobuf::uint32 _has_bits_[(3 + 31) / 32];
+  
+  friend void  protobuf_AddDesc_packet_2eproto();
+  friend void protobuf_AssignDesc_packet_2eproto();
+  friend void protobuf_ShutdownFile_packet_2eproto();
+  
+  void InitAsDefaultInstance();
+  static ClientInitialConnection* default_instance_;
+};
+// -------------------------------------------------------------------
+
 class ChatMessage : public ::google::protobuf::Message {
  public:
   ChatMessage();
@@ -193,10 +280,10 @@ class ChatMessage : public ::google::protobuf::Message {
   
   // accessors -------------------------------------------------------
   
-  // optional string message = 3;
+  // optional string message = 1;
   inline bool has_message() const;
   inline void clear_message();
-  static const int kMessageFieldNumber = 3;
+  static const int kMessageFieldNumber = 1;
   inline const ::std::string& message() const;
   inline void set_message(const ::std::string& value);
   inline void set_message(const char* value);
@@ -254,9 +341,115 @@ inline void Packet::set_type(::google::protobuf::int32 value) {
 
 // -------------------------------------------------------------------
 
+// ClientInitialConnection
+
+// optional string playerName = 1;
+inline bool ClientInitialConnection::has_playername() const {
+  return (_has_bits_[0] & 0x00000001u) != 0;
+}
+inline void ClientInitialConnection::set_has_playername() {
+  _has_bits_[0] |= 0x00000001u;
+}
+inline void ClientInitialConnection::clear_has_playername() {
+  _has_bits_[0] &= ~0x00000001u;
+}
+inline void ClientInitialConnection::clear_playername() {
+  if (playername_ != &::google::protobuf::internal::kEmptyString) {
+    playername_->clear();
+  }
+  clear_has_playername();
+}
+inline const ::std::string& ClientInitialConnection::playername() const {
+  return *playername_;
+}
+inline void ClientInitialConnection::set_playername(const ::std::string& value) {
+  set_has_playername();
+  if (playername_ == &::google::protobuf::internal::kEmptyString) {
+    playername_ = new ::std::string;
+  }
+  playername_->assign(value);
+}
+inline void ClientInitialConnection::set_playername(const char* value) {
+  set_has_playername();
+  if (playername_ == &::google::protobuf::internal::kEmptyString) {
+    playername_ = new ::std::string;
+  }
+  playername_->assign(value);
+}
+inline void ClientInitialConnection::set_playername(const char* value, size_t size) {
+  set_has_playername();
+  if (playername_ == &::google::protobuf::internal::kEmptyString) {
+    playername_ = new ::std::string;
+  }
+  playername_->assign(reinterpret_cast<const char*>(value), size);
+}
+inline ::std::string* ClientInitialConnection::mutable_playername() {
+  set_has_playername();
+  if (playername_ == &::google::protobuf::internal::kEmptyString) {
+    playername_ = new ::std::string;
+  }
+  return playername_;
+}
+inline ::std::string* ClientInitialConnection::release_playername() {
+  clear_has_playername();
+  if (playername_ == &::google::protobuf::internal::kEmptyString) {
+    return NULL;
+  } else {
+    ::std::string* temp = playername_;
+    playername_ = const_cast< ::std::string*>(&::google::protobuf::internal::kEmptyString);
+    return temp;
+  }
+}
+
+// optional int32 versionMajor = 2;
+inline bool ClientInitialConnection::has_versionmajor() const {
+  return (_has_bits_[0] & 0x00000002u) != 0;
+}
+inline void ClientInitialConnection::set_has_versionmajor() {
+  _has_bits_[0] |= 0x00000002u;
+}
+inline void ClientInitialConnection::clear_has_versionmajor() {
+  _has_bits_[0] &= ~0x00000002u;
+}
+inline void ClientInitialConnection::clear_versionmajor() {
+  versionmajor_ = 0;
+  clear_has_versionmajor();
+}
+inline ::google::protobuf::int32 ClientInitialConnection::versionmajor() const {
+  return versionmajor_;
+}
+inline void ClientInitialConnection::set_versionmajor(::google::protobuf::int32 value) {
+  set_has_versionmajor();
+  versionmajor_ = value;
+}
+
+// optional int32 versionMinor = 3;
+inline bool ClientInitialConnection::has_versionminor() const {
+  return (_has_bits_[0] & 0x00000004u) != 0;
+}
+inline void ClientInitialConnection::set_has_versionminor() {
+  _has_bits_[0] |= 0x00000004u;
+}
+inline void ClientInitialConnection::clear_has_versionminor() {
+  _has_bits_[0] &= ~0x00000004u;
+}
+inline void ClientInitialConnection::clear_versionminor() {
+  versionminor_ = 0;
+  clear_has_versionminor();
+}
+inline ::google::protobuf::int32 ClientInitialConnection::versionminor() const {
+  return versionminor_;
+}
+inline void ClientInitialConnection::set_versionminor(::google::protobuf::int32 value) {
+  set_has_versionminor();
+  versionminor_ = value;
+}
+
+// -------------------------------------------------------------------
+
 // ChatMessage
 
-// optional string message = 3;
+// optional string message = 1;
 inline bool ChatMessage::has_message() const {
   return (_has_bits_[0] & 0x00000001u) != 0;
 }
@@ -323,10 +516,6 @@ inline ::std::string* ChatMessage::release_message() {
 namespace google {
 namespace protobuf {
 
-template <>
-inline const EnumDescriptor* GetEnumDescriptor< PacketBuf::PhoneType>() {
-  return PacketBuf::PhoneType_descriptor();
-}
 
 }  // namespace google
 }  // namespace protobuf
