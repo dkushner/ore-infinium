@@ -105,9 +105,11 @@ void Server::processMessage(ENetEvent& event)
 //    std::cout << "(Server) latency is: " << event.peer->lowestRoundTripTime  << "\n";
 
     std::stringstream ss;
-    ss << event.packet->data;
+    ss << (const char*)(event.packet->data);
 
-    uint32_t packetType = Packet::deserializePacketType(ss);
+printf("server 0x%x\n", ss.str().c_str());
+    uint32_t packetType = Packet::FromClientPacketContents::ClientInitialConnectionDataFromClientPacket;
+    //Packet::deserializePacketType(ss);
 
     switch (packetType) {
         case Packet::FromClientPacketContents::ClientInitialConnectionDataFromClientPacket:
