@@ -139,8 +139,6 @@ void Client::poll()
     ENetEvent event;
     int eventStatus;
 
-    eventStatus = 1;
-
     eventStatus = enet_host_service(m_client, &event, 0);
 
     // If we had some event that interested us

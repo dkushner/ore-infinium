@@ -61,9 +61,6 @@ void Server::poll()
     ENetEvent event;
     int eventStatus;
 
-    // c. Connect and user service
-    eventStatus = 1;
-
     eventStatus = enet_host_service(m_server, &event, 0);
 
     if (eventStatus > 0) {
