@@ -36,7 +36,12 @@ public:
     static constexpr int MAXPLAYERS = 8;
 
 private:
-    void receiveInitialClientData(std::stringstream* ss);
+    /**
+     * @returns false if the initial client data is unsuitable (version mismatch)
+     * In such a case, a disconnect is *necessary*.
+     */
+    bool receiveInitialClientData(std::stringstream* ss);
+    void receiveChatMessage(std::stringstream* ss);
 
 private:
     ENetHost* m_server = nullptr;

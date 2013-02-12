@@ -27,6 +27,7 @@
 #include <google/protobuf/io/coded_stream.h>
 
 #include "src/debug.h"
+#include "src/../config.h"
 
 #include <iostream>
 #include <fstream>
@@ -88,7 +89,7 @@ void Server::poll()
 
 void Server::processMessage(ENetEvent& event)
 {
-    std::cout << "(Server) Message from client : " << event.packet->data << "\n";
+//    std::cout << "(Server) Message from client : " << event.packet->data << "\n";
 //    std::cout << "(Server) Message from client, our client->server round trip latency is: " << event.peer->roundTripTime  << "\n";
 //    std::cout << "(Server) latency is: " << event.peer->lowestRoundTripTime  << "\n";
 
@@ -98,13 +99,14 @@ void Server::processMessage(ENetEvent& event)
 
     switch (packetType) {
         case Packet::FromClientPacketContents::InitialConnectionDataFromClientPacket:
-            receiveInitialClientData(&ss);
+            //version mismatch, can't let him connect or else we'll have assloads of problems
+            if (receiveInitialClientData(&ss) == false) {
+                enet_peer_disconnect_now(event.peer, Packet::ConnectionEventType::DisconnectedVersionMismatch);
+            }
             break;
 
         case Packet::FromClientPacketContents::ChatMessageFromClientPacket:
-            PacketBuf::ChatMessage chatMessage;
-            Packet::deserialize(&ss, &chatMessage);
-            Debug::log(Debug::Area::NetworkServer) << "(Server) chat message received: " << chatMessage.message();
+            receiveChatMessage(&ss);
             break;
     }
 
@@ -115,10 +117,22 @@ void Server::processMessage(ENetEvent& event)
     //                enet_peer_send()
 }
 
-void Server::receiveInitialClientData(std::stringstream* ss)
+bool Server::receiveInitialClientData(std::stringstream* ss)
 {
     PacketBuf::ClientInitialConnection message;
     Packet::deserialize(ss, &message);
 
     Debug::log(Debug::Area::NetworkServer) << "client sent player name and version data name: " << message.playername() << " version major: " << message.versionmajor() << " minor: " << message.versionminor();
+    if (message.versionmajor() == ore_infinium_VERSION_MAJOR && message.versionminor() == ore_infinium_VERSION_MINOR) {
+        return true;
+    } else {
+        return false;
+    }
+}
+
+void Server::receiveChatMessage(std::stringstream* ss)
+{
+    PacketBuf::ChatMessage chatMessage;
+    Packet::deserialize(ss, &chatMessage);
+    Debug::log(Debug::Area::NetworkServer) << "(Server) chat message received: " << chatMessage.message();
 }

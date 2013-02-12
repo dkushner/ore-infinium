@@ -86,7 +86,10 @@ private:
 
 private:
     ENetHost* m_client = nullptr;
+
+    /// server
     ENetPeer* m_peer = nullptr;
+    /// server address
     ENetAddress m_address;
 };
 

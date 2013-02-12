@@ -144,12 +144,13 @@ void Client::poll()
     // If we had some event that interested us
     if (eventStatus > 0) {
         switch(event.type) {
-            case ENET_EVENT_TYPE_CONNECT:
+            case ENET_EVENT_TYPE_CONNECT: {
                 char hostname[32];
                 enet_address_get_host_ip(&event.peer->address, hostname, static_cast<size_t>(32));
                 Debug::log(Debug::Area::NetworkClient) << "Connected to server host IP: " << hostname;
 
                 sendInitialConnectionData();
+            }
                 break;
 
             case ENET_EVENT_TYPE_RECEIVE:
@@ -160,11 +161,26 @@ void Client::poll()
                 enet_packet_destroy(event.packet);
                 break;
 
-            case ENET_EVENT_TYPE_DISCONNECT:
-                Debug::log(Debug::Area::NetworkClient) << "Peer disconnected: " << event.peer->data;
+            case ENET_EVENT_TYPE_DISCONNECT: {
+                Debug::log(Debug::Area::NetworkClient) << "Peer disconnected: " << event.data;
+                switch (event.data) {
+                    case Packet::ConnectionEventType::DisconnectedVersionMismatch:
+                        Debug::log(Debug::Area::NetworkClient) << "Server booted us, client version does not match server version." << event.data;
+                        //FIXME: gracefully handle a version mismatch, obviously
+                        assert(0);
+                        break;
+                }
+
+                char hostname[32];
+                enet_address_get_host_ip(&event.peer->address, hostname, static_cast<size_t>(32));
+                Debug::log(Debug::Area::NetworkClient) << "disconnected from server host IP: " << hostname;
+                enet_peer_reset(m_peer);
 
                 // Reset client's information
-                event.peer->data = NULL;
+                event.peer->data = nullptr;
+                delete m_peer;
+                m_peer = nullptr;
+            }
                 break;
         }
     }

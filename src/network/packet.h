@@ -48,6 +48,12 @@ public:
         ChatMessageFromServerPacket
     };
 
+    enum ConnectionEventType {
+        None = 0,
+        //client version does not match server version, forceful disconnect.
+       DisconnectedVersionMismatch = 1
+    };
+
     /**
      * Serializes the @p message into a stringstream, along with the packet header and @p packetType which specifies
      * what kind of data is inside it.
