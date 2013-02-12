@@ -42,10 +42,14 @@ public:
     ~Client();
 
     void startSinglePlayer(const std::string& playername);
+    /**
+     * Starts a mutliplayer client only connection, aka connecting to a server, not hosting.
+     * @p address the server address/IP to connect to
+     */
+    void startMultiplayerClientConnection(const std::string& playername, const char* address, unsigned int port = 44543);
 
     void tick(double elapsedTime, double fps);
     void render(double elapsedTime);
-
 
     const float FPS = 60.0;
 
@@ -56,7 +60,11 @@ public:
     void sendChatMessage(const std::string& message);
 
 private:
-    void connect(const char* address = "127.0.0.1", unsigned int port = 44543);
+    /**
+     * blocks until it can connect within a timeout.
+     * @returns true on success, false on failure
+     */
+    bool connect(const char* address = "127.0.0.1", unsigned int port = 44543);
     void sendInitialConnectionData();
 ///////////////////////////////////////////////
 

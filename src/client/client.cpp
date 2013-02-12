@@ -312,7 +312,7 @@ void Client::shutdown()
     exit(0);
 }
 
-void Client::connect(const char* address, unsigned int port)
+bool Client::connect(const char* address, unsigned int port)
 {
     m_client = enet_host_create (nullptr /* create a client host */,
                                1 /* only allow 1 outgoing connection */,
@@ -332,21 +332,39 @@ void Client::connect(const char* address, unsigned int port)
         exit(EXIT_FAILURE);
     }
 
-    m_world = new World(false);
+    ENetEvent event;
+    if (enet_host_service(m_client, &event, 5000) > 0 && event.type == ENET_EVENT_TYPE_CONNECT) {
+        Debug::log(Debug::Area::NetworkClient) << "Client connection to server succeeded!";
+        m_mainMenu->toggleShown();
+
+        m_chat = new ChatDialog(this, m_mainMenu);
+        m_chat->show();
+        m_world = new World(false);
+    } else {
+        Debug::log(Debug::Area::NetworkClient) << "Client failed to connect to server within timeout";
+        enet_peer_reset(m_peer);
+    }
+
 }
 
 void Client::startSinglePlayer(const std::string& playername)
 {
     Debug::log(Debug::Area::NetworkClient) << "starting singleplayer! Playername: " << playername;
     m_playerName = playername;
-    m_mainMenu->toggleShown();
-
-    m_chat = new ChatDialog(this, m_mainMenu);
-    m_chat->show();
+    std::string strⓇ;
 
     //create a local server, and connect to it.
     m_server = new Server(1);
     connect();
+}
+
+void Client::startMultiplayerClientConnection(const std::string& playername, const char* address, unsigned int port)
+{
+    Debug::log(Debug::Area::NetworkClient) << "starting multiplayer joining address: " << address << "! Playername: " << playername;
+    m_playerName = playername;
+
+
+    connect(address, port);
 }
 
 void Client::sendInitialConnectionData()

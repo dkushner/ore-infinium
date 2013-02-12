@@ -23,6 +23,7 @@
 #include <Rocket/Core.h>
 
 #include <iostream>
+#include <sstream>
 
 #include <assert.h>
 
@@ -49,9 +50,16 @@ void MainMenu::ProcessEvent(Rocket::Core::Event& event)
     const Rocket::Core::String& id = event.GetCurrentElement()->GetId();
 
     if (id == "singleplayer") {
-        m_client->startSinglePlayer("Shaun");
+        std::stringstream ss;
+        ss << "Player";
+        ss << rand();
+        m_client->startSinglePlayer(ss.str());
     } else if (id == "multiplayer") {
-
+        std::stringstream ss;
+        ss << "Player";
+        ss << rand();
+        m_client->startMultiplayerClientConnection(ss.str(), "127.0.0.1", 44543);
+//        m_client->startMultiplayerHostConnection("Shaun");
     } else if (id == "options") {
         if (!m_optionsDialog) {
             m_optionsDialog = new OptionsDialog(m_client, this);
