@@ -145,19 +145,15 @@ void Client::poll()
     if (eventStatus > 0) {
         switch(event.type) {
             case ENET_EVENT_TYPE_CONNECT:
-                printf("(Client) We got a new connection from %x\n", event.peer->address.host);
-
                 char hostname[32];
                 enet_address_get_host_ip(&event.peer->address, hostname, static_cast<size_t>(32));
-                printf("(Client) CONNECTED TO HOST IP: %s\n", hostname);
-//                Debug::log()
-                enet_peer_ping(event.peer);
+                Debug::log(Debug::Area::NetworkClient) << "Connected to server host IP: " << hostname;
+
+                sendInitialConnectionData();
                 break;
 
             case ENET_EVENT_TYPE_RECEIVE:
-//                printf("(Client) Message from server : %s\n", event.packet->data);
-                std::cout << "(Client) Message from server, our client->server round trip latency is: " << event.peer->lastRoundTripTime << "\n";
-
+                Debug::log(Debug::Area::NetworkClient) << "Message from server, our client->server round trip latency is: " << event.peer->lastRoundTripTime;
 
                 // Lets broadcast this message to all
                 // enet_host_broadcast(client, 0, event.packet);
@@ -165,13 +161,13 @@ void Client::poll()
                 break;
 
             case ENET_EVENT_TYPE_DISCONNECT:
-                printf("(Client) %s disconnected.\n", event.peer->data);
+                Debug::log(Debug::Area::NetworkClient) << "Peer disconnected: " << event.peer->data;
+
                 // Reset client's information
                 event.peer->data = NULL;
                 break;
         }
     }
-    sendInitialConnectionData();
 
 }
 
@@ -316,18 +312,16 @@ void Client::connect(const char* address, unsigned int port)
     m_peer = enet_host_connect(m_client, &m_address, 2, 0);
 
     if (m_peer == NULL) {
-        fprintf(stderr, "Client failed to connect to server");
+        Debug::log(Debug::Area::NetworkClient) << "Client failed to connect to server";
         exit(EXIT_FAILURE);
     }
-
-//FIXME:    sendInitialConnectionData();
 
     m_world = new World(false);
 }
 
 void Client::startSinglePlayer(const std::string& playername)
 {
-    Debug::log() << "starting singleplayer! Playername: " << playername;
+    Debug::log(Debug::Area::NetworkClient) << "starting singleplayer! Playername: " << playername;
     m_playerName = playername;
     m_mainMenu->toggleShown();
 
@@ -339,19 +333,6 @@ void Client::startSinglePlayer(const std::string& playername)
     connect();
 }
 
-//HACK: UNUSED
-//std::stringstream ss2;
-//ss2 << ss.str();
-
-//    PacketBuf::ClientInitialConnection message2;
-//Packet::deserialize(&ss2, &message2);
-//Debug::log() << "client attempted to deserialize serialized data, before sending (test), version maj: " << message.versionmajor() << " minor: " << message.versionminor();
-//std::stringstream ss(std::stringstream::out | std::stringstream::binary);
-
-//Packet::serialize(&ss, message, Packet::FromClientPacketContents::ClientInitialConnectionDataFromClientPacket);
-
-//ENetPacket *packet = enet_packet_create(ss.str().c_str(), ss.str().size(), ENET_PACKET_FLAG_RELIABLE);
-//assert(packet);
 void Client::sendInitialConnectionData()
 {
     PacketBuf::ClientInitialConnection message;

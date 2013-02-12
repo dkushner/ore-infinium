@@ -84,12 +84,11 @@ void Server::poll()
 
         }
     }
-
 }
 
 void Server::processMessage(ENetEvent& event)
 {
-//    std::cout << "(Server) Message from client : " << event.packet->data << "\n";
+    std::cout << "(Server) Message from client : " << event.packet->data << "\n";
 //    std::cout << "(Server) Message from client, our client->server round trip latency is: " << event.peer->roundTripTime  << "\n";
 //    std::cout << "(Server) latency is: " << event.peer->lowestRoundTripTime  << "\n";
 
