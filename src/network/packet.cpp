@@ -46,9 +46,7 @@ void Packet::serialize(std::stringstream* out, const google::protobuf::Message* 
 
     // write actual contents
     message->SerializeToString(&s);
-//    Debug::log() << "serializing mesasge to string, contents: " << s << "end";
 
-    Debug::log() << "SERIALIZING s.size():" << s.size();
     coded_out.WriteVarint32(s.size());
     coded_out.WriteString(s);
 }
@@ -103,7 +101,6 @@ void Packet::deserialize(std::stringstream* in, google::protobuf::Message* messa
     //packet contents
     coded_in.ReadVarint32(&msgSize);
 
-    //FIXME: this fails for some reason when i set an integer in protobuf to be 0..?
     if (coded_in.ReadString(&s, msgSize)) {
         message->ParseFromString(s);
     } else {
@@ -122,7 +119,7 @@ void Packet::sendPacket(ENetPeer* peer, const google::protobuf::Message* message
 
     Packet::serialize(&ss, message, packetType);
 
-    ENetPacket *packet = enet_packet_create(ss.str().c_str(), ss.str().size(), enetPacketType);
+    ENetPacket *packet = enet_packet_create(ss.str().data(), ss.str().size(), enetPacketType);
     assert(packet);
 
     enet_peer_send(peer, 0, packet);

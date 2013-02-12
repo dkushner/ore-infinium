@@ -34,7 +34,7 @@ public:
     enum FromClientPacketContents {
        InvalidFromClientPacket = 0,
        /// to send stuff like the name of the player, version of game client, etc.
-      ClientInitialConnectionDataFromClientPacket,
+      InitialConnectionDataFromClientPacket,
       ChatMessageFromClientPacket,
       PlayerInitialDataFromClientPacket,
       PlayerStateFromClientPacket,

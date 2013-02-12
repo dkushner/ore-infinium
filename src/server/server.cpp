@@ -66,14 +66,6 @@ void Server::poll()
 
     eventStatus = enet_host_service(m_server, &event, 0);
 
-//    PacketBuf::ChatMessage message;
-//    message.set_message("THIS IS A TEST PROTOBUF MESSAGE FROM CLIENT");
-//    std::stringstream ss(std::stringstream::out | std::stringstream::binary);
-//    ss.str();
-//    ss.str().size();
-//
-//    person.SerializeToOstream(&ss);
-//
     if (eventStatus > 0) {
 
         switch(event.type) {
@@ -104,22 +96,13 @@ void Server::processMessage(ENetEvent& event)
 //    std::cout << "(Server) Message from client, our client->server round trip latency is: " << event.peer->roundTripTime  << "\n";
 //    std::cout << "(Server) latency is: " << event.peer->lowestRoundTripTime  << "\n";
 
-    std::stringstream ss;
-    ss << (const char*)(event.packet->data);
+    std::stringstream ss(std::string(event.packet->data, event.packet->dataLength));
 
-printf("server 0x%x\n", ss.str().c_str());
-    uint32_t packetType = Packet::FromClientPacketContents::ClientInitialConnectionDataFromClientPacket;
-    //Packet::deserializePacketType(ss);
+    uint32_t packetType = Packet::deserializePacketType(ss);
 
     switch (packetType) {
-        case Packet::FromClientPacketContents::ClientInitialConnectionDataFromClientPacket:
-           // receiveInitialClientData(&ss);
-        {
-            PacketBuf::ClientInitialConnection message;
-            Packet::deserialize(&ss, &message);
-
-    Debug::log(Debug::Area::NetworkServer) << "client sent player name and version data name: " << message.playername() << " version major: " << message.versionmajor() << " minor: " << message.versionminor();
-        }
+        case Packet::FromClientPacketContents::InitialConnectionDataFromClientPacket:
+            receiveInitialClientData(&ss);
             break;
 
         case Packet::FromClientPacketContents::ChatMessageFromClientPacket:

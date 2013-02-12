@@ -354,32 +354,14 @@ void Client::startSinglePlayer(const std::string& playername)
 
 //ENetPacket *packet = enet_packet_create(ss.str().c_str(), ss.str().size(), ENET_PACKET_FLAG_RELIABLE);
 //assert(packet);
-    //enet_peer_send(m_peer, 0, packet);
-    //printf("client presend deserialize test 0x%x\n", ss2.str().c_str());
-    //ore_infinium_VERSION_MAJOR);
-    //ore_infinium_VERSION_MINOR);
 void Client::sendInitialConnectionData()
 {
     PacketBuf::ClientInitialConnection message;
     message.set_playername(m_playerName);
-    message.set_versionmajor(0);
-    message.set_versionminor(0);
+    message.set_versionmajor(ore_infinium_VERSION_MAJOR);
+    message.set_versionminor(ore_infinium_VERSION_MINOR);
 
-    std::stringstream ss(std::stringstream::out | std::stringstream::binary);
-
-    Packet::serialize(&ss, &message, Packet::FromClientPacketContents::ClientInitialConnectionDataFromClientPacket);
-
-    printf("client 0x%x\n", ss.str().c_str());
-
-    ENetPacket *packet = enet_packet_create(ss.str().data(), ss.str().size(), ENET_PACKET_FLAG_RELIABLE);
-
-    std::stringstream ss2(std::string(packet->data, packet->dataLength));
-
-    PacketBuf::ClientInitialConnection message2;
-    Packet::deserialize(&ss2, &message2);
-
-
-    Debug::log() << "client presend deserialize test major vers: " << message2.versionmajor() << " minor: " << message2.versionminor();
+    Packet::sendPacket(m_peer, &message, Packet::FromClientPacketContents::InitialConnectionDataFromClientPacket, ENET_PACKET_FLAG_RELIABLE);
 }
 
 void Client::sendChatMessage(const std::string& message)
@@ -387,5 +369,5 @@ void Client::sendChatMessage(const std::string& message)
     PacketBuf::ChatMessage messagestruct;
     messagestruct.set_message(message);
 
-//    Packet::sendPacket(m_peer, &messagestruct, Packet::FromClientPacketContents::ChatMessageFromClientPacket, ENET_PACKET_FLAG_RELIABLE);
+    Packet::sendPacket(m_peer, &messagestruct, Packet::FromClientPacketContents::ChatMessageFromClientPacket, ENET_PACKET_FLAG_RELIABLE);
 }
