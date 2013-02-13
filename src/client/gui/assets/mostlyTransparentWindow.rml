@@ -1,0 +1,12 @@
+<template name="mostlyTransparentWindow" content="content">
+<head>
+	<link type="text/rcss" href="rkt.rcss"/>
+	<link type="text/rcss" href="gui.rcss"/>
+</head>
+<body class="mostlyTransparentWindow">
+	<div id="mostlyTransparentWindow">
+		<div id="content">
+		</div>
+	</div>
+</body>
+</template>

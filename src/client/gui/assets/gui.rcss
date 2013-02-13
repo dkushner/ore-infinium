@@ -96,8 +96,15 @@ div#transparentWindow
 {
         width: auto;
         padding: 10px 15px;
+}
 
+div#mostlyTransparentWindow
+{
+        width: auto;
+        padding: 10px 15px;
 
+        background-decorator: image;
+        background-image: gui.tga 823px 410px 1128px 595px;
 }
 
 div#window

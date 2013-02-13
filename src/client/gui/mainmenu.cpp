@@ -19,12 +19,15 @@
 #include "gui.h"
 
 #include "src/client/client.h"
-#include <src/settings/settings.h>
+#include "src/settings/settings.h"
+
+#include "src/debug.h"
 
 #include <Rocket/Core.h>
 
 #include <iostream>
 #include <sstream>
+
 
 #include <assert.h>
 
@@ -35,7 +38,7 @@ MainMenu::MainMenu(Client* client) : m_client(client)
 
     m_menu->SetProperty("height", Rocket::Core::Property(Settings::instance()->screenResolutionHeight ,Rocket::Core::Property::PX));
     m_menu->SetProperty("width", Rocket::Core::Property(Settings::instance()->screenResolutionWidth,Rocket::Core::Property::PX));
-    m_menu->SetProperty("padding-top", Rocket::Core::Property(static_cast<int>(Settings::instance()->screenResolutionHeight * 0.5),Rocket::Core::Property::PX));
+    m_menu->GetElementById("content")->SetProperty("padding-top", Rocket::Core::Property(static_cast<int>(Settings::instance()->screenResolutionHeight * 0.5),Rocket::Core::Property::PX));
 
     m_menu->GetElementById("singleplayer")->AddEventListener("click", this);
     m_menu->GetElementById("multiplayer")->AddEventListener("click", this);
