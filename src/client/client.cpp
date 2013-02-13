@@ -351,7 +351,6 @@ void Client::startSinglePlayer(const std::string& playername)
 {
     Debug::log(Debug::Area::NetworkClient) << "starting singleplayer! Playername: " << playername;
     m_playerName = playername;
-    std::string strⓇ;
 
     //create a local server, and connect to it.
     m_server = new Server(1);
