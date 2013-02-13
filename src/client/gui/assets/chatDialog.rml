@@ -52,13 +52,13 @@
 
         <body template="window">
             <tabset id="tabset">
-                <tab>Fucking fuck in the chat chat</tab>
+                <tab>Chat Tab</tab>
                     <panel id="panel1">
                         This is where some text for the chat history goes
                     </panel>
             </tabset>
 
-                    <input id="inputLine" type="text" value="PUT YOUR SHIT IN HERE" />
+                    <input id="inputLine" type="text" value="" />
                     <button id="sendButton">send</button>
         </body>
 </rml>
