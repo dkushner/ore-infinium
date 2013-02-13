@@ -56,7 +56,7 @@ void ChatDialog::ProcessEvent(Rocket::Core::Event& event)
 
 void ChatDialog::loadDocument()
 {
-    m_chat = GUI::instance()->context()->LoadDocument("../gui/assets/chatDialog.rml");
+    m_chat = GUI::instance()->context()->LoadDocument("../client/gui/assets/chatDialog.rml");
     m_chat->GetElementById("title")->SetInnerRML("fuck yeah, runtime chat");
 
     m_tabSet = dynamic_cast<Rocket::Controls::ElementTabSet*>(m_chat->GetElementById("tabset"));

@@ -94,7 +94,7 @@ void OptionsDialog::ProcessEvent(Rocket::Core::Event& event)
 
 void OptionsDialog::loadDocument()
 {
-    m_options = GUI::instance()->context()->LoadDocument("../gui/assets/optionsDialog.rml");
+    m_options = GUI::instance()->context()->LoadDocument("../client/gui/assets/optionsDialog.rml");
     m_options->RemoveReference();
     m_options->GetElementById("title")->SetInnerRML("fuck yeah, runtime options");
 

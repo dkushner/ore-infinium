@@ -75,7 +75,8 @@ GUI::GUI()
     bool success = Rocket::Core::FontDatabase::LoadFontFace("../client/gui/assets/Delicious-Roman.otf");
     Debug::fatal(success, Debug::Area::Graphics, "font load failure");
 
-    m_context->LoadMouseCursor("../gui/assets/cursor.rml");
+    auto cursor = m_context->LoadMouseCursor("../client/gui/assets/cursor.rml");
+    Debug::assertf(cursor, "cursor load failure");
 }
 
 GUI::~GUI()

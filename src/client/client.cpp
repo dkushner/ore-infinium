@@ -333,17 +333,17 @@ bool Client::connect(const char* address, unsigned int port)
     }
 
     ENetEvent event;
-    if (enet_host_service(m_client, &event, 5000) > 0 && event.type == ENET_EVENT_TYPE_CONNECT) {
-        Debug::log(Debug::Area::NetworkClient) << "Client connection to server succeeded!";
+//    if (enet_host_service(m_client, &event, 5000) > 0 && event.type == ENET_EVENT_TYPE_CONNECT) {
+     //   Debug::log(Debug::Area::NetworkClient) << "Client connection to server succeeded!";
         m_mainMenu->toggleShown();
 
         m_chat = new ChatDialog(this, m_mainMenu);
         m_chat->show();
         m_world = new World(false);
-    } else {
-        Debug::log(Debug::Area::NetworkClient) << "Client failed to connect to server within timeout";
-        enet_peer_reset(m_peer);
-    }
+ //   } else {
+    //    Debug::log(Debug::Area::NetworkClient) << "Client failed to connect to server within timeout";
+   //     enet_peer_reset(m_peer);
+  //  }
 
 }
 

@@ -19,6 +19,7 @@
 #include "gui.h"
 
 #include "src/client/client.h"
+#include <src/settings/settings.h>
 
 #include <Rocket/Core.h>
 
@@ -29,8 +30,12 @@
 
 MainMenu::MainMenu(Client* client) : m_client(client)
 {
-    m_menu = GUI::instance()->context()->LoadDocument("../gui/assets/mainMenu.rml");
+    m_menu = GUI::instance()->context()->LoadDocument("../client/gui/assets/mainMenu.rml");
     assert(m_menu);
+
+    m_menu->SetProperty("height", Rocket::Core::Property(Settings::instance()->screenResolutionHeight ,Rocket::Core::Property::PX));
+    m_menu->SetProperty("width", Rocket::Core::Property(Settings::instance()->screenResolutionWidth,Rocket::Core::Property::PX));
+    m_menu->SetProperty("padding-top", Rocket::Core::Property(static_cast<int>(Settings::instance()->screenResolutionHeight * 0.5),Rocket::Core::Property::PX));
 
     m_menu->GetElementById("singleplayer")->AddEventListener("click", this);
     m_menu->GetElementById("multiplayer")->AddEventListener("click", this);
@@ -84,6 +89,16 @@ void MainMenu::toggleShown()
         GUI::instance()->addInputDemand();
         m_menu->Show();
     }
+    /*
+        Rocket::Core::Box box;
+    box.SetContent(Rocket::Core::Vector2f(200, 200));
+    box.SetOffset(Rocket::Core::Vector2f(100,100));
+
+
+    m_menu->SetContentBox(Rocket::Core::Vector2f(0, 0), Rocket::Core::Vector2f(1600, 900));
+    m_menu->SetBox(box);
+    */
+
 }
 
 void MainMenu::optionsClosedCallback()
