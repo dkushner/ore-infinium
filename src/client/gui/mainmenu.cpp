@@ -33,6 +33,7 @@
 
 MainMenu::MainMenu(Client* client) : m_client(client)
 {
+
     m_menu = GUI::instance()->context()->LoadDocument("../client/gui/assets/mainMenu.rml");
     assert(m_menu);
 
@@ -44,6 +45,13 @@ MainMenu::MainMenu(Client* client) : m_client(client)
     m_menu->GetElementById("multiplayer")->AddEventListener("click", this);
     m_menu->GetElementById("options")->AddEventListener("click", this);
     m_menu->GetElementById("quit")->AddEventListener("click", this);
+
+    m_escapeMenu = GUI::instance()->context()->LoadDocument("../client/gui/assets/escapeMenu.rml");
+    assert(m_escapeMenu);
+
+    m_escapeMenu->SetProperty("height", Rocket::Core::Property(Settings::instance()->screenResolutionHeight ,Rocket::Core::Property::PX));
+    m_escapeMenu->SetProperty("width", Rocket::Core::Property(Settings::instance()->screenResolutionWidth,Rocket::Core::Property::PX));
+    m_escapeMenu->GetElementById("content")->SetProperty("padding-top", Rocket::Core::Property(static_cast<int>(Settings::instance()->screenResolutionHeight * 0.5),Rocket::Core::Property::PX));
 }
 
 MainMenu::~MainMenu()
@@ -79,29 +87,36 @@ void MainMenu::ProcessEvent(Rocket::Core::Event& event)
     }
 }
 
-void MainMenu::toggleShown()
+bool MainMenu::escapeMenuVisible()
 {
-    if (m_menu->IsVisible()) {
-        GUI::instance()->removeInputDemand();
-        m_menu->Hide();
+    m_escapeMenu->IsVisible();
+}
 
-        if (m_optionsDialog) {
-            m_optionsDialog->close();
-        }
-    } else {
+void MainMenu::showEscapeMenu()
+{
+    if (!m_escapeMenu->IsVisible()) {
         GUI::instance()->addInputDemand();
-        m_menu->Show();
+        m_escapeMenu->Show();
     }
-    /*
-        Rocket::Core::Box box;
-    box.SetContent(Rocket::Core::Vector2f(200, 200));
-    box.SetOffset(Rocket::Core::Vector2f(100,100));
+}
 
+void MainMenu::hideEscapeMenu()
+{
+    if (m_escapeMenu->IsVisible()) {
+        GUI::instance()->removeInputDemand();
+        m_escapeMenu->Hide();
+    }
+}
 
-    m_menu->SetContentBox(Rocket::Core::Vector2f(0, 0), Rocket::Core::Vector2f(1600, 900));
-    m_menu->SetBox(box);
-    */
+//input demand not needed since you can't access the main menu in game, only the escape menu
+void MainMenu::showMainMenu()
+{
+    m_menu->Show();
+}
 
+void MainMenu::hideMainMenu()
+{
+    m_menu->Hide();
 }
 
 void MainMenu::optionsClosedCallback()
@@ -109,5 +124,3 @@ void MainMenu::optionsClosedCallback()
     delete m_optionsDialog;
     m_optionsDialog = 0;
 }
-
-

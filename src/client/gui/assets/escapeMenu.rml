@@ -1,0 +1,23 @@
+<rml>
+	<head>
+		<title></title>
+		<link type="text/template" href="mostlyTransparentWindow.rml" />
+                <link type="text/template" href="window.rml" />
+
+		<style>
+			body
+			{
+			}
+                        div#content
+                        {
+                        }
+
+		</style>
+	</head>
+	<body template="mostlyTransparentWindow">
+		<button id="resume">Resume</button><br />
+                <button id="disconnect">Disconnect</button><br />
+		<button id="options">Options</button><br />
+		<button id="quit">Quit</button>
+	</body>
+</rml>

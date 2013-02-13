@@ -38,7 +38,12 @@ public:
     /// reimplemented from Rocket::Core::EventListener
     virtual void ProcessEvent(Rocket::Core::Event& event);
 
-    void toggleShown();
+    void showEscapeMenu();
+    void hideEscapeMenu();
+    bool escapeMenuVisible();
+
+    void hideMainMenu();
+    void showMainMenu();
 
     void optionsClosedCallback();
 
@@ -47,6 +52,7 @@ private:
     OptionsDialog* m_optionsDialog = nullptr;
 
     Rocket::Core::ElementDocument* m_menu = nullptr;
+    Rocket::Core::ElementDocument* m_escapeMenu = nullptr;
 };
 
 #endif

@@ -43,7 +43,7 @@ Client::Client()
 
     m_gui = GUI::instance();
     m_mainMenu = new MainMenu(this);
-    m_mainMenu->toggleShown();
+    m_mainMenu->showMainMenu();
 }
 
 Client::~Client()
@@ -268,9 +268,13 @@ void Client::handleInputEvents()
         switch (event.type) {
             case SDL_KEYDOWN:
                 if (event.key.keysym.sym == SDLK_ESCAPE) {
-                    //only if we are connected, do we allow hiding and showing the main menu (escape menu)
+                    //only if we are connected, do we allow hiding and showing (escape menu)
                     if (m_peer) {
-                        m_mainMenu->toggleShown();
+                        if (!m_mainMenu->escapeMenuVisible()) {
+                            m_mainMenu->showEscapeMenu();
+                        } else {
+                            m_mainMenu->hideEscapeMenu();
+                        }
                     }
                 } else if (event.key.keysym.sym == SDLK_F5) {
                     // toggle debug logging
@@ -294,7 +298,7 @@ void Client::handleInputEvents()
 
             case SDL_QUIT:
                      if (m_peer) {
-                        m_mainMenu->toggleShown();
+                        m_mainMenu->showEscapeMenu();
                     } else {
                         shutdown();
                     }
@@ -335,7 +339,7 @@ bool Client::connect(const char* address, unsigned int port)
     ENetEvent event;
 //    if (enet_host_service(m_client, &event, 5000) > 0 && event.type == ENET_EVENT_TYPE_CONNECT) {
      //   Debug::log(Debug::Area::NetworkClient) << "Client connection to server succeeded!";
-        m_mainMenu->toggleShown();
+        m_mainMenu->hideMainMenu();
 
         m_chat = new ChatDialog(this, m_mainMenu);
         m_chat->show();
