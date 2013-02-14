@@ -56,6 +56,12 @@ MainMenu::MainMenu(Client* client) : m_client(client)
     m_escapeMenu->GetElementById("disconnect")->AddEventListener("click", this);
     m_escapeMenu->GetElementById("options")->AddEventListener("click", this);
     m_escapeMenu->GetElementById("quit")->AddEventListener("click", this);
+
+    m_mainMenuSingleplayer = GUI::instance()->context()->LoadDocument("../client/gui/assets/mainMenuSingleplayer.rml");
+    assert(m_mainMenuSingleplayer);
+
+    m_mainMenuSingleplayer->SetProperty("height", Rocket::Core::Property(Settings::instance()->screenResolutionHeight ,Rocket::Core::Property::PX));
+    m_mainMenuSingleplayer->SetProperty("width", Rocket::Core::Property(Settings::instance()->screenResolutionWidth,Rocket::Core::Property::PX));
 }
 
 MainMenu::~MainMenu()
@@ -84,10 +90,13 @@ void MainMenu::ProcessEvent(Rocket::Core::Event& event)
         }
     } else if (m_menu->IsVisible() == true) {
         if (id == "singleplayer") {
+
+
+    m_mainMenuSingleplayer->Show();
             std::stringstream ss;
             ss << "Player";
             ss << rand();
-            m_client->startSinglePlayer(ss.str());
+//            m_client->startSinglePlayer(ss.str());
         } else if (id == "multiplayer") {
             std::stringstream ss;
             ss << "Player";

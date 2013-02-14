@@ -1,0 +1,51 @@
+<rml>
+	<head>
+		<title></title>
+		<link type="text/template" href="mostlyTransparentWindow.rml" />
+
+		<style>
+			body
+			{
+			}
+                        div#content
+                        {
+
+
+                            display: inline;
+                        }
+
+form div {
+height: 800px;
+}
+                        button#start
+                        {
+/*
+                            display: inline-block;
+*/
+
+float: right;
+                            width: 190px;
+                            height: 30px;
+                        }
+                        button#back
+                        {
+
+float: left;
+                            width: 190px;
+                            height: 30px;
+                        }
+		</style>
+	</head>
+
+	<body template="mostlyTransparentWindow">
+                <form>
+                <div>
+                    <text id="playerNameLabel">Player Name:</text>
+                    <input id="playerName" type="text" value="uninit" />
+                </div>
+                </form>
+
+                <button id="back">Back</button>
+                <button id="start">Start Game</button>
+	</body>
+</rml>

@@ -54,6 +54,8 @@ private:
 
     Rocket::Core::ElementDocument* m_menu = nullptr;
     Rocket::Core::ElementDocument* m_escapeMenu = nullptr;
+    Rocket::Core::ElementDocument* m_mainMenuSingleplayer = nullptr;
+    Rocket::Core::ElementDocument* m_mainMenuMultiplayer = nullptr;
 };
 
 #endif
