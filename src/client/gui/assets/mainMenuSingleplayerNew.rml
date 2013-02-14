@@ -1,13 +1,13 @@
 <rml>
-	<head>
-		<title></title>
-		<link type="text/template" href="mostlyTransparentWindow.rml" />
+        <head>
+                <title></title>
+                <link type="text/template" href="mostlyTransparentWindow.rml" />
 
-		<style>
-			body
-			{
+                <style>
+                        body
+                        {
                             height:900px;
-			}
+                        }
 
                         div#content
                         {
@@ -58,10 +58,10 @@ height: 900px;
                         text {
                             display: block;
                         }
-		</style>
-	</head>
+                </style>
+        </head>
 
-	<body template="mostlyTransparentWindow">
+        <body template="mostlyTransparentWindow">
             <div id="main">
                 <text id="playerNameLabel">Player Name:</text>
                 <input id="playerName" type="text" value="uninit" /><br/>
@@ -71,5 +71,5 @@ height: 900px;
                 <button id="back">Back</button>
                 <button id="start">Start Game</button>
             </div>
-	</body>
+        </body>
 </rml>
