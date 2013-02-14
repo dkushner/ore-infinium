@@ -351,6 +351,11 @@ bool Client::connect(const char* address, unsigned int port)
 
 }
 
+void Client::disconnect()
+{
+    Debug::log(Debug::Area::NetworkClient) << "attempting disconnect from server";
+}
+
 void Client::startSinglePlayer(const std::string& playername)
 {
     Debug::log(Debug::Area::NetworkClient) << "starting singleplayer! Playername: " << playername;

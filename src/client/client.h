@@ -53,6 +53,8 @@ public:
 
     const float FPS = 60.0;
 
+    void disconnect();
+
     void shutdown();
 
 ///////////////// Network Communication ////////////////////

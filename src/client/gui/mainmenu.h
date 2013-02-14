@@ -45,6 +45,7 @@ public:
     void hideMainMenu();
     void showMainMenu();
 
+    void showOptionsDialog();
     void optionsClosedCallback();
 
 private:

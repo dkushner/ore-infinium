@@ -52,6 +52,10 @@ MainMenu::MainMenu(Client* client) : m_client(client)
     m_escapeMenu->SetProperty("height", Rocket::Core::Property(Settings::instance()->screenResolutionHeight ,Rocket::Core::Property::PX));
     m_escapeMenu->SetProperty("width", Rocket::Core::Property(Settings::instance()->screenResolutionWidth,Rocket::Core::Property::PX));
     m_escapeMenu->GetElementById("content")->SetProperty("padding-top", Rocket::Core::Property(static_cast<int>(Settings::instance()->screenResolutionHeight * 0.5),Rocket::Core::Property::PX));
+    m_escapeMenu->GetElementById("resume")->AddEventListener("click", this);
+    m_escapeMenu->GetElementById("disconnect")->AddEventListener("click", this);
+    m_escapeMenu->GetElementById("options")->AddEventListener("click", this);
+    m_escapeMenu->GetElementById("quit")->AddEventListener("click", this);
 }
 
 MainMenu::~MainMenu()
@@ -65,26 +69,48 @@ void MainMenu::ProcessEvent(Rocket::Core::Event& event)
 
     const Rocket::Core::String& id = event.GetCurrentElement()->GetId();
 
-    if (id == "singleplayer") {
-        std::stringstream ss;
-        ss << "Player";
-        ss << rand();
-        m_client->startSinglePlayer(ss.str());
-    } else if (id == "multiplayer") {
-        std::stringstream ss;
-        ss << "Player";
-        ss << rand();
-        m_client->startMultiplayerClientConnection(ss.str(), "127.0.0.1", 44543);
-//        m_client->startMultiplayerHostConnection("Shaun");
-    } else if (id == "options") {
-        if (!m_optionsDialog) {
-            m_optionsDialog = new OptionsDialog(m_client, this);
+    //user pressed escape, aka is in game with a connection (either SP or MP)
+    if (m_escapeMenu->IsVisible() == true) {
+        Debug::log() << "escape menu visible, id: " << id.CString();
+        if (id == "resume") {
+            hideEscapeMenu();
+        } else if (id == "disconnect") {
+            m_client->disconnect();
+        } else if (id == "options") {
+            showOptionsDialog();
+        } else if (id == "quit") {
+            //FIXME: prompt dialog to disconnect, as we clearly are connected.
+            m_client->shutdown();
         }
-
-        m_optionsDialog->show();
-    } else if (id == "quit") {
-        m_client->shutdown();
+    } else if (m_menu->IsVisible() == true) {
+        if (id == "singleplayer") {
+            std::stringstream ss;
+            ss << "Player";
+            ss << rand();
+            m_client->startSinglePlayer(ss.str());
+        } else if (id == "multiplayer") {
+            std::stringstream ss;
+            ss << "Player";
+            ss << rand();
+            m_client->startMultiplayerClientConnection(ss.str(), "127.0.0.1", 44543);
+        } else if (id == "options") {
+            showOptionsDialog();
+        } else if (id == "quit") {
+            // no prompt needed for save, no active connection.
+            m_client->shutdown();
+        }
+    } else {
+       Debug::assertf(false, "Input propagation sanity check failure, MainMenu somehow received an event to process even though neither of escapemenu or main menu are visible. What's up with that?");
     }
+}
+
+void MainMenu::showOptionsDialog()
+{
+    if (!m_optionsDialog) {
+        m_optionsDialog = new OptionsDialog(m_client, this);
+    }
+
+    m_optionsDialog->show();
 }
 
 bool MainMenu::escapeMenuVisible()
@@ -105,6 +131,9 @@ void MainMenu::hideEscapeMenu()
     if (m_escapeMenu->IsVisible()) {
         GUI::instance()->removeInputDemand();
         m_escapeMenu->Hide();
+        if (m_optionsDialog) {
+           m_optionsDialog->close();
+        }
     }
 }
 
