@@ -56,6 +56,9 @@ private:
     void processSingleplayerLoad(Rocket::Core::Event& event);
     void processMultiplayer(Rocket::Core::Event& event);
 
+    /// hides all submenus, including multiplayer, sp, if available, as we're initiating the game now
+    void hideSubmenus();
+
 private:
     Client* m_client = nullptr;
     OptionsDialog* m_optionsDialog = nullptr;

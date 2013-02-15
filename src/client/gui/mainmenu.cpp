@@ -24,6 +24,7 @@
 #include "src/debug.h"
 
 #include <Rocket/Core.h>
+#include <Rocket/Controls.h>
 
 #include <iostream>
 #include <sstream>
@@ -65,6 +66,7 @@ MainMenu::MainMenu(Client* client) : m_client(client)
 
     m_mainMenuSingleplayerCreate = GUI::instance()->context()->LoadDocument("../client/gui/assets/mainMenuSingleplayerCreate.rml");
     m_mainMenuSingleplayerCreate->GetElementById("back")->AddEventListener("click", this);
+    m_mainMenuSingleplayerCreate->GetElementById("start")->AddEventListener("click", this);
 
     m_mainMenuSingleplayerLoad = GUI::instance()->context()->LoadDocument("../client/gui/assets/mainMenuSingleplayerLoad.rml");
     m_mainMenuSingleplayerLoad->GetElementById("back")->AddEventListener("click", this);
@@ -124,16 +126,12 @@ void MainMenu::processMainMenu(Rocket::Core::Event& event)
     if (id == "singleplayer") {
         m_mainMenuSingleplayer->Show();
 
-//        std::stringstream ss;
-     //   ss << "Player";
-    //    ss << rand();
-        //FIXME:            m_client->startSinglePlayer(ss.str());
+
     } else if (id == "multiplayer") {
    //     std::stringstream ss;
   //      ss << "Player";
  //       ss << rand();
 //        m_client->startMultiplayerClientConnection(ss.str(), "127.0.0.1", 44543);
-       
     } else if (id == "options") {
         showOptionsDialog();
     } else if (id == "quit") {
@@ -147,6 +145,14 @@ void MainMenu::processSingleplayer(Rocket::Core::Event& event)
     const Rocket::Core::String& id = event.GetCurrentElement()->GetId();
     //just at the singleplayer sub menu
     if (id == "create") {
+        // FIXME: populate the singleplayer create with values from settings
+        Rocket::Core::Element* playerNameInput = m_mainMenuSingleplayerCreate->GetElementById("playerName");
+        //HACK: pick a random useless name
+        std::stringstream ss;
+        ss << "Player";
+        ss << rand();
+        playerNameInput->SetAttribute("value", ss.str().c_str());
+
         m_mainMenuSingleplayerCreate->Show();
     } else if (id == "load") {
         m_mainMenuSingleplayerLoad->Show();
@@ -155,12 +161,16 @@ void MainMenu::processSingleplayer(Rocket::Core::Event& event)
     }
 }
 
-
 void MainMenu::processSingleplayerCreate(Rocket::Core::Event& event)
 {
     const Rocket::Core::String& id = event.GetCurrentElement()->GetId();
     if (id == "back") {
         m_mainMenuSingleplayerCreate->Hide();
+    } else if (id == "start") {
+        Rocket::Core::Element* playerNameInput = m_mainMenuSingleplayerCreate->GetElementById("playerName");
+        Rocket::Core::String playerName = playerNameInput->GetAttribute("value")->Get<Rocket::Core::String>();
+        hideSubmenus();
+        m_client->startSinglePlayer(playerName.CString());
     }
 }
 
@@ -174,6 +184,14 @@ void MainMenu::processSingleplayerLoad(Rocket::Core::Event& event)
 
 void MainMenu::processMultiplayer(Rocket::Core::Event& event)
 {
+}
+
+void MainMenu::hideSubmenus()
+{
+    m_mainMenuSingleplayer->Hide();
+    m_mainMenuSingleplayerCreate->Hide();
+    m_mainMenuSingleplayerLoad->Hide();
+//    m_mainMenuMultiplayer->Hide();
 }
 
 void MainMenu::showOptionsDialog()
