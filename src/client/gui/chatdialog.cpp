@@ -78,7 +78,6 @@ void ChatDialog::reloadChatHistory()
     m_tabSet->GetElementById("panel1")->SetScrollTop(20500.0f);
 }
 
-
 void ChatDialog::replaceAll(std::string& str, const std::string& from, const std::string& to) {
     if(from.empty()) {
         return;

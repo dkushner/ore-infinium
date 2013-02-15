@@ -58,7 +58,7 @@
                     </panel>
             </tabset>
 
-                    <input id="inputLine" type="text" value="" />
+                    <input id="inputLine" type="text" value="" maxLength="128" />
                     <button id="sendButton">send</button>
         </body>
 </rml>
