@@ -49,12 +49,22 @@ public:
     void optionsClosedCallback();
 
 private:
+    void processEscapeMenu(Rocket::Core::Event& event);
+    void processMainMenu(Rocket::Core::Event& event);
+    void processSingleplayer(Rocket::Core::Event& event);
+    void processSingleplayerCreate(Rocket::Core::Event& event);
+    void processSingleplayerLoad(Rocket::Core::Event& event);
+    void processMultiplayer(Rocket::Core::Event& event);
+
+private:
     Client* m_client = nullptr;
     OptionsDialog* m_optionsDialog = nullptr;
 
     Rocket::Core::ElementDocument* m_menu = nullptr;
     Rocket::Core::ElementDocument* m_escapeMenu = nullptr;
     Rocket::Core::ElementDocument* m_mainMenuSingleplayer = nullptr;
+    Rocket::Core::ElementDocument* m_mainMenuSingleplayerCreate = nullptr;
+    Rocket::Core::ElementDocument* m_mainMenuSingleplayerLoad = nullptr;
     Rocket::Core::ElementDocument* m_mainMenuMultiplayer = nullptr;
 };
 
