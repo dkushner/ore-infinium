@@ -60,7 +60,7 @@ public:
     ~World();
 
     void update(double elapsedTime);
-    void render();
+    void render(Player* player);
 
     void loadMap();
 
@@ -69,6 +69,9 @@ public:
     bool isBlockSolid(const glm::vec2& vecDest) const;
 
     unsigned char getBlockType(const glm::vec2& vecPoint) const;
+
+    void addPlayer(Player* player);
+    void removePlayer(Player* player);
 
     //create containers of various entities, and implement a tile system
     //game.cpp calls into this each tick, which this descends downward into each entity
@@ -91,11 +94,11 @@ private:
 
     void calculateAttackPosition();
 
-    void performBlockAttack();
+    void performBlockAttack(Player* player);
 
     void saveMap();
 
-    glm::ivec2 tileOffset() const;
+    glm::ivec2 tileOffset(Player* player) const;
 
     /**
      * Should be called AFTER the world has been fully processed in raw block form.
@@ -123,13 +126,13 @@ private:
 
     std::vector<Entity*> m_entities;
 
-    // it's faster and easier to manage with a linear array. access is trivial - array[y][x] simply becomes array[y*rowlength + x]
-    // makes sure that the memory allocated is in fact contiguous.
+    // it's easier to manage with a linear array. access is trivial - array[y][x] simply becomes array[y*rowlength + x]
     // [column * WORLD_ROWCOUNT + row]
     Block m_blocks[WORLD_ROWCOUNT * WORLD_COLUMNCOUNT];
 
     TileRenderer* m_tileRenderer = nullptr;
-    Player* m_player = nullptr;
+
+    std::vector<Player*> m_players;
 
     //HACK: remove when we get beyond just testing stupid shit
     Entity* m_uselessEntity = nullptr;

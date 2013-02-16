@@ -29,6 +29,7 @@
 #include <SDL2/SDL.h>
 #include <SDL_log.h>
 
+class Player;
 class GUI;
 class MainMenu;
 class ChatDialog;
@@ -93,6 +94,8 @@ private:
     double m_fps = 0.0;
 
     std::string m_playerName;
+
+    Player* m_player = nullptr;
 
 private:
     ENetHost* m_client = nullptr;

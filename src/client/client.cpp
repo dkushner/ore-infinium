@@ -29,6 +29,7 @@
 #include "src/settings/settings.h"
 
 #include "src/world.h"
+#include "src/player.h"
 #include "src/debug.h"
 #include "src/../config.h"
 
@@ -191,8 +192,8 @@ void Client::render(double elapsedTime)
 {
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-    if (m_world) {
-        m_world->render();
+    if (m_world && m_player) {
+        m_world->render(m_player);
     }
 
     m_gui->render();

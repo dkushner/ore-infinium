@@ -41,8 +41,9 @@ World::World(bool isServer) : m_isServer(isServer)
 
     m_tileRenderer = new TileRenderer(this);
 
-    m_player = new Player("someframe");
-    m_entities.insert(m_entities.end(), m_player);
+    //FIXME:
+//    m_player = new Player("someframe");
+//    m_entities.insert(m_entities.end(), m_player);
 
     m_uselessEntity = new Entity("test", SpriteSheetManager::SpriteSheetType::Character);
     m_uselessEntity->setPosition(2200, 2490);
@@ -59,13 +60,26 @@ World::World(bool isServer) : m_isServer(isServer)
 
 World::~World()
 {
-    delete m_player;
     delete m_tileRenderer;
     delete m_camera;
     //    delete m_sky;
 }
 
-void World::render()
+void World::addPlayer(Player* player)
+{
+    m_players.push_back(player);
+}
+
+void World::removePlayer(Player* player)
+{
+}
+
+void World::generateTileMeshes()
+{
+
+}
+
+void World::render(Player* player)
 {
     assert(!m_isServer);
 
@@ -89,9 +103,11 @@ void World::render()
     const float halfRadius = radius * 0.5;
     const float halfBlockSize = Block::blockSize * 0.5;
 
+    const glm::ivec2 offset = tileOffset(player);
+
     // NOTE: (Settings::instance()->screenResolutionHeight % Block::blockSize) is what we add so that it is aligned properly to the tile grid, even though the screen is not evenly divisible by such.
-    glm::vec2 crosshairPosition(mouse.x - mouse.x % Block::blockSize + (Settings::instance()->screenResolutionWidth % Block::blockSize) - tileOffset().x + Block::blockSize,
-                                mouse.y - mouse.y % Block::blockSize + (Settings::instance()->screenResolutionHeight % Block::blockSize) - tileOffset().y + Block::blockSize);
+    glm::vec2 crosshairPosition(mouse.x - mouse.x % Block::blockSize + (Settings::instance()->screenResolutionWidth % Block::blockSize) - offset.x + Block::blockSize,
+                                mouse.y - mouse.y % Block::blockSize + (Settings::instance()->screenResolutionHeight % Block::blockSize) - offset.y + Block::blockSize);
 
     //    ALLEGRO_COLOR color = al_map_rgb(255, 0, 0);
     //   al_draw_rectangle(crosshairPosition.x(), crosshairPosition.y(), crosshairPosition.x() + radius, crosshairPosition.y() + radius, color, 1.0f);
@@ -124,9 +140,10 @@ void World::handleEvent(const SDL_Event& event)
 
 void World::update(double elapsedTime)
 {
-    if (m_mouseLeftHeld) {
-        performBlockAttack();
-    }
+    //FIXME:
+//    if (m_mouseLeftHeld) {
+//        performBlockAttack();
+//    }
 
     //    m_sky->update(elapsedTime);
 
@@ -146,7 +163,7 @@ void World::update(double elapsedTime)
     m_uselessEntity->setPosition(x, y);
 
     //FIXME: MAKE IT CENTER ON THE CENTER OF THE PLAYER SPRITE
-    m_camera->centerOn(m_player->position());
+// FIXME:   m_camera->centerOn(m_player->position());
 
     //calculateAttackPosition();
 }
@@ -244,7 +261,7 @@ void World::calculateAttackPosition()
 
 //FIXME: this function needs a lot of help.
 //so make it so it doesn't iterate over the whole visible screen but just the blockPickingRadius size.
-void World::performBlockAttack()
+void World::performBlockAttack(Player* player)
 {
     /*
      *   const glm::vec2 viewCenter = m_view->getCenter();
@@ -285,7 +302,7 @@ void World::performBlockAttack()
     int attackX = 0 ; //HACK= mouse.x() + (m_view->getCenter().x() - Settings::instance()->screenResolutionWidth * 0.5) / Block::blockSize;
     int attackY = 0; //HACK= mouse.y() + (m_view->getCenter().y() - Settings::instance()->screenResolutionHeight * 0.5) / Block::blockSize;
 
-    const glm::vec2 playerPosition = m_player->position();
+    const glm::vec2 playerPosition = player->position();
 
     //consider block map as starting at player pos == 0,0 and going down and to the right-ward
     //tilesBefore{X,Y} is only at the center of the view though..find the whole screen real estate
@@ -395,9 +412,9 @@ void World::performBlockAttack()
      }
      */
 
-glm::ivec2 World::tileOffset() const
+glm::ivec2 World::tileOffset(Player* player) const
 {
-    const glm::vec2 playerPosition = m_player->position();
+    const glm::vec2 playerPosition = player->position();
     // to get per-pixel smooth scrolling, we get the remainders and pass it as an offset to things that need to know the tile positions
     const glm::ivec2 ret = glm::ivec2(int(playerPosition.x) & Block::blockSize - 1, int(playerPosition.y) & Block::blockSize - 1);
     return ret;
@@ -409,7 +426,6 @@ void World::loadMap()
     std::cout << "SIZEOF m_blocks: " << sizeof(m_blocks) / 1e6 << " MiB" << std::endl;
     generateMap();
 
-    m_player->setPosition(2800, 2450);
     //FIXME:
 //    m_player->setPosition(100, 200);
 }
@@ -467,4 +483,15 @@ void World::saveMap()
      const int elapsedTime = clock.getElapsedTime().asMilliseconds();
      std::cout << "Time taken for map saving: " << elapsedTime << " Milliseconds" << std::endl;
      */
+    std::ofstream file("TESTWORLDDATA");
+
+    int index = 0;
+    for (int row = 0; row < WORLD_ROWCOUNT; ++row) {
+        for (int column = 0; column < WORLD_COLUMNCOUNT; ++column) {
+            index = column * WORLD_ROWCOUNT + row;
+            Block* block = &m_blocks[index];
+            file.write((char*)(block), sizeof(Block));
+        }
+    }
+    file.close();
 }
