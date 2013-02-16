@@ -51,6 +51,8 @@ Client::~Client()
 {
     enet_host_destroy(m_client);
 
+    delete m_mainPlayer;
+
     SDL_DestroyWindow(m_window);
     SDL_Quit();
 }
@@ -156,10 +158,8 @@ void Client::poll()
 
             case ENET_EVENT_TYPE_RECEIVE:
                 Debug::log(Debug::Area::NetworkClient) << "Message from server, our client->server round trip latency is: " << event.peer->lastRoundTripTime;
+                processMessage(event);;
 
-                // Lets broadcast this message to all
-                // enet_host_broadcast(client, 0, event.packet);
-                enet_packet_destroy(event.packet);
                 break;
 
             case ENET_EVENT_TYPE_DISCONNECT: {
@@ -192,8 +192,8 @@ void Client::render(double elapsedTime)
 {
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-    if (m_world && m_player) {
-        m_world->render(m_player);
+    if (m_world && m_mainPlayer) {
+        m_world->render(m_mainPlayer);
     }
 
     m_gui->render();
@@ -344,12 +344,12 @@ bool Client::connect(const char* address, unsigned int port)
 
         m_chat = new ChatDialog(this, m_mainMenu);
         m_chat->show();
-        m_world = new World(false);
- //   } else {
+       //NOTE: no world is created yet. we now wait for the server to receive our initial connection data, and give us back a
+        //player id, which we then create as the main player and finally, create the world.
+
     //    Debug::log(Debug::Area::NetworkClient) << "Client failed to connect to server within timeout";
    //     enet_peer_reset(m_peer);
   //  }
-
 }
 
 void Client::disconnect()
@@ -393,4 +393,28 @@ void Client::sendChatMessage(const std::string& message)
     messagestruct.set_message(message);
 
     Packet::sendPacket(m_peer, &messagestruct, Packet::FromClientPacketContents::ChatMessageFromClientPacket, ENET_PACKET_FLAG_RELIABLE);
+}
+
+void Client::processMessage(ENetEvent& event)
+{
+    std::stringstream ss(std::string(event.packet->data, event.packet->dataLength));
+
+    uint32_t packetType = Packet::deserializePacketType(ss);
+
+    switch (packetType) {
+        case Packet::FromServerPacketContents::ChatMessageFromServerPacket:
+            receiveChatMessage(&ss);
+            break;
+    }
+
+    // Lets broadcast this message to all
+    // enet_host_broadcast(client, 0, event.packet);
+    enet_packet_destroy(event.packet);
+}
+
+void Client::receiveChatMessage(std::stringstream* ss)
+{
+    PacketBuf::ChatMessage chatMessage;
+    Packet::deserialize(ss, &chatMessage);
+    Debug::log(Debug::Area::NetworkClient) << "chat message received: " << chatMessage.message();
 }

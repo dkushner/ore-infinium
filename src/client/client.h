@@ -69,6 +69,12 @@ private:
      */
     bool connect(const char* address = "127.0.0.1", unsigned int port = 44543);
     void sendInitialConnectionData();
+
+    void poll();
+
+    void processMessage(ENetEvent& event);
+    void receiveChatMessage(std::stringstream* ss);
+
 ///////////////////////////////////////////////
 
 private:
@@ -76,7 +82,6 @@ private:
 
     void handleInputEvents();
     void drawDebugText(double frametime);
-    void poll();
 
 private:
     Server* m_server = nullptr;
@@ -95,7 +100,7 @@ private:
 
     std::string m_playerName;
 
-    Player* m_player = nullptr;
+    Player* m_mainPlayer = nullptr;
 
 private:
     ENetHost* m_client = nullptr;

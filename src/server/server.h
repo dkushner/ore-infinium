@@ -24,6 +24,7 @@
 
 #include <map>
 
+class World;
 class Player;
 
 class Server
@@ -41,10 +42,12 @@ public:
 
 private:
     /**
+     * If the client validated successfully, also creates a player and appends client and player
+     * to @sa m_clients
      * @returns false if the initial client data is unsuitable (version mismatch)
      * In such a case, a disconnect is *necessary*.
      */
-    bool receiveInitialClientData(std::stringstream* ss);
+    bool receiveInitialClientData(std::stringstream* ss, ENetEvent& event);
     void receiveChatMessage(std::stringstream* ss);
 
    Player* createPlayer(const std::string& playerName);
@@ -55,6 +58,8 @@ private:
      * unused and will gradually rise as the player connection count history goes up.
      */
     uint32_t m_freePlayerID = 0;
+
+    World* m_world = nullptr;
 
 private:
     ENetHost* m_server = nullptr;

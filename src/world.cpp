@@ -34,10 +34,11 @@
 #include <math.h>
 #include <fstream>
 
-World::World(bool isServer) : m_isServer(isServer)
+World::World(Player* mainPlayer) : m_mainPlayer(mainPlayer)
 {
-    m_camera = new Camera();
-    SpriteSheetManager::instance()->setCamera(m_camera);
+    //FIXME:
+//    m_camera = new Camera();
+//    SpriteSheetManager::instance()->setCamera(m_camera);
 
     m_tileRenderer = new TileRenderer(this);
 
@@ -61,7 +62,6 @@ World::World(bool isServer) : m_isServer(isServer)
 World::~World()
 {
     delete m_tileRenderer;
-    delete m_camera;
     //    delete m_sky;
 }
 
@@ -81,7 +81,7 @@ void World::generateTileMeshes()
 
 void World::render(Player* player)
 {
-    assert(!m_isServer);
+    assert(m_mainPlayer);
 
     //Sky at bottom layer
 

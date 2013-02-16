@@ -52,11 +52,10 @@ class World
 {
 public:
     /**
-     * @p isServer true if this worlld will be used for the server,
-     * or if it will be used on a client
-     * Determines how we do collisions checking and so on.
+     * @p mainPlayer If this world is owned by a client, then the mainPlayer should point
+     * to a player instance which is 'us'/'me'. If it is null, then we are on a server.
      */
-    World(bool isServer);
+    World(Player* mainPlayer);
     ~World();
 
     void update(double elapsedTime);
@@ -70,6 +69,9 @@ public:
 
     unsigned char getBlockType(const glm::vec2& vecPoint) const;
 
+    /**
+     * Adds the player to the world, but will not take ownership of (you delete it when you're done)
+     */
     void addPlayer(Player* player);
     void removePlayer(Player* player);
 
@@ -147,7 +149,12 @@ private:
 
     Camera* m_camera = nullptr;
 
-    bool m_isServer = false;
+    /**
+     * Null if we are in server mode.
+     * Else we're in client mode and this is OUR player, the one
+     * the client's user is driving.
+     */
+    Player* m_mainPlayer = nullptr;
 
     friend class TileRenderer;
 };

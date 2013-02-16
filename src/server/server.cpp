@@ -70,8 +70,8 @@ void Server::poll()
 
         switch(event.type) {
             case ENET_EVENT_TYPE_CONNECT:
-                Debug::log(Debug::Area::NetworkServer) << "Received a new peer, adding to client list, connection from host:  " << event.peer->address.host << " at port: " << event.peer->address.port;
-//                m_clients.push_back(event.peer);
+                Debug::log(Debug::Area::NetworkServer) << "Received a new peer, adding to client list, connection from host:  " << event.peer->address.host << " at port: " << event.peer->address.port << " client has not yet been validated.";
+                Debug::log(Debug::Area::NetworkServer) << "client count, before adding: " << m_clients.size();
                 break;
 
             case ENET_EVENT_TYPE_RECEIVE:
@@ -109,7 +109,7 @@ void Server::processMessage(ENetEvent& event)
     switch (packetType) {
         case Packet::FromClientPacketContents::InitialConnectionDataFromClientPacket:
             //version mismatch, can't let him connect or else we'll have assloads of problems
-            if (receiveInitialClientData(&ss) == false) {
+            if (receiveInitialClientData(&ss, event) == false) {
                 enet_peer_disconnect_now(event.peer, Packet::ConnectionEventType::DisconnectedVersionMismatch);
             }
             break;
@@ -126,19 +126,20 @@ void Server::processMessage(ENetEvent& event)
     //                enet_peer_send()
 }
 
-bool Server::receiveInitialClientData(std::stringstream* ss)
+bool Server::receiveInitialClientData(std::stringstream* ss, ENetEvent& event)
 {
     PacketBuf::ClientInitialConnection message;
     Packet::deserialize(ss, &message);
 
     Debug::log(Debug::Area::NetworkServer) << "client sent player name and version data name: " << message.playername() << " version major: " << message.versionmajor() << " minor: " << message.versionminor();
-    if (message.versionmajor() == ore_infinium_VERSION_MAJOR && message.versionminor() == ore_infinium_VERSION_MINOR) {
-        return true;
-    } else {
+
+    if (message.versionmajor() != ore_infinium_VERSION_MAJOR || message.versionminor() != ore_infinium_VERSION_MINOR) {
         return false;
     }
 
-    createPlayer(message.playername());
+    m_clients[event.peer] = createPlayer(message.playername());
+
+    return true;
 }
 
 void Server::receiveChatMessage(std::stringstream* ss)
@@ -146,6 +147,10 @@ void Server::receiveChatMessage(std::stringstream* ss)
     PacketBuf::ChatMessage chatMessage;
     Packet::deserialize(ss, &chatMessage);
     Debug::log(Debug::Area::NetworkServer) << "(Server) chat message received: " << chatMessage.message();
+
+    for (auto& client : m_clients) {
+        Packet::sendPacket(client.first, &chatMessage, Packet::FromServerPacketContents::ChatMessageFromServerPacket, ENET_PACKET_FLAG_RELIABLE);
+    }
 }
 
 Player* Server::createPlayer(const std::string& playerName)
