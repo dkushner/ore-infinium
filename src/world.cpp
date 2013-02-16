@@ -119,7 +119,7 @@ void World::handleEvent(const SDL_Event& event)
         }
     }
 
-    m_player->handleEvent(event);
+//    m_player->handleEvent(event);
 }
 
 void World::update(double elapsedTime)
@@ -467,4 +467,4 @@ void World::saveMap()
      const int elapsedTime = clock.getElapsedTime().asMilliseconds();
      std::cout << "Time taken for map saving: " << elapsedTime << " Milliseconds" << std::endl;
      */
-     }
+}

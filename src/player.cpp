@@ -25,6 +25,7 @@ Player::Player(const std::string& frameName): Entity(frameName, SpriteSheetManag
 
 }
 
+/*
 void Player::handleEvent(const SDL_Event& event)
 {
     switch (event.type) {
@@ -66,4 +67,25 @@ void Player::handleEvent(const SDL_Event& event)
     }
 
     Entity::setVelocity(m_inputXDirection * movementSpeed, m_inputYDirection * movementSpeed);
+}
+*/
+
+void Player::setName(const std::string& name)
+{
+    m_name = name;
+}
+
+std::string Player::name() const
+{
+    return m_name;
+}
+
+void Player::setPlayerID(uint32_t id)
+{
+    m_playerID = id;
+}
+
+uint32_t Player::playerID() const
+{
+    return m_playerID;
 }

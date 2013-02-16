@@ -22,6 +22,10 @@
 
 #include <sstream>
 
+#include <map>
+
+class Player;
+
 class Server
 {
 public:
@@ -43,9 +47,19 @@ private:
     bool receiveInitialClientData(std::stringstream* ss);
     void receiveChatMessage(std::stringstream* ss);
 
+   Player* createPlayer(const std::string& playerName);
+
+private:
+    /**
+     * Will always be the ID after the last used one, so it's always unique and
+     * unused and will gradually rise as the player connection count history goes up.
+     */
+    uint32_t m_freePlayerID = 0;
+
 private:
     ENetHost* m_server = nullptr;
     ENetAddress m_address;
+    std::map<ENetPeer*, Player*> m_clients;
 };
 
 #endif

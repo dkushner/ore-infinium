@@ -31,8 +31,15 @@ public:
      */
     Player(const std::string& frameName);
 
-    void handleEvent(const SDL_Event& event);
+//    void handleEvent(const SDL_Event& event);
 
+    void setName(const std::string& name);
+    std::string name() const;
+
+    void setPlayerID(uint32_t id);
+    uint32_t playerID() const;
+
+public:
     // radius indicating how many pixels out the player can pick blocks
     static constexpr float blockPickingRadius = Block::blockSize * 8.0f;
 
@@ -41,10 +48,26 @@ public:
     static constexpr float movementSpeed = 10.0f * movementUnits;
 
 private:
-    unsigned char health = 100;
+    uint32_t m_maxHealth = 2500;
+    uint32_t m_health = m_maxHealth;
+
     float m_inputXDirection = 0.0f;
     float m_inputYDirection = 0.0f;
-};
 
+    /**
+     * Unique and utilized only by players, is not global or related to generic entity id's
+     * Is used to identify the players, for knowing which one the network is talking about,
+     * and is also very useful for kicking/banning.
+     */
+    uint32_t m_playerID;
+
+    /**
+     * NOTE: presently not designed to allow name changing mid-connection. You need to reconnect to do that.
+     * (allowing name changes seems likemore of a problem than a solution to anything.)
+     */
+    std::string m_name;
+
+    uint16_t m_ping = 0;
+};
 
 #endif

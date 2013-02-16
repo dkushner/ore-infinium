@@ -354,6 +354,7 @@ bool Client::connect(const char* address, unsigned int port)
 void Client::disconnect()
 {
     Debug::log(Debug::Area::NetworkClient) << "attempting disconnect from server";
+    enet_peer_disconnect(m_peer, 0);
 }
 
 void Client::startSinglePlayer(const std::string& playername)

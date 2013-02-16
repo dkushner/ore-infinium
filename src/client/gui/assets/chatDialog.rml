@@ -49,7 +49,6 @@
                 </style>
         </head>
 
-
         <body template="window">
             <tabset id="tabset">
                 <tab>Chat Tab</tab>

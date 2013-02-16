@@ -21,13 +21,15 @@
 
 #include "src/network/protobuf-compiled/packet.pb.h"
 
+#include "src/player.h"
+
+#include "src/debug.h"
+#include "src/../config.h"
+
 #include <google/protobuf/stubs/common.h>
 #include <google/protobuf/io/zero_copy_stream.h>
 #include <google/protobuf/io/zero_copy_stream_impl.h>
 #include <google/protobuf/io/coded_stream.h>
-
-#include "src/debug.h"
-#include "src/../config.h"
 
 #include <iostream>
 #include <fstream>
@@ -68,7 +70,8 @@ void Server::poll()
 
         switch(event.type) {
             case ENET_EVENT_TYPE_CONNECT:
-                Debug::log(Debug::Area::NetworkServer) << "Received a new peer connection from host:  " << event.peer->address.host << " at port: " << event.peer->address.port;
+                Debug::log(Debug::Area::NetworkServer) << "Received a new peer, adding to client list, connection from host:  " << event.peer->address.host << " at port: " << event.peer->address.port;
+//                m_clients.push_back(event.peer);
                 break;
 
             case ENET_EVENT_TYPE_RECEIVE:
@@ -78,6 +81,12 @@ void Server::poll()
             case ENET_EVENT_TYPE_DISCONNECT:
                 Debug::log(Debug::Area::NetworkServer) << "Peer has disconnected:  " << event.peer->address.host << " at port: " << event.peer->address.port;
                 printf("%s disconnected.\n", event.peer->data);
+                for (auto& client : m_clients) {
+//                    if (peer == event.peer) {
+//                       Debug::log(Debug::Area::NetworkServer) << "FOUND PEER for disconnect, deleting it";
+//                    }
+                }
+                Debug::log(Debug::Area::NetworkServer) << "m_clients size: " << m_clients.size();
 
                 // Reset client's information
                 event.peer->data = NULL;
@@ -128,6 +137,8 @@ bool Server::receiveInitialClientData(std::stringstream* ss)
     } else {
         return false;
     }
+
+    createPlayer(message.playername());
 }
 
 void Server::receiveChatMessage(std::stringstream* ss)
@@ -135,4 +146,14 @@ void Server::receiveChatMessage(std::stringstream* ss)
     PacketBuf::ChatMessage chatMessage;
     Packet::deserialize(ss, &chatMessage);
     Debug::log(Debug::Area::NetworkServer) << "(Server) chat message received: " << chatMessage.message();
+}
+
+Player* Server::createPlayer(const std::string& playerName)
+{
+    Player* player = new Player("testframe");
+    player->setName(playerName);
+    player->setPlayerID(m_freePlayerID);
+    ++m_freePlayerID;
+
+    return player;
 }
