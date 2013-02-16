@@ -70,8 +70,9 @@ MainMenu::MainMenu(Client* client) : m_client(client)
 
     m_mainMenuSingleplayerLoad = GUI::instance()->context()->LoadDocument("../client/gui/assets/mainMenuSingleplayerLoad.rml");
     m_mainMenuSingleplayerLoad->GetElementById("back")->AddEventListener("click", this);
-//    m_mainMenuSingleplayer->SetProperty("height", Rocket::Core::Property(Settings::instance()->screenResolutionHeight ,Rocket::Core::Property::PX));
-//    m_mainMenuSingleplayer->SetProperty("width", Rocket::Core::Property(Settings::instance()->screenResolutionWidth,Rocket::Core::Property::PX));
+
+    m_mainMenuMultiplayer = GUI::instance()->context()->LoadDocument("../client/gui/assets/mainMenuMultiplayer.rml");
+    m_mainMenuMultiplayer->GetElementById("back")->AddEventListener("click", this);
 }
 
 MainMenu::~MainMenu()
@@ -84,24 +85,45 @@ void MainMenu::ProcessEvent(Rocket::Core::Event& event)
     const Rocket::Core::String& id = event.GetCurrentElement()->GetId();
     std::cout << "mainmenu Processing element id:" << id.CString() << " type: " << event.GetType().CString() << '\n';
 
-    if (m_escapeMenu->IsVisible() == true) {
+
+    if (m_mainMenuSingleplayerCreate->IsVisible()) {
+        processSingleplayerCreate(event);
+        return;
+    } else if (m_mainMenuSingleplayerLoad->IsVisible()) {
+        processSingleplayerLoad(event);
+        return;
+    }
+
+    if (m_mainMenuSingleplayer->IsVisible()) {
+            processSingleplayer(event);
+            return;
+    }
+
+    if (m_mainMenuMultiplayerHost->IsVisible()) {
+        processMultiplayerHost(event);
+    }
+
+    if (m_mainMenuMultiplayerJoin->IsVisible()) {
+        processMultiplayerJoin(event);
+    }
+
+    // process parent/non-submenus
+    if (m_mainMenuMultiplayer->IsVisible()) {
+        processMultiplayer(event);
+        return;
+    }
+
+        if (m_escapeMenu->IsVisible()) {
         //user pressed escape, aka is in game with a connection (either SP or MP)
         processEscapeMenu(event);
-    } else if (m_menu->IsVisible() == true && m_mainMenuSingleplayer->IsVisible() == false) {
-        processMainMenu(event);
-    } else if (m_mainMenuSingleplayer->IsVisible() == true) {
-        if (m_mainMenuSingleplayerCreate->IsVisible() == false && m_mainMenuSingleplayerLoad->IsVisible() == false) {
-            processSingleplayer(event);
-        } else {
-            if (m_mainMenuSingleplayerCreate->IsVisible()) {
-                processSingleplayerCreate(event);
-            } else if (m_mainMenuSingleplayerLoad->IsVisible()) {
-                processSingleplayerLoad(event);
-            }
-        }
-    } else if (m_mainMenuMultiplayer->IsVisible() == true) {
-        processMultiplayer(event);
+        return;
     }
+
+    if (m_menu->IsVisible()) {
+        processMainMenu(event);
+        return;
+    }
+
 }
 
 void MainMenu::processEscapeMenu(Rocket::Core::Event& event)
@@ -125,9 +147,8 @@ void MainMenu::processMainMenu(Rocket::Core::Event& event)
     const Rocket::Core::String& id = event.GetCurrentElement()->GetId();
     if (id == "singleplayer") {
         m_mainMenuSingleplayer->Show();
-
-
     } else if (id == "multiplayer") {
+        m_mainMenuMultiplayer->Show();
    //     std::stringstream ss;
   //      ss << "Player";
  //       ss << rand();
@@ -184,6 +205,20 @@ void MainMenu::processSingleplayerLoad(Rocket::Core::Event& event)
 
 void MainMenu::processMultiplayer(Rocket::Core::Event& event)
 {
+    const Rocket::Core::String& id = event.GetCurrentElement()->GetId();
+    if (id == "back") {
+        m_mainMenuMultiplayer->Hide();
+    }
+}
+
+void MainMenu::processMultiplayerHost(Rocket::Core::Event& event)
+{
+
+}
+
+void MainMenu::processMultiplayerJoin(Rocket::Core::Event& event)
+{
+
 }
 
 void MainMenu::hideSubmenus()
@@ -191,7 +226,7 @@ void MainMenu::hideSubmenus()
     m_mainMenuSingleplayer->Hide();
     m_mainMenuSingleplayerCreate->Hide();
     m_mainMenuSingleplayerLoad->Hide();
-//    m_mainMenuMultiplayer->Hide();
+    m_mainMenuMultiplayer->Hide();
 }
 
 void MainMenu::showOptionsDialog()

@@ -55,6 +55,8 @@ private:
     void processSingleplayerCreate(Rocket::Core::Event& event);
     void processSingleplayerLoad(Rocket::Core::Event& event);
     void processMultiplayer(Rocket::Core::Event& event);
+    void processMultiplayerHost(Rocket::Core::Event& event);
+    void processMultiplayerJoin(Rocket::Core::Event& event);
 
     /// hides all submenus, including multiplayer, sp, if available, as we're initiating the game now
     void hideSubmenus();
@@ -69,6 +71,8 @@ private:
     Rocket::Core::ElementDocument* m_mainMenuSingleplayerCreate = nullptr;
     Rocket::Core::ElementDocument* m_mainMenuSingleplayerLoad = nullptr;
     Rocket::Core::ElementDocument* m_mainMenuMultiplayer = nullptr;
+    Rocket::Core::ElementDocument* m_mainMenuMultiplayerHost = nullptr;
+    Rocket::Core::ElementDocument* m_mainMenuMultiplayerJoin = nullptr;
 };
 
 #endif
