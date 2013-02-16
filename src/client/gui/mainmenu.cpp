@@ -73,6 +73,14 @@ MainMenu::MainMenu(Client* client) : m_client(client)
 
     m_mainMenuMultiplayer = GUI::instance()->context()->LoadDocument("../client/gui/assets/mainMenuMultiplayer.rml");
     m_mainMenuMultiplayer->GetElementById("back")->AddEventListener("click", this);
+    m_mainMenuMultiplayer->GetElementById("host")->AddEventListener("click", this);
+    m_mainMenuMultiplayer->GetElementById("join")->AddEventListener("click", this);
+
+    m_mainMenuMultiplayerHost = GUI::instance()->context()->LoadDocument("../client/gui/assets/mainMenuMultiplayerHost.rml");
+    m_mainMenuMultiplayerHost->GetElementById("back")->AddEventListener("click", this);
+
+    m_mainMenuMultiplayerJoin = GUI::instance()->context()->LoadDocument("../client/gui/assets/mainMenuMultiplayerJoin.rml");
+    m_mainMenuMultiplayerJoin->GetElementById("back")->AddEventListener("click", this);
 }
 
 MainMenu::~MainMenu()
@@ -85,7 +93,7 @@ void MainMenu::ProcessEvent(Rocket::Core::Event& event)
     const Rocket::Core::String& id = event.GetCurrentElement()->GetId();
     std::cout << "mainmenu Processing element id:" << id.CString() << " type: " << event.GetType().CString() << '\n';
 
-
+    //process submenus first since those are on top, obviously..
     if (m_mainMenuSingleplayerCreate->IsVisible()) {
         processSingleplayerCreate(event);
         return;
@@ -101,10 +109,12 @@ void MainMenu::ProcessEvent(Rocket::Core::Event& event)
 
     if (m_mainMenuMultiplayerHost->IsVisible()) {
         processMultiplayerHost(event);
+        return;
     }
 
     if (m_mainMenuMultiplayerJoin->IsVisible()) {
         processMultiplayerJoin(event);
+        return;
     }
 
     // process parent/non-submenus
@@ -113,7 +123,7 @@ void MainMenu::ProcessEvent(Rocket::Core::Event& event)
         return;
     }
 
-        if (m_escapeMenu->IsVisible()) {
+    if (m_escapeMenu->IsVisible()) {
         //user pressed escape, aka is in game with a connection (either SP or MP)
         processEscapeMenu(event);
         return;
@@ -123,7 +133,6 @@ void MainMenu::ProcessEvent(Rocket::Core::Event& event)
         processMainMenu(event);
         return;
     }
-
 }
 
 void MainMenu::processEscapeMenu(Rocket::Core::Event& event)
@@ -208,17 +217,27 @@ void MainMenu::processMultiplayer(Rocket::Core::Event& event)
     const Rocket::Core::String& id = event.GetCurrentElement()->GetId();
     if (id == "back") {
         m_mainMenuMultiplayer->Hide();
+    } else if (id == "host") {
+        m_mainMenuMultiplayerHost->Show();
+    } else if (id == "join") {
+        m_mainMenuMultiplayerJoin->Show();
     }
 }
 
 void MainMenu::processMultiplayerHost(Rocket::Core::Event& event)
 {
-
+    const Rocket::Core::String& id = event.GetCurrentElement()->GetId();
+    if (id == "back") {
+        m_mainMenuMultiplayerHost->Hide();
+    }
 }
 
 void MainMenu::processMultiplayerJoin(Rocket::Core::Event& event)
 {
-
+    const Rocket::Core::String& id = event.GetCurrentElement()->GetId();
+    if (id == "back") {
+        m_mainMenuMultiplayerJoin->Hide();
+    }
 }
 
 void MainMenu::hideSubmenus()
