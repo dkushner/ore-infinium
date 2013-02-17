@@ -12,9 +12,23 @@
                         {
                         }
 
+                        div#title
+                        {
+                                    font-size: 62;
+        font-weight: bold;
+
+        outline-font-effect: outline;
+        outline-width: 2px;
+        outline-color: red;
+position: absolute;
+top: 100px;
+        text-align: center;
+                        }
+
 		</style>
 	</head>
 	<body template="mostlyTransparentWindow">
+                <div id="title"> Ore Infinium</div>
 		<button id="singleplayer">Singleplayer</button><br />
                 <button id="multiplayer">Multiplayer</button><br />
 		<button id="options">Options</button><br />
