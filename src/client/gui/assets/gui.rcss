@@ -114,6 +114,7 @@ div#transparentWindow
 div#mostlyTransparentWindow
 {
         width: auto;
+        padding: 10px 15px;
         background-color: rgba(0, 0, 0, 255);
         background-decorator: image;
         background-image: gui.tga 823px 410px 1128px 595px;
@@ -140,12 +141,14 @@ div#window
         background-center-image: gui.tga stretch 44px 428px 277px 569px;
 }
 
+
 div#content
 {
         z-index: 2;
 
         width: auto;
         height: 100%;
+        margin-left: 5px;
 
         overflow: hidden auto;
 

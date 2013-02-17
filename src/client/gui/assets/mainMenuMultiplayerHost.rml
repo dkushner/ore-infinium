@@ -20,7 +20,14 @@
                             top: 30%;
                         }
 
-                        button {
+                        button, input {
+                            display: inline-block;
+
+                            width: 159px;
+                            height: 30px;
+
+                            padding-top: 0px;
+                            vertical-align: -6px;
                         }
 
                         button#back
@@ -41,8 +48,9 @@
 	<body template="mostlyTransparentWindow">
             <div id="titleHeader">Host a Multiplayer Game</div>
             <div id="main">
-                <button id="join">Jo</button><br/>
-                <button id="host">Ho</button><br/>
+                <text id="portLabel">Port:</text>
+                <input id="port" type="text" value="44543" />
+                <button id="host">Host It!</button><br/>
                 <button id="back">Back</button>
             </div>
 
