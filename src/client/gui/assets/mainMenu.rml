@@ -10,6 +10,7 @@
 			}
                         div#content
                         {
+                            display: block;
                         }
 
                         div#titleHeader
@@ -17,13 +18,21 @@
 
                         }
 
+                        div#main
+                        {
+                            position: absolute;
+                            top: 30%;
+                        }
+
 		</style>
 	</head>
 	<body template="mostlyTransparentWindow">
                 <div id="titleHeader">Ore Infinium</div>
-		<button id="singleplayer">Singleplayer</button><br />
-                <button id="multiplayer">Multiplayer</button><br />
-		<button id="options">Options</button><br />
-		<button id="quit">Quit</button>
+                <div id="main">
+                    <button id="singleplayer">Singleplayer</button><br />
+                    <button id="multiplayer">Multiplayer</button><br />
+                    <button id="options">Options</button><br />
+                    <button id="quit">Quit</button>
+                </div>
 	</body>
 </rml>
