@@ -102,6 +102,8 @@ private:
 
     Player* m_mainPlayer = nullptr;
 
+    bool m_connected = false;
+
 private:
     ENetHost* m_client = nullptr;
 

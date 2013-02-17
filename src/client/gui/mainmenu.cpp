@@ -81,6 +81,7 @@ MainMenu::MainMenu(Client* client) : m_client(client)
 
     m_mainMenuMultiplayerJoin = GUI::instance()->context()->LoadDocument("../client/gui/assets/mainMenuMultiplayerJoin.rml");
     m_mainMenuMultiplayerJoin->GetElementById("back")->AddEventListener("click", this);
+    m_mainMenuMultiplayerJoin->GetElementById("join")->AddEventListener("click", this);
 }
 
 MainMenu::~MainMenu()
@@ -161,7 +162,6 @@ void MainMenu::processMainMenu(Rocket::Core::Event& event)
    //     std::stringstream ss;
   //      ss << "Player";
  //       ss << rand();
-//        m_client->startMultiplayerClientConnection(ss.str(), "127.0.0.1", 44543);
     } else if (id == "options") {
         showOptionsDialog();
     } else if (id == "quit") {
@@ -220,6 +220,13 @@ void MainMenu::processMultiplayer(Rocket::Core::Event& event)
     } else if (id == "host") {
         m_mainMenuMultiplayerHost->Show();
     } else if (id == "join") {
+        Rocket::Core::Element* playerNameInput = m_mainMenuMultiplayerJoin->GetElementById("playerName");
+        //HACK: pick a random useless name
+        std::stringstream ss;
+        ss << "Player";
+        ss << rand();
+        playerNameInput->SetAttribute("value", ss.str().c_str());
+
         m_mainMenuMultiplayerJoin->Show();
     }
 }
@@ -237,6 +244,17 @@ void MainMenu::processMultiplayerJoin(Rocket::Core::Event& event)
     const Rocket::Core::String& id = event.GetCurrentElement()->GetId();
     if (id == "back") {
         m_mainMenuMultiplayerJoin->Hide();
+    } else if (id == "join") {
+        Rocket::Core::Element* playerNameInput = m_mainMenuMultiplayerJoin->GetElementById("playerName");
+        Rocket::Core::String playerName = playerNameInput->GetAttribute("value")->Get<Rocket::Core::String>();
+        Rocket::Core::Element* ipInput = m_mainMenuMultiplayerJoin->GetElementById("ip");
+        Rocket::Core::String ip = ipInput->GetAttribute("value")->Get<Rocket::Core::String>();
+        Rocket::Core::Element* portInput = m_mainMenuMultiplayerJoin->GetElementById("port");
+        Rocket::Core::String port = portInput->GetAttribute("value")->Get<Rocket::Core::String>();
+
+ //       hideSubmenus();
+        Debug::log(Debug::Area::NetworkClient) << "joining multiplayer session with player: " << playerName.CString() << " ip: " << ip.CString() << " port: " << atoi(port.CString());
+        m_client->startMultiplayerClientConnection(playerName.CString(), ip.CString(), atoi(port.CString()));
     }
 }
 
@@ -245,6 +263,8 @@ void MainMenu::hideSubmenus()
     m_mainMenuSingleplayer->Hide();
     m_mainMenuSingleplayerCreate->Hide();
     m_mainMenuSingleplayerLoad->Hide();
+    m_mainMenuMultiplayerHost->Hide();
+    m_mainMenuMultiplayerJoin->Hide();
     m_mainMenuMultiplayer->Hide();
 }
 

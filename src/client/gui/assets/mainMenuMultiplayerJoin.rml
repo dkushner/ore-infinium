@@ -25,7 +25,14 @@
 
                         button#join
                         {
+/*
                             vertical-align: -4px;
+*/
+                        }
+
+                        input#playerName
+                        {
+                            width: 10%;
                         }
 
                         input#ip
@@ -60,10 +67,15 @@
 	<body template="mostlyTransparentWindow">
             <div id="titleHeader">Join a Multiplayer Game</div>
             <div id="main">
+                <text id="playerNameLabel">Player Name:</text>
+                <input id="playerName" type="text" value="uinint" /><br/>
+
                 <text id="ipLabel">Server Address/IP:</text>
                 <input id="ip" type="text" value="127.0.0.1" />
-                <text id="ipLabel">Port:</text>
-                <input id="port" type="text" value="44543" />
+
+                <text id="portLabel">Port:</text>
+                <input id="port" type="text" value="44543" /><br/>
+
                 <button id="join">Join</button><br/>
                 <button id="back">Back</button>
             </div>

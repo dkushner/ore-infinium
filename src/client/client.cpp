@@ -150,7 +150,8 @@ void Client::poll()
             case ENET_EVENT_TYPE_CONNECT: {
                 char hostname[32];
                 enet_address_get_host_ip(&event.peer->address, hostname, static_cast<size_t>(32));
-                Debug::log(Debug::Area::NetworkClient) << "Connected to server host IP: " << hostname;
+                Debug::log(Debug::Area::NetworkClient) << "Connection event received, connected to server host IP: " << hostname;
+                m_connected = true;
 
                 sendInitialConnectionData();
             }
@@ -337,9 +338,17 @@ bool Client::connect(const char* address, unsigned int port)
         exit(EXIT_FAILURE);
     }
 
+//    m_server->poll();
+    poll();
+    m_server->poll();
+    poll();
+        Debug::log(Debug::Area::NetworkClient) << "m_connected ==" << m_connected;
+
     ENetEvent event;
+/////    assert(0);
+    //&& event.type == ENET_EVENT_TYPE_CONNECT) {
 //    if (enet_host_service(m_client, &event, 5000) > 0 && event.type == ENET_EVENT_TYPE_CONNECT) {
-     //   Debug::log(Debug::Area::NetworkClient) << "Client connection to server succeeded!";
+        Debug::log(Debug::Area::NetworkClient) << "Client connection to server succeeded!";
         m_mainMenu->hideMainMenu();
 
         m_chat = new ChatDialog(this, m_mainMenu);
@@ -347,6 +356,8 @@ bool Client::connect(const char* address, unsigned int port)
        //NOTE: no world is created yet. we now wait for the server to receive our initial connection data, and give us back a
         //player id, which we then create as the main player and finally, create the world.
 
+//    } else {
+ //       Debug::log(Debug::Area::NetworkClient) << "Client connection to server failed!";
     //    Debug::log(Debug::Area::NetworkClient) << "Client failed to connect to server within timeout";
    //     enet_peer_reset(m_peer);
   //  }
@@ -373,8 +384,11 @@ void Client::startMultiplayerClientConnection(const std::string& playername, con
     Debug::log(Debug::Area::NetworkClient) << "starting multiplayer joining address: " << address << "! Playername: " << playername;
     m_playerName = playername;
 
-
-    connect(address, port);
+    if (connect(address, port)) {
+        Debug::log(Debug::Area::NetworkClient) << "connection success!";
+    } else {
+        Debug::log(Debug::Area::NetworkClient) << "connection failure!";
+    }
 }
 
 void Client::sendInitialConnectionData()
