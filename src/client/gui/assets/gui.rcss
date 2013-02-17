@@ -32,6 +32,19 @@ div#title_bar
         text-align: center;
 }
 
+div#titleHeader
+{
+        font-size: 62;
+        font-weight: bold;
+
+        outline-font-effect: outline;
+        outline-width: 2px;
+        outline-color: black;
+        position: absolute;
+        top: 100px;
+        text-align: center;
+}
+
 /*
 FIXME: not needed anymore..or yet anyways. maybe sometime, maybe never.
 div#title_bar div#icon
@@ -102,7 +115,7 @@ div#mostlyTransparentWindow
 {
         width: auto;
         padding: 10px 15px;
-
+        background-color: rgba(0, 0, 0, 255);
         background-decorator: image;
         background-image: gui.tga 823px 410px 1128px 595px;
 }

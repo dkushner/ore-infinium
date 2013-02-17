@@ -130,7 +130,7 @@ void Client::initSDL()
 
     Debug::fatal(enet_initialize != 0, Debug::Area::Network, "An error occurred during ENet init (network init failure");
 
-    glClearColor(.5f, 0.f, 0.f, 1.0f);
+    glClearColor(0.f, .5f, 0.f, 1.0f);
 
     glViewport(0, 0, Settings::instance()->screenResolutionWidth, Settings::instance()->screenResolutionHeight);
 
