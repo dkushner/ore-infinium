@@ -28,6 +28,9 @@
                         input.text
                         {
                             margin-left: 0px;
+                            margin-bottom: 0px;
+                            padding-bottom: 0px;
+                            vertical-align: 0px;
                         }
 
                         button,
@@ -39,7 +42,9 @@
                             height: 30px;
 
                             padding-top: 0px;
-                            vertical-align: -6px;
+                            margin-bottom: 0px;
+                            padding-bottom: 0px;
+                            vertical-align: 0px;
                         }
 
                         tabset
