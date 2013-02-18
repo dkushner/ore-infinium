@@ -41,7 +41,6 @@ ChatDialog::~ChatDialog()
 
 void ChatDialog::ProcessEvent(Rocket::Core::Event& event)
 {
-    std::cout << "Options Processing element: " << event.GetCurrentElement()->GetId().CString() << " type: " << event.GetType().CString() << '\n';
     const Rocket::Core::String& id = event.GetCurrentElement()->GetId();
     const Rocket::Core::String& type = event.GetType();
 

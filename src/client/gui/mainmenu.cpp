@@ -78,6 +78,7 @@ MainMenu::MainMenu(Client* client) : m_client(client)
 
     m_mainMenuMultiplayerHost = GUI::instance()->context()->LoadDocument("../client/gui/assets/mainMenuMultiplayerHost.rml");
     m_mainMenuMultiplayerHost->GetElementById("back")->AddEventListener("click", this);
+    m_mainMenuMultiplayerHost->GetElementById("host")->AddEventListener("click", this);
 
     m_mainMenuMultiplayerJoin = GUI::instance()->context()->LoadDocument("../client/gui/assets/mainMenuMultiplayerJoin.rml");
     m_mainMenuMultiplayerJoin->GetElementById("back")->AddEventListener("click", this);
@@ -236,6 +237,15 @@ void MainMenu::processMultiplayerHost(Rocket::Core::Event& event)
     const Rocket::Core::String& id = event.GetCurrentElement()->GetId();
     if (id == "back") {
         m_mainMenuMultiplayerHost->Hide();
+    } if (id == "host") {
+        Rocket::Core::Element* playerNameInput = m_mainMenuMultiplayerHost->GetElementById("playerName");
+        Rocket::Core::String playerName = playerNameInput->GetAttribute("value")->Get<Rocket::Core::String>();
+        Rocket::Core::Element* portInput = m_mainMenuMultiplayerHost->GetElementById("port");
+        Rocket::Core::String port = portInput->GetAttribute("value")->Get<Rocket::Core::String>();
+
+        hideSubmenus();
+
+        m_client->startMultiplayerHost(playerName.CString(), atoi(port.CString()));
     }
 }
 

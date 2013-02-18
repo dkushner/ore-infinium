@@ -49,6 +49,11 @@ public:
      * @p address the server address/IP to connect to
      */
     void startMultiplayerClientConnection(const std::string& playername, const char* address, unsigned int port = 44543);
+    /**
+     * Similar to @sa startSinglePlayer
+     * but instead hosts a multiplayer game, presumably visible to others through internet/LAN ip entering.
+     */
+    void startMultiplayerHost(const std::string& playername, unsigned int port = 44543);
 
     void tick(double elapsedTime, double fps);
     void render(double elapsedTime);

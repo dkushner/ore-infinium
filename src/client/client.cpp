@@ -148,12 +148,7 @@ void Client::poll()
     if (eventStatus > 0) {
         switch(event.type) {
             case ENET_EVENT_TYPE_CONNECT: {
-                char hostname[32];
-                enet_address_get_host_ip(&event.peer->address, hostname, static_cast<size_t>(32));
-                Debug::log(Debug::Area::NetworkClient) << "Connection event received, connected to server host IP: " << hostname;
-                m_connected = true;
-
-                sendInitialConnectionData();
+                assert(0);
             }
                 break;
 
@@ -333,26 +328,25 @@ bool Client::connect(const char* address, unsigned int port)
         exit(EXIT_FAILURE);
     }
 
-    poll();
-        Debug::log(Debug::Area::NetworkClient) << "m_connected ==" << m_connected;
-
     ENetEvent event;
-/////    assert(0);
-    //&& event.type == ENET_EVENT_TYPE_CONNECT) {
-//    if (enet_host_service(m_client, &event, 5000) > 0 && event.type == ENET_EVENT_TYPE_CONNECT) {
+    if (enet_host_service(m_client, &event, 5000) > 0 && event.type == ENET_EVENT_TYPE_CONNECT) {
         Debug::log(Debug::Area::NetworkClient) << "Client connection to server succeeded!";
         m_mainMenu->hideMainMenu();
 
         m_chat = new ChatDialog(this, m_mainMenu);
         m_chat->show();
+
        //NOTE: no world is created yet. we now wait for the server to receive our initial connection data, and give us back a
         //player id, which we then create as the main player and finally, create the world.
-
-//    } else {
- //       Debug::log(Debug::Area::NetworkClient) << "Client connection to server failed!";
-    //    Debug::log(Debug::Area::NetworkClient) << "Client failed to connect to server within timeout";
-   //     enet_peer_reset(m_peer);
-  //  }
+        m_connected = true;
+        sendInitialConnectionData();
+        return true;
+    } else {
+        Debug::log(Debug::Area::NetworkClient) << "Client connection to server failed!";
+        Debug::log(Debug::Area::NetworkClient) << "Client failed to connect to server within timeout";
+        enet_peer_reset(m_peer);
+        return false;
+    }
 }
 
 void Client::disconnect()
@@ -382,6 +376,16 @@ void Client::startMultiplayerClientConnection(const std::string& playername, con
     } else {
         Debug::log(Debug::Area::NetworkClient) << "connection failure!";
     }
+}
+
+void Client::startMultiplayerHost(const std::string& playername, unsigned int port)
+{
+    Debug::log(Debug::Area::NetworkClient) << "starting multiplayer, hosting! Playername: " << playername << " port: " << port;
+    m_playerName = playername;
+
+    m_server = new Server(8, port);
+    m_serverThread = new std::thread(&Server::tick, m_server);
+    connect();
 }
 
 void Client::sendInitialConnectionData()

@@ -48,6 +48,8 @@
 	<body template="mostlyTransparentWindow">
             <div id="titleHeader">Host a Multiplayer Game</div>
             <div id="main">
+                <text id="playerNameLabel">Player Name:</text>
+                <input id="playerName" type="text" value="uninit" /><br/>
                 <text id="portLabel">Port:</text>
                 <input id="port" type="text" value="44543" />
                 <button id="host">Host It!</button><br/>
