@@ -262,7 +262,7 @@ void MainMenu::processMultiplayerJoin(Rocket::Core::Event& event)
         Rocket::Core::Element* portInput = m_mainMenuMultiplayerJoin->GetElementById("port");
         Rocket::Core::String port = portInput->GetAttribute("value")->Get<Rocket::Core::String>();
 
- //       hideSubmenus();
+        hideSubmenus();
         Debug::log(Debug::Area::NetworkClient) << "joining multiplayer session with player: " << playerName.CString() << " ip: " << ip.CString() << " port: " << atoi(port.CString());
         m_client->startMultiplayerClientConnection(playerName.CString(), ip.CString(), atoi(port.CString()));
     }
