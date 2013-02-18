@@ -122,7 +122,6 @@ void ChatDialog::consumeInputLine()
     Rocket::Controls::ElementFormControlInput* inputLine = dynamic_cast<Rocket::Controls::ElementFormControlInput*>(m_chat->GetElementById("inputLine"));
     const std::string& input = inputLine->GetAttribute<Rocket::Core::String>("value", "").CString();
 
-    addChatLine(input);
     m_client->sendChatMessage(input);
     inputLine->SetAttribute<Rocket::Core::String>("value", "");
 

@@ -428,4 +428,5 @@ void Client::receiveChatMessage(std::stringstream* ss)
     PacketBuf::ChatMessage chatMessage;
     Packet::deserialize(ss, &chatMessage);
     Debug::log(Debug::Area::NetworkClient) << "chat message received: " << chatMessage.message();
+    m_chat->addChatLine(chatMessage.message());
 }
