@@ -67,6 +67,7 @@ void Debug::checkSDLError()
     }
 }
 
+#ifdef GLEW_KHR_debug
 //COLOR HOWTO: http://www.ibm.com/developerworks/linux/library/l-tip-prompt/ , only for linux..obviously
 void Debug::glDebugCallback(unsigned int source, unsigned int type, unsigned int id, unsigned int severity, int length, const char* message, void* userParam)
 {
@@ -215,6 +216,7 @@ void Debug::glDebugCallback(unsigned int source, unsigned int type, unsigned int
         log(Debug::Area::Graphics) << "\nOpenGL Error Report: " << sourceString << typeString << idString << severityString << messageString << "\n";
     }
 }
+#endif
 
 ////////////////////////////////////////////////////////////////// LogStream class ///////////////////////////////////////////////////////////////////////////
 

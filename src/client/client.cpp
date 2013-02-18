@@ -119,6 +119,7 @@ void Client::initSDL()
     Debug::log(Debug::Area::Graphics) << "Maximum OpenGL texture size allowed: " << textureSize;
     std::cout << "\n\n\n\n";
 
+#ifdef GLEW_KHR_debug
     if (!GLEW_KHR_debug) {
         Debug::log(Debug::Area::Graphics) << "GLEW_KHR_debug is not available, disabling OpenGL debug mode (TODO)";
         assert(0);
@@ -127,6 +128,7 @@ void Client::initSDL()
     glEnable(GL_DEBUG_OUTPUT);
     glDebugMessageCallback(&Debug::glDebugCallback, 0);
     glDebugMessageControl(GL_DONT_CARE,GL_DONT_CARE,GL_DONT_CARE,0,0,GL_TRUE);
+#endif
 
     Debug::fatal(enet_initialize != 0, Debug::Area::Network, "An error occurred during ENet init (network init failure");
 
