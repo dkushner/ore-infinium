@@ -48,7 +48,7 @@ public:
      * Starts a mutliplayer client only connection, aka connecting to a server, not hosting.
      * @p address the server address/IP to connect to
      */
-    void startMultiplayerClientConnection(const std::string& playername, const char* address, unsigned int port = 44543);
+    bool startMultiplayerClientConnection(const std::string& playername, const char* address, unsigned int port = 44543);
     /**
      * Similar to @sa startSinglePlayer
      * but instead hosts a multiplayer game, presumably visible to others through internet/LAN ip entering.

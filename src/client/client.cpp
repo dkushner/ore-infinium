@@ -368,15 +368,17 @@ void Client::startSinglePlayer(const std::string& playername)
     connect();
 }
 
-void Client::startMultiplayerClientConnection(const std::string& playername, const char* address, unsigned int port)
+bool Client::startMultiplayerClientConnection(const std::string& playername, const char* address, unsigned int port)
 {
     Debug::log(Debug::Area::NetworkClient) << "starting multiplayer joining address: " << address << "! Playername: " << playername;
     m_playerName = playername;
 
     if (connect(address, port)) {
         Debug::log(Debug::Area::NetworkClient) << "connection success!";
+        return true;
     } else {
         Debug::log(Debug::Area::NetworkClient) << "connection failure!";
+        return false;
     }
 }
 
