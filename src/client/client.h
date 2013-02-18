@@ -28,6 +28,7 @@
 
 #include <SDL2/SDL.h>
 #include <SDL_log.h>
+#include <thread>
 
 class Player;
 class GUI;
@@ -102,6 +103,7 @@ private:
 
     Player* m_mainPlayer = nullptr;
 
+    std::thread* m_serverThread = nullptr;
     bool m_connected = false;
 
 private:

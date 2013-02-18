@@ -29,5 +29,6 @@ Sprite::Sprite(const std::string& frameName, SpriteSheetManager::SpriteSheetType
         FIXME:
     */
 
-    SpriteSheetManager::instance()->registerSprite(m_spriteSheetType, this);
+    //FIXME: HACK: rendering is borked because of this, server will shit bricks when it sees this, because it needs to run this code
+//    SpriteSheetManager::instance()->registerSprite(m_spriteSheetType, this);
 }

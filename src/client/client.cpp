@@ -205,11 +205,6 @@ void Client::render(double elapsedTime)
 
 void Client::tick(double elapsedTime, double fps)
 {
-    if (m_server) {
-        m_server->poll();
-        m_server->tick();
-    }
-
     m_fps = fps;
 
     handleInputEvents();
@@ -338,9 +333,6 @@ bool Client::connect(const char* address, unsigned int port)
         exit(EXIT_FAILURE);
     }
 
-//    m_server->poll();
-    poll();
-    m_server->poll();
     poll();
         Debug::log(Debug::Area::NetworkClient) << "m_connected ==" << m_connected;
 
@@ -376,6 +368,7 @@ void Client::startSinglePlayer(const std::string& playername)
 
     //create a local server, and connect to it.
     m_server = new Server(1);
+    m_serverThread = new std::thread(&Server::tick, m_server);
     connect();
 }
 

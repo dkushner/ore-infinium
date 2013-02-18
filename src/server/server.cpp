@@ -56,7 +56,9 @@ Server::~Server()
 
 void Server::tick()
 {
-
+    while (1) {
+        poll();
+    }
 }
 
 void Server::poll()
@@ -64,7 +66,7 @@ void Server::poll()
     ENetEvent event;
     int eventStatus;
 
-    eventStatus = enet_host_service(m_server, &event, 0);
+    eventStatus = enet_host_service(m_server, &event, 100);
 
     if (eventStatus > 0) {
 
