@@ -10,6 +10,11 @@ message ClientInitialConnection {
     optional int32 versionMinor = 3;
 }
 
-message ChatMessage {
+message ChatMessageFromClient {
   optional string message = 1;
+}
+
+message ChatMessageFromServer {
+  optional string playerName = 1;
+  optional string message = 2;
 }

@@ -34,7 +34,8 @@ void protobuf_ShutdownFile_packet_2eproto();
 
 class Packet;
 class ClientInitialConnection;
-class ChatMessage;
+class ChatMessageFromClient;
+class ChatMessageFromServer;
 
 // ===================================================================
 
@@ -226,14 +227,14 @@ class ClientInitialConnection : public ::google::protobuf::Message {
 };
 // -------------------------------------------------------------------
 
-class ChatMessage : public ::google::protobuf::Message {
+class ChatMessageFromClient : public ::google::protobuf::Message {
  public:
-  ChatMessage();
-  virtual ~ChatMessage();
+  ChatMessageFromClient();
+  virtual ~ChatMessageFromClient();
   
-  ChatMessage(const ChatMessage& from);
+  ChatMessageFromClient(const ChatMessageFromClient& from);
   
-  inline ChatMessage& operator=(const ChatMessage& from) {
+  inline ChatMessageFromClient& operator=(const ChatMessageFromClient& from) {
     CopyFrom(from);
     return *this;
   }
@@ -247,17 +248,17 @@ class ChatMessage : public ::google::protobuf::Message {
   }
   
   static const ::google::protobuf::Descriptor* descriptor();
-  static const ChatMessage& default_instance();
+  static const ChatMessageFromClient& default_instance();
   
-  void Swap(ChatMessage* other);
+  void Swap(ChatMessageFromClient* other);
   
   // implements Message ----------------------------------------------
   
-  ChatMessage* New() const;
+  ChatMessageFromClient* New() const;
   void CopyFrom(const ::google::protobuf::Message& from);
   void MergeFrom(const ::google::protobuf::Message& from);
-  void CopyFrom(const ChatMessage& from);
-  void MergeFrom(const ChatMessage& from);
+  void CopyFrom(const ChatMessageFromClient& from);
+  void MergeFrom(const ChatMessageFromClient& from);
   void Clear();
   bool IsInitialized() const;
   
@@ -291,7 +292,7 @@ class ChatMessage : public ::google::protobuf::Message {
   inline ::std::string* mutable_message();
   inline ::std::string* release_message();
   
-  // @@protoc_insertion_point(class_scope:PacketBuf.ChatMessage)
+  // @@protoc_insertion_point(class_scope:PacketBuf.ChatMessageFromClient)
  private:
   inline void set_has_message();
   inline void clear_has_message();
@@ -308,7 +309,107 @@ class ChatMessage : public ::google::protobuf::Message {
   friend void protobuf_ShutdownFile_packet_2eproto();
   
   void InitAsDefaultInstance();
-  static ChatMessage* default_instance_;
+  static ChatMessageFromClient* default_instance_;
+};
+// -------------------------------------------------------------------
+
+class ChatMessageFromServer : public ::google::protobuf::Message {
+ public:
+  ChatMessageFromServer();
+  virtual ~ChatMessageFromServer();
+  
+  ChatMessageFromServer(const ChatMessageFromServer& from);
+  
+  inline ChatMessageFromServer& operator=(const ChatMessageFromServer& from) {
+    CopyFrom(from);
+    return *this;
+  }
+  
+  inline const ::google::protobuf::UnknownFieldSet& unknown_fields() const {
+    return _unknown_fields_;
+  }
+  
+  inline ::google::protobuf::UnknownFieldSet* mutable_unknown_fields() {
+    return &_unknown_fields_;
+  }
+  
+  static const ::google::protobuf::Descriptor* descriptor();
+  static const ChatMessageFromServer& default_instance();
+  
+  void Swap(ChatMessageFromServer* other);
+  
+  // implements Message ----------------------------------------------
+  
+  ChatMessageFromServer* New() const;
+  void CopyFrom(const ::google::protobuf::Message& from);
+  void MergeFrom(const ::google::protobuf::Message& from);
+  void CopyFrom(const ChatMessageFromServer& from);
+  void MergeFrom(const ChatMessageFromServer& from);
+  void Clear();
+  bool IsInitialized() const;
+  
+  int ByteSize() const;
+  bool MergePartialFromCodedStream(
+      ::google::protobuf::io::CodedInputStream* input);
+  void SerializeWithCachedSizes(
+      ::google::protobuf::io::CodedOutputStream* output) const;
+  ::google::protobuf::uint8* SerializeWithCachedSizesToArray(::google::protobuf::uint8* output) const;
+  int GetCachedSize() const { return _cached_size_; }
+  private:
+  void SharedCtor();
+  void SharedDtor();
+  void SetCachedSize(int size) const;
+  public:
+  
+  ::google::protobuf::Metadata GetMetadata() const;
+  
+  // nested types ----------------------------------------------------
+  
+  // accessors -------------------------------------------------------
+  
+  // optional string playerName = 1;
+  inline bool has_playername() const;
+  inline void clear_playername();
+  static const int kPlayerNameFieldNumber = 1;
+  inline const ::std::string& playername() const;
+  inline void set_playername(const ::std::string& value);
+  inline void set_playername(const char* value);
+  inline void set_playername(const char* value, size_t size);
+  inline ::std::string* mutable_playername();
+  inline ::std::string* release_playername();
+  
+  // optional string message = 2;
+  inline bool has_message() const;
+  inline void clear_message();
+  static const int kMessageFieldNumber = 2;
+  inline const ::std::string& message() const;
+  inline void set_message(const ::std::string& value);
+  inline void set_message(const char* value);
+  inline void set_message(const char* value, size_t size);
+  inline ::std::string* mutable_message();
+  inline ::std::string* release_message();
+  
+  // @@protoc_insertion_point(class_scope:PacketBuf.ChatMessageFromServer)
+ private:
+  inline void set_has_playername();
+  inline void clear_has_playername();
+  inline void set_has_message();
+  inline void clear_has_message();
+  
+  ::google::protobuf::UnknownFieldSet _unknown_fields_;
+  
+  ::std::string* playername_;
+  ::std::string* message_;
+  
+  mutable int _cached_size_;
+  ::google::protobuf::uint32 _has_bits_[(2 + 31) / 32];
+  
+  friend void  protobuf_AddDesc_packet_2eproto();
+  friend void protobuf_AssignDesc_packet_2eproto();
+  friend void protobuf_ShutdownFile_packet_2eproto();
+  
+  void InitAsDefaultInstance();
+  static ChatMessageFromServer* default_instance_;
 };
 // ===================================================================
 
@@ -447,56 +548,176 @@ inline void ClientInitialConnection::set_versionminor(::google::protobuf::int32 
 
 // -------------------------------------------------------------------
 
-// ChatMessage
+// ChatMessageFromClient
 
 // optional string message = 1;
-inline bool ChatMessage::has_message() const {
+inline bool ChatMessageFromClient::has_message() const {
   return (_has_bits_[0] & 0x00000001u) != 0;
 }
-inline void ChatMessage::set_has_message() {
+inline void ChatMessageFromClient::set_has_message() {
   _has_bits_[0] |= 0x00000001u;
 }
-inline void ChatMessage::clear_has_message() {
+inline void ChatMessageFromClient::clear_has_message() {
   _has_bits_[0] &= ~0x00000001u;
 }
-inline void ChatMessage::clear_message() {
+inline void ChatMessageFromClient::clear_message() {
   if (message_ != &::google::protobuf::internal::kEmptyString) {
     message_->clear();
   }
   clear_has_message();
 }
-inline const ::std::string& ChatMessage::message() const {
+inline const ::std::string& ChatMessageFromClient::message() const {
   return *message_;
 }
-inline void ChatMessage::set_message(const ::std::string& value) {
+inline void ChatMessageFromClient::set_message(const ::std::string& value) {
   set_has_message();
   if (message_ == &::google::protobuf::internal::kEmptyString) {
     message_ = new ::std::string;
   }
   message_->assign(value);
 }
-inline void ChatMessage::set_message(const char* value) {
+inline void ChatMessageFromClient::set_message(const char* value) {
   set_has_message();
   if (message_ == &::google::protobuf::internal::kEmptyString) {
     message_ = new ::std::string;
   }
   message_->assign(value);
 }
-inline void ChatMessage::set_message(const char* value, size_t size) {
+inline void ChatMessageFromClient::set_message(const char* value, size_t size) {
   set_has_message();
   if (message_ == &::google::protobuf::internal::kEmptyString) {
     message_ = new ::std::string;
   }
   message_->assign(reinterpret_cast<const char*>(value), size);
 }
-inline ::std::string* ChatMessage::mutable_message() {
+inline ::std::string* ChatMessageFromClient::mutable_message() {
   set_has_message();
   if (message_ == &::google::protobuf::internal::kEmptyString) {
     message_ = new ::std::string;
   }
   return message_;
 }
-inline ::std::string* ChatMessage::release_message() {
+inline ::std::string* ChatMessageFromClient::release_message() {
+  clear_has_message();
+  if (message_ == &::google::protobuf::internal::kEmptyString) {
+    return NULL;
+  } else {
+    ::std::string* temp = message_;
+    message_ = const_cast< ::std::string*>(&::google::protobuf::internal::kEmptyString);
+    return temp;
+  }
+}
+
+// -------------------------------------------------------------------
+
+// ChatMessageFromServer
+
+// optional string playerName = 1;
+inline bool ChatMessageFromServer::has_playername() const {
+  return (_has_bits_[0] & 0x00000001u) != 0;
+}
+inline void ChatMessageFromServer::set_has_playername() {
+  _has_bits_[0] |= 0x00000001u;
+}
+inline void ChatMessageFromServer::clear_has_playername() {
+  _has_bits_[0] &= ~0x00000001u;
+}
+inline void ChatMessageFromServer::clear_playername() {
+  if (playername_ != &::google::protobuf::internal::kEmptyString) {
+    playername_->clear();
+  }
+  clear_has_playername();
+}
+inline const ::std::string& ChatMessageFromServer::playername() const {
+  return *playername_;
+}
+inline void ChatMessageFromServer::set_playername(const ::std::string& value) {
+  set_has_playername();
+  if (playername_ == &::google::protobuf::internal::kEmptyString) {
+    playername_ = new ::std::string;
+  }
+  playername_->assign(value);
+}
+inline void ChatMessageFromServer::set_playername(const char* value) {
+  set_has_playername();
+  if (playername_ == &::google::protobuf::internal::kEmptyString) {
+    playername_ = new ::std::string;
+  }
+  playername_->assign(value);
+}
+inline void ChatMessageFromServer::set_playername(const char* value, size_t size) {
+  set_has_playername();
+  if (playername_ == &::google::protobuf::internal::kEmptyString) {
+    playername_ = new ::std::string;
+  }
+  playername_->assign(reinterpret_cast<const char*>(value), size);
+}
+inline ::std::string* ChatMessageFromServer::mutable_playername() {
+  set_has_playername();
+  if (playername_ == &::google::protobuf::internal::kEmptyString) {
+    playername_ = new ::std::string;
+  }
+  return playername_;
+}
+inline ::std::string* ChatMessageFromServer::release_playername() {
+  clear_has_playername();
+  if (playername_ == &::google::protobuf::internal::kEmptyString) {
+    return NULL;
+  } else {
+    ::std::string* temp = playername_;
+    playername_ = const_cast< ::std::string*>(&::google::protobuf::internal::kEmptyString);
+    return temp;
+  }
+}
+
+// optional string message = 2;
+inline bool ChatMessageFromServer::has_message() const {
+  return (_has_bits_[0] & 0x00000002u) != 0;
+}
+inline void ChatMessageFromServer::set_has_message() {
+  _has_bits_[0] |= 0x00000002u;
+}
+inline void ChatMessageFromServer::clear_has_message() {
+  _has_bits_[0] &= ~0x00000002u;
+}
+inline void ChatMessageFromServer::clear_message() {
+  if (message_ != &::google::protobuf::internal::kEmptyString) {
+    message_->clear();
+  }
+  clear_has_message();
+}
+inline const ::std::string& ChatMessageFromServer::message() const {
+  return *message_;
+}
+inline void ChatMessageFromServer::set_message(const ::std::string& value) {
+  set_has_message();
+  if (message_ == &::google::protobuf::internal::kEmptyString) {
+    message_ = new ::std::string;
+  }
+  message_->assign(value);
+}
+inline void ChatMessageFromServer::set_message(const char* value) {
+  set_has_message();
+  if (message_ == &::google::protobuf::internal::kEmptyString) {
+    message_ = new ::std::string;
+  }
+  message_->assign(value);
+}
+inline void ChatMessageFromServer::set_message(const char* value, size_t size) {
+  set_has_message();
+  if (message_ == &::google::protobuf::internal::kEmptyString) {
+    message_ = new ::std::string;
+  }
+  message_->assign(reinterpret_cast<const char*>(value), size);
+}
+inline ::std::string* ChatMessageFromServer::mutable_message() {
+  set_has_message();
+  if (message_ == &::google::protobuf::internal::kEmptyString) {
+    message_ = new ::std::string;
+  }
+  return message_;
+}
+inline ::std::string* ChatMessageFromServer::release_message() {
   clear_has_message();
   if (message_ == &::google::protobuf::internal::kEmptyString) {
     return NULL;

@@ -48,7 +48,7 @@ private:
      * In such a case, a disconnect is *necessary*.
      */
     bool receiveInitialClientData(std::stringstream* ss, ENetEvent& event);
-    void receiveChatMessage(std::stringstream* ss);
+    void receiveChatMessage(std::stringstream* ss, const std::string& playerName);
 
    Player* createPlayer(const std::string& playerName);
 

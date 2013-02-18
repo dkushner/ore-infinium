@@ -47,7 +47,7 @@ public:
 
     void clearChatHistory();
 
-    void addChatLine(const std::string& message);
+    void addChatLine(const std::string& playerName, const std::string& message);
 
     Rocket::Core::ElementDocument* document();
 

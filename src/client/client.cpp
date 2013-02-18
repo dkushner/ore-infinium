@@ -404,7 +404,7 @@ void Client::sendInitialConnectionData()
 
 void Client::sendChatMessage(const std::string& message)
 {
-    PacketBuf::ChatMessage messagestruct;
+    PacketBuf::ChatMessageFromClient messagestruct;
     messagestruct.set_message(message);
 
     Packet::sendPacket(m_peer, &messagestruct, Packet::FromClientPacketContents::ChatMessageFromClientPacket, ENET_PACKET_FLAG_RELIABLE);
@@ -429,8 +429,8 @@ void Client::processMessage(ENetEvent& event)
 
 void Client::receiveChatMessage(std::stringstream* ss)
 {
-    PacketBuf::ChatMessage chatMessage;
+    PacketBuf::ChatMessageFromServer chatMessage;
     Packet::deserialize(ss, &chatMessage);
     Debug::log(Debug::Area::NetworkClient) << "chat message received: " << chatMessage.message();
-    m_chat->addChatLine(chatMessage.message());
+    m_chat->addChatLine(chatMessage.playername(), chatMessage.message());
 }

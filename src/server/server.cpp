@@ -117,14 +117,13 @@ void Server::processMessage(ENetEvent& event)
             break;
 
         case Packet::FromClientPacketContents::ChatMessageFromClientPacket:
-            receiveChatMessage(&ss);
+            receiveChatMessage(&ss, m_clients[event.peer]->name());
             break;
     }
 
     enet_packet_destroy(event.packet);
 
     // Lets broadcast this message to all
-    //                enet_host_broadcast(m_server, 0, event.packet);
     //                enet_peer_send()
 }
 
@@ -144,14 +143,18 @@ bool Server::receiveInitialClientData(std::stringstream* ss, ENetEvent& event)
     return true;
 }
 
-void Server::receiveChatMessage(std::stringstream* ss)
+void Server::receiveChatMessage(std::stringstream* ss, const std::string& playerName)
 {
-    PacketBuf::ChatMessage chatMessage;
-    Packet::deserialize(ss, &chatMessage);
-    Debug::log(Debug::Area::NetworkServer) << "(Server) chat message received: " << chatMessage.message();
+    PacketBuf::ChatMessageFromClient receiveMessage;
+    Packet::deserialize(ss, &receiveMessage);
+
+    PacketBuf::ChatMessageFromServer sendMessage;
+    sendMessage.set_playername(playerName);
+    sendMessage.set_message(receiveMessage.message());
 
     for (auto& client : m_clients) {
-        Packet::sendPacket(client.first, &chatMessage, Packet::FromServerPacketContents::ChatMessageFromServerPacket, ENET_PACKET_FLAG_RELIABLE);
+        Packet::sendPacket(client.first, &sendMessage, Packet::FromServerPacketContents::ChatMessageFromServerPacket, ENET_PACKET_FLAG_RELIABLE);
+    //                enet_host_broadcast(m_server, 0, event.packet);
     }
 }
 
