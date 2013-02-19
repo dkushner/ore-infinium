@@ -44,10 +44,11 @@ private:
     /**
      * If the client validated successfully, also creates a player and appends client and player
      * to @sa m_clients
-     * @returns false if the initial client data is unsuitable (version mismatch)
-     * In such a case, a disconnect is *necessary*.
+     * @returns uint32_t the Packet::ConnectionEventType. which could possibly be, for instance,
+     * a mismatching version, or a non-valid player name...returns Packet::ConnectionEventType::None
+     * if nothing bad happened (it's okay to keep them connected).
      */
-    bool receiveInitialClientData(std::stringstream* ss, ENetEvent& event);
+    uint32_t receiveInitialClientData(std::stringstream* ss, ENetEvent& event);
     void receiveChatMessage(std::stringstream* ss, const std::string& playerName);
     void sendChatMessage(const std::string& message, const std::string& playerName);
 

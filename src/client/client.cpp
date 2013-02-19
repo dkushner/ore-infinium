@@ -164,8 +164,12 @@ void Client::poll()
                 Debug::log(Debug::Area::NetworkClient) << "Peer disconnected: " << event.data;
                 switch (event.data) {
                     case Packet::ConnectionEventType::DisconnectedVersionMismatch:
-                        Debug::log(Debug::Area::NetworkClient) << "Server booted us, client version does not match server version." << event.data;
+                        Debug::log(Debug::Area::NetworkClient) << "Server booted us, client version does not match server version.";
                         //FIXME: gracefully handle a version mismatch, obviously
+                        assert(0);
+                        break;
+                    case Packet::ConnectionEventType::DisconnectedInvalidPlayerName:
+                        Debug::log(Debug::Area::NetworkClient) << "Server booted us, invalid player name";
                         assert(0);
                         break;
                 }

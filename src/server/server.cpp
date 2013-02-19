@@ -111,18 +111,27 @@ void Server::processMessage(ENetEvent& event)
     uint32_t packetType = Packet::deserializePacketType(ss);
 
     switch (packetType) {
-        case Packet::FromClientPacketContents::InitialConnectionDataFromClientPacket:
+        case Packet::FromClientPacketContents::InitialConnectionDataFromClientPacket: {
             //version mismatch, can't let him connect or else we'll have assloads of problems
-            if (receiveInitialClientData(&ss, event) == false) {
-                enet_peer_disconnect_now(event.peer, Packet::ConnectionEventType::DisconnectedVersionMismatch);
-            } else {
-               //he's good to go, validation succeeded
-                std::stringstream ss;
-                ss << m_clients[event.peer]->name();
-                ss << " has joined the server.";
-                sendChatMessage(ss.str(), "");
+            uint32_t result = receiveInitialClientData(&ss, event);
+            switch (result) {
+                case Packet::ConnectionEventType::None: {
+                    //he's good to go, validation succeeded
+                    std::stringstream ss;
+                    ss << m_clients[event.peer]->name();
+                    ss << " has joined the server.";
+                    sendChatMessage(ss.str(), "");
+                    break;
+                }
+                case Packet::ConnectionEventType::DisconnectedInvalidPlayerName:
+                    //fall through
+                case Packet::ConnectionEventType::DisconnectedVersionMismatch: {
+                    enet_peer_disconnect_now(event.peer, result);
+                    break;
+                }
             }
             break;
+        }
 
         case Packet::FromClientPacketContents::ChatMessageFromClientPacket:
             receiveChatMessage(&ss, m_clients[event.peer]->name());
@@ -132,7 +141,7 @@ void Server::processMessage(ENetEvent& event)
     enet_packet_destroy(event.packet);
 }
 
-bool Server::receiveInitialClientData(std::stringstream* ss, ENetEvent& event)
+uint32_t Server::receiveInitialClientData(std::stringstream* ss, ENetEvent& event)
 {
     PacketBuf::ClientInitialConnection message;
     Packet::deserialize(ss, &message);
@@ -140,17 +149,17 @@ bool Server::receiveInitialClientData(std::stringstream* ss, ENetEvent& event)
     Debug::log(Debug::Area::NetworkServer) << "client sent player name and version data name: " << message.playername() << " version major: " << message.versionmajor() << " minor: " << message.versionminor();
 
     if (message.versionmajor() != ore_infinium_VERSION_MAJOR || message.versionminor() != ore_infinium_VERSION_MINOR) {
-        return false;
+        return Packet::ConnectionEventType::DisconnectedVersionMismatch;
     }
 
     //trying to trick us into using a blank name
     if (message.playername().empty()) {
-        return false;
+        return Packet::ConnectionEventType::DisconnectedInvalidPlayerName;
     }
 
     m_clients[event.peer] = createPlayer(message.playername());
 
-    return true;
+    return Packet::ConnectionEventType::None;;
 }
 
 void Server::receiveChatMessage(std::stringstream* ss, const std::string& playerName)
