@@ -98,7 +98,10 @@ void ChatDialog::addChatLine(const std::string& playerName, const std::string& m
 
         Debug::assertf(message.length() < maximumChatCharCount, "FATAL, ChatDialog::addChatLine was given an input string larger than the  maximum char count, for buffer overflow prevention. This is a BUG, likely in the networking stack.");
 
-        ss << playerName << ": ";
+        //it's a server notice then, so don't add playername as it is null
+        if (!playerName.empty()) {
+            ss << playerName << ":";
+        }
 
         // for sanitizing, so clients can't inject arbitrary html(!), which would mean they could
         // do all kinds of crazy shit.

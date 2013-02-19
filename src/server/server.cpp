@@ -74,6 +74,8 @@ void Server::poll()
             case ENET_EVENT_TYPE_CONNECT:
                 Debug::log(Debug::Area::NetworkServer) << "Received a new peer, adding to client list, connection from host:  " << event.peer->address.host << " at port: " << event.peer->address.port << " client has not yet been validated.";
                 Debug::log(Debug::Area::NetworkServer) << "client count, before adding: " << m_clients.size();
+                //NOTE: we don't actually act on it, first we wait for them to send us a packet then we validate it and if so we add it to our client list
+                //FIXME: probably should timeout if they're not validated within n seconds, that way they can't just keep piling on top of us
                 break;
 
             case ENET_EVENT_TYPE_RECEIVE:
@@ -113,6 +115,12 @@ void Server::processMessage(ENetEvent& event)
             //version mismatch, can't let him connect or else we'll have assloads of problems
             if (receiveInitialClientData(&ss, event) == false) {
                 enet_peer_disconnect_now(event.peer, Packet::ConnectionEventType::DisconnectedVersionMismatch);
+            } else {
+               //he's good to go, validation succeeded
+                std::stringstream ss;
+                ss << m_clients[event.peer]->name();
+                ss << " has joined the server.";
+                sendChatMessage(ss.str(), "");
             }
             break;
 
@@ -122,9 +130,6 @@ void Server::processMessage(ENetEvent& event)
     }
 
     enet_packet_destroy(event.packet);
-
-    // Lets broadcast this message to all
-    //                enet_peer_send()
 }
 
 bool Server::receiveInitialClientData(std::stringstream* ss, ENetEvent& event)
@@ -148,9 +153,14 @@ void Server::receiveChatMessage(std::stringstream* ss, const std::string& player
     PacketBuf::ChatMessageFromClient receiveMessage;
     Packet::deserialize(ss, &receiveMessage);
 
+    sendChatMessage(ss->str(), playerName);
+}
+
+void Server::sendChatMessage(const std::string& message, const std::string& playerName)
+{
     PacketBuf::ChatMessageFromServer sendMessage;
     sendMessage.set_playername(playerName);
-    sendMessage.set_message(receiveMessage.message());
+    sendMessage.set_message(message);
 
     Packet::sendPacketBroadcast(m_server, &sendMessage, Packet::FromServerPacketContents::ChatMessageFromServerPacket, ENET_PACKET_FLAG_RELIABLE);
 }
