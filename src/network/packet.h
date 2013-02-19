@@ -82,6 +82,8 @@ public:
      */
     static void sendPacket(ENetPeer* peer, const google::protobuf::Message* message, uint32_t packetType, uint32_t enetPacketType);
 
+    static void sendPacketBroadcast(ENetHost* host, const google::protobuf::Message* message, uint32_t packetType, uint32_t enetPacketType);
+
 private:
     Packet();
     ~Packet();

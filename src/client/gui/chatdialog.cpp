@@ -93,7 +93,6 @@ void ChatDialog::addChatLine(const std::string& playerName, const std::string& m
 {
     if (message != "") {
         std::string formattedMessage = message;
-
         std::string finalString;
         std::stringstream ss;
 

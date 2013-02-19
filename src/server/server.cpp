@@ -152,10 +152,7 @@ void Server::receiveChatMessage(std::stringstream* ss, const std::string& player
     sendMessage.set_playername(playerName);
     sendMessage.set_message(receiveMessage.message());
 
-    for (auto& client : m_clients) {
-        Packet::sendPacket(client.first, &sendMessage, Packet::FromServerPacketContents::ChatMessageFromServerPacket, ENET_PACKET_FLAG_RELIABLE);
-    //                enet_host_broadcast(m_server, 0, event.packet);
-    }
+    Packet::sendPacketBroadcast(m_server, &sendMessage, Packet::FromServerPacketContents::ChatMessageFromServerPacket, ENET_PACKET_FLAG_RELIABLE);
 }
 
 Player* Server::createPlayer(const std::string& playerName)
