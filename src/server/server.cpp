@@ -143,6 +143,11 @@ bool Server::receiveInitialClientData(std::stringstream* ss, ENetEvent& event)
         return false;
     }
 
+    //trying to trick us into using a blank name
+    if (message.playername().empty()) {
+        return false;
+    }
+
     m_clients[event.peer] = createPlayer(message.playername());
 
     return true;
