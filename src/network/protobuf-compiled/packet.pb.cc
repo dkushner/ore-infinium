@@ -109,8 +109,9 @@ void protobuf_AssignDesc_packet_2eproto() {
       ::google::protobuf::MessageFactory::generated_factory(),
       sizeof(ChatMessageFromServer));
   InitialPlayerDataFromServer_descriptor_ = file->message_type(4);
-  static const int InitialPlayerDataFromServer_offsets_[5] = {
+  static const int InitialPlayerDataFromServer_offsets_[6] = {
     GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(InitialPlayerDataFromServer, playerid_),
+    GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(InitialPlayerDataFromServer, playername_),
     GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(InitialPlayerDataFromServer, x_),
     GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(InitialPlayerDataFromServer, y_),
     GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(InitialPlayerDataFromServer, ortho_),
@@ -198,10 +199,11 @@ void protobuf_AddDesc_packet_2eproto() {
     "\n\014versionMinor\030\003 \001(\005\"(\n\025ChatMessageFromC"
     "lient\022\017\n\007message\030\001 \001(\t\"<\n\025ChatMessageFro"
     "mServer\022\022\n\nplayerName\030\001 \001(\t\022\017\n\007message\030\002"
-    " \001(\t\"b\n\033InitialPlayerDataFromServer\022\020\n\010p"
-    "layerID\030\001 \001(\r\022\t\n\001x\030\002 \001(\002\022\t\n\001y\030\003 \001(\002\022\r\n\005o"
-    "rtho\030\004 \003(\002\022\014\n\004view\030\005 \003(\002\"0\n\034PlayerDiscon"
-    "nectedFromServer\022\020\n\010playerID\030\001 \001(\r", 394);
+    " \001(\t\"v\n\033InitialPlayerDataFromServer\022\020\n\010p"
+    "layerID\030\001 \001(\r\022\022\n\nplayerName\030\002 \001(\t\022\t\n\001x\030\003"
+    " \001(\002\022\t\n\001y\030\004 \001(\002\022\r\n\005ortho\030\005 \003(\002\022\014\n\004view\030\006"
+    " \003(\002\"0\n\034PlayerDisconnectedFromServer\022\020\n\010"
+    "playerID\030\001 \001(\r", 414);
   ::google::protobuf::MessageFactory::InternalRegisterGeneratedFile(
     "packet.proto", &protobuf_RegisterTypes);
   Packet::default_instance_ = new Packet();
@@ -1247,6 +1249,7 @@ void ChatMessageFromServer::Swap(ChatMessageFromServer* other) {
 
 #ifndef _MSC_VER
 const int InitialPlayerDataFromServer::kPlayerIDFieldNumber;
+const int InitialPlayerDataFromServer::kPlayerNameFieldNumber;
 const int InitialPlayerDataFromServer::kXFieldNumber;
 const int InitialPlayerDataFromServer::kYFieldNumber;
 const int InitialPlayerDataFromServer::kOrthoFieldNumber;
@@ -1270,6 +1273,7 @@ InitialPlayerDataFromServer::InitialPlayerDataFromServer(const InitialPlayerData
 void InitialPlayerDataFromServer::SharedCtor() {
   _cached_size_ = 0;
   playerid_ = 0u;
+  playername_ = const_cast< ::std::string*>(&::google::protobuf::internal::kEmptyString);
   x_ = 0;
   y_ = 0;
   ::memset(_has_bits_, 0, sizeof(_has_bits_));
@@ -1280,6 +1284,9 @@ InitialPlayerDataFromServer::~InitialPlayerDataFromServer() {
 }
 
 void InitialPlayerDataFromServer::SharedDtor() {
+  if (playername_ != &::google::protobuf::internal::kEmptyString) {
+    delete playername_;
+  }
   if (this != default_instance_) {
   }
 }
@@ -1307,6 +1314,11 @@ InitialPlayerDataFromServer* InitialPlayerDataFromServer::New() const {
 void InitialPlayerDataFromServer::Clear() {
   if (_has_bits_[0 / 32] & (0xffu << (0 % 32))) {
     playerid_ = 0u;
+    if (has_playername()) {
+      if (playername_ != &::google::protobuf::internal::kEmptyString) {
+        playername_->clear();
+      }
+    }
     x_ = 0;
     y_ = 0;
   }
@@ -1333,12 +1345,29 @@ bool InitialPlayerDataFromServer::MergePartialFromCodedStream(
         } else {
           goto handle_uninterpreted;
         }
-        if (input->ExpectTag(21)) goto parse_x;
+        if (input->ExpectTag(18)) goto parse_playerName;
         break;
       }
       
-      // optional float x = 2;
+      // optional string playerName = 2;
       case 2: {
+        if (::google::protobuf::internal::WireFormatLite::GetTagWireType(tag) ==
+            ::google::protobuf::internal::WireFormatLite::WIRETYPE_LENGTH_DELIMITED) {
+         parse_playerName:
+          DO_(::google::protobuf::internal::WireFormatLite::ReadString(
+                input, this->mutable_playername()));
+          ::google::protobuf::internal::WireFormat::VerifyUTF8String(
+            this->playername().data(), this->playername().length(),
+            ::google::protobuf::internal::WireFormat::PARSE);
+        } else {
+          goto handle_uninterpreted;
+        }
+        if (input->ExpectTag(29)) goto parse_x;
+        break;
+      }
+      
+      // optional float x = 3;
+      case 3: {
         if (::google::protobuf::internal::WireFormatLite::GetTagWireType(tag) ==
             ::google::protobuf::internal::WireFormatLite::WIRETYPE_FIXED32) {
          parse_x:
@@ -1349,12 +1378,12 @@ bool InitialPlayerDataFromServer::MergePartialFromCodedStream(
         } else {
           goto handle_uninterpreted;
         }
-        if (input->ExpectTag(29)) goto parse_y;
+        if (input->ExpectTag(37)) goto parse_y;
         break;
       }
       
-      // optional float y = 3;
-      case 3: {
+      // optional float y = 4;
+      case 4: {
         if (::google::protobuf::internal::WireFormatLite::GetTagWireType(tag) ==
             ::google::protobuf::internal::WireFormatLite::WIRETYPE_FIXED32) {
          parse_y:
@@ -1365,18 +1394,18 @@ bool InitialPlayerDataFromServer::MergePartialFromCodedStream(
         } else {
           goto handle_uninterpreted;
         }
-        if (input->ExpectTag(37)) goto parse_ortho;
+        if (input->ExpectTag(45)) goto parse_ortho;
         break;
       }
       
-      // repeated float ortho = 4;
-      case 4: {
+      // repeated float ortho = 5;
+      case 5: {
         if (::google::protobuf::internal::WireFormatLite::GetTagWireType(tag) ==
             ::google::protobuf::internal::WireFormatLite::WIRETYPE_FIXED32) {
          parse_ortho:
           DO_((::google::protobuf::internal::WireFormatLite::ReadRepeatedPrimitive<
                    float, ::google::protobuf::internal::WireFormatLite::TYPE_FLOAT>(
-                 1, 37, input, this->mutable_ortho())));
+                 1, 45, input, this->mutable_ortho())));
         } else if (::google::protobuf::internal::WireFormatLite::GetTagWireType(tag)
                    == ::google::protobuf::internal::WireFormatLite::
                       WIRETYPE_LENGTH_DELIMITED) {
@@ -1386,19 +1415,19 @@ bool InitialPlayerDataFromServer::MergePartialFromCodedStream(
         } else {
           goto handle_uninterpreted;
         }
-        if (input->ExpectTag(37)) goto parse_ortho;
-        if (input->ExpectTag(45)) goto parse_view;
+        if (input->ExpectTag(45)) goto parse_ortho;
+        if (input->ExpectTag(53)) goto parse_view;
         break;
       }
       
-      // repeated float view = 5;
-      case 5: {
+      // repeated float view = 6;
+      case 6: {
         if (::google::protobuf::internal::WireFormatLite::GetTagWireType(tag) ==
             ::google::protobuf::internal::WireFormatLite::WIRETYPE_FIXED32) {
          parse_view:
           DO_((::google::protobuf::internal::WireFormatLite::ReadRepeatedPrimitive<
                    float, ::google::protobuf::internal::WireFormatLite::TYPE_FLOAT>(
-                 1, 45, input, this->mutable_view())));
+                 1, 53, input, this->mutable_view())));
         } else if (::google::protobuf::internal::WireFormatLite::GetTagWireType(tag)
                    == ::google::protobuf::internal::WireFormatLite::
                       WIRETYPE_LENGTH_DELIMITED) {
@@ -1408,7 +1437,7 @@ bool InitialPlayerDataFromServer::MergePartialFromCodedStream(
         } else {
           goto handle_uninterpreted;
         }
-        if (input->ExpectTag(45)) goto parse_view;
+        if (input->ExpectTag(53)) goto parse_view;
         if (input->ExpectAtEnd()) return true;
         break;
       }
@@ -1436,26 +1465,35 @@ void InitialPlayerDataFromServer::SerializeWithCachedSizes(
     ::google::protobuf::internal::WireFormatLite::WriteUInt32(1, this->playerid(), output);
   }
   
-  // optional float x = 2;
+  // optional string playerName = 2;
+  if (has_playername()) {
+    ::google::protobuf::internal::WireFormat::VerifyUTF8String(
+      this->playername().data(), this->playername().length(),
+      ::google::protobuf::internal::WireFormat::SERIALIZE);
+    ::google::protobuf::internal::WireFormatLite::WriteString(
+      2, this->playername(), output);
+  }
+  
+  // optional float x = 3;
   if (has_x()) {
-    ::google::protobuf::internal::WireFormatLite::WriteFloat(2, this->x(), output);
+    ::google::protobuf::internal::WireFormatLite::WriteFloat(3, this->x(), output);
   }
   
-  // optional float y = 3;
+  // optional float y = 4;
   if (has_y()) {
-    ::google::protobuf::internal::WireFormatLite::WriteFloat(3, this->y(), output);
+    ::google::protobuf::internal::WireFormatLite::WriteFloat(4, this->y(), output);
   }
   
-  // repeated float ortho = 4;
+  // repeated float ortho = 5;
   for (int i = 0; i < this->ortho_size(); i++) {
     ::google::protobuf::internal::WireFormatLite::WriteFloat(
-      4, this->ortho(i), output);
+      5, this->ortho(i), output);
   }
   
-  // repeated float view = 5;
+  // repeated float view = 6;
   for (int i = 0; i < this->view_size(); i++) {
     ::google::protobuf::internal::WireFormatLite::WriteFloat(
-      5, this->view(i), output);
+      6, this->view(i), output);
   }
   
   if (!unknown_fields().empty()) {
@@ -1471,26 +1509,36 @@ void InitialPlayerDataFromServer::SerializeWithCachedSizes(
     target = ::google::protobuf::internal::WireFormatLite::WriteUInt32ToArray(1, this->playerid(), target);
   }
   
-  // optional float x = 2;
+  // optional string playerName = 2;
+  if (has_playername()) {
+    ::google::protobuf::internal::WireFormat::VerifyUTF8String(
+      this->playername().data(), this->playername().length(),
+      ::google::protobuf::internal::WireFormat::SERIALIZE);
+    target =
+      ::google::protobuf::internal::WireFormatLite::WriteStringToArray(
+        2, this->playername(), target);
+  }
+  
+  // optional float x = 3;
   if (has_x()) {
-    target = ::google::protobuf::internal::WireFormatLite::WriteFloatToArray(2, this->x(), target);
+    target = ::google::protobuf::internal::WireFormatLite::WriteFloatToArray(3, this->x(), target);
   }
   
-  // optional float y = 3;
+  // optional float y = 4;
   if (has_y()) {
-    target = ::google::protobuf::internal::WireFormatLite::WriteFloatToArray(3, this->y(), target);
+    target = ::google::protobuf::internal::WireFormatLite::WriteFloatToArray(4, this->y(), target);
   }
   
-  // repeated float ortho = 4;
+  // repeated float ortho = 5;
   for (int i = 0; i < this->ortho_size(); i++) {
     target = ::google::protobuf::internal::WireFormatLite::
-      WriteFloatToArray(4, this->ortho(i), target);
+      WriteFloatToArray(5, this->ortho(i), target);
   }
   
-  // repeated float view = 5;
+  // repeated float view = 6;
   for (int i = 0; i < this->view_size(); i++) {
     target = ::google::protobuf::internal::WireFormatLite::
-      WriteFloatToArray(5, this->view(i), target);
+      WriteFloatToArray(6, this->view(i), target);
   }
   
   if (!unknown_fields().empty()) {
@@ -1511,25 +1559,32 @@ int InitialPlayerDataFromServer::ByteSize() const {
           this->playerid());
     }
     
-    // optional float x = 2;
+    // optional string playerName = 2;
+    if (has_playername()) {
+      total_size += 1 +
+        ::google::protobuf::internal::WireFormatLite::StringSize(
+          this->playername());
+    }
+    
+    // optional float x = 3;
     if (has_x()) {
       total_size += 1 + 4;
     }
     
-    // optional float y = 3;
+    // optional float y = 4;
     if (has_y()) {
       total_size += 1 + 4;
     }
     
   }
-  // repeated float ortho = 4;
+  // repeated float ortho = 5;
   {
     int data_size = 0;
     data_size = 4 * this->ortho_size();
     total_size += 1 * this->ortho_size() + data_size;
   }
   
-  // repeated float view = 5;
+  // repeated float view = 6;
   {
     int data_size = 0;
     data_size = 4 * this->view_size();
@@ -1567,6 +1622,9 @@ void InitialPlayerDataFromServer::MergeFrom(const InitialPlayerDataFromServer& f
     if (from.has_playerid()) {
       set_playerid(from.playerid());
     }
+    if (from.has_playername()) {
+      set_playername(from.playername());
+    }
     if (from.has_x()) {
       set_x(from.x());
     }
@@ -1597,6 +1655,7 @@ bool InitialPlayerDataFromServer::IsInitialized() const {
 void InitialPlayerDataFromServer::Swap(InitialPlayerDataFromServer* other) {
   if (other != this) {
     std::swap(playerid_, other->playerid_);
+    std::swap(playername_, other->playername_);
     std::swap(x_, other->x_);
     std::swap(y_, other->y_);
     ortho_.Swap(&other->ortho_);

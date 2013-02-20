@@ -21,15 +21,16 @@ message ChatMessageFromServer {
 
 message InitialPlayerDataFromServer {
     optional uint32 playerID = 1;
+    optional string playerName = 2;
 
-    optional float x = 2;
-    optional float y = 3;
-
-    // 2D array
-    repeated float ortho = 4;
+    optional float x = 3;
+    optional float y = 4;
 
     // 2D array
-    repeated float view = 5;
+    repeated float ortho = 5;
+
+    // 2D array
+    repeated float view = 6;
 }
 
 message PlayerDisconnectedFromServer {

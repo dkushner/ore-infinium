@@ -476,24 +476,35 @@ class InitialPlayerDataFromServer : public ::google::protobuf::Message {
   inline ::google::protobuf::uint32 playerid() const;
   inline void set_playerid(::google::protobuf::uint32 value);
   
-  // optional float x = 2;
+  // optional string playerName = 2;
+  inline bool has_playername() const;
+  inline void clear_playername();
+  static const int kPlayerNameFieldNumber = 2;
+  inline const ::std::string& playername() const;
+  inline void set_playername(const ::std::string& value);
+  inline void set_playername(const char* value);
+  inline void set_playername(const char* value, size_t size);
+  inline ::std::string* mutable_playername();
+  inline ::std::string* release_playername();
+  
+  // optional float x = 3;
   inline bool has_x() const;
   inline void clear_x();
-  static const int kXFieldNumber = 2;
+  static const int kXFieldNumber = 3;
   inline float x() const;
   inline void set_x(float value);
   
-  // optional float y = 3;
+  // optional float y = 4;
   inline bool has_y() const;
   inline void clear_y();
-  static const int kYFieldNumber = 3;
+  static const int kYFieldNumber = 4;
   inline float y() const;
   inline void set_y(float value);
   
-  // repeated float ortho = 4;
+  // repeated float ortho = 5;
   inline int ortho_size() const;
   inline void clear_ortho();
-  static const int kOrthoFieldNumber = 4;
+  static const int kOrthoFieldNumber = 5;
   inline float ortho(int index) const;
   inline void set_ortho(int index, float value);
   inline void add_ortho(float value);
@@ -502,10 +513,10 @@ class InitialPlayerDataFromServer : public ::google::protobuf::Message {
   inline ::google::protobuf::RepeatedField< float >*
       mutable_ortho();
   
-  // repeated float view = 5;
+  // repeated float view = 6;
   inline int view_size() const;
   inline void clear_view();
-  static const int kViewFieldNumber = 5;
+  static const int kViewFieldNumber = 6;
   inline float view(int index) const;
   inline void set_view(int index, float value);
   inline void add_view(float value);
@@ -518,6 +529,8 @@ class InitialPlayerDataFromServer : public ::google::protobuf::Message {
  private:
   inline void set_has_playerid();
   inline void clear_has_playerid();
+  inline void set_has_playername();
+  inline void clear_has_playername();
   inline void set_has_x();
   inline void clear_has_x();
   inline void set_has_y();
@@ -525,6 +538,7 @@ class InitialPlayerDataFromServer : public ::google::protobuf::Message {
   
   ::google::protobuf::UnknownFieldSet _unknown_fields_;
   
+  ::std::string* playername_;
   ::google::protobuf::uint32 playerid_;
   float x_;
   ::google::protobuf::RepeatedField< float > ortho_;
@@ -532,7 +546,7 @@ class InitialPlayerDataFromServer : public ::google::protobuf::Message {
   float y_;
   
   mutable int _cached_size_;
-  ::google::protobuf::uint32 _has_bits_[(5 + 31) / 32];
+  ::google::protobuf::uint32 _has_bits_[(6 + 31) / 32];
   
   friend void  protobuf_AddDesc_packet_2eproto();
   friend void protobuf_AssignDesc_packet_2eproto();
@@ -966,15 +980,73 @@ inline void InitialPlayerDataFromServer::set_playerid(::google::protobuf::uint32
   playerid_ = value;
 }
 
-// optional float x = 2;
-inline bool InitialPlayerDataFromServer::has_x() const {
+// optional string playerName = 2;
+inline bool InitialPlayerDataFromServer::has_playername() const {
   return (_has_bits_[0] & 0x00000002u) != 0;
 }
-inline void InitialPlayerDataFromServer::set_has_x() {
+inline void InitialPlayerDataFromServer::set_has_playername() {
   _has_bits_[0] |= 0x00000002u;
 }
-inline void InitialPlayerDataFromServer::clear_has_x() {
+inline void InitialPlayerDataFromServer::clear_has_playername() {
   _has_bits_[0] &= ~0x00000002u;
+}
+inline void InitialPlayerDataFromServer::clear_playername() {
+  if (playername_ != &::google::protobuf::internal::kEmptyString) {
+    playername_->clear();
+  }
+  clear_has_playername();
+}
+inline const ::std::string& InitialPlayerDataFromServer::playername() const {
+  return *playername_;
+}
+inline void InitialPlayerDataFromServer::set_playername(const ::std::string& value) {
+  set_has_playername();
+  if (playername_ == &::google::protobuf::internal::kEmptyString) {
+    playername_ = new ::std::string;
+  }
+  playername_->assign(value);
+}
+inline void InitialPlayerDataFromServer::set_playername(const char* value) {
+  set_has_playername();
+  if (playername_ == &::google::protobuf::internal::kEmptyString) {
+    playername_ = new ::std::string;
+  }
+  playername_->assign(value);
+}
+inline void InitialPlayerDataFromServer::set_playername(const char* value, size_t size) {
+  set_has_playername();
+  if (playername_ == &::google::protobuf::internal::kEmptyString) {
+    playername_ = new ::std::string;
+  }
+  playername_->assign(reinterpret_cast<const char*>(value), size);
+}
+inline ::std::string* InitialPlayerDataFromServer::mutable_playername() {
+  set_has_playername();
+  if (playername_ == &::google::protobuf::internal::kEmptyString) {
+    playername_ = new ::std::string;
+  }
+  return playername_;
+}
+inline ::std::string* InitialPlayerDataFromServer::release_playername() {
+  clear_has_playername();
+  if (playername_ == &::google::protobuf::internal::kEmptyString) {
+    return NULL;
+  } else {
+    ::std::string* temp = playername_;
+    playername_ = const_cast< ::std::string*>(&::google::protobuf::internal::kEmptyString);
+    return temp;
+  }
+}
+
+// optional float x = 3;
+inline bool InitialPlayerDataFromServer::has_x() const {
+  return (_has_bits_[0] & 0x00000004u) != 0;
+}
+inline void InitialPlayerDataFromServer::set_has_x() {
+  _has_bits_[0] |= 0x00000004u;
+}
+inline void InitialPlayerDataFromServer::clear_has_x() {
+  _has_bits_[0] &= ~0x00000004u;
 }
 inline void InitialPlayerDataFromServer::clear_x() {
   x_ = 0;
@@ -988,15 +1060,15 @@ inline void InitialPlayerDataFromServer::set_x(float value) {
   x_ = value;
 }
 
-// optional float y = 3;
+// optional float y = 4;
 inline bool InitialPlayerDataFromServer::has_y() const {
-  return (_has_bits_[0] & 0x00000004u) != 0;
+  return (_has_bits_[0] & 0x00000008u) != 0;
 }
 inline void InitialPlayerDataFromServer::set_has_y() {
-  _has_bits_[0] |= 0x00000004u;
+  _has_bits_[0] |= 0x00000008u;
 }
 inline void InitialPlayerDataFromServer::clear_has_y() {
-  _has_bits_[0] &= ~0x00000004u;
+  _has_bits_[0] &= ~0x00000008u;
 }
 inline void InitialPlayerDataFromServer::clear_y() {
   y_ = 0;
@@ -1010,7 +1082,7 @@ inline void InitialPlayerDataFromServer::set_y(float value) {
   y_ = value;
 }
 
-// repeated float ortho = 4;
+// repeated float ortho = 5;
 inline int InitialPlayerDataFromServer::ortho_size() const {
   return ortho_.size();
 }
@@ -1035,7 +1107,7 @@ InitialPlayerDataFromServer::mutable_ortho() {
   return &ortho_;
 }
 
-// repeated float view = 5;
+// repeated float view = 6;
 inline int InitialPlayerDataFromServer::view_size() const {
   return view_.size();
 }

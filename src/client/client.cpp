@@ -473,17 +473,25 @@ void Client::receiveInitialPlayerData(std::stringstream* ss)
     cam->setOrtho(ortho);
     cam->setView(view);
 
+    std::stringstream chatMessage;
     if (!m_mainPlayer) {
-        //this is must be our player
+        //this is must be *our* player, so create it
         m_mainPlayer = new Player("test");
         m_mainPlayer->setCamera(cam);
+        m_mainPlayer->setName(message.playername());
         m_mainPlayer->setPlayerID(message.playerid());
         m_mainPlayer->setPosition(message.x(), message.y());
+
+        Debug::log() << "PLAYERNAME: " << m_mainPlayer->name();
+        chatMessage << m_mainPlayer->name() << " has joined";
     } else {
         Player* player = new Player("test");
         player->setCamera(cam);
+        player->setName(message.playername());
         player->setPlayerID(message.playerid());
         player->setPosition(message.x(), message.y());
+
+        chatMessage << player->name() << " has joined";
     }
 
     // means a client/player joined us, do our chat..

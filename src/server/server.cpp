@@ -125,10 +125,10 @@ void Server::processMessage(ENetEvent& event)
             switch (result) {
                 case Packet::ConnectionEventType::None: {
                     //he's good to go, validation succeeded
-                    std::stringstream ss;
-                    ss << m_clients[event.peer]->name();
-                    ss << " has joined the server.";
-                    sendChatMessage(ss.str(), "");
+//                    std::stringstream ss;
+//                    ss << m_clients[event.peer]->name();
+//                    ss << " has joined the server.";
+//                    sendChatMessage(ss.str(), "");
                     sendInitialPlayerData(m_clients[event.peer]);
                     break;
                 }
@@ -191,6 +191,7 @@ void Server::sendChatMessage(const std::string& message, const std::string& play
 void Server::sendInitialPlayerData(Player* player)
 {
     PacketBuf::InitialPlayerDataFromServer message;
+    message.set_playername(player->name());
     message.set_playerid(player->playerID());
     message.set_x(player->position().x);
     message.set_y(player->position().y);
