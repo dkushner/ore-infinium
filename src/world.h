@@ -26,6 +26,7 @@
 #include <GL/glew.h>
 #include <GL/gl.h>
 #include <SDL2/SDL_events.h>
+#include <list>
 
 class Server;
 class TileRenderer;
@@ -74,7 +75,12 @@ public:
      * Adds the player to the world, but will not take ownership of (you delete it when you're done)
      */
     void addPlayer(Player* player);
+
+    /**
+     * Removes player from the world, but will *NOT* delete it. That's your job, bro
+     */
     void removePlayer(Player* player);
+    Player* findPlayer(uint32_t playerID);
 
     //create containers of various entities, and implement a tile system
     //game.cpp calls into this each tick, which this descends downward into each entity
@@ -135,7 +141,7 @@ private:
 
     TileRenderer* m_tileRenderer = nullptr;
 
-    std::vector<Player*> m_players;
+    std::list<Player*> m_players;
 
     //HACK: remove when we get beyond just testing stupid shit
     Entity* m_uselessEntity = nullptr;

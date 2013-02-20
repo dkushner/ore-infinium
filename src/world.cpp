@@ -77,6 +77,18 @@ void World::addPlayer(Player* player)
 
 void World::removePlayer(Player* player)
 {
+    m_players.remove(player);
+}
+
+Player* World::findPlayer(uint32_t playerID)
+{
+    for (auto* player : m_players) {
+       if (player->playerID() == playerID) {
+           return player;
+       }
+    }
+
+    Debug::assertf(false, "World::findPlayer, player does not exist? that shit's whack");
 }
 
 void World::generateTileMeshes()
