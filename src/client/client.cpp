@@ -516,6 +516,7 @@ void Client::receiveInitialPlayerData(std::stringstream* ss)
 
         Debug::log() << "PLAYERNAME: " << m_mainPlayer->name();
         chatMessage << m_mainPlayer->name() << " has joined";
+        m_world = new World(m_mainPlayer, nullptr);
     } else {
         Player* player = new Player("test");
         player->setName(message.playername());
