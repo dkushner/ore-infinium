@@ -51,6 +51,8 @@ Server::Server(unsigned int maxClients, unsigned int port)
                                                             0 /* assume any amount of outgoing bandwidth */ );
 
     Debug::assertf(m_server, "failed to create ENet server");
+
+    m_world = new World(nullptr, this);
 }
 
 Server::~Server()
@@ -70,9 +72,7 @@ void Server::tick()
         fps = (frameCount / delta) * 1000;
         poll();
 
-        if (m_world) {
-           m_world->update(delta);
-        }
+        m_world->update(delta);
 
         ++frameCount;
     }
@@ -233,6 +233,8 @@ Player* Server::createPlayer(const std::string& playerName)
     player->setPlayerID(m_freePlayerID);
     player->setPosition(2500, 1492);
 
+    m_world->addPlayer(player);;
+
     ++m_freePlayerID;
 
     return player;
@@ -245,5 +247,5 @@ void Server::sendPlayerMove(Player* player)
     message.set_x(player->position().x);
     message.set_y(player->position().y);
 
-    Packet::sendPacketBroadcast(m_server, &message, Packet::FromServerPacketContents::ChatMessageFromServerPacket, ENET_PACKET_FLAG_UNSEQUENCED);
+    Packet::sendPacketBroadcast(m_server, &message, Packet::FromServerPacketContents::PlayerMoveFromServerPacket, ENET_PACKET_FLAG_UNSEQUENCED);
 }
