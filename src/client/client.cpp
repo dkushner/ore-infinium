@@ -30,6 +30,7 @@
 
 #include "src/world.h"
 #include "src/player.h"
+#include "src/camera.h"
 #include "src/debug.h"
 #include "src/../config.h"
 
@@ -157,7 +158,6 @@ void Client::poll()
             case ENET_EVENT_TYPE_RECEIVE:
                 Debug::log(Debug::Area::NetworkClient) << "Message from server, our client->server round trip latency is: " << event.peer->lastRoundTripTime;
                 processMessage(event);;
-
                 break;
 
             case ENET_EVENT_TYPE_DISCONNECT: {
@@ -424,6 +424,9 @@ void Client::processMessage(ENetEvent& event)
         case Packet::FromServerPacketContents::ChatMessageFromServerPacket:
             receiveChatMessage(&ss);
             break;
+        case Packet::FromServerPacketContents::InitialPlayerDataFromServerPacket:
+            receiveInitialPlayerData(&ss);
+            break;
     }
 
     // Lets broadcast this message to all
@@ -437,4 +440,38 @@ void Client::receiveChatMessage(std::stringstream* ss)
     Packet::deserialize(ss, &chatMessage);
     Debug::log(Debug::Area::NetworkClient) << "chat message received: " << chatMessage.message();
     m_chat->addChatLine(chatMessage.playername(), chatMessage.message());
+}
+
+void Client::receiveInitialPlayerData(std::stringstream* ss)
+{
+    PacketBuf::InitialPlayerDataFromServer message;
+    Packet::deserialize(ss, &message);
+    Debug::log(Debug::Area::NetworkClient) << "initial player data received";
+
+    glm::mat4 ortho;
+    glm::mat4 view;
+    int count = 0;
+    for (int i = 0; i < 4; ++i) {
+        for (int j = 0; j < 4; ++j) {
+            ortho[i][j] = message.ortho(count);
+            ++count;
+        }
+    }
+
+    count = 0;
+    for (int i = 0; i < 4; ++i) {
+        for (int j = 0; j < 4; ++j) {
+            view[i][j] = message.view(count);
+            ++count;
+        }
+    }
+
+    Camera* cam = new Camera();
+    cam->setOrtho(ortho);
+    cam->setView(view);
+
+    m_mainPlayer = new Player("test");
+    m_mainPlayer->setCamera(cam);
+    m_mainPlayer->setPlayerID(message.playerid());
+    m_mainPlayer->setPosition(message.x(), message.y());
 }

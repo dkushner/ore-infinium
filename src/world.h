@@ -27,6 +27,7 @@
 #include <GL/gl.h>
 #include <SDL2/SDL_events.h>
 
+class Server;
 class TileRenderer;
 class Sky;
 class Camera;
@@ -53,9 +54,9 @@ class World
 public:
     /**
      * @p mainPlayer If this world is owned by a client, then the mainPlayer should point
-     * to a player instance which is 'us'/'me'. If it is null, then we are on a server.
+     * to a player instance which is 'us'/'me'. It is null if we are on a server.
      */
-    World(Player* mainPlayer);
+    World(Player* mainPlayer, Server* server);
     ~World();
 
     void update(double elapsedTime);
@@ -155,6 +156,8 @@ private:
      * the client's user is driving.
      */
     Player* m_mainPlayer = nullptr;
+
+    Server* m_server = nullptr;
 
     friend class TileRenderer;
 };

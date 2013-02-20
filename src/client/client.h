@@ -80,6 +80,7 @@ private:
 
     void processMessage(ENetEvent& event);
     void receiveChatMessage(std::stringstream* ss);
+    void receiveInitialPlayerData(std::stringstream* ss);
 
 ///////////////////////////////////////////////
 

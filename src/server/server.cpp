@@ -24,6 +24,7 @@
 #include "src/player.h"
 
 #include "src/debug.h"
+#include <src/camera.h>
 #include "src/../config.h"
 
 #include <google/protobuf/stubs/common.h>
@@ -121,6 +122,7 @@ void Server::processMessage(ENetEvent& event)
                     ss << m_clients[event.peer]->name();
                     ss << " has joined the server.";
                     sendChatMessage(ss.str(), "");
+                    sendInitialPlayerData(m_clients[event.peer]);
                     break;
                 }
                 case Packet::ConnectionEventType::DisconnectedInvalidPlayerName:
@@ -179,11 +181,40 @@ void Server::sendChatMessage(const std::string& message, const std::string& play
     Packet::sendPacketBroadcast(m_server, &sendMessage, Packet::FromServerPacketContents::ChatMessageFromServerPacket, ENET_PACKET_FLAG_RELIABLE);
 }
 
+void Server::sendInitialPlayerData(Player* player)
+{
+    PacketBuf::InitialPlayerDataFromServer message;
+    message.set_playerid(player->playerID());
+    message.set_x(player->position().x);
+    message.set_y(player->position().y);
+
+    Camera* cam = player->camera();
+    for (int i = 0; i < 4; ++i) {
+        for (int j = 0; j < 4; ++j) {
+            message.add_ortho(cam->ortho()[i][j]);
+        }
+    }
+
+    for (int i = 0; i < 4; ++i) {
+        for (int j = 0; j < 4; ++j) {
+            message.add_view(cam->view()[i][j]);
+        }
+    }
+
+    Packet::sendPacketBroadcast(m_server, &message, Packet::FromServerPacketContents::InitialPlayerDataFromServerPacket, ENET_PACKET_FLAG_RELIABLE);
+}
+
 Player* Server::createPlayer(const std::string& playerName)
 {
     Player* player = new Player("testframe");
     player->setName(playerName);
     player->setPlayerID(m_freePlayerID);
+    player->setPosition(2500, 1492);
+
+    Camera* camera = new Camera();
+    camera->centerOn(player->position());
+    player->setCamera(camera);
+
     ++m_freePlayerID;
 
     return player;

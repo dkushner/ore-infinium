@@ -45,14 +45,15 @@ public:
      */
     enum FromServerPacketContents {
         InvalidFromServerPacket = 0,
-        ChatMessageFromServerPacket
+        ChatMessageFromServerPacket,
+        InitialPlayerDataFromServerPacket
     };
 
     enum ConnectionEventType {
         None = 0,
         //client version does not match server version, forceful disconnect.
-       DisconnectedVersionMismatch = 1,
-       DisconnectedInvalidPlayerName = 2
+       DisconnectedVersionMismatch,
+       DisconnectedInvalidPlayerName
     };
 
     /**

@@ -1,7 +1,7 @@
 package PacketBuf;
 
 message Packet {
-   optional int32 type = 1;
+    optional uint32 type = 1;
 }
 
 message ClientInitialConnection {
@@ -11,10 +11,23 @@ message ClientInitialConnection {
 }
 
 message ChatMessageFromClient {
-  optional string message = 1;
+    optional string message = 1;
 }
 
 message ChatMessageFromServer {
-  optional string playerName = 1;
-  optional string message = 2;
+    optional string playerName = 1;
+    optional string message = 2;
+}
+
+message InitialPlayerDataFromServer {
+    optional uint32 playerID = 1;
+
+    optional float x = 2;
+    optional float y = 3;
+
+    // 2D array
+    repeated float ortho = 4;
+
+    // 2D array
+    repeated float view = 5;
 }

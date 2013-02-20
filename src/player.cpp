@@ -17,6 +17,8 @@
 
 #include "player.h"
 
+#include "src/camera.h"
+
 #include "spritesheetmanager.h"
 #include <assert.h>
 
@@ -88,4 +90,14 @@ void Player::setPlayerID(uint32_t id)
 uint32_t Player::playerID() const
 {
     return m_playerID;
+}
+
+Camera* Player::camera() const
+{
+    return m_camera;
+}
+
+void Player::setCamera(Camera* camera)
+{
+    m_camera = camera;
 }

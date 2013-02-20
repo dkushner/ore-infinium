@@ -44,8 +44,11 @@ public:
 
     void centerOn(const glm::vec2 vec);
 
-
     void setShader(Shader* shader);
+
+    void setView(const glm::mat4& view);
+    void setOrtho(const glm::mat4& ortho);
+
     glm::mat4 ortho() const;
     glm::mat4 view() const;
 
@@ -57,7 +60,6 @@ private:
 
     glm::mat4 m_viewMatrix;
     glm::mat4 m_orthoMatrix;
-    glm::vec3 m_vector;
 };
 
 #endif

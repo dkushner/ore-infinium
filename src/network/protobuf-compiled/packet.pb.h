@@ -36,6 +36,7 @@ class Packet;
 class ClientInitialConnection;
 class ChatMessageFromClient;
 class ChatMessageFromServer;
+class InitialPlayerDataFromServer;
 
 // ===================================================================
 
@@ -93,12 +94,12 @@ class Packet : public ::google::protobuf::Message {
   
   // accessors -------------------------------------------------------
   
-  // optional int32 type = 1;
+  // optional uint32 type = 1;
   inline bool has_type() const;
   inline void clear_type();
   static const int kTypeFieldNumber = 1;
-  inline ::google::protobuf::int32 type() const;
-  inline void set_type(::google::protobuf::int32 value);
+  inline ::google::protobuf::uint32 type() const;
+  inline void set_type(::google::protobuf::uint32 value);
   
   // @@protoc_insertion_point(class_scope:PacketBuf.Packet)
  private:
@@ -107,7 +108,7 @@ class Packet : public ::google::protobuf::Message {
   
   ::google::protobuf::UnknownFieldSet _unknown_fields_;
   
-  ::google::protobuf::int32 type_;
+  ::google::protobuf::uint32 type_;
   
   mutable int _cached_size_;
   ::google::protobuf::uint32 _has_bits_[(1 + 31) / 32];
@@ -411,6 +412,134 @@ class ChatMessageFromServer : public ::google::protobuf::Message {
   void InitAsDefaultInstance();
   static ChatMessageFromServer* default_instance_;
 };
+// -------------------------------------------------------------------
+
+class InitialPlayerDataFromServer : public ::google::protobuf::Message {
+ public:
+  InitialPlayerDataFromServer();
+  virtual ~InitialPlayerDataFromServer();
+  
+  InitialPlayerDataFromServer(const InitialPlayerDataFromServer& from);
+  
+  inline InitialPlayerDataFromServer& operator=(const InitialPlayerDataFromServer& from) {
+    CopyFrom(from);
+    return *this;
+  }
+  
+  inline const ::google::protobuf::UnknownFieldSet& unknown_fields() const {
+    return _unknown_fields_;
+  }
+  
+  inline ::google::protobuf::UnknownFieldSet* mutable_unknown_fields() {
+    return &_unknown_fields_;
+  }
+  
+  static const ::google::protobuf::Descriptor* descriptor();
+  static const InitialPlayerDataFromServer& default_instance();
+  
+  void Swap(InitialPlayerDataFromServer* other);
+  
+  // implements Message ----------------------------------------------
+  
+  InitialPlayerDataFromServer* New() const;
+  void CopyFrom(const ::google::protobuf::Message& from);
+  void MergeFrom(const ::google::protobuf::Message& from);
+  void CopyFrom(const InitialPlayerDataFromServer& from);
+  void MergeFrom(const InitialPlayerDataFromServer& from);
+  void Clear();
+  bool IsInitialized() const;
+  
+  int ByteSize() const;
+  bool MergePartialFromCodedStream(
+      ::google::protobuf::io::CodedInputStream* input);
+  void SerializeWithCachedSizes(
+      ::google::protobuf::io::CodedOutputStream* output) const;
+  ::google::protobuf::uint8* SerializeWithCachedSizesToArray(::google::protobuf::uint8* output) const;
+  int GetCachedSize() const { return _cached_size_; }
+  private:
+  void SharedCtor();
+  void SharedDtor();
+  void SetCachedSize(int size) const;
+  public:
+  
+  ::google::protobuf::Metadata GetMetadata() const;
+  
+  // nested types ----------------------------------------------------
+  
+  // accessors -------------------------------------------------------
+  
+  // optional uint32 playerID = 1;
+  inline bool has_playerid() const;
+  inline void clear_playerid();
+  static const int kPlayerIDFieldNumber = 1;
+  inline ::google::protobuf::uint32 playerid() const;
+  inline void set_playerid(::google::protobuf::uint32 value);
+  
+  // optional float x = 2;
+  inline bool has_x() const;
+  inline void clear_x();
+  static const int kXFieldNumber = 2;
+  inline float x() const;
+  inline void set_x(float value);
+  
+  // optional float y = 3;
+  inline bool has_y() const;
+  inline void clear_y();
+  static const int kYFieldNumber = 3;
+  inline float y() const;
+  inline void set_y(float value);
+  
+  // repeated float ortho = 4;
+  inline int ortho_size() const;
+  inline void clear_ortho();
+  static const int kOrthoFieldNumber = 4;
+  inline float ortho(int index) const;
+  inline void set_ortho(int index, float value);
+  inline void add_ortho(float value);
+  inline const ::google::protobuf::RepeatedField< float >&
+      ortho() const;
+  inline ::google::protobuf::RepeatedField< float >*
+      mutable_ortho();
+  
+  // repeated float view = 5;
+  inline int view_size() const;
+  inline void clear_view();
+  static const int kViewFieldNumber = 5;
+  inline float view(int index) const;
+  inline void set_view(int index, float value);
+  inline void add_view(float value);
+  inline const ::google::protobuf::RepeatedField< float >&
+      view() const;
+  inline ::google::protobuf::RepeatedField< float >*
+      mutable_view();
+  
+  // @@protoc_insertion_point(class_scope:PacketBuf.InitialPlayerDataFromServer)
+ private:
+  inline void set_has_playerid();
+  inline void clear_has_playerid();
+  inline void set_has_x();
+  inline void clear_has_x();
+  inline void set_has_y();
+  inline void clear_has_y();
+  
+  ::google::protobuf::UnknownFieldSet _unknown_fields_;
+  
+  ::google::protobuf::uint32 playerid_;
+  float x_;
+  ::google::protobuf::RepeatedField< float > ortho_;
+  ::google::protobuf::RepeatedField< float > view_;
+  float y_;
+  
+  mutable int _cached_size_;
+  ::google::protobuf::uint32 _has_bits_[(5 + 31) / 32];
+  
+  friend void  protobuf_AddDesc_packet_2eproto();
+  friend void protobuf_AssignDesc_packet_2eproto();
+  friend void protobuf_ShutdownFile_packet_2eproto();
+  
+  void InitAsDefaultInstance();
+  static InitialPlayerDataFromServer* default_instance_;
+};
 // ===================================================================
 
 
@@ -418,7 +547,7 @@ class ChatMessageFromServer : public ::google::protobuf::Message {
 
 // Packet
 
-// optional int32 type = 1;
+// optional uint32 type = 1;
 inline bool Packet::has_type() const {
   return (_has_bits_[0] & 0x00000001u) != 0;
 }
@@ -429,13 +558,13 @@ inline void Packet::clear_has_type() {
   _has_bits_[0] &= ~0x00000001u;
 }
 inline void Packet::clear_type() {
-  type_ = 0;
+  type_ = 0u;
   clear_has_type();
 }
-inline ::google::protobuf::int32 Packet::type() const {
+inline ::google::protobuf::uint32 Packet::type() const {
   return type_;
 }
-inline void Packet::set_type(::google::protobuf::int32 value) {
+inline void Packet::set_type(::google::protobuf::uint32 value) {
   set_has_type();
   type_ = value;
 }
@@ -726,6 +855,126 @@ inline ::std::string* ChatMessageFromServer::release_message() {
     message_ = const_cast< ::std::string*>(&::google::protobuf::internal::kEmptyString);
     return temp;
   }
+}
+
+// -------------------------------------------------------------------
+
+// InitialPlayerDataFromServer
+
+// optional uint32 playerID = 1;
+inline bool InitialPlayerDataFromServer::has_playerid() const {
+  return (_has_bits_[0] & 0x00000001u) != 0;
+}
+inline void InitialPlayerDataFromServer::set_has_playerid() {
+  _has_bits_[0] |= 0x00000001u;
+}
+inline void InitialPlayerDataFromServer::clear_has_playerid() {
+  _has_bits_[0] &= ~0x00000001u;
+}
+inline void InitialPlayerDataFromServer::clear_playerid() {
+  playerid_ = 0u;
+  clear_has_playerid();
+}
+inline ::google::protobuf::uint32 InitialPlayerDataFromServer::playerid() const {
+  return playerid_;
+}
+inline void InitialPlayerDataFromServer::set_playerid(::google::protobuf::uint32 value) {
+  set_has_playerid();
+  playerid_ = value;
+}
+
+// optional float x = 2;
+inline bool InitialPlayerDataFromServer::has_x() const {
+  return (_has_bits_[0] & 0x00000002u) != 0;
+}
+inline void InitialPlayerDataFromServer::set_has_x() {
+  _has_bits_[0] |= 0x00000002u;
+}
+inline void InitialPlayerDataFromServer::clear_has_x() {
+  _has_bits_[0] &= ~0x00000002u;
+}
+inline void InitialPlayerDataFromServer::clear_x() {
+  x_ = 0;
+  clear_has_x();
+}
+inline float InitialPlayerDataFromServer::x() const {
+  return x_;
+}
+inline void InitialPlayerDataFromServer::set_x(float value) {
+  set_has_x();
+  x_ = value;
+}
+
+// optional float y = 3;
+inline bool InitialPlayerDataFromServer::has_y() const {
+  return (_has_bits_[0] & 0x00000004u) != 0;
+}
+inline void InitialPlayerDataFromServer::set_has_y() {
+  _has_bits_[0] |= 0x00000004u;
+}
+inline void InitialPlayerDataFromServer::clear_has_y() {
+  _has_bits_[0] &= ~0x00000004u;
+}
+inline void InitialPlayerDataFromServer::clear_y() {
+  y_ = 0;
+  clear_has_y();
+}
+inline float InitialPlayerDataFromServer::y() const {
+  return y_;
+}
+inline void InitialPlayerDataFromServer::set_y(float value) {
+  set_has_y();
+  y_ = value;
+}
+
+// repeated float ortho = 4;
+inline int InitialPlayerDataFromServer::ortho_size() const {
+  return ortho_.size();
+}
+inline void InitialPlayerDataFromServer::clear_ortho() {
+  ortho_.Clear();
+}
+inline float InitialPlayerDataFromServer::ortho(int index) const {
+  return ortho_.Get(index);
+}
+inline void InitialPlayerDataFromServer::set_ortho(int index, float value) {
+  ortho_.Set(index, value);
+}
+inline void InitialPlayerDataFromServer::add_ortho(float value) {
+  ortho_.Add(value);
+}
+inline const ::google::protobuf::RepeatedField< float >&
+InitialPlayerDataFromServer::ortho() const {
+  return ortho_;
+}
+inline ::google::protobuf::RepeatedField< float >*
+InitialPlayerDataFromServer::mutable_ortho() {
+  return &ortho_;
+}
+
+// repeated float view = 5;
+inline int InitialPlayerDataFromServer::view_size() const {
+  return view_.size();
+}
+inline void InitialPlayerDataFromServer::clear_view() {
+  view_.Clear();
+}
+inline float InitialPlayerDataFromServer::view(int index) const {
+  return view_.Get(index);
+}
+inline void InitialPlayerDataFromServer::set_view(int index, float value) {
+  view_.Set(index, value);
+}
+inline void InitialPlayerDataFromServer::add_view(float value) {
+  view_.Add(value);
+}
+inline const ::google::protobuf::RepeatedField< float >&
+InitialPlayerDataFromServer::view() const {
+  return view_;
+}
+inline ::google::protobuf::RepeatedField< float >*
+InitialPlayerDataFromServer::mutable_view() {
+  return &view_;
 }
 
 

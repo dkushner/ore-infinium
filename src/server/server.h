@@ -51,6 +51,7 @@ private:
     uint32_t receiveInitialClientData(std::stringstream* ss, ENetEvent& event);
     void receiveChatMessage(std::stringstream* ss, const std::string& playerName);
     void sendChatMessage(const std::string& message, const std::string& playerName);
+    void sendInitialPlayerData(Player* player);
 
    Player* createPlayer(const std::string& playerName);
 

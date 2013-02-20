@@ -18,6 +18,7 @@
 #include "world.h"
 #include "debug.h"
 
+#include "src/server/server.h"
 #include "block.h"
 #include "game.h"
 #include "camera.h"
@@ -34,13 +35,17 @@
 #include <math.h>
 #include <fstream>
 
-World::World(Player* mainPlayer) : m_mainPlayer(mainPlayer)
+World::World(Player* mainPlayer, Server* server)
+  : m_mainPlayer(mainPlayer),
+    m_server(server)
 {
     //FIXME:
 //    m_camera = new Camera();
 //    SpriteSheetManager::instance()->setCamera(m_camera);
 
-    m_tileRenderer = new TileRenderer(this);
+    if (!m_server) {
+        m_tileRenderer = new TileRenderer(this);
+    }
 
     //FIXME:
 //    m_player = new Player("someframe");
@@ -81,7 +86,7 @@ void World::generateTileMeshes()
 
 void World::render(Player* player)
 {
-    assert(m_mainPlayer);
+    assert(m_mainPlayer && !m_server);
 
     //Sky at bottom layer
 
@@ -483,6 +488,7 @@ void World::saveMap()
      const int elapsedTime = clock.getElapsedTime().asMilliseconds();
      std::cout << "Time taken for map saving: " << elapsedTime << " Milliseconds" << std::endl;
      */
+    /*
     std::ofstream file("TESTWORLDDATA");
 
     int index = 0;
@@ -494,4 +500,5 @@ void World::saveMap()
         }
     }
     file.close();
+    */
 }
