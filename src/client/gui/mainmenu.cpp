@@ -219,6 +219,13 @@ void MainMenu::processMultiplayer(Rocket::Core::Event& event)
     if (id == "back") {
         m_mainMenuMultiplayer->Hide();
     } else if (id == "host") {
+        Rocket::Core::Element* playerNameInput = m_mainMenuMultiplayerHost->GetElementById("playerName");
+        //HACK: pick a random useless name
+        std::stringstream ss;
+        ss << "Player";
+        ss << rand();
+        playerNameInput->SetAttribute("value", ss.str().c_str());
+
         m_mainMenuMultiplayerHost->Show();
     } else if (id == "join") {
         Rocket::Core::Element* playerNameInput = m_mainMenuMultiplayerJoin->GetElementById("playerName");
