@@ -166,20 +166,34 @@ void World::update(double elapsedTime)
 
     //    m_sky->update(elapsedTime);
 
-    for (Entity * currentEntity : m_entities) {
+    //NOTE: players are not exactly considered entities. they are, but they aren't
+    for (Entity* currentEntity : m_entities) {
         currentEntity->update(elapsedTime, this);
     }
 
-    float x = m_uselessEntity->position().x;
-    float y = m_uselessEntity->position().y;
+    for (Player* player : m_players) {
+       player->update(elapsedTime, this);
 
-    if (x > 3200) {
-        x = 2200;
-    } else {
-        x += 1.0f;
+       if (m_server) {
+        if (player->dirtyFlags() & Entity::DirtyFlags::PositionDirty) {
+            m_server->sendPlayerMove(player);
+            player->clearDirtyFlag(Entity::DirtyFlags::PositionDirty);
+        }
+       }
     }
 
-    m_uselessEntity->setPosition(x, y);
+    if (m_server) {
+        float x = m_uselessEntity->position().x;
+        float y = m_uselessEntity->position().y;
+
+        if (x > 3200) {
+            x = 2200;
+        } else {
+            x += 1.0f;
+        }
+
+        m_uselessEntity->setPosition(x, y);
+    }
 
     //FIXME: MAKE IT CENTER ON THE CENTER OF THE PLAYER SPRITE
 // FIXME:   m_camera->centerOn(m_player->position());

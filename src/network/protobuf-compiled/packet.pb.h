@@ -38,6 +38,7 @@ class ChatMessageFromClient;
 class ChatMessageFromServer;
 class InitialPlayerDataFromServer;
 class PlayerDisconnectedFromServer;
+class PlayerMoveFromServer;
 class PlayerMoveFromClient;
 
 // ===================================================================
@@ -614,6 +615,108 @@ class PlayerDisconnectedFromServer : public ::google::protobuf::Message {
 };
 // -------------------------------------------------------------------
 
+class PlayerMoveFromServer : public ::google::protobuf::Message {
+ public:
+  PlayerMoveFromServer();
+  virtual ~PlayerMoveFromServer();
+  
+  PlayerMoveFromServer(const PlayerMoveFromServer& from);
+  
+  inline PlayerMoveFromServer& operator=(const PlayerMoveFromServer& from) {
+    CopyFrom(from);
+    return *this;
+  }
+  
+  inline const ::google::protobuf::UnknownFieldSet& unknown_fields() const {
+    return _unknown_fields_;
+  }
+  
+  inline ::google::protobuf::UnknownFieldSet* mutable_unknown_fields() {
+    return &_unknown_fields_;
+  }
+  
+  static const ::google::protobuf::Descriptor* descriptor();
+  static const PlayerMoveFromServer& default_instance();
+  
+  void Swap(PlayerMoveFromServer* other);
+  
+  // implements Message ----------------------------------------------
+  
+  PlayerMoveFromServer* New() const;
+  void CopyFrom(const ::google::protobuf::Message& from);
+  void MergeFrom(const ::google::protobuf::Message& from);
+  void CopyFrom(const PlayerMoveFromServer& from);
+  void MergeFrom(const PlayerMoveFromServer& from);
+  void Clear();
+  bool IsInitialized() const;
+  
+  int ByteSize() const;
+  bool MergePartialFromCodedStream(
+      ::google::protobuf::io::CodedInputStream* input);
+  void SerializeWithCachedSizes(
+      ::google::protobuf::io::CodedOutputStream* output) const;
+  ::google::protobuf::uint8* SerializeWithCachedSizesToArray(::google::protobuf::uint8* output) const;
+  int GetCachedSize() const { return _cached_size_; }
+  private:
+  void SharedCtor();
+  void SharedDtor();
+  void SetCachedSize(int size) const;
+  public:
+  
+  ::google::protobuf::Metadata GetMetadata() const;
+  
+  // nested types ----------------------------------------------------
+  
+  // accessors -------------------------------------------------------
+  
+  // optional uint32 playerID = 1;
+  inline bool has_playerid() const;
+  inline void clear_playerid();
+  static const int kPlayerIDFieldNumber = 1;
+  inline ::google::protobuf::uint32 playerid() const;
+  inline void set_playerid(::google::protobuf::uint32 value);
+  
+  // optional float x = 2;
+  inline bool has_x() const;
+  inline void clear_x();
+  static const int kXFieldNumber = 2;
+  inline float x() const;
+  inline void set_x(float value);
+  
+  // optional float y = 3;
+  inline bool has_y() const;
+  inline void clear_y();
+  static const int kYFieldNumber = 3;
+  inline float y() const;
+  inline void set_y(float value);
+  
+  // @@protoc_insertion_point(class_scope:PacketBuf.PlayerMoveFromServer)
+ private:
+  inline void set_has_playerid();
+  inline void clear_has_playerid();
+  inline void set_has_x();
+  inline void clear_has_x();
+  inline void set_has_y();
+  inline void clear_has_y();
+  
+  ::google::protobuf::UnknownFieldSet _unknown_fields_;
+  
+  ::google::protobuf::uint32 playerid_;
+  float x_;
+  float y_;
+  
+  mutable int _cached_size_;
+  ::google::protobuf::uint32 _has_bits_[(3 + 31) / 32];
+  
+  friend void  protobuf_AddDesc_packet_2eproto();
+  friend void protobuf_AssignDesc_packet_2eproto();
+  friend void protobuf_ShutdownFile_packet_2eproto();
+  
+  void InitAsDefaultInstance();
+  static PlayerMoveFromServer* default_instance_;
+};
+// -------------------------------------------------------------------
+
 class PlayerMoveFromClient : public ::google::protobuf::Message {
  public:
   PlayerMoveFromClient();
@@ -1173,6 +1276,76 @@ inline ::google::protobuf::uint32 PlayerDisconnectedFromServer::playerid() const
 inline void PlayerDisconnectedFromServer::set_playerid(::google::protobuf::uint32 value) {
   set_has_playerid();
   playerid_ = value;
+}
+
+// -------------------------------------------------------------------
+
+// PlayerMoveFromServer
+
+// optional uint32 playerID = 1;
+inline bool PlayerMoveFromServer::has_playerid() const {
+  return (_has_bits_[0] & 0x00000001u) != 0;
+}
+inline void PlayerMoveFromServer::set_has_playerid() {
+  _has_bits_[0] |= 0x00000001u;
+}
+inline void PlayerMoveFromServer::clear_has_playerid() {
+  _has_bits_[0] &= ~0x00000001u;
+}
+inline void PlayerMoveFromServer::clear_playerid() {
+  playerid_ = 0u;
+  clear_has_playerid();
+}
+inline ::google::protobuf::uint32 PlayerMoveFromServer::playerid() const {
+  return playerid_;
+}
+inline void PlayerMoveFromServer::set_playerid(::google::protobuf::uint32 value) {
+  set_has_playerid();
+  playerid_ = value;
+}
+
+// optional float x = 2;
+inline bool PlayerMoveFromServer::has_x() const {
+  return (_has_bits_[0] & 0x00000002u) != 0;
+}
+inline void PlayerMoveFromServer::set_has_x() {
+  _has_bits_[0] |= 0x00000002u;
+}
+inline void PlayerMoveFromServer::clear_has_x() {
+  _has_bits_[0] &= ~0x00000002u;
+}
+inline void PlayerMoveFromServer::clear_x() {
+  x_ = 0;
+  clear_has_x();
+}
+inline float PlayerMoveFromServer::x() const {
+  return x_;
+}
+inline void PlayerMoveFromServer::set_x(float value) {
+  set_has_x();
+  x_ = value;
+}
+
+// optional float y = 3;
+inline bool PlayerMoveFromServer::has_y() const {
+  return (_has_bits_[0] & 0x00000004u) != 0;
+}
+inline void PlayerMoveFromServer::set_has_y() {
+  _has_bits_[0] |= 0x00000004u;
+}
+inline void PlayerMoveFromServer::clear_has_y() {
+  _has_bits_[0] &= ~0x00000004u;
+}
+inline void PlayerMoveFromServer::clear_y() {
+  y_ = 0;
+  clear_has_y();
+}
+inline float PlayerMoveFromServer::y() const {
+  return y_;
+}
+inline void PlayerMoveFromServer::set_y(float value) {
+  set_has_y();
+  y_ = value;
 }
 
 // -------------------------------------------------------------------

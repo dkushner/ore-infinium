@@ -40,6 +40,11 @@ public:
 
     static constexpr int MAXPLAYERS = 8;
 
+    /**
+     * Broadcast to clients that this player's position has changed
+     */
+    void sendPlayerMove(Player* player);
+
 private:
     /**
      * If the client validated successfully, also creates a player and appends client and player

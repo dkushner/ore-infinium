@@ -486,6 +486,9 @@ void Client::processMessage(ENetEvent& event)
         case Packet::FromServerPacketContents::PlayerDisconnectedFromServerPacket:
             receivePlayerDisconnected(&ss);
             break;
+        case Packet::FromServerPacketContents::PlayerMoveFromServerPacket:
+            receivePlayerMove(&ss);
+            break;
     }
 
     enet_packet_destroy(event.packet);
@@ -505,7 +508,6 @@ void Client::receiveInitialPlayerData(std::stringstream* ss)
     Packet::deserialize(ss, &message);
     Debug::log(Debug::Area::NetworkClient) << "initial player data received";
 
-
     std::stringstream chatMessage;
     if (!m_mainPlayer) {
         //this is must be *our* player, so create it
@@ -516,6 +518,7 @@ void Client::receiveInitialPlayerData(std::stringstream* ss)
 
         Debug::log() << "PLAYERNAME: " << m_mainPlayer->name();
         chatMessage << m_mainPlayer->name() << " has joined";
+
         m_world = new World(m_mainPlayer, nullptr);
     } else {
         Player* player = new Player("test");
@@ -537,4 +540,13 @@ void Client::receivePlayerDisconnected(std::stringstream* ss)
 
     Debug::assertf(m_world, "WARNING:, player disconnected, client attempted to remove him from the worlds player list..but we dont' have a world yet here? seems odd");
     m_world->findPlayer(message.playerid());
+}
+
+void Client::receivePlayerMove(std::stringstream* ss)
+{
+    PacketBuf::PlayerMoveFromServer message;
+    Packet::deserialize(ss, &message);
+
+    Player* player = m_world->findPlayer(message.playerid());
+    player->setPosition(message.x(), message.y());
 }

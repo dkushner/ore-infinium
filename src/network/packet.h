@@ -52,7 +52,8 @@ public:
         InvalidFromServerPacket = 0,
         ChatMessageFromServerPacket,
         InitialPlayerDataFromServerPacket,
-        PlayerDisconnectedFromServerPacket
+        PlayerDisconnectedFromServerPacket,
+        PlayerMoveFromServerPacket
     };
 
     enum ConnectionEventType {

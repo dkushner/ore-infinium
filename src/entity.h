@@ -36,6 +36,13 @@ public:
 
     virtual void update(double elapsedTime, World* world);
 
+    enum DirtyFlags {
+        PositionDirty = 1 << 0
+    };
+
+    uint32_t dirtyFlags();
+    void clearDirtyFlag(uint32_t dirtyFlag);
+
     /**
      * Overrides/hides member functions from Sprite
      * Use only to reset the entities position to some other place.
@@ -70,6 +77,7 @@ public:
 
 private:
     glm::vec2 m_velocity;
+    uint32_t m_dirtyFlags = 0;
 };
 
 #endif

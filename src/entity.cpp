@@ -54,17 +54,21 @@ void Entity::update(double elapsedTime, World* world)
 
     //Remove this and add the above when the definition for dim is fixed.
 //    if (!World::instance()->isBlockSolid(dest)) {
+
+    m_dirtyFlags |= DirtyFlags::PositionDirty;
     Sprite::setPosition(dest);
 //   }
 }
 
 void Entity::setPosition(float x, float y)
 {
+    m_dirtyFlags |= DirtyFlags::PositionDirty;
     Sprite::setPosition(x, y);
 }
 
 void Entity::setPosition(const glm::vec2& vect)
 {
+    m_dirtyFlags |= DirtyFlags::PositionDirty;
     Sprite::setPosition(vect);
 }
 
@@ -153,3 +157,14 @@ bool Entity::collidingWithTile(const glm::vec2& destPosition, const glm::ivec2& 
     }
     return false;
 }
+
+uint32_t Entity::dirtyFlags()
+{
+    return m_dirtyFlags;
+}
+
+void Entity::clearDirtyFlag(uint32_t dirtyFlag)
+{
+    m_dirtyFlags &= ~dirtyFlag;
+}
+

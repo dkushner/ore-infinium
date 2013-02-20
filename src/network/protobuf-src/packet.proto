@@ -31,6 +31,14 @@ message PlayerDisconnectedFromServer {
    optional uint32 playerID = 1;
 }
 
+message PlayerMoveFromServer {
+   optional uint32 playerID = 1;
+
+    // new positions
+   optional float x = 2;
+   optional float y = 3;
+}
+
 message PlayerMoveFromClient {
    optional int32 directionX = 1;
    optional int32 directionY = 2;

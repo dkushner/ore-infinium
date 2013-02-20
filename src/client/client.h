@@ -85,6 +85,7 @@ private:
     void receiveChatMessage(std::stringstream* ss);
     void receiveInitialPlayerData(std::stringstream* ss);
     void receivePlayerDisconnected(std::stringstream* ss);
+    void receivePlayerMove(std::stringstream* ss);
 
 ///////////////////////////////////////////////
 
