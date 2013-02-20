@@ -112,13 +112,11 @@ void protobuf_AssignDesc_packet_2eproto() {
       ::google::protobuf::MessageFactory::generated_factory(),
       sizeof(ChatMessageFromServer));
   InitialPlayerDataFromServer_descriptor_ = file->message_type(4);
-  static const int InitialPlayerDataFromServer_offsets_[6] = {
+  static const int InitialPlayerDataFromServer_offsets_[4] = {
     GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(InitialPlayerDataFromServer, playerid_),
     GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(InitialPlayerDataFromServer, playername_),
     GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(InitialPlayerDataFromServer, x_),
     GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(InitialPlayerDataFromServer, y_),
-    GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(InitialPlayerDataFromServer, ortho_),
-    GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(InitialPlayerDataFromServer, view_),
   };
   InitialPlayerDataFromServer_reflection_ =
     new ::google::protobuf::internal::GeneratedMessageReflection(
@@ -222,12 +220,12 @@ void protobuf_AddDesc_packet_2eproto() {
     "\n\014versionMinor\030\003 \001(\005\"(\n\025ChatMessageFromC"
     "lient\022\017\n\007message\030\001 \001(\t\"<\n\025ChatMessageFro"
     "mServer\022\022\n\nplayerName\030\001 \001(\t\022\017\n\007message\030\002"
-    " \001(\t\"v\n\033InitialPlayerDataFromServer\022\020\n\010p"
+    " \001(\t\"Y\n\033InitialPlayerDataFromServer\022\020\n\010p"
     "layerID\030\001 \001(\r\022\022\n\nplayerName\030\002 \001(\t\022\t\n\001x\030\003"
-    " \001(\002\022\t\n\001y\030\004 \001(\002\022\r\n\005ortho\030\005 \003(\002\022\014\n\004view\030\006"
-    " \003(\002\"0\n\034PlayerDisconnectedFromServer\022\020\n\010"
-    "playerID\030\001 \001(\r\">\n\024PlayerMoveFromClient\022\022"
-    "\n\ndirectionX\030\001 \001(\005\022\022\n\ndirectionY\030\002 \001(\005", 478);
+    " \001(\002\022\t\n\001y\030\004 \001(\002\"0\n\034PlayerDisconnectedFro"
+    "mServer\022\020\n\010playerID\030\001 \001(\r\">\n\024PlayerMoveF"
+    "romClient\022\022\n\ndirectionX\030\001 \001(\005\022\022\n\ndirecti"
+    "onY\030\002 \001(\005", 449);
   ::google::protobuf::MessageFactory::InternalRegisterGeneratedFile(
     "packet.proto", &protobuf_RegisterTypes);
   Packet::default_instance_ = new Packet();
@@ -1278,8 +1276,6 @@ const int InitialPlayerDataFromServer::kPlayerIDFieldNumber;
 const int InitialPlayerDataFromServer::kPlayerNameFieldNumber;
 const int InitialPlayerDataFromServer::kXFieldNumber;
 const int InitialPlayerDataFromServer::kYFieldNumber;
-const int InitialPlayerDataFromServer::kOrthoFieldNumber;
-const int InitialPlayerDataFromServer::kViewFieldNumber;
 #endif  // !_MSC_VER
 
 InitialPlayerDataFromServer::InitialPlayerDataFromServer()
@@ -1348,8 +1344,6 @@ void InitialPlayerDataFromServer::Clear() {
     x_ = 0;
     y_ = 0;
   }
-  ortho_.Clear();
-  view_.Clear();
   ::memset(_has_bits_, 0, sizeof(_has_bits_));
   mutable_unknown_fields()->Clear();
 }
@@ -1420,50 +1414,6 @@ bool InitialPlayerDataFromServer::MergePartialFromCodedStream(
         } else {
           goto handle_uninterpreted;
         }
-        if (input->ExpectTag(45)) goto parse_ortho;
-        break;
-      }
-      
-      // repeated float ortho = 5;
-      case 5: {
-        if (::google::protobuf::internal::WireFormatLite::GetTagWireType(tag) ==
-            ::google::protobuf::internal::WireFormatLite::WIRETYPE_FIXED32) {
-         parse_ortho:
-          DO_((::google::protobuf::internal::WireFormatLite::ReadRepeatedPrimitive<
-                   float, ::google::protobuf::internal::WireFormatLite::TYPE_FLOAT>(
-                 1, 45, input, this->mutable_ortho())));
-        } else if (::google::protobuf::internal::WireFormatLite::GetTagWireType(tag)
-                   == ::google::protobuf::internal::WireFormatLite::
-                      WIRETYPE_LENGTH_DELIMITED) {
-          DO_((::google::protobuf::internal::WireFormatLite::ReadPackedPrimitiveNoInline<
-                   float, ::google::protobuf::internal::WireFormatLite::TYPE_FLOAT>(
-                 input, this->mutable_ortho())));
-        } else {
-          goto handle_uninterpreted;
-        }
-        if (input->ExpectTag(45)) goto parse_ortho;
-        if (input->ExpectTag(53)) goto parse_view;
-        break;
-      }
-      
-      // repeated float view = 6;
-      case 6: {
-        if (::google::protobuf::internal::WireFormatLite::GetTagWireType(tag) ==
-            ::google::protobuf::internal::WireFormatLite::WIRETYPE_FIXED32) {
-         parse_view:
-          DO_((::google::protobuf::internal::WireFormatLite::ReadRepeatedPrimitive<
-                   float, ::google::protobuf::internal::WireFormatLite::TYPE_FLOAT>(
-                 1, 53, input, this->mutable_view())));
-        } else if (::google::protobuf::internal::WireFormatLite::GetTagWireType(tag)
-                   == ::google::protobuf::internal::WireFormatLite::
-                      WIRETYPE_LENGTH_DELIMITED) {
-          DO_((::google::protobuf::internal::WireFormatLite::ReadPackedPrimitiveNoInline<
-                   float, ::google::protobuf::internal::WireFormatLite::TYPE_FLOAT>(
-                 input, this->mutable_view())));
-        } else {
-          goto handle_uninterpreted;
-        }
-        if (input->ExpectTag(53)) goto parse_view;
         if (input->ExpectAtEnd()) return true;
         break;
       }
@@ -1510,18 +1460,6 @@ void InitialPlayerDataFromServer::SerializeWithCachedSizes(
     ::google::protobuf::internal::WireFormatLite::WriteFloat(4, this->y(), output);
   }
   
-  // repeated float ortho = 5;
-  for (int i = 0; i < this->ortho_size(); i++) {
-    ::google::protobuf::internal::WireFormatLite::WriteFloat(
-      5, this->ortho(i), output);
-  }
-  
-  // repeated float view = 6;
-  for (int i = 0; i < this->view_size(); i++) {
-    ::google::protobuf::internal::WireFormatLite::WriteFloat(
-      6, this->view(i), output);
-  }
-  
   if (!unknown_fields().empty()) {
     ::google::protobuf::internal::WireFormat::SerializeUnknownFields(
         unknown_fields(), output);
@@ -1553,18 +1491,6 @@ void InitialPlayerDataFromServer::SerializeWithCachedSizes(
   // optional float y = 4;
   if (has_y()) {
     target = ::google::protobuf::internal::WireFormatLite::WriteFloatToArray(4, this->y(), target);
-  }
-  
-  // repeated float ortho = 5;
-  for (int i = 0; i < this->ortho_size(); i++) {
-    target = ::google::protobuf::internal::WireFormatLite::
-      WriteFloatToArray(5, this->ortho(i), target);
-  }
-  
-  // repeated float view = 6;
-  for (int i = 0; i < this->view_size(); i++) {
-    target = ::google::protobuf::internal::WireFormatLite::
-      WriteFloatToArray(6, this->view(i), target);
   }
   
   if (!unknown_fields().empty()) {
@@ -1603,20 +1529,6 @@ int InitialPlayerDataFromServer::ByteSize() const {
     }
     
   }
-  // repeated float ortho = 5;
-  {
-    int data_size = 0;
-    data_size = 4 * this->ortho_size();
-    total_size += 1 * this->ortho_size() + data_size;
-  }
-  
-  // repeated float view = 6;
-  {
-    int data_size = 0;
-    data_size = 4 * this->view_size();
-    total_size += 1 * this->view_size() + data_size;
-  }
-  
   if (!unknown_fields().empty()) {
     total_size +=
       ::google::protobuf::internal::WireFormat::ComputeUnknownFieldsSize(
@@ -1642,8 +1554,6 @@ void InitialPlayerDataFromServer::MergeFrom(const ::google::protobuf::Message& f
 
 void InitialPlayerDataFromServer::MergeFrom(const InitialPlayerDataFromServer& from) {
   GOOGLE_CHECK_NE(&from, this);
-  ortho_.MergeFrom(from.ortho_);
-  view_.MergeFrom(from.view_);
   if (from._has_bits_[0 / 32] & (0xffu << (0 % 32))) {
     if (from.has_playerid()) {
       set_playerid(from.playerid());
@@ -1684,8 +1594,6 @@ void InitialPlayerDataFromServer::Swap(InitialPlayerDataFromServer* other) {
     std::swap(playername_, other->playername_);
     std::swap(x_, other->x_);
     std::swap(y_, other->y_);
-    ortho_.Swap(&other->ortho_);
-    view_.Swap(&other->view_);
     std::swap(_has_bits_[0], other->_has_bits_[0]);
     _unknown_fields_.Swap(&other->_unknown_fields_);
     std::swap(_cached_size_, other->_cached_size_);

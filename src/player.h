@@ -41,9 +41,6 @@ public:
     void setPlayerID(uint32_t id);
     uint32_t playerID() const;
 
-    Camera* camera() const;
-    void setCamera(Camera* camera);
-
 public:
     // radius indicating how many pixels out the player can pick blocks
     static constexpr float blockPickingRadius = Block::blockSize * 8.0f;
@@ -73,8 +70,6 @@ private:
     std::string m_name;
 
     uint16_t m_ping = 0;
-
-    Camera* m_camera = nullptr;
 };
 
 #endif

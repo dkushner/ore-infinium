@@ -91,13 +91,3 @@ uint32_t Player::playerID() const
 {
     return m_playerID;
 }
-
-Camera* Player::camera() const
-{
-    return m_camera;
-}
-
-void Player::setCamera(Camera* camera)
-{
-    m_camera = camera;
-}

@@ -25,12 +25,6 @@ message InitialPlayerDataFromServer {
 
     optional float x = 3;
     optional float y = 4;
-
-    // 2D array
-    repeated float ortho = 5;
-
-    // 2D array
-    repeated float view = 6;
 }
 
 message PlayerDisconnectedFromServer {

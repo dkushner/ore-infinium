@@ -505,33 +505,11 @@ void Client::receiveInitialPlayerData(std::stringstream* ss)
     Packet::deserialize(ss, &message);
     Debug::log(Debug::Area::NetworkClient) << "initial player data received";
 
-    int count = 0;
-    glm::mat4 ortho;
-    for (int i = 0; i < 4; ++i) {
-        for (int j = 0; j < 4; ++j) {
-            ortho[i][j] = message.ortho(count);
-            ++count;
-        }
-    }
-
-    count = 0;
-    glm::mat4 view;
-    for (int i = 0; i < 4; ++i) {
-        for (int j = 0; j < 4; ++j) {
-            view[i][j] = message.view(count);
-            ++count;
-        }
-    }
-
-    Camera* cam = new Camera();
-    cam->setOrtho(ortho);
-    cam->setView(view);
 
     std::stringstream chatMessage;
     if (!m_mainPlayer) {
         //this is must be *our* player, so create it
         m_mainPlayer = new Player("test");
-        m_mainPlayer->setCamera(cam);
         m_mainPlayer->setName(message.playername());
         m_mainPlayer->setPlayerID(message.playerid());
         m_mainPlayer->setPosition(message.x(), message.y());
@@ -540,7 +518,6 @@ void Client::receiveInitialPlayerData(std::stringstream* ss)
         chatMessage << m_mainPlayer->name() << " has joined";
     } else {
         Player* player = new Player("test");
-        player->setCamera(cam);
         player->setName(message.playername());
         player->setPlayerID(message.playerid());
         player->setPosition(message.x(), message.y());

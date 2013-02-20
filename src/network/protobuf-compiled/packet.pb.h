@@ -502,30 +502,6 @@ class InitialPlayerDataFromServer : public ::google::protobuf::Message {
   inline float y() const;
   inline void set_y(float value);
   
-  // repeated float ortho = 5;
-  inline int ortho_size() const;
-  inline void clear_ortho();
-  static const int kOrthoFieldNumber = 5;
-  inline float ortho(int index) const;
-  inline void set_ortho(int index, float value);
-  inline void add_ortho(float value);
-  inline const ::google::protobuf::RepeatedField< float >&
-      ortho() const;
-  inline ::google::protobuf::RepeatedField< float >*
-      mutable_ortho();
-  
-  // repeated float view = 6;
-  inline int view_size() const;
-  inline void clear_view();
-  static const int kViewFieldNumber = 6;
-  inline float view(int index) const;
-  inline void set_view(int index, float value);
-  inline void add_view(float value);
-  inline const ::google::protobuf::RepeatedField< float >&
-      view() const;
-  inline ::google::protobuf::RepeatedField< float >*
-      mutable_view();
-  
   // @@protoc_insertion_point(class_scope:PacketBuf.InitialPlayerDataFromServer)
  private:
   inline void set_has_playerid();
@@ -542,12 +518,10 @@ class InitialPlayerDataFromServer : public ::google::protobuf::Message {
   ::std::string* playername_;
   ::google::protobuf::uint32 playerid_;
   float x_;
-  ::google::protobuf::RepeatedField< float > ortho_;
-  ::google::protobuf::RepeatedField< float > view_;
   float y_;
   
   mutable int _cached_size_;
-  ::google::protobuf::uint32 _has_bits_[(6 + 31) / 32];
+  ::google::protobuf::uint32 _has_bits_[(4 + 31) / 32];
   
   friend void  protobuf_AddDesc_packet_2eproto();
   friend void protobuf_AssignDesc_packet_2eproto();
@@ -1173,56 +1147,6 @@ inline float InitialPlayerDataFromServer::y() const {
 inline void InitialPlayerDataFromServer::set_y(float value) {
   set_has_y();
   y_ = value;
-}
-
-// repeated float ortho = 5;
-inline int InitialPlayerDataFromServer::ortho_size() const {
-  return ortho_.size();
-}
-inline void InitialPlayerDataFromServer::clear_ortho() {
-  ortho_.Clear();
-}
-inline float InitialPlayerDataFromServer::ortho(int index) const {
-  return ortho_.Get(index);
-}
-inline void InitialPlayerDataFromServer::set_ortho(int index, float value) {
-  ortho_.Set(index, value);
-}
-inline void InitialPlayerDataFromServer::add_ortho(float value) {
-  ortho_.Add(value);
-}
-inline const ::google::protobuf::RepeatedField< float >&
-InitialPlayerDataFromServer::ortho() const {
-  return ortho_;
-}
-inline ::google::protobuf::RepeatedField< float >*
-InitialPlayerDataFromServer::mutable_ortho() {
-  return &ortho_;
-}
-
-// repeated float view = 6;
-inline int InitialPlayerDataFromServer::view_size() const {
-  return view_.size();
-}
-inline void InitialPlayerDataFromServer::clear_view() {
-  view_.Clear();
-}
-inline float InitialPlayerDataFromServer::view(int index) const {
-  return view_.Get(index);
-}
-inline void InitialPlayerDataFromServer::set_view(int index, float value) {
-  view_.Set(index, value);
-}
-inline void InitialPlayerDataFromServer::add_view(float value) {
-  view_.Add(value);
-}
-inline const ::google::protobuf::RepeatedField< float >&
-InitialPlayerDataFromServer::view() const {
-  return view_;
-}
-inline ::google::protobuf::RepeatedField< float >*
-InitialPlayerDataFromServer::mutable_view() {
-  return &view_;
 }
 
 // -------------------------------------------------------------------

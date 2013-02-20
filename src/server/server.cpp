@@ -207,19 +207,6 @@ void Server::sendInitialPlayerData(Player* player)
     message.set_x(player->position().x);
     message.set_y(player->position().y);
 
-    Camera* cam = player->camera();
-    for (int i = 0; i < 4; ++i) {
-        for (int j = 0; j < 4; ++j) {
-            message.add_ortho(cam->ortho()[i][j]);
-        }
-    }
-
-    for (int i = 0; i < 4; ++i) {
-        for (int j = 0; j < 4; ++j) {
-            message.add_view(cam->view()[i][j]);
-        }
-    }
-
     Packet::sendPacketBroadcast(m_server, &message, Packet::FromServerPacketContents::InitialPlayerDataFromServerPacket, ENET_PACKET_FLAG_RELIABLE);
 }
 
@@ -229,10 +216,6 @@ Player* Server::createPlayer(const std::string& playerName)
     player->setName(playerName);
     player->setPlayerID(m_freePlayerID);
     player->setPosition(2500, 1492);
-
-    Camera* camera = new Camera();
-    camera->centerOn(player->position());
-    player->setCamera(camera);
 
     ++m_freePlayerID;
 

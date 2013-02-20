@@ -39,8 +39,10 @@ World::World(Player* mainPlayer, Server* server)
   : m_mainPlayer(mainPlayer),
     m_server(server)
 {
+    if (!m_server) {
+        m_camera = new Camera();
+    }
     //FIXME:
-//    m_camera = new Camera();
 //    SpriteSheetManager::instance()->setCamera(m_camera);
 
     if (!m_server) {
@@ -55,7 +57,7 @@ World::World(Player* mainPlayer, Server* server)
     m_uselessEntity->setPosition(2200, 2490);
     m_entities.insert(m_entities.end(), m_uselessEntity);
 
-    loadMap();
+//    loadMap();
 
     //FIXME: saveMap();
 

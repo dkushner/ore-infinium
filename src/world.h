@@ -154,6 +154,9 @@ private:
      */
     glm::vec2 m_relativeVectorToAttack;
 
+    /**
+     * Null if in server mode. It refers to the client camera
+     */
     Camera* m_camera = nullptr;
 
     /**
