@@ -175,11 +175,11 @@ void World::update(double elapsedTime)
        player->update(elapsedTime, this);
 
        if (m_server) {
-        if (player->dirtyFlags() & Entity::DirtyFlags::PositionDirty) {
-            m_server->sendPlayerMove(player);
-            player->clearDirtyFlag(Entity::DirtyFlags::PositionDirty);
+            if (player->dirtyFlags() & Entity::DirtyFlags::PositionDirty) {
+                m_server->sendPlayerMove(player);
+                player->clearDirtyFlag(Entity::DirtyFlags::PositionDirty);
+            }
         }
-       }
     }
 
     if (m_server) {

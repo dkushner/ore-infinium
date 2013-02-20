@@ -41,6 +41,12 @@ public:
     void setPlayerID(uint32_t id);
     uint32_t playerID() const;
 
+    /**
+     * Accepts player input result, which is a vector from -1 to 1 indicating
+     * direction, not magnitude.
+     */
+    void move(int32_t directionX, int32_t directionY);
+
 public:
     // radius indicating how many pixels out the player can pick blocks
     static constexpr float blockPickingRadius = Block::blockSize * 8.0f;
@@ -52,9 +58,6 @@ public:
 private:
     uint32_t m_maxHealth = 2500;
     uint32_t m_health = m_maxHealth;
-
-    float m_inputXDirection = 0.0f;
-    float m_inputYDirection = 0.0f;
 
     /**
      * Unique and utilized only by players, is not global or related to generic entity id's

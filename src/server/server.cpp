@@ -25,6 +25,7 @@
 
 #include "src/debug.h"
 #include <src/camera.h>
+#include <src/world.h>
 #include "src/../config.h"
 
 #include <google/protobuf/stubs/common.h>
@@ -34,6 +35,8 @@
 
 #include <iostream>
 #include <fstream>
+
+#include <SDL2/SDL.h>
 
 Server::Server(unsigned int maxClients, unsigned int port)
 {
@@ -57,8 +60,21 @@ Server::~Server()
 
 void Server::tick()
 {
+    Uint32 startTime = SDL_GetTicks();
+    int frameCount = 0;
+
+    double fps = 0.0;
     while (1) {
+        const double delta = static_cast<double>(SDL_GetTicks() - startTime);
+
+        fps = (frameCount / delta) * 1000;
         poll();
+
+        if (m_world) {
+           m_world->update(delta);
+        }
+
+        ++frameCount;
     }
 }
 
@@ -186,8 +202,8 @@ void Server::receivePlayerMove(std::stringstream* ss, Player* player)
     PacketBuf::PlayerMoveFromClient message;
     Packet::deserialize(ss, &message);
 
-    Debug::log(Debug::Area::NetworkServer) << " PLAYER MOVE RECEIVED, directionx: " <<  message.directionx() << " Y: " <<
-    message.directiony();
+//    Debug::log(Debug::Area::NetworkServer) << " PLAYER MOVE RECEIVED, directionx: " <<  message.directionx() << " Y: " <<
+    player->move(message.directionx(), message.directiony());
 }
 
 void Server::sendChatMessage(const std::string& message, const std::string& playerName)

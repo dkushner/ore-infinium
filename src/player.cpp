@@ -20,6 +20,7 @@
 #include "src/camera.h"
 
 #include "spritesheetmanager.h"
+#include "debug.h"
 #include <assert.h>
 
 Player::Player(const std::string& frameName): Entity(frameName, SpriteSheetManager::SpriteSheetType::Character)
@@ -71,6 +72,12 @@ void Player::handleEvent(const SDL_Event& event)
     Entity::setVelocity(m_inputXDirection * movementSpeed, m_inputYDirection * movementSpeed);
 }
 */
+
+void Player::move(int32_t directionX, int32_t directionY)
+{
+    Entity::setVelocity(directionX * movementSpeed, directionY * movementSpeed);
+    Debug::log() << "PLAYER MOVE HAPPENING";
+}
 
 void Player::setName(const std::string& name)
 {

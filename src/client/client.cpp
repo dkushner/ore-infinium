@@ -549,4 +549,5 @@ void Client::receivePlayerMove(std::stringstream* ss)
 
     Player* player = m_world->findPlayer(message.playerid());
     player->setPosition(message.x(), message.y());
+    Debug::log(Debug::Area::NetworkClient) << "player move received, new position x: " << message.x() << " y: " << message.y();
 }
