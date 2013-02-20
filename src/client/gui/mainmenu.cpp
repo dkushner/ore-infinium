@@ -29,6 +29,7 @@
 #include <iostream>
 #include <sstream>
 
+#include <random>
 
 #include <assert.h>
 
@@ -160,9 +161,6 @@ void MainMenu::processMainMenu(Rocket::Core::Event& event)
         m_mainMenuSingleplayer->Show();
     } else if (id == "multiplayer") {
         m_mainMenuMultiplayer->Show();
-   //     std::stringstream ss;
-  //      ss << "Player";
- //       ss << rand();
     } else if (id == "options") {
         showOptionsDialog();
     } else if (id == "quit") {
@@ -181,7 +179,12 @@ void MainMenu::processSingleplayer(Rocket::Core::Event& event)
         //HACK: pick a random useless name
         std::stringstream ss;
         ss << "Player";
-        ss << rand();
+        std::random_device device;
+        std::mt19937 rand(device());
+        std::uniform_int_distribution<> distribution(0, INT_MAX);
+
+        ss << distribution(rand);
+
         playerNameInput->SetAttribute("value", ss.str().c_str());
 
         m_mainMenuSingleplayerCreate->Show();
@@ -215,6 +218,10 @@ void MainMenu::processSingleplayerLoad(Rocket::Core::Event& event)
 
 void MainMenu::processMultiplayer(Rocket::Core::Event& event)
 {
+    std::random_device device;
+    std::mt19937 rand(device());
+    std::uniform_int_distribution<> distribution(0, INT_MAX);
+
     const Rocket::Core::String& id = event.GetCurrentElement()->GetId();
     if (id == "back") {
         m_mainMenuMultiplayer->Hide();
@@ -223,7 +230,8 @@ void MainMenu::processMultiplayer(Rocket::Core::Event& event)
         //HACK: pick a random useless name
         std::stringstream ss;
         ss << "Player";
-        ss << rand();
+        ss << distribution(rand);
+
         playerNameInput->SetAttribute("value", ss.str().c_str());
 
         m_mainMenuMultiplayerHost->Show();
@@ -232,7 +240,8 @@ void MainMenu::processMultiplayer(Rocket::Core::Event& event)
         //HACK: pick a random useless name
         std::stringstream ss;
         ss << "Player";
-        ss << rand();
+        ss << distribution(rand);
+
         playerNameInput->SetAttribute("value", ss.str().c_str());
 
         m_mainMenuMultiplayerJoin->Show();
