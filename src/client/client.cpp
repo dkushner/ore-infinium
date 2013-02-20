@@ -448,9 +448,8 @@ void Client::receiveInitialPlayerData(std::stringstream* ss)
     Packet::deserialize(ss, &message);
     Debug::log(Debug::Area::NetworkClient) << "initial player data received";
 
-    glm::mat4 ortho;
-    glm::mat4 view;
     int count = 0;
+    glm::mat4 ortho;
     for (int i = 0; i < 4; ++i) {
         for (int j = 0; j < 4; ++j) {
             ortho[i][j] = message.ortho(count);
@@ -459,6 +458,7 @@ void Client::receiveInitialPlayerData(std::stringstream* ss)
     }
 
     count = 0;
+    glm::mat4 view;
     for (int i = 0; i < 4; ++i) {
         for (int j = 0; j < 4; ++j) {
             view[i][j] = message.view(count);
@@ -470,8 +470,16 @@ void Client::receiveInitialPlayerData(std::stringstream* ss)
     cam->setOrtho(ortho);
     cam->setView(view);
 
-    m_mainPlayer = new Player("test");
-    m_mainPlayer->setCamera(cam);
-    m_mainPlayer->setPlayerID(message.playerid());
-    m_mainPlayer->setPosition(message.x(), message.y());
+    if (!m_mainPlayer) {
+        //this is must be our player
+        m_mainPlayer = new Player("test");
+        m_mainPlayer->setCamera(cam);
+        m_mainPlayer->setPlayerID(message.playerid());
+        m_mainPlayer->setPosition(message.x(), message.y());
+    } else {
+        Player* player = new Player("test");
+        player->setCamera(cam);
+        player->setPlayerID(message.playerid());
+        player->setPosition(message.x(), message.y());
+    }
 }
