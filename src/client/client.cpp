@@ -257,6 +257,7 @@ void Client::handleInputEvents()
 
         m_gui->handleEvent(event);
 
+        handlePlayerInput(event);
 
         switch (event.type) {
             case SDL_KEYDOWN:
@@ -278,10 +279,7 @@ void Client::handleInputEvents()
                     // toggle debug rendering
                     Settings::instance()->debugGUIRenderingEnabled = !Settings::instance()->debugGUIRenderingEnabled;
                     m_gui->debugRenderingChanged();
-                } else if (!m_gui->inputDemanded()) {
-                    // process player input
                 }
-
                 break;
 
             case SDL_WINDOWEVENT_CLOSE:
@@ -303,6 +301,47 @@ void Client::handleInputEvents()
             default:
                 break;
         }
+    }
+}
+
+void Client::handlePlayerInput(SDL_Event& event)
+{
+    switch (event.type) {
+        case SDL_KEYDOWN:
+            if (event.key.keysym.sym == SDLK_d || event.key.keysym.sym == SDLK_RIGHT) {
+                m_playerInputDirectionX = 1;
+            }
+
+            if (event.key.keysym.sym == SDLK_a || event.key.keysym.sym == SDLK_LEFT) {
+                m_playerInputDirectionX = -1;
+            }
+
+            if (event.key.keysym.sym == SDLK_s || event.key.keysym.sym == SDLK_DOWN) {
+                m_playerInputDirectionY = 1;
+            }
+
+            if (event.key.keysym.sym == SDLK_w || event.key.keysym.sym == SDLK_UP) {
+                m_playerInputDirectionY = -1;
+            }
+            break;
+
+        case SDL_KEYUP:
+            if (event.key.keysym.sym == SDLK_d || event.key.keysym.sym == SDLK_RIGHT) {
+                m_playerInputDirectionX = 0;
+            }
+
+            if (event.key.keysym.sym == SDLK_a || event.key.keysym.sym == SDLK_LEFT) {
+                m_playerInputDirectionX = 0;
+            }
+
+            if (event.key.keysym.sym == SDLK_s || event.key.keysym.sym == SDLK_DOWN) {
+                m_playerInputDirectionY = 0;
+            }
+
+            if (event.key.keysym.sym == SDLK_w || event.key.keysym.sym == SDLK_UP) {
+                m_playerInputDirectionY = 0;
+            }
+            break;
     }
 }
 

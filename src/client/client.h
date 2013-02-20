@@ -58,6 +58,8 @@ public:
     void tick(double elapsedTime, double fps);
     void render(double elapsedTime);
 
+    void handlePlayerInput(SDL_Event& event);
+
     const float FPS = 60.0;
 
     void disconnect();
@@ -112,6 +114,9 @@ private:
 
     std::thread* m_serverThread = nullptr;
     bool m_connected = false;
+
+    uint32_t m_playerInputDirectionX = 0;
+    uint32_t m_playerInputDirectionY = 0;
 
 private:
     ENetHost* m_client = nullptr;
