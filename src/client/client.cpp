@@ -257,11 +257,6 @@ void Client::handleInputEvents()
 
         m_gui->handleEvent(event);
 
-        if (!m_gui->inputDemanded()) {
-            if (m_world) {
-                m_world->handleEvent(event);
-            }
-        }
 
         switch (event.type) {
             case SDL_KEYDOWN:
@@ -283,7 +278,10 @@ void Client::handleInputEvents()
                     // toggle debug rendering
                     Settings::instance()->debugGUIRenderingEnabled = !Settings::instance()->debugGUIRenderingEnabled;
                     m_gui->debugRenderingChanged();
+                } else if (!m_gui->inputDemanded()) {
+                    // process player input
                 }
+
                 break;
 
             case SDL_WINDOWEVENT_CLOSE:
@@ -310,6 +308,7 @@ void Client::handleInputEvents()
 
 void Client::shutdown()
 {
+    disconnect();
     //FIXME: graceful client shutdown needed..
     exit(0);
 }
@@ -432,8 +431,6 @@ void Client::processMessage(ENetEvent& event)
             break;
     }
 
-    // Lets broadcast this message to all
-    // enet_host_broadcast(client, 0, event.packet);
     enet_packet_destroy(event.packet);
 }
 
