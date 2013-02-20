@@ -508,10 +508,11 @@ void Client::receiveInitialPlayerData(std::stringstream* ss)
     Packet::deserialize(ss, &message);
     Debug::log(Debug::Area::NetworkClient) << "initial player data received";
 
+    Player* player = new Player("test");
     std::stringstream chatMessage;
     if (!m_mainPlayer) {
         //this is must be *our* player, so create it
-        m_mainPlayer = new Player("test");
+        m_mainPlayer = player;
         m_mainPlayer->setName(message.playername());
         m_mainPlayer->setPlayerID(message.playerid());
         m_mainPlayer->setPosition(message.x(), message.y());
@@ -519,15 +520,17 @@ void Client::receiveInitialPlayerData(std::stringstream* ss)
         Debug::log() << "PLAYERNAME: " << m_mainPlayer->name();
         chatMessage << m_mainPlayer->name() << " has joined";
 
+        // this is us, the first player so this means the world creation is up to us
         m_world = new World(m_mainPlayer, nullptr);
     } else {
-        Player* player = new Player("test");
         player->setName(message.playername());
         player->setPlayerID(message.playerid());
         player->setPosition(message.x(), message.y());
 
         chatMessage << player->name() << " has joined";
     }
+
+    m_world->addPlayer(player);
 
     // means a client/player joined us, do our chat..
     m_chat->addChatLine("", chatMessage.str());
