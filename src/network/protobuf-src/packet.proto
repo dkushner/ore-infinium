@@ -31,3 +31,7 @@ message InitialPlayerDataFromServer {
     // 2D array
     repeated float view = 5;
 }
+
+message PlayerDisconnectedFromServer {
+   optional uint32 playerID = 1;
+}

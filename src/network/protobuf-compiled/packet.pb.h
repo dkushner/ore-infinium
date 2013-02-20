@@ -37,6 +37,7 @@ class ClientInitialConnection;
 class ChatMessageFromClient;
 class ChatMessageFromServer;
 class InitialPlayerDataFromServer;
+class PlayerDisconnectedFromServer;
 
 // ===================================================================
 
@@ -540,6 +541,88 @@ class InitialPlayerDataFromServer : public ::google::protobuf::Message {
   void InitAsDefaultInstance();
   static InitialPlayerDataFromServer* default_instance_;
 };
+// -------------------------------------------------------------------
+
+class PlayerDisconnectedFromServer : public ::google::protobuf::Message {
+ public:
+  PlayerDisconnectedFromServer();
+  virtual ~PlayerDisconnectedFromServer();
+  
+  PlayerDisconnectedFromServer(const PlayerDisconnectedFromServer& from);
+  
+  inline PlayerDisconnectedFromServer& operator=(const PlayerDisconnectedFromServer& from) {
+    CopyFrom(from);
+    return *this;
+  }
+  
+  inline const ::google::protobuf::UnknownFieldSet& unknown_fields() const {
+    return _unknown_fields_;
+  }
+  
+  inline ::google::protobuf::UnknownFieldSet* mutable_unknown_fields() {
+    return &_unknown_fields_;
+  }
+  
+  static const ::google::protobuf::Descriptor* descriptor();
+  static const PlayerDisconnectedFromServer& default_instance();
+  
+  void Swap(PlayerDisconnectedFromServer* other);
+  
+  // implements Message ----------------------------------------------
+  
+  PlayerDisconnectedFromServer* New() const;
+  void CopyFrom(const ::google::protobuf::Message& from);
+  void MergeFrom(const ::google::protobuf::Message& from);
+  void CopyFrom(const PlayerDisconnectedFromServer& from);
+  void MergeFrom(const PlayerDisconnectedFromServer& from);
+  void Clear();
+  bool IsInitialized() const;
+  
+  int ByteSize() const;
+  bool MergePartialFromCodedStream(
+      ::google::protobuf::io::CodedInputStream* input);
+  void SerializeWithCachedSizes(
+      ::google::protobuf::io::CodedOutputStream* output) const;
+  ::google::protobuf::uint8* SerializeWithCachedSizesToArray(::google::protobuf::uint8* output) const;
+  int GetCachedSize() const { return _cached_size_; }
+  private:
+  void SharedCtor();
+  void SharedDtor();
+  void SetCachedSize(int size) const;
+  public:
+  
+  ::google::protobuf::Metadata GetMetadata() const;
+  
+  // nested types ----------------------------------------------------
+  
+  // accessors -------------------------------------------------------
+  
+  // optional uint32 playerID = 1;
+  inline bool has_playerid() const;
+  inline void clear_playerid();
+  static const int kPlayerIDFieldNumber = 1;
+  inline ::google::protobuf::uint32 playerid() const;
+  inline void set_playerid(::google::protobuf::uint32 value);
+  
+  // @@protoc_insertion_point(class_scope:PacketBuf.PlayerDisconnectedFromServer)
+ private:
+  inline void set_has_playerid();
+  inline void clear_has_playerid();
+  
+  ::google::protobuf::UnknownFieldSet _unknown_fields_;
+  
+  ::google::protobuf::uint32 playerid_;
+  
+  mutable int _cached_size_;
+  ::google::protobuf::uint32 _has_bits_[(1 + 31) / 32];
+  
+  friend void  protobuf_AddDesc_packet_2eproto();
+  friend void protobuf_AssignDesc_packet_2eproto();
+  friend void protobuf_ShutdownFile_packet_2eproto();
+  
+  void InitAsDefaultInstance();
+  static PlayerDisconnectedFromServer* default_instance_;
+};
 // ===================================================================
 
 
@@ -975,6 +1058,32 @@ InitialPlayerDataFromServer::view() const {
 inline ::google::protobuf::RepeatedField< float >*
 InitialPlayerDataFromServer::mutable_view() {
   return &view_;
+}
+
+// -------------------------------------------------------------------
+
+// PlayerDisconnectedFromServer
+
+// optional uint32 playerID = 1;
+inline bool PlayerDisconnectedFromServer::has_playerid() const {
+  return (_has_bits_[0] & 0x00000001u) != 0;
+}
+inline void PlayerDisconnectedFromServer::set_has_playerid() {
+  _has_bits_[0] |= 0x00000001u;
+}
+inline void PlayerDisconnectedFromServer::clear_has_playerid() {
+  _has_bits_[0] &= ~0x00000001u;
+}
+inline void PlayerDisconnectedFromServer::clear_playerid() {
+  playerid_ = 0u;
+  clear_has_playerid();
+}
+inline ::google::protobuf::uint32 PlayerDisconnectedFromServer::playerid() const {
+  return playerid_;
+}
+inline void PlayerDisconnectedFromServer::set_playerid(::google::protobuf::uint32 value) {
+  set_has_playerid();
+  playerid_ = value;
 }
 
 

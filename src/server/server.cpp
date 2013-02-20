@@ -77,6 +77,12 @@ void Server::poll()
                 Debug::log(Debug::Area::NetworkServer) << "client count, before adding: " << m_clients.size();
                 //NOTE: we don't actually act on it, first we wait for them to send us a packet then we validate it and if so we add it to our client list
                 //FIXME: probably should timeout if they're not validated within n seconds, that way they can't just keep piling on top of us
+
+                //DEFAULT IS 5000
+                event.peer->timeoutMinimum = 2000;
+                //DEFAULT IS 30000
+                event.peer->timeoutMaximum = 8000;
+                event.peer->timeoutLimit = 20;
                 break;
 
             case ENET_EVENT_TYPE_RECEIVE:
@@ -87,9 +93,10 @@ void Server::poll()
                 Debug::log(Debug::Area::NetworkServer) << "Peer has disconnected:  " << event.peer->address.host << " at port: " << event.peer->address.port;
                 printf("%s disconnected.\n", event.peer->data);
                 for (auto& client : m_clients) {
-//                    if (peer == event.peer) {
-//                       Debug::log(Debug::Area::NetworkServer) << "FOUND PEER for disconnect, deleting it";
-//                    }
+                    if (client.first == event.peer) {
+                       Debug::log(Debug::Area::NetworkServer) << "FOUND PEER for disconnect, deleting it";
+                       m_clients.erase(client.first);
+                    }
                 }
                 Debug::log(Debug::Area::NetworkServer) << "m_clients size: " << m_clients.size();
 
