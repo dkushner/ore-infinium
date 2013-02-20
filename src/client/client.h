@@ -77,6 +77,7 @@ private:
      */
     bool connect(const char* address = "127.0.0.1", unsigned int port = 44543);
     void sendInitialConnectionData();
+    void sendPlayerMovement();
 
     void poll();
 
@@ -115,8 +116,8 @@ private:
     std::thread* m_serverThread = nullptr;
     bool m_connected = false;
 
-    uint32_t m_playerInputDirectionX = 0;
-    uint32_t m_playerInputDirectionY = 0;
+    int32_t m_playerInputDirectionX = 0;
+    int32_t m_playerInputDirectionY = 0;
 
 private:
     ENetHost* m_client = nullptr;

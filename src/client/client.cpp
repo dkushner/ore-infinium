@@ -257,7 +257,9 @@ void Client::handleInputEvents()
 
         m_gui->handleEvent(event);
 
-        handlePlayerInput(event);
+        if (m_mainPlayer && m_peer && m_connected) {
+            handlePlayerInput(event);
+        }
 
         switch (event.type) {
             case SDL_KEYDOWN:
@@ -306,6 +308,9 @@ void Client::handleInputEvents()
 
 void Client::handlePlayerInput(SDL_Event& event)
 {
+    int32_t originalX = m_playerInputDirectionX;
+    int32_t originalY = m_playerInputDirectionY;
+
     switch (event.type) {
         case SDL_KEYDOWN:
             if (event.key.keysym.sym == SDLK_d || event.key.keysym.sym == SDLK_RIGHT) {
@@ -342,6 +347,10 @@ void Client::handlePlayerInput(SDL_Event& event)
                 m_playerInputDirectionY = 0;
             }
             break;
+    }
+
+    if ( m_playerInputDirectionX != originalX || m_playerInputDirectionY != originalY) {
+        sendPlayerMovement();
     }
 }
 
@@ -450,6 +459,15 @@ void Client::sendChatMessage(const std::string& message)
     messagestruct.set_message(message);
 
     Packet::sendPacket(m_peer, &messagestruct, Packet::FromClientPacketContents::ChatMessageFromClientPacket, ENET_PACKET_FLAG_RELIABLE);
+}
+
+void Client::sendPlayerMovement()
+{
+    PacketBuf::PlayerMoveFromClient message;
+    message.set_directionx(m_playerInputDirectionX);
+    message.set_directiony(m_playerInputDirectionY);
+
+    Packet::sendPacket(m_peer, &message, Packet::FromClientPacketContents::PlayerMoveFromClientPacket, ENET_PACKET_FLAG_RELIABLE);
 }
 
 void Client::processMessage(ENetEvent& event)

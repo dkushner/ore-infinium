@@ -125,15 +125,13 @@ void Server::processMessage(ENetEvent& event)
             switch (result) {
                 case Packet::ConnectionEventType::None: {
                     //he's good to go, validation succeeded
-//                    std::stringstream ss;
-//                    ss << m_clients[event.peer]->name();
-//                    ss << " has joined the server.";
-//                    sendChatMessage(ss.str(), "");
                     sendInitialPlayerData(m_clients[event.peer]);
                     break;
                 }
+
                 case Packet::ConnectionEventType::DisconnectedInvalidPlayerName:
                     //fall through
+
                 case Packet::ConnectionEventType::DisconnectedVersionMismatch: {
                     enet_peer_disconnect_now(event.peer, result);
                     break;
@@ -144,6 +142,10 @@ void Server::processMessage(ENetEvent& event)
 
         case Packet::FromClientPacketContents::ChatMessageFromClientPacket:
             receiveChatMessage(&ss, m_clients[event.peer]->name());
+            break;
+
+        case Packet::FromClientPacketContents::PlayerMoveFromClientPacket:
+            receivePlayerMove(&ss, m_clients[event.peer]);
             break;
     }
 
@@ -177,6 +179,15 @@ void Server::receiveChatMessage(std::stringstream* ss, const std::string& player
     Packet::deserialize(ss, &receiveMessage);
 
     sendChatMessage(ss->str(), playerName);
+}
+
+void Server::receivePlayerMove(std::stringstream* ss, Player* player)
+{
+    PacketBuf::PlayerMoveFromClient message;
+    Packet::deserialize(ss, &message);
+
+    Debug::log(Debug::Area::NetworkServer) << " PLAYER MOVE RECEIVED, directionx: " <<  message.directionx() << " Y: " <<
+    message.directiony();
 }
 
 void Server::sendChatMessage(const std::string& message, const std::string& playerName)

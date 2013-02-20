@@ -36,3 +36,8 @@ message InitialPlayerDataFromServer {
 message PlayerDisconnectedFromServer {
    optional uint32 playerID = 1;
 }
+
+message PlayerMoveFromClient {
+   optional int32 directionX = 1;
+   optional int32 directionY = 2;
+}

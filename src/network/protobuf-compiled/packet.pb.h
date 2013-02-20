@@ -38,6 +38,7 @@ class ChatMessageFromClient;
 class ChatMessageFromServer;
 class InitialPlayerDataFromServer;
 class PlayerDisconnectedFromServer;
+class PlayerMoveFromClient;
 
 // ===================================================================
 
@@ -637,6 +638,98 @@ class PlayerDisconnectedFromServer : public ::google::protobuf::Message {
   void InitAsDefaultInstance();
   static PlayerDisconnectedFromServer* default_instance_;
 };
+// -------------------------------------------------------------------
+
+class PlayerMoveFromClient : public ::google::protobuf::Message {
+ public:
+  PlayerMoveFromClient();
+  virtual ~PlayerMoveFromClient();
+  
+  PlayerMoveFromClient(const PlayerMoveFromClient& from);
+  
+  inline PlayerMoveFromClient& operator=(const PlayerMoveFromClient& from) {
+    CopyFrom(from);
+    return *this;
+  }
+  
+  inline const ::google::protobuf::UnknownFieldSet& unknown_fields() const {
+    return _unknown_fields_;
+  }
+  
+  inline ::google::protobuf::UnknownFieldSet* mutable_unknown_fields() {
+    return &_unknown_fields_;
+  }
+  
+  static const ::google::protobuf::Descriptor* descriptor();
+  static const PlayerMoveFromClient& default_instance();
+  
+  void Swap(PlayerMoveFromClient* other);
+  
+  // implements Message ----------------------------------------------
+  
+  PlayerMoveFromClient* New() const;
+  void CopyFrom(const ::google::protobuf::Message& from);
+  void MergeFrom(const ::google::protobuf::Message& from);
+  void CopyFrom(const PlayerMoveFromClient& from);
+  void MergeFrom(const PlayerMoveFromClient& from);
+  void Clear();
+  bool IsInitialized() const;
+  
+  int ByteSize() const;
+  bool MergePartialFromCodedStream(
+      ::google::protobuf::io::CodedInputStream* input);
+  void SerializeWithCachedSizes(
+      ::google::protobuf::io::CodedOutputStream* output) const;
+  ::google::protobuf::uint8* SerializeWithCachedSizesToArray(::google::protobuf::uint8* output) const;
+  int GetCachedSize() const { return _cached_size_; }
+  private:
+  void SharedCtor();
+  void SharedDtor();
+  void SetCachedSize(int size) const;
+  public:
+  
+  ::google::protobuf::Metadata GetMetadata() const;
+  
+  // nested types ----------------------------------------------------
+  
+  // accessors -------------------------------------------------------
+  
+  // optional int32 directionX = 1;
+  inline bool has_directionx() const;
+  inline void clear_directionx();
+  static const int kDirectionXFieldNumber = 1;
+  inline ::google::protobuf::int32 directionx() const;
+  inline void set_directionx(::google::protobuf::int32 value);
+  
+  // optional int32 directionY = 2;
+  inline bool has_directiony() const;
+  inline void clear_directiony();
+  static const int kDirectionYFieldNumber = 2;
+  inline ::google::protobuf::int32 directiony() const;
+  inline void set_directiony(::google::protobuf::int32 value);
+  
+  // @@protoc_insertion_point(class_scope:PacketBuf.PlayerMoveFromClient)
+ private:
+  inline void set_has_directionx();
+  inline void clear_has_directionx();
+  inline void set_has_directiony();
+  inline void clear_has_directiony();
+  
+  ::google::protobuf::UnknownFieldSet _unknown_fields_;
+  
+  ::google::protobuf::int32 directionx_;
+  ::google::protobuf::int32 directiony_;
+  
+  mutable int _cached_size_;
+  ::google::protobuf::uint32 _has_bits_[(2 + 31) / 32];
+  
+  friend void  protobuf_AddDesc_packet_2eproto();
+  friend void protobuf_AssignDesc_packet_2eproto();
+  friend void protobuf_ShutdownFile_packet_2eproto();
+  
+  void InitAsDefaultInstance();
+  static PlayerMoveFromClient* default_instance_;
+};
 // ===================================================================
 
 
@@ -1156,6 +1249,54 @@ inline ::google::protobuf::uint32 PlayerDisconnectedFromServer::playerid() const
 inline void PlayerDisconnectedFromServer::set_playerid(::google::protobuf::uint32 value) {
   set_has_playerid();
   playerid_ = value;
+}
+
+// -------------------------------------------------------------------
+
+// PlayerMoveFromClient
+
+// optional int32 directionX = 1;
+inline bool PlayerMoveFromClient::has_directionx() const {
+  return (_has_bits_[0] & 0x00000001u) != 0;
+}
+inline void PlayerMoveFromClient::set_has_directionx() {
+  _has_bits_[0] |= 0x00000001u;
+}
+inline void PlayerMoveFromClient::clear_has_directionx() {
+  _has_bits_[0] &= ~0x00000001u;
+}
+inline void PlayerMoveFromClient::clear_directionx() {
+  directionx_ = 0;
+  clear_has_directionx();
+}
+inline ::google::protobuf::int32 PlayerMoveFromClient::directionx() const {
+  return directionx_;
+}
+inline void PlayerMoveFromClient::set_directionx(::google::protobuf::int32 value) {
+  set_has_directionx();
+  directionx_ = value;
+}
+
+// optional int32 directionY = 2;
+inline bool PlayerMoveFromClient::has_directiony() const {
+  return (_has_bits_[0] & 0x00000002u) != 0;
+}
+inline void PlayerMoveFromClient::set_has_directiony() {
+  _has_bits_[0] |= 0x00000002u;
+}
+inline void PlayerMoveFromClient::clear_has_directiony() {
+  _has_bits_[0] &= ~0x00000002u;
+}
+inline void PlayerMoveFromClient::clear_directiony() {
+  directiony_ = 0;
+  clear_has_directiony();
+}
+inline ::google::protobuf::int32 PlayerMoveFromClient::directiony() const {
+  return directiony_;
+}
+inline void PlayerMoveFromClient::set_directiony(::google::protobuf::int32 value) {
+  set_has_directiony();
+  directiony_ = value;
 }
 
 
