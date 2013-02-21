@@ -55,7 +55,7 @@ public:
      * which position, etc.
      * @p spriteSheetType which sprite sheet it is considered to be from. A character, entity, etc.
      */
-    void registerSprite(SpriteSheetType spriteSheetType, Sprite* sprite);
+    void registerSprite(Sprite* sprite);
 
     /**
      * Renders PC's and NPC's

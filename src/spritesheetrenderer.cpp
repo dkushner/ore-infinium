@@ -109,9 +109,9 @@ glm::vec2 SpriteSheetRenderer::spriteSheetSize(SpriteSheetRenderer::SpriteSheetT
     return imageSize;
 }
 
-void SpriteSheetRenderer::registerSprite(SpriteSheetRenderer::SpriteSheetType spriteSheetType, Sprite* sprite)
+void SpriteSheetRenderer::registerSprite(Sprite* sprite)
 {
-    switch (spriteSheetType) {
+    switch (sprite->spriteSheetType()) {
         case SpriteSheetType::Character:
             m_characterSprites.insert(m_characterSprites.end(), sprite);
             // TODO: look up the size of the graphic/frame, in the spritesheet map.

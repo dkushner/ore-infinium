@@ -56,6 +56,7 @@ World::World(Player* mainPlayer, Server* server)
     m_uselessEntity = new Entity("test", SpriteSheetRenderer::SpriteSheetType::Character);
     m_uselessEntity->setPosition(2200, 2490);
     m_entities.insert(m_entities.end(), m_uselessEntity);
+    m_spriteSheetRenderer->registerSprite(m_uselessEntity);
 
 //    loadMap();
 
@@ -64,7 +65,6 @@ World::World(Player* mainPlayer, Server* server)
     //FIXME: height
     //    m_sky = new Sky(m_window, m_view, 0.0f);
     //FIXME: HACK: rendering is borked because of this, server will shit bricks when it sees this, because it needs to run this code
-    //    SpriteSheetManager::instance()->registerSprite(m_spriteSheetType, this);
 }
 
 World::~World()
@@ -114,9 +114,9 @@ void World::render(Player* player)
     m_tileRenderer->render();
 
     //HACK    m_window->setView(m_window->getDefaultView());
-//    SpriteSheetManager::instance()->renderEntities();
-//    SpriteSheetManager::instance()->renderCharacters();
-//
+    m_spriteSheetRenderer->renderEntities();
+    m_spriteSheetRenderer->renderCharacters();
+
     // ==================================================
     glm::ivec2 mouse = mousePosition();
 

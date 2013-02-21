@@ -48,6 +48,10 @@ public:
         return m_frameName;
     }
 
+    SpriteSheetRenderer::SpriteSheetType spriteSheetType() {
+        return m_spriteSheetType;
+    };
+
     /// TODO: NOT IMPLEMENTED OR NEEDED RIGHT NOW.
     /// THIS MAY REQUIRE SOME CHANGES ON THE MANAGER FRONT, TO GET IT TO CHANGE THE INTERNAL MAPPING
     /// THIS WOULD ONLY EVER BE NEEDED TO e.g. MAKE AN ENTITY SUDDENLY LOOK LIKE A CHARACTER, aka a mimic/illusionist
