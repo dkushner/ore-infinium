@@ -4,8 +4,8 @@ uniform mat4 mvp;
 
 attribute vec2 position;
 
-attribute vec2 texcoord;
-varying vec2 frag_texcoord;
+attribute vec3 texcoord;
+varying vec3 frag_texcoord;
 
 attribute vec4 color;
 varying vec4 frag_color;

@@ -81,8 +81,6 @@ void TileRenderer::renderCharacters()
     int index = 0;
     for (Sprite* sprite: m_characterSprites) {
         auto frameIdentifier = m_spriteSheetCharactersDescription.find(sprite->frameName());
-        SpriteFrameIdentifier& frame = frameIdentifier->second;
-        frame.x; //FIXME:
 
         // vertices that will be uploaded.
         Vertex vertices[4];

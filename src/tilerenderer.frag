@@ -1,17 +1,28 @@
-#version 130
+//#version 130
 //uniform vec2 offset;
 
 //uniform sampler2D tilemap_pixels;
 
-uniform sampler2D tile_types_super_texture;
+//uniform sampler2D tile_types_super_texture;
 
-ivec2 offset = ivec2(5.0, 5.0);
+//ivec2 offset = ivec2(5.0, 5.0);
 
 //FIXME: stop hardcoding ..
-ivec2 TILE_SIZE = ivec2(16, 16);
+//ivec2 TILE_SIZE = ivec2(16, 16);
 
-void main()
-{
+#version 120
+
+varying vec3 frag_texcoord;
+varying vec4 frag_color;
+
+uniform sampler2DArray tex;
+
+void main() {
+    gl_FragColor = frag_color * texture2D(tex, frag_texcoord);
+}
+
+//void main()
+//{
 /*
     ivec2 tilemap_size = textureSize(tile_types_super_texture, 0);
 
@@ -28,8 +39,8 @@ void main()
     vec4 tileColor = texelFetch(tile_types_super_texture, tileCoordinate, 0);
 */
 //    vec4 tileColor = texelFetch(tile_types_super_texture, ivec2(22, 12), 0);
-    vec4 tileColor = texture2D(tile_types_super_texture, vec2(0.5, 0.5), 0);
-    gl_FragColor = tileColor;
+//    vec4 tileColor = texture2D(tile_types_super_texture, vec2(0.5, 0.5), 0);
+ //   gl_FragColor = tileColor;
 
 /*
 gl_FragColor.r = 1.0;
@@ -37,4 +48,4 @@ gl_FragColor.g = 0.0;
 gl_FragColor.b = 0.0;
 gl_FragColor.a = 1.0;
 */
-}
+//}
