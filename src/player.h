@@ -44,6 +44,8 @@ public:
     /**
      * Accepts player input result, which is a vector from -1 to 1 indicating
      * direction, not magnitude.
+     *
+     * Only used by server.
      */
     void move(int32_t directionX, int32_t directionY);
 

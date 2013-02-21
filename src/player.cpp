@@ -76,7 +76,6 @@ void Player::handleEvent(const SDL_Event& event)
 void Player::move(int32_t directionX, int32_t directionY)
 {
     Entity::setVelocity(directionX * movementSpeed, directionY * movementSpeed);
-    Debug::log() << "PLAYER MOVE HAPPENING";
 }
 
 void Player::setName(const std::string& name)

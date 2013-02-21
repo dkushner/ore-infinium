@@ -156,7 +156,7 @@ void Client::poll()
                 break;
 
             case ENET_EVENT_TYPE_RECEIVE:
-                Debug::log(Debug::Area::NetworkClient) << "Message from server, our client->server round trip latency is: " << event.peer->lastRoundTripTime;
+                //Debug::log(Debug::Area::NetworkClient) << "Message from server, our client->server round trip latency is: " << event.peer->lastRoundTripTime;
                 processMessage(event);;
                 break;
 
@@ -267,7 +267,6 @@ void Client::drawDebugText(double frametime)
         y += 15.0;
         m_font->Render(player.c_str(), -1, FTPoint(0.0, height - y, 0.0));
     }
-
 }
 
 void Client::handleInputEvents()
@@ -578,5 +577,4 @@ void Client::receivePlayerMove(std::stringstream* ss)
 
     Player* player = m_world->findPlayer(message.playerid());
     player->setPosition(message.x(), message.y());
-    Debug::log(Debug::Area::NetworkClient) << "player move received, new position x: " << message.x() << " y: " << message.y();
 }
