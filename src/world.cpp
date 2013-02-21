@@ -76,6 +76,7 @@ void World::addPlayer(Player* player)
     m_players.push_back(player);
     if (!m_server) {
         m_spriteSheetRenderer->registerSprite(player);
+    m_uselessEntity->setPosition(player->position().x - 20, player->position().y - 20);
     }
 }
 

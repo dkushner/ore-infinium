@@ -261,10 +261,10 @@ Player* Server::createPlayer(const std::string& playerName)
 
 void Server::sendPlayerMove(Player* player)
 {
-//    PacketBuf::PlayerMoveFromServer message;
-//    message.set_playerid(player->playerID());
-//    message.set_x(player->position().x);
-//    message.set_y(player->position().y);
-//
-//////    Packet::sendPacketBroadcast(m_server, &message, Packet::FromServerPacketContents::PlayerMoveFromServerPacket, ENET_PACKET_FLAG_UNSEQUENCED);
+    PacketBuf::PlayerMoveFromServer message;
+    message.set_playerid(player->playerID());
+    message.set_x(player->position().x);
+    message.set_y(player->position().y);
+
+    Packet::sendPacketBroadcast(m_server, &message, Packet::FromServerPacketContents::PlayerMoveFromServerPacket, ENET_PACKET_FLAG_UNSEQUENCED);
 }
