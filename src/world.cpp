@@ -172,6 +172,12 @@ void World::update(double elapsedTime)
     //NOTE: players are not exactly considered entities. they are, but they aren't
     for (Entity* currentEntity : m_entities) {
         currentEntity->update(elapsedTime, this);
+        if (m_server) {
+            if (currentEntity->dirtyFlags() & Entity::DirtyFlags::PositionDirty) {
+//                m_server->sendPlayerMove(player);
+                currentEntity->clearDirtyFlag(Entity::DirtyFlags::PositionDirty);
+            }
+        }
     }
 
     for (Player* player : m_players) {
@@ -202,7 +208,6 @@ void World::update(double elapsedTime)
     //only occurs on client side, obviously the server doesn't need to do this stuff
     if (m_mainPlayer) {
         m_camera->centerOn(m_mainPlayer->position());
-        Debug::log(Debug::Area::NetworkClient) << "centering on player position x: "<< m_mainPlayer->position().x << " y: " << m_mainPlayer->position().y;
     }
 
     //calculateAttackPosition();

@@ -225,8 +225,7 @@ void Client::drawDebugText(double frametime)
     std::string str;
 
     ss.str("");
-    ss << "FPS: " << m_fps;
-    ss << " Frametime: " << "fucking hell";//frametime;
+    ss << "FPS: " << m_fps << " Frametime: " << "fucking hell";//frametime;
     str = ss.str();
 
     const int height = Settings::instance()->screenResolutionHeight - 15;
@@ -240,13 +239,35 @@ void Client::drawDebugText(double frametime)
        ss << "Disconnected";
     }
 
+    if (m_server) {
+       ss << " | Hosting Server Mode";
+    } else {
+       ss << " | Client Mode";
+    }
+
     std::string connectedString = ss.str();
 
-    m_font->Render(str.c_str(), -1, FTPoint(0.0, height - 0.0, 0.0));
-    m_font->Render("F5 to toggle debug logging", -1, FTPoint(0.0, height - 15.0, 0.0));
-    m_font->Render("F6 to toggle renderer logging", -1, FTPoint(0.0, height - 30.0, 0.0));
-    m_font->Render("F7 to toggle GUI renderer debug", -1, FTPoint(0.0, height - 45.0, 0.0));
-    m_font->Render(connectedString.c_str(), -1, FTPoint(0.0, height - 60.0, 0.0));
+    float y = 0.0f;
+
+    m_font->Render(str.c_str(), -1, FTPoint(0.0, height - y, 0.0));
+    y += 15.0;
+    m_font->Render("F5 to toggle debug logging", -1, FTPoint(0.0, height - y, 0.0));
+    y += 15.0;
+    m_font->Render("F6 to toggle renderer logging", -1, FTPoint(0.0, height - y, 0.0));
+    y += 15.0;
+    m_font->Render("F7 to toggle GUI renderer debug", -1, FTPoint(0.0, height - y, 0.0));
+    y += 15.0;
+    m_font->Render(connectedString.c_str(), -1, FTPoint(0.0, height - y, 0.0));
+
+    if (m_mainPlayer) {
+        ss.str("");
+        ss << "Player name: " << m_mainPlayer->name() << " Position X: " << m_mainPlayer->position().x << " Position Y: " << m_mainPlayer->position().y;
+
+        std::string player = ss.str();
+        y += 15.0;
+        m_font->Render(player.c_str(), -1, FTPoint(0.0, height - y, 0.0));
+    }
+
 }
 
 void Client::handleInputEvents()

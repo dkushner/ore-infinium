@@ -143,6 +143,7 @@ private:
     TileRenderer* m_tileRenderer = nullptr;
     SpriteSheetRenderer* m_spriteSheetRenderer = nullptr;
 
+    /// inclusive of m_mainPlayer as well.
     std::list<Player*> m_players;
 
     //HACK: remove when we get beyond just testing stupid shit
