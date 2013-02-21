@@ -19,23 +19,74 @@
 #define TILERENDERER_H
 
 #include "debug.h"
+#include "block.h"
 
+#include <glm/glm.hpp>
+#include <glm/gtc/matrix_transform.hpp>
+#include <glm/gtc/swizzle.hpp>
 #include <GL/glew.h>
-#include <GL/gl.h>
 
+#include <map>
+#include <string>
+#include <vector>
+
+class Camera;
+class Image;
 class World;
 class Shader;
 
 class TileRenderer
 {
 public:
-    explicit TileRenderer(World* world);
+    explicit TileRenderer(World* world, Camera* camera);
     ~TileRenderer();
 
     void render();
 
+    void setCamera(Camera* camera);
+
 private:
+    typedef uint32_t u32;
+    typedef float f32;
+
+    /* Each vertex is:
+     * two floats for the 2d coordinate
+     * four u8s for the color
+     * two f32s for the texcoords
+     * the vbo contains data of the aforementioned elements interleaved.
+     * Each sprite has four vertices.
+     * */
+    struct Vertex {
+        float x, y;
+        unsigned int color; // packed with 4 u8s (unsigned chars) for color
+        float u, v;
+    };
+
+    void loadTileSheet(const std::string& fileName);
+
     void initGL();
+
+//    std::map<SpriteSheetType, SpriteSheet> m_spriteSheetTextures;
+
+    /**
+     * Map containing all the sprite frame names and their properties for this
+     * particular spritesheet. e.g. x, y, width, height.
+     */
+//    std::map<std::string, SpriteFrameIdentifier> m_spriteSheetCharactersDescription;
+    std::map<Block::BlockType, Image*> m_tileSheets;
+
+    GLint m_texture_location;
+
+    GLuint m_vao; // vertex array object
+    GLuint m_vbo; // vertex buffer object
+    GLuint m_ebo; // element buffer object
+
+    glm::mat4 m_modelMatrix;
+    glm::mat4 m_projectionMatrix;
+
+    int m_maxSpriteCount = 2200;
+
+    Camera* m_camera = nullptr;
 
     World* m_world = nullptr;
     Shader* m_shader = nullptr;

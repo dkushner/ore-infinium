@@ -1,6 +1,5 @@
 /******************************************************************************
  *   Copyright (C) 2013 by Shaun Reich <sreich@kde.org>                       *
- *   Based on original code from Ben English <benjamin.english@oit.edu>       *
  *                                                                            *
  *   This program is free software; you can redistribute it and/or            *
  *   modify it under the terms of the GNU General Public License as           *
