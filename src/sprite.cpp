@@ -16,6 +16,7 @@
  *****************************************************************************/
 
 #include "sprite.h"
+
 #include "spritesheetmanager.h"
 #include "game.h"
 
@@ -28,7 +29,4 @@ Sprite::Sprite(const std::string& frameName, SpriteSheetManager::SpriteSheetType
         m_origin = glm::vec2(texSize.x() * 0.5, texSize.y() * 0.5);
         FIXME:
     */
-
-    //FIXME: HACK: rendering is borked because of this, server will shit bricks when it sees this, because it needs to run this code
-//    SpriteSheetManager::instance()->registerSprite(m_spriteSheetType, this);
 }

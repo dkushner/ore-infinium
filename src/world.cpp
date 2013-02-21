@@ -63,7 +63,8 @@ World::World(Player* mainPlayer, Server* server)
 
     //FIXME: height
     //    m_sky = new Sky(m_window, m_view, 0.0f);
-
+    //FIXME: HACK: rendering is borked because of this, server will shit bricks when it sees this, because it needs to run this code
+    //    SpriteSheetManager::instance()->registerSprite(m_spriteSheetType, this);
 }
 
 World::~World()
@@ -196,7 +197,10 @@ void World::update(double elapsedTime)
     }
 
     //FIXME: MAKE IT CENTER ON THE CENTER OF THE PLAYER SPRITE
-// FIXME:   m_camera->centerOn(m_player->position());
+    //only occurs on client side, obviously the server doesn't need to do this stuff
+    if (m_mainPlayer) {
+        m_camera->centerOn(m_mainPlayer->position());
+    }
 
     //calculateAttackPosition();
 }
