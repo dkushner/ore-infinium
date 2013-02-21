@@ -6,7 +6,7 @@ set(SRC
 main.cpp
 game.cpp
 debug.cpp
-spritesheetmanager.cpp
+spritesheetrenderer.cpp
 shader.cpp
 fontmanager.cpp
 camera.cpp

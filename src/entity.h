@@ -32,7 +32,7 @@ public:
      * Create an entity with the given texture @p texture
      * texture loading is handled automatically via textureManager.
      */
-    Entity(const std::string& frameName, SpriteSheetManager::SpriteSheetType spriteSheetType);
+    Entity(const std::string& frameName, SpriteSheetRenderer::SpriteSheetType spriteSheetType);
 
     virtual void update(double elapsedTime, World* world);
 

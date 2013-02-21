@@ -16,7 +16,7 @@
  *   along with this program.  If not, see <http://www.gnu.org/licenses/>.    *
  *****************************************************************************/
 
-#include "spritesheetmanager.h"
+#include "spritesheetrenderer.h"
 
 #include "sprite.h"
 #include "debug.h"
@@ -31,17 +31,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-SpriteSheetManager* SpriteSheetManager::s_instance(0);
-
-SpriteSheetManager* SpriteSheetManager::instance()
-{
-    if (!s_instance)
-        s_instance = new SpriteSheetManager();
-
-    return s_instance;
-}
-
-SpriteSheetManager::SpriteSheetManager()
+SpriteSheetRenderer::SpriteSheetRenderer(Camera* camera)
 {
     // call this ONLY when linking with FreeImage as a static library
     #ifdef FREEIMAGE_LIB
@@ -60,7 +50,7 @@ SpriteSheetManager::SpriteSheetManager()
     parseAllSpriteSheets();
 }
 
-SpriteSheetManager::~SpriteSheetManager()
+SpriteSheetRenderer::~SpriteSheetRenderer()
 {
     unloadAllSpriteSheets();
 
@@ -69,36 +59,35 @@ SpriteSheetManager::~SpriteSheetManager()
 
     glDeleteVertexArrays(1, &m_vao);
 
-    s_instance = 0;
 }
 
-void SpriteSheetManager::setCamera(Camera* camera)
+void SpriteSheetRenderer::setCamera(Camera* camera)
 {
     m_camera = camera;
     m_camera->setShader(m_shader);
 }
 
-void SpriteSheetManager::loadAllSpriteSheets()
+void SpriteSheetRenderer::loadAllSpriteSheets()
 {
     loadSpriteSheet("../textures/characters.png", SpriteSheetType::Character);
 }
 
-void SpriteSheetManager::loadSpriteSheet(const std::string& fileName, SpriteSheetManager::SpriteSheetType type)
+void SpriteSheetRenderer::loadSpriteSheet(const std::string& fileName, SpriteSheetRenderer::SpriteSheetType type)
 {
     auto& wrapper = m_spriteSheetTextures[type];
     wrapper.image = new Image(fileName);
     wrapper.image->generate();
 }
 
-void SpriteSheetManager::unloadSpriteSheet(SpriteSheetManager::SpriteSheetType type)
+void SpriteSheetRenderer::unloadSpriteSheet(SpriteSheetRenderer::SpriteSheetType type)
 {
     delete m_spriteSheetTextures.at(type).image;
     m_spriteSheetTextures.erase(type);
 }
 
-void SpriteSheetManager::unloadAllSpriteSheets()
+void SpriteSheetRenderer::unloadAllSpriteSheets()
 {
-    std::map<SpriteSheetManager::SpriteSheetType, SpriteSheet>::const_iterator i = m_spriteSheetTextures.begin();
+    std::map<SpriteSheetRenderer::SpriteSheetType, SpriteSheet>::const_iterator i = m_spriteSheetTextures.begin();
 
     while (i != m_spriteSheetTextures.end()) {
         unloadSpriteSheet(i->first);
@@ -107,12 +96,12 @@ void SpriteSheetManager::unloadAllSpriteSheets()
     m_spriteSheetTextures.clear();
 }
 
-void SpriteSheetManager::bindSpriteSheet(SpriteSheetManager::SpriteSheetType type)
+void SpriteSheetRenderer::bindSpriteSheet(SpriteSheetRenderer::SpriteSheetType type)
 {
     m_spriteSheetTextures[type].image->bind();
 }
 
-glm::vec2 SpriteSheetManager::spriteSheetSize(SpriteSheetManager::SpriteSheetType type)
+glm::vec2 SpriteSheetRenderer::spriteSheetSize(SpriteSheetRenderer::SpriteSheetType type)
 {
     auto texture = m_spriteSheetTextures.find(type);
     glm::vec2 imageSize(float(texture->second.image->width()), float(texture->second.image->height()));
@@ -120,7 +109,7 @@ glm::vec2 SpriteSheetManager::spriteSheetSize(SpriteSheetManager::SpriteSheetTyp
     return imageSize;
 }
 
-void SpriteSheetManager::registerSprite(SpriteSheetManager::SpriteSheetType spriteSheetType, Sprite* sprite)
+void SpriteSheetRenderer::registerSprite(SpriteSheetRenderer::SpriteSheetType spriteSheetType, Sprite* sprite)
 {
     switch (spriteSheetType) {
         case SpriteSheetType::Character:
@@ -135,12 +124,12 @@ void SpriteSheetManager::registerSprite(SpriteSheetManager::SpriteSheetType spri
     }
 }
 
-void SpriteSheetManager::parseAllSpriteSheets()
+void SpriteSheetRenderer::parseAllSpriteSheets()
 {
     m_spriteSheetCharactersDescription = parseSpriteSheet("../textures/characters.yaml");
 }
 
-std::map<std::string, SpriteSheetManager::SpriteFrameIdentifier> SpriteSheetManager::parseSpriteSheet(const std::string& filename)
+std::map<std::string, SpriteSheetRenderer::SpriteFrameIdentifier> SpriteSheetRenderer::parseSpriteSheet(const std::string& filename)
 {
     std::map<std::string, SpriteFrameIdentifier> descriptionMap;
 
@@ -156,7 +145,7 @@ std::map<std::string, SpriteSheetManager::SpriteFrameIdentifier> SpriteSheetMana
     return descriptionMap;
 }
 
-void SpriteSheetManager::renderCharacters()
+void SpriteSheetRenderer::renderCharacters()
 {
     m_shader->bindProgram();
 
@@ -263,13 +252,13 @@ void SpriteSheetManager::renderCharacters()
     Debug::checkGLError();
 }
 
-void SpriteSheetManager::renderEntities()
+void SpriteSheetRenderer::renderEntities()
 {
 
 }
 
 GLuint tex;
-void SpriteSheetManager::initGL()
+void SpriteSheetRenderer::initGL()
 {
     Debug::checkGLError();
 

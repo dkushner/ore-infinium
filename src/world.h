@@ -32,6 +32,7 @@ class Server;
 class TileRenderer;
 class Sky;
 class Camera;
+class SpriteSheetRenderer;
 
 //height
 static constexpr unsigned short WORLD_ROWCOUNT = 8400;
@@ -140,6 +141,7 @@ private:
     Block m_blocks[WORLD_ROWCOUNT * WORLD_COLUMNCOUNT];
 
     TileRenderer* m_tileRenderer = nullptr;
+    SpriteSheetRenderer* m_spriteSheetRenderer = nullptr;
 
     std::list<Player*> m_players;
 

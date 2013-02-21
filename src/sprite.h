@@ -18,7 +18,7 @@
 #ifndef SPRITE_H
 #define SPRITE_H
 
-#include "spritesheetmanager.h"
+#include "spritesheetrenderer.h"
 
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
@@ -35,7 +35,7 @@ public:
      * and with the category (also required)
      * @see setOrigin origin
      */
-    explicit Sprite(const std::string& frameName, SpriteSheetManager::SpriteSheetType spriteSheetType);
+    explicit Sprite(const std::string& frameName, SpriteSheetRenderer::SpriteSheetType spriteSheetType);
 
     /**
      * Sets the name of the sprite's frame to use.
@@ -88,7 +88,7 @@ private:
     Sprite() {};
 
 private:
-    SpriteSheetManager::SpriteSheetType m_spriteSheetType;
+    SpriteSheetRenderer::SpriteSheetType m_spriteSheetType;
 
     std::string m_frameName;
 
@@ -96,7 +96,7 @@ private:
     glm::vec2 m_position;
     glm::vec2 m_origin;
 
-    friend SpriteSheetManager;
+    friend SpriteSheetRenderer;
 };
 
 #endif

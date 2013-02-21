@@ -21,8 +21,8 @@
 #include "debug.h"
 #include "block.h"
 
-Entity::Entity(const std::string& frameName, SpriteSheetManager::SpriteSheetType spriteSheetType) :
-    Sprite(frameName, spriteSheetType)
+Entity::Entity(const std::string& frameName, SpriteSheetRenderer::SpriteSheetType spriteSheetType)
+    : Sprite(frameName, spriteSheetType)
 {
 
 }

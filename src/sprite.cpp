@@ -17,10 +17,10 @@
 
 #include "sprite.h"
 
-#include "spritesheetmanager.h"
+#include "spritesheetrenderer.h"
 #include "game.h"
 
-Sprite::Sprite(const std::string& frameName, SpriteSheetManager::SpriteSheetType spriteSheetType) :
+Sprite::Sprite(const std::string& frameName, SpriteSheetRenderer::SpriteSheetType spriteSheetType) :
     m_spriteSheetType(spriteSheetType)
 {
     setFrameName(frameName);

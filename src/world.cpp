@@ -42,8 +42,8 @@ World::World(Player* mainPlayer, Server* server)
     if (!m_server) {
         m_camera = new Camera();
     }
-    //FIXME:
-//    SpriteSheetManager::instance()->setCamera(m_camera);
+
+    m_spriteSheetRenderer = new SpriteSheetRenderer(m_camera);
 
     if (!m_server) {
         m_tileRenderer = new TileRenderer(this);
@@ -53,7 +53,7 @@ World::World(Player* mainPlayer, Server* server)
 //    m_player = new Player("someframe");
 //    m_entities.insert(m_entities.end(), m_player);
 
-    m_uselessEntity = new Entity("test", SpriteSheetManager::SpriteSheetType::Character);
+    m_uselessEntity = new Entity("test", SpriteSheetRenderer::SpriteSheetType::Character);
     m_uselessEntity->setPosition(2200, 2490);
     m_entities.insert(m_entities.end(), m_uselessEntity);
 
@@ -70,6 +70,7 @@ World::World(Player* mainPlayer, Server* server)
 World::~World()
 {
     delete m_tileRenderer;
+    delete m_spriteSheetRenderer;
     //    delete m_sky;
 }
 
@@ -113,9 +114,9 @@ void World::render(Player* player)
     m_tileRenderer->render();
 
     //HACK    m_window->setView(m_window->getDefaultView());
-    SpriteSheetManager::instance()->renderEntities();
-    SpriteSheetManager::instance()->renderCharacters();
-
+//    SpriteSheetManager::instance()->renderEntities();
+//    SpriteSheetManager::instance()->renderCharacters();
+//
     // ==================================================
     glm::ivec2 mouse = mousePosition();
 
