@@ -45,7 +45,7 @@ World::World(Player* mainPlayer, Server* server)
 //    m_entities.insert(m_entities.end(), m_player);
 
     m_uselessEntity = new Entity("test", SpriteSheetRenderer::SpriteSheetType::Character);
-    m_uselessEntity->setPosition(2200, 2490);
+    m_uselessEntity->setPosition(2300, 1400);
     m_entities.insert(m_entities.end(), m_uselessEntity);
 
     if (!m_server) {
@@ -74,9 +74,9 @@ World::~World()
 void World::addPlayer(Player* player)
 {
     m_players.push_back(player);
+
     if (!m_server) {
         m_spriteSheetRenderer->registerSprite(player);
-    m_uselessEntity->setPosition(player->position().x - 20, player->position().y - 20);
     }
 }
 
