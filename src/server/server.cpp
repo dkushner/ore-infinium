@@ -45,7 +45,7 @@ Server::Server(unsigned int maxClients, unsigned int port)
     m_address.host = ENET_HOST_ANY;
     m_address.port = port;
 
-    m_server = enet_host_create (&m_address, maxClients /* allow up to 32 clients and/or outgoing connections */,
+    m_server = enet_host_create (&m_address, maxClients /* allow up to maxClients and/or outgoing connections */,
                                                             2 /* allow up to 2 channels to be used, 0 and 1 */,
                                                             0 /* assume any amount of incoming bandwidth */,
                                                             0 /* assume any amount of outgoing bandwidth */ );
@@ -62,17 +62,17 @@ Server::~Server()
 
 void Server::tick()
 {
-    Uint32 startTime = SDL_GetTicks();
+    Uint32 lastTime = SDL_GetTicks();
     int frameCount = 0;
 
     double fps = 0.0;
     while (1) {
-        const double delta = static_cast<double>(SDL_GetTicks() - startTime);
+        const double delta = static_cast<double>(SDL_GetTicks() - lastTime);
+        lastTime = SDL_GetTicks();
 
         fps = (frameCount / delta) * 1000;
         poll();
 
-        Debug::log(Debug::Area::NetworkServer) << "delta: " << delta;
         m_world->update(delta);
 
         ++frameCount;
@@ -84,7 +84,7 @@ void Server::poll()
     ENetEvent event;
     int eventStatus;
 
-    eventStatus = enet_host_service(m_server, &event, 30);
+    eventStatus = enet_host_service(m_server, &event, 20);
 
     if (eventStatus > 0) {
 

@@ -122,13 +122,14 @@ void Packet::sendPacket(ENetPeer* peer, const google::protobuf::Message* message
     ENetPacket *packet = enet_packet_create(ss.str().data(), ss.str().size(), enetPacketType);
     assert(packet);
 
+//Debug::log() << "SENDING PACKET";
     enet_peer_send(peer, 0, packet);
 }
 
 void Packet::sendPacketBroadcast(ENetHost* host, const google::protobuf::Message* message, uint32_t packetType, uint32_t enetPacketType)
 {
     assert(host && message);
-
+//Debug::log() << "SENDING PACKET BROAD";
     std::stringstream ss(std::stringstream::out | std::stringstream::binary);
 
     Packet::serialize(&ss, message, packetType);
