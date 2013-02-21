@@ -67,17 +67,15 @@ glm::mat4 Camera::view() const
 
 void Camera::pushMatrix()
 {
-    //if there is no shader program, then this is a server instance
-    if (m_shader) {
-        m_shader->bindProgram();
+    Debug::assertf(m_shader, "no shader to push the camera matrix too. This is INVALID");
+    m_shader->bindProgram();
 
-        glm::mat4 mvp =  m_orthoMatrix * m_viewMatrix;
+    glm::mat4 mvp =  m_orthoMatrix * m_viewMatrix;
 
-        int mvpLoc = glGetUniformLocation(m_shader->shaderProgram(), "mvp");
-        glUniformMatrix4fv(mvpLoc, 1, GL_FALSE, &mvp[0][0]);
+    int mvpLoc = glGetUniformLocation(m_shader->shaderProgram(), "mvp");
+    glUniformMatrix4fv(mvpLoc, 1, GL_FALSE, &mvp[0][0]);
 
-        m_shader->unbindProgram();
-    }
+    m_shader->unbindProgram();
 }
 
 void Camera::setOrtho(const glm::mat4& ortho)

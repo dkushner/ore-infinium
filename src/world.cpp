@@ -39,15 +39,6 @@ World::World(Player* mainPlayer, Server* server)
   : m_mainPlayer(mainPlayer),
     m_server(server)
 {
-    if (!m_server) {
-        m_camera = new Camera();
-    }
-
-    m_spriteSheetRenderer = new SpriteSheetRenderer(m_camera);
-
-    if (!m_server) {
-        m_tileRenderer = new TileRenderer(this);
-    }
 
     //FIXME:
 //    m_player = new Player("someframe");
@@ -56,7 +47,13 @@ World::World(Player* mainPlayer, Server* server)
     m_uselessEntity = new Entity("test", SpriteSheetRenderer::SpriteSheetType::Character);
     m_uselessEntity->setPosition(2200, 2490);
     m_entities.insert(m_entities.end(), m_uselessEntity);
-    m_spriteSheetRenderer->registerSprite(m_uselessEntity);
+
+    if (!m_server) {
+        m_camera = new Camera();
+        m_tileRenderer = new TileRenderer(this);
+        m_spriteSheetRenderer = new SpriteSheetRenderer(m_camera);
+        m_spriteSheetRenderer->registerSprite(m_uselessEntity);
+    }
 
 //    loadMap();
 
@@ -77,6 +74,9 @@ World::~World()
 void World::addPlayer(Player* player)
 {
     m_players.push_back(player);
+    if (!m_server) {
+        m_spriteSheetRenderer->registerSprite(player);
+    }
 }
 
 void World::removePlayer(Player* player)
@@ -201,6 +201,7 @@ void World::update(double elapsedTime)
     //only occurs on client side, obviously the server doesn't need to do this stuff
     if (m_mainPlayer) {
         m_camera->centerOn(m_mainPlayer->position());
+        Debug::log(Debug::Area::NetworkClient) << "centering on player position x: "<< m_mainPlayer->position().x << " y: " << m_mainPlayer->position().y;
     }
 
     //calculateAttackPosition();

@@ -39,6 +39,7 @@ SpriteSheetRenderer::SpriteSheetRenderer(Camera* camera)
     #endif
 
     m_shader = new Shader("sprite.vert", "sprite.frag");
+        setCamera(camera);
 
     initGL();
 
