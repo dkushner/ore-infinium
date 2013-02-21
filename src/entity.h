@@ -76,7 +76,7 @@ public:
     bool collidingWithTile(const glm::vec2& destPosition, const glm::ivec2& dimensions, World* world) const;
 
 private:
-    glm::vec2 m_velocity;
+    glm::vec2 m_velocity = glm::vec2(0, 0);
     uint32_t m_dirtyFlags = 0;
 };
 

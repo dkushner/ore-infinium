@@ -72,6 +72,7 @@ void Server::tick()
         fps = (frameCount / delta) * 1000;
         poll();
 
+        Debug::log(Debug::Area::NetworkServer) << "delta: " << delta;
         m_world->update(delta);
 
         ++frameCount;
@@ -83,7 +84,7 @@ void Server::poll()
     ENetEvent event;
     int eventStatus;
 
-    eventStatus = enet_host_service(m_server, &event, 100);
+    eventStatus = enet_host_service(m_server, &event, 30);
 
     if (eventStatus > 0) {
 
@@ -95,10 +96,10 @@ void Server::poll()
                 //FIXME: probably should timeout if they're not validated within n seconds, that way they can't just keep piling on top of us
 
                 //DEFAULT IS 5000
-                event.peer->timeoutMinimum = 2000;
-                //DEFAULT IS 30000
-                event.peer->timeoutMaximum = 8000;
-                event.peer->timeoutLimit = 20;
+//                event.peer->timeoutMinimum = 2000;
+//                //DEFAULT IS 30000
+//                event.peer->timeoutMaximum = 8000;
+//                event.peer->timeoutLimit = 20;
                 break;
 
             case ENET_EVENT_TYPE_RECEIVE:

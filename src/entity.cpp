@@ -41,7 +41,7 @@ void Entity::setVelocity(float x, float y)
 void Entity::update(double elapsedTime, World* world)
 {
 //    m_velocity.y += GRAVITY;
-
+    if (m_velocity.x > 0.0f || m_velocity.x < 0.0f || m_velocity.y > 0.0f || m_velocity.y < 0.0f) {
     glm::vec2 dest = glm::vec2(m_velocity.x * elapsedTime, m_velocity.y * elapsedTime);
     dest.x += position().x;
     dest.y += position().y;
@@ -57,6 +57,7 @@ void Entity::update(double elapsedTime, World* world)
 
     m_dirtyFlags |= DirtyFlags::PositionDirty;
     Sprite::setPosition(dest);
+    }
 //   }
 }
 

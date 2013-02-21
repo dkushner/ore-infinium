@@ -23,7 +23,8 @@
 #include "debug.h"
 #include <assert.h>
 
-Player::Player(const std::string& frameName): Entity(frameName, SpriteSheetRenderer::SpriteSheetType::Character)
+Player::Player(const std::string& frameName)
+    : Entity(frameName, SpriteSheetRenderer::SpriteSheetType::Character)
 {
 
 }

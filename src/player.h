@@ -54,7 +54,7 @@ public:
     static constexpr float blockPickingRadius = Block::blockSize * 8.0f;
 
     //FIXME: MOVE MORE UPSTREAM, halfass attempt at making a unit system, instead of making it pixel based for movement.
-    static constexpr float movementUnits = 1.0f / 100000.0f;
+    static constexpr float movementUnits = 1.0f / 10000.0f;
     static constexpr float movementSpeed = 10.0f * movementUnits;
 
 private:
