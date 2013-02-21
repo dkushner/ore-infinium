@@ -489,6 +489,9 @@ void Client::processMessage(ENetEvent& event)
         case Packet::FromServerPacketContents::PlayerMoveFromServerPacket:
             receivePlayerMove(&ss);
             break;
+        case Packet::FromServerPacketContents::InitialPlayerDataFinishedFromServerPacket:
+            m_initialPlayersReceivedFinished = true;
+            break;
     }
 
     enet_packet_destroy(event.packet);
@@ -498,7 +501,6 @@ void Client::receiveChatMessage(std::stringstream* ss)
 {
     PacketBuf::ChatMessageFromServer chatMessage;
     Packet::deserialize(ss, &chatMessage);
-    Debug::log(Debug::Area::NetworkClient) << "chat message received: " << chatMessage.message();
     m_chat->addChatLine(chatMessage.playername(), chatMessage.message());
 }
 
@@ -517,8 +519,8 @@ void Client::receiveInitialPlayerData(std::stringstream* ss)
         m_mainPlayer->setPlayerID(message.playerid());
         m_mainPlayer->setPosition(message.x(), message.y());
 
-        Debug::log() << "PLAYERNAME: " << m_mainPlayer->name();
         chatMessage << m_mainPlayer->name() << " has joined";
+        m_chat->addChatLine("", chatMessage.str());
 
         // this is us, the first player so this means the world creation is up to us
         m_world = new World(m_mainPlayer, nullptr);
@@ -528,12 +530,15 @@ void Client::receiveInitialPlayerData(std::stringstream* ss)
         player->setPosition(message.x(), message.y());
 
         chatMessage << player->name() << " has joined";
+
+        if (m_initialPlayersReceivedFinished) {
+            m_chat->addChatLine("", chatMessage.str());
+        } else {
+            Debug::log() << "PLAYERNAME: " << player->name() << " we're not adding the chat line because we haven't finished receiving initail client data";
+        }
     }
 
     m_world->addPlayer(player);
-
-    // means a client/player joined us, do our chat..
-    m_chat->addChatLine("", chatMessage.str());
 }
 
 void Client::receivePlayerDisconnected(std::stringstream* ss)

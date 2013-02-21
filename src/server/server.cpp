@@ -136,12 +136,24 @@ void Server::processMessage(ENetEvent& event)
 
     switch (packetType) {
         case Packet::FromClientPacketContents::InitialConnectionDataFromClientPacket: {
-            //version mismatch, can't let him connect or else we'll have assloads of problems
+            //check for version mismatch, can't let him connect or else we'll have assloads of problems
             uint32_t result = receiveInitialClientData(&ss, event);
             switch (result) {
                 case Packet::ConnectionEventType::None: {
-                    //he's good to go, validation succeeded
-                    sendInitialPlayerData(m_clients[event.peer]);
+                    //he's good to go, validation succeeded, tell everyone, including himself that he joined
+                    for (auto& client : m_clients) {
+                        sendInitialPlayerData(client.first, m_clients[event.peer]);
+                    }
+
+                    for (auto& client : m_clients) {
+                        // send this new client every player we know about so far, except its own player,
+                        // since we already sent that first.
+                       if (client.first != event.peer) {
+                           sendInitialPlayerData(event.peer, client.second);
+                       }
+                    }
+
+                    sendInitialPlayerDataFinished(event.peer);
                     break;
                 }
 
@@ -194,7 +206,7 @@ void Server::receiveChatMessage(std::stringstream* ss, const std::string& player
     PacketBuf::ChatMessageFromClient receiveMessage;
     Packet::deserialize(ss, &receiveMessage);
 
-    sendChatMessage(ss->str(), playerName);
+    sendChatMessage(receiveMessage.message(), playerName);
 }
 
 void Server::receivePlayerMove(std::stringstream* ss, Player* player)
@@ -215,7 +227,7 @@ void Server::sendChatMessage(const std::string& message, const std::string& play
     Packet::sendPacketBroadcast(m_server, &sendMessage, Packet::FromServerPacketContents::ChatMessageFromServerPacket, ENET_PACKET_FLAG_RELIABLE);
 }
 
-void Server::sendInitialPlayerData(Player* player)
+void Server::sendInitialPlayerData(ENetPeer* peer, Player* player)
 {
     PacketBuf::InitialPlayerDataFromServer message;
     message.set_playername(player->name());
@@ -223,7 +235,14 @@ void Server::sendInitialPlayerData(Player* player)
     message.set_x(player->position().x);
     message.set_y(player->position().y);
 
-    Packet::sendPacketBroadcast(m_server, &message, Packet::FromServerPacketContents::InitialPlayerDataFromServerPacket, ENET_PACKET_FLAG_RELIABLE);
+    Packet::sendPacket(peer, &message, Packet::FromServerPacketContents::InitialPlayerDataFromServerPacket, ENET_PACKET_FLAG_RELIABLE);
+}
+
+void Server::sendInitialPlayerDataFinished(ENetPeer* peer)
+{
+    PacketBuf::InitialPlayerDataFinishedFromServer message;
+
+    Packet::sendPacket(peer, &message, Packet::FromServerPacketContents::InitialPlayerDataFinishedFromServerPacket, ENET_PACKET_FLAG_RELIABLE);
 }
 
 Player* Server::createPlayer(const std::string& playerName)
@@ -242,10 +261,10 @@ Player* Server::createPlayer(const std::string& playerName)
 
 void Server::sendPlayerMove(Player* player)
 {
-    PacketBuf::PlayerMoveFromServer message;
-    message.set_playerid(player->playerID());
-    message.set_x(player->position().x);
-    message.set_y(player->position().y);
-
-    Packet::sendPacketBroadcast(m_server, &message, Packet::FromServerPacketContents::PlayerMoveFromServerPacket, ENET_PACKET_FLAG_UNSEQUENCED);
+//    PacketBuf::PlayerMoveFromServer message;
+//    message.set_playerid(player->playerID());
+//    message.set_x(player->position().x);
+//    message.set_y(player->position().y);
+//
+//////    Packet::sendPacketBroadcast(m_server, &message, Packet::FromServerPacketContents::PlayerMoveFromServerPacket, ENET_PACKET_FLAG_UNSEQUENCED);
 }

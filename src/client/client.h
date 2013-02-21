@@ -120,6 +120,8 @@ private:
     int32_t m_playerInputDirectionX = 0;
     int32_t m_playerInputDirectionY = 0;
 
+    bool m_initialPlayersReceivedFinished = false;
+
 private:
     ENetHost* m_client = nullptr;
 

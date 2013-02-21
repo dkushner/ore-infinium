@@ -29,6 +29,9 @@ const ::google::protobuf::internal::GeneratedMessageReflection*
 const ::google::protobuf::Descriptor* ChatMessageFromServer_descriptor_ = NULL;
 const ::google::protobuf::internal::GeneratedMessageReflection*
   ChatMessageFromServer_reflection_ = NULL;
+const ::google::protobuf::Descriptor* InitialPlayerDataFinishedFromServer_descriptor_ = NULL;
+const ::google::protobuf::internal::GeneratedMessageReflection*
+  InitialPlayerDataFinishedFromServer_reflection_ = NULL;
 const ::google::protobuf::Descriptor* InitialPlayerDataFromServer_descriptor_ = NULL;
 const ::google::protobuf::internal::GeneratedMessageReflection*
   InitialPlayerDataFromServer_reflection_ = NULL;
@@ -114,7 +117,21 @@ void protobuf_AssignDesc_packet_2eproto() {
       ::google::protobuf::DescriptorPool::generated_pool(),
       ::google::protobuf::MessageFactory::generated_factory(),
       sizeof(ChatMessageFromServer));
-  InitialPlayerDataFromServer_descriptor_ = file->message_type(4);
+  InitialPlayerDataFinishedFromServer_descriptor_ = file->message_type(4);
+  static const int InitialPlayerDataFinishedFromServer_offsets_[1] = {
+  };
+  InitialPlayerDataFinishedFromServer_reflection_ =
+    new ::google::protobuf::internal::GeneratedMessageReflection(
+      InitialPlayerDataFinishedFromServer_descriptor_,
+      InitialPlayerDataFinishedFromServer::default_instance_,
+      InitialPlayerDataFinishedFromServer_offsets_,
+      GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(InitialPlayerDataFinishedFromServer, _has_bits_[0]),
+      GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(InitialPlayerDataFinishedFromServer, _unknown_fields_),
+      -1,
+      ::google::protobuf::DescriptorPool::generated_pool(),
+      ::google::protobuf::MessageFactory::generated_factory(),
+      sizeof(InitialPlayerDataFinishedFromServer));
+  InitialPlayerDataFromServer_descriptor_ = file->message_type(5);
   static const int InitialPlayerDataFromServer_offsets_[4] = {
     GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(InitialPlayerDataFromServer, playerid_),
     GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(InitialPlayerDataFromServer, playername_),
@@ -132,7 +149,7 @@ void protobuf_AssignDesc_packet_2eproto() {
       ::google::protobuf::DescriptorPool::generated_pool(),
       ::google::protobuf::MessageFactory::generated_factory(),
       sizeof(InitialPlayerDataFromServer));
-  PlayerDisconnectedFromServer_descriptor_ = file->message_type(5);
+  PlayerDisconnectedFromServer_descriptor_ = file->message_type(6);
   static const int PlayerDisconnectedFromServer_offsets_[1] = {
     GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(PlayerDisconnectedFromServer, playerid_),
   };
@@ -147,7 +164,7 @@ void protobuf_AssignDesc_packet_2eproto() {
       ::google::protobuf::DescriptorPool::generated_pool(),
       ::google::protobuf::MessageFactory::generated_factory(),
       sizeof(PlayerDisconnectedFromServer));
-  PlayerMoveFromServer_descriptor_ = file->message_type(6);
+  PlayerMoveFromServer_descriptor_ = file->message_type(7);
   static const int PlayerMoveFromServer_offsets_[3] = {
     GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(PlayerMoveFromServer, playerid_),
     GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(PlayerMoveFromServer, x_),
@@ -164,7 +181,7 @@ void protobuf_AssignDesc_packet_2eproto() {
       ::google::protobuf::DescriptorPool::generated_pool(),
       ::google::protobuf::MessageFactory::generated_factory(),
       sizeof(PlayerMoveFromServer));
-  PlayerMoveFromClient_descriptor_ = file->message_type(7);
+  PlayerMoveFromClient_descriptor_ = file->message_type(8);
   static const int PlayerMoveFromClient_offsets_[2] = {
     GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(PlayerMoveFromClient, directionx_),
     GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(PlayerMoveFromClient, directiony_),
@@ -201,6 +218,8 @@ void protobuf_RegisterTypes(const ::std::string&) {
   ::google::protobuf::MessageFactory::InternalRegisterGeneratedMessage(
     ChatMessageFromServer_descriptor_, &ChatMessageFromServer::default_instance());
   ::google::protobuf::MessageFactory::InternalRegisterGeneratedMessage(
+    InitialPlayerDataFinishedFromServer_descriptor_, &InitialPlayerDataFinishedFromServer::default_instance());
+  ::google::protobuf::MessageFactory::InternalRegisterGeneratedMessage(
     InitialPlayerDataFromServer_descriptor_, &InitialPlayerDataFromServer::default_instance());
   ::google::protobuf::MessageFactory::InternalRegisterGeneratedMessage(
     PlayerDisconnectedFromServer_descriptor_, &PlayerDisconnectedFromServer::default_instance());
@@ -221,6 +240,8 @@ void protobuf_ShutdownFile_packet_2eproto() {
   delete ChatMessageFromClient_reflection_;
   delete ChatMessageFromServer::default_instance_;
   delete ChatMessageFromServer_reflection_;
+  delete InitialPlayerDataFinishedFromServer::default_instance_;
+  delete InitialPlayerDataFinishedFromServer_reflection_;
   delete InitialPlayerDataFromServer::default_instance_;
   delete InitialPlayerDataFromServer_reflection_;
   delete PlayerDisconnectedFromServer::default_instance_;
@@ -244,19 +265,21 @@ void protobuf_AddDesc_packet_2eproto() {
     "\n\014versionMinor\030\003 \001(\005\"(\n\025ChatMessageFromC"
     "lient\022\017\n\007message\030\001 \001(\t\"<\n\025ChatMessageFro"
     "mServer\022\022\n\nplayerName\030\001 \001(\t\022\017\n\007message\030\002"
-    " \001(\t\"Y\n\033InitialPlayerDataFromServer\022\020\n\010p"
-    "layerID\030\001 \001(\r\022\022\n\nplayerName\030\002 \001(\t\022\t\n\001x\030\003"
-    " \001(\002\022\t\n\001y\030\004 \001(\002\"0\n\034PlayerDisconnectedFro"
-    "mServer\022\020\n\010playerID\030\001 \001(\r\">\n\024PlayerMoveF"
-    "romServer\022\020\n\010playerID\030\001 \001(\r\022\t\n\001x\030\002 \001(\002\022\t"
-    "\n\001y\030\003 \001(\002\">\n\024PlayerMoveFromClient\022\022\n\ndir"
-    "ectionX\030\001 \001(\005\022\022\n\ndirectionY\030\002 \001(\005", 513);
+    " \001(\t\"%\n#InitialPlayerDataFinishedFromSer"
+    "ver\"Y\n\033InitialPlayerDataFromServer\022\020\n\010pl"
+    "ayerID\030\001 \001(\r\022\022\n\nplayerName\030\002 \001(\t\022\t\n\001x\030\003 "
+    "\001(\002\022\t\n\001y\030\004 \001(\002\"0\n\034PlayerDisconnectedFrom"
+    "Server\022\020\n\010playerID\030\001 \001(\r\">\n\024PlayerMoveFr"
+    "omServer\022\020\n\010playerID\030\001 \001(\r\022\t\n\001x\030\002 \001(\002\022\t\n"
+    "\001y\030\003 \001(\002\">\n\024PlayerMoveFromClient\022\022\n\ndire"
+    "ctionX\030\001 \001(\005\022\022\n\ndirectionY\030\002 \001(\005", 552);
   ::google::protobuf::MessageFactory::InternalRegisterGeneratedFile(
     "packet.proto", &protobuf_RegisterTypes);
   Packet::default_instance_ = new Packet();
   ClientInitialConnection::default_instance_ = new ClientInitialConnection();
   ChatMessageFromClient::default_instance_ = new ChatMessageFromClient();
   ChatMessageFromServer::default_instance_ = new ChatMessageFromServer();
+  InitialPlayerDataFinishedFromServer::default_instance_ = new InitialPlayerDataFinishedFromServer();
   InitialPlayerDataFromServer::default_instance_ = new InitialPlayerDataFromServer();
   PlayerDisconnectedFromServer::default_instance_ = new PlayerDisconnectedFromServer();
   PlayerMoveFromServer::default_instance_ = new PlayerMoveFromServer();
@@ -265,6 +288,7 @@ void protobuf_AddDesc_packet_2eproto() {
   ClientInitialConnection::default_instance_->InitAsDefaultInstance();
   ChatMessageFromClient::default_instance_->InitAsDefaultInstance();
   ChatMessageFromServer::default_instance_->InitAsDefaultInstance();
+  InitialPlayerDataFinishedFromServer::default_instance_->InitAsDefaultInstance();
   InitialPlayerDataFromServer::default_instance_->InitAsDefaultInstance();
   PlayerDisconnectedFromServer::default_instance_->InitAsDefaultInstance();
   PlayerMoveFromServer::default_instance_->InitAsDefaultInstance();
@@ -1292,6 +1316,161 @@ void ChatMessageFromServer::Swap(ChatMessageFromServer* other) {
   ::google::protobuf::Metadata metadata;
   metadata.descriptor = ChatMessageFromServer_descriptor_;
   metadata.reflection = ChatMessageFromServer_reflection_;
+  return metadata;
+}
+
+
+// ===================================================================
+
+#ifndef _MSC_VER
+#endif  // !_MSC_VER
+
+InitialPlayerDataFinishedFromServer::InitialPlayerDataFinishedFromServer()
+  : ::google::protobuf::Message() {
+  SharedCtor();
+}
+
+void InitialPlayerDataFinishedFromServer::InitAsDefaultInstance() {
+}
+
+InitialPlayerDataFinishedFromServer::InitialPlayerDataFinishedFromServer(const InitialPlayerDataFinishedFromServer& from)
+  : ::google::protobuf::Message() {
+  SharedCtor();
+  MergeFrom(from);
+}
+
+void InitialPlayerDataFinishedFromServer::SharedCtor() {
+  _cached_size_ = 0;
+  ::memset(_has_bits_, 0, sizeof(_has_bits_));
+}
+
+InitialPlayerDataFinishedFromServer::~InitialPlayerDataFinishedFromServer() {
+  SharedDtor();
+}
+
+void InitialPlayerDataFinishedFromServer::SharedDtor() {
+  if (this != default_instance_) {
+  }
+}
+
+void InitialPlayerDataFinishedFromServer::SetCachedSize(int size) const {
+  GOOGLE_SAFE_CONCURRENT_WRITES_BEGIN();
+  _cached_size_ = size;
+  GOOGLE_SAFE_CONCURRENT_WRITES_END();
+}
+const ::google::protobuf::Descriptor* InitialPlayerDataFinishedFromServer::descriptor() {
+  protobuf_AssignDescriptorsOnce();
+  return InitialPlayerDataFinishedFromServer_descriptor_;
+}
+
+const InitialPlayerDataFinishedFromServer& InitialPlayerDataFinishedFromServer::default_instance() {
+  if (default_instance_ == NULL) protobuf_AddDesc_packet_2eproto();  return *default_instance_;
+}
+
+InitialPlayerDataFinishedFromServer* InitialPlayerDataFinishedFromServer::default_instance_ = NULL;
+
+InitialPlayerDataFinishedFromServer* InitialPlayerDataFinishedFromServer::New() const {
+  return new InitialPlayerDataFinishedFromServer;
+}
+
+void InitialPlayerDataFinishedFromServer::Clear() {
+  ::memset(_has_bits_, 0, sizeof(_has_bits_));
+  mutable_unknown_fields()->Clear();
+}
+
+bool InitialPlayerDataFinishedFromServer::MergePartialFromCodedStream(
+    ::google::protobuf::io::CodedInputStream* input) {
+#define DO_(EXPRESSION) if (!(EXPRESSION)) return false
+  ::google::protobuf::uint32 tag;
+  while ((tag = input->ReadTag()) != 0) {
+    if (::google::protobuf::internal::WireFormatLite::GetTagWireType(tag) ==
+        ::google::protobuf::internal::WireFormatLite::WIRETYPE_END_GROUP) {
+      return true;
+    }
+    DO_(::google::protobuf::internal::WireFormat::SkipField(
+          input, tag, mutable_unknown_fields()));
+  }
+  return true;
+#undef DO_
+}
+
+void InitialPlayerDataFinishedFromServer::SerializeWithCachedSizes(
+    ::google::protobuf::io::CodedOutputStream* output) const {
+  if (!unknown_fields().empty()) {
+    ::google::protobuf::internal::WireFormat::SerializeUnknownFields(
+        unknown_fields(), output);
+  }
+}
+
+::google::protobuf::uint8* InitialPlayerDataFinishedFromServer::SerializeWithCachedSizesToArray(
+    ::google::protobuf::uint8* target) const {
+  if (!unknown_fields().empty()) {
+    target = ::google::protobuf::internal::WireFormat::SerializeUnknownFieldsToArray(
+        unknown_fields(), target);
+  }
+  return target;
+}
+
+int InitialPlayerDataFinishedFromServer::ByteSize() const {
+  int total_size = 0;
+  
+  if (!unknown_fields().empty()) {
+    total_size +=
+      ::google::protobuf::internal::WireFormat::ComputeUnknownFieldsSize(
+        unknown_fields());
+  }
+  GOOGLE_SAFE_CONCURRENT_WRITES_BEGIN();
+  _cached_size_ = total_size;
+  GOOGLE_SAFE_CONCURRENT_WRITES_END();
+  return total_size;
+}
+
+void InitialPlayerDataFinishedFromServer::MergeFrom(const ::google::protobuf::Message& from) {
+  GOOGLE_CHECK_NE(&from, this);
+  const InitialPlayerDataFinishedFromServer* source =
+    ::google::protobuf::internal::dynamic_cast_if_available<const InitialPlayerDataFinishedFromServer*>(
+      &from);
+  if (source == NULL) {
+    ::google::protobuf::internal::ReflectionOps::Merge(from, this);
+  } else {
+    MergeFrom(*source);
+  }
+}
+
+void InitialPlayerDataFinishedFromServer::MergeFrom(const InitialPlayerDataFinishedFromServer& from) {
+  GOOGLE_CHECK_NE(&from, this);
+  mutable_unknown_fields()->MergeFrom(from.unknown_fields());
+}
+
+void InitialPlayerDataFinishedFromServer::CopyFrom(const ::google::protobuf::Message& from) {
+  if (&from == this) return;
+  Clear();
+  MergeFrom(from);
+}
+
+void InitialPlayerDataFinishedFromServer::CopyFrom(const InitialPlayerDataFinishedFromServer& from) {
+  if (&from == this) return;
+  Clear();
+  MergeFrom(from);
+}
+
+bool InitialPlayerDataFinishedFromServer::IsInitialized() const {
+  
+  return true;
+}
+
+void InitialPlayerDataFinishedFromServer::Swap(InitialPlayerDataFinishedFromServer* other) {
+  if (other != this) {
+    _unknown_fields_.Swap(&other->_unknown_fields_);
+    std::swap(_cached_size_, other->_cached_size_);
+  }
+}
+
+::google::protobuf::Metadata InitialPlayerDataFinishedFromServer::GetMetadata() const {
+  protobuf_AssignDescriptorsOnce();
+  ::google::protobuf::Metadata metadata;
+  metadata.descriptor = InitialPlayerDataFinishedFromServer_descriptor_;
+  metadata.reflection = InitialPlayerDataFinishedFromServer_reflection_;
   return metadata;
 }
 

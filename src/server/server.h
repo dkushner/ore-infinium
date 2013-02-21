@@ -58,7 +58,8 @@ private:
     void receivePlayerMove(std::stringstream* ss, Player* player);
 
     void sendChatMessage(const std::string& message, const std::string& playerName);
-    void sendInitialPlayerData(Player* player);
+    void sendInitialPlayerData(ENetPeer* peer, Player* player);
+    void sendInitialPlayerDataFinished(ENetPeer* peer);
 
    Player* createPlayer(const std::string& playerName);
 

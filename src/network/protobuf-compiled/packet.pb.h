@@ -36,6 +36,7 @@ class Packet;
 class ClientInitialConnection;
 class ChatMessageFromClient;
 class ChatMessageFromServer;
+class InitialPlayerDataFinishedFromServer;
 class InitialPlayerDataFromServer;
 class PlayerDisconnectedFromServer;
 class PlayerMoveFromServer;
@@ -414,6 +415,78 @@ class ChatMessageFromServer : public ::google::protobuf::Message {
   
   void InitAsDefaultInstance();
   static ChatMessageFromServer* default_instance_;
+};
+// -------------------------------------------------------------------
+
+class InitialPlayerDataFinishedFromServer : public ::google::protobuf::Message {
+ public:
+  InitialPlayerDataFinishedFromServer();
+  virtual ~InitialPlayerDataFinishedFromServer();
+  
+  InitialPlayerDataFinishedFromServer(const InitialPlayerDataFinishedFromServer& from);
+  
+  inline InitialPlayerDataFinishedFromServer& operator=(const InitialPlayerDataFinishedFromServer& from) {
+    CopyFrom(from);
+    return *this;
+  }
+  
+  inline const ::google::protobuf::UnknownFieldSet& unknown_fields() const {
+    return _unknown_fields_;
+  }
+  
+  inline ::google::protobuf::UnknownFieldSet* mutable_unknown_fields() {
+    return &_unknown_fields_;
+  }
+  
+  static const ::google::protobuf::Descriptor* descriptor();
+  static const InitialPlayerDataFinishedFromServer& default_instance();
+  
+  void Swap(InitialPlayerDataFinishedFromServer* other);
+  
+  // implements Message ----------------------------------------------
+  
+  InitialPlayerDataFinishedFromServer* New() const;
+  void CopyFrom(const ::google::protobuf::Message& from);
+  void MergeFrom(const ::google::protobuf::Message& from);
+  void CopyFrom(const InitialPlayerDataFinishedFromServer& from);
+  void MergeFrom(const InitialPlayerDataFinishedFromServer& from);
+  void Clear();
+  bool IsInitialized() const;
+  
+  int ByteSize() const;
+  bool MergePartialFromCodedStream(
+      ::google::protobuf::io::CodedInputStream* input);
+  void SerializeWithCachedSizes(
+      ::google::protobuf::io::CodedOutputStream* output) const;
+  ::google::protobuf::uint8* SerializeWithCachedSizesToArray(::google::protobuf::uint8* output) const;
+  int GetCachedSize() const { return _cached_size_; }
+  private:
+  void SharedCtor();
+  void SharedDtor();
+  void SetCachedSize(int size) const;
+  public:
+  
+  ::google::protobuf::Metadata GetMetadata() const;
+  
+  // nested types ----------------------------------------------------
+  
+  // accessors -------------------------------------------------------
+  
+  // @@protoc_insertion_point(class_scope:PacketBuf.InitialPlayerDataFinishedFromServer)
+ private:
+  
+  ::google::protobuf::UnknownFieldSet _unknown_fields_;
+  
+  
+  mutable int _cached_size_;
+  ::google::protobuf::uint32 _has_bits_[1];
+  
+  friend void  protobuf_AddDesc_packet_2eproto();
+  friend void protobuf_AssignDesc_packet_2eproto();
+  friend void protobuf_ShutdownFile_packet_2eproto();
+  
+  void InitAsDefaultInstance();
+  static InitialPlayerDataFinishedFromServer* default_instance_;
 };
 // -------------------------------------------------------------------
 
@@ -1123,6 +1196,10 @@ inline ::std::string* ChatMessageFromServer::release_message() {
     return temp;
   }
 }
+
+// -------------------------------------------------------------------
+
+// InitialPlayerDataFinishedFromServer
 
 // -------------------------------------------------------------------
 
