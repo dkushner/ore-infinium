@@ -22,7 +22,7 @@
 #include "game.h"
 #include "camera.h"
 #include "shader.h"
-#include "image.h"
+#include "texture.h"
 #include "settings/settings.h"
 
 #include <fstream>
@@ -53,7 +53,6 @@ SpriteSheetRenderer::~SpriteSheetRenderer()
     glDeleteBuffers(1, &m_ebo);
 
     glDeleteVertexArrays(1, &m_vao);
-
 }
 
 void SpriteSheetRenderer::setCamera(Camera* camera)
@@ -70,13 +69,13 @@ void SpriteSheetRenderer::loadAllSpriteSheets()
 void SpriteSheetRenderer::loadSpriteSheet(const std::string& fileName, SpriteSheetRenderer::SpriteSheetType type)
 {
     auto& wrapper = m_spriteSheetTextures[type];
-    wrapper.image = new Image(fileName);
-    wrapper.image->generate();
+    wrapper.texture = new Texture(fileName);
+    wrapper.texture->generate();
 }
 
 void SpriteSheetRenderer::unloadSpriteSheet(SpriteSheetRenderer::SpriteSheetType type)
 {
-    delete m_spriteSheetTextures.at(type).image;
+    delete m_spriteSheetTextures.at(type).texture;
     m_spriteSheetTextures.erase(type);
 }
 
@@ -93,13 +92,13 @@ void SpriteSheetRenderer::unloadAllSpriteSheets()
 
 void SpriteSheetRenderer::bindSpriteSheet(SpriteSheetRenderer::SpriteSheetType type)
 {
-    m_spriteSheetTextures[type].image->bind();
+    m_spriteSheetTextures[type].texture->bind();
 }
 
 glm::vec2 SpriteSheetRenderer::spriteSheetSize(SpriteSheetRenderer::SpriteSheetType type)
 {
     auto texture = m_spriteSheetTextures.find(type);
-    glm::vec2 imageSize(float(texture->second.image->width()), float(texture->second.image->height()));
+    glm::vec2 imageSize(float(texture->second.texture->width()), float(texture->second.texture->height()));
 
     return imageSize;
 }

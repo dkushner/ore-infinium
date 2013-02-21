@@ -56,11 +56,6 @@ private:
 
     uint32_t m_width = 0;
     uint32_t m_height = 0;
-
-    GLenum m_image_format = 0;
-    GLint m_internal_format = 0;
-    GLint m_level = 0;
-    GLint m_border = 0;
 };
 
 #endif

@@ -30,7 +30,7 @@
 
 class Camera;
 class Shader;
-class Image;
+class Texture;
 class Sprite;
 
 class SpriteSheetRenderer
@@ -72,7 +72,7 @@ public:
 private:
     struct SpriteSheet {
         SpriteSheetType type;
-        Image* image = nullptr;
+        Texture* texture = nullptr;
     };
 
 
