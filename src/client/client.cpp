@@ -40,6 +40,11 @@ Client::Client()
 {
     initSDL();
 
+    // call this ONLY when linking with FreeImage as a static library
+    #ifdef FREEIMAGE_LIB
+    FreeImage_Initialise();
+    #endif
+
     m_font = FontManager::instance()->loadFont("../font/Ubuntu-L.ttf");
     m_font->FaceSize(12);
 
@@ -53,6 +58,11 @@ Client::~Client()
     enet_host_destroy(m_client);
 
     delete m_mainPlayer;
+
+    // call this ONLY when linking with FreeImage as a static library
+    #ifdef FREEIMAGE_LIB
+    FreeImage_DeInitialise();
+    #endif
 
     SDL_DestroyWindow(m_window);
     SDL_Quit();

@@ -32,13 +32,8 @@
 
 SpriteSheetRenderer::SpriteSheetRenderer(Camera* camera)
 {
-    // call this ONLY when linking with FreeImage as a static library
-    #ifdef FREEIMAGE_LIB
-    FreeImage_Initialise();
-    #endif
-
     m_shader = new Shader("sprite.vert", "sprite.frag");
-        setCamera(camera);
+    setCamera(camera);
 
     initGL();
 

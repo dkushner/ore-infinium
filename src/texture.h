@@ -15,52 +15,36 @@
  *   along with this program.  If not, see <http://www.gnu.org/licenses/>.    *
  *****************************************************************************/
 
-#ifndef IMAGE_H
-#define IMAGE_H
+#ifndef TEXTURE_H
+#define TEXTURE_H
 
 #include <GL/glew.h>
 #include <GL/gl.h>
 
 #include <string>
-#include <FreeImage.h>
 
-class FIBITMAP;
+class Image;
 
-class Image
+class Texture
 {
 public:
-    explicit Image(const std::string& fileName);
-    ~Image();
+    explicit Texture(const std::string& fileName);
+    ~Texture();
 
     unsigned int width() const;
     unsigned int height() const;
 
-    BYTE* bytes();
+    void bind();
+    void generate();
+    GLuint textureHandle();
 
 private:
+    void loadImage(const std::string& fileName);
 
-    /**
-     * Load an image as an OpenGL texture and make it the current texture
-     * If @p texID is already in use, it will be unloaded and replaced with this texture
-     *
-     * @p filename path relative or absolute including extension to the image to load
-     * @p texID the GLint handle to the resulting texture
-     * @p image_format which format the image on disk is in. Default is GL_BGRA
-     * @p internal_format the format to tell OpenGL how it should store it. Default GL_RGBA
-     * @p level what mipmapping level to utilize. Default 0.
-     * @p border border size. Default 0
-     */
-    void loadImage(const std::string& filename);
-
-    FIBITMAP* m_bitmap = nullptr;
-
+private:
+    Image* m_image = nullptr;
     uint32_t m_width = 0;
     uint32_t m_height = 0;
-
-    GLenum m_image_format = 0;
-    GLint m_internal_format = 0;
-    GLint m_level = 0;
-    GLint m_border = 0;
 };
 
 #endif

@@ -28,65 +28,20 @@ Image::Image(const std::string& fileName)
 
 Image::~Image()
 {
-    // call this ONLY when linking with FreeImage as a static library
-#ifdef FREEIMAGE_LIB
-    FreeImage_DeInitialise();
-#endif
-
-    glDeleteTextures(1, &m_textureID);
     FreeImage_Unload(m_bitmap);
 }
 
-void Image::bind()
-{
-    Debug::assertf(m_textureID, "bind called before generate on Image");
-
-    Debug::checkGLError();
-    glBindTexture(GL_TEXTURE_2D, m_textureID);
-    Debug::checkGLError();
-}
-
-void Image::generate()
-{
-    Debug::checkGLError();
-    glActiveTexture(GL_TEXTURE0);
-
-    glGenTextures(1, &m_textureID);
-    glBindTexture(GL_TEXTURE_2D, m_textureID);
-
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-
-    //FIXME: do i want this behavior?    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
-    //    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
-
-    BYTE* bits = FreeImage_GetBits(m_bitmap);
-    Debug::assertf(bits, "Image::generate, could not gen texture, image bits are empty.");
-
-
-    glTexImage2D(GL_TEXTURE_2D, m_level, m_internal_format, m_width, m_height, m_border, m_image_format, GL_UNSIGNED_BYTE, bits);
-
-    Debug::checkGLError();
-}
-
-GLuint Image::textureHandle()
-{
-    return m_textureID;
-}
-
-unsigned int Image::width() const
+uint32_t Image::width() const
 {
     return m_width;
 }
 
-unsigned int Image::height() const
+uint32_t Image::height() const
 {
     return m_height;
 }
 
-void Image::loadImage(const std::string& filename, GLenum image_format, GLint internal_format, GLint level, GLint border)
+void Image::loadImage(const std::string& filename)
 {
     FREE_IMAGE_FORMAT imageFormat = FIF_UNKNOWN;
 
@@ -112,10 +67,11 @@ void Image::loadImage(const std::string& filename, GLenum image_format, GLint in
     if (m_width == 0 || m_height == 0) {
         Debug::fatal(false, Debug::Area::Graphics, "failure to load image, bitmap sizes invalid or bits invalid");
     }
-
-    m_image_format = image_format;
-    m_internal_format = internal_format;
-    m_level = level;
-    m_border = border;
 }
+
+BYTE* Image::bytes()
+{
+    return FreeImage_GetBits(m_bitmap);
+}
+
 

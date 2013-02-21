@@ -30,7 +30,8 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-TileRenderer::TileRenderer(Camera* camera)
+TileRenderer::TileRenderer(World* world, Camera* camera)
+    :   m_world(world),
 {
     m_shader = new Shader("tilerenderer.vert", "tilerenderer.frag");
     setCamera(camera);
@@ -48,7 +49,6 @@ TileRenderer::~TileRenderer()
     glDeleteBuffers(1, &m_ebo);
 
     glDeleteVertexArrays(1, &m_vao);
-
 }
 
 void TileRenderer::setCamera(Camera* camera)
@@ -62,12 +62,6 @@ void TileRenderer::loadTileSheet(const std::string& fileName, Block::BlockType t
     auto& image = m_tileSheets[type];
     image = new Image(fileName);
     image->generate();
-}
-
-void TileRenderer::unloadSpriteSheet(TileRenderer::SpriteSheetType type)
-{
-    delete m_spriteSheetTextures.at(type).image;
-    m_spriteSheetTextures.erase(type);
 }
 
 void TileRenderer::renderCharacters()

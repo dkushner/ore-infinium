@@ -17,6 +17,7 @@ player.cpp
 entity.cpp
 tilerenderer.cpp
 image.cpp
+texture.cpp
 
 client/client.cpp
 client/gui/gui.cpp
