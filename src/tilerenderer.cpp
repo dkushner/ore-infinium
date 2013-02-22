@@ -116,11 +116,11 @@ void TileRenderer::render()
     //FIXME: only calculate this crap when we move/change tiles
     // -1 so that we render an additional row and column..to smoothly scroll
     const int startRow = 0; //tilesBeforeY - ((Settings::instance()->screenResolutionHeight * 0.5) / Block::blockSize) - 1;
-    const int endRow = 100; //tilesBeforeY + ((Settings::instance()->screenResolutionHeight * 0.5) / Block::blockSize);
+    const int endRow = 1; //tilesBeforeY + ((Settings::instance()->screenResolutionHeight * 0.5) / Block::blockSize);
 
     //columns are our X value, rows the Y
     const int startColumn =0; // tilesBeforeX - ((Settings::instance()->screenResolutionWidth * 0.5) / Block::blockSize) - 1;
-    const int endColumn =100; // tilesBeforeX + ((Settings::instance()->screenResolutionWidth * 0.5) / Block::blockSize);
+    const int endColumn =1; // tilesBeforeX + ((Settings::instance()->screenResolutionWidth * 0.5) / Block::blockSize);
 
     if (std::abs(startColumn) != startColumn) {
         std::cout << "FIXME, WENT INTO NEGATIVE COLUMN!!";
@@ -154,11 +154,11 @@ void TileRenderer::render()
 
             glm::vec4 rect = glm::vec4(positionX, positionY, positionX + Block::blockSize, positionY + Block::blockSize);
 
-            float x = rect.x;
-            float width = rect.z;
+            float x = 500;//rect.x;
+            float width = x+64; // rect.z;
 
-            float y = rect.y;
-            float height = rect.w;
+            float y = 500;//rect.y;
+            float height = y+64;// rect.w;
 
             vertices[0].x = x; // top left X
             vertices[0].y = y; //top left Y
@@ -185,14 +185,29 @@ void TileRenderer::render()
                 vertices[i].color = color;
             }
 
+            //float startXY = 0.0;
+            //float endXY = 1.0;
+
+//            float endXY = 32/TILESHEET_WIDTH;
+            int row = 0;
+            int column = 0;
+
+            const float tileWidth = 1.0f / TILESHEET_WIDTH * 16.0f;
+            const float tileHeight = 1.0f / TILESHEET_HEIGHT * 16.0f;
+
+            const float tileLeft = (column *  tileWidth);
+            const float tileRight = (column * tileWidth + tileWidth);
+            const float tileTop = 1.0f - (row * tileHeight );
+            const float tileBottom = 1.0f - (row * tileHeight + tileHeight);
+
             // copy texcoords to the buffer
-            vertices[0].u = vertices[1].u = 0.0f;
-            vertices[0].v = vertices[3].v = 1.0f;
-            vertices[1].v = vertices[2].v = 0.0f;
-            vertices[2].u = vertices[3].u = 1.0f;
+            vertices[0].u = vertices[1].u = tileLeft;
+            vertices[0].v = vertices[3].v = tileTop;
+            vertices[1].v = vertices[2].v = tileBottom;
+            vertices[2].u = vertices[3].u = tileRight;
 
             //FIXME: use tile type index
-            vertices[0].w = vertices[1].w = vertices[2].w = vertices[3].w = 1.0;
+            vertices[0].w = vertices[1].w = vertices[2].w = vertices[3].w = 2.0f;
 
             Debug::checkGLError();
             // finally upload everything to the actual vbo
