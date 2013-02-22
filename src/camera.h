@@ -43,6 +43,7 @@ public:
     void zoom(const float factor);
 
     void centerOn(const glm::vec2 vec);
+    void setPosition(const glm::vec2 vec);
 
     void setShader(Shader* shader);
 

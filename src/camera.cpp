@@ -50,6 +50,13 @@ void Camera::centerOn(const glm::vec2 vec)
     pushMatrix();
 }
 
+void Camera::setPosition(const glm::vec2 vec)
+{
+    glm::vec2 screenSize(Settings::instance()->screenResolutionWidth, Settings::instance()->screenResolutionHeight);
+    m_viewMatrix = glm::translate(glm::mat4(), -glm::vec3(vec, 0.0f));
+    pushMatrix();
+}
+
 void Camera::setShader(Shader* shader)
 {
     m_shader = shader;

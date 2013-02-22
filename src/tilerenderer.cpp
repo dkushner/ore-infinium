@@ -104,23 +104,23 @@ void TileRenderer::render()
 
     Debug::checkGLError();
 
-    glm::vec2 playerPosition = glm::vec2(1800/2, 1200/2);
+//    glm::vec2 playerPosition = glm::vec2(0, 0);
 
     //consider block map as starting at player pos == 0,0 and going down and to the right-ward
     //tilesBefore{X,Y} is only at the center of the view though..find the whole screen real estate
     //column
-    int tilesBeforeX = playerPosition.x / Block::blockSize;
-    //row
-    int tilesBeforeY = playerPosition.y / Block::blockSize;
+//    int tilesBeforeX = playerPosition.x / Block::blockSize;
+//    //row
+//    int tilesBeforeY = playerPosition.y / Block::blockSize;
 
     //FIXME: only calculate this crap when we move/change tiles
     // -1 so that we render an additional row and column..to smoothly scroll
-    const int startRow = tilesBeforeY - ((Settings::instance()->screenResolutionHeight * 0.5) / Block::blockSize) - 1;
-    const int endRow = tilesBeforeY + ((Settings::instance()->screenResolutionHeight * 0.5) / Block::blockSize);
+    const int startRow = 0; //tilesBeforeY - ((Settings::instance()->screenResolutionHeight * 0.5) / Block::blockSize) - 1;
+    const int endRow = 100; //tilesBeforeY + ((Settings::instance()->screenResolutionHeight * 0.5) / Block::blockSize);
 
     //columns are our X value, rows the Y
-    const int startColumn = tilesBeforeX - ((Settings::instance()->screenResolutionWidth * 0.5) / Block::blockSize) - 1;
-    const int endColumn = tilesBeforeX + ((Settings::instance()->screenResolutionWidth * 0.5) / Block::blockSize);
+    const int startColumn =0; // tilesBeforeX - ((Settings::instance()->screenResolutionWidth * 0.5) / Block::blockSize) - 1;
+    const int endColumn =100; // tilesBeforeX + ((Settings::instance()->screenResolutionWidth * 0.5) / Block::blockSize);
 
     if (std::abs(startColumn) != startColumn) {
         std::cout << "FIXME, WENT INTO NEGATIVE COLUMN!!";
