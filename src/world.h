@@ -162,6 +162,8 @@ private:
      */
     Camera* m_camera = nullptr;
 
+    Camera* m_tileMapCamera = nullptr;
+
     /**
      * Null if we are in server mode.
      * Else we're in client mode and this is OUR player, the one

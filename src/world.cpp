@@ -50,7 +50,9 @@ World::World(Player* mainPlayer, Server* server)
 
     if (!m_server) {
         m_camera = new Camera();
-        m_tileRenderer = new TileRenderer(this, m_camera, m_mainPlayer);
+        m_tileMapCamera = new Camera();
+        m_tileRenderer = new TileRenderer(this, m_tileMapCamera, m_mainPlayer);
+        m_tileMapCamera->centerOn(glm::vec2(0.0, 0.0));
         m_spriteSheetRenderer = new SpriteSheetRenderer(m_camera);
         m_spriteSheetRenderer->registerSprite(m_uselessEntity);
     }

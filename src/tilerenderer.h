@@ -60,7 +60,7 @@ private:
     struct Vertex {
         float x, y;
         unsigned int color; // packed with 4 u8s (unsigned chars) for color
-        float u, v, w;
+        float u, v; //, w;
     };
 
     //FIXME: don't use NPOT
@@ -93,8 +93,7 @@ private:
     glm::mat4 m_modelMatrix;
     glm::mat4 m_projectionMatrix;
 
-    int m_tileCount = 0;
-    int m_maxSpriteCount = 20200;
+    int m_maxSpriteCount = 25200;
 
     Camera* m_camera = nullptr;
     Player* m_mainPlayer = nullptr;

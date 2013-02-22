@@ -104,9 +104,7 @@ void TileRenderer::render()
 
     Debug::checkGLError();
 
-    m_tileCount = 0;
-
-    glm::vec2 playerPosition = m_mainPlayer->position();
+    glm::vec2 playerPosition = glm::vec2(1800/2, 1200/2);
 
     //consider block map as starting at player pos == 0,0 and going down and to the right-ward
     //tilesBefore{X,Y} is only at the center of the view though..find the whole screen real estate
@@ -141,7 +139,6 @@ void TileRenderer::render()
     // [y*rowlength + x]
     for (int currentRow = startRow; currentRow < endRow; ++currentRow) {
         for (int currentColumn = startColumn; currentColumn < endColumn; ++currentColumn) {
-            ++m_tileCount;
 
             // vertices that will be uploaded.
             Vertex vertices[4];
@@ -195,7 +192,7 @@ void TileRenderer::render()
             vertices[2].u = vertices[3].u = 1.0f;
 
             //FIXME: use tile type index
-            vertices[0].w = vertices[1].w = vertices[2].w = vertices[3].w = 1.0;
+//            vertices[0].w = vertices[1].w = vertices[2].w = vertices[3].w = 1.0;
 
             Debug::checkGLError();
             // finally upload everything to the actual vbo
@@ -225,10 +222,11 @@ void TileRenderer::render()
     m_shader->bindProgram();
 
     Debug::checkGLError();
+//    Debug::log() << "RENDERING TILECOUNT: " << m_tileCount;
 
     glDrawElements(
         GL_TRIANGLES,
-        6 * (m_tileCount), // 6 indices per 2 triangles
+        6 * (index), // 6 indices per 2 triangles
                    GL_UNSIGNED_INT,
                    (const GLvoid*)0);
 
@@ -316,7 +314,7 @@ void TileRenderer::initGL()
     glVertexAttribPointer(
         texcoord_attrib,
         //2 + 1 because we need a depth the array of 2d textures
-        3,
+        2, //FIXME HACK
         GL_FLOAT,
         GL_FALSE,
         sizeof(Vertex),

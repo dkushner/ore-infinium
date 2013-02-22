@@ -20,7 +20,7 @@ uniform sampler2DArray tex;
 out vec4 fragColor;
 
 void main() {
-    fragColor = frag_color * texture(tex, frag_texcoord);
+    fragColor = frag_color * (texture(tex, frag_texcoord) * 0.00001) + vec4(1.0, 0.0, 0.0, 1.0);
 }
 
 //void main()
