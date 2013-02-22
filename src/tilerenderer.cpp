@@ -104,23 +104,11 @@ void TileRenderer::render()
 
     Debug::checkGLError();
 
-//    glm::vec2 playerPosition = glm::vec2(0, 0);
-
-    //consider block map as starting at player pos == 0,0 and going down and to the right-ward
-    //tilesBefore{X,Y} is only at the center of the view though..find the whole screen real estate
-    //column
-//    int tilesBeforeX = playerPosition.x / Block::blockSize;
-//    //row
-//    int tilesBeforeY = playerPosition.y / Block::blockSize;
-
-    //FIXME: only calculate this crap when we move/change tiles
-    // -1 so that we render an additional row and column..to smoothly scroll
-    const int startRow = 0; //tilesBeforeY - ((Settings::instance()->screenResolutionHeight * 0.5) / Block::blockSize) - 1;
-    const int endRow = 1; //tilesBeforeY + ((Settings::instance()->screenResolutionHeight * 0.5) / Block::blockSize);
-
+    const int startRow = 0;
+    const int endRow = Settings::instance()->screenResolutionHeight / Block::blockSize;
     //columns are our X value, rows the Y
-    const int startColumn =0; // tilesBeforeX - ((Settings::instance()->screenResolutionWidth * 0.5) / Block::blockSize) - 1;
-    const int endColumn =1; // tilesBeforeX + ((Settings::instance()->screenResolutionWidth * 0.5) / Block::blockSize);
+    const int startColumn = 0;
+    const int endColumn =Settings::instance()->screenResolutionWidth / Block::blockSize;
 
     if (std::abs(startColumn) != startColumn) {
         std::cout << "FIXME, WENT INTO NEGATIVE COLUMN!!";
@@ -152,13 +140,11 @@ void TileRenderer::render()
             float positionX = Block::blockSize * currentColumn;
             float positionY = Block::blockSize * currentRow;
 
-            glm::vec4 rect = glm::vec4(positionX, positionY, positionX + Block::blockSize, positionY + Block::blockSize);
+            float x = positionX;
+            float width = x+ Block::blockSize;
 
-            float x = 500;//rect.x;
-            float width = x+64; // rect.z;
-
-            float y = 500;//rect.y;
-            float height = y+64;// rect.w;
+            float y = positionY;
+            float height = y + Block::blockSize;
 
             vertices[0].x = x; // top left X
             vertices[0].y = y; //top left Y
