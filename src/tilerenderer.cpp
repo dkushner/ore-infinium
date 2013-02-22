@@ -192,7 +192,7 @@ void TileRenderer::render()
             vertices[2].u = vertices[3].u = 1.0f;
 
             //FIXME: use tile type index
-//            vertices[0].w = vertices[1].w = vertices[2].w = vertices[3].w = 1.0;
+            vertices[0].w = vertices[1].w = vertices[2].w = vertices[3].w = 1.0;
 
             Debug::checkGLError();
             // finally upload everything to the actual vbo
@@ -314,7 +314,7 @@ void TileRenderer::initGL()
     glVertexAttribPointer(
         texcoord_attrib,
         //2 + 1 because we need a depth the array of 2d textures
-        2, //FIXME HACK
+        3, //FIXME HACK
         GL_FLOAT,
         GL_FALSE,
         sizeof(Vertex),

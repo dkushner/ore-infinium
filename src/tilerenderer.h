@@ -60,7 +60,7 @@ private:
     struct Vertex {
         float x, y;
         unsigned int color; // packed with 4 u8s (unsigned chars) for color
-        float u, v; //, w;
+        float u, v, w;
     };
 
     //FIXME: don't use NPOT
