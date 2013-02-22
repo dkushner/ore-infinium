@@ -21,7 +21,7 @@
 #include "game.h"
 #include "camera.h"
 #include "shader.h"
-#include "image.h"
+#include "texture.h"
 #include "src/world.h"
 #include "settings/settings.h"
 
@@ -31,7 +31,7 @@
 #include <stdlib.h>
 
 TileRenderer::TileRenderer(World* world, Camera* camera)
-    :   m_world(world),
+    :   m_world(world)
 {
     m_shader = new Shader("tilerenderer.vert", "tilerenderer.frag");
     setCamera(camera);
@@ -59,13 +59,16 @@ void TileRenderer::setCamera(Camera* camera)
 
 void TileRenderer::loadTileSheet(const std::string& fileName, Block::BlockType type)
 {
-    auto& image = m_tileSheets[type];
-    image = new Image(fileName);
-    image->generate();
+    /*
+    auto& texture = m_tileSheets[type];
+    texture = new Texture(fileName);
+    texture->generate();
+    */
 }
 
-void TileRenderer::renderCharacters()
+void TileRenderer::render()
 {
+    /*
     m_shader->bindProgram();
 
     bindSpriteSheet(SpriteSheetType::Character);
@@ -167,11 +170,12 @@ void TileRenderer::renderCharacters()
     glDisable(GL_BLEND);
 
     Debug::checkGLError();
+    */
 }
 
-GLuint tex;
 void TileRenderer::initGL()
 {
+    /*
     Debug::checkGLError();
 
     //////////////////////
@@ -255,4 +259,5 @@ void TileRenderer::initGL()
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
 
     Debug::checkGLError();
+    */
 }

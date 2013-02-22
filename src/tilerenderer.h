@@ -31,7 +31,7 @@
 #include <vector>
 
 class Camera;
-class Image;
+class Texture;
 class World;
 class Shader;
 
@@ -62,7 +62,7 @@ private:
         float u, v;
     };
 
-    void loadTileSheet(const std::string& fileName);
+    void loadTileSheet(const std::string& fileName, Block::BlockType type);
 
     void initGL();
 
@@ -73,7 +73,7 @@ private:
      * particular spritesheet. e.g. x, y, width, height.
      */
 //    std::map<std::string, SpriteFrameIdentifier> m_spriteSheetCharactersDescription;
-    std::map<Block::BlockType, Image*> m_tileSheets;
+//    std::map<Block::BlockType, Texture*> m_tileSheets;
 
     GLint m_texture_location;
 
