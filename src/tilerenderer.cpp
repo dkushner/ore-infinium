@@ -67,8 +67,8 @@ void TileRenderer::loadTileSheets()
     glGenTextures(1, &m_tileMapTexture);
     glBindTexture(GL_TEXTURE_2D_ARRAY, m_tileMapTexture);
 
-    glTexParameteri(GL_TEXTURE_2D_ARRAY, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-    glTexParameteri(GL_TEXTURE_2D_ARRAY, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+    glTexParameteri(GL_TEXTURE_2D_ARRAY, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+    glTexParameteri(GL_TEXTURE_2D_ARRAY, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
     glTexParameteri(GL_TEXTURE_2D_ARRAY, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
     glTexParameteri(GL_TEXTURE_2D_ARRAY, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
 
@@ -195,8 +195,8 @@ void TileRenderer::render()
             const float tileWidth = 1.0f / TILESHEET_WIDTH * 16.0f;
             const float tileHeight = 1.0f / TILESHEET_HEIGHT * 16.0f;
 
-            const float xPadding = 1.0f / TILESHEET_WIDTH * 1;
-            const float yPadding = 1.0f / TILESHEET_WIDTH * 1;
+            const float xPadding = 1.0f / TILESHEET_WIDTH * 1.0f;
+            const float yPadding = 1.0f / TILESHEET_HEIGHT * 1.0f;
 
             const float tileLeft = (column *  tileWidth) + xPadding ;
             const float tileRight = (column * tileWidth + tileWidth) + xPadding;
