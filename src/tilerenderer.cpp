@@ -60,13 +60,17 @@ void TileRenderer::setCamera(Camera* camera)
 
 void TileRenderer::loadTileSheets()
 {
-//    glGenTextures(1,&texture);
-//    glBindTexture(GL_TEXTURE_2D_ARRAY,texture);
-//    glTexParameteri(GL_TEXTURE_2D_ARRAY,GL_TEXTURE_MIN_FILTER,GL_LINEAR); //Always set reasonable texture parameters
-//    glTexParameteri(GL_TEXTURE_2D_ARRAY,GL_TEXTURE_MAG_FILTER,GL_LINEAR);
-//    glTexParameteri(GL_TEXTURE_2D_ARRAY,GL_TEXTURE_WRAP_S,GL_CLAMP_TO_EDGE);
-//    glTexParameteri(GL_TEXTURE_2D_ARRAY,GL_TEXTURE_WRAP_T,GL_CLAMP_TO_EDGE);
-//    glTexImage3D(GL_TEXTURE_2D_ARRAY, 0, GL_RGBA8, width, height, levelCount, 0, GL_RGBA, GL_UNSIGNED_BYTE, 0 /* if it's null it tells GL we will send in 2D images as elements one by one, later */);
+    glGenTextures(1, &m_tileMapTexture);
+    glBindTexture(GL_TEXTURE_2D_ARRAY, m_tileMapTexture);
+
+    glTexParameteri(GL_TEXTURE_2D_ARRAY, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+    glTexParameteri(GL_TEXTURE_2D_ARRAY, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+    glTexParameteri(GL_TEXTURE_2D_ARRAY, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+    glTexParameteri(GL_TEXTURE_2D_ARRAY, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+
+    const GLint level = 0;
+    glTexImage3D(GL_TEXTURE_2D_ARRAY, level, GL_RGBA8, TILESHEET_WIDTH, TILESHEET_HEIGHT, Block::blockTypeMap.size(), 0, GL_RGBA, GL_UNSIGNED_BYTE, 0 /* if it's null it tells GL we will send in 2D images as elements one by one, later */);
+
     for (auto& tile : Block::blockTypeMap) {
        loadTileSheet(tile.second.texture, tile.first);
     }
@@ -74,15 +78,18 @@ void TileRenderer::loadTileSheets()
 
 void TileRenderer::loadTileSheet(const std::string& fileName, Block::BlockType type)
 {
-    /*
-    auto& texture = m_tileSheets[type];
-    texture = new Texture(fileName);
-    texture->generate();
-    */
     Image* image = new Image(Block::blockTypeMap.at(type).texture);
-//    glTexSubImage3D();
+
+    const GLint level = 0;
+    const GLint xoffset = 0;
+    const GLint yoffset = 0;
+    const GLint zoffset = m_tileSheetCount;
+    const GLsizei depth = 1;
+    glTexSubImage3D(GL_TEXTURE_2D_ARRAY, level, xoffset, yoffset, zoffset, TILESHEET_WIDTH, TILESHEET_HEIGHT, depth, GL_RGBA, GL_UNSIGNED_BYTE, image->bytes());
 
     m_tileSheets[type] = image;
+
+    ++m_tileSheetCount;
 }
 
 void TileRenderer::render()

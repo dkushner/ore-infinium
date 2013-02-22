@@ -59,8 +59,12 @@ private:
     struct Vertex {
         float x, y;
         unsigned int color; // packed with 4 u8s (unsigned chars) for color
-        float u, v;
+        float u, v, w;
     };
+
+    //FIXME: don't use NPOT
+    const GLsizei TILESHEET_WIDTH = 170;
+    const GLsizei TILESHEET_HEIGHT = 253;
 
     void loadTileSheets();
     void loadTileSheet(const std::string& fileName, Block::BlockType type);
@@ -77,14 +81,13 @@ private:
     std::map<Block::BlockType, Image*> m_tileSheets;
 
     /// the 3D tilemap texture, whose z texcoord indicates which tile type it is.
+    int m_tileSheetCount = 0;
     GLuint m_tileMapTexture;
     GLint m_texture_location;
 
     GLuint m_vao; // vertex array object
     GLuint m_vbo; // vertex buffer object
     GLuint m_ebo; // element buffer object
-
-    GLubyte m_tileSheetData;
 
     glm::mat4 m_modelMatrix;
     glm::mat4 m_projectionMatrix;

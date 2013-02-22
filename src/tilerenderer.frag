@@ -10,15 +10,17 @@
 //FIXME: stop hardcoding ..
 //ivec2 TILE_SIZE = ivec2(16, 16);
 
-#version 120
+#version 130
 
-varying vec3 frag_texcoord;
-varying vec4 frag_color;
+in vec3 frag_texcoord;
+in vec4 frag_color;
 
 uniform sampler2DArray tex;
 
+out vec4 fragColor;
+
 void main() {
-    gl_FragColor = frag_color * texture2D(tex, frag_texcoord);
+    fragColor = frag_color * texture(tex, frag_texcoord);
 }
 
 //void main()
