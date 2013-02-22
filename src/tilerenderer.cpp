@@ -103,13 +103,26 @@ void TileRenderer::render()
 
 
     Debug::checkGLError();
+    glm::vec2 playerPosition = m_mainPlayer->position();
+    int tilesBeforeX = playerPosition.x / Block::blockSize;
+    //row
+    int tilesBeforeY = playerPosition.y / Block::blockSize;
 
-    const int startRow = 0;
-    const int endRow = Settings::instance()->screenResolutionHeight / Block::blockSize;
+    // -1 so that we render an additional row and column..to smoothly scroll
+    const int startRow = tilesBeforeY - ((Settings::instance()->screenResolutionHeight * 0.5) / Block::blockSize) - 1;
+    const int endRow = tilesBeforeY + ((Settings::instance()->screenResolutionHeight * 0.5) / Block::blockSize);
+
     //columns are our X value, rows the Y
-    const int startColumn = 0;
-    const int endColumn =Settings::instance()->screenResolutionWidth / Block::blockSize;
-
+    const int startColumn = tilesBeforeX - ((Settings::instance()->screenResolutionWidth * 0.5) / Block::blockSize) - 1;
+    const int endColumn = tilesBeforeX + ((Settings::instance()->screenResolutionWidth * 0.5) / Block::blockSize);
+    Debug:: log() << "starRow: " << startRow << "endrow: " << endRow << "startcol: " << startColumn << " endcol: " << endColumn;
+//
+//    const int startRow = 0;
+//    const int endRow = Settings::instance()->screenResolutionHeight / Block::blockSize;
+//    //columns are our X value, rows the Y
+//    const int startColumn = 0;
+//    const int endColumn = Settings::instance()->screenResolutionWidth / Block::blockSize;
+//
     if (std::abs(startColumn) != startColumn) {
         std::cout << "FIXME, WENT INTO NEGATIVE COLUMN!!";
         assert(0);
@@ -118,14 +131,14 @@ void TileRenderer::render()
         assert(0);
     }
 
-    int x = 0;
-    int y = 0;
+    int drawingRow = 0;
 
     int index = 0;
 
     Debug::checkGLError();
     // [y*rowlength + x]
     for (int currentRow = startRow; currentRow < endRow; ++currentRow) {
+        int drawingColumn = 0;
         for (int currentColumn = startColumn; currentColumn < endColumn; ++currentColumn) {
 
             // vertices that will be uploaded.
@@ -137,14 +150,14 @@ void TileRenderer::render()
             // vertices[2] -> bottom right
             // vertices[3] -> top right
 
-            float positionX = Block::blockSize * currentColumn;
-            float positionY = Block::blockSize * currentRow;
+            float positionX = Block::blockSize * drawingColumn;
+            float positionY = Block::blockSize * drawingRow;
 
             float x = positionX;
-            float width = x+ Block::blockSize;
+            float width = x +  Block::blockSize;
 
             float y = positionY;
-            float height = y + Block::blockSize;
+            float height = y  +  Block::blockSize;
 
             vertices[0].x = x; // top left X
             vertices[0].y = y; //top left Y
@@ -209,7 +222,9 @@ void TileRenderer::render()
             Debug::checkGLError();
 
             ++index;
+            ++drawingColumn;
         }
+        ++drawingRow;
     }
 
     Debug::checkGLError();
