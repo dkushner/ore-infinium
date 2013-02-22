@@ -31,7 +31,7 @@
 #include <vector>
 
 class Camera;
-class Texture;
+class Image;
 class World;
 class Shader;
 
@@ -62,6 +62,7 @@ private:
         float u, v;
     };
 
+    void loadTileSheets();
     void loadTileSheet(const std::string& fileName, Block::BlockType type);
 
     void initGL();
@@ -73,17 +74,22 @@ private:
      * particular spritesheet. e.g. x, y, width, height.
      */
 //    std::map<std::string, SpriteFrameIdentifier> m_spriteSheetCharactersDescription;
-//    std::map<Block::BlockType, Texture*> m_tileSheets;
+    std::map<Block::BlockType, Image*> m_tileSheets;
 
+    /// the 3D tilemap texture, whose z texcoord indicates which tile type it is.
+    GLuint m_tileMapTexture;
     GLint m_texture_location;
 
     GLuint m_vao; // vertex array object
     GLuint m_vbo; // vertex buffer object
     GLuint m_ebo; // element buffer object
 
+    GLubyte m_tileSheetData;
+
     glm::mat4 m_modelMatrix;
     glm::mat4 m_projectionMatrix;
 
+    int m_tileCount = 0;
     int m_maxSpriteCount = 2200;
 
     Camera* m_camera = nullptr;

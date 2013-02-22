@@ -251,7 +251,6 @@ void SpriteSheetRenderer::renderEntities()
 
 }
 
-GLuint tex;
 void SpriteSheetRenderer::initGL()
 {
     Debug::checkGLError();

@@ -21,7 +21,7 @@
 #include "game.h"
 #include "camera.h"
 #include "shader.h"
-#include "texture.h"
+#include "image.h"
 #include "src/world.h"
 #include "settings/settings.h"
 
@@ -41,6 +41,7 @@ TileRenderer::TileRenderer(World* world, Camera* camera)
     float scale = 1.0f;
     m_modelMatrix = glm::scale(glm::mat4(1.0f), glm::vec3(scale));
     m_projectionMatrix = glm::ortho(0.0f, float(Settings::instance()->screenResolutionWidth), float(Settings::instance()->screenResolutionHeight), 0.0f, -1.0f, 1.0f);
+    loadTileSheets();
 }
 
 TileRenderer::~TileRenderer()
@@ -54,7 +55,21 @@ TileRenderer::~TileRenderer()
 void TileRenderer::setCamera(Camera* camera)
 {
     m_camera = camera;
- //   m_camera->setShader(m_shader);
+    m_camera->setShader(m_shader);
+}
+
+void TileRenderer::loadTileSheets()
+{
+//    glGenTextures(1,&texture);
+//    glBindTexture(GL_TEXTURE_2D_ARRAY,texture);
+//    glTexParameteri(GL_TEXTURE_2D_ARRAY,GL_TEXTURE_MIN_FILTER,GL_LINEAR); //Always set reasonable texture parameters
+//    glTexParameteri(GL_TEXTURE_2D_ARRAY,GL_TEXTURE_MAG_FILTER,GL_LINEAR);
+//    glTexParameteri(GL_TEXTURE_2D_ARRAY,GL_TEXTURE_WRAP_S,GL_CLAMP_TO_EDGE);
+//    glTexParameteri(GL_TEXTURE_2D_ARRAY,GL_TEXTURE_WRAP_T,GL_CLAMP_TO_EDGE);
+//    glTexImage3D(GL_TEXTURE_2D_ARRAY, 0, GL_RGBA8, width, height, levelCount, 0, GL_RGBA, GL_UNSIGNED_BYTE, 0 /* if it's null it tells GL we will send in 2D images as elements one by one, later */);
+    for (auto& tile : Block::blockTypeMap) {
+       loadTileSheet(tile.second.texture, tile.first);
+    }
 }
 
 void TileRenderer::loadTileSheet(const std::string& fileName, Block::BlockType type)
@@ -64,6 +79,10 @@ void TileRenderer::loadTileSheet(const std::string& fileName, Block::BlockType t
     texture = new Texture(fileName);
     texture->generate();
     */
+    Image* image = new Image(Block::blockTypeMap.at(type).texture);
+//    glTexSubImage3D();
+
+    m_tileSheets[type] = image;
 }
 
 void TileRenderer::render()
@@ -75,8 +94,11 @@ void TileRenderer::render()
 
     Debug::checkGLError();
 
+    tileCount = 0;
+
     int index = 0;
     for (Sprite* sprite: m_characterSprites) {
+        ++tileCount;
         auto frameIdentifier = m_spriteSheetCharactersDescription.find(sprite->frameName());
 
         // vertices that will be uploaded.

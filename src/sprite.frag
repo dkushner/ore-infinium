@@ -1,4 +1,4 @@
-#version 120
+#version 130
 
 varying vec2 frag_texcoord;
 varying vec4 frag_color;
