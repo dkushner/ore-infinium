@@ -34,6 +34,8 @@
 #include "src/debug.h"
 #include "src/../config.h"
 
+#include <random>
+
 #include <GL/glew.h>
 
 Client::Client()
@@ -268,6 +270,8 @@ void Client::drawDebugText(double frametime)
     m_font->Render("F7 to toggle GUI renderer debug", -1, FTPoint(0.0, height - y, 0.0));
     y += 15.0;
     m_font->Render(connectedString.c_str(), -1, FTPoint(0.0, height - y, 0.0));
+    y += 15.0;
+    m_font->Render("F8 instant multiplayer host session", -1, FTPoint(0.0, height - y, 0.0));
 
     if (m_mainPlayer) {
         ss.str("");
@@ -311,6 +315,16 @@ void Client::handleInputEvents()
                     // toggle debug rendering
                     Settings::instance()->debugGUIRenderingEnabled = !Settings::instance()->debugGUIRenderingEnabled;
                     m_gui->debugRenderingChanged();
+                } else if (event.key.keysym.sym == SDLK_F8) {
+                    std::stringstream ss;
+                    ss << "Player";
+                    std::random_device device;
+                    std::mt19937 rand(device());
+                    std::uniform_int_distribution<> distribution(0, INT_MAX);
+
+                    ss << distribution(rand);
+
+                    startMultiplayerHost(ss.str());
                 }
                 break;
 
