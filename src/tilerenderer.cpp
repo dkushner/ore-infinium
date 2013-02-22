@@ -33,8 +33,8 @@
 TileRenderer::TileRenderer(World* world, Camera* camera)
     :   m_world(world)
 {
-//    m_shader = new Shader("tilerenderer.vert", "tilerenderer.frag");
-//    setCamera(camera);
+    m_shader = new Shader("tilerenderer.vert", "tilerenderer.frag");
+    setCamera(camera);
 
     initGL();
 
@@ -46,10 +46,10 @@ TileRenderer::TileRenderer(World* world, Camera* camera)
 
 TileRenderer::~TileRenderer()
 {
- //   glDeleteBuffers(1, &m_vbo);
-  //  glDeleteBuffers(1, &m_ebo);
-//
- //   glDeleteVertexArrays(1, &m_vao);
+    glDeleteBuffers(1, &m_vbo);
+    glDeleteBuffers(1, &m_ebo);
+
+    glDeleteVertexArrays(1, &m_vao);
 }
 
 void TileRenderer::setCamera(Camera* camera)
