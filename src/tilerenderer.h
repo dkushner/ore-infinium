@@ -30,6 +30,7 @@
 #include <string>
 #include <vector>
 
+class Player;
 class Camera;
 class Image;
 class World;
@@ -38,7 +39,7 @@ class Shader;
 class TileRenderer
 {
 public:
-    explicit TileRenderer(World* world, Camera* camera);
+    explicit TileRenderer(World* world, Camera* camera, Player* mainPlayer);
     ~TileRenderer();
 
     void render();
@@ -93,9 +94,10 @@ private:
     glm::mat4 m_projectionMatrix;
 
     int m_tileCount = 0;
-    int m_maxSpriteCount = 2200;
+    int m_maxSpriteCount = 20200;
 
     Camera* m_camera = nullptr;
+    Player* m_mainPlayer = nullptr;
 
     World* m_world = nullptr;
     Shader* m_shader = nullptr;

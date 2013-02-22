@@ -22,7 +22,10 @@
 #include "camera.h"
 #include "shader.h"
 #include "image.h"
+
 #include "src/world.h"
+#include "src/player.h"
+
 #include "settings/settings.h"
 
 #include <fstream>
@@ -30,8 +33,9 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-TileRenderer::TileRenderer(World* world, Camera* camera)
-    :   m_world(world)
+TileRenderer::TileRenderer(World* world, Camera* camera, Player* mainPlayer)
+    :   m_world(world),
+        m_mainPlayer(mainPlayer)
 {
     m_shader = new Shader("tilerenderer.vert", "tilerenderer.frag");
     setCamera(camera);
@@ -95,83 +99,119 @@ void TileRenderer::loadTileSheet(const std::string& fileName, Block::BlockType t
 
 void TileRenderer::render()
 {
-    /*
     m_shader->bindProgram();
 
-    bindSpriteSheet(SpriteSheetType::Character);
 
     Debug::checkGLError();
 
-    tileCount = 0;
+    m_tileCount = 0;
 
-    int index = 0;
-    for (Sprite* sprite: m_characterSprites) {
-        ++tileCount;
-        auto frameIdentifier = m_spriteSheetCharactersDescription.find(sprite->frameName());
+    glm::vec2 playerPosition = m_mainPlayer->position();
 
-        // vertices that will be uploaded.
-        Vertex vertices[4];
+    //consider block map as starting at player pos == 0,0 and going down and to the right-ward
+    //tilesBefore{X,Y} is only at the center of the view though..find the whole screen real estate
+    //column
+    int tilesBeforeX = playerPosition.x / Block::blockSize;
+    //row
+    int tilesBeforeY = playerPosition.y / Block::blockSize;
 
-        // vertices[n][0] -> X, and [1] -> Y
-        // vertices[0] -> top left
-        // vertices[1] -> bottom left
-        // vertices[2] -> bottom right
-        // vertices[3] -> top right
+    //FIXME: only calculate this crap when we move/change tiles
+    // -1 so that we render an additional row and column..to smoothly scroll
+    const int startRow = tilesBeforeY - ((Settings::instance()->screenResolutionHeight * 0.5) / Block::blockSize) - 1;
+    const int endRow = tilesBeforeY + ((Settings::instance()->screenResolutionHeight * 0.5) / Block::blockSize);
 
-        glm::vec2 spritePosition = sprite->position();
+    //columns are our X value, rows the Y
+    const int startColumn = tilesBeforeX - ((Settings::instance()->screenResolutionWidth * 0.5) / Block::blockSize) - 1;
+    const int endColumn = tilesBeforeX + ((Settings::instance()->screenResolutionWidth * 0.5) / Block::blockSize);
 
-        glm::vec2 spriteSize = sprite->size();
-
-        glm::vec4 rect = glm::vec4(spritePosition.x, spritePosition.y, spritePosition.x + spriteSize.x, spritePosition.y + spriteSize.y);
-
-        float x = rect.x;
-        float width = rect.z;
-
-        float y = rect.y;
-        float height = rect.w;
-
-        vertices[0].x = x; // top left X
-        vertices[0].y = y; //top left Y
-
-        vertices[1].x = x; // bottom left X
-        vertices[1].y = height; // bottom left Y
-
-        vertices[2].x = width; // bottom right X
-        vertices[2].y = height; //bottom right Y
-
-        vertices[3].x = width; // top right X
-        vertices[3].y = y; // top right Y
-
-        Debug::checkGLError();
-
-        // copy color to the buffer
-        for (size_t i = 0; i < sizeof(vertices) / sizeof(*vertices); i++) {
-            //        *colorp = color.bgra;
-            uint8_t red = 255;
-            uint8_t blue = 255;
-            uint8_t green = 255;
-            uint8_t alpha = 255;
-            int32_t color = red | (green << 8) | (blue << 16) | (alpha << 24);
-            vertices[i].color = color;
-        }
-
-        // copy texcoords to the buffer
-        vertices[0].u = vertices[1].u = 0.0f;
-        vertices[0].v = vertices[3].v = 1.0f;
-        vertices[1].v = vertices[2].v = 0.0f;
-        vertices[2].u = vertices[3].u = 1.0f;
-
-        // finally upload everything to the actual vbo
-        glBindBuffer(GL_ARRAY_BUFFER, m_vbo);
-        glBufferSubData(
-            GL_ARRAY_BUFFER,
-            sizeof(vertices) * index,
-                        sizeof(vertices),
-                        vertices);
-
-        ++index;
+    if (std::abs(startColumn) != startColumn) {
+        std::cout << "FIXME, WENT INTO NEGATIVE COLUMN!!";
+        assert(0);
+    } else if (std::abs(startRow) != startRow) {
+        std::cout << "FIXME, WENT INTO NEGATIVE ROW!!";
+        assert(0);
     }
 
+    int x = 0;
+    int y = 0;
+
+    int index = 0;
+
+    Debug::checkGLError();
+    // [y*rowlength + x]
+    for (int currentRow = startRow; currentRow < endRow; ++currentRow) {
+        for (int currentColumn = startColumn; currentColumn < endColumn; ++currentColumn) {
+            ++m_tileCount;
+
+            // vertices that will be uploaded.
+            Vertex vertices[4];
+
+            // vertices[n][0] -> X, and [1] -> Y
+            // vertices[0] -> top left
+            // vertices[1] -> bottom left
+            // vertices[2] -> bottom right
+            // vertices[3] -> top right
+
+            float positionX = Block::blockSize * currentColumn;
+            float positionY = Block::blockSize * currentRow;
+
+            glm::vec4 rect = glm::vec4(positionX, positionY, positionX + Block::blockSize, positionY + Block::blockSize);
+
+            float x = rect.x;
+            float width = rect.z;
+
+            float y = rect.y;
+            float height = rect.w;
+
+            vertices[0].x = x; // top left X
+            vertices[0].y = y; //top left Y
+
+            vertices[1].x = x; // bottom left X
+            vertices[1].y = height; // bottom left Y
+
+            vertices[2].x = width; // bottom right X
+            vertices[2].y = height; //bottom right Y
+
+            vertices[3].x = width; // top right X
+            vertices[3].y = y; // top right Y
+
+            Debug::checkGLError();
+
+            // copy color to the buffer
+            for (size_t i = 0; i < sizeof(vertices) / sizeof(*vertices); i++) {
+                //        *colorp = color.bgra;
+                uint8_t red = 255;
+                uint8_t blue = 255;
+                uint8_t green = 255;
+                uint8_t alpha = 255;
+                int32_t color = red | (green << 8) | (blue << 16) | (alpha << 24);
+                vertices[i].color = color;
+            }
+
+            // copy texcoords to the buffer
+            vertices[0].u = vertices[1].u = 0.0f;
+            vertices[0].v = vertices[3].v = 1.0f;
+            vertices[1].v = vertices[2].v = 0.0f;
+            vertices[2].u = vertices[3].u = 1.0f;
+
+            //FIXME: use tile type index
+            vertices[0].w = vertices[1].w = vertices[2].w = vertices[3].w = 1.0;
+
+            Debug::checkGLError();
+            // finally upload everything to the actual vbo
+            glBindBuffer(GL_ARRAY_BUFFER, m_vbo);
+            glBufferSubData(
+                GL_ARRAY_BUFFER,
+                sizeof(vertices) * index,
+                            sizeof(vertices),
+                            vertices);
+            Debug::checkGLError();
+
+            ++index;
+        }
+    }
+
+    Debug::checkGLError();
     ////////////////////////////////FINALLY RENDER IT ALL //////////////////////////////////////////
     glEnable(GL_BLEND);
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
@@ -188,7 +228,7 @@ void TileRenderer::render()
 
     glDrawElements(
         GL_TRIANGLES,
-        6 * (m_characterSprites.size()), // 6 indices per 2 triangles
+        6 * (m_tileCount), // 6 indices per 2 triangles
                    GL_UNSIGNED_INT,
                    (const GLvoid*)0);
 
@@ -200,12 +240,10 @@ void TileRenderer::render()
     glDisable(GL_BLEND);
 
     Debug::checkGLError();
-    */
 }
 
 void TileRenderer::initGL()
 {
-    /*
     Debug::checkGLError();
 
     //////////////////////
@@ -289,5 +327,4 @@ void TileRenderer::initGL()
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
 
     Debug::checkGLError();
-    */
 }
