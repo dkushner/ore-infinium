@@ -33,7 +33,6 @@
 SpriteSheetRenderer::SpriteSheetRenderer(Camera* camera)
 {
     m_shader = new Shader("sprite.vert", "sprite.frag");
-    glBindFragDataLocation(m_shader->shaderProgram(), 0, "fragColor");
     setCamera(camera);
 
     initGL();

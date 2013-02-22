@@ -141,6 +141,8 @@ void Shader::loadShaders(const char* vertexShader, const char* fragmentShader)
     glAttachShader(m_shaderProgram, m_vertexShader);
     glAttachShader(m_shaderProgram, m_fragmentShader);
 
+    glBindFragDataLocation(m_shaderProgram, 0, "fragColor");
+
     // link the program and check for errors
     glLinkProgram(m_shaderProgram);
 
