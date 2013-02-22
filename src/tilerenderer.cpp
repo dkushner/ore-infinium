@@ -189,19 +189,19 @@ void TileRenderer::render()
             //float endXY = 1.0;
 
 //            float endXY = 32/TILESHEET_WIDTH;
-            int row = 0;
-            int column = 0;
+            int row = 1;
+            int column = 5;
 
             const float tileWidth = 1.0f / TILESHEET_WIDTH * 16.0f;
             const float tileHeight = 1.0f / TILESHEET_HEIGHT * 16.0f;
 
-            const float xPadding = 1.0f / TILESHEET_WIDTH * 1.0f;
-            const float yPadding = 1.0f / TILESHEET_HEIGHT * 1.0f;
+            float xPadding = 1.0f / TILESHEET_WIDTH * 1.0f * (column + 1);
+            float yPadding = 1.0f / TILESHEET_HEIGHT * 1.0f * (row + 1);
 
-            const float tileLeft = (column *  tileWidth) + xPadding ;
-            const float tileRight = (column * tileWidth + tileWidth) + xPadding;
-            const float tileTop = 1.0f - ((row * tileHeight ) + yPadding);
-            const float tileBottom = 1.0f - ((row * tileHeight + tileHeight) + yPadding);
+            const float tileLeft = (column *  tileWidth) + xPadding;
+            const float tileRight = tileLeft + tileWidth;
+            const float tileTop = 1.0f - ((row * tileHeight)) - yPadding;
+            const float tileBottom = tileTop - tileHeight;
 
             // copy texcoords to the buffer
             vertices[0].u = vertices[1].u = tileLeft;
