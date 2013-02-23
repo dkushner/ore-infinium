@@ -184,7 +184,7 @@ void TileRenderer::render()
             int column = 5;
 
             int blockIndex = currentColumn * WORLD_ROWCOUNT + currentRow;
-            Block& block = m_world->m_blocks[index];
+            Block& block = m_world->m_blocks[blockIndex];
 
             const float tileWidth = 1.0f / TILESHEET_WIDTH * 16.0f;
             const float tileHeight = 1.0f / TILESHEET_HEIGHT * 16.0f;
