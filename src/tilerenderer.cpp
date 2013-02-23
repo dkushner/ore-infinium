@@ -116,13 +116,7 @@ void TileRenderer::render()
     const int startColumn = tilesBeforeX - ((Settings::instance()->screenResolutionWidth * 0.5) / Block::blockSize) - 1;
     const int endColumn = tilesBeforeX + ((Settings::instance()->screenResolutionWidth * 0.5) / Block::blockSize);
 //    Debug:: log() << "starRow: " << startRow << "endrow: " << endRow << "startcol: " << startColumn << " endcol: " << endColumn;
-//
-//    const int startRow = 0;
-//    const int endRow = Settings::instance()->screenResolutionHeight / Block::blockSize;
-//    //columns are our X value, rows the Y
-//    const int startColumn = 0;
-//    const int endColumn = Settings::instance()->screenResolutionWidth / Block::blockSize;
-//
+
     if (std::abs(startColumn) != startColumn) {
         std::cout << "FIXME, WENT INTO NEGATIVE COLUMN!!";
         assert(0);
@@ -184,10 +178,6 @@ void TileRenderer::render()
                 vertices[i].color = color;
             }
 
-            //float startXY = 0.0;
-            //float endXY = 1.0;
-
-//            float endXY = 32/TILESHEET_WIDTH;
 
             //tilesheet index/row, column
             int row = 1;
@@ -338,7 +328,7 @@ void TileRenderer::initGL()
     glVertexAttribPointer(
         texcoord_attrib,
         //2 + 1 because we need a depth the array of 2d textures
-        3, //FIXME HACK
+        3,
         GL_FLOAT,
         GL_FALSE,
         sizeof(Vertex),

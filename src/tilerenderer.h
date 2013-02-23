@@ -93,7 +93,7 @@ private:
     glm::mat4 m_modelMatrix;
     glm::mat4 m_projectionMatrix;
 
-    int m_maxSpriteCount = 25200;
+    int m_maxSpriteCount = 8200;
 
     Camera* m_camera = nullptr;
     Player* m_mainPlayer = nullptr;
