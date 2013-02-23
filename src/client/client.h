@@ -18,11 +18,6 @@
 #ifndef CLIENT_H
 #define CLIENT_H
 
-#include <ft2build.h>
-#include FT_FREETYPE_H
-
-#include <FTGL/ftgl.h>
-
 #include <enet/enet.h>
 #include <string>
 
@@ -34,6 +29,7 @@ class Player;
 class GUI;
 class MainMenu;
 class ChatDialog;
+class DebugMenu;
 class World;
 class Server;
 
@@ -65,6 +61,10 @@ public:
     void disconnect();
 
     void shutdown();
+
+    bool connected() { return m_connected; }
+    double fps() { return m_fps; }
+    bool hosting() { return m_server; }
 
 ///////////////// Network Communication ////////////////////
 public:
@@ -102,8 +102,7 @@ private:
     GUI* m_gui = nullptr;
     MainMenu* m_mainMenu = nullptr;
     ChatDialog* m_chat = nullptr;
-
-    FTGLPixmapFont *m_font = nullptr;
+    DebugMenu* m_debugMenu = nullptr;
 
     SDL_Window *m_window = nullptr;
     SDL_GLContext m_GLcontext;

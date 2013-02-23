@@ -1,0 +1,37 @@
+
+<rml>
+        <head>
+                <title>Help</title>
+                <link type="text/template" href="mostlyTransparentWindow.rml" />
+                <style>
+                        body
+                        {
+                            z-index: 99;
+                        }
+
+                        div#mostlyTransparentWindow
+                        {
+                                background-color: rgba(0, 0, 0, 0);
+                                text-align: left;
+                                width: 25%;
+                                height: 15%;
+                        }
+
+                        div#content
+                        {
+                            text-align: left;
+                        }
+
+                </style>
+        </head>
+
+        <body template="mostlyTransparentWindow">
+        <text id="1">HALP</text><br/>
+        <text id="2">HALP</text><br/>
+        <text id="3">HALP</text><br/>
+        <text id="4">HALP</text><br/>
+        <text id="5">HALP</text><br/>
+        <text id="6">HALP</text>
+        </body>
+
+</rml>

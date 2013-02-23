@@ -8,7 +8,6 @@ game.cpp
 debug.cpp
 spritesheetrenderer.cpp
 shader.cpp
-fontmanager.cpp
 camera.cpp
 sprite.cpp
 block.cpp
@@ -24,6 +23,7 @@ client/gui/gui.cpp
 client/gui/mainmenu.cpp
 client/gui/optionsdialog.cpp
 client/gui/chatdialog.cpp
+client/gui/debugmenu.cpp
 
 client/gui/core/Shell.cpp
 client/gui/core/ShellFileInterface.cpp
@@ -50,7 +50,6 @@ ${SDLMIXER_INCLUDE_DIR}
 ${FREEIMAGE_INCLUDE_PATH}
 ${FREETYPE_INCLUDE_DIRS}
 ${GLM_INCLUDE_DIRS}
-${FTGL_INCLUDE_DIR}
 ${EIGEN3_INCLUDE_DIR}
 ${YAMLCPP_INCLUDE_DIR}
 ${GLEW_INCLUDE_PATH}
@@ -66,7 +65,6 @@ ${SDL2MAIN_LIBRARY}
 ${SDLMIXER_LIBRARY}
 ${FREEIMAGE_LIBRARY}
 ${FREETYPE_LIBRARY}
-${FTGL_LIBRARY}
 ${OPENGL_LIBRARIES}
 ${GLEW_LIBRARY}
 ${LIBROCKET_LIBRARIES}
@@ -82,7 +80,6 @@ set(CPACK_RESOURCE_FILE_LICENSE "${CMAKE_SOURCE_DIR}/COPYING")
 set(CPACK_PACKAGE_VERSION_MAJOR "${ore_infinium_VERSION_MAJOR}")
 set(CPACK_PACKAGE_VERSION_MINOR "${ore_infinium_VERSION_MINOR}")
 include(CPack)
-
 
 #add_subdirectory(${CMAKE_SOURCE_DIR}/src/)
 

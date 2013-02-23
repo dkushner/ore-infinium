@@ -15,57 +15,46 @@
  *   along with this program.  If not, see <http://www.gnu.org/licenses/>.    *
  *****************************************************************************/
 
-#include "fontmanager.h"
-#include "debug.h"
+#ifndef DEBUGMENU_H
+#define DEBUGMENU_H
 
-#include <map>
-#include <iostream>
+#include <Rocket/Core.h>
 
-static FontManager* s_instance = 0;
-
-FontManager::FontManager()
-{
-}
-
-FontManager::~FontManager()
-{
-}
-
-FontManager* FontManager::instance()
-{
-    if (!s_instance) {
-        s_instance = new FontManager();
+namespace Rocket {
+    namespace Core {
+        class ElementDocument;
     }
-
-    return s_instance;
-}
-
-FTPixmapFont* FontManager::loadFont(std::string fontPath)
-{
-    std::map <std::string, FontManager::Font>::iterator it = m_fonts.find(fontPath);
-
-    if (it != m_fonts.end() && fontPath.compare(it->first) == 0) {
-        it->second.refCount++;
-        Debug::log(Debug::Area::System) << "font already loaded, increasing font refcount for fontPath: " << fontPath << " now at refcount: " << it->second.refCount;
-        return it->second.font;
+    namespace Controls{
+        class ElementTabSet;
     }
-
-    FTGLPixmapFont *pixmap = new FTGLPixmapFont(fontPath.c_str());
-    Debug::fatal(!pixmap->Error(), Debug::Area::System, "Failure to load font at path" + fontPath);
-
-    Font font;
-    font.font = pixmap;
-    font.refCount = 1;
-
-    std::pair<std::string, Font> pair;
-    pair.first = fontPath;
-    pair.second = font;
-    m_fonts.insert(pair);
-
-    return pixmap;
 }
 
-void FontManager::unloadFont(std::string fontPath)
+class Client;
+
+class DebugMenu : public Rocket::Core::EventListener
 {
+public:
+    DebugMenu(Client* client);
+    ~DebugMenu();
 
-}
+    /// reimplemented from Rocket::Core::EventListener
+    virtual void ProcessEvent(Rocket::Core::Event& event);
+
+    void update();
+
+    void show();
+    void close();
+    bool visible();
+
+    Rocket::Core::ElementDocument* document();
+
+private:
+    void loadDocument();
+
+private:
+    Client* m_client = nullptr;
+
+    Rocket::Core::ElementDocument* m_debug = nullptr;
+};
+
+#endif

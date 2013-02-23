@@ -37,8 +37,6 @@ find_package(OpenGL REQUIRED)
 find_package(GLEW REQUIRED)
 
 find_package(FreeImage REQUIRED)
-find_package(FreeType REQUIRED)
-find_package(FTGL REQUIRED)
 
 find_package(YamlCpp REQUIRED)
 
@@ -53,8 +51,6 @@ set_package_properties(OpenGL PROPERTIES DESCRIPTION "OpenGL >= 3.0 is required.
 set_package_properties(GLEW PROPERTIES DESCRIPTION "OpenGL Extension Wrangler, to create our function pointers and extension loading" URL "http://glew.sourceforge.net/")
 
 set_package_properties(FreeImage PROPERTIES DESCRIPTION "Cross-platform open source image loading library" URL "http://freeimage.sourceforge.net/")
-set_package_properties(FTGL PROPERTIES DESCRIPTION "Easy, open source OpenGL font rendering library" URL "http://sourceforge.net/projects/ftgl/")
-set_package_properties(FreeType PROPERTIES DESCRIPTION "FreeType >= 2" URL "http://sourceforge.net/projects/freetype/files/freetype2/")
 
 set_package_properties(Yaml-Cpp PROPERTIES DESCRIPTION "YAML CPP, for config file and sprite sheet reading" URL "http://code.google.com/p/yaml-cpp/")
 

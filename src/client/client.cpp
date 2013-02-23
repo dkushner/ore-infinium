@@ -21,10 +21,10 @@
 #include "src/network/protobuf-compiled/packet.pb.h"
 #include "src/server/server.h"
 
-#include "src/fontmanager.h"
 #include "gui/gui.h"
 #include "gui/mainmenu.h"
 #include "gui/chatdialog.h"
+#include "gui/debugmenu.h"
 
 #include "src/settings/settings.h"
 
@@ -47,12 +47,12 @@ Client::Client()
     FreeImage_Initialise();
     #endif
 
-    m_font = FontManager::instance()->loadFont("../font/Ubuntu-L.ttf");
-    m_font->FaceSize(12);
-
     m_gui = GUI::instance();
     m_mainMenu = new MainMenu(this);
     m_mainMenu->showMainMenu();
+
+    m_debugMenu = new DebugMenu(this);
+    m_debugMenu->show();
 }
 
 Client::~Client()
@@ -236,54 +236,7 @@ void Client::tick(double elapsedTime, double fps)
 
 void Client::drawDebugText(double frametime)
 {
-    std::stringstream ss;
-    std::string str;
-
-    ss.str("");
-    ss << "FPS: " << m_fps << " Frametime: " << "fucking hell";//frametime;
-    str = ss.str();
-
-    const int height = Settings::instance()->screenResolutionHeight - 15;
-    const int width = Settings::instance()->screenResolutionWidth;
-
-    ss.str("");
-    ss << "Client Connection Status: ";
-    if (m_peer) {
-        ss << "Connected!";
-    } else {
-       ss << "Disconnected";
-    }
-
-    if (m_server) {
-       ss << " | Hosting Server Mode";
-    } else {
-       ss << " | Client Mode";
-    }
-
-    std::string connectedString = ss.str();
-
-    float y = 0.0f;
-
-    m_font->Render(str.c_str(), -1, FTPoint(0.0, height - y, 0.0));
-    y += 15.0;
-    m_font->Render("F5 to toggle debug logging", -1, FTPoint(0.0, height - y, 0.0));
-    y += 15.0;
-    m_font->Render("F6 to toggle renderer logging", -1, FTPoint(0.0, height - y, 0.0));
-    y += 15.0;
-    m_font->Render("F7 to toggle GUI renderer debug", -1, FTPoint(0.0, height - y, 0.0));
-    y += 15.0;
-    m_font->Render(connectedString.c_str(), -1, FTPoint(0.0, height - y, 0.0));
-    y += 15.0;
-    m_font->Render("F8 instant multiplayer host session", -1, FTPoint(0.0, height - y, 0.0));
-
-    if (m_mainPlayer) {
-        ss.str("");
-        ss << "Player name: " << m_mainPlayer->name() << " Position X: " << m_mainPlayer->position().x << " Position Y: " << m_mainPlayer->position().y;
-
-        std::string player = ss.str();
-        y += 15.0;
-        m_font->Render(player.c_str(), -1, FTPoint(0.0, height - y, 0.0));
-    }
+    m_debugMenu->update();
 }
 
 void Client::handleInputEvents()

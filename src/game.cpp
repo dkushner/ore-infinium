@@ -19,7 +19,6 @@
 
 #include "debug.h"
 #include "spritesheetmanager.h"
-#include "fontmanager.h"
 
 #include <google/protobuf/stubs/common.h>
 
