@@ -57,6 +57,7 @@ private:
     void pushMatrix();
 
 private:
+    float m_scaleFactor = 1.0;
     Shader* m_shader = nullptr;
 
     glm::mat4 m_viewMatrix;

@@ -179,10 +179,9 @@ void TileRenderer::render()
                 vertices[i].color = color;
             }
 
-
             //tilesheet index/row, column
-            int row = 1;
-            int column = 5;
+            int row = 0;
+            int column = 7;
 
             int blockIndex = currentColumn * WORLD_ROWCOUNT + currentRow;
             Block& block = m_world->m_blocks[blockIndex];

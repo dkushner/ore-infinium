@@ -39,6 +39,8 @@ void Camera::translate(const glm::vec2 vec)
 
 void Camera::zoom(const float factor)
 {
+    m_scaleFactor = factor;
+
     m_viewMatrix = glm::scale(m_viewMatrix, glm::vec3(factor));
     pushMatrix();
 }
@@ -46,7 +48,7 @@ void Camera::zoom(const float factor)
 void Camera::centerOn(const glm::vec2 vec)
 {
     glm::vec2 screenSize(Settings::instance()->screenResolutionWidth, Settings::instance()->screenResolutionHeight);
-    m_viewMatrix = glm::translate(glm::mat4(), -glm::vec3(vec - screenSize * 0.5f, 0.0f));
+    m_viewMatrix =  glm::translate(glm::mat4(), -glm::vec3(vec - screenSize * 0.5f, 0.0f)) ;
     pushMatrix();
 }
 

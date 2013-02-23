@@ -66,6 +66,9 @@ public:
     /**
      * A lookup table to represent the 0-255 possibilities for a tile being surrounded,
      * as 47 possible different sprites.
+     *
+     *
+     *
      * for more info, see http://forums.tigsource.com/index.php?topic=9859.15
      * http://www.saltgames.com/2010/a-bitwise-method-for-applying-tilemaps/
      * http://www.gamedev.net/page/resources/_/technical/game-programming/tilemap-based-game-techniques-handling-terrai-r934

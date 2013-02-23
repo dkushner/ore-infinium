@@ -49,10 +49,11 @@ World::World(Player* mainPlayer, Server* server)
     m_entities.insert(m_entities.end(), m_uselessEntity);
 
     if (!m_server) {
-        m_camera = new Camera();
         m_tileMapCamera = new Camera();
         m_tileRenderer = new TileRenderer(this, m_tileMapCamera, m_mainPlayer);
         m_tileMapCamera->setPosition(glm::vec2(0.0, 0.0));
+
+        m_camera = new Camera();
         m_spriteSheetRenderer = new SpriteSheetRenderer(m_camera);
         m_spriteSheetRenderer->registerSprite(m_uselessEntity);
     }
@@ -223,12 +224,11 @@ void World::generateTileMeshes()
         for (int column = 0; column < WORLD_COLUMNCOUNT; ++column) {
             if (column - 4 >= 0 && row -4 >= 0) {
                 if (column + 4 <= WORLD_COLUMNCOUNT && row + 4 <= WORLD_ROWCOUNT) {
-                    m_blocks[column * WORLD_ROWCOUNT + row].meshType = calculateTileMeshingType(column, row);
+                    m_blocks[column * WORLD_ROWCOUNT + row].meshType = Block::tileMeshingTable.at(calculateTileMeshingType(column, row));
                 }
             }
         }
     }
-
 }
 
 unsigned char World::calculateTileMeshingType(int tileX, int tileY) const
