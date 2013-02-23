@@ -98,11 +98,6 @@ Player* World::findPlayer(uint32_t playerID)
     Debug::assertf(false, "World::findPlayer, player does not exist? that shit's whack");
 }
 
-void World::generateTileMeshes()
-{
-
-}
-
 void World::render(Player* player)
 {
     assert(m_mainPlayer && !m_server);
@@ -220,6 +215,20 @@ glm::ivec2 World::mousePosition() const
     int x; int y;
     SDL_GetMouseState(&x, &y);
     return glm::ivec2(x, y);
+}
+
+void World::generateTileMeshes()
+{
+    for (int row; row < WORLD_ROWCOUNT; ++row) {
+        for (int column = 0; column < WORLD_COLUMNCOUNT; ++column) {
+            if (column - 4 >= 0 && row -4 >= 0) {
+                if (column + 4 <= WORLD_COLUMNCOUNT && row + 4 <= WORLD_ROWCOUNT) {
+                    m_blocks[column * WORLD_ROWCOUNT + row].meshType = calculateTileMeshingType(column, row);
+                }
+            }
+        }
+    }
+
 }
 
 unsigned char World::calculateTileMeshingType(int tileX, int tileY) const
@@ -501,6 +510,8 @@ void World::generateMap()
             m_blocks[column * WORLD_ROWCOUNT + lastRow].primitiveType = distribution(rand);
         }
     }
+
+    generateTileMeshes();
 
 //    const double elapsedTime = SDL_GetTicks() - startTime;
  //   Debug::log(Debug::Area::General) << "Time taken for map generation: " << elapsedTime << " Milliseconds";
