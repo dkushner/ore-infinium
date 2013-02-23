@@ -109,7 +109,8 @@ void SpriteSheetRenderer::registerSprite(Sprite* sprite)
         case SpriteSheetType::Character:
             m_characterSprites.insert(m_characterSprites.end(), sprite);
             // TODO: look up the size of the graphic/frame, in the spritesheet map.
-            sprite->m_size = glm::vec2(100.0f, 100.0f);
+            //NOTE: THIS IS A SOMEWHAT DECENT PLAYER SIZE
+            sprite->m_size = glm::vec2(40.0f, 50.0f);
             Debug::log(Debug::Area::Graphics) << "sprite registered, new sprite count: " << m_characterSprites.size();
             break;
 
@@ -131,8 +132,8 @@ std::map<std::string, SpriteSheetRenderer::SpriteFrameIdentifier> SpriteSheetRen
     SpriteFrameIdentifier frame;
     frame.x = 0;
     frame.y = 0;
-    frame.width = 80;
-    frame.height = 80;
+    frame.width = 40;
+    frame.height = 50;
     descriptionMap["player_frame1"] = frame;
 
     // load the filename (yaml file), populate the map with the information and return it.
