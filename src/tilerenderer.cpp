@@ -115,7 +115,7 @@ void TileRenderer::render()
     //columns are our X value, rows the Y
     const int startColumn = tilesBeforeX - ((Settings::instance()->screenResolutionWidth * 0.5) / Block::blockSize) - 1;
     const int endColumn = tilesBeforeX + ((Settings::instance()->screenResolutionWidth * 0.5) / Block::blockSize);
-    Debug:: log() << "starRow: " << startRow << "endrow: " << endRow << "startcol: " << startColumn << " endcol: " << endColumn;
+//    Debug:: log() << "starRow: " << startRow << "endrow: " << endRow << "startcol: " << startColumn << " endcol: " << endColumn;
 //
 //    const int startRow = 0;
 //    const int endRow = Settings::instance()->screenResolutionHeight / Block::blockSize;
@@ -188,8 +188,13 @@ void TileRenderer::render()
             //float endXY = 1.0;
 
 //            float endXY = 32/TILESHEET_WIDTH;
+
+            //tilesheet index/row, column
             int row = 1;
             int column = 5;
+
+            int blockIndex = currentColumn * WORLD_ROWCOUNT + currentRow;
+            Block& block = m_world->m_blocks[index];
 
             const float tileWidth = 1.0f / TILESHEET_WIDTH * 16.0f;
             const float tileHeight = 1.0f / TILESHEET_HEIGHT * 16.0f;
@@ -209,7 +214,7 @@ void TileRenderer::render()
             vertices[2].u = vertices[3].u = tileRight;
 
             //FIXME: use tile type index
-            vertices[0].w = vertices[1].w = vertices[2].w = vertices[3].w = 2.0f;
+           vertices[0].w = vertices[1].w = vertices[2].w = vertices[3].w = block.primitiveType;
 
             Debug::checkGLError();
             // finally upload everything to the actual vbo

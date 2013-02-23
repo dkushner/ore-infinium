@@ -57,7 +57,7 @@ World::World(Player* mainPlayer, Server* server)
         m_spriteSheetRenderer->registerSprite(m_uselessEntity);
     }
 
-//    loadMap();
+    loadMap();
 
     //FIXME: saveMap();
 
@@ -485,7 +485,7 @@ void World::generateMap()
     std::random_device device;
     std::mt19937 rand(device());
     //FIXME: convert to 1, n
-    std::uniform_int_distribution<> distribution(1, 3);
+    std::uniform_int_distribution<> distribution(0, 3);
 
     int lastRow = 0;
 
