@@ -109,7 +109,8 @@ void Client::initSDL()
     SDL_GL_SetAttribute(SDL_GL_DOUBLEBUFFER, 1);
     SDL_GL_SetAttribute(SDL_GL_DEPTH_SIZE, 24);
 
-//FIXME: doesn't do shit    SDL_GL_SetSwapInterval(1);
+//FIXME: doesn't do shit
+    SDL_GL_SetSwapInterval(1);
 
     //TODO: we'll probably need some extension at some point in time..
     //SDL_GL_ExtensionSupported();
