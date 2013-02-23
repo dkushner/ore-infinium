@@ -99,8 +99,10 @@ void TileRenderer::loadTileSheet(const std::string& fileName, Block::BlockType t
 
 void TileRenderer::render()
 {
-    m_shader->bindProgram();
+//    m_shader->bindProgram();
 
+
+//    Debug::log() << "OFFSET: " << offset.x << " Y : " << offset.y;
 
     Debug::checkGLError();
     glm::vec2 playerPosition = m_mainPlayer->position();
@@ -234,6 +236,10 @@ void TileRenderer::render()
     Debug::checkGLError();
 
     m_shader->bindProgram();
+
+    glm::ivec2 offset = m_world->tileOffset(m_mainPlayer);
+    GLint offsetLoc = glGetUniformLocation(m_shader->shaderProgram(), "offset");
+    glUniform2f(offsetLoc, GLfloat(offset.x), GLfloat(offset.y));
 
     Debug::checkGLError();
 //    Debug::log() << "RENDERING TILECOUNT: " << m_tileCount;
