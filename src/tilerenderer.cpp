@@ -103,7 +103,6 @@ void TileRenderer::render()
 
 
 //    Debug::log() << "OFFSET: " << offset.x << " Y : " << offset.y;
-
     Debug::checkGLError();
     glm::vec2 playerPosition = m_mainPlayer->position();
     int tilesBeforeX = playerPosition.x / Block::blockSize;
@@ -237,6 +236,7 @@ void TileRenderer::render()
 
     m_shader->bindProgram();
 
+    // for smooth per-pixel scrolling, a value from 0-15 and when it's 16 we snap to the next tile
     glm::ivec2 offset = m_world->tileOffset(m_mainPlayer);
     GLint offsetLoc = glGetUniformLocation(m_shader->shaderProgram(), "offset");
     glUniform2f(offsetLoc, GLfloat(offset.x), GLfloat(offset.y));

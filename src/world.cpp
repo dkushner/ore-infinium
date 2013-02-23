@@ -555,3 +555,15 @@ void World::saveMap()
     file.close();
     */
 }
+
+void World::zoomIn()
+{
+    m_camera->zoom(m_zoomInFactor);
+    m_tileMapCamera->zoom(m_zoomInFactor);
+}
+
+void World::zoomOut()
+{
+    m_camera->zoom(m_zoomOutFactor);
+    m_tileMapCamera->zoom(m_zoomOutFactor);
+}

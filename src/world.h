@@ -83,6 +83,9 @@ public:
     void removePlayer(Player* player);
     Player* findPlayer(uint32_t playerID);
 
+    void zoomIn();
+    void zoomOut();
+
     //create containers of various entities, and implement a tile system
     //game.cpp calls into this each tick, which this descends downward into each entity
 private:
@@ -172,6 +175,9 @@ private:
     Player* m_mainPlayer = nullptr;
 
     Server* m_server = nullptr;
+
+    const float m_zoomInFactor = 1.02;
+    const float m_zoomOutFactor = 0.98;
 
     friend class TileRenderer;
 };

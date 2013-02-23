@@ -325,6 +325,14 @@ void Client::handleInputEvents()
                     ss << distribution(rand);
 
                     startMultiplayerHost(ss.str());
+                } else if (event.key.keysym.sym == SDLK_EQUALS) {
+                    if (m_world) {
+                        m_world->zoomIn();
+                    }
+                } else if (event.key.keysym.sym == SDLK_MINUS) {
+                    if (m_world) {
+                        m_world->zoomOut();
+                    }
                 }
                 break;
 

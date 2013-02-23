@@ -93,6 +93,7 @@ private:
     glm::mat4 m_modelMatrix;
     glm::mat4 m_projectionMatrix;
 
+    //FIXME: count max tiles to render
     int m_maxSpriteCount = 8200;
 
     Camera* m_camera = nullptr;
