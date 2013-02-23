@@ -180,8 +180,8 @@ void TileRenderer::render()
             }
 
             //tilesheet index/row, column
-            int row = 0;
-            int column = 7;
+            int row = 1;
+            int column = 5;
 
             int blockIndex = currentColumn * WORLD_ROWCOUNT + currentRow;
             Block& block = m_world->m_blocks[blockIndex];
