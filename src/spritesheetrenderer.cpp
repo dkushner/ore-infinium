@@ -288,7 +288,7 @@ void SpriteSheetRenderer::initGL()
         GL_ELEMENT_ARRAY_BUFFER,
         indicesv.size()*sizeof(u32),
                  indicesv.data(),
-                 GL_STATIC_DRAW);
+                 GL_DYNAMIC_DRAW);
 
     Debug::checkGLError();
 
