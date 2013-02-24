@@ -65,6 +65,7 @@ public:
     bool connected() { return m_connected; }
     double fps() { return m_fps; }
     bool hosting() { return m_server; }
+    Player* mainPlayer() { return m_mainPlayer; }
 
 ///////////////// Network Communication ////////////////////
 public:

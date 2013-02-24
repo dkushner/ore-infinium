@@ -21,6 +21,7 @@
 
 #include "src/client/client.h"
 #include <src/debug.h>
+#include <src/player.h>
 
 #include <Rocket/Core.h>
 #include <Rocket/Controls.h>
@@ -85,12 +86,21 @@ void DebugMenu::update()
 
     std::string connectedString = ss.str();
 
+    ss.str("");
+
+    if (m_client->mainPlayer()) {
+        ss << "Player Position X: " << m_client->mainPlayer()->position().x << " Y: " << m_client->mainPlayer()->position().x;
+    }
+
+    std::string playerString;
+
     m_debug->GetElementById("1")->SetInnerRML(str.c_str());
     m_debug->GetElementById("2")->SetInnerRML("F5 to toggle debug logging");
     m_debug->GetElementById("3")->SetInnerRML("F6 to toggle renderer logging");
     m_debug->GetElementById("4")->SetInnerRML("F7 to toggle GUI renderer debug");
     m_debug->GetElementById("5")->SetInnerRML("F8 instant multiplayer host session");
     m_debug->GetElementById("6")->SetInnerRML(connectedString.c_str());
+    m_debug->GetElementById("7")->SetInnerRML(playerString.c_str());
 }
 
 void DebugMenu::show()
