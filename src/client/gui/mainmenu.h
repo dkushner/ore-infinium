@@ -21,10 +21,12 @@
 #include <Rocket/Core.h>
 #include "optionsdialog.h"
 
-namespace Rocket {
-    namespace Core {
-        class ElementDocument;
-    }
+namespace Rocket
+{
+namespace Core
+{
+class ElementDocument;
+}
 }
 
 class Client;

@@ -61,7 +61,7 @@ private:
     void sendInitialPlayerData(ENetPeer* peer, Player* player);
     void sendInitialPlayerDataFinished(ENetPeer* peer);
 
-   Player* createPlayer(const std::string& playerName);
+    Player* createPlayer(const std::string& playerName);
 
 private:
     /**

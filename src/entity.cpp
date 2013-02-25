@@ -42,21 +42,21 @@ void Entity::update(double elapsedTime, World* world)
 {
 //    m_velocity.y += GRAVITY;
     if (m_velocity.x > 0.0f || m_velocity.x < 0.0f || m_velocity.y > 0.0f || m_velocity.y < 0.0f) {
-    glm::vec2 dest = glm::vec2(m_velocity.x * elapsedTime, m_velocity.y * elapsedTime);
-    dest.x += position().x;
-    dest.y += position().y;
-    //Add the following line to the code with proper variables for width/height.
-    //Then you will be able to switch to the newer collsion method.
-    //Eigen::Vector2f dim = Eigen::Vector2f(width, height);
+        glm::vec2 dest = glm::vec2(m_velocity.x * elapsedTime, m_velocity.y * elapsedTime);
+        dest.x += position().x;
+        dest.y += position().y;
+        //Add the following line to the code with proper variables for width/height.
+        //Then you will be able to switch to the newer collsion method.
+        //Eigen::Vector2f dim = Eigen::Vector2f(width, height);
 
-    //Newer collision method, add when the line mentioned above is fixed..
-    //Texture::setPosition(moveOutsideSolid(position, dest, dim)); FIXME <--- pass world pointer to that
+        //Newer collision method, add when the line mentioned above is fixed..
+        //Texture::setPosition(moveOutsideSolid(position, dest, dim)); FIXME <--- pass world pointer to that
 
-    //Remove this and add the above when the definition for dim is fixed.
+        //Remove this and add the above when the definition for dim is fixed.
 //    if (!World::instance()->isBlockSolid(dest)) {
 
-    m_dirtyFlags |= DirtyFlags::PositionDirty;
-    Sprite::setPosition(dest);
+        m_dirtyFlags |= DirtyFlags::PositionDirty;
+        Sprite::setPosition(dest);
     }
 //   }
 }

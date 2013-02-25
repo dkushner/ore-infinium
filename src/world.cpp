@@ -36,8 +36,8 @@
 #include <fstream>
 
 World::World(Player* mainPlayer, Server* server)
-  : m_mainPlayer(mainPlayer),
-    m_server(server)
+    : m_mainPlayer(mainPlayer),
+      m_server(server)
 {
 
     //FIXME:
@@ -90,10 +90,10 @@ void World::removePlayer(Player* player)
 
 Player* World::findPlayer(uint32_t playerID)
 {
-    for (auto* player : m_players) {
-       if (player->playerID() == playerID) {
-           return player;
-       }
+for (auto * player : m_players) {
+        if (player->playerID() == playerID) {
+            return player;
+        }
     }
 
     Debug::assertf(false, "World::findPlayer, player does not exist? that shit's whack");
@@ -140,19 +140,19 @@ void World::handleEvent(const SDL_Event& event)
     //FIXME:!!!! unused, we just pass events to the player..among other children (currently just player though)
     //here, the inventory ui and other stuff may need to be factored in. who knows.
     switch (event.type) {
-        case SDL_MOUSEBUTTONDOWN: {
-            if (SDL_GetMouseState(nullptr, nullptr) & SDL_BUTTON(MouseButton::Left)) {
-                m_mouseLeftHeld = true;
-            }
-            break;
+    case SDL_MOUSEBUTTONDOWN: {
+        if (SDL_GetMouseState(nullptr, nullptr) & SDL_BUTTON(MouseButton::Left)) {
+            m_mouseLeftHeld = true;
         }
+        break;
+    }
 
-        case SDL_MOUSEBUTTONUP: {
-            if (!SDL_GetMouseState(nullptr, nullptr) & SDL_BUTTON(MouseButton::Left)) {
-                m_mouseLeftHeld = false;
-            }
-            break;
+    case SDL_MOUSEBUTTONUP: {
+        if (!SDL_GetMouseState(nullptr, nullptr) & SDL_BUTTON(MouseButton::Left)) {
+            m_mouseLeftHeld = false;
         }
+        break;
+    }
     }
 
 //    m_player->handleEvent(event);
@@ -168,7 +168,7 @@ void World::update(double elapsedTime)
     //    m_sky->update(elapsedTime);
 
     //NOTE: players are not exactly considered entities. they are, but they aren't
-    for (Entity* currentEntity : m_entities) {
+for (Entity * currentEntity : m_entities) {
         currentEntity->update(elapsedTime, this);
         if (m_server) {
             if (currentEntity->dirtyFlags() & Entity::DirtyFlags::PositionDirty) {
@@ -178,10 +178,10 @@ void World::update(double elapsedTime)
         }
     }
 
-    for (Player* player : m_players) {
-       player->update(elapsedTime, this);
+for (Player * player : m_players) {
+        player->update(elapsedTime, this);
 
-       if (m_server) {
+        if (m_server) {
             if (player->dirtyFlags() & Entity::DirtyFlags::PositionDirty) {
                 m_server->sendPlayerMove(player);
                 player->clearDirtyFlag(Entity::DirtyFlags::PositionDirty);
@@ -222,7 +222,7 @@ void World::generateTileMeshes()
 {
     for (int row; row < WORLD_ROWCOUNT; ++row) {
         for (int column = 0; column < WORLD_COLUMNCOUNT; ++column) {
-            if (column - 4 >= 0 && row -4 >= 0) {
+            if (column - 4 >= 0 && row - 4 >= 0) {
                 if (column + 4 <= WORLD_COLUMNCOUNT && row + 4 <= WORLD_ROWCOUNT) {
                     m_blocks[column * WORLD_ROWCOUNT + row].meshType = Block::tileMeshingTable.at(calculateTileMeshingType(column, row));
                 }
@@ -344,13 +344,13 @@ void World::performBlockAttack(Player* player)
 
     // if the attempted block pick location is out of range, do nothing.
     if (mouse.x < center.x - Player::blockPickingRadius ||
-        mouse.x > center.x + Player::blockPickingRadius ||
-        mouse.y < center.y - Player::blockPickingRadius ||
-        mouse.y > center.y + Player::blockPickingRadius) {
+            mouse.x > center.x + Player::blockPickingRadius ||
+            mouse.y < center.y - Player::blockPickingRadius ||
+            mouse.y > center.y + Player::blockPickingRadius) {
         return;
-        }
+    }
 
-        mouse.x /= int(Block::blockSize);
+    mouse.x /= int(Block::blockSize);
     mouse.y /= int(Block::blockSize);
 
     const int radius = Player::blockPickingRadius / Block::blockSize;
@@ -514,7 +514,7 @@ void World::generateMap()
     generateTileMeshes();
 
 //    const double elapsedTime = SDL_GetTicks() - startTime;
- //   Debug::log(Debug::Area::General) << "Time taken for map generation: " << elapsedTime << " Milliseconds";
+//   Debug::log(Debug::Area::General) << "Time taken for map generation: " << elapsedTime << " Milliseconds";
 }
 
 void World::saveMap()

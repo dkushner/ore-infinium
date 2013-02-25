@@ -1,5 +1,5 @@
 /******************************************************************************
- *   Copyright (C) 2012 by Shaun Reich <sreich@kde.org>                       *
+ *   Copyright (C) 2013 by Shaun Reich <sreich@kde.org>                       *
  *                                                                            *
  *   This program is free software; you can redistribute it and/or            *
  *   modify it under the terms of the GNU General Public License as           *
@@ -15,61 +15,25 @@
  *   along with this program.  If not, see <http://www.gnu.org/licenses/>.    *
  *****************************************************************************/
 
-#ifndef DEBUG_H
-#define DEBUG_H
+#ifndef TORCH_H
+#define TORCH_H
 
-#include <stdlib.h>
-#include <string>
-#include <iostream>
-#include <sstream>
+#include <glm/glm.hpp>
+#include <glm/gtc/matrix_transform.hpp>
+#include <glm/core/type.hpp>
 
-class LogStream;
-
-class Debug
+class Torch
 {
 public:
-    enum class Type
-    {
-        DebugType,
-        Warning,
-        Error,
-    };
+    Torch(const glm::vec2& position);
+    ~Torch();
 
-    enum class Area
-    {
-        General,
-        Graphics,
-        Network,
-        NetworkClient,
-        NetworkServer,
-        System,
-        Physics,
-        Sound
-    };
-
-    static LogStream log(Area area = Area::General);
-
-    static void assertf(bool value, const std::string& message);
-    static void fatal(bool value, Area area, const std::string& message);
-
-    static void checkGLError();
-    static void checkSDLError();
-
-    static void glDebugCallback(unsigned int source, unsigned int type,
-                                unsigned int id, unsigned int severity,
-                                int length, const char* message, void* userParam);
-};
-
-class LogStream : public std::stringstream
-{
-public:
-    LogStream(Debug::Area area);
-    ~LogStream();
-
-    LogStream(const LogStream& stream);
+    float radius() const;
+    glm::vec2 position() const;
 
 private:
-    Debug::Area m_area;
+    float m_radius = 50.0f;
+    glm::vec2 m_position;
 };
 
 #endif

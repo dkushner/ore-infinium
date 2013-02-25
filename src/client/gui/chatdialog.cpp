@@ -69,7 +69,7 @@ void ChatDialog::reloadChatHistory()
 {
     std::stringstream ss;
 
-    for (auto& currentLine : m_chatHistory) {
+for (auto & currentLine : m_chatHistory) {
         ss << currentLine;
     }
     m_tabSet->GetElementById("panel1")->SetInnerRML(ss.str().c_str());
@@ -77,8 +77,9 @@ void ChatDialog::reloadChatHistory()
     m_tabSet->GetElementById("panel1")->SetScrollTop(20500.0f);
 }
 
-void ChatDialog::replaceAll(std::string& str, const std::string& from, const std::string& to) {
-    if(from.empty()) {
+void ChatDialog::replaceAll(std::string& str, const std::string& from, const std::string& to)
+{
+    if (from.empty()) {
         return;
     }
 

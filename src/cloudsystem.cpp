@@ -40,7 +40,7 @@ void CloudSystem::update()
             cloud->setPosition(-cloud->getTextureRect().width, cloud->getPosition().y);
         }
 
-        const float offset = ( * 0.5) - m_view->getCenter().y ;
+        const float offset = (* 0.5) - m_view->getCenter().y ;
         cloud->setPosition(cloud->getPosition().x,  cloud->getTextureRect().height + offset);
     }
 }

@@ -41,7 +41,7 @@ MainMenu::MainMenu(Client* client) : m_client(client)
 
 //    m_menu->SetProperty("height", Rocket::Core::Property(Settings::instance()->screenResolutionHeight ,Rocket::Core::Property::PX));
 //    m_menu->SetProperty("width", Rocket::Core::Property(Settings::instance()->screenResolutionWidth,Rocket::Core::Property::PX));
-    m_menu->GetElementById("content")->SetProperty("padding-top", Rocket::Core::Property(static_cast<int>(Settings::instance()->screenResolutionHeight * 0.5),Rocket::Core::Property::PX));
+    m_menu->GetElementById("content")->SetProperty("padding-top", Rocket::Core::Property(static_cast<int>(Settings::instance()->screenResolutionHeight * 0.5), Rocket::Core::Property::PX));
 
     m_menu->GetElementById("singleplayer")->AddEventListener("click", this);
     m_menu->GetElementById("multiplayer")->AddEventListener("click", this);
@@ -51,9 +51,9 @@ MainMenu::MainMenu(Client* client) : m_client(client)
     m_escapeMenu = GUI::instance()->context()->LoadDocument("../client/gui/assets/escapeMenu.rml");
     assert(m_escapeMenu);
 
-    m_escapeMenu->SetProperty("height", Rocket::Core::Property(Settings::instance()->screenResolutionHeight ,Rocket::Core::Property::PX));
-    m_escapeMenu->SetProperty("width", Rocket::Core::Property(Settings::instance()->screenResolutionWidth,Rocket::Core::Property::PX));
-    m_escapeMenu->GetElementById("content")->SetProperty("padding-top", Rocket::Core::Property(static_cast<int>(Settings::instance()->screenResolutionHeight * 0.5),Rocket::Core::Property::PX));
+    m_escapeMenu->SetProperty("height", Rocket::Core::Property(Settings::instance()->screenResolutionHeight , Rocket::Core::Property::PX));
+    m_escapeMenu->SetProperty("width", Rocket::Core::Property(Settings::instance()->screenResolutionWidth, Rocket::Core::Property::PX));
+    m_escapeMenu->GetElementById("content")->SetProperty("padding-top", Rocket::Core::Property(static_cast<int>(Settings::instance()->screenResolutionHeight * 0.5), Rocket::Core::Property::PX));
     m_escapeMenu->GetElementById("resume")->AddEventListener("click", this);
     m_escapeMenu->GetElementById("disconnect")->AddEventListener("click", this);
     m_escapeMenu->GetElementById("options")->AddEventListener("click", this);
@@ -106,8 +106,8 @@ void MainMenu::ProcessEvent(Rocket::Core::Event& event)
     }
 
     if (m_mainMenuSingleplayer->IsVisible()) {
-            processSingleplayer(event);
-            return;
+        processSingleplayer(event);
+        return;
     }
 
     if (m_mainMenuMultiplayerHost->IsVisible()) {
@@ -326,7 +326,7 @@ void MainMenu::hideEscapeMenu()
         GUI::instance()->removeInputDemand();
         m_escapeMenu->Hide();
         if (m_optionsDialog) {
-           m_optionsDialog->close();
+            m_optionsDialog->close();
         }
     }
 }

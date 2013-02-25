@@ -32,8 +32,8 @@
 #include "ShellOpenGL.h"
 
 /**
-	Low level OpenGL render interface for Rocket
-	@author Peter Curry
+    Low level OpenGL render interface for Rocket
+    @author Peter Curry
  */
 
 class ShellRenderInterfaceOpenGL : public Rocket::Core::RenderInterface

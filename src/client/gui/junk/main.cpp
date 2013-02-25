@@ -14,7 +14,7 @@
  *
  * The above copyright notice and this permission notice shall be included in
  * all copies or substantial portions of the Software.
- * 
+ *
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
  * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -35,12 +35,12 @@ Rocket::Core::Context* context = NULL;
 
 void GameLoop()
 {
-	glClear(GL_COLOR_BUFFER_BIT);
+    glClear(GL_COLOR_BUFFER_BIT);
 
-	context->Update();
-	context->Render();
+    context->Update();
+    context->Render();
 
-	Shell::FlipBuffers();
+    Shell::FlipBuffers();
 }
 
 #if defined ROCKET_PLATFORM_WIN32
@@ -50,58 +50,56 @@ int APIENTRY WinMain(HINSTANCE ROCKET_UNUSED(instance_handle), HINSTANCE ROCKET_
 int main(int ROCKET_UNUSED(argc), char** ROCKET_UNUSED(argv))
 #endif
 {
-	// Generic OS initialisation, creates a window and attaches OpenGL.
-	if (!Shell::Initialise("../Samples/basic/drag/") ||
-		!Shell::OpenWindow("Drag Sample", true))
-	{
-		Shell::Shutdown();
-		return -1;
-	}
+    // Generic OS initialisation, creates a window and attaches OpenGL.
+    if (!Shell::Initialise("../Samples/basic/drag/") ||
+            !Shell::OpenWindow("Drag Sample", true)) {
+        Shell::Shutdown();
+        return -1;
+    }
 
-	// Rocket initialisation.
-	ShellRenderInterfaceOpenGL opengl_renderer;
-	Rocket::Core::SetRenderInterface(&opengl_renderer);
+    // Rocket initialisation.
+    ShellRenderInterfaceOpenGL opengl_renderer;
+    Rocket::Core::SetRenderInterface(&opengl_renderer);
 
-	ShellSystemInterface system_interface;
-	Rocket::Core::SetSystemInterface(&system_interface);
+    ShellSystemInterface system_interface;
+    Rocket::Core::SetSystemInterface(&system_interface);
 
-	Rocket::Core::Initialise();
+    Rocket::Core::Initialise();
 
-	// Create the main Rocket context and set it on the shell's input layer.
-	context = Rocket::Core::CreateContext("main", Rocket::Core::Vector2i(1024, 768));
-	if (context == NULL)
-	{
-		Rocket::Core::Shutdown();
-		Shell::Shutdown();
-		return -1;
-	}
+    // Create the main Rocket context and set it on the shell's input layer.
+    context = Rocket::Core::CreateContext("main", Rocket::Core::Vector2i(1024, 768));
+    if (context == NULL) {
+        Rocket::Core::Shutdown();
+        Shell::Shutdown();
+        return -1;
+    }
 
-	Rocket::Debugger::Initialise(context);
-	Input::SetContext(context);
+    Rocket::Debugger::Initialise(context);
+    Input::SetContext(context);
 
-	Shell::LoadFonts("../../assets/");
+    Shell::LoadFonts("../../assets/");
 
-	// Load and show the inventory document.
-	Inventory* inventory_1 = new Inventory("Inventory 1", Rocket::Core::Vector2f(50, 200), context);
-	Inventory* inventory_2 = new Inventory("Inventory 2", Rocket::Core::Vector2f(540, 240), context);
+    // Load and show the inventory document.
+    Inventory* inventory_1 = new Inventory("Inventory 1", Rocket::Core::Vector2f(50, 200), context);
+    Inventory* inventory_2 = new Inventory("Inventory 2", Rocket::Core::Vector2f(540, 240), context);
 
-	// Add items into the inventory.
-	inventory_1->AddItem("Mk III L.A.S.E.R.");
-	inventory_1->AddItem("Gravity Descender");
-	inventory_1->AddItem("Closed-Loop Ion Beam");
-	inventory_1->AddItem("5kT Mega-Bomb");
+    // Add items into the inventory.
+    inventory_1->AddItem("Mk III L.A.S.E.R.");
+    inventory_1->AddItem("Gravity Descender");
+    inventory_1->AddItem("Closed-Loop Ion Beam");
+    inventory_1->AddItem("5kT Mega-Bomb");
 
-	Shell::EventLoop(GameLoop);
+    Shell::EventLoop(GameLoop);
 
-	delete inventory_1;
-	delete inventory_2;
+    delete inventory_1;
+    delete inventory_2;
 
-	// Shutdown Rocket.
-	context->RemoveReference();
-	Rocket::Core::Shutdown();
+    // Shutdown Rocket.
+    context->RemoveReference();
+    Rocket::Core::Shutdown();
 
-	Shell::CloseWindow();
-	Shell::Shutdown();
+    Shell::CloseWindow();
+    Shell::Shutdown();
 
-	return 0;
+    return 0;
 }

@@ -17,6 +17,8 @@ entity.cpp
 tilerenderer.cpp
 image.cpp
 texture.cpp
+torch.cpp
+quadtree.cpp
 
 client/client.cpp
 client/gui/gui.cpp

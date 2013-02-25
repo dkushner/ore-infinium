@@ -43,9 +43,9 @@ Client::Client()
     initSDL();
 
     // call this ONLY when linking with FreeImage as a static library
-    #ifdef FREEIMAGE_LIB
+#ifdef FREEIMAGE_LIB
     FreeImage_Initialise();
-    #endif
+#endif
 
     m_gui = GUI::instance();
     m_mainMenu = new MainMenu(this);
@@ -62,9 +62,9 @@ Client::~Client()
     delete m_mainPlayer;
 
     // call this ONLY when linking with FreeImage as a static library
-    #ifdef FREEIMAGE_LIB
+#ifdef FREEIMAGE_LIB
     FreeImage_DeInitialise();
-    #endif
+#endif
 
     SDL_DestroyWindow(m_window);
     SDL_Quit();
@@ -81,7 +81,7 @@ void Client::initSDL()
     SDL_GetVersion(&linked);
 
     Debug::log(Debug::Area::System) << "Compiled against SDL version: " << int(compiled.major) << "." << int(compiled.minor) << "-" << int(compiled.patch) <<
-    " Running (linked) against version: " << int(linked.major) << "." << int(linked.minor) << "-" << int(linked.patch);
+                                    " Running (linked) against version: " << int(linked.major) << "." << int(linked.minor) << "-" << int(linked.patch);
 
     if (SDL_Init(SDL_INIT_VIDEO | SDL_INIT_AUDIO | SDL_INIT_TIMER) != 0) {
         std::string error = SDL_GetError();
@@ -143,7 +143,7 @@ void Client::initSDL()
 
     glEnable(GL_DEBUG_OUTPUT);
     glDebugMessageCallback(&Debug::glDebugCallback, 0);
-    glDebugMessageControl(GL_DONT_CARE,GL_DONT_CARE,GL_DONT_CARE,0,0,GL_TRUE);
+    glDebugMessageControl(GL_DONT_CARE, GL_DONT_CARE, GL_DONT_CARE, 0, 0, GL_TRUE);
 #endif
 
     Debug::fatal(enet_initialize != 0, Debug::Area::Network, "An error occurred during ENet init (network init failure");
@@ -164,42 +164,42 @@ void Client::poll()
 
     // If we had some event that interested us
     if (eventStatus > 0) {
-        switch(event.type) {
-            case ENET_EVENT_TYPE_CONNECT: {
+        switch (event.type) {
+        case ENET_EVENT_TYPE_CONNECT: {
+            assert(0);
+        }
+        break;
+
+        case ENET_EVENT_TYPE_RECEIVE:
+            //Debug::log(Debug::Area::NetworkClient) << "Message from server, our client->server round trip latency is: " << event.peer->lastRoundTripTime;
+            processMessage(event);;
+            break;
+
+        case ENET_EVENT_TYPE_DISCONNECT: {
+            Debug::log(Debug::Area::NetworkClient) << "Peer disconnected: " << event.data;
+            switch (event.data) {
+            case Packet::ConnectionEventType::DisconnectedVersionMismatch:
+                Debug::log(Debug::Area::NetworkClient) << "Server booted us, client version does not match server version.";
+                //FIXME: gracefully handle a version mismatch, obviously
                 assert(0);
+                break;
+            case Packet::ConnectionEventType::DisconnectedInvalidPlayerName:
+                Debug::log(Debug::Area::NetworkClient) << "Server booted us, invalid player name";
+                assert(0);
+                break;
             }
-                break;
 
-            case ENET_EVENT_TYPE_RECEIVE:
-                //Debug::log(Debug::Area::NetworkClient) << "Message from server, our client->server round trip latency is: " << event.peer->lastRoundTripTime;
-                processMessage(event);;
-                break;
+            char hostname[32];
+            enet_address_get_host_ip(&event.peer->address, hostname, static_cast<size_t>(32));
+            Debug::log(Debug::Area::NetworkClient) << "disconnected from server host IP: " << hostname;
+            enet_peer_reset(m_peer);
 
-            case ENET_EVENT_TYPE_DISCONNECT: {
-                Debug::log(Debug::Area::NetworkClient) << "Peer disconnected: " << event.data;
-                switch (event.data) {
-                    case Packet::ConnectionEventType::DisconnectedVersionMismatch:
-                        Debug::log(Debug::Area::NetworkClient) << "Server booted us, client version does not match server version.";
-                        //FIXME: gracefully handle a version mismatch, obviously
-                        assert(0);
-                        break;
-                    case Packet::ConnectionEventType::DisconnectedInvalidPlayerName:
-                        Debug::log(Debug::Area::NetworkClient) << "Server booted us, invalid player name";
-                        assert(0);
-                        break;
-                }
-
-                char hostname[32];
-                enet_address_get_host_ip(&event.peer->address, hostname, static_cast<size_t>(32));
-                Debug::log(Debug::Area::NetworkClient) << "disconnected from server host IP: " << hostname;
-                enet_peer_reset(m_peer);
-
-                // Reset client's information
-                event.peer->data = nullptr;
-                delete m_peer;
-                m_peer = nullptr;
-            }
-                break;
+            // Reset client's information
+            event.peer->data = nullptr;
+            delete m_peer;
+            m_peer = nullptr;
+        }
+        break;
         }
     }
 
@@ -252,64 +252,64 @@ void Client::handleInputEvents()
         }
 
         switch (event.type) {
-            case SDL_KEYDOWN:
-                if (event.key.keysym.sym == SDLK_ESCAPE) {
-                    //only if we are connected, do we allow hiding and showing (escape menu)
-                    if (m_peer) {
-                        if (!m_mainMenu->escapeMenuVisible()) {
-                            m_mainMenu->showEscapeMenu();
-                        } else {
-                            m_mainMenu->hideEscapeMenu();
-                        }
-                    }
-                } else if (event.key.keysym.sym == SDLK_F5) {
-                    // toggle debug logging
-                    Settings::instance()->debugOutput = !Settings::instance()->debugOutput;
-                } else if (event.key.keysym.sym == SDLK_F6) {
-                    Settings::instance()->debugRendererOutput = !Settings::instance()->debugRendererOutput;
-                } else if (event.key.keysym.sym == SDLK_F7) {
-                    // toggle debug rendering
-                    Settings::instance()->debugGUIRenderingEnabled = !Settings::instance()->debugGUIRenderingEnabled;
-                    m_gui->debugRenderingChanged();
-                } else if (event.key.keysym.sym == SDLK_F8) {
-                    std::stringstream ss;
-                    ss << "Player";
-                    std::random_device device;
-                    std::mt19937 rand(device());
-                    std::uniform_int_distribution<> distribution(0, INT_MAX);
-
-                    ss << distribution(rand);
-
-                    startMultiplayerHost(ss.str());
-                } else if (event.key.keysym.sym == SDLK_EQUALS) {
-                    if (m_world) {
-                        m_world->zoomIn();
-                    }
-                } else if (event.key.keysym.sym == SDLK_MINUS) {
-                    if (m_world) {
-                        m_world->zoomOut();
-                    }
-                }
-                break;
-
-            case SDL_WINDOWEVENT_CLOSE:
-                   // if (m_peer) {
-                   //     m_mainMenu->toggleShown();
-                   // } else {
-                   //     shutdown();
-                   // }
-                break;
-
-            case SDL_QUIT:
-                     if (m_peer) {
+        case SDL_KEYDOWN:
+            if (event.key.keysym.sym == SDLK_ESCAPE) {
+                //only if we are connected, do we allow hiding and showing (escape menu)
+                if (m_peer) {
+                    if (!m_mainMenu->escapeMenuVisible()) {
                         m_mainMenu->showEscapeMenu();
                     } else {
-                        shutdown();
+                        m_mainMenu->hideEscapeMenu();
                     }
-                break;
+                }
+            } else if (event.key.keysym.sym == SDLK_F5) {
+                // toggle debug logging
+                Settings::instance()->debugOutput = !Settings::instance()->debugOutput;
+            } else if (event.key.keysym.sym == SDLK_F6) {
+                Settings::instance()->debugRendererOutput = !Settings::instance()->debugRendererOutput;
+            } else if (event.key.keysym.sym == SDLK_F7) {
+                // toggle debug rendering
+                Settings::instance()->debugGUIRenderingEnabled = !Settings::instance()->debugGUIRenderingEnabled;
+                m_gui->debugRenderingChanged();
+            } else if (event.key.keysym.sym == SDLK_F8) {
+                std::stringstream ss;
+                ss << "Player";
+                std::random_device device;
+                std::mt19937 rand(device());
+                std::uniform_int_distribution<> distribution(0, INT_MAX);
 
-            default:
-                break;
+                ss << distribution(rand);
+
+                startMultiplayerHost(ss.str());
+            } else if (event.key.keysym.sym == SDLK_EQUALS) {
+                if (m_world) {
+                    m_world->zoomIn();
+                }
+            } else if (event.key.keysym.sym == SDLK_MINUS) {
+                if (m_world) {
+                    m_world->zoomOut();
+                }
+            }
+            break;
+
+        case SDL_WINDOWEVENT_CLOSE:
+            // if (m_peer) {
+            //     m_mainMenu->toggleShown();
+            // } else {
+            //     shutdown();
+            // }
+            break;
+
+        case SDL_QUIT:
+            if (m_peer) {
+                m_mainMenu->showEscapeMenu();
+            } else {
+                shutdown();
+            }
+            break;
+
+        default:
+            break;
         }
     }
 }
@@ -320,44 +320,44 @@ void Client::handlePlayerInput(SDL_Event& event)
     int32_t originalY = m_playerInputDirectionY;
 
     switch (event.type) {
-        case SDL_KEYDOWN:
-            if (event.key.keysym.sym == SDLK_d || event.key.keysym.sym == SDLK_RIGHT) {
-                m_playerInputDirectionX = 1;
-            }
+    case SDL_KEYDOWN:
+        if (event.key.keysym.sym == SDLK_d || event.key.keysym.sym == SDLK_RIGHT) {
+            m_playerInputDirectionX = 1;
+        }
 
-            if (event.key.keysym.sym == SDLK_a || event.key.keysym.sym == SDLK_LEFT) {
-                m_playerInputDirectionX = -1;
-            }
+        if (event.key.keysym.sym == SDLK_a || event.key.keysym.sym == SDLK_LEFT) {
+            m_playerInputDirectionX = -1;
+        }
 
-            if (event.key.keysym.sym == SDLK_s || event.key.keysym.sym == SDLK_DOWN) {
-                m_playerInputDirectionY = 1;
-            }
+        if (event.key.keysym.sym == SDLK_s || event.key.keysym.sym == SDLK_DOWN) {
+            m_playerInputDirectionY = 1;
+        }
 
-            if (event.key.keysym.sym == SDLK_w || event.key.keysym.sym == SDLK_UP) {
-                m_playerInputDirectionY = -1;
-            }
-            break;
+        if (event.key.keysym.sym == SDLK_w || event.key.keysym.sym == SDLK_UP) {
+            m_playerInputDirectionY = -1;
+        }
+        break;
 
-        case SDL_KEYUP:
-            if (event.key.keysym.sym == SDLK_d || event.key.keysym.sym == SDLK_RIGHT) {
-                m_playerInputDirectionX = 0;
-            }
+    case SDL_KEYUP:
+        if (event.key.keysym.sym == SDLK_d || event.key.keysym.sym == SDLK_RIGHT) {
+            m_playerInputDirectionX = 0;
+        }
 
-            if (event.key.keysym.sym == SDLK_a || event.key.keysym.sym == SDLK_LEFT) {
-                m_playerInputDirectionX = 0;
-            }
+        if (event.key.keysym.sym == SDLK_a || event.key.keysym.sym == SDLK_LEFT) {
+            m_playerInputDirectionX = 0;
+        }
 
-            if (event.key.keysym.sym == SDLK_s || event.key.keysym.sym == SDLK_DOWN) {
-                m_playerInputDirectionY = 0;
-            }
+        if (event.key.keysym.sym == SDLK_s || event.key.keysym.sym == SDLK_DOWN) {
+            m_playerInputDirectionY = 0;
+        }
 
-            if (event.key.keysym.sym == SDLK_w || event.key.keysym.sym == SDLK_UP) {
-                m_playerInputDirectionY = 0;
-            }
-            break;
+        if (event.key.keysym.sym == SDLK_w || event.key.keysym.sym == SDLK_UP) {
+            m_playerInputDirectionY = 0;
+        }
+        break;
     }
 
-    if ( m_playerInputDirectionX != originalX || m_playerInputDirectionY != originalY) {
+    if (m_playerInputDirectionX != originalX || m_playerInputDirectionY != originalY) {
         sendPlayerMovement();
     }
 }
@@ -371,11 +371,11 @@ void Client::shutdown()
 
 bool Client::connect(const char* address, unsigned int port)
 {
-    m_client = enet_host_create (nullptr /* create a client host */,
-                               1 /* only allow 1 outgoing connection */,
-                               2 /* allow up 2 channels to be used, 0 and 1 */,
-                               57600 / 8 /* 56K modem with 56 Kbps downstream bandwidth */,
-                               14400 / 8 /* 56K modem with 14 Kbps upstream bandwidth */);
+    m_client = enet_host_create(nullptr /* create a client host */,
+                                1 /* only allow 1 outgoing connection */,
+                                2 /* allow up 2 channels to be used, 0 and 1 */,
+                                57600 / 8 /* 56K modem with 56 Kbps downstream bandwidth */,
+                                14400 / 8 /* 56K modem with 14 Kbps upstream bandwidth */);
 
     Debug::assertf(m_client, "failed to create ENet client host");
 
@@ -397,7 +397,7 @@ bool Client::connect(const char* address, unsigned int port)
         m_chat = new ChatDialog(this, m_mainMenu);
         m_chat->show();
 
-       //NOTE: no world is created yet. we now wait for the server to receive our initial connection data, and give us back a
+        //NOTE: no world is created yet. we now wait for the server to receive our initial connection data, and give us back a
         //player id, which we then create as the main player and finally, create the world.
         m_connected = true;
         sendInitialConnectionData();
@@ -485,21 +485,21 @@ void Client::processMessage(ENetEvent& event)
     uint32_t packetType = Packet::deserializePacketType(ss);
 
     switch (packetType) {
-        case Packet::FromServerPacketContents::ChatMessageFromServerPacket:
-            receiveChatMessage(&ss);
-            break;
-        case Packet::FromServerPacketContents::InitialPlayerDataFromServerPacket:
-            receiveInitialPlayerData(&ss);
-            break;
-        case Packet::FromServerPacketContents::PlayerDisconnectedFromServerPacket:
-            receivePlayerDisconnected(&ss);
-            break;
-        case Packet::FromServerPacketContents::PlayerMoveFromServerPacket:
-            receivePlayerMove(&ss);
-            break;
-        case Packet::FromServerPacketContents::InitialPlayerDataFinishedFromServerPacket:
-            m_initialPlayersReceivedFinished = true;
-            break;
+    case Packet::FromServerPacketContents::ChatMessageFromServerPacket:
+        receiveChatMessage(&ss);
+        break;
+    case Packet::FromServerPacketContents::InitialPlayerDataFromServerPacket:
+        receiveInitialPlayerData(&ss);
+        break;
+    case Packet::FromServerPacketContents::PlayerDisconnectedFromServerPacket:
+        receivePlayerDisconnected(&ss);
+        break;
+    case Packet::FromServerPacketContents::PlayerMoveFromServerPacket:
+        receivePlayerMove(&ss);
+        break;
+    case Packet::FromServerPacketContents::InitialPlayerDataFinishedFromServerPacket:
+        m_initialPlayersReceivedFinished = true;
+        break;
     }
 
     enet_packet_destroy(event.packet);

@@ -32,8 +32,8 @@
 #include <Rocket/Core/FileInterface.h>
 
 /**
-	Rocket file interface for the shell examples.
-	@author Lloyd Weehuizen
+    Rocket file interface for the shell examples.
+    @author Lloyd Weehuizen
  */
 
 class ShellFileInterface : public Rocket::Core::FileInterface

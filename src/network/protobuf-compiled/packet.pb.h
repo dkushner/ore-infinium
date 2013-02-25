@@ -25,7 +25,8 @@
 #include <google/protobuf/generated_message_reflection.h>
 // @@protoc_insertion_point(includes)
 
-namespace PacketBuf {
+namespace PacketBuf
+{
 
 // Internal implementation detail -- do not call these.
 void  protobuf_AddDesc_packet_2eproto();
@@ -44,841 +45,868 @@ class PlayerMoveFromClient;
 
 // ===================================================================
 
-class Packet : public ::google::protobuf::Message {
- public:
-  Packet();
-  virtual ~Packet();
-  
-  Packet(const Packet& from);
-  
-  inline Packet& operator=(const Packet& from) {
-    CopyFrom(from);
-    return *this;
-  }
-  
-  inline const ::google::protobuf::UnknownFieldSet& unknown_fields() const {
-    return _unknown_fields_;
-  }
-  
-  inline ::google::protobuf::UnknownFieldSet* mutable_unknown_fields() {
-    return &_unknown_fields_;
-  }
-  
-  static const ::google::protobuf::Descriptor* descriptor();
-  static const Packet& default_instance();
-  
-  void Swap(Packet* other);
-  
-  // implements Message ----------------------------------------------
-  
-  Packet* New() const;
-  void CopyFrom(const ::google::protobuf::Message& from);
-  void MergeFrom(const ::google::protobuf::Message& from);
-  void CopyFrom(const Packet& from);
-  void MergeFrom(const Packet& from);
-  void Clear();
-  bool IsInitialized() const;
-  
-  int ByteSize() const;
-  bool MergePartialFromCodedStream(
-      ::google::protobuf::io::CodedInputStream* input);
-  void SerializeWithCachedSizes(
-      ::google::protobuf::io::CodedOutputStream* output) const;
-  ::google::protobuf::uint8* SerializeWithCachedSizesToArray(::google::protobuf::uint8* output) const;
-  int GetCachedSize() const { return _cached_size_; }
-  private:
-  void SharedCtor();
-  void SharedDtor();
-  void SetCachedSize(int size) const;
-  public:
-  
-  ::google::protobuf::Metadata GetMetadata() const;
-  
-  // nested types ----------------------------------------------------
-  
-  // accessors -------------------------------------------------------
-  
-  // optional uint32 type = 1;
-  inline bool has_type() const;
-  inline void clear_type();
-  static const int kTypeFieldNumber = 1;
-  inline ::google::protobuf::uint32 type() const;
-  inline void set_type(::google::protobuf::uint32 value);
-  
-  // @@protoc_insertion_point(class_scope:PacketBuf.Packet)
- private:
-  inline void set_has_type();
-  inline void clear_has_type();
-  
-  ::google::protobuf::UnknownFieldSet _unknown_fields_;
-  
-  ::google::protobuf::uint32 type_;
-  
-  mutable int _cached_size_;
-  ::google::protobuf::uint32 _has_bits_[(1 + 31) / 32];
-  
-  friend void  protobuf_AddDesc_packet_2eproto();
-  friend void protobuf_AssignDesc_packet_2eproto();
-  friend void protobuf_ShutdownFile_packet_2eproto();
-  
-  void InitAsDefaultInstance();
-  static Packet* default_instance_;
+class Packet : public ::google::protobuf::Message
+{
+public:
+    Packet();
+    virtual ~Packet();
+
+    Packet(const Packet& from);
+
+    inline Packet& operator=(const Packet& from) {
+        CopyFrom(from);
+        return *this;
+    }
+
+    inline const ::google::protobuf::UnknownFieldSet& unknown_fields() const {
+        return _unknown_fields_;
+    }
+
+    inline ::google::protobuf::UnknownFieldSet* mutable_unknown_fields() {
+        return &_unknown_fields_;
+    }
+
+    static const ::google::protobuf::Descriptor* descriptor();
+    static const Packet& default_instance();
+
+    void Swap(Packet* other);
+
+    // implements Message ----------------------------------------------
+
+    Packet* New() const;
+    void CopyFrom(const ::google::protobuf::Message& from);
+    void MergeFrom(const ::google::protobuf::Message& from);
+    void CopyFrom(const Packet& from);
+    void MergeFrom(const Packet& from);
+    void Clear();
+    bool IsInitialized() const;
+
+    int ByteSize() const;
+    bool MergePartialFromCodedStream(
+        ::google::protobuf::io::CodedInputStream* input);
+    void SerializeWithCachedSizes(
+        ::google::protobuf::io::CodedOutputStream* output) const;
+    ::google::protobuf::uint8* SerializeWithCachedSizesToArray(::google::protobuf::uint8* output) const;
+    int GetCachedSize() const {
+        return _cached_size_;
+    }
+private:
+    void SharedCtor();
+    void SharedDtor();
+    void SetCachedSize(int size) const;
+public:
+
+    ::google::protobuf::Metadata GetMetadata() const;
+
+    // nested types ----------------------------------------------------
+
+    // accessors -------------------------------------------------------
+
+    // optional uint32 type = 1;
+    inline bool has_type() const;
+    inline void clear_type();
+    static const int kTypeFieldNumber = 1;
+    inline ::google::protobuf::uint32 type() const;
+    inline void set_type(::google::protobuf::uint32 value);
+
+    // @@protoc_insertion_point(class_scope:PacketBuf.Packet)
+private:
+    inline void set_has_type();
+    inline void clear_has_type();
+
+    ::google::protobuf::UnknownFieldSet _unknown_fields_;
+
+    ::google::protobuf::uint32 type_;
+
+    mutable int _cached_size_;
+    ::google::protobuf::uint32 _has_bits_[(1 + 31) / 32];
+
+    friend void  protobuf_AddDesc_packet_2eproto();
+    friend void protobuf_AssignDesc_packet_2eproto();
+    friend void protobuf_ShutdownFile_packet_2eproto();
+
+    void InitAsDefaultInstance();
+    static Packet* default_instance_;
 };
 // -------------------------------------------------------------------
 
-class ClientInitialConnection : public ::google::protobuf::Message {
- public:
-  ClientInitialConnection();
-  virtual ~ClientInitialConnection();
-  
-  ClientInitialConnection(const ClientInitialConnection& from);
-  
-  inline ClientInitialConnection& operator=(const ClientInitialConnection& from) {
-    CopyFrom(from);
-    return *this;
-  }
-  
-  inline const ::google::protobuf::UnknownFieldSet& unknown_fields() const {
-    return _unknown_fields_;
-  }
-  
-  inline ::google::protobuf::UnknownFieldSet* mutable_unknown_fields() {
-    return &_unknown_fields_;
-  }
-  
-  static const ::google::protobuf::Descriptor* descriptor();
-  static const ClientInitialConnection& default_instance();
-  
-  void Swap(ClientInitialConnection* other);
-  
-  // implements Message ----------------------------------------------
-  
-  ClientInitialConnection* New() const;
-  void CopyFrom(const ::google::protobuf::Message& from);
-  void MergeFrom(const ::google::protobuf::Message& from);
-  void CopyFrom(const ClientInitialConnection& from);
-  void MergeFrom(const ClientInitialConnection& from);
-  void Clear();
-  bool IsInitialized() const;
-  
-  int ByteSize() const;
-  bool MergePartialFromCodedStream(
-      ::google::protobuf::io::CodedInputStream* input);
-  void SerializeWithCachedSizes(
-      ::google::protobuf::io::CodedOutputStream* output) const;
-  ::google::protobuf::uint8* SerializeWithCachedSizesToArray(::google::protobuf::uint8* output) const;
-  int GetCachedSize() const { return _cached_size_; }
-  private:
-  void SharedCtor();
-  void SharedDtor();
-  void SetCachedSize(int size) const;
-  public:
-  
-  ::google::protobuf::Metadata GetMetadata() const;
-  
-  // nested types ----------------------------------------------------
-  
-  // accessors -------------------------------------------------------
-  
-  // optional string playerName = 1;
-  inline bool has_playername() const;
-  inline void clear_playername();
-  static const int kPlayerNameFieldNumber = 1;
-  inline const ::std::string& playername() const;
-  inline void set_playername(const ::std::string& value);
-  inline void set_playername(const char* value);
-  inline void set_playername(const char* value, size_t size);
-  inline ::std::string* mutable_playername();
-  inline ::std::string* release_playername();
-  
-  // optional int32 versionMajor = 2;
-  inline bool has_versionmajor() const;
-  inline void clear_versionmajor();
-  static const int kVersionMajorFieldNumber = 2;
-  inline ::google::protobuf::int32 versionmajor() const;
-  inline void set_versionmajor(::google::protobuf::int32 value);
-  
-  // optional int32 versionMinor = 3;
-  inline bool has_versionminor() const;
-  inline void clear_versionminor();
-  static const int kVersionMinorFieldNumber = 3;
-  inline ::google::protobuf::int32 versionminor() const;
-  inline void set_versionminor(::google::protobuf::int32 value);
-  
-  // @@protoc_insertion_point(class_scope:PacketBuf.ClientInitialConnection)
- private:
-  inline void set_has_playername();
-  inline void clear_has_playername();
-  inline void set_has_versionmajor();
-  inline void clear_has_versionmajor();
-  inline void set_has_versionminor();
-  inline void clear_has_versionminor();
-  
-  ::google::protobuf::UnknownFieldSet _unknown_fields_;
-  
-  ::std::string* playername_;
-  ::google::protobuf::int32 versionmajor_;
-  ::google::protobuf::int32 versionminor_;
-  
-  mutable int _cached_size_;
-  ::google::protobuf::uint32 _has_bits_[(3 + 31) / 32];
-  
-  friend void  protobuf_AddDesc_packet_2eproto();
-  friend void protobuf_AssignDesc_packet_2eproto();
-  friend void protobuf_ShutdownFile_packet_2eproto();
-  
-  void InitAsDefaultInstance();
-  static ClientInitialConnection* default_instance_;
+class ClientInitialConnection : public ::google::protobuf::Message
+{
+public:
+    ClientInitialConnection();
+    virtual ~ClientInitialConnection();
+
+    ClientInitialConnection(const ClientInitialConnection& from);
+
+    inline ClientInitialConnection& operator=(const ClientInitialConnection& from) {
+        CopyFrom(from);
+        return *this;
+    }
+
+    inline const ::google::protobuf::UnknownFieldSet& unknown_fields() const {
+        return _unknown_fields_;
+    }
+
+    inline ::google::protobuf::UnknownFieldSet* mutable_unknown_fields() {
+        return &_unknown_fields_;
+    }
+
+    static const ::google::protobuf::Descriptor* descriptor();
+    static const ClientInitialConnection& default_instance();
+
+    void Swap(ClientInitialConnection* other);
+
+    // implements Message ----------------------------------------------
+
+    ClientInitialConnection* New() const;
+    void CopyFrom(const ::google::protobuf::Message& from);
+    void MergeFrom(const ::google::protobuf::Message& from);
+    void CopyFrom(const ClientInitialConnection& from);
+    void MergeFrom(const ClientInitialConnection& from);
+    void Clear();
+    bool IsInitialized() const;
+
+    int ByteSize() const;
+    bool MergePartialFromCodedStream(
+        ::google::protobuf::io::CodedInputStream* input);
+    void SerializeWithCachedSizes(
+        ::google::protobuf::io::CodedOutputStream* output) const;
+    ::google::protobuf::uint8* SerializeWithCachedSizesToArray(::google::protobuf::uint8* output) const;
+    int GetCachedSize() const {
+        return _cached_size_;
+    }
+private:
+    void SharedCtor();
+    void SharedDtor();
+    void SetCachedSize(int size) const;
+public:
+
+    ::google::protobuf::Metadata GetMetadata() const;
+
+    // nested types ----------------------------------------------------
+
+    // accessors -------------------------------------------------------
+
+    // optional string playerName = 1;
+    inline bool has_playername() const;
+    inline void clear_playername();
+    static const int kPlayerNameFieldNumber = 1;
+    inline const ::std::string& playername() const;
+    inline void set_playername(const ::std::string& value);
+    inline void set_playername(const char* value);
+    inline void set_playername(const char* value, size_t size);
+    inline ::std::string* mutable_playername();
+    inline ::std::string* release_playername();
+
+    // optional int32 versionMajor = 2;
+    inline bool has_versionmajor() const;
+    inline void clear_versionmajor();
+    static const int kVersionMajorFieldNumber = 2;
+    inline ::google::protobuf::int32 versionmajor() const;
+    inline void set_versionmajor(::google::protobuf::int32 value);
+
+    // optional int32 versionMinor = 3;
+    inline bool has_versionminor() const;
+    inline void clear_versionminor();
+    static const int kVersionMinorFieldNumber = 3;
+    inline ::google::protobuf::int32 versionminor() const;
+    inline void set_versionminor(::google::protobuf::int32 value);
+
+    // @@protoc_insertion_point(class_scope:PacketBuf.ClientInitialConnection)
+private:
+    inline void set_has_playername();
+    inline void clear_has_playername();
+    inline void set_has_versionmajor();
+    inline void clear_has_versionmajor();
+    inline void set_has_versionminor();
+    inline void clear_has_versionminor();
+
+    ::google::protobuf::UnknownFieldSet _unknown_fields_;
+
+    ::std::string* playername_;
+    ::google::protobuf::int32 versionmajor_;
+    ::google::protobuf::int32 versionminor_;
+
+    mutable int _cached_size_;
+    ::google::protobuf::uint32 _has_bits_[(3 + 31) / 32];
+
+    friend void  protobuf_AddDesc_packet_2eproto();
+    friend void protobuf_AssignDesc_packet_2eproto();
+    friend void protobuf_ShutdownFile_packet_2eproto();
+
+    void InitAsDefaultInstance();
+    static ClientInitialConnection* default_instance_;
 };
 // -------------------------------------------------------------------
 
-class ChatMessageFromClient : public ::google::protobuf::Message {
- public:
-  ChatMessageFromClient();
-  virtual ~ChatMessageFromClient();
-  
-  ChatMessageFromClient(const ChatMessageFromClient& from);
-  
-  inline ChatMessageFromClient& operator=(const ChatMessageFromClient& from) {
-    CopyFrom(from);
-    return *this;
-  }
-  
-  inline const ::google::protobuf::UnknownFieldSet& unknown_fields() const {
-    return _unknown_fields_;
-  }
-  
-  inline ::google::protobuf::UnknownFieldSet* mutable_unknown_fields() {
-    return &_unknown_fields_;
-  }
-  
-  static const ::google::protobuf::Descriptor* descriptor();
-  static const ChatMessageFromClient& default_instance();
-  
-  void Swap(ChatMessageFromClient* other);
-  
-  // implements Message ----------------------------------------------
-  
-  ChatMessageFromClient* New() const;
-  void CopyFrom(const ::google::protobuf::Message& from);
-  void MergeFrom(const ::google::protobuf::Message& from);
-  void CopyFrom(const ChatMessageFromClient& from);
-  void MergeFrom(const ChatMessageFromClient& from);
-  void Clear();
-  bool IsInitialized() const;
-  
-  int ByteSize() const;
-  bool MergePartialFromCodedStream(
-      ::google::protobuf::io::CodedInputStream* input);
-  void SerializeWithCachedSizes(
-      ::google::protobuf::io::CodedOutputStream* output) const;
-  ::google::protobuf::uint8* SerializeWithCachedSizesToArray(::google::protobuf::uint8* output) const;
-  int GetCachedSize() const { return _cached_size_; }
-  private:
-  void SharedCtor();
-  void SharedDtor();
-  void SetCachedSize(int size) const;
-  public:
-  
-  ::google::protobuf::Metadata GetMetadata() const;
-  
-  // nested types ----------------------------------------------------
-  
-  // accessors -------------------------------------------------------
-  
-  // optional string message = 1;
-  inline bool has_message() const;
-  inline void clear_message();
-  static const int kMessageFieldNumber = 1;
-  inline const ::std::string& message() const;
-  inline void set_message(const ::std::string& value);
-  inline void set_message(const char* value);
-  inline void set_message(const char* value, size_t size);
-  inline ::std::string* mutable_message();
-  inline ::std::string* release_message();
-  
-  // @@protoc_insertion_point(class_scope:PacketBuf.ChatMessageFromClient)
- private:
-  inline void set_has_message();
-  inline void clear_has_message();
-  
-  ::google::protobuf::UnknownFieldSet _unknown_fields_;
-  
-  ::std::string* message_;
-  
-  mutable int _cached_size_;
-  ::google::protobuf::uint32 _has_bits_[(1 + 31) / 32];
-  
-  friend void  protobuf_AddDesc_packet_2eproto();
-  friend void protobuf_AssignDesc_packet_2eproto();
-  friend void protobuf_ShutdownFile_packet_2eproto();
-  
-  void InitAsDefaultInstance();
-  static ChatMessageFromClient* default_instance_;
+class ChatMessageFromClient : public ::google::protobuf::Message
+{
+public:
+    ChatMessageFromClient();
+    virtual ~ChatMessageFromClient();
+
+    ChatMessageFromClient(const ChatMessageFromClient& from);
+
+    inline ChatMessageFromClient& operator=(const ChatMessageFromClient& from) {
+        CopyFrom(from);
+        return *this;
+    }
+
+    inline const ::google::protobuf::UnknownFieldSet& unknown_fields() const {
+        return _unknown_fields_;
+    }
+
+    inline ::google::protobuf::UnknownFieldSet* mutable_unknown_fields() {
+        return &_unknown_fields_;
+    }
+
+    static const ::google::protobuf::Descriptor* descriptor();
+    static const ChatMessageFromClient& default_instance();
+
+    void Swap(ChatMessageFromClient* other);
+
+    // implements Message ----------------------------------------------
+
+    ChatMessageFromClient* New() const;
+    void CopyFrom(const ::google::protobuf::Message& from);
+    void MergeFrom(const ::google::protobuf::Message& from);
+    void CopyFrom(const ChatMessageFromClient& from);
+    void MergeFrom(const ChatMessageFromClient& from);
+    void Clear();
+    bool IsInitialized() const;
+
+    int ByteSize() const;
+    bool MergePartialFromCodedStream(
+        ::google::protobuf::io::CodedInputStream* input);
+    void SerializeWithCachedSizes(
+        ::google::protobuf::io::CodedOutputStream* output) const;
+    ::google::protobuf::uint8* SerializeWithCachedSizesToArray(::google::protobuf::uint8* output) const;
+    int GetCachedSize() const {
+        return _cached_size_;
+    }
+private:
+    void SharedCtor();
+    void SharedDtor();
+    void SetCachedSize(int size) const;
+public:
+
+    ::google::protobuf::Metadata GetMetadata() const;
+
+    // nested types ----------------------------------------------------
+
+    // accessors -------------------------------------------------------
+
+    // optional string message = 1;
+    inline bool has_message() const;
+    inline void clear_message();
+    static const int kMessageFieldNumber = 1;
+    inline const ::std::string& message() const;
+    inline void set_message(const ::std::string& value);
+    inline void set_message(const char* value);
+    inline void set_message(const char* value, size_t size);
+    inline ::std::string* mutable_message();
+    inline ::std::string* release_message();
+
+    // @@protoc_insertion_point(class_scope:PacketBuf.ChatMessageFromClient)
+private:
+    inline void set_has_message();
+    inline void clear_has_message();
+
+    ::google::protobuf::UnknownFieldSet _unknown_fields_;
+
+    ::std::string* message_;
+
+    mutable int _cached_size_;
+    ::google::protobuf::uint32 _has_bits_[(1 + 31) / 32];
+
+    friend void  protobuf_AddDesc_packet_2eproto();
+    friend void protobuf_AssignDesc_packet_2eproto();
+    friend void protobuf_ShutdownFile_packet_2eproto();
+
+    void InitAsDefaultInstance();
+    static ChatMessageFromClient* default_instance_;
 };
 // -------------------------------------------------------------------
 
-class ChatMessageFromServer : public ::google::protobuf::Message {
- public:
-  ChatMessageFromServer();
-  virtual ~ChatMessageFromServer();
-  
-  ChatMessageFromServer(const ChatMessageFromServer& from);
-  
-  inline ChatMessageFromServer& operator=(const ChatMessageFromServer& from) {
-    CopyFrom(from);
-    return *this;
-  }
-  
-  inline const ::google::protobuf::UnknownFieldSet& unknown_fields() const {
-    return _unknown_fields_;
-  }
-  
-  inline ::google::protobuf::UnknownFieldSet* mutable_unknown_fields() {
-    return &_unknown_fields_;
-  }
-  
-  static const ::google::protobuf::Descriptor* descriptor();
-  static const ChatMessageFromServer& default_instance();
-  
-  void Swap(ChatMessageFromServer* other);
-  
-  // implements Message ----------------------------------------------
-  
-  ChatMessageFromServer* New() const;
-  void CopyFrom(const ::google::protobuf::Message& from);
-  void MergeFrom(const ::google::protobuf::Message& from);
-  void CopyFrom(const ChatMessageFromServer& from);
-  void MergeFrom(const ChatMessageFromServer& from);
-  void Clear();
-  bool IsInitialized() const;
-  
-  int ByteSize() const;
-  bool MergePartialFromCodedStream(
-      ::google::protobuf::io::CodedInputStream* input);
-  void SerializeWithCachedSizes(
-      ::google::protobuf::io::CodedOutputStream* output) const;
-  ::google::protobuf::uint8* SerializeWithCachedSizesToArray(::google::protobuf::uint8* output) const;
-  int GetCachedSize() const { return _cached_size_; }
-  private:
-  void SharedCtor();
-  void SharedDtor();
-  void SetCachedSize(int size) const;
-  public:
-  
-  ::google::protobuf::Metadata GetMetadata() const;
-  
-  // nested types ----------------------------------------------------
-  
-  // accessors -------------------------------------------------------
-  
-  // optional string playerName = 1;
-  inline bool has_playername() const;
-  inline void clear_playername();
-  static const int kPlayerNameFieldNumber = 1;
-  inline const ::std::string& playername() const;
-  inline void set_playername(const ::std::string& value);
-  inline void set_playername(const char* value);
-  inline void set_playername(const char* value, size_t size);
-  inline ::std::string* mutable_playername();
-  inline ::std::string* release_playername();
-  
-  // optional string message = 2;
-  inline bool has_message() const;
-  inline void clear_message();
-  static const int kMessageFieldNumber = 2;
-  inline const ::std::string& message() const;
-  inline void set_message(const ::std::string& value);
-  inline void set_message(const char* value);
-  inline void set_message(const char* value, size_t size);
-  inline ::std::string* mutable_message();
-  inline ::std::string* release_message();
-  
-  // @@protoc_insertion_point(class_scope:PacketBuf.ChatMessageFromServer)
- private:
-  inline void set_has_playername();
-  inline void clear_has_playername();
-  inline void set_has_message();
-  inline void clear_has_message();
-  
-  ::google::protobuf::UnknownFieldSet _unknown_fields_;
-  
-  ::std::string* playername_;
-  ::std::string* message_;
-  
-  mutable int _cached_size_;
-  ::google::protobuf::uint32 _has_bits_[(2 + 31) / 32];
-  
-  friend void  protobuf_AddDesc_packet_2eproto();
-  friend void protobuf_AssignDesc_packet_2eproto();
-  friend void protobuf_ShutdownFile_packet_2eproto();
-  
-  void InitAsDefaultInstance();
-  static ChatMessageFromServer* default_instance_;
+class ChatMessageFromServer : public ::google::protobuf::Message
+{
+public:
+    ChatMessageFromServer();
+    virtual ~ChatMessageFromServer();
+
+    ChatMessageFromServer(const ChatMessageFromServer& from);
+
+    inline ChatMessageFromServer& operator=(const ChatMessageFromServer& from) {
+        CopyFrom(from);
+        return *this;
+    }
+
+    inline const ::google::protobuf::UnknownFieldSet& unknown_fields() const {
+        return _unknown_fields_;
+    }
+
+    inline ::google::protobuf::UnknownFieldSet* mutable_unknown_fields() {
+        return &_unknown_fields_;
+    }
+
+    static const ::google::protobuf::Descriptor* descriptor();
+    static const ChatMessageFromServer& default_instance();
+
+    void Swap(ChatMessageFromServer* other);
+
+    // implements Message ----------------------------------------------
+
+    ChatMessageFromServer* New() const;
+    void CopyFrom(const ::google::protobuf::Message& from);
+    void MergeFrom(const ::google::protobuf::Message& from);
+    void CopyFrom(const ChatMessageFromServer& from);
+    void MergeFrom(const ChatMessageFromServer& from);
+    void Clear();
+    bool IsInitialized() const;
+
+    int ByteSize() const;
+    bool MergePartialFromCodedStream(
+        ::google::protobuf::io::CodedInputStream* input);
+    void SerializeWithCachedSizes(
+        ::google::protobuf::io::CodedOutputStream* output) const;
+    ::google::protobuf::uint8* SerializeWithCachedSizesToArray(::google::protobuf::uint8* output) const;
+    int GetCachedSize() const {
+        return _cached_size_;
+    }
+private:
+    void SharedCtor();
+    void SharedDtor();
+    void SetCachedSize(int size) const;
+public:
+
+    ::google::protobuf::Metadata GetMetadata() const;
+
+    // nested types ----------------------------------------------------
+
+    // accessors -------------------------------------------------------
+
+    // optional string playerName = 1;
+    inline bool has_playername() const;
+    inline void clear_playername();
+    static const int kPlayerNameFieldNumber = 1;
+    inline const ::std::string& playername() const;
+    inline void set_playername(const ::std::string& value);
+    inline void set_playername(const char* value);
+    inline void set_playername(const char* value, size_t size);
+    inline ::std::string* mutable_playername();
+    inline ::std::string* release_playername();
+
+    // optional string message = 2;
+    inline bool has_message() const;
+    inline void clear_message();
+    static const int kMessageFieldNumber = 2;
+    inline const ::std::string& message() const;
+    inline void set_message(const ::std::string& value);
+    inline void set_message(const char* value);
+    inline void set_message(const char* value, size_t size);
+    inline ::std::string* mutable_message();
+    inline ::std::string* release_message();
+
+    // @@protoc_insertion_point(class_scope:PacketBuf.ChatMessageFromServer)
+private:
+    inline void set_has_playername();
+    inline void clear_has_playername();
+    inline void set_has_message();
+    inline void clear_has_message();
+
+    ::google::protobuf::UnknownFieldSet _unknown_fields_;
+
+    ::std::string* playername_;
+    ::std::string* message_;
+
+    mutable int _cached_size_;
+    ::google::protobuf::uint32 _has_bits_[(2 + 31) / 32];
+
+    friend void  protobuf_AddDesc_packet_2eproto();
+    friend void protobuf_AssignDesc_packet_2eproto();
+    friend void protobuf_ShutdownFile_packet_2eproto();
+
+    void InitAsDefaultInstance();
+    static ChatMessageFromServer* default_instance_;
 };
 // -------------------------------------------------------------------
 
-class InitialPlayerDataFinishedFromServer : public ::google::protobuf::Message {
- public:
-  InitialPlayerDataFinishedFromServer();
-  virtual ~InitialPlayerDataFinishedFromServer();
-  
-  InitialPlayerDataFinishedFromServer(const InitialPlayerDataFinishedFromServer& from);
-  
-  inline InitialPlayerDataFinishedFromServer& operator=(const InitialPlayerDataFinishedFromServer& from) {
-    CopyFrom(from);
-    return *this;
-  }
-  
-  inline const ::google::protobuf::UnknownFieldSet& unknown_fields() const {
-    return _unknown_fields_;
-  }
-  
-  inline ::google::protobuf::UnknownFieldSet* mutable_unknown_fields() {
-    return &_unknown_fields_;
-  }
-  
-  static const ::google::protobuf::Descriptor* descriptor();
-  static const InitialPlayerDataFinishedFromServer& default_instance();
-  
-  void Swap(InitialPlayerDataFinishedFromServer* other);
-  
-  // implements Message ----------------------------------------------
-  
-  InitialPlayerDataFinishedFromServer* New() const;
-  void CopyFrom(const ::google::protobuf::Message& from);
-  void MergeFrom(const ::google::protobuf::Message& from);
-  void CopyFrom(const InitialPlayerDataFinishedFromServer& from);
-  void MergeFrom(const InitialPlayerDataFinishedFromServer& from);
-  void Clear();
-  bool IsInitialized() const;
-  
-  int ByteSize() const;
-  bool MergePartialFromCodedStream(
-      ::google::protobuf::io::CodedInputStream* input);
-  void SerializeWithCachedSizes(
-      ::google::protobuf::io::CodedOutputStream* output) const;
-  ::google::protobuf::uint8* SerializeWithCachedSizesToArray(::google::protobuf::uint8* output) const;
-  int GetCachedSize() const { return _cached_size_; }
-  private:
-  void SharedCtor();
-  void SharedDtor();
-  void SetCachedSize(int size) const;
-  public:
-  
-  ::google::protobuf::Metadata GetMetadata() const;
-  
-  // nested types ----------------------------------------------------
-  
-  // accessors -------------------------------------------------------
-  
-  // @@protoc_insertion_point(class_scope:PacketBuf.InitialPlayerDataFinishedFromServer)
- private:
-  
-  ::google::protobuf::UnknownFieldSet _unknown_fields_;
-  
-  
-  mutable int _cached_size_;
-  ::google::protobuf::uint32 _has_bits_[1];
-  
-  friend void  protobuf_AddDesc_packet_2eproto();
-  friend void protobuf_AssignDesc_packet_2eproto();
-  friend void protobuf_ShutdownFile_packet_2eproto();
-  
-  void InitAsDefaultInstance();
-  static InitialPlayerDataFinishedFromServer* default_instance_;
+class InitialPlayerDataFinishedFromServer : public ::google::protobuf::Message
+{
+public:
+    InitialPlayerDataFinishedFromServer();
+    virtual ~InitialPlayerDataFinishedFromServer();
+
+    InitialPlayerDataFinishedFromServer(const InitialPlayerDataFinishedFromServer& from);
+
+    inline InitialPlayerDataFinishedFromServer& operator=(const InitialPlayerDataFinishedFromServer& from) {
+        CopyFrom(from);
+        return *this;
+    }
+
+    inline const ::google::protobuf::UnknownFieldSet& unknown_fields() const {
+        return _unknown_fields_;
+    }
+
+    inline ::google::protobuf::UnknownFieldSet* mutable_unknown_fields() {
+        return &_unknown_fields_;
+    }
+
+    static const ::google::protobuf::Descriptor* descriptor();
+    static const InitialPlayerDataFinishedFromServer& default_instance();
+
+    void Swap(InitialPlayerDataFinishedFromServer* other);
+
+    // implements Message ----------------------------------------------
+
+    InitialPlayerDataFinishedFromServer* New() const;
+    void CopyFrom(const ::google::protobuf::Message& from);
+    void MergeFrom(const ::google::protobuf::Message& from);
+    void CopyFrom(const InitialPlayerDataFinishedFromServer& from);
+    void MergeFrom(const InitialPlayerDataFinishedFromServer& from);
+    void Clear();
+    bool IsInitialized() const;
+
+    int ByteSize() const;
+    bool MergePartialFromCodedStream(
+        ::google::protobuf::io::CodedInputStream* input);
+    void SerializeWithCachedSizes(
+        ::google::protobuf::io::CodedOutputStream* output) const;
+    ::google::protobuf::uint8* SerializeWithCachedSizesToArray(::google::protobuf::uint8* output) const;
+    int GetCachedSize() const {
+        return _cached_size_;
+    }
+private:
+    void SharedCtor();
+    void SharedDtor();
+    void SetCachedSize(int size) const;
+public:
+
+    ::google::protobuf::Metadata GetMetadata() const;
+
+    // nested types ----------------------------------------------------
+
+    // accessors -------------------------------------------------------
+
+    // @@protoc_insertion_point(class_scope:PacketBuf.InitialPlayerDataFinishedFromServer)
+private:
+
+    ::google::protobuf::UnknownFieldSet _unknown_fields_;
+
+
+    mutable int _cached_size_;
+    ::google::protobuf::uint32 _has_bits_[1];
+
+    friend void  protobuf_AddDesc_packet_2eproto();
+    friend void protobuf_AssignDesc_packet_2eproto();
+    friend void protobuf_ShutdownFile_packet_2eproto();
+
+    void InitAsDefaultInstance();
+    static InitialPlayerDataFinishedFromServer* default_instance_;
 };
 // -------------------------------------------------------------------
 
-class InitialPlayerDataFromServer : public ::google::protobuf::Message {
- public:
-  InitialPlayerDataFromServer();
-  virtual ~InitialPlayerDataFromServer();
-  
-  InitialPlayerDataFromServer(const InitialPlayerDataFromServer& from);
-  
-  inline InitialPlayerDataFromServer& operator=(const InitialPlayerDataFromServer& from) {
-    CopyFrom(from);
-    return *this;
-  }
-  
-  inline const ::google::protobuf::UnknownFieldSet& unknown_fields() const {
-    return _unknown_fields_;
-  }
-  
-  inline ::google::protobuf::UnknownFieldSet* mutable_unknown_fields() {
-    return &_unknown_fields_;
-  }
-  
-  static const ::google::protobuf::Descriptor* descriptor();
-  static const InitialPlayerDataFromServer& default_instance();
-  
-  void Swap(InitialPlayerDataFromServer* other);
-  
-  // implements Message ----------------------------------------------
-  
-  InitialPlayerDataFromServer* New() const;
-  void CopyFrom(const ::google::protobuf::Message& from);
-  void MergeFrom(const ::google::protobuf::Message& from);
-  void CopyFrom(const InitialPlayerDataFromServer& from);
-  void MergeFrom(const InitialPlayerDataFromServer& from);
-  void Clear();
-  bool IsInitialized() const;
-  
-  int ByteSize() const;
-  bool MergePartialFromCodedStream(
-      ::google::protobuf::io::CodedInputStream* input);
-  void SerializeWithCachedSizes(
-      ::google::protobuf::io::CodedOutputStream* output) const;
-  ::google::protobuf::uint8* SerializeWithCachedSizesToArray(::google::protobuf::uint8* output) const;
-  int GetCachedSize() const { return _cached_size_; }
-  private:
-  void SharedCtor();
-  void SharedDtor();
-  void SetCachedSize(int size) const;
-  public:
-  
-  ::google::protobuf::Metadata GetMetadata() const;
-  
-  // nested types ----------------------------------------------------
-  
-  // accessors -------------------------------------------------------
-  
-  // optional uint32 playerID = 1;
-  inline bool has_playerid() const;
-  inline void clear_playerid();
-  static const int kPlayerIDFieldNumber = 1;
-  inline ::google::protobuf::uint32 playerid() const;
-  inline void set_playerid(::google::protobuf::uint32 value);
-  
-  // optional string playerName = 2;
-  inline bool has_playername() const;
-  inline void clear_playername();
-  static const int kPlayerNameFieldNumber = 2;
-  inline const ::std::string& playername() const;
-  inline void set_playername(const ::std::string& value);
-  inline void set_playername(const char* value);
-  inline void set_playername(const char* value, size_t size);
-  inline ::std::string* mutable_playername();
-  inline ::std::string* release_playername();
-  
-  // optional float x = 3;
-  inline bool has_x() const;
-  inline void clear_x();
-  static const int kXFieldNumber = 3;
-  inline float x() const;
-  inline void set_x(float value);
-  
-  // optional float y = 4;
-  inline bool has_y() const;
-  inline void clear_y();
-  static const int kYFieldNumber = 4;
-  inline float y() const;
-  inline void set_y(float value);
-  
-  // @@protoc_insertion_point(class_scope:PacketBuf.InitialPlayerDataFromServer)
- private:
-  inline void set_has_playerid();
-  inline void clear_has_playerid();
-  inline void set_has_playername();
-  inline void clear_has_playername();
-  inline void set_has_x();
-  inline void clear_has_x();
-  inline void set_has_y();
-  inline void clear_has_y();
-  
-  ::google::protobuf::UnknownFieldSet _unknown_fields_;
-  
-  ::std::string* playername_;
-  ::google::protobuf::uint32 playerid_;
-  float x_;
-  float y_;
-  
-  mutable int _cached_size_;
-  ::google::protobuf::uint32 _has_bits_[(4 + 31) / 32];
-  
-  friend void  protobuf_AddDesc_packet_2eproto();
-  friend void protobuf_AssignDesc_packet_2eproto();
-  friend void protobuf_ShutdownFile_packet_2eproto();
-  
-  void InitAsDefaultInstance();
-  static InitialPlayerDataFromServer* default_instance_;
+class InitialPlayerDataFromServer : public ::google::protobuf::Message
+{
+public:
+    InitialPlayerDataFromServer();
+    virtual ~InitialPlayerDataFromServer();
+
+    InitialPlayerDataFromServer(const InitialPlayerDataFromServer& from);
+
+    inline InitialPlayerDataFromServer& operator=(const InitialPlayerDataFromServer& from) {
+        CopyFrom(from);
+        return *this;
+    }
+
+    inline const ::google::protobuf::UnknownFieldSet& unknown_fields() const {
+        return _unknown_fields_;
+    }
+
+    inline ::google::protobuf::UnknownFieldSet* mutable_unknown_fields() {
+        return &_unknown_fields_;
+    }
+
+    static const ::google::protobuf::Descriptor* descriptor();
+    static const InitialPlayerDataFromServer& default_instance();
+
+    void Swap(InitialPlayerDataFromServer* other);
+
+    // implements Message ----------------------------------------------
+
+    InitialPlayerDataFromServer* New() const;
+    void CopyFrom(const ::google::protobuf::Message& from);
+    void MergeFrom(const ::google::protobuf::Message& from);
+    void CopyFrom(const InitialPlayerDataFromServer& from);
+    void MergeFrom(const InitialPlayerDataFromServer& from);
+    void Clear();
+    bool IsInitialized() const;
+
+    int ByteSize() const;
+    bool MergePartialFromCodedStream(
+        ::google::protobuf::io::CodedInputStream* input);
+    void SerializeWithCachedSizes(
+        ::google::protobuf::io::CodedOutputStream* output) const;
+    ::google::protobuf::uint8* SerializeWithCachedSizesToArray(::google::protobuf::uint8* output) const;
+    int GetCachedSize() const {
+        return _cached_size_;
+    }
+private:
+    void SharedCtor();
+    void SharedDtor();
+    void SetCachedSize(int size) const;
+public:
+
+    ::google::protobuf::Metadata GetMetadata() const;
+
+    // nested types ----------------------------------------------------
+
+    // accessors -------------------------------------------------------
+
+    // optional uint32 playerID = 1;
+    inline bool has_playerid() const;
+    inline void clear_playerid();
+    static const int kPlayerIDFieldNumber = 1;
+    inline ::google::protobuf::uint32 playerid() const;
+    inline void set_playerid(::google::protobuf::uint32 value);
+
+    // optional string playerName = 2;
+    inline bool has_playername() const;
+    inline void clear_playername();
+    static const int kPlayerNameFieldNumber = 2;
+    inline const ::std::string& playername() const;
+    inline void set_playername(const ::std::string& value);
+    inline void set_playername(const char* value);
+    inline void set_playername(const char* value, size_t size);
+    inline ::std::string* mutable_playername();
+    inline ::std::string* release_playername();
+
+    // optional float x = 3;
+    inline bool has_x() const;
+    inline void clear_x();
+    static const int kXFieldNumber = 3;
+    inline float x() const;
+    inline void set_x(float value);
+
+    // optional float y = 4;
+    inline bool has_y() const;
+    inline void clear_y();
+    static const int kYFieldNumber = 4;
+    inline float y() const;
+    inline void set_y(float value);
+
+    // @@protoc_insertion_point(class_scope:PacketBuf.InitialPlayerDataFromServer)
+private:
+    inline void set_has_playerid();
+    inline void clear_has_playerid();
+    inline void set_has_playername();
+    inline void clear_has_playername();
+    inline void set_has_x();
+    inline void clear_has_x();
+    inline void set_has_y();
+    inline void clear_has_y();
+
+    ::google::protobuf::UnknownFieldSet _unknown_fields_;
+
+    ::std::string* playername_;
+    ::google::protobuf::uint32 playerid_;
+    float x_;
+    float y_;
+
+    mutable int _cached_size_;
+    ::google::protobuf::uint32 _has_bits_[(4 + 31) / 32];
+
+    friend void  protobuf_AddDesc_packet_2eproto();
+    friend void protobuf_AssignDesc_packet_2eproto();
+    friend void protobuf_ShutdownFile_packet_2eproto();
+
+    void InitAsDefaultInstance();
+    static InitialPlayerDataFromServer* default_instance_;
 };
 // -------------------------------------------------------------------
 
-class PlayerDisconnectedFromServer : public ::google::protobuf::Message {
- public:
-  PlayerDisconnectedFromServer();
-  virtual ~PlayerDisconnectedFromServer();
-  
-  PlayerDisconnectedFromServer(const PlayerDisconnectedFromServer& from);
-  
-  inline PlayerDisconnectedFromServer& operator=(const PlayerDisconnectedFromServer& from) {
-    CopyFrom(from);
-    return *this;
-  }
-  
-  inline const ::google::protobuf::UnknownFieldSet& unknown_fields() const {
-    return _unknown_fields_;
-  }
-  
-  inline ::google::protobuf::UnknownFieldSet* mutable_unknown_fields() {
-    return &_unknown_fields_;
-  }
-  
-  static const ::google::protobuf::Descriptor* descriptor();
-  static const PlayerDisconnectedFromServer& default_instance();
-  
-  void Swap(PlayerDisconnectedFromServer* other);
-  
-  // implements Message ----------------------------------------------
-  
-  PlayerDisconnectedFromServer* New() const;
-  void CopyFrom(const ::google::protobuf::Message& from);
-  void MergeFrom(const ::google::protobuf::Message& from);
-  void CopyFrom(const PlayerDisconnectedFromServer& from);
-  void MergeFrom(const PlayerDisconnectedFromServer& from);
-  void Clear();
-  bool IsInitialized() const;
-  
-  int ByteSize() const;
-  bool MergePartialFromCodedStream(
-      ::google::protobuf::io::CodedInputStream* input);
-  void SerializeWithCachedSizes(
-      ::google::protobuf::io::CodedOutputStream* output) const;
-  ::google::protobuf::uint8* SerializeWithCachedSizesToArray(::google::protobuf::uint8* output) const;
-  int GetCachedSize() const { return _cached_size_; }
-  private:
-  void SharedCtor();
-  void SharedDtor();
-  void SetCachedSize(int size) const;
-  public:
-  
-  ::google::protobuf::Metadata GetMetadata() const;
-  
-  // nested types ----------------------------------------------------
-  
-  // accessors -------------------------------------------------------
-  
-  // optional uint32 playerID = 1;
-  inline bool has_playerid() const;
-  inline void clear_playerid();
-  static const int kPlayerIDFieldNumber = 1;
-  inline ::google::protobuf::uint32 playerid() const;
-  inline void set_playerid(::google::protobuf::uint32 value);
-  
-  // @@protoc_insertion_point(class_scope:PacketBuf.PlayerDisconnectedFromServer)
- private:
-  inline void set_has_playerid();
-  inline void clear_has_playerid();
-  
-  ::google::protobuf::UnknownFieldSet _unknown_fields_;
-  
-  ::google::protobuf::uint32 playerid_;
-  
-  mutable int _cached_size_;
-  ::google::protobuf::uint32 _has_bits_[(1 + 31) / 32];
-  
-  friend void  protobuf_AddDesc_packet_2eproto();
-  friend void protobuf_AssignDesc_packet_2eproto();
-  friend void protobuf_ShutdownFile_packet_2eproto();
-  
-  void InitAsDefaultInstance();
-  static PlayerDisconnectedFromServer* default_instance_;
+class PlayerDisconnectedFromServer : public ::google::protobuf::Message
+{
+public:
+    PlayerDisconnectedFromServer();
+    virtual ~PlayerDisconnectedFromServer();
+
+    PlayerDisconnectedFromServer(const PlayerDisconnectedFromServer& from);
+
+    inline PlayerDisconnectedFromServer& operator=(const PlayerDisconnectedFromServer& from) {
+        CopyFrom(from);
+        return *this;
+    }
+
+    inline const ::google::protobuf::UnknownFieldSet& unknown_fields() const {
+        return _unknown_fields_;
+    }
+
+    inline ::google::protobuf::UnknownFieldSet* mutable_unknown_fields() {
+        return &_unknown_fields_;
+    }
+
+    static const ::google::protobuf::Descriptor* descriptor();
+    static const PlayerDisconnectedFromServer& default_instance();
+
+    void Swap(PlayerDisconnectedFromServer* other);
+
+    // implements Message ----------------------------------------------
+
+    PlayerDisconnectedFromServer* New() const;
+    void CopyFrom(const ::google::protobuf::Message& from);
+    void MergeFrom(const ::google::protobuf::Message& from);
+    void CopyFrom(const PlayerDisconnectedFromServer& from);
+    void MergeFrom(const PlayerDisconnectedFromServer& from);
+    void Clear();
+    bool IsInitialized() const;
+
+    int ByteSize() const;
+    bool MergePartialFromCodedStream(
+        ::google::protobuf::io::CodedInputStream* input);
+    void SerializeWithCachedSizes(
+        ::google::protobuf::io::CodedOutputStream* output) const;
+    ::google::protobuf::uint8* SerializeWithCachedSizesToArray(::google::protobuf::uint8* output) const;
+    int GetCachedSize() const {
+        return _cached_size_;
+    }
+private:
+    void SharedCtor();
+    void SharedDtor();
+    void SetCachedSize(int size) const;
+public:
+
+    ::google::protobuf::Metadata GetMetadata() const;
+
+    // nested types ----------------------------------------------------
+
+    // accessors -------------------------------------------------------
+
+    // optional uint32 playerID = 1;
+    inline bool has_playerid() const;
+    inline void clear_playerid();
+    static const int kPlayerIDFieldNumber = 1;
+    inline ::google::protobuf::uint32 playerid() const;
+    inline void set_playerid(::google::protobuf::uint32 value);
+
+    // @@protoc_insertion_point(class_scope:PacketBuf.PlayerDisconnectedFromServer)
+private:
+    inline void set_has_playerid();
+    inline void clear_has_playerid();
+
+    ::google::protobuf::UnknownFieldSet _unknown_fields_;
+
+    ::google::protobuf::uint32 playerid_;
+
+    mutable int _cached_size_;
+    ::google::protobuf::uint32 _has_bits_[(1 + 31) / 32];
+
+    friend void  protobuf_AddDesc_packet_2eproto();
+    friend void protobuf_AssignDesc_packet_2eproto();
+    friend void protobuf_ShutdownFile_packet_2eproto();
+
+    void InitAsDefaultInstance();
+    static PlayerDisconnectedFromServer* default_instance_;
 };
 // -------------------------------------------------------------------
 
-class PlayerMoveFromServer : public ::google::protobuf::Message {
- public:
-  PlayerMoveFromServer();
-  virtual ~PlayerMoveFromServer();
-  
-  PlayerMoveFromServer(const PlayerMoveFromServer& from);
-  
-  inline PlayerMoveFromServer& operator=(const PlayerMoveFromServer& from) {
-    CopyFrom(from);
-    return *this;
-  }
-  
-  inline const ::google::protobuf::UnknownFieldSet& unknown_fields() const {
-    return _unknown_fields_;
-  }
-  
-  inline ::google::protobuf::UnknownFieldSet* mutable_unknown_fields() {
-    return &_unknown_fields_;
-  }
-  
-  static const ::google::protobuf::Descriptor* descriptor();
-  static const PlayerMoveFromServer& default_instance();
-  
-  void Swap(PlayerMoveFromServer* other);
-  
-  // implements Message ----------------------------------------------
-  
-  PlayerMoveFromServer* New() const;
-  void CopyFrom(const ::google::protobuf::Message& from);
-  void MergeFrom(const ::google::protobuf::Message& from);
-  void CopyFrom(const PlayerMoveFromServer& from);
-  void MergeFrom(const PlayerMoveFromServer& from);
-  void Clear();
-  bool IsInitialized() const;
-  
-  int ByteSize() const;
-  bool MergePartialFromCodedStream(
-      ::google::protobuf::io::CodedInputStream* input);
-  void SerializeWithCachedSizes(
-      ::google::protobuf::io::CodedOutputStream* output) const;
-  ::google::protobuf::uint8* SerializeWithCachedSizesToArray(::google::protobuf::uint8* output) const;
-  int GetCachedSize() const { return _cached_size_; }
-  private:
-  void SharedCtor();
-  void SharedDtor();
-  void SetCachedSize(int size) const;
-  public:
-  
-  ::google::protobuf::Metadata GetMetadata() const;
-  
-  // nested types ----------------------------------------------------
-  
-  // accessors -------------------------------------------------------
-  
-  // optional uint32 playerID = 1;
-  inline bool has_playerid() const;
-  inline void clear_playerid();
-  static const int kPlayerIDFieldNumber = 1;
-  inline ::google::protobuf::uint32 playerid() const;
-  inline void set_playerid(::google::protobuf::uint32 value);
-  
-  // optional float x = 2;
-  inline bool has_x() const;
-  inline void clear_x();
-  static const int kXFieldNumber = 2;
-  inline float x() const;
-  inline void set_x(float value);
-  
-  // optional float y = 3;
-  inline bool has_y() const;
-  inline void clear_y();
-  static const int kYFieldNumber = 3;
-  inline float y() const;
-  inline void set_y(float value);
-  
-  // @@protoc_insertion_point(class_scope:PacketBuf.PlayerMoveFromServer)
- private:
-  inline void set_has_playerid();
-  inline void clear_has_playerid();
-  inline void set_has_x();
-  inline void clear_has_x();
-  inline void set_has_y();
-  inline void clear_has_y();
-  
-  ::google::protobuf::UnknownFieldSet _unknown_fields_;
-  
-  ::google::protobuf::uint32 playerid_;
-  float x_;
-  float y_;
-  
-  mutable int _cached_size_;
-  ::google::protobuf::uint32 _has_bits_[(3 + 31) / 32];
-  
-  friend void  protobuf_AddDesc_packet_2eproto();
-  friend void protobuf_AssignDesc_packet_2eproto();
-  friend void protobuf_ShutdownFile_packet_2eproto();
-  
-  void InitAsDefaultInstance();
-  static PlayerMoveFromServer* default_instance_;
+class PlayerMoveFromServer : public ::google::protobuf::Message
+{
+public:
+    PlayerMoveFromServer();
+    virtual ~PlayerMoveFromServer();
+
+    PlayerMoveFromServer(const PlayerMoveFromServer& from);
+
+    inline PlayerMoveFromServer& operator=(const PlayerMoveFromServer& from) {
+        CopyFrom(from);
+        return *this;
+    }
+
+    inline const ::google::protobuf::UnknownFieldSet& unknown_fields() const {
+        return _unknown_fields_;
+    }
+
+    inline ::google::protobuf::UnknownFieldSet* mutable_unknown_fields() {
+        return &_unknown_fields_;
+    }
+
+    static const ::google::protobuf::Descriptor* descriptor();
+    static const PlayerMoveFromServer& default_instance();
+
+    void Swap(PlayerMoveFromServer* other);
+
+    // implements Message ----------------------------------------------
+
+    PlayerMoveFromServer* New() const;
+    void CopyFrom(const ::google::protobuf::Message& from);
+    void MergeFrom(const ::google::protobuf::Message& from);
+    void CopyFrom(const PlayerMoveFromServer& from);
+    void MergeFrom(const PlayerMoveFromServer& from);
+    void Clear();
+    bool IsInitialized() const;
+
+    int ByteSize() const;
+    bool MergePartialFromCodedStream(
+        ::google::protobuf::io::CodedInputStream* input);
+    void SerializeWithCachedSizes(
+        ::google::protobuf::io::CodedOutputStream* output) const;
+    ::google::protobuf::uint8* SerializeWithCachedSizesToArray(::google::protobuf::uint8* output) const;
+    int GetCachedSize() const {
+        return _cached_size_;
+    }
+private:
+    void SharedCtor();
+    void SharedDtor();
+    void SetCachedSize(int size) const;
+public:
+
+    ::google::protobuf::Metadata GetMetadata() const;
+
+    // nested types ----------------------------------------------------
+
+    // accessors -------------------------------------------------------
+
+    // optional uint32 playerID = 1;
+    inline bool has_playerid() const;
+    inline void clear_playerid();
+    static const int kPlayerIDFieldNumber = 1;
+    inline ::google::protobuf::uint32 playerid() const;
+    inline void set_playerid(::google::protobuf::uint32 value);
+
+    // optional float x = 2;
+    inline bool has_x() const;
+    inline void clear_x();
+    static const int kXFieldNumber = 2;
+    inline float x() const;
+    inline void set_x(float value);
+
+    // optional float y = 3;
+    inline bool has_y() const;
+    inline void clear_y();
+    static const int kYFieldNumber = 3;
+    inline float y() const;
+    inline void set_y(float value);
+
+    // @@protoc_insertion_point(class_scope:PacketBuf.PlayerMoveFromServer)
+private:
+    inline void set_has_playerid();
+    inline void clear_has_playerid();
+    inline void set_has_x();
+    inline void clear_has_x();
+    inline void set_has_y();
+    inline void clear_has_y();
+
+    ::google::protobuf::UnknownFieldSet _unknown_fields_;
+
+    ::google::protobuf::uint32 playerid_;
+    float x_;
+    float y_;
+
+    mutable int _cached_size_;
+    ::google::protobuf::uint32 _has_bits_[(3 + 31) / 32];
+
+    friend void  protobuf_AddDesc_packet_2eproto();
+    friend void protobuf_AssignDesc_packet_2eproto();
+    friend void protobuf_ShutdownFile_packet_2eproto();
+
+    void InitAsDefaultInstance();
+    static PlayerMoveFromServer* default_instance_;
 };
 // -------------------------------------------------------------------
 
-class PlayerMoveFromClient : public ::google::protobuf::Message {
- public:
-  PlayerMoveFromClient();
-  virtual ~PlayerMoveFromClient();
-  
-  PlayerMoveFromClient(const PlayerMoveFromClient& from);
-  
-  inline PlayerMoveFromClient& operator=(const PlayerMoveFromClient& from) {
-    CopyFrom(from);
-    return *this;
-  }
-  
-  inline const ::google::protobuf::UnknownFieldSet& unknown_fields() const {
-    return _unknown_fields_;
-  }
-  
-  inline ::google::protobuf::UnknownFieldSet* mutable_unknown_fields() {
-    return &_unknown_fields_;
-  }
-  
-  static const ::google::protobuf::Descriptor* descriptor();
-  static const PlayerMoveFromClient& default_instance();
-  
-  void Swap(PlayerMoveFromClient* other);
-  
-  // implements Message ----------------------------------------------
-  
-  PlayerMoveFromClient* New() const;
-  void CopyFrom(const ::google::protobuf::Message& from);
-  void MergeFrom(const ::google::protobuf::Message& from);
-  void CopyFrom(const PlayerMoveFromClient& from);
-  void MergeFrom(const PlayerMoveFromClient& from);
-  void Clear();
-  bool IsInitialized() const;
-  
-  int ByteSize() const;
-  bool MergePartialFromCodedStream(
-      ::google::protobuf::io::CodedInputStream* input);
-  void SerializeWithCachedSizes(
-      ::google::protobuf::io::CodedOutputStream* output) const;
-  ::google::protobuf::uint8* SerializeWithCachedSizesToArray(::google::protobuf::uint8* output) const;
-  int GetCachedSize() const { return _cached_size_; }
-  private:
-  void SharedCtor();
-  void SharedDtor();
-  void SetCachedSize(int size) const;
-  public:
-  
-  ::google::protobuf::Metadata GetMetadata() const;
-  
-  // nested types ----------------------------------------------------
-  
-  // accessors -------------------------------------------------------
-  
-  // optional int32 directionX = 1;
-  inline bool has_directionx() const;
-  inline void clear_directionx();
-  static const int kDirectionXFieldNumber = 1;
-  inline ::google::protobuf::int32 directionx() const;
-  inline void set_directionx(::google::protobuf::int32 value);
-  
-  // optional int32 directionY = 2;
-  inline bool has_directiony() const;
-  inline void clear_directiony();
-  static const int kDirectionYFieldNumber = 2;
-  inline ::google::protobuf::int32 directiony() const;
-  inline void set_directiony(::google::protobuf::int32 value);
-  
-  // @@protoc_insertion_point(class_scope:PacketBuf.PlayerMoveFromClient)
- private:
-  inline void set_has_directionx();
-  inline void clear_has_directionx();
-  inline void set_has_directiony();
-  inline void clear_has_directiony();
-  
-  ::google::protobuf::UnknownFieldSet _unknown_fields_;
-  
-  ::google::protobuf::int32 directionx_;
-  ::google::protobuf::int32 directiony_;
-  
-  mutable int _cached_size_;
-  ::google::protobuf::uint32 _has_bits_[(2 + 31) / 32];
-  
-  friend void  protobuf_AddDesc_packet_2eproto();
-  friend void protobuf_AssignDesc_packet_2eproto();
-  friend void protobuf_ShutdownFile_packet_2eproto();
-  
-  void InitAsDefaultInstance();
-  static PlayerMoveFromClient* default_instance_;
+class PlayerMoveFromClient : public ::google::protobuf::Message
+{
+public:
+    PlayerMoveFromClient();
+    virtual ~PlayerMoveFromClient();
+
+    PlayerMoveFromClient(const PlayerMoveFromClient& from);
+
+    inline PlayerMoveFromClient& operator=(const PlayerMoveFromClient& from) {
+        CopyFrom(from);
+        return *this;
+    }
+
+    inline const ::google::protobuf::UnknownFieldSet& unknown_fields() const {
+        return _unknown_fields_;
+    }
+
+    inline ::google::protobuf::UnknownFieldSet* mutable_unknown_fields() {
+        return &_unknown_fields_;
+    }
+
+    static const ::google::protobuf::Descriptor* descriptor();
+    static const PlayerMoveFromClient& default_instance();
+
+    void Swap(PlayerMoveFromClient* other);
+
+    // implements Message ----------------------------------------------
+
+    PlayerMoveFromClient* New() const;
+    void CopyFrom(const ::google::protobuf::Message& from);
+    void MergeFrom(const ::google::protobuf::Message& from);
+    void CopyFrom(const PlayerMoveFromClient& from);
+    void MergeFrom(const PlayerMoveFromClient& from);
+    void Clear();
+    bool IsInitialized() const;
+
+    int ByteSize() const;
+    bool MergePartialFromCodedStream(
+        ::google::protobuf::io::CodedInputStream* input);
+    void SerializeWithCachedSizes(
+        ::google::protobuf::io::CodedOutputStream* output) const;
+    ::google::protobuf::uint8* SerializeWithCachedSizesToArray(::google::protobuf::uint8* output) const;
+    int GetCachedSize() const {
+        return _cached_size_;
+    }
+private:
+    void SharedCtor();
+    void SharedDtor();
+    void SetCachedSize(int size) const;
+public:
+
+    ::google::protobuf::Metadata GetMetadata() const;
+
+    // nested types ----------------------------------------------------
+
+    // accessors -------------------------------------------------------
+
+    // optional int32 directionX = 1;
+    inline bool has_directionx() const;
+    inline void clear_directionx();
+    static const int kDirectionXFieldNumber = 1;
+    inline ::google::protobuf::int32 directionx() const;
+    inline void set_directionx(::google::protobuf::int32 value);
+
+    // optional int32 directionY = 2;
+    inline bool has_directiony() const;
+    inline void clear_directiony();
+    static const int kDirectionYFieldNumber = 2;
+    inline ::google::protobuf::int32 directiony() const;
+    inline void set_directiony(::google::protobuf::int32 value);
+
+    // @@protoc_insertion_point(class_scope:PacketBuf.PlayerMoveFromClient)
+private:
+    inline void set_has_directionx();
+    inline void clear_has_directionx();
+    inline void set_has_directiony();
+    inline void clear_has_directiony();
+
+    ::google::protobuf::UnknownFieldSet _unknown_fields_;
+
+    ::google::protobuf::int32 directionx_;
+    ::google::protobuf::int32 directiony_;
+
+    mutable int _cached_size_;
+    ::google::protobuf::uint32 _has_bits_[(2 + 31) / 32];
+
+    friend void  protobuf_AddDesc_packet_2eproto();
+    friend void protobuf_AssignDesc_packet_2eproto();
+    friend void protobuf_ShutdownFile_packet_2eproto();
+
+    void InitAsDefaultInstance();
+    static PlayerMoveFromClient* default_instance_;
 };
 // ===================================================================
 
@@ -888,25 +916,31 @@ class PlayerMoveFromClient : public ::google::protobuf::Message {
 // Packet
 
 // optional uint32 type = 1;
-inline bool Packet::has_type() const {
-  return (_has_bits_[0] & 0x00000001u) != 0;
+inline bool Packet::has_type() const
+{
+    return (_has_bits_[0] & 0x00000001u) != 0;
 }
-inline void Packet::set_has_type() {
-  _has_bits_[0] |= 0x00000001u;
+inline void Packet::set_has_type()
+{
+    _has_bits_[0] |= 0x00000001u;
 }
-inline void Packet::clear_has_type() {
-  _has_bits_[0] &= ~0x00000001u;
+inline void Packet::clear_has_type()
+{
+    _has_bits_[0] &= ~0x00000001u;
 }
-inline void Packet::clear_type() {
-  type_ = 0u;
-  clear_has_type();
+inline void Packet::clear_type()
+{
+    type_ = 0u;
+    clear_has_type();
 }
-inline ::google::protobuf::uint32 Packet::type() const {
-  return type_;
+inline ::google::protobuf::uint32 Packet::type() const
+{
+    return type_;
 }
-inline void Packet::set_type(::google::protobuf::uint32 value) {
-  set_has_type();
-  type_ = value;
+inline void Packet::set_type(::google::protobuf::uint32 value)
+{
+    set_has_type();
+    type_ = value;
 }
 
 // -------------------------------------------------------------------
@@ -914,105 +948,127 @@ inline void Packet::set_type(::google::protobuf::uint32 value) {
 // ClientInitialConnection
 
 // optional string playerName = 1;
-inline bool ClientInitialConnection::has_playername() const {
-  return (_has_bits_[0] & 0x00000001u) != 0;
+inline bool ClientInitialConnection::has_playername() const
+{
+    return (_has_bits_[0] & 0x00000001u) != 0;
 }
-inline void ClientInitialConnection::set_has_playername() {
-  _has_bits_[0] |= 0x00000001u;
+inline void ClientInitialConnection::set_has_playername()
+{
+    _has_bits_[0] |= 0x00000001u;
 }
-inline void ClientInitialConnection::clear_has_playername() {
-  _has_bits_[0] &= ~0x00000001u;
+inline void ClientInitialConnection::clear_has_playername()
+{
+    _has_bits_[0] &= ~0x00000001u;
 }
-inline void ClientInitialConnection::clear_playername() {
-  if (playername_ != &::google::protobuf::internal::kEmptyString) {
-    playername_->clear();
-  }
-  clear_has_playername();
+inline void ClientInitialConnection::clear_playername()
+{
+    if (playername_ != &::google::protobuf::internal::kEmptyString) {
+        playername_->clear();
+    }
+    clear_has_playername();
 }
-inline const ::std::string& ClientInitialConnection::playername() const {
-  return *playername_;
+inline const ::std::string& ClientInitialConnection::playername() const
+{
+    return *playername_;
 }
-inline void ClientInitialConnection::set_playername(const ::std::string& value) {
-  set_has_playername();
-  if (playername_ == &::google::protobuf::internal::kEmptyString) {
-    playername_ = new ::std::string;
-  }
-  playername_->assign(value);
+inline void ClientInitialConnection::set_playername(const ::std::string& value)
+{
+    set_has_playername();
+    if (playername_ == &::google::protobuf::internal::kEmptyString) {
+        playername_ = new ::std::string;
+    }
+    playername_->assign(value);
 }
-inline void ClientInitialConnection::set_playername(const char* value) {
-  set_has_playername();
-  if (playername_ == &::google::protobuf::internal::kEmptyString) {
-    playername_ = new ::std::string;
-  }
-  playername_->assign(value);
+inline void ClientInitialConnection::set_playername(const char* value)
+{
+    set_has_playername();
+    if (playername_ == &::google::protobuf::internal::kEmptyString) {
+        playername_ = new ::std::string;
+    }
+    playername_->assign(value);
 }
-inline void ClientInitialConnection::set_playername(const char* value, size_t size) {
-  set_has_playername();
-  if (playername_ == &::google::protobuf::internal::kEmptyString) {
-    playername_ = new ::std::string;
-  }
-  playername_->assign(reinterpret_cast<const char*>(value), size);
+inline void ClientInitialConnection::set_playername(const char* value, size_t size)
+{
+    set_has_playername();
+    if (playername_ == &::google::protobuf::internal::kEmptyString) {
+        playername_ = new ::std::string;
+    }
+    playername_->assign(reinterpret_cast<const char*>(value), size);
 }
-inline ::std::string* ClientInitialConnection::mutable_playername() {
-  set_has_playername();
-  if (playername_ == &::google::protobuf::internal::kEmptyString) {
-    playername_ = new ::std::string;
-  }
-  return playername_;
+inline ::std::string* ClientInitialConnection::mutable_playername()
+{
+    set_has_playername();
+    if (playername_ == &::google::protobuf::internal::kEmptyString) {
+        playername_ = new ::std::string;
+    }
+    return playername_;
 }
-inline ::std::string* ClientInitialConnection::release_playername() {
-  clear_has_playername();
-  if (playername_ == &::google::protobuf::internal::kEmptyString) {
-    return NULL;
-  } else {
-    ::std::string* temp = playername_;
-    playername_ = const_cast< ::std::string*>(&::google::protobuf::internal::kEmptyString);
-    return temp;
-  }
+inline ::std::string* ClientInitialConnection::release_playername()
+{
+    clear_has_playername();
+    if (playername_ == &::google::protobuf::internal::kEmptyString) {
+        return NULL;
+    } else {
+        ::std::string* temp = playername_;
+        playername_ = const_cast< ::std::string*>(&::google::protobuf::internal::kEmptyString);
+        return temp;
+    }
 }
 
 // optional int32 versionMajor = 2;
-inline bool ClientInitialConnection::has_versionmajor() const {
-  return (_has_bits_[0] & 0x00000002u) != 0;
+inline bool ClientInitialConnection::has_versionmajor() const
+{
+    return (_has_bits_[0] & 0x00000002u) != 0;
 }
-inline void ClientInitialConnection::set_has_versionmajor() {
-  _has_bits_[0] |= 0x00000002u;
+inline void ClientInitialConnection::set_has_versionmajor()
+{
+    _has_bits_[0] |= 0x00000002u;
 }
-inline void ClientInitialConnection::clear_has_versionmajor() {
-  _has_bits_[0] &= ~0x00000002u;
+inline void ClientInitialConnection::clear_has_versionmajor()
+{
+    _has_bits_[0] &= ~0x00000002u;
 }
-inline void ClientInitialConnection::clear_versionmajor() {
-  versionmajor_ = 0;
-  clear_has_versionmajor();
+inline void ClientInitialConnection::clear_versionmajor()
+{
+    versionmajor_ = 0;
+    clear_has_versionmajor();
 }
-inline ::google::protobuf::int32 ClientInitialConnection::versionmajor() const {
-  return versionmajor_;
+inline ::google::protobuf::int32 ClientInitialConnection::versionmajor() const
+{
+    return versionmajor_;
 }
-inline void ClientInitialConnection::set_versionmajor(::google::protobuf::int32 value) {
-  set_has_versionmajor();
-  versionmajor_ = value;
+inline void ClientInitialConnection::set_versionmajor(::google::protobuf::int32 value)
+{
+    set_has_versionmajor();
+    versionmajor_ = value;
 }
 
 // optional int32 versionMinor = 3;
-inline bool ClientInitialConnection::has_versionminor() const {
-  return (_has_bits_[0] & 0x00000004u) != 0;
+inline bool ClientInitialConnection::has_versionminor() const
+{
+    return (_has_bits_[0] & 0x00000004u) != 0;
 }
-inline void ClientInitialConnection::set_has_versionminor() {
-  _has_bits_[0] |= 0x00000004u;
+inline void ClientInitialConnection::set_has_versionminor()
+{
+    _has_bits_[0] |= 0x00000004u;
 }
-inline void ClientInitialConnection::clear_has_versionminor() {
-  _has_bits_[0] &= ~0x00000004u;
+inline void ClientInitialConnection::clear_has_versionminor()
+{
+    _has_bits_[0] &= ~0x00000004u;
 }
-inline void ClientInitialConnection::clear_versionminor() {
-  versionminor_ = 0;
-  clear_has_versionminor();
+inline void ClientInitialConnection::clear_versionminor()
+{
+    versionminor_ = 0;
+    clear_has_versionminor();
 }
-inline ::google::protobuf::int32 ClientInitialConnection::versionminor() const {
-  return versionminor_;
+inline ::google::protobuf::int32 ClientInitialConnection::versionminor() const
+{
+    return versionminor_;
 }
-inline void ClientInitialConnection::set_versionminor(::google::protobuf::int32 value) {
-  set_has_versionminor();
-  versionminor_ = value;
+inline void ClientInitialConnection::set_versionminor(::google::protobuf::int32 value)
+{
+    set_has_versionminor();
+    versionminor_ = value;
 }
 
 // -------------------------------------------------------------------
@@ -1020,61 +1076,71 @@ inline void ClientInitialConnection::set_versionminor(::google::protobuf::int32 
 // ChatMessageFromClient
 
 // optional string message = 1;
-inline bool ChatMessageFromClient::has_message() const {
-  return (_has_bits_[0] & 0x00000001u) != 0;
+inline bool ChatMessageFromClient::has_message() const
+{
+    return (_has_bits_[0] & 0x00000001u) != 0;
 }
-inline void ChatMessageFromClient::set_has_message() {
-  _has_bits_[0] |= 0x00000001u;
+inline void ChatMessageFromClient::set_has_message()
+{
+    _has_bits_[0] |= 0x00000001u;
 }
-inline void ChatMessageFromClient::clear_has_message() {
-  _has_bits_[0] &= ~0x00000001u;
+inline void ChatMessageFromClient::clear_has_message()
+{
+    _has_bits_[0] &= ~0x00000001u;
 }
-inline void ChatMessageFromClient::clear_message() {
-  if (message_ != &::google::protobuf::internal::kEmptyString) {
-    message_->clear();
-  }
-  clear_has_message();
+inline void ChatMessageFromClient::clear_message()
+{
+    if (message_ != &::google::protobuf::internal::kEmptyString) {
+        message_->clear();
+    }
+    clear_has_message();
 }
-inline const ::std::string& ChatMessageFromClient::message() const {
-  return *message_;
+inline const ::std::string& ChatMessageFromClient::message() const
+{
+    return *message_;
 }
-inline void ChatMessageFromClient::set_message(const ::std::string& value) {
-  set_has_message();
-  if (message_ == &::google::protobuf::internal::kEmptyString) {
-    message_ = new ::std::string;
-  }
-  message_->assign(value);
+inline void ChatMessageFromClient::set_message(const ::std::string& value)
+{
+    set_has_message();
+    if (message_ == &::google::protobuf::internal::kEmptyString) {
+        message_ = new ::std::string;
+    }
+    message_->assign(value);
 }
-inline void ChatMessageFromClient::set_message(const char* value) {
-  set_has_message();
-  if (message_ == &::google::protobuf::internal::kEmptyString) {
-    message_ = new ::std::string;
-  }
-  message_->assign(value);
+inline void ChatMessageFromClient::set_message(const char* value)
+{
+    set_has_message();
+    if (message_ == &::google::protobuf::internal::kEmptyString) {
+        message_ = new ::std::string;
+    }
+    message_->assign(value);
 }
-inline void ChatMessageFromClient::set_message(const char* value, size_t size) {
-  set_has_message();
-  if (message_ == &::google::protobuf::internal::kEmptyString) {
-    message_ = new ::std::string;
-  }
-  message_->assign(reinterpret_cast<const char*>(value), size);
+inline void ChatMessageFromClient::set_message(const char* value, size_t size)
+{
+    set_has_message();
+    if (message_ == &::google::protobuf::internal::kEmptyString) {
+        message_ = new ::std::string;
+    }
+    message_->assign(reinterpret_cast<const char*>(value), size);
 }
-inline ::std::string* ChatMessageFromClient::mutable_message() {
-  set_has_message();
-  if (message_ == &::google::protobuf::internal::kEmptyString) {
-    message_ = new ::std::string;
-  }
-  return message_;
+inline ::std::string* ChatMessageFromClient::mutable_message()
+{
+    set_has_message();
+    if (message_ == &::google::protobuf::internal::kEmptyString) {
+        message_ = new ::std::string;
+    }
+    return message_;
 }
-inline ::std::string* ChatMessageFromClient::release_message() {
-  clear_has_message();
-  if (message_ == &::google::protobuf::internal::kEmptyString) {
-    return NULL;
-  } else {
-    ::std::string* temp = message_;
-    message_ = const_cast< ::std::string*>(&::google::protobuf::internal::kEmptyString);
-    return temp;
-  }
+inline ::std::string* ChatMessageFromClient::release_message()
+{
+    clear_has_message();
+    if (message_ == &::google::protobuf::internal::kEmptyString) {
+        return NULL;
+    } else {
+        ::std::string* temp = message_;
+        message_ = const_cast< ::std::string*>(&::google::protobuf::internal::kEmptyString);
+        return temp;
+    }
 }
 
 // -------------------------------------------------------------------
@@ -1082,119 +1148,139 @@ inline ::std::string* ChatMessageFromClient::release_message() {
 // ChatMessageFromServer
 
 // optional string playerName = 1;
-inline bool ChatMessageFromServer::has_playername() const {
-  return (_has_bits_[0] & 0x00000001u) != 0;
+inline bool ChatMessageFromServer::has_playername() const
+{
+    return (_has_bits_[0] & 0x00000001u) != 0;
 }
-inline void ChatMessageFromServer::set_has_playername() {
-  _has_bits_[0] |= 0x00000001u;
+inline void ChatMessageFromServer::set_has_playername()
+{
+    _has_bits_[0] |= 0x00000001u;
 }
-inline void ChatMessageFromServer::clear_has_playername() {
-  _has_bits_[0] &= ~0x00000001u;
+inline void ChatMessageFromServer::clear_has_playername()
+{
+    _has_bits_[0] &= ~0x00000001u;
 }
-inline void ChatMessageFromServer::clear_playername() {
-  if (playername_ != &::google::protobuf::internal::kEmptyString) {
-    playername_->clear();
-  }
-  clear_has_playername();
+inline void ChatMessageFromServer::clear_playername()
+{
+    if (playername_ != &::google::protobuf::internal::kEmptyString) {
+        playername_->clear();
+    }
+    clear_has_playername();
 }
-inline const ::std::string& ChatMessageFromServer::playername() const {
-  return *playername_;
+inline const ::std::string& ChatMessageFromServer::playername() const
+{
+    return *playername_;
 }
-inline void ChatMessageFromServer::set_playername(const ::std::string& value) {
-  set_has_playername();
-  if (playername_ == &::google::protobuf::internal::kEmptyString) {
-    playername_ = new ::std::string;
-  }
-  playername_->assign(value);
+inline void ChatMessageFromServer::set_playername(const ::std::string& value)
+{
+    set_has_playername();
+    if (playername_ == &::google::protobuf::internal::kEmptyString) {
+        playername_ = new ::std::string;
+    }
+    playername_->assign(value);
 }
-inline void ChatMessageFromServer::set_playername(const char* value) {
-  set_has_playername();
-  if (playername_ == &::google::protobuf::internal::kEmptyString) {
-    playername_ = new ::std::string;
-  }
-  playername_->assign(value);
+inline void ChatMessageFromServer::set_playername(const char* value)
+{
+    set_has_playername();
+    if (playername_ == &::google::protobuf::internal::kEmptyString) {
+        playername_ = new ::std::string;
+    }
+    playername_->assign(value);
 }
-inline void ChatMessageFromServer::set_playername(const char* value, size_t size) {
-  set_has_playername();
-  if (playername_ == &::google::protobuf::internal::kEmptyString) {
-    playername_ = new ::std::string;
-  }
-  playername_->assign(reinterpret_cast<const char*>(value), size);
+inline void ChatMessageFromServer::set_playername(const char* value, size_t size)
+{
+    set_has_playername();
+    if (playername_ == &::google::protobuf::internal::kEmptyString) {
+        playername_ = new ::std::string;
+    }
+    playername_->assign(reinterpret_cast<const char*>(value), size);
 }
-inline ::std::string* ChatMessageFromServer::mutable_playername() {
-  set_has_playername();
-  if (playername_ == &::google::protobuf::internal::kEmptyString) {
-    playername_ = new ::std::string;
-  }
-  return playername_;
+inline ::std::string* ChatMessageFromServer::mutable_playername()
+{
+    set_has_playername();
+    if (playername_ == &::google::protobuf::internal::kEmptyString) {
+        playername_ = new ::std::string;
+    }
+    return playername_;
 }
-inline ::std::string* ChatMessageFromServer::release_playername() {
-  clear_has_playername();
-  if (playername_ == &::google::protobuf::internal::kEmptyString) {
-    return NULL;
-  } else {
-    ::std::string* temp = playername_;
-    playername_ = const_cast< ::std::string*>(&::google::protobuf::internal::kEmptyString);
-    return temp;
-  }
+inline ::std::string* ChatMessageFromServer::release_playername()
+{
+    clear_has_playername();
+    if (playername_ == &::google::protobuf::internal::kEmptyString) {
+        return NULL;
+    } else {
+        ::std::string* temp = playername_;
+        playername_ = const_cast< ::std::string*>(&::google::protobuf::internal::kEmptyString);
+        return temp;
+    }
 }
 
 // optional string message = 2;
-inline bool ChatMessageFromServer::has_message() const {
-  return (_has_bits_[0] & 0x00000002u) != 0;
+inline bool ChatMessageFromServer::has_message() const
+{
+    return (_has_bits_[0] & 0x00000002u) != 0;
 }
-inline void ChatMessageFromServer::set_has_message() {
-  _has_bits_[0] |= 0x00000002u;
+inline void ChatMessageFromServer::set_has_message()
+{
+    _has_bits_[0] |= 0x00000002u;
 }
-inline void ChatMessageFromServer::clear_has_message() {
-  _has_bits_[0] &= ~0x00000002u;
+inline void ChatMessageFromServer::clear_has_message()
+{
+    _has_bits_[0] &= ~0x00000002u;
 }
-inline void ChatMessageFromServer::clear_message() {
-  if (message_ != &::google::protobuf::internal::kEmptyString) {
-    message_->clear();
-  }
-  clear_has_message();
+inline void ChatMessageFromServer::clear_message()
+{
+    if (message_ != &::google::protobuf::internal::kEmptyString) {
+        message_->clear();
+    }
+    clear_has_message();
 }
-inline const ::std::string& ChatMessageFromServer::message() const {
-  return *message_;
+inline const ::std::string& ChatMessageFromServer::message() const
+{
+    return *message_;
 }
-inline void ChatMessageFromServer::set_message(const ::std::string& value) {
-  set_has_message();
-  if (message_ == &::google::protobuf::internal::kEmptyString) {
-    message_ = new ::std::string;
-  }
-  message_->assign(value);
+inline void ChatMessageFromServer::set_message(const ::std::string& value)
+{
+    set_has_message();
+    if (message_ == &::google::protobuf::internal::kEmptyString) {
+        message_ = new ::std::string;
+    }
+    message_->assign(value);
 }
-inline void ChatMessageFromServer::set_message(const char* value) {
-  set_has_message();
-  if (message_ == &::google::protobuf::internal::kEmptyString) {
-    message_ = new ::std::string;
-  }
-  message_->assign(value);
+inline void ChatMessageFromServer::set_message(const char* value)
+{
+    set_has_message();
+    if (message_ == &::google::protobuf::internal::kEmptyString) {
+        message_ = new ::std::string;
+    }
+    message_->assign(value);
 }
-inline void ChatMessageFromServer::set_message(const char* value, size_t size) {
-  set_has_message();
-  if (message_ == &::google::protobuf::internal::kEmptyString) {
-    message_ = new ::std::string;
-  }
-  message_->assign(reinterpret_cast<const char*>(value), size);
+inline void ChatMessageFromServer::set_message(const char* value, size_t size)
+{
+    set_has_message();
+    if (message_ == &::google::protobuf::internal::kEmptyString) {
+        message_ = new ::std::string;
+    }
+    message_->assign(reinterpret_cast<const char*>(value), size);
 }
-inline ::std::string* ChatMessageFromServer::mutable_message() {
-  set_has_message();
-  if (message_ == &::google::protobuf::internal::kEmptyString) {
-    message_ = new ::std::string;
-  }
-  return message_;
+inline ::std::string* ChatMessageFromServer::mutable_message()
+{
+    set_has_message();
+    if (message_ == &::google::protobuf::internal::kEmptyString) {
+        message_ = new ::std::string;
+    }
+    return message_;
 }
-inline ::std::string* ChatMessageFromServer::release_message() {
-  clear_has_message();
-  if (message_ == &::google::protobuf::internal::kEmptyString) {
-    return NULL;
-  } else {
-    ::std::string* temp = message_;
-    message_ = const_cast< ::std::string*>(&::google::protobuf::internal::kEmptyString);
-    return temp;
-  }
+inline ::std::string* ChatMessageFromServer::release_message()
+{
+    clear_has_message();
+    if (message_ == &::google::protobuf::internal::kEmptyString) {
+        return NULL;
+    } else {
+        ::std::string* temp = message_;
+        message_ = const_cast< ::std::string*>(&::google::protobuf::internal::kEmptyString);
+        return temp;
+    }
 }
 
 // -------------------------------------------------------------------
@@ -1206,127 +1292,155 @@ inline ::std::string* ChatMessageFromServer::release_message() {
 // InitialPlayerDataFromServer
 
 // optional uint32 playerID = 1;
-inline bool InitialPlayerDataFromServer::has_playerid() const {
-  return (_has_bits_[0] & 0x00000001u) != 0;
+inline bool InitialPlayerDataFromServer::has_playerid() const
+{
+    return (_has_bits_[0] & 0x00000001u) != 0;
 }
-inline void InitialPlayerDataFromServer::set_has_playerid() {
-  _has_bits_[0] |= 0x00000001u;
+inline void InitialPlayerDataFromServer::set_has_playerid()
+{
+    _has_bits_[0] |= 0x00000001u;
 }
-inline void InitialPlayerDataFromServer::clear_has_playerid() {
-  _has_bits_[0] &= ~0x00000001u;
+inline void InitialPlayerDataFromServer::clear_has_playerid()
+{
+    _has_bits_[0] &= ~0x00000001u;
 }
-inline void InitialPlayerDataFromServer::clear_playerid() {
-  playerid_ = 0u;
-  clear_has_playerid();
+inline void InitialPlayerDataFromServer::clear_playerid()
+{
+    playerid_ = 0u;
+    clear_has_playerid();
 }
-inline ::google::protobuf::uint32 InitialPlayerDataFromServer::playerid() const {
-  return playerid_;
+inline ::google::protobuf::uint32 InitialPlayerDataFromServer::playerid() const
+{
+    return playerid_;
 }
-inline void InitialPlayerDataFromServer::set_playerid(::google::protobuf::uint32 value) {
-  set_has_playerid();
-  playerid_ = value;
+inline void InitialPlayerDataFromServer::set_playerid(::google::protobuf::uint32 value)
+{
+    set_has_playerid();
+    playerid_ = value;
 }
 
 // optional string playerName = 2;
-inline bool InitialPlayerDataFromServer::has_playername() const {
-  return (_has_bits_[0] & 0x00000002u) != 0;
+inline bool InitialPlayerDataFromServer::has_playername() const
+{
+    return (_has_bits_[0] & 0x00000002u) != 0;
 }
-inline void InitialPlayerDataFromServer::set_has_playername() {
-  _has_bits_[0] |= 0x00000002u;
+inline void InitialPlayerDataFromServer::set_has_playername()
+{
+    _has_bits_[0] |= 0x00000002u;
 }
-inline void InitialPlayerDataFromServer::clear_has_playername() {
-  _has_bits_[0] &= ~0x00000002u;
+inline void InitialPlayerDataFromServer::clear_has_playername()
+{
+    _has_bits_[0] &= ~0x00000002u;
 }
-inline void InitialPlayerDataFromServer::clear_playername() {
-  if (playername_ != &::google::protobuf::internal::kEmptyString) {
-    playername_->clear();
-  }
-  clear_has_playername();
+inline void InitialPlayerDataFromServer::clear_playername()
+{
+    if (playername_ != &::google::protobuf::internal::kEmptyString) {
+        playername_->clear();
+    }
+    clear_has_playername();
 }
-inline const ::std::string& InitialPlayerDataFromServer::playername() const {
-  return *playername_;
+inline const ::std::string& InitialPlayerDataFromServer::playername() const
+{
+    return *playername_;
 }
-inline void InitialPlayerDataFromServer::set_playername(const ::std::string& value) {
-  set_has_playername();
-  if (playername_ == &::google::protobuf::internal::kEmptyString) {
-    playername_ = new ::std::string;
-  }
-  playername_->assign(value);
+inline void InitialPlayerDataFromServer::set_playername(const ::std::string& value)
+{
+    set_has_playername();
+    if (playername_ == &::google::protobuf::internal::kEmptyString) {
+        playername_ = new ::std::string;
+    }
+    playername_->assign(value);
 }
-inline void InitialPlayerDataFromServer::set_playername(const char* value) {
-  set_has_playername();
-  if (playername_ == &::google::protobuf::internal::kEmptyString) {
-    playername_ = new ::std::string;
-  }
-  playername_->assign(value);
+inline void InitialPlayerDataFromServer::set_playername(const char* value)
+{
+    set_has_playername();
+    if (playername_ == &::google::protobuf::internal::kEmptyString) {
+        playername_ = new ::std::string;
+    }
+    playername_->assign(value);
 }
-inline void InitialPlayerDataFromServer::set_playername(const char* value, size_t size) {
-  set_has_playername();
-  if (playername_ == &::google::protobuf::internal::kEmptyString) {
-    playername_ = new ::std::string;
-  }
-  playername_->assign(reinterpret_cast<const char*>(value), size);
+inline void InitialPlayerDataFromServer::set_playername(const char* value, size_t size)
+{
+    set_has_playername();
+    if (playername_ == &::google::protobuf::internal::kEmptyString) {
+        playername_ = new ::std::string;
+    }
+    playername_->assign(reinterpret_cast<const char*>(value), size);
 }
-inline ::std::string* InitialPlayerDataFromServer::mutable_playername() {
-  set_has_playername();
-  if (playername_ == &::google::protobuf::internal::kEmptyString) {
-    playername_ = new ::std::string;
-  }
-  return playername_;
+inline ::std::string* InitialPlayerDataFromServer::mutable_playername()
+{
+    set_has_playername();
+    if (playername_ == &::google::protobuf::internal::kEmptyString) {
+        playername_ = new ::std::string;
+    }
+    return playername_;
 }
-inline ::std::string* InitialPlayerDataFromServer::release_playername() {
-  clear_has_playername();
-  if (playername_ == &::google::protobuf::internal::kEmptyString) {
-    return NULL;
-  } else {
-    ::std::string* temp = playername_;
-    playername_ = const_cast< ::std::string*>(&::google::protobuf::internal::kEmptyString);
-    return temp;
-  }
+inline ::std::string* InitialPlayerDataFromServer::release_playername()
+{
+    clear_has_playername();
+    if (playername_ == &::google::protobuf::internal::kEmptyString) {
+        return NULL;
+    } else {
+        ::std::string* temp = playername_;
+        playername_ = const_cast< ::std::string*>(&::google::protobuf::internal::kEmptyString);
+        return temp;
+    }
 }
 
 // optional float x = 3;
-inline bool InitialPlayerDataFromServer::has_x() const {
-  return (_has_bits_[0] & 0x00000004u) != 0;
+inline bool InitialPlayerDataFromServer::has_x() const
+{
+    return (_has_bits_[0] & 0x00000004u) != 0;
 }
-inline void InitialPlayerDataFromServer::set_has_x() {
-  _has_bits_[0] |= 0x00000004u;
+inline void InitialPlayerDataFromServer::set_has_x()
+{
+    _has_bits_[0] |= 0x00000004u;
 }
-inline void InitialPlayerDataFromServer::clear_has_x() {
-  _has_bits_[0] &= ~0x00000004u;
+inline void InitialPlayerDataFromServer::clear_has_x()
+{
+    _has_bits_[0] &= ~0x00000004u;
 }
-inline void InitialPlayerDataFromServer::clear_x() {
-  x_ = 0;
-  clear_has_x();
+inline void InitialPlayerDataFromServer::clear_x()
+{
+    x_ = 0;
+    clear_has_x();
 }
-inline float InitialPlayerDataFromServer::x() const {
-  return x_;
+inline float InitialPlayerDataFromServer::x() const
+{
+    return x_;
 }
-inline void InitialPlayerDataFromServer::set_x(float value) {
-  set_has_x();
-  x_ = value;
+inline void InitialPlayerDataFromServer::set_x(float value)
+{
+    set_has_x();
+    x_ = value;
 }
 
 // optional float y = 4;
-inline bool InitialPlayerDataFromServer::has_y() const {
-  return (_has_bits_[0] & 0x00000008u) != 0;
+inline bool InitialPlayerDataFromServer::has_y() const
+{
+    return (_has_bits_[0] & 0x00000008u) != 0;
 }
-inline void InitialPlayerDataFromServer::set_has_y() {
-  _has_bits_[0] |= 0x00000008u;
+inline void InitialPlayerDataFromServer::set_has_y()
+{
+    _has_bits_[0] |= 0x00000008u;
 }
-inline void InitialPlayerDataFromServer::clear_has_y() {
-  _has_bits_[0] &= ~0x00000008u;
+inline void InitialPlayerDataFromServer::clear_has_y()
+{
+    _has_bits_[0] &= ~0x00000008u;
 }
-inline void InitialPlayerDataFromServer::clear_y() {
-  y_ = 0;
-  clear_has_y();
+inline void InitialPlayerDataFromServer::clear_y()
+{
+    y_ = 0;
+    clear_has_y();
 }
-inline float InitialPlayerDataFromServer::y() const {
-  return y_;
+inline float InitialPlayerDataFromServer::y() const
+{
+    return y_;
 }
-inline void InitialPlayerDataFromServer::set_y(float value) {
-  set_has_y();
-  y_ = value;
+inline void InitialPlayerDataFromServer::set_y(float value)
+{
+    set_has_y();
+    y_ = value;
 }
 
 // -------------------------------------------------------------------
@@ -1334,25 +1448,31 @@ inline void InitialPlayerDataFromServer::set_y(float value) {
 // PlayerDisconnectedFromServer
 
 // optional uint32 playerID = 1;
-inline bool PlayerDisconnectedFromServer::has_playerid() const {
-  return (_has_bits_[0] & 0x00000001u) != 0;
+inline bool PlayerDisconnectedFromServer::has_playerid() const
+{
+    return (_has_bits_[0] & 0x00000001u) != 0;
 }
-inline void PlayerDisconnectedFromServer::set_has_playerid() {
-  _has_bits_[0] |= 0x00000001u;
+inline void PlayerDisconnectedFromServer::set_has_playerid()
+{
+    _has_bits_[0] |= 0x00000001u;
 }
-inline void PlayerDisconnectedFromServer::clear_has_playerid() {
-  _has_bits_[0] &= ~0x00000001u;
+inline void PlayerDisconnectedFromServer::clear_has_playerid()
+{
+    _has_bits_[0] &= ~0x00000001u;
 }
-inline void PlayerDisconnectedFromServer::clear_playerid() {
-  playerid_ = 0u;
-  clear_has_playerid();
+inline void PlayerDisconnectedFromServer::clear_playerid()
+{
+    playerid_ = 0u;
+    clear_has_playerid();
 }
-inline ::google::protobuf::uint32 PlayerDisconnectedFromServer::playerid() const {
-  return playerid_;
+inline ::google::protobuf::uint32 PlayerDisconnectedFromServer::playerid() const
+{
+    return playerid_;
 }
-inline void PlayerDisconnectedFromServer::set_playerid(::google::protobuf::uint32 value) {
-  set_has_playerid();
-  playerid_ = value;
+inline void PlayerDisconnectedFromServer::set_playerid(::google::protobuf::uint32 value)
+{
+    set_has_playerid();
+    playerid_ = value;
 }
 
 // -------------------------------------------------------------------
@@ -1360,69 +1480,87 @@ inline void PlayerDisconnectedFromServer::set_playerid(::google::protobuf::uint3
 // PlayerMoveFromServer
 
 // optional uint32 playerID = 1;
-inline bool PlayerMoveFromServer::has_playerid() const {
-  return (_has_bits_[0] & 0x00000001u) != 0;
+inline bool PlayerMoveFromServer::has_playerid() const
+{
+    return (_has_bits_[0] & 0x00000001u) != 0;
 }
-inline void PlayerMoveFromServer::set_has_playerid() {
-  _has_bits_[0] |= 0x00000001u;
+inline void PlayerMoveFromServer::set_has_playerid()
+{
+    _has_bits_[0] |= 0x00000001u;
 }
-inline void PlayerMoveFromServer::clear_has_playerid() {
-  _has_bits_[0] &= ~0x00000001u;
+inline void PlayerMoveFromServer::clear_has_playerid()
+{
+    _has_bits_[0] &= ~0x00000001u;
 }
-inline void PlayerMoveFromServer::clear_playerid() {
-  playerid_ = 0u;
-  clear_has_playerid();
+inline void PlayerMoveFromServer::clear_playerid()
+{
+    playerid_ = 0u;
+    clear_has_playerid();
 }
-inline ::google::protobuf::uint32 PlayerMoveFromServer::playerid() const {
-  return playerid_;
+inline ::google::protobuf::uint32 PlayerMoveFromServer::playerid() const
+{
+    return playerid_;
 }
-inline void PlayerMoveFromServer::set_playerid(::google::protobuf::uint32 value) {
-  set_has_playerid();
-  playerid_ = value;
+inline void PlayerMoveFromServer::set_playerid(::google::protobuf::uint32 value)
+{
+    set_has_playerid();
+    playerid_ = value;
 }
 
 // optional float x = 2;
-inline bool PlayerMoveFromServer::has_x() const {
-  return (_has_bits_[0] & 0x00000002u) != 0;
+inline bool PlayerMoveFromServer::has_x() const
+{
+    return (_has_bits_[0] & 0x00000002u) != 0;
 }
-inline void PlayerMoveFromServer::set_has_x() {
-  _has_bits_[0] |= 0x00000002u;
+inline void PlayerMoveFromServer::set_has_x()
+{
+    _has_bits_[0] |= 0x00000002u;
 }
-inline void PlayerMoveFromServer::clear_has_x() {
-  _has_bits_[0] &= ~0x00000002u;
+inline void PlayerMoveFromServer::clear_has_x()
+{
+    _has_bits_[0] &= ~0x00000002u;
 }
-inline void PlayerMoveFromServer::clear_x() {
-  x_ = 0;
-  clear_has_x();
+inline void PlayerMoveFromServer::clear_x()
+{
+    x_ = 0;
+    clear_has_x();
 }
-inline float PlayerMoveFromServer::x() const {
-  return x_;
+inline float PlayerMoveFromServer::x() const
+{
+    return x_;
 }
-inline void PlayerMoveFromServer::set_x(float value) {
-  set_has_x();
-  x_ = value;
+inline void PlayerMoveFromServer::set_x(float value)
+{
+    set_has_x();
+    x_ = value;
 }
 
 // optional float y = 3;
-inline bool PlayerMoveFromServer::has_y() const {
-  return (_has_bits_[0] & 0x00000004u) != 0;
+inline bool PlayerMoveFromServer::has_y() const
+{
+    return (_has_bits_[0] & 0x00000004u) != 0;
 }
-inline void PlayerMoveFromServer::set_has_y() {
-  _has_bits_[0] |= 0x00000004u;
+inline void PlayerMoveFromServer::set_has_y()
+{
+    _has_bits_[0] |= 0x00000004u;
 }
-inline void PlayerMoveFromServer::clear_has_y() {
-  _has_bits_[0] &= ~0x00000004u;
+inline void PlayerMoveFromServer::clear_has_y()
+{
+    _has_bits_[0] &= ~0x00000004u;
 }
-inline void PlayerMoveFromServer::clear_y() {
-  y_ = 0;
-  clear_has_y();
+inline void PlayerMoveFromServer::clear_y()
+{
+    y_ = 0;
+    clear_has_y();
 }
-inline float PlayerMoveFromServer::y() const {
-  return y_;
+inline float PlayerMoveFromServer::y() const
+{
+    return y_;
 }
-inline void PlayerMoveFromServer::set_y(float value) {
-  set_has_y();
-  y_ = value;
+inline void PlayerMoveFromServer::set_y(float value)
+{
+    set_has_y();
+    y_ = value;
 }
 
 // -------------------------------------------------------------------
@@ -1430,47 +1568,59 @@ inline void PlayerMoveFromServer::set_y(float value) {
 // PlayerMoveFromClient
 
 // optional int32 directionX = 1;
-inline bool PlayerMoveFromClient::has_directionx() const {
-  return (_has_bits_[0] & 0x00000001u) != 0;
+inline bool PlayerMoveFromClient::has_directionx() const
+{
+    return (_has_bits_[0] & 0x00000001u) != 0;
 }
-inline void PlayerMoveFromClient::set_has_directionx() {
-  _has_bits_[0] |= 0x00000001u;
+inline void PlayerMoveFromClient::set_has_directionx()
+{
+    _has_bits_[0] |= 0x00000001u;
 }
-inline void PlayerMoveFromClient::clear_has_directionx() {
-  _has_bits_[0] &= ~0x00000001u;
+inline void PlayerMoveFromClient::clear_has_directionx()
+{
+    _has_bits_[0] &= ~0x00000001u;
 }
-inline void PlayerMoveFromClient::clear_directionx() {
-  directionx_ = 0;
-  clear_has_directionx();
+inline void PlayerMoveFromClient::clear_directionx()
+{
+    directionx_ = 0;
+    clear_has_directionx();
 }
-inline ::google::protobuf::int32 PlayerMoveFromClient::directionx() const {
-  return directionx_;
+inline ::google::protobuf::int32 PlayerMoveFromClient::directionx() const
+{
+    return directionx_;
 }
-inline void PlayerMoveFromClient::set_directionx(::google::protobuf::int32 value) {
-  set_has_directionx();
-  directionx_ = value;
+inline void PlayerMoveFromClient::set_directionx(::google::protobuf::int32 value)
+{
+    set_has_directionx();
+    directionx_ = value;
 }
 
 // optional int32 directionY = 2;
-inline bool PlayerMoveFromClient::has_directiony() const {
-  return (_has_bits_[0] & 0x00000002u) != 0;
+inline bool PlayerMoveFromClient::has_directiony() const
+{
+    return (_has_bits_[0] & 0x00000002u) != 0;
 }
-inline void PlayerMoveFromClient::set_has_directiony() {
-  _has_bits_[0] |= 0x00000002u;
+inline void PlayerMoveFromClient::set_has_directiony()
+{
+    _has_bits_[0] |= 0x00000002u;
 }
-inline void PlayerMoveFromClient::clear_has_directiony() {
-  _has_bits_[0] &= ~0x00000002u;
+inline void PlayerMoveFromClient::clear_has_directiony()
+{
+    _has_bits_[0] &= ~0x00000002u;
 }
-inline void PlayerMoveFromClient::clear_directiony() {
-  directiony_ = 0;
-  clear_has_directiony();
+inline void PlayerMoveFromClient::clear_directiony()
+{
+    directiony_ = 0;
+    clear_has_directiony();
 }
-inline ::google::protobuf::int32 PlayerMoveFromClient::directiony() const {
-  return directiony_;
+inline ::google::protobuf::int32 PlayerMoveFromClient::directiony() const
+{
+    return directiony_;
 }
-inline void PlayerMoveFromClient::set_directiony(::google::protobuf::int32 value) {
-  set_has_directiony();
-  directiony_ = value;
+inline void PlayerMoveFromClient::set_directiony(::google::protobuf::int32 value)
+{
+    set_has_directiony();
+    directiony_ = value;
 }
 
 
@@ -1479,8 +1629,10 @@ inline void PlayerMoveFromClient::set_directiony(::google::protobuf::int32 value
 }  // namespace PacketBuf
 
 #ifndef SWIG
-namespace google {
-namespace protobuf {
+namespace google
+{
+namespace protobuf
+{
 
 
 }  // namespace google

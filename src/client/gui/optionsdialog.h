@@ -20,10 +20,12 @@
 
 #include <Rocket/Core.h>
 
-namespace Rocket {
-    namespace Core {
-        class ElementDocument;
-    }
+namespace Rocket
+{
+namespace Core
+{
+class ElementDocument;
+}
 }
 
 class Client;

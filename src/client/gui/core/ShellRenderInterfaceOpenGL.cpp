@@ -50,13 +50,10 @@ void ShellRenderInterfaceOpenGL::RenderGeometry(Rocket::Core::Vertex* vertices, 
     glEnableClientState(GL_COLOR_ARRAY);
     glColorPointer(4, GL_UNSIGNED_BYTE, sizeof(Rocket::Core::Vertex), &vertices[0].colour);
 
-    if (!texture)
-    {
+    if (!texture) {
         glDisable(GL_TEXTURE_2D);
         glDisableClientState(GL_TEXTURE_COORD_ARRAY);
-    }
-    else
-    {
+    } else {
         glEnable(GL_TEXTURE_2D);
         glBindTexture(GL_TEXTURE_2D, (GLuint) texture);
         glEnableClientState(GL_TEXTURE_COORD_ARRAY);
@@ -106,8 +103,7 @@ void ShellRenderInterfaceOpenGL::SetScissorRegion(int x, int y, int width, int h
 
 // Set to byte packing, or the compiler will expand our struct, which means it won't read correctly from file
 #pragma pack(1)
-struct TGAHeader
-{
+struct TGAHeader {
     char  idLength;
     char  colourMapType;
     char  dataType;
@@ -129,8 +125,7 @@ bool ShellRenderInterfaceOpenGL::LoadTexture(Rocket::Core::TextureHandle& textur
 {
     Rocket::Core::FileInterface* file_interface = Rocket::Core::GetFileInterface();
     Rocket::Core::FileHandle file_handle = file_interface->Open(source);
-    if (!file_handle)
-    {
+    if (!file_handle) {
         return false;
     }
 
@@ -148,15 +143,13 @@ bool ShellRenderInterfaceOpenGL::LoadTexture(Rocket::Core::TextureHandle& textur
     int color_mode = header.bitsPerPixel / 8;
     int image_size = header.width * header.height * 4; // We always make 32bit textures
 
-    if (header.dataType != 2)
-    {
+    if (header.dataType != 2) {
         Rocket::Core::Log::Message(Rocket::Core::Log::LT_ERROR, "Only 24/32bit uncompressed TGAs are supported.");
         return false;
     }
 
     // Ensure we have at least 3 colors
-    if (color_mode < 3)
-    {
+    if (color_mode < 3) {
         Rocket::Core::Log::Message(Rocket::Core::Log::LT_ERROR, "Only 24 and 32bit textures are supported");
         return false;
     }
@@ -165,19 +158,17 @@ bool ShellRenderInterfaceOpenGL::LoadTexture(Rocket::Core::TextureHandle& textur
     unsigned char* image_dest = new unsigned char[image_size];
 
     // Targa is BGR, swap to RGB and flip Y axis
-    for (long y = 0; y < header.height; y++)
-    {
+    for (long y = 0; y < header.height; y++) {
         long read_index = y * header.width * color_mode;
         long write_index = ((header.imageDescriptor & 32) != 0) ? read_index : (header.height - y - 1) * header.width * color_mode;
-        for (long x = 0; x < header.width; x++)
-        {
-            image_dest[write_index] = image_src[read_index+2];
-            image_dest[write_index+1] = image_src[read_index+1];
-            image_dest[write_index+2] = image_src[read_index];
+        for (long x = 0; x < header.width; x++) {
+            image_dest[write_index] = image_src[read_index + 2];
+            image_dest[write_index + 1] = image_src[read_index + 1];
+            image_dest[write_index + 2] = image_src[read_index];
             if (color_mode == 4)
-                image_dest[write_index+3] = image_src[read_index+3];
+                image_dest[write_index + 3] = image_src[read_index + 3];
             else
-                image_dest[write_index+3] = 255;
+                image_dest[write_index + 3] = 255;
 
             write_index += 4;
             read_index += color_mode;
@@ -200,8 +191,7 @@ bool ShellRenderInterfaceOpenGL::GenerateTexture(Rocket::Core::TextureHandle& te
 {
     GLuint texture_id = 0;
     glGenTextures(1, &texture_id);
-    if (texture_id == 0)
-    {
+    if (texture_id == 0) {
         printf("Failed to generate textures\n");
         return false;
     }

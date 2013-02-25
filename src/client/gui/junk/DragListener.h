@@ -14,7 +14,7 @@
  *
  * The above copyright notice and this permission notice shall be included in
  * all copies or substantial portions of the Software.
- * 
+ *
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
  * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -32,17 +32,17 @@
 #include <Rocket/Core/Types.h>
 
 /**
-	@author Pete
+    @author Pete
  */
 
 class DragListener : public Rocket::Core::EventListener
 {
 public:
-	/// Registers an elemenet as being a container of draggable elements.
-	static void RegisterDraggableContainer(Rocket::Core::Element* element);
+    /// Registers an elemenet as being a container of draggable elements.
+    static void RegisterDraggableContainer(Rocket::Core::Element* element);
 
 protected:
-	virtual void ProcessEvent(Rocket::Core::Event& event);
+    virtual void ProcessEvent(Rocket::Core::Event& event);
 };
 
 #endif

@@ -18,10 +18,12 @@
 #ifndef GUI_H
 #define GUI_H
 
-namespace Rocket {
-    namespace Core {
-        class Context;
-    }
+namespace Rocket
+{
+namespace Core
+{
+class Context;
+}
 }
 
 class ShellRenderInterfaceOpenGL;
@@ -45,7 +47,9 @@ public:
      */
     void debugRenderingChanged();
 
-    Rocket::Core::Context* context() { return m_context; }
+    Rocket::Core::Context* context() {
+        return m_context;
+    }
 
     void addInputDemand();
     void removeInputDemand();

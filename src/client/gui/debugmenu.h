@@ -20,13 +20,16 @@
 
 #include <Rocket/Core.h>
 
-namespace Rocket {
-    namespace Core {
-        class ElementDocument;
-    }
-    namespace Controls{
-        class ElementTabSet;
-    }
+namespace Rocket
+{
+namespace Core
+{
+class ElementDocument;
+}
+namespace Controls
+{
+class ElementTabSet;
+}
 }
 
 class Client;

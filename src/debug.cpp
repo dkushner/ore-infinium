@@ -77,42 +77,42 @@ void Debug::glDebugCallback(unsigned int source, unsigned int type, unsigned int
         sourceString.append("\e[32;40m");
         sourceString.append("\nError Source:");
 
-        switch(source) {
-            case GL_DEBUG_SOURCE_API:
-                sourceString.append("\e[37;40m");
-                sourceString.append("[API]");
-                sourceString.append("\e[37;40m\e[0m");
-                break;
+        switch (source) {
+        case GL_DEBUG_SOURCE_API:
+            sourceString.append("\e[37;40m");
+            sourceString.append("[API]");
+            sourceString.append("\e[37;40m\e[0m");
+            break;
 
-            case GL_DEBUG_SOURCE_WINDOW_SYSTEM:
-                sourceString.append("\e[37;40m");
-                sourceString.append("[WINDOW SYSTEM]");
-                sourceString.append("\e[37;40m\e[0m");
-                break;
+        case GL_DEBUG_SOURCE_WINDOW_SYSTEM:
+            sourceString.append("\e[37;40m");
+            sourceString.append("[WINDOW SYSTEM]");
+            sourceString.append("\e[37;40m\e[0m");
+            break;
 
-            case GL_DEBUG_SOURCE_SHADER_COMPILER:
-                sourceString.append("\e[37;40m");
-                sourceString.append("[SHADER COMPILER]");
-                sourceString.append("\e[37;40m\e[0m");
-                break;
+        case GL_DEBUG_SOURCE_SHADER_COMPILER:
+            sourceString.append("\e[37;40m");
+            sourceString.append("[SHADER COMPILER]");
+            sourceString.append("\e[37;40m\e[0m");
+            break;
 
-            case GL_DEBUG_SOURCE_THIRD_PARTY:
-                sourceString.append("\e[37;40m");
-                sourceString.append("[THIRD_PARTY]");
-                sourceString.append("\e[37;40m\e[0m");
-                break;
+        case GL_DEBUG_SOURCE_THIRD_PARTY:
+            sourceString.append("\e[37;40m");
+            sourceString.append("[THIRD_PARTY]");
+            sourceString.append("\e[37;40m\e[0m");
+            break;
 
-            case GL_DEBUG_SOURCE_APPLICATION:
-                sourceString.append("\e[37;40m");
-                sourceString.append("[APPLICATION]");
-                sourceString.append("\e[37;40m\e[0m");
-                break;
+        case GL_DEBUG_SOURCE_APPLICATION:
+            sourceString.append("\e[37;40m");
+            sourceString.append("[APPLICATION]");
+            sourceString.append("\e[37;40m\e[0m");
+            break;
 
-            case GL_DEBUG_SOURCE_OTHER:
-                sourceString.append("\e[37;40m");
-                sourceString.append("[OTHER]");
-                sourceString.append("\e[37;40m\e[0m");
-                break;
+        case GL_DEBUG_SOURCE_OTHER:
+            sourceString.append("\e[37;40m");
+            sourceString.append("[OTHER]");
+            sourceString.append("\e[37;40m\e[0m");
+            break;
         }
 
         sourceString.append("\e[32;40m\e[0m");
@@ -121,30 +121,30 @@ void Debug::glDebugCallback(unsigned int source, unsigned int type, unsigned int
         severityString.append("\e[32;40m");
         severityString.append("\nError Source:");
 
-        switch(severity) {
-            case GL_DEBUG_SEVERITY_HIGH:
-                severityString.append("\e[37;40m");
-                severityString.append("[HIGH]");
-                severityString.append("\e[37;40m\e[0m");
-                break;
+        switch (severity) {
+        case GL_DEBUG_SEVERITY_HIGH:
+            severityString.append("\e[37;40m");
+            severityString.append("[HIGH]");
+            severityString.append("\e[37;40m\e[0m");
+            break;
 
-            case GL_DEBUG_SEVERITY_MEDIUM:
-                severityString.append("\e[37;40m");
-                severityString.append("[MEDIUM]");
-                severityString.append("\e[37;40m\e[0m");
-                break;
+        case GL_DEBUG_SEVERITY_MEDIUM:
+            severityString.append("\e[37;40m");
+            severityString.append("[MEDIUM]");
+            severityString.append("\e[37;40m\e[0m");
+            break;
 
-            case GL_DEBUG_SEVERITY_LOW:
-                severityString.append("\e[37;40m");
-                severityString.append("[LOW]");
-                severityString.append("\e[37;40m\e[0m");
-                break;
+        case GL_DEBUG_SEVERITY_LOW:
+            severityString.append("\e[37;40m");
+            severityString.append("[LOW]");
+            severityString.append("\e[37;40m\e[0m");
+            break;
 
-            case GL_DEBUG_SEVERITY_NOTIFICATION:
-                severityString.append("\e[37;40m");
-                severityString.append("[NOTIFICATION]");
-                severityString.append("\e[37;40m\e[0m");
-                break;
+        case GL_DEBUG_SEVERITY_NOTIFICATION:
+            severityString.append("\e[37;40m");
+            severityString.append("[NOTIFICATION]");
+            severityString.append("\e[37;40m\e[0m");
+            break;
         }
 
         severityString.append("\e[32;40m\e[0m");
@@ -153,48 +153,48 @@ void Debug::glDebugCallback(unsigned int source, unsigned int type, unsigned int
         typeString.append("\e[32;40m");
         typeString.append("\nError Source:");
 
-        switch(type) {
-            case GL_DEBUG_TYPE_ERROR:
-                typeString.append("\e[37;40m");
-                typeString.append("[ERROR]");
-                typeString.append("\e[37;40m\e[0m");
-                break;
+        switch (type) {
+        case GL_DEBUG_TYPE_ERROR:
+            typeString.append("\e[37;40m");
+            typeString.append("[ERROR]");
+            typeString.append("\e[37;40m\e[0m");
+            break;
 
-            case GL_DEBUG_TYPE_DEPRECATED_BEHAVIOR:
-                typeString.append("\e[37;40m");
-                typeString.append("[DEPRECATED BEHAVIOR]");
-                typeString.append("\e[37;40m\e[0m");
-                break;
+        case GL_DEBUG_TYPE_DEPRECATED_BEHAVIOR:
+            typeString.append("\e[37;40m");
+            typeString.append("[DEPRECATED BEHAVIOR]");
+            typeString.append("\e[37;40m\e[0m");
+            break;
 
-            case GL_DEBUG_TYPE_UNDEFINED_BEHAVIOR:
-                typeString.append("\e[37;40m");
-                typeString.append("[UNDEFINED BEHAVIOR]");
-                typeString.append("\e[37;40m\e[0m");
-                break;
+        case GL_DEBUG_TYPE_UNDEFINED_BEHAVIOR:
+            typeString.append("\e[37;40m");
+            typeString.append("[UNDEFINED BEHAVIOR]");
+            typeString.append("\e[37;40m\e[0m");
+            break;
 
-            case GL_DEBUG_TYPE_PORTABILITY:
-                typeString.append("\e[37;40m");
-                typeString.append("[PORTABILITY]");
-                typeString.append("\e[37;40m\e[0m");
-                break;
+        case GL_DEBUG_TYPE_PORTABILITY:
+            typeString.append("\e[37;40m");
+            typeString.append("[PORTABILITY]");
+            typeString.append("\e[37;40m\e[0m");
+            break;
 
-            case GL_DEBUG_TYPE_PERFORMANCE:
-                typeString.append("\e[37;40m");
-                typeString.append("[PERFORMANCE]");
-                typeString.append("\e[37;40m\e[0m");
-                break;
+        case GL_DEBUG_TYPE_PERFORMANCE:
+            typeString.append("\e[37;40m");
+            typeString.append("[PERFORMANCE]");
+            typeString.append("\e[37;40m\e[0m");
+            break;
 
-            case GL_DEBUG_TYPE_OTHER:
-                typeString.append("\e[37;40m");
-                typeString.append("[OTHER]");
-                typeString.append("\e[37;40m\e[0m");
-                break;
+        case GL_DEBUG_TYPE_OTHER:
+            typeString.append("\e[37;40m");
+            typeString.append("[OTHER]");
+            typeString.append("\e[37;40m\e[0m");
+            break;
 
-            case GL_DEBUG_TYPE_MARKER:
-                typeString.append("\e[37;40m");
-                typeString.append("[MARKER]");
-                typeString.append("\e[37;40m\e[0m");
-                break;
+        case GL_DEBUG_TYPE_MARKER:
+            typeString.append("\e[37;40m");
+            typeString.append("[MARKER]");
+            typeString.append("\e[37;40m\e[0m");
+            break;
         }
 
         typeString.append("\e[32;40m\e[0m");

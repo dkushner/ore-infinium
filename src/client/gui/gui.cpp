@@ -86,7 +86,7 @@ GUI::~GUI()
 
 void GUI::handleEvent(const SDL_Event& event)
 {
-    switch(event.type) {
+    switch (event.type) {
     case SDL_KEYDOWN:
         m_context->ProcessKeyDown(m_system->TranslateKey(event.key.keysym.sym), m_system->GetKeyModifiers());
         break;
@@ -146,7 +146,7 @@ void GUI::removeInputDemand()
 {
 
     if (m_inputDemand > 0) {
-       --m_inputDemand;
+        --m_inputDemand;
     } else {
         Debug::log(Debug::Area::Graphics) << "WARNING: GUI::removeInputDemand minor failure, tried to remove refcount below 0. This will break GUI focusing., input demand count: " << m_inputDemand;
     }

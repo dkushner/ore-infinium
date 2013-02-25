@@ -33,6 +33,7 @@ class TileRenderer;
 class Sky;
 class Camera;
 class SpriteSheetRenderer;
+class Torch;
 
 //height
 static constexpr unsigned short WORLD_ROWCOUNT = 8400;

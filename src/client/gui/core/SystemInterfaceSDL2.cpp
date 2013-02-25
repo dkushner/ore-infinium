@@ -65,19 +65,18 @@ int SystemInterfaceSDL2::GetKeyModifiers()
 int SystemInterfaceSDL2::TranslateMouseButton(Uint8 button)
 {
     switch (button) {
-        case 1: //left
-            return 0;
-        case 2: //MMB
-            return 3;
-        case 3: //right
-            return 2;
+    case 1: //left
+        return 0;
+    case 2: //MMB
+        return 3;
+    case 3: //right
+        return 2;
     }
 }
 
 Rocket::Core::Input::KeyIdentifier SystemInterfaceSDL2::TranslateKey(SDL_Keycode code)
 {
-    switch (code)
-    {
+    switch (code) {
     case SDLK_a:
         return Rocket::Core::Input::KI_A;
         break;
@@ -311,8 +310,8 @@ Rocket::Core::Input::KeyIdentifier SystemInterfaceSDL2::TranslateKey(SDL_Keycode
         break;
 //    case SDLK_
         //FIXME: UNFOUND?
- //       return Rocket::Core::Input::KI_MULTIPLY;
-  //      break;
+//       return Rocket::Core::Input::KI_MULTIPLY;
+        //      break;
     case SDLK_PAUSE:
         return Rocket::Core::Input::KI_PAUSE;
         break;
@@ -349,8 +348,7 @@ bool SystemInterfaceSDL2::LogMessage(Rocket::Core::Log::Type type, const Rocket:
 {
     std::string Type;
 
-    switch(type)
-    {
+    switch (type) {
     case Rocket::Core::Log::LT_ALWAYS:
         Type = "[Always]";
         break;

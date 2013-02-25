@@ -32,17 +32,17 @@ public:
      * Packet command/contents sent *from* client to a server
      */
     enum FromClientPacketContents {
-       InvalidFromClientPacket = 0,
-       /// to send stuff like the name of the player, version of game client, etc.
-      InitialConnectionDataFromClientPacket,
-      /// only sending the chat message itself, not player name. server handles that magic
-      ChatMessageFromClientPacket,
-      /// contains version, player name and other things that the server needs to OK for us to not get booted right away.
-      PlayerInitialDataFromClientPacket,
-      //FIXME: not sure wtf to do with that one..i don't think we want a huge generic thing, it also is unused presently
-      PlayerStateFromClientPacket,
-      ///movement attempted left/right/up/down
-      PlayerMoveFromClientPacket
+        InvalidFromClientPacket = 0,
+        /// to send stuff like the name of the player, version of game client, etc.
+        InitialConnectionDataFromClientPacket,
+        /// only sending the chat message itself, not player name. server handles that magic
+        ChatMessageFromClientPacket,
+        /// contains version, player name and other things that the server needs to OK for us to not get booted right away.
+        PlayerInitialDataFromClientPacket,
+        //FIXME: not sure wtf to do with that one..i don't think we want a huge generic thing, it also is unused presently
+        PlayerStateFromClientPacket,
+        ///movement attempted left/right/up/down
+        PlayerMoveFromClientPacket
     };
 
     /**
@@ -61,8 +61,8 @@ public:
     enum ConnectionEventType {
         None = 0,
         //client version does not match server version, forceful disconnect.
-       DisconnectedVersionMismatch,
-       DisconnectedInvalidPlayerName
+        DisconnectedVersionMismatch,
+        DisconnectedInvalidPlayerName
     };
 
     /**

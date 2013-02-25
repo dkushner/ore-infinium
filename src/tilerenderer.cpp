@@ -75,8 +75,8 @@ void TileRenderer::loadTileSheets()
     const GLint level = 0;
     glTexImage3D(GL_TEXTURE_2D_ARRAY, level, GL_RGBA, TILESHEET_WIDTH, TILESHEET_HEIGHT, Block::blockTypeMap.size(), 0, GL_RGBA, GL_UNSIGNED_BYTE, 0 /* if it's null it tells GL we will send in 2D images as elements one by one, later */);
 
-    for (auto& tile : Block::blockTypeMap) {
-       loadTileSheet(tile.second.texture, tile.first);
+for (auto & tile : Block::blockTypeMap) {
+        loadTileSheet(tile.second.texture, tile.first);
     }
 }
 
@@ -204,7 +204,7 @@ void TileRenderer::render()
             vertices[2].u = vertices[3].u = tileRight;
 
             //FIXME: use tile type index
-           vertices[0].w = vertices[1].w = vertices[2].w = vertices[3].w = block.primitiveType;
+            vertices[0].w = vertices[1].w = vertices[2].w = vertices[3].w = block.primitiveType;
 
             Debug::checkGLError();
             // finally upload everything to the actual vbo
@@ -212,8 +212,8 @@ void TileRenderer::render()
             glBufferSubData(
                 GL_ARRAY_BUFFER,
                 sizeof(vertices) * index,
-                            sizeof(vertices),
-                            vertices);
+                sizeof(vertices),
+                vertices);
             Debug::checkGLError();
 
             ++index;
@@ -246,8 +246,8 @@ void TileRenderer::render()
     glDrawElements(
         GL_TRIANGLES,
         6 * (index), // 6 indices per 2 triangles
-                   GL_UNSIGNED_INT,
-                   (const GLvoid*)0);
+        GL_UNSIGNED_INT,
+        (const GLvoid*)0);
 
     m_shader->unbindProgram();
     glBindVertexArray(0);
@@ -273,8 +273,8 @@ void TileRenderer::initGL()
     glBufferData(
         GL_ARRAY_BUFFER,
         m_maxSpriteCount * 4 * sizeof(Vertex),
-                 NULL,
-                 GL_DYNAMIC_DRAW);
+        NULL,
+        GL_DYNAMIC_DRAW);
 
     Debug::checkGLError();
 
@@ -294,8 +294,8 @@ void TileRenderer::initGL()
     glBufferData(
         GL_ELEMENT_ARRAY_BUFFER,
         indicesv.size()*sizeof(u32),
-                 indicesv.data(),
-                 GL_STATIC_DRAW);
+        indicesv.data(),
+        GL_STATIC_DRAW);
 
     Debug::checkGLError();
 
@@ -309,7 +309,7 @@ void TileRenderer::initGL()
         GL_FLOAT,
         GL_FALSE,
         sizeof(Vertex),
-                          (const GLvoid*)buffer_offset);
+        (const GLvoid*)buffer_offset);
     buffer_offset += sizeof(f32) * 2;
 
     GLint color_attrib = glGetAttribLocation(m_shader->shaderProgram(), "color");
@@ -323,7 +323,7 @@ void TileRenderer::initGL()
         GL_UNSIGNED_BYTE,
         GL_TRUE,
         sizeof(Vertex),
-                          (const GLvoid*)buffer_offset);
+        (const GLvoid*)buffer_offset);
     buffer_offset += sizeof(u32);
 
     Debug::checkGLError();
@@ -337,7 +337,7 @@ void TileRenderer::initGL()
         GL_FLOAT,
         GL_FALSE,
         sizeof(Vertex),
-                          (const GLvoid*)buffer_offset);
+        (const GLvoid*)buffer_offset);
 
     glBindVertexArray(0);
     glBindBuffer(GL_ARRAY_BUFFER, 0);
