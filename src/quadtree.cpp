@@ -26,7 +26,7 @@ void QuadTree::split()
     nodes[3] = new QuadTree(m_x + m_width / 2.0f, m_y + m_height / 2.0f, m_width / 2.0f, m_height / 2.0f, m_level + 1);
 }
 
-vector<Entity*> QuadTree::entitiesAt(float _x, float _y)
+vector<Entity*> QuadTree::entitiesInRegion(float x, float y, float width, float height)
 {
     /*
     if (m_level == MAX_LEVELS) {

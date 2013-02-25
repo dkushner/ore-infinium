@@ -13,8 +13,11 @@ class QuadTree
 public:
     QuadTree(float x, float y, float width, float height, int level);
 
-    void addEntity(Entity* object);
-    vector<Entity*> entitiesAt(float x, float y);
+    void insert(Entity* entity);
+
+    vector<Entity*> entitiesInRegion(float x, float y, float width, float height);
+    vector<Entity*> retrieve(vector<Entity*> returnObjects, Entity* entity);
+
     void clear();
     void split();
 
@@ -28,6 +31,7 @@ private:
     float m_width;
     float m_height;
     int m_level;
+
     vector<Entity*> m_entities;
 
 //    QuadTree* parent;
