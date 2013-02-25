@@ -18,6 +18,11 @@ QuadTree::QuadTree(float _x, float _y, float _width, float _height, int _level) 
     }
 }
 
+QuadTree::~QuadTree()
+{
+
+}
+
 void QuadTree::split()
 {
     nodes[0] = new QuadTree(m_x, m_y, m_width / 2.0f, m_height / 2.0f, m_level + 1);
@@ -125,14 +130,15 @@ void QuadTree::insert(Entity* entity) {
 
         int i = 0;
         while (i < m_entities.size()) {
-            int index = getIndex(objects.get(i));
+            int index = getIndex(m_entities.at(i));
             if (index != -1) {
-                nodes[index]->insert(objects.remove(i));
+                nodes[index]->insert(m_entities.remove(i));
             }
             else {
                 i++;
             }
         }
+
     }
 }
 

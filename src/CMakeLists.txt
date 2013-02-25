@@ -18,7 +18,7 @@ tilerenderer.cpp
 image.cpp
 texture.cpp
 torch.cpp
-quadtree.cpp
+collisionmap.cpp
 
 client/client.cpp
 client/gui/gui.cpp

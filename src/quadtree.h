@@ -12,6 +12,7 @@ class QuadTree
 {
 public:
     QuadTree(float x, float y, float width, float height, int level);
+    ~QuadTree();
 
     void insert(Entity* entity);
 
