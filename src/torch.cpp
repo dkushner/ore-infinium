@@ -28,6 +28,10 @@ Torch::~Torch()
 
 }
 
+void Torch::setRadius(float radius)
+{
+    m_radius = radius;
+}
 
 float Torch::radius() const
 {

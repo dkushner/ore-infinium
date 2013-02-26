@@ -18,6 +18,7 @@
 #include "spritesheetrenderer.h"
 
 #include "sprite.h"
+#include "torch.h"
 #include "entity.h"
 #include "debug.h"
 #include "game.h"
@@ -56,6 +57,12 @@ void SpriteSheetRenderer::setCamera(Camera* camera)
 {
     m_camera = camera;
     m_camera->setShader(m_shader);
+}
+
+void SpriteSheetRenderer::setVisibleLights(const std::vector<Torch* >& lightList)
+{
+    m_lights = lightList;
+    Debug::log(Debug::Area::Graphics) << "light count: " << m_lights.size();
 }
 
 void SpriteSheetRenderer::loadAllSpriteSheets()

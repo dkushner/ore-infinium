@@ -61,7 +61,11 @@ World::World(Player* mainPlayer, Server* server)
         Torch* torch = new Torch(glm::vec2(2400, 1420));
         m_torches.push_back(torch);
         m_spriteSheetRenderer->registerSprite(torch);
+
+        //FIXME: call each update, and make it only do visible ones
+        m_spriteSheetRenderer->setVisibleLights(m_torches);
     }
+
 
     loadMap();
 

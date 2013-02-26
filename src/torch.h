@@ -30,6 +30,7 @@ public:
     ~Torch();
 
     float radius() const;
+    void setRadius(float radius);
 
 private:
     float m_radius = 50.0f;
