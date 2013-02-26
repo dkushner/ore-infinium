@@ -33,6 +33,7 @@ class TileRenderer;
 class Sky;
 class Camera;
 class SpriteSheetRenderer;
+class CollisionMap;
 class Torch;
 
 //height
@@ -139,6 +140,7 @@ private:
     bool tileBlendTypeMatch(int sourceTileX, int sourceTileY, int nearbyTileX, int nearbyTileY) const;
 
     std::vector<Entity*> m_entities;
+    std::vector<Torch*> m_torches;
 
     // it's easier to manage with a linear array. access is trivial - array[y][x] simply becomes array[y*rowlength + x]
     // [column * WORLD_ROWCOUNT + row]

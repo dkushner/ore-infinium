@@ -21,19 +21,18 @@
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/core/type.hpp>
+#include "entity.h"
 
-class Torch
+class Torch : public Entity
 {
 public:
     Torch(const glm::vec2& position);
     ~Torch();
 
     float radius() const;
-    glm::vec2 position() const;
 
 private:
     float m_radius = 50.0f;
-    glm::vec2 m_position;
 };
 
 #endif

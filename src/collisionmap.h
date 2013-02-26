@@ -27,6 +27,12 @@ class Entity;
 class CollisionMap {
 public:
 
+    /**
+     *  @p width @p height should be the size of the entire world
+     * @p cellWidth @p cellHeight should be the optimum average for the size of the entities it will contain,
+     * cell size smaller than entities to contain --> performance losses because entities would span many more cells
+     * than they should otherwise.
+     */
     CollisionMap(unsigned int width, unsigned int height, unsigned int cellWidth, unsigned int cellHeight);
     ~CollisionMap();
 

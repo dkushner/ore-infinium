@@ -20,6 +20,7 @@
 
 #include "src/server/server.h"
 #include "block.h"
+#include "torch.h"
 #include "game.h"
 #include "camera.h"
 #include "tilerenderer.h"
@@ -56,6 +57,10 @@ World::World(Player* mainPlayer, Server* server)
         m_camera = new Camera();
         m_spriteSheetRenderer = new SpriteSheetRenderer(m_camera);
         m_spriteSheetRenderer->registerSprite(m_uselessEntity);
+
+        Torch* torch = new Torch(glm::vec2(2400, 1420));
+        m_torches.push_back(torch);
+        m_spriteSheetRenderer->registerSprite(torch);
     }
 
     loadMap();

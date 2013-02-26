@@ -32,6 +32,7 @@ class Camera;
 class Shader;
 class Texture;
 class Sprite;
+class Entity;
 
 class SpriteSheetRenderer
 {
@@ -53,7 +54,11 @@ public:
      * Registers the sprite, taking over rendering control.
      * SpriteSheetManager will then fondle the privates of Sprite, by asking which frameName it is,
      * which position, etc.
-     * @p spriteSheetType which sprite sheet it is considered to be from. A character, entity, etc.
+     * ///FIXME: does not do any culling what-so-ever. even dumb culling would be better by iterating over each one
+     * and determining if it is within the bounds of the camera and should be rendered.
+     * However, i'd like to somehow incorporate the CollisionMap (not sure how exactly, especially since the renderer distincts from entities vs characters, but the users of
+     * CollisionMap do not/will not, I believe.), but it could retrieve a list of entities in a region and use only those. But that'd also require updating that region list aka retrieval each
+     * pass..so..what would I even gain. Anyways, all theory as this isn't anywhere near being an issue yet, just something to keep in mind.
      */
     void registerSprite(Sprite* sprite);
 
@@ -123,6 +128,8 @@ private:
     glm::vec2 spriteSheetSize(SpriteSheetType type);
 
     void initGL();
+    void initGLCharacters();
+    void initGLEntities();
 
     /**
      * It is a container of the GL textures, one for each spritesheet..
@@ -136,19 +143,24 @@ private:
      * particular spritesheet. e.g. x, y, width, height.
      */
     std::map<std::string, SpriteFrameIdentifier> m_spriteSheetCharactersDescription;
+    std::map<std::string, SpriteFrameIdentifier> m_spriteSheetEntitiesDescription;
 
     std::vector<Sprite*> m_characterSprites;
-
-    GLint m_texture_location;
+    std::vector<Sprite*> m_entitySprites;
 
     GLuint m_vao; // vertex array object
     GLuint m_vbo; // vertex buffer object
     GLuint m_ebo; // element buffer object
 
+    GLuint m_vaoEntities; // vertex array object
+    GLuint m_vboEntities; // vertex buffer object
+    GLuint m_eboEntities; // element buffer object
+
     glm::mat4 m_modelMatrix;
     glm::mat4 m_projectionMatrix;
 
     int m_maxSpriteCount = 2200;
+    int m_maxEntityCount = 2200;
 
     Camera* m_camera = nullptr;
     Shader* m_shader = nullptr;
