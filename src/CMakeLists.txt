@@ -15,6 +15,7 @@ world.cpp
 player.cpp
 entity.cpp
 tilerenderer.cpp
+lightrenderer.cpp
 image.cpp
 texture.cpp
 torch.cpp

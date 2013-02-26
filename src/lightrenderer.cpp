@@ -15,13 +15,14 @@
  *   along with this program.  If not, see <http://www.gnu.org/licenses/>.    *
  *****************************************************************************/
 
-#include "tilerenderer.h"
+#include "lightrenderer.h"
 
 #include "debug.h"
 #include "game.h"
 #include "camera.h"
 #include "shader.h"
 #include "image.h"
+#include "torch.h"
 
 #include "src/world.h"
 #include "src/player.h"
@@ -33,11 +34,11 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-TileRenderer::TileRenderer(World* world, Camera* camera, Player* mainPlayer)
+LightRenderer::LightRenderer(World* world, Camera* camera, Player* mainPlayer)
     :   m_world(world),
         m_mainPlayer(mainPlayer)
 {
-    m_shader = new Shader("tilerenderer.vert", "tilerenderer.frag");
+    m_shader = new Shader("lightrenderer.vert", "lightrenderer.frag");
     setCamera(camera);
 
     initGL();
@@ -45,10 +46,9 @@ TileRenderer::TileRenderer(World* world, Camera* camera, Player* mainPlayer)
     float scale = 1.0f;
     m_modelMatrix = glm::scale(glm::mat4(1.0f), glm::vec3(scale));
     m_projectionMatrix = glm::ortho(0.0f, float(Settings::instance()->screenResolutionWidth), float(Settings::instance()->screenResolutionHeight), 0.0f, -1.0f, 1.0f);
-    loadTileSheets();
 }
 
-TileRenderer::~TileRenderer()
+LightRenderer::~LightRenderer()
 {
     glDeleteBuffers(1, &m_vbo);
     glDeleteBuffers(1, &m_ebo);
@@ -56,14 +56,18 @@ TileRenderer::~TileRenderer()
     glDeleteVertexArrays(1, &m_vao);
 }
 
-void TileRenderer::setCamera(Camera* camera)
+void LightRenderer::setCamera(Camera* camera)
 {
     m_camera = camera;
     m_camera->setShader(m_shader);
 }
 
-void TileRenderer::loadTileSheets()
+void LightRenderer::setTorches(const std::vector< Torch* >& torches)
 {
+    m_torches = torches;
+}
+
+/*
     glGenTextures(1, &m_tileMapTexture);
     glBindTexture(GL_TEXTURE_2D_ARRAY, m_tileMapTexture);
 
@@ -73,13 +77,15 @@ void TileRenderer::loadTileSheets()
     glTexParameteri(GL_TEXTURE_2D_ARRAY, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
 
     const GLint level = 0;
-    glTexImage3D(GL_TEXTURE_2D_ARRAY, level, GL_RGBA, TILESHEET_WIDTH, TILESHEET_HEIGHT, Block::blockTypeMap.size(), 0, GL_RGBA, GL_UNSIGNED_BYTE, 0 /* if it's null it tells GL we will send in 2D images as elements one by one, later */);
-
+    glTexImage3D(GL_TEXTURE_2D_ARRAY, level, GL_RGBA, TILESHEET_WIDTH, TILESHEET_HEIGHT, Block::blockTypeMap.size(), 0, GL_RGBA, GL_UNSIGNED_BYTE, 0 /* if it's null it tells GL we will send in 2D images as elements one by one, later );
+/*
 for (auto & tile : Block::blockTypeMap) {
         loadTileSheet(tile.second.texture, tile.first);
     }
 }
+*/
 
+/*
 void TileRenderer::loadTileSheet(const std::string& fileName, Block::BlockType type)
 {
     Image* image = new Image(Block::blockTypeMap.at(type).texture);
@@ -96,130 +102,76 @@ void TileRenderer::loadTileSheet(const std::string& fileName, Block::BlockType t
 
     ++m_tileSheetCount;
 }
+*/
 
-void TileRenderer::render()
+void LightRenderer::render()
 {
-//    m_shader->bindProgram();
-
-
-//    Debug::log() << "OFFSET: " << offset.x << " Y : " << offset.y;
-    Debug::checkGLError();
-    glm::vec2 playerPosition = m_mainPlayer->position();
-    int tilesBeforeX = playerPosition.x / Block::blockSize;
-    //row
-    int tilesBeforeY = playerPosition.y / Block::blockSize;
-
-    // -1 so that we render an additional row and column..to smoothly scroll
-    const int startRow = tilesBeforeY - ((Settings::instance()->screenResolutionHeight * 0.5) / Block::blockSize) - 1;
-    const int endRow = tilesBeforeY + ((Settings::instance()->screenResolutionHeight * 0.5) / Block::blockSize);
-
-    //columns are our X value, rows the Y
-    const int startColumn = tilesBeforeX - ((Settings::instance()->screenResolutionWidth * 0.5) / Block::blockSize) - 1;
-    const int endColumn = tilesBeforeX + ((Settings::instance()->screenResolutionWidth * 0.5) / Block::blockSize);
-//    Debug:: log() << "starRow: " << startRow << "endrow: " << endRow << "startcol: " << startColumn << " endcol: " << endColumn;
-
-    if (std::abs(startColumn) != startColumn) {
-        std::cout << "FIXME, WENT INTO NEGATIVE COLUMN!!";
-        assert(0);
-    } else if (std::abs(startRow) != startRow) {
-        std::cout << "FIXME, WENT INTO NEGATIVE ROW!!";
-        assert(0);
-    }
-
-    int drawingRow = 0;
 
     int index = 0;
-
     Debug::checkGLError();
-    // [y*rowlength + x]
-    for (int currentRow = startRow; currentRow < endRow; ++currentRow) {
-        int drawingColumn = 0;
-        for (int currentColumn = startColumn; currentColumn < endColumn; ++currentColumn) {
+    for (Torch* torch : m_torches) {
 
-            // vertices that will be uploaded.
-            Vertex vertices[4];
+        // vertices that will be uploaded.
+        Vertex vertices[4];
 
-            // vertices[n][0] -> X, and [1] -> Y
-            // vertices[0] -> top left
-            // vertices[1] -> bottom left
-            // vertices[2] -> bottom right
-            // vertices[3] -> top right
+        // vertices[n][0] -> X, and [1] -> Y
+        // vertices[0] -> top left
+        // vertices[1] -> bottom left
+        // vertices[2] -> bottom right
+        // vertices[3] -> top right
 
-            float positionX = Block::blockSize * drawingColumn;
-            float positionY = Block::blockSize * drawingRow;
+        const glm::vec2& position = torch->position();
+        const float radius = torch->radius();
 
-            float x = positionX;
-            float width = x +  Block::blockSize;
+        float x = position.x - radius;
+        float width = position.x +  radius;
 
-            float y = positionY;
-            float height = y  +  Block::blockSize;
+        float y = position.y - radius;
+        float height = y  +  radius;
+        Debug::log() << "torch: " << " x: " << x << " y: " << y << " w: " << width << " h: " << height;
 
-            vertices[0].x = x; // top left X
-            vertices[0].y = y; //top left Y
+        vertices[0].x = x; // top left X
+        vertices[0].y = y; //top left Y
 
-            vertices[1].x = x; // bottom left X
-            vertices[1].y = height; // bottom left Y
+        vertices[1].x = x; // bottom left X
+        vertices[1].y = height; // bottom left Y
 
-            vertices[2].x = width; // bottom right X
-            vertices[2].y = height; //bottom right Y
+        vertices[2].x = width; // bottom right X
+        vertices[2].y = height; //bottom right Y
 
-            vertices[3].x = width; // top right X
-            vertices[3].y = y; // top right Y
+        vertices[3].x = width; // top right X
+        vertices[3].y = y; // top right Y
 
-            Debug::checkGLError();
+        Debug::checkGLError();
 
-            // copy color to the buffer
-            for (size_t i = 0; i < sizeof(vertices) / sizeof(*vertices); i++) {
-                //        *colorp = color.bgra;
-                uint8_t red = 255;
-                uint8_t blue = 255;
-                uint8_t green = 255;
-                uint8_t alpha = 255;
-                int32_t color = red | (green << 8) | (blue << 16) | (alpha << 24);
-                vertices[i].color = color;
-            }
-
-            //tilesheet index/row, column
-            int row = 1;
-            int column = 5;
-
-            int blockIndex = currentColumn * WORLD_ROWCOUNT + currentRow;
-            Block& block = m_world->m_blocks[blockIndex];
-
-            const float tileWidth = 1.0f / TILESHEET_WIDTH * 16.0f;
-            const float tileHeight = 1.0f / TILESHEET_HEIGHT * 16.0f;
-
-            float xPadding = 1.0f / TILESHEET_WIDTH * 1.0f * (column + 1);
-            float yPadding = 1.0f / TILESHEET_HEIGHT * 1.0f * (row + 1);
-
-            const float tileLeft = (column *  tileWidth) + xPadding;
-            const float tileRight = tileLeft + tileWidth;
-            const float tileTop = 1.0f - ((row * tileHeight)) - yPadding;
-            const float tileBottom = tileTop - tileHeight;
-
-            // copy texcoords to the buffer
-            vertices[0].u = vertices[1].u = tileLeft;
-            vertices[0].v = vertices[3].v = tileTop;
-            vertices[1].v = vertices[2].v = tileBottom;
-            vertices[2].u = vertices[3].u = tileRight;
-
-            //FIXME: use tile type index
-            vertices[0].w = vertices[1].w = vertices[2].w = vertices[3].w = block.primitiveType;
-
-            Debug::checkGLError();
-            // finally upload everything to the actual vbo
-            glBindBuffer(GL_ARRAY_BUFFER, m_vbo);
-            glBufferSubData(
-                GL_ARRAY_BUFFER,
-                sizeof(vertices) * index,
-                sizeof(vertices),
-                vertices);
-            Debug::checkGLError();
-
-            ++index;
-            ++drawingColumn;
+        // copy color to the buffer
+        for (size_t i = 0; i < sizeof(vertices) / sizeof(*vertices); i++) {
+            //        *colorp = color.bgra;
+            uint8_t red = 255;
+            uint8_t blue = 255;
+            uint8_t green = 255;
+            uint8_t alpha = 255;
+            int32_t color = red | (green << 8) | (blue << 16) | (alpha << 24);
+            vertices[i].color = color;
         }
-        ++drawingRow;
+
+        // copy texcoords to the buffer
+        vertices[0].u = vertices[1].u = 0.0f;
+        vertices[0].v = vertices[3].v = 1.0f;
+        vertices[1].v = vertices[2].v = 0.0f;
+        vertices[2].u = vertices[3].u = 1.0f;
+
+        Debug::checkGLError();
+        // finally upload everything to the actual vbo
+        glBindBuffer(GL_ARRAY_BUFFER, m_vbo);
+        glBufferSubData(
+            GL_ARRAY_BUFFER,
+            sizeof(vertices) * index,
+            sizeof(vertices),
+            vertices);
+        Debug::checkGLError();
+
+        ++index;
     }
 
     Debug::checkGLError();
@@ -235,17 +187,11 @@ void TileRenderer::render()
 
     m_shader->bindProgram();
 
-    // for smooth per-pixel scrolling, a value from 0-15 and when it's 16 we snap to the next tile
-    glm::ivec2 offset = m_world->tileOffset(m_mainPlayer);
-    GLint offsetLoc = glGetUniformLocation(m_shader->shaderProgram(), "offset");
-    glUniform2f(offsetLoc, GLfloat(offset.x), GLfloat(offset.y));
-
     Debug::checkGLError();
-//    Debug::log() << "RENDERING TILECOUNT: " << m_tileCount;
 
     glDrawElements(
         GL_TRIANGLES,
-        6 * (index), // 6 indices per 2 triangles
+        6 * (m_torches.size()), // 6 indices per 2 triangles
         GL_UNSIGNED_INT,
         (const GLvoid*)0);
 
@@ -259,7 +205,7 @@ void TileRenderer::render()
     Debug::checkGLError();
 }
 
-void TileRenderer::initGL()
+void LightRenderer::initGL()
 {
     Debug::checkGLError();
 
@@ -332,8 +278,7 @@ void TileRenderer::initGL()
     glEnableVertexAttribArray(texcoord_attrib);
     glVertexAttribPointer(
         texcoord_attrib,
-        //2 + 1 because we need a depth the array of 2d textures
-        3,
+        2,
         GL_FLOAT,
         GL_FALSE,
         sizeof(Vertex),

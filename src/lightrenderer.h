@@ -15,8 +15,8 @@
  *   along with this program.  If not, see <http://www.gnu.org/licenses/>.    *
  *****************************************************************************/
 
-#ifndef TILERENDERER_H
-#define TILERENDERER_H
+#ifndef LIGHTRENDERER_H
+#define LIGHTRENDERER_H
 
 #include "debug.h"
 #include "block.h"
@@ -37,15 +37,17 @@ class World;
 class Shader;
 class Torch;
 
-class TileRenderer
+class LightRenderer
 {
 public:
-    explicit TileRenderer(World* world, Camera* camera, Player* mainPlayer);
-    ~TileRenderer();
+    explicit LightRenderer(World* world, Camera* camera, Player* mainPlayer);
+    ~LightRenderer();
 
     void render();
 
     void setCamera(Camera* camera);
+
+    void setTorches(const std::vector<Torch*>& torches);
 
 private:
     typedef uint32_t u32;
@@ -64,28 +66,11 @@ private:
         float u, v, w;
     };
 
-    //FIXME: don't use NPOT
-    const GLsizei TILESHEET_WIDTH = 170;
-    const GLsizei TILESHEET_HEIGHT = 253;
-
-    void loadTileSheets();
-    void loadTileSheet(const std::string& fileName, Block::BlockType type);
-
     void initGL();
 
-//    std::map<SpriteSheetType, SpriteSheet> m_spriteSheetTextures;
+    std::vector<Torch*> m_torches;
 
-    /**
-     * Map containing all the sprite frame names and their properties for this
-     * particular spritesheet. e.g. x, y, width, height.
-     */
-//    std::map<std::string, SpriteFrameIdentifier> m_spriteSheetCharactersDescription;
-    std::map<Block::BlockType, Image*> m_tileSheets;
-
-    /// the 3D tilemap texture, whose z texcoord indicates which tile type it is.
-    int m_tileSheetCount = 0;
     GLuint m_tileMapTexture;
-    GLint m_texture_location;
 
     GLuint m_vao; // vertex array object
     GLuint m_vbo; // vertex buffer object

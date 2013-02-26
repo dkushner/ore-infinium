@@ -24,6 +24,8 @@
 #include "game.h"
 #include "camera.h"
 #include "tilerenderer.h"
+#include "lightrenderer.h"
+
 //HACK #include "sky.h"
 #include "settings/settings.h"
 
@@ -62,8 +64,11 @@ World::World(Player* mainPlayer, Server* server)
         m_torches.push_back(torch);
         m_spriteSheetRenderer->registerSprite(torch);
 
+        m_lightingCamera = new Camera();
+        m_lightRenderer = new LightRenderer(this, m_lightingCamera, m_mainPlayer);
+
         //FIXME: call each update, and make it only do visible ones
-        m_spriteSheetRenderer->setVisibleLights(m_torches);
+        m_lightRenderer->setTorches(m_torches);
     }
 
 
@@ -124,6 +129,8 @@ void World::render(Player* player)
     //HACK    m_window->setView(m_window->getDefaultView());
     m_spriteSheetRenderer->renderEntities();
     m_spriteSheetRenderer->renderCharacters();
+
+    m_lightRenderer->render();
 
     // ==================================================
     glm::ivec2 mouse = mousePosition();
@@ -215,6 +222,7 @@ for (Player * player : m_players) {
     //only occurs on client side, obviously the server doesn't need to do this stuff
     if (m_mainPlayer) {
         m_camera->centerOn(m_mainPlayer->position());
+        m_lightingCamera->centerOn(m_mainPlayer->position());
     }
 
     //calculateAttackPosition();

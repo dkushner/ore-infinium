@@ -28,6 +28,7 @@
 #include <SDL2/SDL_events.h>
 #include <list>
 
+class LightRenderer;
 class Server;
 class TileRenderer;
 class Sky;
@@ -147,6 +148,7 @@ private:
     Block m_blocks[WORLD_ROWCOUNT * WORLD_COLUMNCOUNT];
 
     TileRenderer* m_tileRenderer = nullptr;
+    LightRenderer* m_lightRenderer = nullptr;
     SpriteSheetRenderer* m_spriteSheetRenderer = nullptr;
 
     /// inclusive of m_mainPlayer as well.
@@ -169,6 +171,7 @@ private:
     Camera* m_camera = nullptr;
 
     Camera* m_tileMapCamera = nullptr;
+    Camera* m_lightingCamera = nullptr;
 
     /**
      * Null if we are in server mode.

@@ -75,8 +75,6 @@ public:
 
     void setCamera(Camera* camera);
 
-    void setVisibleLights(const std::vector<Torch*>& lightList);
-
 private:
     struct SpriteSheet {
         SpriteSheetType type;
@@ -150,8 +148,6 @@ private:
 
     std::vector<Sprite*> m_characterSprites;
     std::vector<Sprite*> m_entitySprites;
-
-    std::vector<Torch*> m_lights;
 
     GLuint m_vao; // vertex array object
     GLuint m_vbo; // vertex buffer object
