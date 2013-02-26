@@ -127,7 +127,7 @@ void LightRenderer::render()
         float width = position.x +  radius;
 
         float y = position.y - radius;
-        float height = y  +  radius;
+        float height = position.y  +  radius;
         Debug::log() << "torch: " << " x: " << x << " y: " << y << " w: " << width << " h: " << height;
 
         vertices[0].x = x; // top left X
