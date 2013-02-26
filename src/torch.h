@@ -33,7 +33,7 @@ public:
     void setRadius(float radius);
 
 private:
-    float m_radius = 50.0f;
+    float m_radius = 300.0f;
 };
 
 #endif
