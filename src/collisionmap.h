@@ -18,43 +18,41 @@
 #define COLLISIONMAP_H
 
 #include <SFML/Graphics.hpp>
+
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 
+class Entity;
+
 class CollisionMap {
 public:
-    class CollisionEntry {
-        friend class CollisionMap;
-        sf::Rect<unsigned int> _region;
-        int _index;
-    };
 
     CollisionMap(unsigned int width, unsigned int height, unsigned int cellWidth, unsigned int cellHeight);
     ~CollisionMap();
 
-    CollisionEntry* Add(sf::Rect<unsigned int> region);
-    void Change(CollisionEntry* entry, sf::Rect<unsigned int> newRegion);
-    void Remove(CollisionEntry* entry);
+    void Add(Entity* entity);
+    void Change(Entity* entity);
+    void Remove(Entity* entity);
 
-    bool CheckCollision(const glm::vec2& position);
+    bool collidesAt(const glm::vec2& position);
     bool CheckCollision(const glm::vec2& position);
 
 private:
     class GridNode {
         friend class CollisionMap;
-        CollisionEntry* _entry;
-        GridNode* _next;
+        Entity* entity;
+        GridNode* next;
     };
 
     unsigned int m_width, m_height, m_cellWidth, m_cellHeight, m_totalWidth, m_totalHeight;
     unsigned int m_nextEntryIndex;
-    std::vector<CollisionEntry*> m_entries;
+    std::vector<Entity*> m_entities;
     GridNode*** m_map;
 
-    void addToGrid(CollisionEntry* entry);
-    void removeFromGrid(CollisionEntry* entry);
-    inline void addEntryToCell(unsigned int x, unsigned int y, CollisionEntry* entry);
-    inline void removeEntryFromCell(unsigned int x, unsigned int y, CollisionEntry* entry);
+    void addToGrid(Entity* entity);
+    void removeFromGrid(Entity* entity);
+    inline void addEntryToCell(unsigned int x, unsigned int y, Entity* entity);
+    inline void removeEntryFromCell(unsigned int x, unsigned int y, Entity* entity);
 };
 
 #endif

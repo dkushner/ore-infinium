@@ -16,23 +16,25 @@
  *   along with this program.  If not, see <http://www.gnu.org/licenses/>.    *
  *****************************************************************************/
 
-
 #include "collisionmap.h"
 
-CollisionMap::CollisionMap(unsigned int width, unsigned int height, unsigned int cellWidth, unsigned int cellHeight) {
-    m_width = width;
-    m_height = height;
-    m_cellWidth = cellWidth;
-    m_cellHeight = cellHeight;
-    m_totalWidth = width * cellWidth;
-    m_totalHeight = height * cellHeight;
-    m_nextEntryIndex = 0;
+#include "entity.h"
 
+CollisionMap::CollisionMap(unsigned int width, unsigned int height, unsigned int cellWidth, unsigned int cellHeight)
+    :   m_width(width),
+        m_height(height),
+        m_cellWidth(cellWidth),
+        m_cellHeight(cellHeight),
+        m_totalWidth(width * cellWidth),
+        m_totalHeight(height * cellHeight),
+        m_nextEntryIndex(0)
+{
     m_map = new GridNode**[m_width];
+
     for (unsigned int x = 0; x < m_width; x++) {
         m_map[x] = new GridNode*[m_height];
         for (unsigned int y = 0; y < m_height; y++) {
-            m_map[x][y] = NULL;
+            m_map[x][y] = nullptr;
         }
     }
 }
@@ -42,162 +44,167 @@ CollisionMap::~CollisionMap() {
         for (unsigned int y = 0; y < m_height; y++) {
             GridNode* next = m_map[x][y];
             GridNode* current;
-            while (next != NULL) {
+
+            while (next != nullptr) {
                 current = next;
-                next = next->_next;
+                next = next->next;
                 delete current;
             }
+
         }
         delete[] m_map[x];
     }
     delete[] m_map;
 
-    CollisionEntry* entry;
+    /*
     for (unsigned int i = 0; i < m_nextEntryIndex; i++) {
-        entry = m_entries[i];
+        entry = m_entities[i];
         delete entry;
     }
+    */
 }
 
-CollisionMap::CollisionEntry* CollisionMap::Add(sf::Rect<unsigned int> region) {
-    CollisionMap::CollisionEntry* res = new CollisionMap::CollisionEntry;
+void CollisionMap::Add(Entity* entity) {
     unsigned int index = m_nextEntryIndex++;
-    res->_region = region;
-    res->_index = index;
+    entity->m_index = index;
 
-    m_entries.push_back(res);
+    m_entities.push_back(entity);
 
-    addToGrid(res);
-
-    return res;
+    addToGrid(entity);
 }
 
-void CollisionMap::Remove(CollisionEntry* entry) {
-    removeFromGrid(entry);
-    m_entries[entry->_index] = NULL;
-    delete entry;
+void CollisionMap::Remove(Entity* entity) {
+    removeFromGrid(entity);
+    m_entities[entity->m_index] = nullptr;
 }
 
-void CollisionMap::Change(CollisionEntry* entry, sf::Rect<unsigned int> newRect) {
-    sf::Rect<unsigned int> rect = entry->_region;
-
-    unsigned int minX, maxX;
-
-    unsigned int oleft = rect.left / m_cellWidth;
-    unsigned int oright = (rect.left + rect.width) / m_cellWidth;
-    unsigned int otop = rect.top / m_cellHeight;
-    unsigned int obottom = (rect.top + rect.height) / m_cellHeight;
-
-    unsigned int nleft = newRect.left / m_cellWidth;
-    unsigned int nright = (newRect.left + newRect.width) / m_cellWidth;
-    unsigned int ntop = newRect.top / m_cellHeight;
-    unsigned int nbottom = (newRect.top + newRect.height) / m_cellHeight;
-
-    if (oleft < nleft) // Trim the left side
-        for (unsigned int x = oleft; x < nleft; x++)
-            for (unsigned int y = otop; y <= obottom; y++)
-                removeEntryFromCell(x, y, entry);
-
-    if (oright > nright) // Trim the right side
-        for (unsigned int x = nright + 1; x <= oright; x++)
-            for (unsigned int y = otop; y <= obottom; y++)
-                removeEntryFromCell(x, y, entry);
-
-    minX = nleft > oleft ? nleft : oleft;
-    maxX = nright < oright ? nright : oright;
-    if (otop < ntop) // Trim the top side
-        for (unsigned int x = minX; x <= maxX; x++)
-            for (unsigned int y = otop; y < ntop; y++)
-                removeEntryFromCell(x, y, entry);
-
-    if (obottom > nbottom) // Trim the bottom side
-        for (unsigned int x = minX; x <= maxX; x++)
-            for (unsigned int y = nbottom + 1; y <= obottom; y++)
-                removeEntryFromCell(x, y, entry);
-
-    if (nleft < oleft) // Expand the left side
-        for (unsigned int x = nleft; x < oleft; x++)
-            for (unsigned int y = ntop; y <= nbottom; y++)
-                addEntryToCell(x, y, entry);
-
-    if (nright > oright) // Expand the right side
-        for (unsigned int x = oright + 1; x <= nright; x++)
-            for (unsigned int y = ntop; y <= nbottom; y++)
-                addEntryToCell(x, y, entry);
-
-    if (ntop < otop) // Expand the top side
-        for (unsigned int x = minX; x <= maxX; x++)
-            for (unsigned int y = ntop; y < otop; y++)
-                addEntryToCell(x, y, entry);
-
-    if (nbottom > obottom) // Expand the bottom side
-        for (unsigned int x = minX; x <= maxX; x++)
-            for (unsigned int y = obottom + 1; y <= nbottom; y++)
-                addEntryToCell(x, y, entry);
-
-    entry->_region = newRect;
+void CollisionMap::Change(Entity* entity) {
+//
+//    unsigned int minX, maxX;
+//
+//    unsigned int oleft = rect.left / m_cellWidth;
+//    unsigned int oright = (rect.left + rect.width) / m_cellWidth;
+//    unsigned int otop = rect.top / m_cellHeight;
+//    unsigned int obottom = (rect.top + rect.height) / m_cellHeight;
+//
+//    unsigned int nleft = newRect.left / m_cellWidth;
+//    unsigned int nright = (newRect.left + newRect.width) / m_cellWidth;
+//    unsigned int ntop = newRect.top / m_cellHeight;
+//    unsigned int nbottom = (newRect.top + newRect.height) / m_cellHeight;
+//
+//    if (oleft < nleft) // Trim the left side
+//        for (unsigned int x = oleft; x < nleft; x++)
+//            for (unsigned int y = otop; y <= obottom; y++)
+//                removeEntryFromCell(x, y, entry);
+//
+//    if (oright > nright) // Trim the right side
+//        for (unsigned int x = nright + 1; x <= oright; x++)
+//            for (unsigned int y = otop; y <= obottom; y++)
+//                removeEntryFromCell(x, y, entry);
+//
+//    minX = nleft > oleft ? nleft : oleft;
+//    maxX = nright < oright ? nright : oright;
+//    if (otop < ntop) // Trim the top side
+//        for (unsigned int x = minX; x <= maxX; x++)
+//            for (unsigned int y = otop; y < ntop; y++)
+//                removeEntryFromCell(x, y, entry);
+//
+//    if (obottom > nbottom) // Trim the bottom side
+//        for (unsigned int x = minX; x <= maxX; x++)
+//            for (unsigned int y = nbottom + 1; y <= obottom; y++)
+//                removeEntryFromCell(x, y, entry);
+//
+//    if (nleft < oleft) // Expand the left side
+//        for (unsigned int x = nleft; x < oleft; x++)
+//            for (unsigned int y = ntop; y <= nbottom; y++)
+//                addEntryToCell(x, y, entry);
+//
+//    if (nright > oright) // Expand the right side
+//        for (unsigned int x = oright + 1; x <= nright; x++)
+//            for (unsigned int y = ntop; y <= nbottom; y++)
+//                addEntryToCell(x, y, entry);
+//
+//    if (ntop < otop) // Expand the top side
+//        for (unsigned int x = minX; x <= maxX; x++)
+//            for (unsigned int y = ntop; y < otop; y++)
+//                addEntryToCell(x, y, entry);
+//
+//    if (nbottom > obottom) // Expand the bottom side
+//        for (unsigned int x = minX; x <= maxX; x++)
+//            for (unsigned int y = obottom + 1; y <= nbottom; y++)
+//                addEntryToCell(x, y, entry);
+//
+//    entry->_region = newRect;
 
     // This is the quick and dirty alternative:
     // removeFromGrid(entry);
     // entry->_region = newRect;
     // addToGrid(entry);
+
+    Remove(entity);
+    Add(entity);
 }
 
-inline void CollisionMap::addEntryToCell(unsigned int x, unsigned int y, CollisionEntry* entry) {
+inline void CollisionMap::addEntryToCell(unsigned int x, unsigned int y, Entity* entity) {
     GridNode* node = new GridNode;
-    node->_entry = entry;
-    node->_next = m_map[x][y];
+    node->entity = entity;
+    node->next = m_map[x][y];
     m_map[x][y] = node;
 }
 
-void CollisionMap::addToGrid(CollisionEntry* entry) {
-    sf::Rect<unsigned int> rect = entry->_region;
+void CollisionMap::addToGrid(Entity* entity) {
+    const glm::vec2& position = entity->position();
+    const glm::vec2& size = entity->size();
 
-    unsigned int left = rect.left / m_cellWidth;
-    unsigned int right = (rect.left + rect.width) / m_cellWidth;
-    unsigned int top = rect.top / m_cellHeight;
-    unsigned int bottom = (rect.top + rect.height) / m_cellHeight;
+    unsigned int left = position.x / m_cellWidth;
+    unsigned int right = (position.x + size.x) / m_cellWidth;
+    unsigned int top = position.y / m_cellHeight;
+    unsigned int bottom = (position.y + size.y) / m_cellHeight;
 
-    for (unsigned int x = left; x <= right; x++)
-        for (unsigned int y = top; y <= bottom; y++)
-            addEntryToCell(x, y, entry);
-}
-
-inline void CollisionMap::removeEntryFromCell(unsigned int x, unsigned int y, CollisionEntry* entry) {
-    GridNode* parent = NULL;
-    GridNode* current = m_map[x][y];
-    while (current != NULL) {
-        if (current->_entry == entry) {
-            if (parent != NULL) {
-                parent->_next = current->_next;
-                m_map[x][y] = parent;
-            }
-            else m_map[x][y] = current->_next;
-            current = NULL;
-        }
-        else {
-            parent = current;
-            current = parent->_next;
+    for (unsigned int x = left; x <= right; x++) {
+        for (unsigned int y = top; y <= bottom; y++) {
+            addEntryToCell(x, y, entity);
         }
     }
 }
 
-void CollisionMap::removeFromGrid(CollisionEntry* entry) {
-    sf::Rect<unsigned int> rect = entry->_region;
+inline void CollisionMap::removeEntryFromCell(unsigned int x, unsigned int y, Entity* entity) {
+    GridNode* parent = nullptr;
+    GridNode* current = m_map[x][y];
 
-    unsigned int left = rect.left / m_cellWidth;
-    unsigned int right = (rect.left + rect.width) / m_cellWidth;
-    unsigned int top = rect.top / m_cellHeight;
-    unsigned int bottom = (rect.top + rect.height) / m_cellHeight;
+    while (current != nullptr) {
+        if (current->entity == entity) {
+            if (parent != nullptr) {
+                parent->next = current->next;
+                m_map[x][y] = parent;
+            }
+            else m_map[x][y] = current->next;
+            current = nullptr;
+        }
+        else {
+            parent = current;
+            current = parent->next;
+        }
+    }
+}
+
+void CollisionMap::removeFromGrid(Entity* entity) {
+    const glm::vec2& position = entity->position();
+    const glm::vec2& size = entity->size();
+
+    unsigned int left = position.x / m_cellWidth;
+    unsigned int right = (position.x + size.x) / m_cellWidth;
+    unsigned int top = position.y / m_cellHeight;
+    unsigned int bottom = (position.y + size.y) / m_cellHeight;
 
     for (unsigned int x = left; x <= right; x++)
         for (unsigned int y = top; y <= bottom; y++)
-            removeEntryFromCell(x, y, entry);
+            removeEntryFromCell(x, y, entity);
 }
 
 /*
 sf::Texture CollisionMap::RenderDebugTexture() {
-    if (_tex == NULL) {
+    if (_tex == nullptr) {
         _tex = new sf::RenderTexture();
         _tex->create(_totalWidth, _totalHeight);
     }
@@ -224,7 +231,7 @@ sf::Texture CollisionMap::RenderDebugTexture() {
     sf::Rect<unsigned int> region;
     for (unsigned int i = 0; i < _nextEntryIndex; i++) {
         entryPtr = _entries[i];
-        if (entryPtr == NULL) continue;
+        if (entryPtr == nullptr) continue;
         region = entryPtr->_region;
         rect.setPosition((sf::Vector2f)sf::Vector2i(region.left, region.top));
         rect.setSize((sf::Vector2f)sf::Vector2i(region.width, region.height));
@@ -237,18 +244,21 @@ sf::Texture CollisionMap::RenderDebugTexture() {
 }
 */
 
-bool CollisionMap::CheckCollision(sf::Vector2i position) {
-    if (position.x < 0 || position.y < 0) return false;
-    return CheckCollision((sf::Vector2u)position);
+bool CollisionMap::collidesAt(const glm::vec2& position) {
+    if (position.x < 0 || position.y < 0) {
+        return false;
+    }
+
+    return CheckCollision(position);
 }
 
-
-bool CollisionMap::CheckCollision(sf::Vector2u position) {
+bool CollisionMap::CheckCollision(const glm::vec2& position) {
+    /*
     if (position.x >= m_totalWidth || position.y >= m_totalHeight) return false;
 
     GridNode* node = m_map[position.x / m_cellWidth][position.y / m_cellHeight];
     sf::Rect<unsigned int> region;
-    while (node != NULL) {
+    while (node != nullptr) {
         region = node->_entry->_region;
         if (position.x >= region.left && position.y >= region.top &&
                 position.x < region.left + region.width &&
@@ -257,5 +267,6 @@ bool CollisionMap::CheckCollision(sf::Vector2u position) {
         node = node->_next;
     }
 
+    */
     return false;
 }

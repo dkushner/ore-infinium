@@ -19,6 +19,7 @@
 #define ENTITY_H
 
 #include "sprite.h"
+#include "collisionmap.h"
 #include <glm/core/type.hpp>
 
 const float GRAVITY = 0.05f;
@@ -75,9 +76,15 @@ public:
      */
     bool collidingWithTile(const glm::vec2& destPosition, const glm::ivec2& dimensions, World* world) const;
 
+
 private:
     glm::vec2 m_velocity = glm::vec2(0, 0);
     uint32_t m_dirtyFlags = 0;
+
+    /// utilized only by collision map for speedy lookups (insertions and removals as well as findings)
+    int m_index = -1;
+
+    friend class CollisionMap;
 };
 
 #endif
