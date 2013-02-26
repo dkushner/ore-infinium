@@ -95,38 +95,55 @@ void Client::initSDL()
         Debug::checkSDLError();
     }
 
+    Debug::checkGLError();
+    glewExperimental = GL_TRUE;
+    Debug::checkGLError();
     SDL_GL_SetAttribute(SDL_GL_RED_SIZE, 5);
+    Debug::checkGLError();
     SDL_GL_SetAttribute(SDL_GL_GREEN_SIZE, 5);
+    Debug::checkGLError();
     SDL_GL_SetAttribute(SDL_GL_BLUE_SIZE, 5);
+    Debug::checkGLError();
 
     // Request opengl 3.3 context.
     // FIXME: i *want 3.2, but Mesa 9 only has 3.0.. :(
+    Debug::checkGLError();
     SDL_GL_SetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, 3);
-    SDL_GL_SetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, 0);
+    Debug::checkGLError();
+    SDL_GL_SetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, 2);
+
+    Debug::checkGLError();
 
     /* Turn on double buffering with a 24bit Z buffer.
      * You may need to change this to 16 or 32 for your system */
     SDL_GL_SetAttribute(SDL_GL_DOUBLEBUFFER, 1);
+    Debug::checkGLError();
     SDL_GL_SetAttribute(SDL_GL_DEPTH_SIZE, 24);
+    Debug::checkGLError();
 
 //FIXME: doesn't do shit
     SDL_GL_SetSwapInterval(1);
+    Debug::checkGLError();
 
     //TODO: we'll probably need some extension at some point in time..
     //SDL_GL_ExtensionSupported();
 
+    Debug::checkGLError();
     m_GLcontext = SDL_GL_CreateContext(m_window);
+        Debug::checkSDLError();
     Debug::checkGLError();
 
     SDL_ShowCursor(0);
+    Debug::checkGLError();
 
     Debug::checkSDLError();
+    Debug::checkGLError();
     Debug::assertf(glewInit() == GLEW_OK, "glewInit returned !GLEW_OK. No GL context can be formed..bailing out");
-
-    Debug::log(Debug::Area::Graphics) << "Platform: Driver Vendor: " << glGetString(GL_VENDOR);
-    Debug::log(Debug::Area::Graphics) << "Platform: Renderer: " << glGetString(GL_RENDERER);
-    Debug::log(Debug::Area::Graphics) << "OpenGL Version: " << glGetString(GL_VERSION);
-    Debug::log(Debug::Area::Graphics) << "GLSL Version: " << glGetString(GL_SHADING_LANGUAGE_VERSION);
+//
+//    Debug::log(Debug::Area::Graphics) << "Platform: Driver Vendor: " << glGetString(GL_VENDOR);
+//    Debug::log(Debug::Area::Graphics) << "Platform: Renderer: " << glGetString(GL_RENDERER);
+//    Debug::log(Debug::Area::Graphics) << "OpenGL Version: " << glGetString(GL_VERSION);
+//    Debug::log(Debug::Area::Graphics) << "GLSL Version: " << glGetString(GL_SHADING_LANGUAGE_VERSION);
 
     Debug::checkGLError();
 
