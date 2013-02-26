@@ -123,6 +123,7 @@ void World::render(Player* player)
 
     //set our view so that the player will stay relative to the view, in the center.
     //HACK    m_window->setView(*m_view);
+    m_lightRenderer->renderToFBO();
 
     m_tileRenderer->render();
 
@@ -130,7 +131,7 @@ void World::render(Player* player)
     m_spriteSheetRenderer->renderEntities();
     m_spriteSheetRenderer->renderCharacters();
 
-    m_lightRenderer->render();
+    m_lightRenderer->renderToBackbuffer();
 
     // ==================================================
     glm::ivec2 mouse = mousePosition();

@@ -39,6 +39,7 @@ LightRenderer::LightRenderer(World* world, Camera* camera, Player* mainPlayer)
         m_mainPlayer(mainPlayer)
 {
     m_shader = new Shader("lightrenderer.vert", "lightrenderer.frag");
+    m_shaderPassthrough = new Shader("lightrendererpassthrough.vert", "lightrendererpassthrough.frag");
     setCamera(camera);
 
     initGL();
@@ -104,8 +105,9 @@ void TileRenderer::loadTileSheet(const std::string& fileName, Block::BlockType t
 }
 */
 
-void LightRenderer::render()
+void LightRenderer::renderToFBO()
 {
+//    glBindFrameBuffer(GL_FRAMEBUFFER, m_fbo);
 
     int index = 0;
     Debug::checkGLError();
@@ -205,8 +207,17 @@ void LightRenderer::render()
     Debug::checkGLError();
 }
 
+void LightRenderer::renderToBackbuffer()
+{
+
+}
+
+
 void LightRenderer::initGL()
 {
+//    glGenFrameBuffers(1, &m_fbo);
+
+
     Debug::checkGLError();
 
     //////////////////////

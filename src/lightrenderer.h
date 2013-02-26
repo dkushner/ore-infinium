@@ -43,7 +43,8 @@ public:
     explicit LightRenderer(World* world, Camera* camera, Player* mainPlayer);
     ~LightRenderer();
 
-    void render();
+    void renderToFBO();
+    void renderToBackbuffer();
 
     void setCamera(Camera* camera);
 
@@ -70,7 +71,10 @@ private:
 
     std::vector<Torch*> m_torches;
 
-    GLuint m_tileMapTexture;
+//    GLuint m_tileMapTexture;
+
+    // framebuffer, which we first render our lightmaps to, then we render it to the backbuffer
+    GLuint m_fbo = 0;
 
     GLuint m_vao; // vertex array object
     GLuint m_vbo; // vertex buffer object
@@ -87,6 +91,7 @@ private:
 
     World* m_world = nullptr;
     Shader* m_shader = nullptr;
+    Shader* m_shaderPassthrough = nullptr;
 };
 
 #endif
