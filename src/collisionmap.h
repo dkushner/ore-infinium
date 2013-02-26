@@ -17,10 +17,10 @@
 #ifndef COLLISIONMAP_H
 #define COLLISIONMAP_H
 
-#include <SFML/Graphics.hpp>
-
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
+
+#include <vector>
 
 class Entity;
 

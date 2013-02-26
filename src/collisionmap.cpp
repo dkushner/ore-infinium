@@ -161,6 +161,7 @@ void CollisionMap::addToGrid(Entity* entity) {
     unsigned int top = position.y / m_cellHeight;
     unsigned int bottom = (position.y + size.y) / m_cellHeight;
 
+    // adds the entry to several cells, however many the position + size takes up.
     for (unsigned int x = left; x <= right; x++) {
         for (unsigned int y = top; y <= bottom; y++) {
             addEntryToCell(x, y, entity);
@@ -178,13 +179,16 @@ inline void CollisionMap::removeEntryFromCell(unsigned int x, unsigned int y, En
                 parent->next = current->next;
                 m_map[x][y] = parent;
             }
-            else m_map[x][y] = current->next;
+            else {
+                m_map[x][y] = current->next;
+            }
+
             current = nullptr;
-        }
-        else {
+        } else {
             parent = current;
-            current = parent->next;
         }
+
+        current = parent->next;
     }
 }
 
@@ -197,9 +201,11 @@ void CollisionMap::removeFromGrid(Entity* entity) {
     unsigned int top = position.y / m_cellHeight;
     unsigned int bottom = (position.y + size.y) / m_cellHeight;
 
-    for (unsigned int x = left; x <= right; x++)
-        for (unsigned int y = top; y <= bottom; y++)
+    for (unsigned int x = left; x <= right; x++) {
+        for (unsigned int y = top; y <= bottom; y++) {
             removeEntryFromCell(x, y, entity);
+        }
+    }
 }
 
 /*
@@ -244,6 +250,7 @@ sf::Texture CollisionMap::RenderDebugTexture() {
 }
 */
 
+//FIXME: impleament when i feel like doing entity->entity collision..
 bool CollisionMap::collidesAt(const glm::vec2& position) {
     if (position.x < 0 || position.y < 0) {
         return false;
