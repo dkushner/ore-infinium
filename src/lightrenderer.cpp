@@ -128,7 +128,6 @@ void LightRenderer::render()
 
         float y = position.y - radius;
         float height = position.y  +  radius;
-        Debug::log() << "torch: " << " x: " << x << " y: " << y << " w: " << width << " h: " << height;
 
         vertices[0].x = x; // top left X
         vertices[0].y = y; //top left Y
@@ -178,6 +177,7 @@ void LightRenderer::render()
     ////////////////////////////////FINALLY RENDER IT ALL //////////////////////////////////////////
     glEnable(GL_BLEND);
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+//    glBlendFunc(GL_DST_COLOR, GL_ONE);
 
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_ebo);
     glBindBuffer(GL_ARRAY_BUFFER, m_vbo);
