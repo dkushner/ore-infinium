@@ -76,6 +76,9 @@ private:
     // framebuffer, which we first render our lightmaps to, then we render it to the backbuffer
     GLuint m_fbo = 0;
 
+    //render buffer object
+    GLuint m_rb = 0;
+
     GLuint m_vao; // vertex array object
     GLuint m_vbo; // vertex buffer object
     GLuint m_ebo; // element buffer object

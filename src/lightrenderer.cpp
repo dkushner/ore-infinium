@@ -110,8 +110,9 @@ void TileRenderer::loadTileSheet(const std::string& fileName, Block::BlockType t
 
 void LightRenderer::renderToFBO()
 {
-//    glBindFrameBuffer(GL_FRAMEBUFFER, m_fbo);
-
+    glBindFramebuffer(GL_FRAMEBUFFER, m_fbo);
+    glBindRenderbuffer(GL_RENDERBUFFER, m_rb);
+    glClearColor(0.f, 0.f, .5f, .2f);
     int index = 0;
     Debug::checkGLError();
     for (Torch* torch : m_torches) {
@@ -180,7 +181,7 @@ void LightRenderer::renderToFBO()
 
     Debug::checkGLError();
     ////////////////////////////////FINALLY RENDER IT ALL //////////////////////////////////////////
-    glEnable(GL_BLEND);
+//    glEnable(GL_BLEND);
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 //    glBlendFunc(GL_DST_COLOR, GL_ONE);
 
@@ -199,27 +200,49 @@ void LightRenderer::renderToFBO()
         6 * (m_torches.size()), // 6 indices per 2 triangles
         GL_UNSIGNED_INT,
         (const GLvoid*)0);
+    Debug::checkGLError();
 
     m_shader->unbindProgram();
+    Debug::checkGLError();
     glBindVertexArray(0);
+    Debug::checkGLError();
     glBindBuffer(GL_ARRAY_BUFFER, 0);
+    Debug::checkGLError();
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
 
+    Debug::checkGLError();
     glDisable(GL_BLEND);
 
     Debug::checkGLError();
+    glBindFramebuffer(GL_FRAMEBUFFER, 0);
+    glBindRenderbuffer(GL_RENDERBUFFER, 0);
 }
 
 void LightRenderer::renderToBackbuffer()
 {
+    glEnable(GL_BLEND);
+//    glBlendFunc(GL_DST_COLOR, GL_ZERO);
+    glBindFramebuffer(GL_DRAW_FRAMEBUFFER, 0);
+    glBindFramebuffer(GL_READ_FRAMEBUFFER, m_fbo);
 
+    glBlitFramebuffer(0, 0, 1600, 800, 0, 0, 1600, 800, GL_COLOR_BUFFER_BIT, GL_NEAREST);
+
+    glDisable(GL_BLEND);
+    glBindFramebuffer(GL_READ_FRAMEBUFFER, 0);
+    glBindFramebuffer(GL_DRAW_FRAMEBUFFER, 0);
+    glBindFramebuffer(GL_FRAMEBUFFER, 0);
 }
 
 
 void LightRenderer::initGL()
 {
     glGenFramebuffers(1, &m_fbo);
+    glBindFramebuffer(GL_FRAMEBUFFER, m_fbo);
 
+    glGenRenderbuffers(1, &m_rb);
+    glBindRenderbuffer(GL_RENDERBUFFER, m_rb);
+    glRenderbufferStorage(GL_RENDERBUFFER, GL_RGBA8, 1600, 900);
+    glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_RENDERBUFFER, m_rb);
 
     Debug::checkGLError();
 
@@ -303,4 +326,7 @@ void LightRenderer::initGL()
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
 
     Debug::checkGLError();
+
+    glBindFramebuffer(GL_FRAMEBUFFER, 0);
+    glBindRenderbuffer(GL_RENDERBUFFER, 0);
 }
