@@ -112,7 +112,9 @@ void LightRenderer::renderToFBO()
 {
     glBindFramebuffer(GL_FRAMEBUFFER, m_fbo);
     glBindRenderbuffer(GL_RENDERBUFFER, m_rb);
-    glClearColor(0.f, 0.f, .5f, .2f);
+    glClearColor(0.f, 0.f, 0.f, 1.0f);
+    glClear(GL_COLOR_BUFFER_BIT);
+
     int index = 0;
     Debug::checkGLError();
     for (Torch* torch : m_torches) {
@@ -181,10 +183,8 @@ void LightRenderer::renderToFBO()
 
     Debug::checkGLError();
     ////////////////////////////////FINALLY RENDER IT ALL //////////////////////////////////////////
-//    glEnable(GL_BLEND);
-    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-//    glBlendFunc(GL_DST_COLOR, GL_ONE);
-
+    glEnable(GL_BLEND);
+    glBlendFunc(GL_SRC_ALPHA, GL_ONE);
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_ebo);
     glBindBuffer(GL_ARRAY_BUFFER, m_vbo);
     glBindVertexArray(m_vao);
@@ -221,7 +221,8 @@ void LightRenderer::renderToFBO()
 void LightRenderer::renderToBackbuffer()
 {
     glEnable(GL_BLEND);
-//    glBlendFunc(GL_DST_COLOR, GL_ZERO);
+    glBlendFunc(GL_DST_COLOR, GL_ZERO);
+
     glBindFramebuffer(GL_DRAW_FRAMEBUFFER, 0);
     glBindFramebuffer(GL_READ_FRAMEBUFFER, m_fbo);
 

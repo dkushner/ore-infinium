@@ -9,5 +9,5 @@ out vec4 fragColor;
 
 void main() {
     float distance = 10 * distance(frag_texcoord.xy, vec2(0.5, 0.5));
-    fragColor = vec4(frag_color.rgb, 1/ distance);
+    fragColor = vec4(frag_color.rgb, (1/ distance));
 }
