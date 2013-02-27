@@ -96,7 +96,7 @@ void Client::initSDL()
     }
 
     Debug::checkGLError();
-    glewExperimental = GL_TRUE;
+//    glewExperimental = GL_TRUE;
     Debug::checkGLError();
     SDL_GL_SetAttribute(SDL_GL_RED_SIZE, 5);
     Debug::checkGLError();
@@ -110,7 +110,7 @@ void Client::initSDL()
     Debug::checkGLError();
     SDL_GL_SetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, 3);
     Debug::checkGLError();
-    SDL_GL_SetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, 2);
+    SDL_GL_SetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, 0);
 
     Debug::checkGLError();
 

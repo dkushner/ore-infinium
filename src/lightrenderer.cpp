@@ -34,6 +34,9 @@
 #include <stdio.h>
 #include <stdlib.h>
 
+#include <GL/glew.h>
+#include <GL/glext.h>
+
 LightRenderer::LightRenderer(World* world, Camera* camera, Player* mainPlayer)
     :   m_world(world),
         m_mainPlayer(mainPlayer)
@@ -215,7 +218,7 @@ void LightRenderer::renderToBackbuffer()
 
 void LightRenderer::initGL()
 {
-//    glGenFrameBuffers(1, &m_fbo);
+    glGenFramebuffers(1, &m_fbo);
 
 
     Debug::checkGLError();
