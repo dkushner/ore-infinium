@@ -33,7 +33,7 @@ void main() {
     vec3 lightMapCoordinate = gl_FragCoord.xyz / vec3(size, 0.0);
 
 //   vec3 N = texture(normalMap, (lightMapCoordinate).xyz; //* 2.0 - 1.0;
-   vec3 N = texture(normalMap, vec3(lightMapCoordinate.xy, 0)).xyz; //* 2.0 - 1.0;
+   vec3 N = texture(normalMap, vec3(lightMapCoordinate.xy, 0)).xyz* 2.0 - 1.0;
 //   vec3 N = texture(normalMap, vec3(lightMapCoordinate.xy / size * 2, 0)).xyz; //* 2.0 - 1.0;
     vec3 L = normalize(lightPos - gl_FragCoord.xyz);
     vec4 I = /* first is color of light*/ vec4(1.0, 1.0, 1.0, 1.0) * dot(L, N);
