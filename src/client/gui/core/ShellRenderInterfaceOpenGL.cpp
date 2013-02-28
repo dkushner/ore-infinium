@@ -55,6 +55,7 @@ void ShellRenderInterfaceOpenGL::RenderGeometry(Rocket::Core::Vertex* vertices, 
         glDisableClientState(GL_TEXTURE_COORD_ARRAY);
     } else {
         glEnable(GL_TEXTURE_2D);
+        glActiveTexture(GL_TEXTURE0);
         glBindTexture(GL_TEXTURE_2D, (GLuint) texture);
         glEnableClientState(GL_TEXTURE_COORD_ARRAY);
         glTexCoordPointer(2, GL_FLOAT, sizeof(Rocket::Core::Vertex), &vertices[0].tex_coord);
@@ -196,6 +197,7 @@ bool ShellRenderInterfaceOpenGL::GenerateTexture(Rocket::Core::TextureHandle& te
         return false;
     }
 
+    glActiveTexture(GL_TEXTURE0);
     glBindTexture(GL_TEXTURE_2D, texture_id);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_BASE_LEVEL, 0);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAX_LEVEL, 0);

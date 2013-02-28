@@ -15,13 +15,14 @@
 in vec3 frag_texcoord;
 in vec4 frag_color;
 
-uniform sampler2DArray tex;
+uniform sampler2DArray tileSheet;
+uniform sampler2DArray normalMaps;
 
 out vec4 fragColor;
 
 void main() {
-    vec4 texel = texture(tex, frag_texcoord);
-    fragColor = (frag_color.rgba) * vec4(texel.rgb, texel.a);
+    vec4 tile = texture(tileSheet, frag_texcoord);
+    fragColor = (frag_color.rgba) * vec4(tile.rgb, tile.a);
 }
 
 //void main()
@@ -52,3 +53,25 @@ gl_FragColor.b = 0.0;
 gl_FragColor.a = 1.0;
 */
 //}
+
+/*
+    "#version 130\n"
+
+    "uniform sampler2DArray sampler;\n"
+    "uniform vec3 lightPos;\n"
+
+    "void main()\n{\n"
+    "   vec2 size = textureSize(sampler, 0).xy;\n"
+
+    "   vec3 N = texture(sampler, vec3(gl_FragCoord.xy / size, 0)).xyz * 2.0 - 1.0;\n"
+    "   vec3 L = normalize(lightPos - gl_FragCoord.xyz);\n"
+    "   vec4 I = vec4(1.0) * dot(L, N);\n"
+
+    "   float dist = distance(gl_FragCoord.xyz, lightPos);\n"
+    "   I *= 1.0 - min(1.5 * pow(dist / 512, 2.0), 1.0);\n"
+
+    "   vec4 fragColor = texture(sampler, vec3(gl_FragCoord.xy / size, 1));\n"
+    "   fragColor.rgb *= I.rgb;\n"
+    "   gl_FragColor = fragColor;\n"
+    "}\n";
+*/

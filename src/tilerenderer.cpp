@@ -105,6 +105,8 @@ void TileRenderer::render()
 {
 //    m_shader->bindProgram();
 
+    glActiveTexture(GL_TEXTURE0);
+    glBindTexture(GL_TEXTURE_2D_ARRAY, m_tileMapTexture);
 
 //    Debug::log() << "OFFSET: " << offset.x << " Y : " << offset.y;
     Debug::checkGLError();

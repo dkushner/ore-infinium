@@ -91,6 +91,7 @@ void SpriteSheetRenderer::unloadAllSpriteSheets()
 
 void SpriteSheetRenderer::bindSpriteSheet(SpriteSheetRenderer::SpriteSheetType type)
 {
+    glActiveTexture(GL_TEXTURE0);
     m_spriteSheetTextures[type].texture->bind();
 }
 
