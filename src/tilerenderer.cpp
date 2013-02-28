@@ -76,12 +76,38 @@ void TileRenderer::loadTileSheets()
     glTexParameteri(GL_TEXTURE_2D_ARRAY, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
     glTexParameteri(GL_TEXTURE_2D_ARRAY, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
 
+    Debug::checkGLError();
     const GLint level = 0;
     glTexImage3D(GL_TEXTURE_2D_ARRAY, level, GL_RGBA, TILESHEET_WIDTH, TILESHEET_HEIGHT, Block::blockTypeMap.size(), 0, GL_RGBA, GL_UNSIGNED_BYTE, 0 /* if it's null it tells GL we will send in 2D images as elements one by one, later */);
+    Debug::checkGLError();
 
-for (auto & tile : Block::blockTypeMap) {
+    for (auto& tile : Block::blockTypeMap) {
         loadTileSheet(tile.second.texture, tile.first);
     }
+
+    Debug::checkGLError();
+
+    glGenTextures(1, &m_tileMapNormalsTexture);
+    glBindTexture(GL_TEXTURE_2D_ARRAY, m_tileMapNormalsTexture);
+
+    Debug::checkGLError();
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_BASE_LEVEL, 0);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAX_LEVEL, 0);
+    glTexParameteri(GL_TEXTURE_2D_ARRAY, GL_TEXTURE_BASE_LEVEL, 0);
+    glTexParameteri(GL_TEXTURE_2D_ARRAY, GL_TEXTURE_MAX_LEVEL, 0);
+    glTexParameteri(GL_TEXTURE_2D_ARRAY, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+    glTexParameteri(GL_TEXTURE_2D_ARRAY, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+    glTexParameteri(GL_TEXTURE_2D_ARRAY, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+    glTexParameteri(GL_TEXTURE_2D_ARRAY, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+
+    Debug::checkGLError();
+    glTexImage3D(GL_TEXTURE_2D_ARRAY, level, GL_RGBA, TILESHEET_WIDTH, TILESHEET_HEIGHT, Block::blockTypeMap.size(), 0, GL_RGBA, GL_UNSIGNED_BYTE, 0 /* if it's null it tells GL we will send in 2D images as elements one by one, later */);
+
+    Debug::checkGLError();
+    for (auto& tile : Block::blockTypeMap) {
+        loadTileSheetNormals(tile.second.textureNormal, tile.first);
+    }
+    Debug::checkGLError();
 }
 
 void TileRenderer::loadTileSheet(const std::string& fileName, Block::BlockType type)
@@ -91,20 +117,40 @@ void TileRenderer::loadTileSheet(const std::string& fileName, Block::BlockType t
     const GLint level = 0;
     const GLint xoffset = 0;
     const GLint yoffset = 0;
-    const GLint zoffset = m_tileSheetCount;
+    const GLint zoffset = m_tileSheetNormalCount;
     const GLsizei depth = 1;
 
+    Debug::checkGLError();
     glTexSubImage3D(GL_TEXTURE_2D_ARRAY, level, xoffset, yoffset, zoffset, TILESHEET_WIDTH, TILESHEET_HEIGHT, depth, GL_BGRA, GL_UNSIGNED_BYTE, image->bytes());
+    Debug::checkGLError();
 
     m_tileSheets[type] = image;
 
-    ++m_tileSheetCount;
+    ++m_tileSheetNormalCount;
+}
+
+void TileRenderer::loadTileSheetNormals(const std::string& fileName, Block::BlockType type)
+{
+    Image* image = new Image(Block::blockTypeMap.at(type).textureNormal);
+
+    const GLint level = 0;
+    const GLint xoffset = 0;
+    const GLint yoffset = 0;
+    const GLint zoffset = m_tileSheetCount;
+    const GLsizei depth = 1;
+
+    Debug::checkGLError();
+    glTexSubImage3D(GL_TEXTURE_2D_ARRAY, level, xoffset, yoffset, zoffset, 16, 16, depth, GL_BGRA, GL_UNSIGNED_BYTE, image->bytes());
+    Debug::checkGLError();
+
+    m_tileSheetNormals[type] = image;
 }
 
 void TileRenderer::render()
 {
 //    m_shader->bindProgram();
 
+    Debug::checkGLError();
     glActiveTexture(GL_TEXTURE0);
     glBindTexture(GL_TEXTURE_2D_ARRAY, m_tileMapTexture);
 

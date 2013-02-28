@@ -70,6 +70,7 @@ private:
 
     void loadTileSheets();
     void loadTileSheet(const std::string& fileName, Block::BlockType type);
+    void loadTileSheetNormals(const std::string& fileName, Block::BlockType type);
 
     void initGL();
 
@@ -81,11 +82,13 @@ private:
      */
 //    std::map<std::string, SpriteFrameIdentifier> m_spriteSheetCharactersDescription;
     std::map<Block::BlockType, Image*> m_tileSheets;
+    std::map<Block::BlockType, Image*> m_tileSheetNormals;
 
     /// the 3D tilemap texture, whose z texcoord indicates which tile type it is.
     int m_tileSheetCount = 0;
+    int m_tileSheetNormalCount = 0;
     GLuint m_tileMapTexture;
-    GLint m_texture_location;
+    GLuint m_tileMapNormalsTexture;
 
     GLuint m_vao; // vertex array object
     GLuint m_vbo; // vertex buffer object
