@@ -63,12 +63,6 @@ World::World(Player* mainPlayer, Server* server)
         Torch* torch = new Torch(glm::vec2(2400, 1420));
         m_torches.push_back(torch);
         m_spriteSheetRenderer->registerSprite(torch);
-
-        m_lightingCamera = new Camera();
-        m_lightRenderer = new LightRenderer(this, m_lightingCamera, m_mainPlayer);
-
-        //FIXME: call each update, and make it only do visible ones
-        m_lightRenderer->setTorches(m_torches);
     }
 
 
@@ -123,7 +117,6 @@ void World::render(Player* player)
 
     //set our view so that the player will stay relative to the view, in the center.
     //HACK    m_window->setView(*m_view);
-    m_lightRenderer->renderToFBO();
 
     m_tileRenderer->render();
 
@@ -131,7 +124,6 @@ void World::render(Player* player)
     m_spriteSheetRenderer->renderEntities();
     m_spriteSheetRenderer->renderCharacters();
 
-    m_lightRenderer->renderToBackbuffer();
 
     // ==================================================
     glm::ivec2 mouse = mousePosition();
@@ -223,7 +215,6 @@ for (Player * player : m_players) {
     //only occurs on client side, obviously the server doesn't need to do this stuff
     if (m_mainPlayer) {
         m_camera->centerOn(m_mainPlayer->position());
-        m_lightingCamera->centerOn(m_mainPlayer->position());
     }
 
     //calculateAttackPosition();
