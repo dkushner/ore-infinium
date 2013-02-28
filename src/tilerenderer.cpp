@@ -99,9 +99,10 @@ void TileRenderer::loadTileSheets()
     glTexParameteri(GL_TEXTURE_2D_ARRAY, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
     glTexParameteri(GL_TEXTURE_2D_ARRAY, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
     glTexParameteri(GL_TEXTURE_2D_ARRAY, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
-
+//    glTexParameteri(GL_TEXTURE_2D_ARRAY, GL_TEXTURE_WRAP_S, GL_REPEAT);
+//    glTexParameteri(GL_TEXTURE_2D_ARRAY, GL_TEXTURE_WRAP_T, GL_REPEAT);
     Debug::checkGLError();
-    glTexImage3D(GL_TEXTURE_2D_ARRAY, level, GL_RGBA, TILESHEET_WIDTH, TILESHEET_HEIGHT, Block::blockTypeMap.size(), 0, GL_RGBA, GL_UNSIGNED_BYTE, 0 /* if it's null it tells GL we will send in 2D images as elements one by one, later */);
+    glTexImage3D(GL_TEXTURE_2D_ARRAY, level, GL_RGBA, 16, 16, Block::blockTypeMap.size(), 0, GL_RGBA, GL_UNSIGNED_BYTE, 0 /* if it's null it tells GL we will send in 2D images as elements one by one, later */);
 
     Debug::checkGLError();
     for (auto& tile : Block::blockTypeMap) {
@@ -140,19 +141,21 @@ void TileRenderer::loadTileSheetNormals(const std::string& fileName, Block::Bloc
     const GLsizei depth = 1;
 
     Debug::checkGLError();
-    glTexSubImage3D(GL_TEXTURE_2D_ARRAY, level, xoffset, yoffset, zoffset, 16, 16, depth, GL_BGRA, GL_UNSIGNED_BYTE, image->bytes());
+    glTexSubImage3D(GL_TEXTURE_2D_ARRAY, level, xoffset, yoffset, zoffset, 16, 16, depth, GL_BGRA, GL_UNSIGNED_INT_8_8_8_8_REV, image->bytes());
     Debug::checkGLError();
 
     m_tileSheetNormals[type] = image;
 
-    ++m_tileSheetCount;
+    ++m_tileSheetNormalCount;
 }
 
 void TileRenderer::render()
 {
     m_shader->bindProgram();
     GLint lightPosLoc = glGetUniformLocation(m_shader->shaderProgram(), "lightPos");
-    glUniform3f(lightPosLoc, 2400.0, 1420.0, 0.0);
+//    glUniform3f(lightPosLoc, 500.0, 500.0, 1.0);
+//    glUniform3f(lightPosLoc, 2400.0, 1420.0, 1.0);
+    glUniform3f(lightPosLoc, .8, .8, 0.0);
 
     Debug::checkGLError();
     glActiveTexture(GL_TEXTURE0);
@@ -238,8 +241,8 @@ void TileRenderer::render()
             }
 
             //tilesheet index/row, column
-            int row = 1;
-            int column = 5;
+            int row = 0;
+            int column = 0;
 
             int blockIndex = currentColumn * WORLD_ROWCOUNT + currentRow;
             Block& block = m_world->m_blocks[blockIndex];

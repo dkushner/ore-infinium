@@ -23,8 +23,27 @@ uniform vec3 lightPos;
 out vec4 fragColor;
 
 void main() {
-    vec4 tile = texture(tileSheet, frag_texcoord + (lightPos * 0.000001));
-    fragColor = (frag_color.rgba) * vec4(tile.rgb, tile.a);
+
+   vec2 size = textureSize(normalMap, 0).xy;
+
+    vec3 lightMapCoordinate = frag_texcoord;
+
+   vec3 N = texture(normalMap, vec3(lightMapCoordinate.xy / size, 0)).xyz * 2.0 - 1.0;
+   vec3 L = normalize(lightPos - lightMapCoordinate.xyz);
+   vec4 I = /* first is color of light*/ vec4(1.0) * dot(L, N);
+
+   float dist = distance(frag_texcoord.xyz, lightPos);
+   I *= 1.0 - min(1.5 * pow(dist / 512, 2.0), 1.0);
+
+//   vec4 fragColor2 = texture(normalMap, vec3(lightMapCoordinate.xy / size, 1));
+
+//////////////////////
+
+    vec4 tile = texture(tileSheet, frag_texcoord);
+    fragColor = (frag_color.rgba) * vec4(tile.rgb, 1.0); //FIXME: tile.a);
+    fragColor.rgb *= I.rgb;
+//fragColor *= 0.00001;
+//fragColor += vec4(N, 1.0);
 }
 
 /*
