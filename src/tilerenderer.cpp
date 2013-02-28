@@ -78,7 +78,8 @@ void TileRenderer::loadTileSheets()
 
     Debug::checkGLError();
     const GLint level = 0;
-    glTexImage3D(GL_TEXTURE_2D_ARRAY, level, GL_RGBA, TILESHEET_WIDTH, TILESHEET_HEIGHT, Block::blockTypeMap.size(), 0, GL_RGBA, GL_UNSIGNED_BYTE, 0 /* if it's null it tells GL we will send in 2D images as elements one by one, later */);
+//    glTexImage3D(GL_TEXTURE_2D_ARRAY, level, GL_RGBA, TILESHEET_WIDTH, TILESHEET_HEIGHT, Block::blockTypeMap.size(), 0, GL_RGBA, GL_UNSIGNED_BYTE, 0 /* if it's null it tells GL we will send in 2D images as elements one by one, later */);
+    glTexImage3D(GL_TEXTURE_2D_ARRAY, level, GL_RGBA, 16, 16, Block::blockTypeMap.size(), 0, GL_RGBA, GL_UNSIGNED_BYTE, 0 /* if it's null it tells GL we will send in 2D images as elements one by one, later */);
     Debug::checkGLError();
 
     for (auto& tile : Block::blockTypeMap) {
@@ -122,7 +123,8 @@ void TileRenderer::loadTileSheet(const std::string& fileName, Block::BlockType t
     const GLsizei depth = 1;
 
     Debug::checkGLError();
-    glTexSubImage3D(GL_TEXTURE_2D_ARRAY, level, xoffset, yoffset, zoffset, TILESHEET_WIDTH, TILESHEET_HEIGHT, depth, GL_BGRA, GL_UNSIGNED_BYTE, image->bytes());
+//    glTexSubImage3D(GL_TEXTURE_2D_ARRAY, level, xoffset, yoffset, zoffset, TILESHEET_WIDTH, TILESHEET_HEIGHT, depth, GL_BGRA, GL_UNSIGNED_BYTE, image->bytes());
+    glTexSubImage3D(GL_TEXTURE_2D_ARRAY, level, xoffset, yoffset, zoffset, 16, 16, depth, GL_BGRA, GL_UNSIGNED_BYTE, image->bytes());
     Debug::checkGLError();
 
     m_tileSheets[type] = image;
@@ -155,11 +157,15 @@ void TileRenderer::render()
     GLint lightPosLoc = glGetUniformLocation(m_shader->shaderProgram(), "lightPos");
 //    glUniform3f(lightPosLoc, 500.0, 500.0, 1.0);
 //    glUniform3f(lightPosLoc, 2400.0, 1420.0, 1.0);
-    glUniform3f(lightPosLoc, .5, .5, 0.0);
+    glUniform3f(lightPosLoc, .9, .9, 0.0);
 
     Debug::checkGLError();
     glActiveTexture(GL_TEXTURE0);
+    GLint tileMapLoc = glGetUniformLocation(m_shader->shaderProgram(), "tileSheet");
+    glUniform1i(tileMapLoc, 0);
     glBindTexture(GL_TEXTURE_2D_ARRAY, m_tileMapTexture);
+    GLint normalMapLoc = glGetUniformLocation(m_shader->shaderProgram(), "normalMap");
+    glUniform1i(normalMapLoc, 1);
     glActiveTexture(GL_TEXTURE1);
     glBindTexture(GL_TEXTURE_2D_ARRAY, m_tileMapNormalsTexture);
 
@@ -253,10 +259,15 @@ void TileRenderer::render()
             float xPadding = 1.0f / TILESHEET_WIDTH * 1.0f * (column + 1);
             float yPadding = 1.0f / TILESHEET_HEIGHT * 1.0f * (row + 1);
 
-            const float tileLeft = (column *  tileWidth) + xPadding;
-            const float tileRight = tileLeft + tileWidth;
-            const float tileTop = 1.0f - ((row * tileHeight)) - yPadding;
-            const float tileBottom = tileTop - tileHeight;
+//            const float tileLeft = (column *  tileWidth) + xPadding;
+//            const float tileRight = tileLeft + tileWidth;
+//            const float tileTop = 1.0f - ((row * tileHeight)) - yPadding;
+//            const float tileBottom = tileTop - tileHeight;
+
+            const float tileLeft = 0;
+            const float tileRight = 1;
+            const float tileTop = 0;
+            const float tileBottom = 1;
 
             // copy texcoords to the buffer
             vertices[0].u = vertices[1].u = tileLeft;
