@@ -155,7 +155,7 @@ void TileRenderer::render()
     GLint lightPosLoc = glGetUniformLocation(m_shader->shaderProgram(), "lightPos");
 //    glUniform3f(lightPosLoc, 500.0, 500.0, 1.0);
 //    glUniform3f(lightPosLoc, 2400.0, 1420.0, 1.0);
-    glUniform3f(lightPosLoc, .8, .8, 0.0);
+    glUniform3f(lightPosLoc, .5, .5, 0.0);
 
     Debug::checkGLError();
     glActiveTexture(GL_TEXTURE0);

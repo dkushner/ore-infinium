@@ -32,7 +32,7 @@ void main() {
    vec3 L = normalize(lightPos - lightMapCoordinate.xyz);
    vec4 I = /* first is color of light*/ vec4(1.0) * dot(L, N);
 
-   float dist = distance(frag_texcoord.xyz, lightPos);
+   float dist = .5;//distance(frag_texcoord.xyz, lightPos);
    I *= 1.0 - min(1.5 * pow(dist / 512, 2.0), 1.0);
 
 //   vec4 fragColor2 = texture(normalMap, vec3(lightMapCoordinate.xy / size, 1));
@@ -40,8 +40,8 @@ void main() {
 //////////////////////
 
     vec4 tile = texture(tileSheet, frag_texcoord);
-    fragColor = (frag_color.rgba) * vec4(tile.rgb, 1.0); //FIXME: tile.a);
-    fragColor.rgb *= I.rgb;
+    fragColor = (frag_color.rgba) * vec4(tile.rgb, tile.a);
+    fragColor.rgb += I.rgb; /////FIXME: was multiply
 //fragColor *= 0.00001;
 //fragColor += vec4(N, 1.0);
 }
