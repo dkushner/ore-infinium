@@ -150,7 +150,9 @@ void TileRenderer::loadTileSheetNormals(const std::string& fileName, Block::Bloc
 
 void TileRenderer::render()
 {
-//    m_shader->bindProgram();
+    m_shader->bindProgram();
+    GLint lightPosLoc = glGetUniformLocation(m_shader->shaderProgram(), "lightPos");
+    glUniform3f(lightPosLoc, 2400.0, 1420.0, 0.0);
 
     Debug::checkGLError();
     glActiveTexture(GL_TEXTURE0);
@@ -288,7 +290,6 @@ void TileRenderer::render()
 
     Debug::checkGLError();
 
-    m_shader->bindProgram();
 
     // for smooth per-pixel scrolling, a value from 0-15 and when it's 16 we snap to the next tile
     glm::ivec2 offset = m_world->tileOffset(m_mainPlayer);

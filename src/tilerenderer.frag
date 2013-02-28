@@ -18,10 +18,12 @@ in vec4 frag_color;
 uniform sampler2DArray tileSheet;
 uniform sampler2DArray normalMap;
 
+uniform vec3 lightPos;
+
 out vec4 fragColor;
 
 void main() {
-    vec4 tile = texture(tileSheet, frag_texcoord);
+    vec4 tile = texture(tileSheet, frag_texcoord + (lightPos * 0.000001));
     fragColor = (frag_color.rgba) * vec4(tile.rgb, tile.a);
 }
 
