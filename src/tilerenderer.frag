@@ -1,15 +1,3 @@
-//#version 130
-//uniform vec2 offset;
-
-//uniform sampler2D tilemap_pixels;
-
-//uniform sampler2D tile_types_super_texture;
-
-//ivec2 offset = ivec2(5.0, 5.0);
-
-//FIXME: stop hardcoding ..
-//ivec2 TILE_SIZE = ivec2(16, 16);
-
 #version 130
 
 in vec3 frag_texcoord;
@@ -32,7 +20,6 @@ void main() {
 
     vec3 lightMapCoordinate = gl_FragCoord.xyz / vec3(size, 0.0);
 
-//   vec3 N = texture(normalMap, (lightMapCoordinate).xyz; //* 2.0 - 1.0;
    vec3 N = texture(normalMap, vec3(lightMapCoordinate.xy, 0)).xyz* 2.0 - 1.0;
 //   vec3 N = texture(normalMap, vec3(lightMapCoordinate.xy / size * 2, 0)).xyz; //* 2.0 - 1.0;
     vec3 L = normalize(lightPos - gl_FragCoord.xyz);
@@ -41,22 +28,11 @@ void main() {
    float dist = 1.0;//distance(gl_FragCoord.xyz, lightPos);
    I *= 1.0 - min(1.5 * pow(dist / 512, 2.0), 1.0);
 
-//   vec4 fragColor2 = texture(normalMap, vec3(lightMapCoordinate.xy / size, 1));
-
 //////////////////////
 
     vec4 tile = texture(tileSheet, frag_texcoord);
     fragColor = (frag_color.rgba) * vec4(tile.rgb, tile.a);
-//fragColor += vec4(1.0, 1.0, 1.0, 1.0);
-//    fragColor.rgb *= I.rgb; /////FIXME: was multiply
-//    fragColor.rgb *= I.rgb; /////FIXME: was multiply
     fragColor.rgb *= I.rgb;
-//fragColor *= 0.0000001;
-//fragColor += vec4(lightMapCoordinate, 1.0);
-//fragColor += vec4(N, 1.0) * 0.000001;
-//fragColor += vec4(lightMapCoordinate/vec3(size, 0), 1.0);
-//fragColor += vec4(N, 1.0) * 0.00000001 ;
-//fragColor += vec4(N, 1.0);
 }
 
 /*

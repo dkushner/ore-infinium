@@ -174,6 +174,11 @@ void World::update(double elapsedTime)
 //        performBlockAttack();
 //    }
 
+    if (m_tileRenderer) {
+        glm::ivec2 mouse = mousePosition();
+        m_tileRenderer->setLights(mouse);
+    }
+
     //    m_sky->update(elapsedTime);
 
     //NOTE: players are not exactly considered entities. they are, but they aren't

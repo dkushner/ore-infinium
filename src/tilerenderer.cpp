@@ -151,11 +151,16 @@ void TileRenderer::loadTileSheetNormals(const std::string& fileName, Block::Bloc
     ++m_tileSheetNormalCount;
 }
 
+void TileRenderer::setLights(const glm::ivec2& pos)
+{
+    m_lightPos = pos;
+}
+
 void TileRenderer::render()
 {
     m_shader->bindProgram();
     GLint lightPosLoc = glGetUniformLocation(m_shader->shaderProgram(), "lightPos");
-    glUniform3f(lightPosLoc, 500.0, 500.0, 1.0);
+    glUniform3f(lightPosLoc, m_lightPos.x, m_lightPos.y, 0.0);
 //    glUniform3f(lightPosLoc, 2400.0, 1420.0, 1.0);
 //    glUniform3f(lightPosLoc, .5, .5, 0.0);
 

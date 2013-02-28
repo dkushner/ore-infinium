@@ -24,6 +24,7 @@
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/swizzle.hpp>
+#include <glm/core/type.hpp>
 #include <GL/glew.h>
 
 #include <map>
@@ -46,6 +47,8 @@ public:
     void render();
 
     void setCamera(Camera* camera);
+
+    void setLights(const glm::ivec2& pos);
 
 private:
     typedef uint32_t u32;
@@ -75,6 +78,8 @@ private:
     void initGL();
 
 //    std::map<SpriteSheetType, SpriteSheet> m_spriteSheetTextures;
+
+    glm::vec2 m_lightPos;
 
     /**
      * Map containing all the sprite frame names and their properties for this
