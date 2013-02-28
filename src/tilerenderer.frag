@@ -16,7 +16,6 @@ out vec4 fragColor;
 void main() {
 
    vec2 size = textureSize(normalMap, 0).xy;
-//   vec2 size = textureSize(tileSheet, 0).xy;
 
     vec3 lightMapCoordinate = gl_FragCoord.xyz / vec3(size, 0.0);
 
@@ -25,7 +24,7 @@ void main() {
     vec3 L = normalize(lightPos - gl_FragCoord.xyz);
     vec4 I = /* first is color of light*/ vec4(1.0, 1.0, 1.0, 1.0) * dot(L, N);
 
-   float dist = 1.0;//distance(gl_FragCoord.xyz, lightPos);
+   float dist = distance(gl_FragCoord.xyz, lightPos);
    I *= 1.0 - min(1.5 * pow(dist / 512, 2.0), 1.0);
 
 //////////////////////
@@ -35,6 +34,7 @@ void main() {
     fragColor.rgb *= I.rgb;
 }
 
+//    fragColor.rgb -= (1 - I.rgb);
 /*
     "#version 130\n"
 
