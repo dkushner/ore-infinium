@@ -117,7 +117,7 @@ void TileRenderer::loadTileSheet(const std::string& fileName, Block::BlockType t
     const GLint level = 0;
     const GLint xoffset = 0;
     const GLint yoffset = 0;
-    const GLint zoffset = m_tileSheetNormalCount;
+    const GLint zoffset = m_tileSheetCount;
     const GLsizei depth = 1;
 
     Debug::checkGLError();
@@ -126,7 +126,7 @@ void TileRenderer::loadTileSheet(const std::string& fileName, Block::BlockType t
 
     m_tileSheets[type] = image;
 
-    ++m_tileSheetNormalCount;
+    ++m_tileSheetCount;
 }
 
 void TileRenderer::loadTileSheetNormals(const std::string& fileName, Block::BlockType type)
@@ -136,7 +136,7 @@ void TileRenderer::loadTileSheetNormals(const std::string& fileName, Block::Bloc
     const GLint level = 0;
     const GLint xoffset = 0;
     const GLint yoffset = 0;
-    const GLint zoffset = m_tileSheetCount;
+    const GLint zoffset = m_tileSheetNormalCount;
     const GLsizei depth = 1;
 
     Debug::checkGLError();
@@ -144,6 +144,8 @@ void TileRenderer::loadTileSheetNormals(const std::string& fileName, Block::Bloc
     Debug::checkGLError();
 
     m_tileSheetNormals[type] = image;
+
+    ++m_tileSheetCount;
 }
 
 void TileRenderer::render()
