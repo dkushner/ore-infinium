@@ -53,15 +53,6 @@ Client::Client()
 
     m_debugMenu = new DebugMenu(this);
     m_debugMenu->show();
-    std::stringstream ss;
-    ss << "Player";
-    std::random_device device;
-    std::mt19937 rand(device());
-    std::uniform_int_distribution<> distribution(0, INT_MAX);
-
-    ss << distribution(rand);
-
-    startMultiplayerHost(ss.str());
 }
 
 Client::~Client()
@@ -119,8 +110,8 @@ void Client::initSDL()
     Debug::checkGLError();
     SDL_GL_SetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, 3);
     Debug::checkGLError();
-    SDL_GL_SetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, 2);
-    SDL_GL_SetAttribute(SDL_GL_CONTEXT_PROFILE_MASK, SDL_GL_CONTEXT_PROFILE_COMPATIBILITY);
+    SDL_GL_SetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, 0);
+
     Debug::checkGLError();
 
     /* Turn on double buffering with a 24bit Z buffer.
@@ -327,11 +318,11 @@ void Client::handleInputEvents()
             break;
 
         case SDL_QUIT:
-            //if (m_peer) {
-                //m_mainMenu->showEscapeMenu();
-            //} else {
+            if (m_peer) {
+                m_mainMenu->showEscapeMenu();
+            } else {
                 shutdown();
-            //}
+            }
             break;
 
         default:

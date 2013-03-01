@@ -32,10 +32,10 @@ void Block::update()
 }
 
 std::map<Block::BlockType, Block::BlockStruct> Block::blockTypeMap = {
-    { BlockType::Null, BlockStruct("../textures/null.png", "../textures/null-normal.png", false) },
-    { BlockType::Dirt, BlockStruct("../textures/dirt.png", "../textures/dirt-normal.png", true) },
-    { BlockType::Stone, BlockStruct("../textures/stone.png", "../textures/stone-normal.png", true) },
-    { BlockType::Grass, BlockStruct("../textures/grass.png", "../textures/grass-normal.png", true) }
+    { BlockType::Null, BlockStruct("../textures/null.png", false) },
+    { BlockType::Dirt, BlockStruct("../textures/dirt.png", true) },
+    { BlockType::Stone, BlockStruct("../textures/stone.png", true) },
+    { BlockType::Grass, BlockStruct("../textures/grass.png", true) }
 };
 
 std::map<unsigned char, unsigned char> Block::tileMeshingTable = {

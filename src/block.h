@@ -48,14 +48,11 @@ public:
     static constexpr unsigned char blockSize = 16;
 
     struct BlockStruct {
-        BlockStruct(const char *_texture, const char *_textureNormal, bool _collides) {
+        BlockStruct(const char *_texture, bool _collides) {
             texture = _texture;
-            textureNormal = _textureNormal;
             collides = _collides;
         };
         const char* texture;
-        // the normal map texture, used for lighting
-        const char* textureNormal;
 
         // I thought about using flags..but this seems better, save for the might-be-fucking-huge-constructor
         // this will be useful for TODO: blocks that hurt or help the player's health, etc. (lava), liquids of types, etc.

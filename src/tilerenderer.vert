@@ -4,6 +4,8 @@ uniform mat4 mvp;
 
 uniform vec2 offset;
 
+uniform vec2 lightPositions[100];
+
 in vec2 position;
 in vec3 texcoord;
 

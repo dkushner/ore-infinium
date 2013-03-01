@@ -111,6 +111,9 @@ void TileRenderer::loadTileSheet(const std::string& fileName, Block::BlockType t
 void LightRenderer::renderToFBO()
 {
     glBindFramebuffer(GL_FRAMEBUFFER, m_fbo);
+    glBindRenderbuffer(GL_RENDERBUFFER, m_rb);
+    glClearColor(0.f, 0.f, 0.f, 1.0f);
+    glClear(GL_COLOR_BUFFER_BIT);
 
     int index = 0;
     Debug::checkGLError();
@@ -181,17 +184,14 @@ void LightRenderer::renderToFBO()
     Debug::checkGLError();
     ////////////////////////////////FINALLY RENDER IT ALL //////////////////////////////////////////
     glEnable(GL_BLEND);
-    glDisable(GL_DEPTH_TEST);
-//    glClearColor(0.0f, 0.0f, 0.5f, 0.0f);
-//    glClear(GL_COLOR_BUFFER_BIT);
-    glBlendFunc(GL_ONE, GL_ONE);
+    glBlendFunc(GL_SRC_ALPHA, GL_ONE);
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_ebo);
     glBindBuffer(GL_ARRAY_BUFFER, m_vbo);
     glBindVertexArray(m_vao);
 
     Debug::checkGLError();
 
-    m_shaderPassthrough->bindProgram();
+    m_shader->bindProgram();
 
     Debug::checkGLError();
 
@@ -202,7 +202,7 @@ void LightRenderer::renderToFBO()
         (const GLvoid*)0);
     Debug::checkGLError();
 
-    m_shaderPassthrough->unbindProgram();
+    m_shader->unbindProgram();
     Debug::checkGLError();
     glBindVertexArray(0);
     Debug::checkGLError();
@@ -215,86 +215,35 @@ void LightRenderer::renderToFBO()
 
     Debug::checkGLError();
     glBindFramebuffer(GL_FRAMEBUFFER, 0);
+    glBindRenderbuffer(GL_RENDERBUFFER, 0);
 }
 
 void LightRenderer::renderToBackbuffer()
 {
-//    m_shaderPassthrough->bindProgram();
-//    m_shaderPassthrough->unbindProgram();
- //   glEnable(GL_BLEND);
-//    glBlendFunc(GL_DST_COLOR, GL_ZERO);
-//    glBlendFunc(GL_SRC_ALPHA, GL_ONE);
+    glEnable(GL_BLEND);
+    glBlendFunc(GL_DST_COLOR, GL_ZERO);
 
-//    glBindFramebuffer(GL_DRAW_FRAMEBUFFER, 0);
- //   glBindFramebuffer(GL_READ_FRAMEBUFFER, m_fbo);
+    glBindFramebuffer(GL_DRAW_FRAMEBUFFER, 0);
+    glBindFramebuffer(GL_READ_FRAMEBUFFER, m_fbo);
 
-//    glBlitFramebuffer(0, 0, 1600, 800, 0, 0, 1600, 800, GL_COLOR_BUFFER_BIT, GL_NEAREST);
+    glBlitFramebuffer(0, 0, 1600, 800, 0, 0, 1600, 800, GL_COLOR_BUFFER_BIT, GL_NEAREST);
 
-    glBindFramebuffer(GL_FRAMEBUFFER, 0);
- //   m_shaderPassthrough->unbindProgram();
     glDisable(GL_BLEND);
- //   glBindFramebuffer(GL_READ_FRAMEBUFFER, 0);
- //   glBindFramebuffer(GL_DRAW_FRAMEBUFFER, 0);
+    glBindFramebuffer(GL_READ_FRAMEBUFFER, 0);
+    glBindFramebuffer(GL_DRAW_FRAMEBUFFER, 0);
+    glBindFramebuffer(GL_FRAMEBUFFER, 0);
 }
+
 
 void LightRenderer::initGL()
 {
-    glDisable(GL_DEPTH_TEST);
     glGenFramebuffers(1, &m_fbo);
     glBindFramebuffer(GL_FRAMEBUFFER, m_fbo);
-    Debug::checkGLError();
 
-    glGenTextures(1, m_fboTexture);
-    glBindTexture(GL_TEXTURE_2D, m_fboTexture);
-    Debug::checkGLError();
-
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
-    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, 1024, 512, 0, GL_RGBA, GL_UNSIGNED_BYTE, 0);
-    Debug::checkGLError();
-
-
-    Debug::checkGLError();
-//    glGenRenderbuffers(1, &m_rb);
-//    glBindRenderbuffer(GL_RENDERBUFFER, m_rb);
-//    glRenderbufferStorage(GL_RENDERBUFFER, GL_RGBA8, 1600, 900);
-//    glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_RENDERBUFFER, m_rb);
-
-    glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, m_fboTexture, 0);
-//    GLenum DrawBuffers[1] = {GL_COLOR_ATTACHMENT0};
-//    glDrawBuffers(1, DrawBuffers);
-//    glDrawBuffer(GL_COLOR_ATTACHMENT0);
-
-    GLenum status = glCheckFramebufferStatus(GL_FRAMEBUFFER);
-    switch(status) {
-        case GL_FRAMEBUFFER_UNDEFINED:
-        Debug::fatal(false, Debug::Area::Graphics, "oh fuck, framebuffer undefined!");
-            break;
-        case GL_FRAMEBUFFER_INCOMPLETE_ATTACHMENT:
-        Debug::fatal(false, Debug::Area::Graphics, "oh fuck, framebuffer incomp attachment!");
-            break;
-        case GL_FRAMEBUFFER_INCOMPLETE_MISSING_ATTACHMENT:
-        Debug::fatal(false, Debug::Area::Graphics, "oh fuck, framebuffer missing attachment!");
-            break;
-        case GL_FRAMEBUFFER_INCOMPLETE_DRAW_BUFFER:
-        Debug::fatal(false, Debug::Area::Graphics, "oh fuck, framebuffer draw buffer!");
-            break;
-        case GL_FRAMEBUFFER_INCOMPLETE_READ_BUFFER:
-        Debug::fatal(false, Debug::Area::Graphics, "oh fuck, framebuffer read buffer!");
-            break;
-        case GL_FRAMEBUFFER_UNSUPPORTED:
-        Debug::fatal(false, Debug::Area::Graphics, "oh fuck, framebuffer unsupported!");
-            break;
-        case GL_FRAMEBUFFER_INCOMPLETE_MULTISAMPLE:
-        Debug::fatal(false, Debug::Area::Graphics, "oh fuck, framebuffer incomp multisample!");
-            break;
-        case GL_FRAMEBUFFER_INCOMPLETE_LAYER_TARGETS:
-        Debug::fatal(false, Debug::Area::Graphics, "oh fuck, framebuffer incomp layer targets0!");
-            break;
-    }
-    if (status != GL_FRAMEBUFFER_COMPLETE) {
-        Debug::fatal(false, Debug::Area::Graphics, "oh fuck, framebuffer is all shitted up!");
-    }
+    glGenRenderbuffers(1, &m_rb);
+    glBindRenderbuffer(GL_RENDERBUFFER, m_rb);
+    glRenderbufferStorage(GL_RENDERBUFFER, GL_RGBA8, 1600, 900);
+    glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_RENDERBUFFER, m_rb);
 
     Debug::checkGLError();
 
@@ -380,4 +329,5 @@ void LightRenderer::initGL()
     Debug::checkGLError();
 
     glBindFramebuffer(GL_FRAMEBUFFER, 0);
+    glBindRenderbuffer(GL_RENDERBUFFER, 0);
 }
