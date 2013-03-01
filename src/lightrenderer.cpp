@@ -220,17 +220,43 @@ void LightRenderer::renderToFBO()
 
 void LightRenderer::renderToBackbuffer()
 {
-    glEnable(GL_BLEND);
-    glBlendFunc(GL_DST_COLOR, GL_ZERO);
+//    glEnable(GL_BLEND);
+ //   glBlendFunc(GL_DST_COLOR, GL_ZERO);
 
-    glBindFramebuffer(GL_DRAW_FRAMEBUFFER, 0);
-    glBindFramebuffer(GL_READ_FRAMEBUFFER, m_fbo);
+    glBindTexture(GL_TEXTURE_2D, m_fboTexture);
+    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_eboBackbuffer);
+    glBindBuffer(GL_ARRAY_BUFFER, m_vboBackbuffer);
+    glBindVertexArray(m_vaoBackbuffer);
 
+    Debug::checkGLError();
+
+    m_shaderPassthrough->bindProgram();
+
+    Debug::checkGLError();
+
+    glDrawElements(
+        GL_TRIANGLES,
+        6 * (1), // 6 indices per 2 triangles
+        GL_UNSIGNED_INT,
+        (const GLvoid*)0);
+    Debug::checkGLError();
+
+    m_shader->unbindProgram();
+    Debug::checkGLError();
+    glBindVertexArray(0);
+    Debug::checkGLError();
+    glBindBuffer(GL_ARRAY_BUFFER, 0);
+    Debug::checkGLError();
+    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
+
+//    glBindFramebuffer(GL_DRAW_FRAMEBUFFER, 0);
+//    glBindFramebuffer(GL_READ_FRAMEBUFFER, m_fbo);
+
+    m_shaderPassthrough->unbindProgram();
 
     glDisable(GL_BLEND);
-    glBindFramebuffer(GL_READ_FRAMEBUFFER, 0);
-    glBindFramebuffer(GL_DRAW_FRAMEBUFFER, 0);
-    glBindFramebuffer(GL_FRAMEBUFFER, 0);
+//    glBindFramebuffer(GL_DRAW_FRAMEBUFFER, 0);
+ //   glBindFramebuffer(GL_FRAMEBUFFER, 0);
 }
 
 
@@ -427,6 +453,64 @@ void LightRenderer::initBackbufferGL()
         GL_FALSE,
         sizeof(Vertex),
                           (const GLvoid*)buffer_offset);
+    Debug::checkGLError();
+
+    // vertices that will be uploaded.
+    Vertex vertices[4];
+
+    // vertices[n][0] -> X, and [1] -> Y
+    // vertices[0] -> top left
+    // vertices[1] -> bottom left
+    // vertices[2] -> bottom right
+    // vertices[3] -> top right
+
+    float x = 0.0f;
+    float width = 1.0f;
+
+    float y = 0.0f;
+    float height = 1.0f;
+
+    vertices[0].x = x; // top left X
+    vertices[0].y = y; //top left Y
+
+    vertices[1].x = x; // bottom left X
+    vertices[1].y = height; // bottom left Y
+
+    vertices[2].x = width; // bottom right X
+    vertices[2].y = height; //bottom right Y
+
+    vertices[3].x = width; // top right X
+    vertices[3].y = y; // top right Y
+
+    Debug::checkGLError();
+
+    // copy color to the buffer
+    for (size_t i = 0; i < sizeof(vertices) / sizeof(*vertices); i++) {
+        //        *colorp = color.bgra;
+        uint8_t red = 255;
+        uint8_t blue = 255;
+        uint8_t green = 255;
+        uint8_t alpha = 255;
+        int32_t color = red | (green << 8) | (blue << 16) | (alpha << 24);
+        vertices[i].color = color;
+    }
+
+    // copy texcoords to the buffer
+    vertices[0].u = vertices[1].u = 0.0f;
+    vertices[0].v = vertices[3].v = 1.0f;
+    vertices[1].v = vertices[2].v = 0.0f;
+    vertices[2].u = vertices[3].u = 1.0f;
+
+    Debug::checkGLError();
+    // finally upload everything to the actual vbo
+    glBindBuffer(GL_ARRAY_BUFFER, m_vbo);
+    glBufferSubData(
+        GL_ARRAY_BUFFER,
+        sizeof(vertices) * 1,
+                    sizeof(vertices),
+                    vertices);
+    Debug::checkGLError();
+
 
     glBindVertexArray(0);
     glBindBuffer(GL_ARRAY_BUFFER, 0);
