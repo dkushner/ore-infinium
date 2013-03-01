@@ -221,8 +221,8 @@ void LightRenderer::renderToFBO()
 
 void LightRenderer::renderToBackbuffer()
 {
-//    glEnable(GL_BLEND);
- //   glBlendFunc(GL_DST_COLOR, GL_ZERO);
+    glEnable(GL_BLEND);
+   glBlendFunc(GL_ONE, GL_ONE);
 
    glBindFramebuffer(GL_FRAMEBUFFER, 0);
     glBindTexture(GL_TEXTURE_2D, m_fboTexture);
@@ -271,7 +271,7 @@ void LightRenderer::renderToBackbuffer()
         //        *colorp = color.bgra;
         uint8_t red = 255;
         uint8_t blue = 255;
-        uint8_t green = 255;
+        uint8_t green = 0;
         uint8_t alpha = 255;
         int32_t color = red | (green << 8) | (blue << 16) | (alpha << 24);
         vertices[i].color = color;
@@ -324,14 +324,6 @@ void LightRenderer::renderToBackbuffer()
 
     Debug::checkGLError();
     glDisable(GL_BLEND);
-
-
-//    glBindFramebuffer(GL_DRAW_FRAMEBUFFER, 0);
-//    glBindFramebuffer(GL_READ_FRAMEBUFFER, m_fbo);
-
-
-//    glDisable(GL_BLEND);
-//    glBindFramebuffer(GL_DRAW_FRAMEBUFFER, 0);
 }
 
 
@@ -356,23 +348,7 @@ void LightRenderer::initGL()
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
 
-    int width = 1600;
-    int height = 900;
-    // create some image data
-    std::vector<GLubyte> image(4*width*height);
-    for(int j = 0;j<height;++j)
-    {
-        for(int i = 0;i<width;++i)
-        {
-            size_t index = j*width + i;
-            image[4*index + 0] = 0xFF*(j/10%2)*(i/10%2); // R
-            image[4*index + 1] = 0xFF*(j/13%2)*(i/13%2); // G
-            image[4*index + 2] = 0xFF*(j/17%2)*(i/17%2); // B
-            image[4*index + 3] = 0xFF;                   // A
-        }
-    }
-
-    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, 1600, 900, 0, GL_RGBA, GL_UNSIGNED_BYTE, &image[0]);
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, 1600, 900, 0, GL_RGBA, GL_UNSIGNED_BYTE, nullptr);
 
     // Attach the texture to the FBO
     glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, m_fboTexture, 0);
