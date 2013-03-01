@@ -226,7 +226,6 @@ void LightRenderer::renderToBackbuffer()
     glBindFramebuffer(GL_DRAW_FRAMEBUFFER, 0);
     glBindFramebuffer(GL_READ_FRAMEBUFFER, m_fbo);
 
-    glBlitFramebuffer(0, 0, 1600, 800, 0, 0, 1600, 800, GL_COLOR_BUFFER_BIT, GL_NEAREST);
 
     glDisable(GL_BLEND);
     glBindFramebuffer(GL_READ_FRAMEBUFFER, 0);
@@ -242,8 +241,26 @@ void LightRenderer::initGL()
 
     glGenRenderbuffers(1, &m_rb);
     glBindRenderbuffer(GL_RENDERBUFFER, m_rb);
-    glRenderbufferStorage(GL_RENDERBUFFER, GL_RGBA8, 1600, 900);
+    glRenderbufferStorage(GL_RENDERBUFFER, GL_RGBA, 1600, 900);
     glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_RENDERBUFFER, m_rb);
+
+    GLenum buffers[] = { GL_COLOR_ATTACHMENT0 };
+    glDrawBuffers(1, buffers);
+
+    glGenTextures(1, &m_fboTexture);
+    glBindTexture(GL_TEXTURE_2D, m_fboTexture);
+
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, 1600, 900, 0, GL_RGBA, GL_UNSIGNED_BYTE, NULL);
+
+    // Attach the texture to the FBO
+    glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, m_fboTexture, 0);
+
+    GLenum status = glCheckFramebufferStatus(GL_FRAMEBUFFER);
+    assert(status == GL_FRAMEBUFFER_COMPLETE);
 
     Debug::checkGLError();
 
@@ -330,4 +347,89 @@ void LightRenderer::initGL()
 
     glBindFramebuffer(GL_FRAMEBUFFER, 0);
     glBindRenderbuffer(GL_RENDERBUFFER, 0);
+
+    initBackbufferGL();
 }
+
+void LightRenderer::initBackbufferGL()
+{
+    glGenVertexArrays(1, &m_vaoBackbuffer);
+    glBindVertexArray(m_vaoBackbuffer);
+
+    int quadCount = 2;
+
+    glGenBuffers(1, &m_vboBackbuffer);
+    glBindBuffer(GL_ARRAY_BUFFER, m_vboBackbuffer);
+    glBufferData(
+        GL_ARRAY_BUFFER,
+        quadCount * 4 * sizeof(Vertex),
+                 NULL,
+                 GL_DYNAMIC_DRAW);
+
+    Debug::checkGLError();
+
+    std::vector<u32> indicesv;
+
+    // prepare and upload indices as a one time deal
+    const u32 indices[] = { 0, 1, 2, 0, 2, 3 }; // pattern for a triangle array
+    // for each possible sprite, add the 6 index pattern
+    for (size_t j = 0; j < quadCount; j++) {
+        for (size_t i = 0; i < sizeof(indices) / sizeof(*indices); i++) {
+            indicesv.push_back(4 * j + indices[i]);
+        }
+    }
+
+    glGenBuffers(1, &m_eboBackbuffer);
+    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_eboBackbuffer);
+    glBufferData(
+        GL_ELEMENT_ARRAY_BUFFER,
+        indicesv.size()*sizeof(u32),
+                 indicesv.data(),
+                 GL_STATIC_DRAW);
+
+    Debug::checkGLError();
+
+    size_t buffer_offset = 0;
+
+    GLint pos_attrib = glGetAttribLocation(m_shaderPassthrough->shaderProgram(), "position");
+    glEnableVertexAttribArray(pos_attrib);
+    glVertexAttribPointer(
+        pos_attrib,
+        2,
+        GL_FLOAT,
+        GL_FALSE,
+        sizeof(Vertex),
+                          (const GLvoid*)buffer_offset);
+    buffer_offset += sizeof(f32) * 2;
+
+    GLint color_attrib = glGetAttribLocation(m_shaderPassthrough->shaderProgram(), "color");
+
+    Debug::checkGLError();
+
+    glEnableVertexAttribArray(color_attrib);
+    glVertexAttribPointer(
+        color_attrib,
+        4,
+        GL_UNSIGNED_BYTE,
+        GL_TRUE,
+        sizeof(Vertex),
+                          (const GLvoid*)buffer_offset);
+    buffer_offset += sizeof(u32);
+
+    Debug::checkGLError();
+
+    GLint texcoord_attrib = glGetAttribLocation(m_shaderPassthrough->shaderProgram(), "texcoord");
+    glEnableVertexAttribArray(texcoord_attrib);
+    glVertexAttribPointer(
+        texcoord_attrib,
+        2,
+        GL_FLOAT,
+        GL_FALSE,
+        sizeof(Vertex),
+                          (const GLvoid*)buffer_offset);
+
+    glBindVertexArray(0);
+    glBindBuffer(GL_ARRAY_BUFFER, 0);
+    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
+}
+

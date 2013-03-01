@@ -68,6 +68,7 @@ private:
     };
 
     void initGL();
+    void initBackbufferGL();
 
     std::vector<Torch*> m_torches;
 
@@ -75,6 +76,11 @@ private:
 
     // framebuffer, which we first render our lightmaps to, then we render it to the backbuffer
     GLuint m_fbo = 0;
+    GLint m_fboTexture = 0;
+
+    GLuint m_vaoBackbuffer; // vertex array object
+    GLuint m_vboBackbuffer; // vertex buffer object
+    GLuint m_eboBackbuffer; // element buffer object
 
     //render buffer object
     GLuint m_rb = 0;
