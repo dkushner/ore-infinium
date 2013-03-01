@@ -53,6 +53,17 @@ Client::Client()
 
     m_debugMenu = new DebugMenu(this);
     m_debugMenu->show();
+
+    //HACK: for debug only so i don't have to piss around
+    std::stringstream ss;
+    ss << "Player";
+    std::random_device device;
+    std::mt19937 rand(device());
+    std::uniform_int_distribution<> distribution(0, INT_MAX);
+
+    ss << distribution(rand);
+
+    startMultiplayerHost(ss.str());
 }
 
 Client::~Client()
@@ -318,11 +329,11 @@ void Client::handleInputEvents()
             break;
 
         case SDL_QUIT:
-            if (m_peer) {
-                m_mainMenu->showEscapeMenu();
-            } else {
+//            if (m_peer) {
+//                m_mainMenu->showEscapeMenu();
+//            } else {
                 shutdown();
-            }
+            //}
             break;
 
         default:

@@ -223,6 +223,7 @@ void LightRenderer::renderToBackbuffer()
 //    glEnable(GL_BLEND);
  //   glBlendFunc(GL_DST_COLOR, GL_ZERO);
 
+   glBindFramebuffer(GL_FRAMEBUFFER, 0);
     glBindTexture(GL_TEXTURE_2D, m_fboTexture);
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_eboBackbuffer);
     glBindBuffer(GL_ARRAY_BUFFER, m_vboBackbuffer);
@@ -256,7 +257,6 @@ void LightRenderer::renderToBackbuffer()
 
     glDisable(GL_BLEND);
 //    glBindFramebuffer(GL_DRAW_FRAMEBUFFER, 0);
- //   glBindFramebuffer(GL_FRAMEBUFFER, 0);
 }
 
 
@@ -382,7 +382,7 @@ void LightRenderer::initBackbufferGL()
     glGenVertexArrays(1, &m_vaoBackbuffer);
     glBindVertexArray(m_vaoBackbuffer);
 
-    int quadCount = 2;
+    int quadCount = 1;
 
     glGenBuffers(1, &m_vboBackbuffer);
     glBindBuffer(GL_ARRAY_BUFFER, m_vboBackbuffer);
