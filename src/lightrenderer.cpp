@@ -44,6 +44,7 @@ LightRenderer::LightRenderer(World* world, Camera* camera, Player* mainPlayer)
     m_shader = new Shader("lightrenderer.vert", "lightrenderer.frag");
     m_shaderPassthrough = new Shader("lightrendererpassthrough.vert", "lightrendererpassthrough.frag");
     setCamera(camera);
+    m_camera->setShader(m_shaderPassthrough);
 
     initGL();
 
@@ -110,6 +111,8 @@ void TileRenderer::loadTileSheet(const std::string& fileName, Block::BlockType t
 
 void LightRenderer::renderToFBO()
 {
+    m_camera->setShader(m_shader);
+    m_camera->setShader(m_shaderPassthrough);
     glBindFramebuffer(GL_FRAMEBUFFER, m_fbo);
     glBindRenderbuffer(GL_RENDERBUFFER, m_rb);
     glClearColor(0.f, 0.f, 0.f, 1.0f);
@@ -233,13 +236,93 @@ void LightRenderer::renderToBackbuffer()
 
     m_shaderPassthrough->bindProgram();
 
+
+
+
+    int index = 0;
+    for (Torch* torch : m_torches) {
+
+        // vertices that will be uploaded.
+        Vertex vertices[4];
+
+        // vertices[n][0] -> X, and [1] -> Y
+        // vertices[0] -> top left
+        // vertices[1] -> bottom left
+        // vertices[2] -> bottom right
+        // vertices[3] -> top right
+
+        const glm::vec2& position = torch->position();
+        const float radius = torch->radius();
+
+        float x = position.x - radius;
+        float width = position.x +  radius;
+
+        float y = position.y - radius;
+        float height = position.y  +  radius;
+
+        vertices[0].x = x; // top left X
+        vertices[0].y = y; //top left Y
+
+        vertices[1].x = x; // bottom left X
+        vertices[1].y = height; // bottom left Y
+
+        vertices[2].x = width; // bottom right X
+        vertices[2].y = height; //bottom right Y
+
+        vertices[3].x = width; // top right X
+        vertices[3].y = y; // top right Y
+
+        Debug::checkGLError();
+
+        // copy color to the buffer
+        for (size_t i = 0; i < sizeof(vertices) / sizeof(*vertices); i++) {
+            //        *colorp = color.bgra;
+            uint8_t red = 255;
+            uint8_t blue = 255;
+            uint8_t green = 255;
+            uint8_t alpha = 255;
+            int32_t color = red | (green << 8) | (blue << 16) | (alpha << 24);
+            vertices[i].color = color;
+        }
+
+        // copy texcoords to the buffer
+        vertices[0].u = vertices[1].u = 0.0f;
+        vertices[0].v = vertices[3].v = 1.0f;
+        vertices[1].v = vertices[2].v = 0.0f;
+        vertices[2].u = vertices[3].u = 1.0f;
+
+        Debug::checkGLError();
+        // finally upload everything to the actual vbo
+        glBindBuffer(GL_ARRAY_BUFFER, m_vboBackbuffer);
+        glBufferSubData(
+            GL_ARRAY_BUFFER,
+            sizeof(vertices) * index,
+                        sizeof(vertices),
+                        vertices);
+        Debug::checkGLError();
+
+        ++index;
+    }
+
+    Debug::checkGLError();
+    ////////////////////////////////FINALLY RENDER IT ALL //////////////////////////////////////////
+    glEnable(GL_BLEND);
+    glBlendFunc(GL_SRC_ALPHA, GL_ONE);
+    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_eboBackbuffer);
+    glBindBuffer(GL_ARRAY_BUFFER, m_vboBackbuffer);
+    glBindVertexArray(m_vaoBackbuffer);
+
+    Debug::checkGLError();
+
+    m_shader->bindProgram();
+
     Debug::checkGLError();
 
     glDrawElements(
         GL_TRIANGLES,
-        6 * (1), // 6 indices per 2 triangles
-        GL_UNSIGNED_INT,
-        (const GLvoid*)0);
+        6 * (m_torches.size()), // 6 indices per 2 triangles
+                   GL_UNSIGNED_INT,
+                   (const GLvoid*)0);
     Debug::checkGLError();
 
     m_shader->unbindProgram();
@@ -250,12 +333,49 @@ void LightRenderer::renderToBackbuffer()
     Debug::checkGLError();
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
 
+    Debug::checkGLError();
+    glDisable(GL_BLEND);
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 //    glBindFramebuffer(GL_DRAW_FRAMEBUFFER, 0);
 //    glBindFramebuffer(GL_READ_FRAMEBUFFER, m_fbo);
 
     m_shaderPassthrough->unbindProgram();
 
-    glDisable(GL_BLEND);
+//    glDisable(GL_BLEND);
 //    glBindFramebuffer(GL_DRAW_FRAMEBUFFER, 0);
 }
 
@@ -382,7 +502,7 @@ void LightRenderer::initBackbufferGL()
     glGenVertexArrays(1, &m_vaoBackbuffer);
     glBindVertexArray(m_vaoBackbuffer);
 
-    int quadCount = 1;
+    int quadCount = m_maxTileCount;
 
     glGenBuffers(1, &m_vboBackbuffer);
     glBindBuffer(GL_ARRAY_BUFFER, m_vboBackbuffer);
@@ -455,61 +575,6 @@ void LightRenderer::initBackbufferGL()
                           (const GLvoid*)buffer_offset);
     Debug::checkGLError();
 
-    // vertices that will be uploaded.
-    Vertex vertices[4];
-
-    // vertices[n][0] -> X, and [1] -> Y
-    // vertices[0] -> top left
-    // vertices[1] -> bottom left
-    // vertices[2] -> bottom right
-    // vertices[3] -> top right
-
-    float x = 0.0f;
-    float width = 1.0f;
-
-    float y = 0.0f;
-    float height = 1.0f;
-
-    vertices[0].x = x; // top left X
-    vertices[0].y = y; //top left Y
-
-    vertices[1].x = x; // bottom left X
-    vertices[1].y = height; // bottom left Y
-
-    vertices[2].x = width; // bottom right X
-    vertices[2].y = height; //bottom right Y
-
-    vertices[3].x = width; // top right X
-    vertices[3].y = y; // top right Y
-
-    Debug::checkGLError();
-
-    // copy color to the buffer
-    for (size_t i = 0; i < sizeof(vertices) / sizeof(*vertices); i++) {
-        //        *colorp = color.bgra;
-        uint8_t red = 255;
-        uint8_t blue = 255;
-        uint8_t green = 255;
-        uint8_t alpha = 255;
-        int32_t color = red | (green << 8) | (blue << 16) | (alpha << 24);
-        vertices[i].color = color;
-    }
-
-    // copy texcoords to the buffer
-    vertices[0].u = vertices[1].u = 0.0f;
-    vertices[0].v = vertices[3].v = 1.0f;
-    vertices[1].v = vertices[2].v = 0.0f;
-    vertices[2].u = vertices[3].u = 1.0f;
-
-    Debug::checkGLError();
-    // finally upload everything to the actual vbo
-    glBindBuffer(GL_ARRAY_BUFFER, m_vbo);
-    glBufferSubData(
-        GL_ARRAY_BUFFER,
-        sizeof(vertices) * 1,
-                    sizeof(vertices),
-                    vertices);
-    Debug::checkGLError();
 
 
     glBindVertexArray(0);
