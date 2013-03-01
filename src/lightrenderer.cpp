@@ -155,10 +155,10 @@ void LightRenderer::renderToFBO()
         // copy color to the buffer
         for (size_t i = 0; i < sizeof(vertices) / sizeof(*vertices); i++) {
             //        *colorp = color.bgra;
-            uint8_t red = 240;
-            uint8_t green = 240;
-            uint8_t blue = 0;
-            uint8_t alpha = 150;
+            uint8_t red = 255;
+            uint8_t green = 255;
+            uint8_t blue = 255;
+            uint8_t alpha = 255;
             int32_t color = red | (green << 8) | (blue << 16) | (alpha << 24);
             vertices[i].color = color;
         }
@@ -185,7 +185,7 @@ void LightRenderer::renderToFBO()
     Debug::checkGLError();
     ////////////////////////////////FINALLY RENDER IT ALL //////////////////////////////////////////
     glEnable(GL_BLEND);
-    glBlendFunc(GL_SRC_ALPHA, GL_ONE);
+    glBlendFunc(GL_ONE, GL_ONE);
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_ebo);
     glBindBuffer(GL_ARRAY_BUFFER, m_vbo);
     glBindVertexArray(m_vao);
@@ -222,7 +222,7 @@ void LightRenderer::renderToFBO()
 void LightRenderer::renderToBackbuffer()
 {
     glEnable(GL_BLEND);
-   glBlendFunc(GL_ONE, GL_ONE);
+   glBlendFunc(GL_ZERO, GL_SRC_COLOR);
 
    glBindFramebuffer(GL_FRAMEBUFFER, 0);
     glBindTexture(GL_TEXTURE_2D, m_fboTexture);
