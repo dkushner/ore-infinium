@@ -234,7 +234,6 @@ void LightRenderer::renderToBackbuffer()
 
     Debug::checkGLError();
 
-    m_shaderPassthrough->bindProgram();
 
     int index = 0;
     // vertices that will be uploaded.
@@ -249,11 +248,11 @@ void LightRenderer::renderToBackbuffer()
 //    const glm::vec2& position = torch->position();
 //    const float radius = torch->radius();
 
-    float x = 0.0f; //position.x - radius;
-    float width = 10000.0f; //position.x +  radius;
+    float x = -1.0f; //position.x - radius;
+    float width = 1.0f; //position.x +  radius;
 
-    float y = 0.0f; //position.y - radius;
-    float height = 10000.0f; //position.y  +  radius;
+    float y = 1.0f; //position.y - radius;
+    float height = -1.0f; //position.y  +  radius;
 
     vertices[0].x = x; // top left X
     vertices[0].y = y; //top left Y
@@ -332,7 +331,6 @@ void LightRenderer::renderToBackbuffer()
 //    glBindFramebuffer(GL_DRAW_FRAMEBUFFER, 0);
 //    glBindFramebuffer(GL_READ_FRAMEBUFFER, m_fbo);
 
-    m_shaderPassthrough->unbindProgram();
 
 //    glDisable(GL_BLEND);
 //    glBindFramebuffer(GL_DRAW_FRAMEBUFFER, 0);
