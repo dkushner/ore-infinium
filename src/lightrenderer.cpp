@@ -44,7 +44,6 @@ LightRenderer::LightRenderer(World* world, Camera* camera, Player* mainPlayer)
     m_shader = new Shader("lightrenderer.vert", "lightrenderer.frag");
     m_shaderPassthrough = new Shader("lightrendererpassthrough.vert", "lightrendererpassthrough.frag");
     setCamera(camera);
-    m_camera->setShader(m_shaderPassthrough);
 
     initGL();
 
@@ -112,7 +111,6 @@ void TileRenderer::loadTileSheet(const std::string& fileName, Block::BlockType t
 void LightRenderer::renderToFBO()
 {
     m_camera->setShader(m_shader);
-    m_camera->setShader(m_shaderPassthrough);
     glBindFramebuffer(GL_FRAMEBUFFER, m_fbo);
     glBindRenderbuffer(GL_RENDERBUFFER, m_rb);
     glClearColor(0.f, 0.f, 0.f, 1.0f);
