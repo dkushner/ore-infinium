@@ -113,7 +113,7 @@ void LightRenderer::renderToFBO()
     m_camera->setShader(m_shader);
     glBindFramebuffer(GL_FRAMEBUFFER, m_fbo);
     glBindRenderbuffer(GL_RENDERBUFFER, m_rb);
-    glClearColor(0.f, 0.f, 0.f, 1.0f);
+    glClearColor(0.f, 0.f, 0.f, 0.0f);
     glClear(GL_COLOR_BUFFER_BIT);
 
     int index = 0;
@@ -155,10 +155,10 @@ void LightRenderer::renderToFBO()
         // copy color to the buffer
         for (size_t i = 0; i < sizeof(vertices) / sizeof(*vertices); i++) {
             //        *colorp = color.bgra;
-            uint8_t red = 255;
-            uint8_t blue = 255;
-            uint8_t green = 255;
-            uint8_t alpha = 255;
+            uint8_t red = 240;
+            uint8_t green = 240;
+            uint8_t blue = 0;
+            uint8_t alpha = 150;
             int32_t color = red | (green << 8) | (blue << 16) | (alpha << 24);
             vertices[i].color = color;
         }
@@ -271,7 +271,7 @@ void LightRenderer::renderToBackbuffer()
         //        *colorp = color.bgra;
         uint8_t red = 255;
         uint8_t blue = 255;
-        uint8_t green = 0;
+        uint8_t green = 255;
         uint8_t alpha = 255;
         int32_t color = red | (green << 8) | (blue << 16) | (alpha << 24);
         vertices[i].color = color;
