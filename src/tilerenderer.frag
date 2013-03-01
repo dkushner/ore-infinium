@@ -17,15 +17,15 @@ void main() {
 
    vec2 size = textureSize(normalMap, 0).xy;
 
-    vec3 lightMapCoordinate = gl_FragCoord.xyz / vec3(size, 0.0);
-
-   vec3 N = texture(normalMap, vec3(lightMapCoordinate.xy, 0)).xyz* 2.0 - 1.0;
+   vec3 N = texture(normalMap, vec3(gl_FragCoord.xy / size, 0)).xyz * 2.0 - 1.0;
 //   vec3 N = texture(normalMap, vec3(lightMapCoordinate.xy / size * 2, 0)).xyz; //* 2.0 - 1.0;
+
     vec3 L = normalize(lightPos - gl_FragCoord.xyz);
-    vec4 I = /* first is color of light*/ vec4(1.0, 1.0, 1.0, 1.0) * dot(L, N);
+    vec4 I = /* first is color of light*/ vec4(1.0) * dot(L, N);
 
    float dist = distance(gl_FragCoord.xyz, lightPos);
-   I *= 1.0 - min(1.5 * pow(dist / 512, 2.0), 1.0);
+    float radius = 200;
+   I *= 1.0 - min(1.5 * pow(dist / radius, 2.0), 1.0);
 
 //////////////////////
 
