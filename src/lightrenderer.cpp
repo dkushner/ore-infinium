@@ -44,7 +44,6 @@ LightRenderer::LightRenderer(World* world, Camera* camera, Player* mainPlayer)
     m_shader = new Shader("lightrenderer.vert", "lightrenderer.frag");
     m_shaderPassthrough = new Shader("lightrendererpassthrough.vert", "lightrendererpassthrough.frag");
     setCamera(camera);
-    m_camera->setShader(m_shaderPassthrough);
 
     initGL();
 
@@ -112,7 +111,6 @@ void TileRenderer::loadTileSheet(const std::string& fileName, Block::BlockType t
 void LightRenderer::renderToFBO()
 {
     m_camera->setShader(m_shader);
-    m_camera->setShader(m_shaderPassthrough);
     glBindFramebuffer(GL_FRAMEBUFFER, m_fbo);
     glBindRenderbuffer(GL_RENDERBUFFER, m_rb);
     glClearColor(0.f, 0.f, 0.f, 1.0f);
@@ -236,7 +234,6 @@ void LightRenderer::renderToBackbuffer()
 
     m_shaderPassthrough->bindProgram();
 
-    int index = 0;
     // vertices that will be uploaded.
     Vertex vertices[4];
 
@@ -246,17 +243,14 @@ void LightRenderer::renderToBackbuffer()
     // vertices[2] -> bottom right
     // vertices[3] -> top right
 
-//    const glm::vec2& position = torch->position();
-//    const float radius = torch->radius();
+    float x = -1.0f;
+    float width = 1.0f;
 
-    float x = 0.0f; //position.x - radius;
-    float width = 10000.0f; //position.x +  radius;
+    float y = -1.0f;
+    float height = 1.0f;
 
-    float y = 0.0f; //position.y - radius;
-    float height = 10000.0f; //position.y  +  radius;
-
-    vertices[0].x = x; // top left X
-    vertices[0].y = y; //top left Y
+    vertices[0].x = x;
+    vertices[0].y = y;
 
     vertices[1].x = x; // bottom left X
     vertices[1].y = height; // bottom left Y
