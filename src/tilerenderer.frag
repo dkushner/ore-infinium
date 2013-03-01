@@ -13,25 +13,58 @@ uniform vec3 lightPos;
 
 out vec4 fragColor;
 
+//values used for shading algorithm...
+uniform vec2 Resolution;      //resolution of screen
+uniform vec3 LightPos;        //light position, normalized
+uniform vec4 LightColor;      //light RGBA -- alpha is intensity
+uniform vec4 AmbientColor;    //ambient RGBA -- alpha is intensity
+uniform vec3 Falloff;         //attenuation coefficients
+
+
 void main() {
 
-   vec2 size = textureSize(normalMap, 0).xy;
+    ///////////////////////////////////////////////////////////////////////////////
 
-   vec3 N = texture(normalMap, vec3(gl_FragCoord.xy / size, 0)).xyz * 2.0 - 1.0;
-//   vec3 N = texture(normalMap, vec3(lightMapCoordinate.xy / size * 2, 0)).xyz; //* 2.0 - 1.0;
 
-    vec3 L = normalize(lightPos - gl_FragCoord.xyz);
-    vec4 I = /* first is color of light*/ vec4(1.0) * dot(L, N);
+    //RGBA of our diffuse color
+    vec4 DiffuseColor = texture2D(u_texture, vTexCoord);
 
-   float dist = distance(gl_FragCoord.xyz, lightPos);
-    float radius = 200;
-   I *= 1.0 - min(1.5 * pow(dist / radius, 2.0), 1.0);
+    //RGB of our normal map
+    vec3 NormalMap = texture2D(u_normals, vTexCoord).rgb;
 
-//////////////////////
+    //The delta position of light
+    vec3 LightDir = vec3(LightPos.xy - (gl_FragCoord.xy / Resolution.xy), LightPos.z);
 
+    //Correct for aspect ratio
+    LightDir.x *= Resolution.x / Resolution.y;
+
+    //Determine distance (used for attenuation) BEFORE we normalize our LightDir
+    float D = length(LightDir);
+
+    //normalize our vectors
+    vec3 N = normalize(NormalMap * 2.0 - 1.0);
+    vec3 L = normalize(LightDir);
+
+    //Pre-multiply light color with intensity
+    //Then perform "N dot L" to determine our diffuse term
+    vec3 Diffuse = (LightColor.rgb * LightColor.a) * max(dot(N, L), 0.0);
+
+    //pre-multiply ambient color with intensity
+    vec3 Ambient = AmbientColor.rgb * AmbientColor.a;
+
+    //calculate attenuation
+    float Attenuation = 1.0 / ( Falloff.x + (Falloff.y*D) + (Falloff.z*D*D) );
+
+    //the calculation which brings it all together
+    vec3 Intensity = Ambient + Diffuse * Attenuation;
+    vec3 FinalColor = DiffuseColor.rgb * Intensity;
+
+    //////////////////////// TILE ///////////////////////////////////
     vec4 tile = texture(tileSheet, frag_texcoord);
-    fragColor = (frag_color.rgba) * vec4(tile.rgb, tile.a);
-    fragColor.rgb *= I.rgb;
+    vec4 tileColor = (frag_color.rgba) * vec4(tile.rgb, tile.a);
+    /////////////////////////////////////////////////////////////////
+
+    fragColor = tileColor * vec4(FinalColor, DiffuseColor.a);
 }
 
 //    fragColor.rgb -= (1 - I.rgb);
@@ -77,15 +110,6 @@ void main() {
     tileCoordinate.y = (screen_coordinates.y) % TILE_SIZE.y;
 
     vec4 tileColor = texelFetch(tile_types_super_texture, tileCoordinate, 0);
-*/
-//    vec4 tileColor = texelFetch(tile_types_super_texture, ivec2(22, 12), 0);
-//    vec4 tileColor = texture2D(tile_types_super_texture, vec2(0.5, 0.5), 0);
- //   gl_FragColor = tileColor;
 
-/*
-gl_FragColor.r = 1.0;
-gl_FragColor.g = 0.0;
-gl_FragColor.b = 0.0;
-gl_FragColor.a = 1.0;
 */
 //}
