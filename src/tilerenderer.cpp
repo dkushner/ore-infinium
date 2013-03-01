@@ -164,13 +164,25 @@ uniform vec4 AmbientColor;    //ambient RGBA -- alpha is intensity
 uniform vec3 Falloff;         //attenuation coefficients
 */
 
+void TileRenderer::zoomIn()
+{
+
+   m_z += 0.2;
+}
+
+void TileRenderer::zoomOut()
+{
+   m_z -= 0.2;
+}
+
+
 void TileRenderer::render()
 {
     m_shader->bindProgram();
     GLint lightPosLoc = glGetUniformLocation(m_shader->shaderProgram(), "LightPos");
     int sHeight = Settings::instance()->screenResolutionHeight;
     int sWidth = Settings::instance()->screenResolutionWidth;
-    glUniform3f(lightPosLoc, m_lightPos.x / sWidth,  (sHeight - m_lightPos.y) / sHeight, 0.0);
+    glUniform3f(lightPosLoc, m_lightPos.x / sWidth,  (sHeight - m_lightPos.y) / sHeight, m_z);
 
     GLint resLoc = glGetUniformLocation(m_shader->shaderProgram(), "Resolution");
     glUniform2f(resLoc, sWidth, sHeight);
@@ -182,7 +194,7 @@ void TileRenderer::render()
     glUniform4f(ambientColorLoc, 0.5f, 0.5f, 0.5f, 1.0f);
 
     GLint falloffLoc = glGetUniformLocation(m_shader->shaderProgram(), "Falloff");
-    glUniform3f(falloffLoc, 0.4f, 3.0f, 10.0f);
+    glUniform3f(falloffLoc, 0.4f, 3.0f, 20.0f);
 
     Debug::checkGLError();
     glActiveTexture(GL_TEXTURE0);

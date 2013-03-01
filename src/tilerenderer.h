@@ -50,6 +50,9 @@ public:
 
     void setLights(const glm::ivec2& pos);
 
+    void zoomIn();
+    void zoomOut();
+
 private:
     typedef uint32_t u32;
     typedef float f32;
@@ -94,6 +97,7 @@ private:
     int m_tileSheetNormalCount = 0;
     GLuint m_tileMapTexture;
     GLuint m_tileMapNormalsTexture;
+    float m_z = 0;
 
     GLuint m_vao; // vertex array object
     GLuint m_vbo; // vertex buffer object

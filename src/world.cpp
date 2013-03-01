@@ -163,7 +163,6 @@ void World::handleEvent(const SDL_Event& event)
         break;
     }
     }
-
 //    m_player->handleEvent(event);
 }
 
@@ -572,12 +571,14 @@ void World::saveMap()
 
 void World::zoomIn()
 {
-    m_camera->zoom(m_zoomInFactor);
-    m_tileMapCamera->zoom(m_zoomInFactor);
+//    m_camera->zoom(m_zoomInFactor);
+//    m_tileMapCamera->zoom(m_zoomInFactor);
+    m_tileRenderer->zoomIn();
 }
 
 void World::zoomOut()
 {
-    m_camera->zoom(m_zoomOutFactor);
-    m_tileMapCamera->zoom(m_zoomOutFactor);
+    //m_camera->zoom(m_zoomOutFactor);
+//    m_tileMapCamera->zoom(m_zoomOutFactor);
+    m_tileRenderer->zoomOut();
 }
