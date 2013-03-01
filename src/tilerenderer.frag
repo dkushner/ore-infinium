@@ -9,7 +9,7 @@ uniform sampler2DArray tileSheet;
 uniform sampler2DArray normalMap;
 
 //presently a value of (0.5, 0.5, 0.0)
-uniform vec3 lightPos;
+//uniform vec3 lightPos;
 
 out vec4 fragColor;
 
@@ -25,12 +25,11 @@ void main() {
 
     ///////////////////////////////////////////////////////////////////////////////
 
-
-    //RGBA of our diffuse color
-    vec4 DiffuseColor = texture2D(u_texture, vTexCoord);
+   //RGBA of our diffuse color
+    vec4 DiffuseColor = texture(tileSheet, frag_texcoord);
 
     //RGB of our normal map
-    vec3 NormalMap = texture2D(u_normals, vTexCoord).rgb;
+    vec3 NormalMap = texture(normalMap, frag_texcoord).rgb;
 
     //The delta position of light
     vec3 LightDir = vec3(LightPos.xy - (gl_FragCoord.xy / Resolution.xy), LightPos.z);

@@ -156,13 +156,33 @@ void TileRenderer::setLights(const glm::ivec2& pos)
     m_lightPos = pos;
 }
 
+/*
+uniform vec2 Resolution;      //resolution of screen
+uniform vec3 LightPos;        //light position, normalized
+uniform vec4 LightColor;      //light RGBA -- alpha is intensity
+uniform vec4 AmbientColor;    //ambient RGBA -- alpha is intensity
+uniform vec3 Falloff;         //attenuation coefficients
+*/
+
 void TileRenderer::render()
 {
     m_shader->bindProgram();
-    GLint lightPosLoc = glGetUniformLocation(m_shader->shaderProgram(), "lightPos");
-    glUniform3f(lightPosLoc, m_lightPos.x, Settings::instance()->screenResolutionHeight - m_lightPos.y, 0.0);
-//    glUniform3f(lightPosLoc, 2400.0, 1420.0, 1.0);
-//    glUniform3f(lightPosLoc, .5, .5, 0.0);
+    GLint lightPosLoc = glGetUniformLocation(m_shader->shaderProgram(), "LightPos");
+    int sHeight = Settings::instance()->screenResolutionHeight;
+    int sWidth = Settings::instance()->screenResolutionWidth;
+    glUniform3f(lightPosLoc, m_lightPos.x / sWidth,  (sHeight - m_lightPos.y) / sHeight, 0.0);
+
+    GLint resLoc = glGetUniformLocation(m_shader->shaderProgram(), "Resolution");
+    glUniform2f(resLoc, sWidth, sHeight);
+
+    GLint lightColorLoc = glGetUniformLocation(m_shader->shaderProgram(), "LightColor");
+    glUniform4f(lightColorLoc, 1.0f, 1.0f, 1.0f, 1.0f);
+
+    GLint ambientColorLoc = glGetUniformLocation(m_shader->shaderProgram(), "AmbientColor");
+    glUniform4f(ambientColorLoc, 0.5f, 0.5f, 0.5f, 1.0f);
+
+    GLint falloffLoc = glGetUniformLocation(m_shader->shaderProgram(), "Falloff");
+    glUniform3f(falloffLoc, 0.4f, 3.0f, 10.0f);
 
     Debug::checkGLError();
     glActiveTexture(GL_TEXTURE0);
