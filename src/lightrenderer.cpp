@@ -108,12 +108,13 @@ void TileRenderer::loadTileSheet(const std::string& fileName, Block::BlockType t
 }
 */
 
+//FIXME: TODO: take a slightly different approach, clear to white instead, draw black whereever there are tiles that have back-tiles, and then draw user-placed lights which would brighten up those tiles
 void LightRenderer::renderToFBO()
 {
     m_camera->setShader(m_shader);
     glBindFramebuffer(GL_FRAMEBUFFER, m_fbo);
     glBindRenderbuffer(GL_RENDERBUFFER, m_rb);
-    glClearColor(0.f, 0.f, 0.f, 0.0f);
+    glClearColor(0.f, 0.f, 0.f, 1.0f);
     glClear(GL_COLOR_BUFFER_BIT);
 
     int index = 0;
@@ -185,7 +186,7 @@ void LightRenderer::renderToFBO()
     Debug::checkGLError();
     ////////////////////////////////FINALLY RENDER IT ALL //////////////////////////////////////////
     glEnable(GL_BLEND);
-    glBlendFunc(GL_ONE, GL_ONE);
+//    glBlendFunc(GL_ONE, GL_ONE);
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_ebo);
     glBindBuffer(GL_ARRAY_BUFFER, m_vbo);
     glBindVertexArray(m_vao);
@@ -222,7 +223,9 @@ void LightRenderer::renderToFBO()
 void LightRenderer::renderToBackbuffer()
 {
     glEnable(GL_BLEND);
-   glBlendFunc(GL_ZERO, GL_SRC_COLOR);
+  // glBlendFunc(GL_ZERO, GL_SRC_COLOR);
+//   glBlendFunc(GL_ONE, GL_SRC_COLOR);
+//    glBlendFunc(GL_ONE_MINUS_SRC_ALPHA, GL_SRC_COLOR);
 
    glBindFramebuffer(GL_FRAMEBUFFER, 0);
     glBindTexture(GL_TEXTURE_2D, m_fboTexture);
@@ -231,7 +234,6 @@ void LightRenderer::renderToBackbuffer()
     glBindVertexArray(m_vaoBackbuffer);
 
     Debug::checkGLError();
-
 
     int index = 0;
     // vertices that will be uploaded.
@@ -295,8 +297,6 @@ void LightRenderer::renderToBackbuffer()
 
     Debug::checkGLError();
     ////////////////////////////////FINALLY RENDER IT ALL //////////////////////////////////////////
-    glEnable(GL_BLEND);
-    glBlendFunc(GL_SRC_ALPHA, GL_ONE);
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_eboBackbuffer);
     glBindBuffer(GL_ARRAY_BUFFER, m_vboBackbuffer);
     glBindVertexArray(m_vaoBackbuffer);

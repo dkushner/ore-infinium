@@ -82,8 +82,7 @@ private:
     GLuint m_vboBackbuffer; // vertex buffer object
     GLuint m_eboBackbuffer; // element buffer object
 
-    //render buffer object
-    GLuint m_rb = 0;
+    GLuint m_rb = 0; //render buffer object
 
     GLuint m_vao; // vertex array object
     GLuint m_vbo; // vertex buffer object
