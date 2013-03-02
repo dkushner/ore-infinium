@@ -49,6 +49,7 @@ public:
     void setCamera(Camera* camera);
 
     void setTorches(const std::vector<Torch*>& torches);
+    void setTileRendererTexture(GLuint texture);
 
 private:
     typedef uint32_t u32;
@@ -77,6 +78,8 @@ private:
     // framebuffer, which we first render our lightmaps to, then we render it to the backbuffer
     GLuint m_fbo = 0;
     GLint m_fboTexture = 0;
+
+    GLuint m_tileRendererTexture = 0;
 
     GLuint m_vaoBackbuffer; // vertex array object
     GLuint m_vboBackbuffer; // vertex buffer object

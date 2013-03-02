@@ -66,6 +66,7 @@ World::World(Player* mainPlayer, Server* server)
 
         m_lightingCamera = new Camera();
         m_lightRenderer = new LightRenderer(this, m_lightingCamera, m_mainPlayer);
+        m_lightRenderer->setTileRendererTexture(m_tileRenderer->fboTexture());
 
         //FIXME: call each update, and make it only do visible ones
         m_lightRenderer->setTorches(m_torches);

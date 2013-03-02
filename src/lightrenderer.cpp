@@ -71,6 +71,12 @@ void LightRenderer::setTorches(const std::vector< Torch* >& torches)
     m_torches = torches;
 }
 
+void LightRenderer::setTileRendererTexture(GLuint texture)
+{
+    m_tileRendererTexture = texture;
+}
+
+
 /*
     glGenTextures(1, &m_tileMapTexture);
     glBindTexture(GL_TEXTURE_2D_ARRAY, m_tileMapTexture);
@@ -186,7 +192,7 @@ void LightRenderer::renderToFBO()
     Debug::checkGLError();
     ////////////////////////////////FINALLY RENDER IT ALL //////////////////////////////////////////
     glEnable(GL_BLEND);
-//    glBlendFunc(GL_ONE, GL_ONE);
+    glBlendFunc(GL_ONE, GL_ONE);
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_ebo);
     glBindBuffer(GL_ARRAY_BUFFER, m_vbo);
     glBindVertexArray(m_vao);
@@ -227,8 +233,27 @@ void LightRenderer::renderToBackbuffer()
 //   glBlendFunc(GL_ONE, GL_SRC_COLOR);
 //    glBlendFunc(GL_ONE_MINUS_SRC_ALPHA, GL_SRC_COLOR);
 
+    Debug::checkGLError();
    glBindFramebuffer(GL_FRAMEBUFFER, 0);
+    Debug::checkGLError();
+
+    m_shaderPassthrough->bindProgram();
+    Debug::checkGLError();
+    glActiveTexture(GL_TEXTURE0);
     glBindTexture(GL_TEXTURE_2D, m_fboTexture);
+    Debug::checkGLError();
+
+    GLint lightFBOLoc = glGetUniformLocation(m_shaderPassthrough->shaderProgram(), "lightFBO");
+    glUniform1i(lightFBOLoc, 0);
+
+    Debug::checkGLError();
+    glActiveTexture(GL_TEXTURE1);
+    glBindTexture(GL_TEXTURE_2D, m_tileRendererTexture);
+
+    GLint tileFBOLoc = glGetUniformLocation(m_shaderPassthrough->shaderProgram(), "tileFBO");
+    glUniform1i(tileFBOLoc, 1);
+    Debug::checkGLError();
+
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_eboBackbuffer);
     glBindBuffer(GL_ARRAY_BUFFER, m_vboBackbuffer);
     glBindVertexArray(m_vaoBackbuffer);
@@ -303,7 +328,6 @@ void LightRenderer::renderToBackbuffer()
 
     Debug::checkGLError();
 
-    m_shaderPassthrough->bindProgram();
 
     Debug::checkGLError();
 
@@ -315,6 +339,8 @@ void LightRenderer::renderToBackbuffer()
     Debug::checkGLError();
 
     m_shaderPassthrough->unbindProgram();
+
+    glDisable(GL_BLEND);
     Debug::checkGLError();
     glBindVertexArray(0);
     Debug::checkGLError();
@@ -322,8 +348,9 @@ void LightRenderer::renderToBackbuffer()
     Debug::checkGLError();
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
 
+   glActiveTexture(GL_TEXTURE0);
+
     Debug::checkGLError();
-    glDisable(GL_BLEND);
 }
 
 

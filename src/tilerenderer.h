@@ -89,7 +89,7 @@ private:
     GLint m_texture_location;
 
     GLuint m_fbo = 0;
-    GLint m_fboTexture = 0;
+    GLuint m_fboTexture = 0;
     GLuint m_rb = 0; //render buffer object
 
     GLuint m_vao; // vertex array object
