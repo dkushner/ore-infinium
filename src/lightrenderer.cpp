@@ -174,7 +174,7 @@ void LightRenderer::renderToFBO()
             //        *colorp = color.bgra;
             uint8_t red = 255;
             uint8_t green = 255;
-            uint8_t blue = 0;
+            uint8_t blue = 255;
             uint8_t alpha = 255;
             int32_t color = red | (green << 8) | (blue << 16) | (alpha << 24);
             vertices[i].color = color;
