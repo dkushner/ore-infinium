@@ -108,8 +108,8 @@ void SpriteSheetRenderer::registerSprite(Sprite* sprite)
     case SpriteSheetType::Character:
         m_characterSprites.insert(m_characterSprites.end(), sprite);
         // TODO: look up the size of the graphic/frame, in the spritesheet map.
-        //NOTE: THIS IS A SOMEWHAT DECENT PLAYER SIZE
-        sprite->m_size = glm::vec2(40.0f, 50.0f);
+        //NOTE: this is terraria's exact player size, it's a nice size.
+        sprite->m_size = glm::vec2(Block::blockSize * 2, Block::blockSize * 3);
         Debug::log(Debug::Area::Graphics) << "character sprite registered, new sprite count: " << m_characterSprites.size();
         break;
 
