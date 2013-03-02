@@ -32,6 +32,10 @@
 #include <stdio.h>
 #include <stdlib.h>
 
+#include <sys/stat.h>
+
+#include <yaml-cpp/yaml.h>
+
 SpriteSheetRenderer::SpriteSheetRenderer(Camera* camera)
 {
     m_shader = new Shader("sprite.vert", "sprite.frag");
@@ -132,6 +136,19 @@ void SpriteSheetRenderer::parseAllSpriteSheets()
 std::map<std::string, SpriteSheetRenderer::SpriteFrameIdentifier> SpriteSheetRenderer::parseSpriteSheet(const std::string& filename)
 {
     std::map<std::string, SpriteFrameIdentifier> descriptionMap;
+
+    struct stat fileAttribute;
+    bool fileExists = stat(filename.c_str(), &fileAttribute) != 0;
+
+    Debug::fatal(fileExists, Debug::Area::System, "sprite sheet description file failed to load, filename: " + filename);
+
+    YAML::Node description(filename);
+
+//    for(std::size_t i=0;i < primes.size();i++)
+//        std::cout << primes[i].as<int>() << "\n";
+
+    Debug::log() << "PARSED SIZE: " << description.size();
+
 
     //FIXME hardcoded to "load" 1 character for now.
     SpriteFrameIdentifier frame;
