@@ -118,10 +118,20 @@ void TileRenderer::loadTileSheet(const std::string& fileName, Block::BlockType t
 void LightRenderer::renderToFBO()
 {
     m_camera->setShader(m_shader);
+    m_shader->bindProgram();
+
+    Debug::checkGLError();
+
     glBindFramebuffer(GL_FRAMEBUFFER, m_fbo);
     glBindRenderbuffer(GL_RENDERBUFFER, m_rb);
     glClearColor(0.f, 0.f, 0.f, 1.0f);
     glClear(GL_COLOR_BUFFER_BIT);
+
+    glActiveTexture(GL_TEXTURE0);
+    glBindTexture(GL_TEXTURE_2D, m_torchLightTexture);
+
+    GLint lightMapLoc = glGetUniformLocation(m_shader->shaderProgram(), "lightMap");
+    glUniform1i(lightMapLoc, 0);
 
     int index = 0;
     Debug::checkGLError();
@@ -164,7 +174,7 @@ void LightRenderer::renderToFBO()
             //        *colorp = color.bgra;
             uint8_t red = 255;
             uint8_t green = 255;
-            uint8_t blue = 255;
+            uint8_t blue = 0;
             uint8_t alpha = 255;
             int32_t color = red | (green << 8) | (blue << 16) | (alpha << 24);
             vertices[i].color = color;
@@ -192,14 +202,12 @@ void LightRenderer::renderToFBO()
     Debug::checkGLError();
     ////////////////////////////////FINALLY RENDER IT ALL //////////////////////////////////////////
     glEnable(GL_BLEND);
-    glBlendFunc(GL_ONE, GL_ONE);
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_ebo);
     glBindBuffer(GL_ARRAY_BUFFER, m_vbo);
     glBindVertexArray(m_vao);
 
     Debug::checkGLError();
 
-    m_shader->bindProgram();
 
     Debug::checkGLError();
 
@@ -229,12 +237,9 @@ void LightRenderer::renderToFBO()
 void LightRenderer::renderToBackbuffer()
 {
     glEnable(GL_BLEND);
-  // glBlendFunc(GL_ZERO, GL_SRC_COLOR);
-//   glBlendFunc(GL_ONE, GL_SRC_COLOR);
-//    glBlendFunc(GL_ONE_MINUS_SRC_ALPHA, GL_SRC_COLOR);
 
     Debug::checkGLError();
-   glBindFramebuffer(GL_FRAMEBUFFER, 0);
+    glBindFramebuffer(GL_FRAMEBUFFER, 0);
     Debug::checkGLError();
 
     m_shaderPassthrough->bindProgram();
@@ -353,7 +358,6 @@ void LightRenderer::renderToBackbuffer()
     Debug::checkGLError();
 }
 
-
 void LightRenderer::initGL()
 {
     glGenFramebuffers(1, &m_fbo);
@@ -366,6 +370,20 @@ void LightRenderer::initGL()
 
     GLenum buffers[] = { GL_COLOR_ATTACHMENT0 };
     glDrawBuffers(1, buffers);
+
+    // torch lightmap texture
+    glGenTextures(1, &m_torchLightTexture);
+    glBindTexture(GL_TEXTURE_2D, m_torchLightTexture);
+
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_BASE_LEVEL, 0);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAX_LEVEL, 0);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+
+    Image image("../textures/torch light.png");
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, image.width(), image.height(), 0, GL_BGRA, GL_UNSIGNED_BYTE, image.bytes());
 
     glGenTextures(1, &m_fboTexture);
     glBindTexture(GL_TEXTURE_2D, m_fboTexture);
@@ -382,6 +400,7 @@ void LightRenderer::initGL()
 
     GLenum status = glCheckFramebufferStatus(GL_FRAMEBUFFER);
     assert(status == GL_FRAMEBUFFER_COMPLETE);
+
 
     Debug::checkGLError();
 

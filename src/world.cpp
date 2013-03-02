@@ -72,7 +72,6 @@ World::World(Player* mainPlayer, Server* server)
         m_lightRenderer->setTorches(m_torches);
     }
 
-
     loadMap();
 
     //FIXME: saveMap();
@@ -128,11 +127,13 @@ void World::render(Player* player)
 
     m_tileRenderer->render();
 
+    //FIXME: incorporate entities into the pre-lit gamescene FBO, then render lighting as last pass
+    m_lightRenderer->renderToBackbuffer();
+
     //HACK    m_window->setView(m_window->getDefaultView());
     m_spriteSheetRenderer->renderEntities();
     m_spriteSheetRenderer->renderCharacters();
 
-    m_lightRenderer->renderToBackbuffer();
 
     // ==================================================
     glm::ivec2 mouse = mousePosition();

@@ -77,7 +77,8 @@ private:
 
     // framebuffer, which we first render our lightmaps to, then we render it to the backbuffer
     GLuint m_fbo = 0;
-    GLint m_fboTexture = 0;
+    GLuint m_fboTexture = 0;
+    GLuint m_torchLightTexture = 0;
 
     GLuint m_tileRendererTexture = 0;
 
