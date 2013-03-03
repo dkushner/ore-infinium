@@ -146,26 +146,31 @@ std::map<std::string, SpriteSheetRenderer::SpriteFrameIdentifier> SpriteSheetRen
 
     YAML::Node description = YAML::LoadFile(filename);
 
-    for(std::size_t i=0;i < description.size();i++) {
-        //FIXME: this non const ref scares me...are my concerns valid?
-        auto sprite = description["sprite"];
+    try {
+        for(std::size_t i=0;i < description.size();i++) {
+            //FIXME: this non const ref scares me...are my concerns valid?
+            auto sprite = description["sprite"];
 
-        Debug::log(Debug::Area::System) << "parsing description sheet...";
-        Debug::log(Debug::Area::System) << "frameName: " << sprite["frameName"].as<std::string>();
-        Debug::log(Debug::Area::System) << "x: " << sprite["x"].as<int>();
-        Debug::log(Debug::Area::System) << "y: " << sprite["y"].as<int>();
-        Debug::log(Debug::Area::System) << "width: " << sprite["width"].as<int>();
-        Debug::log(Debug::Area::System) << "height: " << sprite["height"].as<int>();
+            Debug::log(Debug::Area::System) << "parsing description sheet...";
+            Debug::log(Debug::Area::System) << "frameName: " << sprite["frameName"].as<std::string>();
+            Debug::log(Debug::Area::System) << "x: " << sprite["x"].as<int>();
+            Debug::log(Debug::Area::System) << "y: " << sprite["y"].as<int>();
+            Debug::log(Debug::Area::System) << "width: " << sprite["width"].as<int>();
+            Debug::log(Debug::Area::System) << "height: " << sprite["height"].as<int>();
 
-        SpriteFrameIdentifier frame;
-        frame.x = sprite["x"].as<int>();
-        frame.y = sprite["y"].as<int>();
-        frame.width = sprite["width"].as<int>();
-        frame.height = sprite["height"].as<int>();
+            SpriteFrameIdentifier frame;
+            frame.x = sprite["x"].as<int>();
+            frame.y = sprite["y"].as<int>();
+            frame.width = sprite["width"].as<int>();
+            frame.height = sprite["height"].as<int>();
 
-        const std::string frameName = sprite["frameName"].as<std::string>();
+            const std::string frameName = sprite["frameName"].as<std::string>();
 
-        descriptionMap[frameName] = frame;
+            descriptionMap[frameName] = frame;
+        }
+    } catch (YAML::Exception &e) {
+        Debug::log(Debug::Area::System) << "fatal error, converting from YAML, filename: " << filename << " Error: " << e.what();
+        Debug::fatal(false, Debug::Area::System, "bailing out");
     }
 
     return descriptionMap;
@@ -180,7 +185,7 @@ void SpriteSheetRenderer::renderCharacters()
     Debug::checkGLError();
 
     int index = 0;
-for (Sprite * sprite: m_characterSprites) {
+    for (Sprite * sprite: m_characterSprites) {
         auto frameIdentifier = m_spriteSheetCharactersDescription.find(sprite->frameName());
         SpriteFrameIdentifier& frame = frameIdentifier->second;
 
@@ -218,21 +223,20 @@ for (Sprite * sprite: m_characterSprites) {
         vertices[3].y = y; // top right Y
 
         Debug::checkGLError();
-        Debug::log() << "RENDERING OUR FRAME WIDTH: " << frame.width << " SPRITE SIZE: " << sprite->size().x;
         // copy color to the buffer
         for (size_t i = 0; i < sizeof(vertices) / sizeof(*vertices); i++) {
             //        *colorp = color.bgra;
             uint8_t red = 255;
-            uint8_t blue = 255;
             uint8_t green = 255;
+            uint8_t blue = 255;
             uint8_t alpha = 255;
             int32_t color = red | (green << 8) | (blue << 16) | (alpha << 24);
             vertices[i].color = color;
         }
 
         // copy texcoords to the buffer
-        const float textureWidth = 1.0f / 512 * frame.width;
-        const float textureHeight = 1.0f / 512 * frame.height;
+        const float textureWidth = 1.0f / SPRITESHEET_WIDTH * frame.width;
+        const float textureHeight = 1.0f / SPRITESHEET_HEIGHT * frame.height;
 
         const float spriteLeft = (frame.x *  textureWidth);
         const float spriteRight = spriteLeft + textureWidth;
@@ -298,7 +302,6 @@ void SpriteSheetRenderer::renderEntities()
     for (Sprite * sprite: m_entitySprites) {
         auto frameIdentifier = m_spriteSheetEntitiesDescription.find(sprite->frameName());
         SpriteFrameIdentifier& frame = frameIdentifier->second;
-        frame.x; //FIXME:
 
         // vertices that will be uploaded.
         Vertex vertices[4];
@@ -339,18 +342,27 @@ void SpriteSheetRenderer::renderEntities()
         for (size_t i = 0; i < sizeof(vertices) / sizeof(*vertices); i++) {
             //        *colorp = color.bgra;
             uint8_t red = 255;
-            uint8_t blue = 255;
             uint8_t green = 255;
+            uint8_t blue = 255;
             uint8_t alpha = 255;
             int32_t color = red | (green << 8) | (blue << 16) | (alpha << 24);
             vertices[i].color = color;
         }
 
         // copy texcoords to the buffer
-        vertices[0].u = vertices[1].u = 0.0f;
-        vertices[0].v = vertices[3].v = 1.0f;
-        vertices[1].v = vertices[2].v = 0.0f;
-        vertices[2].u = vertices[3].u = 1.0f;
+        const float textureWidth = 1.0f / SPRITESHEET_WIDTH * frame.width;
+        const float textureHeight = 1.0f / SPRITESHEET_HEIGHT * frame.height;
+
+        const float spriteLeft = (frame.x *  textureWidth);
+        const float spriteRight = spriteLeft + textureWidth;
+        const float spriteTop = 1.0f - ((frame.y * textureHeight));
+        const float spriteBottom = spriteTop - textureHeight;
+
+        // copy texcoords to the buffer
+        vertices[0].u = vertices[1].u = spriteLeft;
+        vertices[0].v = vertices[3].v = spriteTop;
+        vertices[1].v = vertices[2].v = spriteBottom;
+        vertices[2].u = vertices[3].u = spriteRight;
 
         // finally upload everything to the actual vbo
         glBindBuffer(GL_ARRAY_BUFFER, m_vboEntities);

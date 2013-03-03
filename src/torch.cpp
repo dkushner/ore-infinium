@@ -18,7 +18,7 @@
 #include "torch.h"
 
 Torch::Torch(const glm::vec2& position)
-    :   Entity("torch1", SpriteSheetRenderer::SpriteSheetType::Entity)
+    :   Entity("torch1Ground1", SpriteSheetRenderer::SpriteSheetType::Entity)
 {
     setPosition(position);
 }
