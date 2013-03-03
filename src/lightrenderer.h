@@ -51,6 +51,14 @@ public:
     void setTorches(const std::vector<Torch*>& torches);
     void setTileRendererTexture(GLuint texture);
 
+    /**
+     * Enables or disables lighting rendering. When disabled, it just
+     * goes straight to the passthrough shader and combines a blank FBO (white)
+     * with the scene, so technically also decreases rendering complexity.
+     */
+    void setRenderingEnabled(bool enabled) { m_renderingEnabled = enabled; }
+    bool lightRenderingEnabled() { return m_renderingEnabled; }
+
 private:
     typedef uint32_t u32;
     typedef float f32;
@@ -73,7 +81,7 @@ private:
 
     std::vector<Torch*> m_torches;
 
-//    GLuint m_tileMapTexture;
+    // GLuint m_tileMapTexture;
 
     // framebuffer, which we first render our lightmaps to, then we render it to the backbuffer
     GLuint m_fbo = 0;
@@ -97,6 +105,8 @@ private:
 
     //FIXME: count max tiles to render
     int m_maxTileCount = 8200;
+
+    bool m_renderingEnabled = true;
 
     Camera* m_camera = nullptr;
     Player* m_mainPlayer = nullptr;

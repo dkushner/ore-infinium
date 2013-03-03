@@ -124,8 +124,17 @@ void LightRenderer::renderToFBO()
 
     glBindFramebuffer(GL_FRAMEBUFFER, m_fbo);
     glBindRenderbuffer(GL_RENDERBUFFER, m_rb);
-    glClearColor(0.f, 0.f, 0.f, 1.0f);
-    glClear(GL_COLOR_BUFFER_BIT);
+
+    if (m_renderingEnabled) {
+        glClearColor(0.f, 0.f, 0.f, 1.0f);
+        glClear(GL_COLOR_BUFFER_BIT);
+    } else {
+        //clear the lightmap to all white, aka no darkness at all, and don't bother rendering light sources
+        //NOTE: this is just for debugging purposes..don't plan on ever using it for anything else, you sick, sick bastard...
+        glClearColor(1.f, 1.f, 1.f, 1.0f);
+        glClear(GL_COLOR_BUFFER_BIT);
+        return;
+    }
 
     glActiveTexture(GL_TEXTURE0);
     glBindTexture(GL_TEXTURE_2D, m_torchLightTexture);
@@ -205,9 +214,6 @@ void LightRenderer::renderToFBO()
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_ebo);
     glBindBuffer(GL_ARRAY_BUFFER, m_vbo);
     glBindVertexArray(m_vao);
-
-    Debug::checkGLError();
-
 
     Debug::checkGLError();
 

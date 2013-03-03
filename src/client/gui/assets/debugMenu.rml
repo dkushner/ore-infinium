@@ -14,7 +14,7 @@
                                 background-color: rgba(0, 0, 0, 0);
                                 text-align: left;
                                 width: 25%;
-                                height: 15%;
+                                height: 25%;
                         }
 
                         div#content
@@ -31,7 +31,9 @@
         <text id="3">HALP</text><br/>
         <text id="4">HALP</text><br/>
         <text id="5">HALP</text><br/>
-        <text id="6">HALP</text>
+        <text id="6">HALP</text><br/>
+        <text id="7">HALP</text><br/>
+        <text id="8">HALP</text>
         </body>
 
 </rml>

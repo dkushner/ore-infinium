@@ -89,6 +89,8 @@ public:
     void zoomIn();
     void zoomOut();
 
+    void toggleLightRenderingEnabled();
+
     //create containers of various entities, and implement a tile system
     //game.cpp calls into this each tick, which this descends downward into each entity
 private:

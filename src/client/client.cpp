@@ -309,6 +309,10 @@ void Client::handleInputEvents()
                 ss << distribution(rand);
 
                 startMultiplayerHost(ss.str());
+            } else if (event.key.keysym.sym == SDLK_F9) {
+                if (m_world) {
+                   m_world->toggleLightRenderingEnabled();
+                }
             } else if (event.key.keysym.sym == SDLK_EQUALS) {
                 if (m_world) {
                     m_world->zoomIn();

@@ -89,12 +89,12 @@ void DebugMenu::update()
 
     ss.str("");
 
-    std::string playerString;
     if (m_client->mainPlayer()) {
+        std::string playerString;
+        ss << "Player Position X: " << m_client->mainPlayer()->position().x << " Y: " << m_client->mainPlayer()->position().y;
         playerString = ss.str();
-        ss << "Player Position X: " << m_client->mainPlayer()->position().x << " Y: " << m_client->mainPlayer()->position().x;
-    } else {
-        playerString = "";
+
+        m_debug->GetElementById("8")->SetInnerRML(playerString.c_str());
     }
 
     ss.str("");
@@ -135,10 +135,10 @@ void DebugMenu::update()
     m_debug->GetElementById("4")->SetInnerRML(debugGUIRenderer.c_str());
     m_debug->GetElementById("5")->SetInnerRML("F8 instant multiplayer host session");
     m_debug->GetElementById("6")->SetInnerRML(connectedString.c_str());
+    m_debug->GetElementById("7")->SetInnerRML("F9 to toggle light rendering pass");
+    // 8 is up top, player pos
 
-    if (!playerString.empty()) {
-        m_debug->GetElementById("7")->SetInnerRML(playerString.c_str());
-    }
+
 }
 
 void DebugMenu::show()

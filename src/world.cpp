@@ -576,6 +576,11 @@ void World::saveMap()
     */
 }
 
+void World::toggleLightRenderingEnabled()
+{
+    m_lightRenderer->setRenderingEnabled(!m_lightRenderer->lightRenderingEnabled());
+}
+
 void World::zoomIn()
 {
     m_camera->zoom(m_zoomInFactor);
