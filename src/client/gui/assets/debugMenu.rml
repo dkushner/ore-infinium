@@ -36,30 +36,42 @@ NOTE: overridden at runtime
         </head>
 
         <body template="mostlyTransparentWindow">
-        <text id="1">HALP</text><br/>
-        <text id="2">HALP</text><br/>
-        <text id="3">HALP</text><br/>
-        <text id="4">HALP</text><br/>
-        <text id="5">HALP</text><br/>
-        <text id="6">HALP</text><br/>
-        <text id="7">HALP</text><br/>
+        <text id="1">unused</text><br/>
+        <text id="2">unused</text><br/>
+        <text id="3">unused</text><br/>
+        <text id="4">unused</text><br/>
+        <text id="5">unused</text><br/>
+        <text id="6">unused</text><br/>
+        <text id="7">unused</text><br/>
 
-        <text id="8">HALP</text><br/>
+        <text id="8">unused</text><br/>
 
-        <text id="9">HALP</text><br/>
-        <text id="10">HALP</text><br/>
-        <text id="11">HALP</text><br/>
-        <text id="12">HALP</text><br/>
-        <text id="13">HALP</text><br/>
-        <text id="14">HALP</text><br/>
-        <text id="15">HALP</text><br/>
-        <text id="16">HALP</text><br/>
-        <text id="17">HALP</text><br/>
-        <text id="18">HALP</text><br/>
-        <text id="19">HALP</text><br/>
-        <text id="20">HALP</text><br/>
-        <text id="21">HALP</text><br/>
-        <text id="22">HALP</text><br/>
+        <text id="9">unused</text><br/>
+        <text id="10">unused</text><br/>
+        <text id="11">unused</text><br/>
+        <text id="12">unused</text><br/>
+        <text id="13">unused</text><br/>
+        <text id="14">unused</text><br/>
+        <text id="15">unused</text><br/>
+        <text id="16">unused</text><br/>
+        <text id="17">unused</text><br/>
+        <text id="18">unused</text><br/>
+        <text id="19">unused</text><br/>
+        <text id="20">unused</text><br/>
+        <text id="21">unused</text><br/>
+        <text id="22">unused</text><br/>
+        <text id="23">unused</text><br/>
+        <text id="24">unused</text><br/>
+        <text id="25">unused</text><br/>
+        <text id="26">unused</text><br/>
+        <text id="27">unused</text><br/>
+        <text id="28">unused</text><br/>
+        <text id="29">unused</text><br/>
+        <text id="30">unused</text><br/>
+        <text id="31">unused</text><br/>
+        <text id="32">unused</text><br/>
+        <text id="33">unused</text><br/>
+        <text id="34">unused</text><br/>
         </body>
 
 </rml>

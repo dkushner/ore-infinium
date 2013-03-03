@@ -72,7 +72,10 @@ World::World(Player* mainPlayer, Server* server)
         m_lightRenderer->setTorches(m_torches);
     }
 
-    loadMap();
+    //client doesn't actually load/generate any world
+    if (m_server) {
+        loadMap();
+    }
 
     //FIXME: saveMap();
 
@@ -498,8 +501,9 @@ glm::ivec2 World::tileOffset(Player* player) const
 
 void World::loadMap()
 {
-    std::cout << "loading map!" << std::endl;
-    std::cout << "SIZEOF m_blocks: " << sizeof(m_blocks) / 1e6 << " MiB" << std::endl;
+    Debug::log(Debug::Area::General) << "loading map!";
+    Debug::log(Debug::Area::General) << "SIZEOF Block class: " << sizeof(Block);
+    Debug::log(Debug::Area::General) << "SIZEOF m_blocks: " << sizeof(m_blocks) / 1e6 << " MiB";
     generateMap();
 
     //FIXME:
