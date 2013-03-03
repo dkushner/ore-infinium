@@ -13,6 +13,7 @@
                         {
                                 background-color: rgba(0, 0, 0, 0);
                                 text-align: left;
+                                float: right;
                                 width: 25%;
                                 height: 25%;
                         }
