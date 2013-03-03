@@ -44,6 +44,11 @@ public:
         Grass
     };
 
+    enum class WallType
+    {
+        Null = 0
+    };
+
     // height is the same as width (they're square)
     static constexpr unsigned char blockSize = 16;
 
@@ -81,13 +86,13 @@ public:
      * |___4____|____64___|____2____*
      * |********|*********|***********
      */
-    static std::map<unsigned char, unsigned char> tileMeshingTable;
+    static std::map<uint8_t, uint8_t> tileMeshingTable;
 
     /**
      * 0-255, 0 obviously meaning this block is marked as to be destroyed.
      * higher values are for more "difficult" to break block types. e.g. sand has a very low number.
      */
-    unsigned char health = 255;
+    uint8_t health = 255;
 
     /**
      * Which mesh sprite to use, aka subsprite.
@@ -103,13 +108,15 @@ public:
      * Bottom line: use meshType ONLY for rendering, use primitiveType for everything else. meshType is only a displaying
      * niche of a detail, not a gameplay mechanic
      */
-    unsigned char meshType = 0;
+    uint8_t meshType = 0;
 
     /**
      * The type of tile this is, 0-255 is valid and can be compared with the world's definition of tile types
      * (an enum)
      */
-    unsigned char primitiveType = 0;
+    uint8_t primitiveType = 0;
+
+    uint8_t wallType = 0;
 };
 
 #endif

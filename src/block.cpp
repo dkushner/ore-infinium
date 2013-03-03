@@ -38,7 +38,7 @@ std::map<Block::BlockType, Block::BlockStruct> Block::blockTypeMap = {
     { BlockType::Grass, BlockStruct("../textures/grass.png", true) }
 };
 
-std::map<unsigned char, unsigned char> Block::tileMeshingTable = {
+std::map<uint8_t, uint8_t> Block::tileMeshingTable = {
     { 0, 0 }, { 1, 1 }, { 2, 2 }, { 3, 2 },
     { 4, 3 }, { 5, 4 }, { 6, 2 }, { 7, 2 },
     { 8, 5 }, { 9, 5 }, { 10, 6 }, { 11, 6 },

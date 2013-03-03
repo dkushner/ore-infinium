@@ -128,7 +128,7 @@ private:
      * Looks at @p tileX, @p tileY and looks at 4 sides and 4 corners of it.
      * Returns what is the resulting meshing type that this tile should now have.
      */
-    unsigned char calculateTileMeshingType(int tileX, int tileY) const;
+    uint8_t calculateTileMeshingType(int tileX, int tileY) const;
 
     /**
      * Decides whether or not a blend type of the tile at the source position matches a tile at a different position.

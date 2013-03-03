@@ -254,7 +254,7 @@ void World::generateTileMeshes()
     }
 }
 
-unsigned char World::calculateTileMeshingType(int tileX, int tileY) const
+uint8_t World::calculateTileMeshingType(int tileX, int tileY) const
 {
     const bool left = tileBlendTypeMatch(tileX, tileY, tileX - 1, tileY);
     const bool right = tileBlendTypeMatch(tileX, tileY, tileX + 1, tileY);
@@ -269,7 +269,7 @@ unsigned char World::calculateTileMeshingType(int tileX, int tileY) const
     const bool bottomRight = tileBlendTypeMatch(tileX, tileY, tileX + 1, tileY + 1);
 
     // behold the motherfucking magic
-    const unsigned char result = (1 * topRight) + (2 * bottomRight) + (4 * bottomLeft) + (8 * topLeft) + (16 * top) + (32 * right) + (64 * bottom) + (128 * left);
+    const uint8_t result = (1 * topRight) + (2 * bottomRight) + (4 * bottomLeft) + (8 * topLeft) + (16 * top) + (32 * right) + (64 * bottom) + (128 * left);
     return result;
 }
 
@@ -281,13 +281,13 @@ bool World::isBlockSolid(const glm::vec2& vecDest) const
     int index = column * WORLD_ROWCOUNT + row;
     assert(index < WORLD_ROWCOUNT * WORLD_COLUMNCOUNT);
 
-    const unsigned char blockType = World::m_blocks[index].primitiveType;
+    const uint8_t blockType = World::m_blocks[index].primitiveType;
 
     //FIXME: do water, lava, doors..what else?
     return  blockType != 0;
 }
 
-unsigned char World::getBlockType(const glm::vec2& vecPoint) const
+uint8_t World::getBlockType(const glm::vec2& vecPoint) const
 {
     const int column = int(std::ceil(vecPoint.x) / Block::blockSize);
     const int row = int(std::ceil(vecPoint.y) / Block::blockSize);
@@ -295,7 +295,7 @@ unsigned char World::getBlockType(const glm::vec2& vecPoint) const
     int index = column * WORLD_ROWCOUNT + row;
     assert(index < WORLD_ROWCOUNT * WORLD_COLUMNCOUNT);
 
-    const unsigned char blockType = World::m_blocks[index].primitiveType;
+    const uint8_t blockType = World::m_blocks[index].primitiveType;
 
     return  blockType;
 }
