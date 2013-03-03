@@ -49,6 +49,9 @@ public:
     void close();
     bool visible();
 
+    void setCollapsed(bool collapsed);
+    bool collapsed() { return m_collapsed; }
+
     Rocket::Core::ElementDocument* document();
 
 private:
@@ -58,6 +61,7 @@ private:
     Client* m_client = nullptr;
 
     Rocket::Core::ElementDocument* m_debug = nullptr;
+    bool m_collapsed = false;
 };
 
 #endif

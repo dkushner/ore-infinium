@@ -290,6 +290,8 @@ void Client::handleInputEvents()
                         m_mainMenu->hideEscapeMenu();
                     }
                 }
+            } else if (event.key.keysym.sym == SDLK_F1) {
+                m_debugMenu->setCollapsed(!m_debugMenu->collapsed());
             } else if (event.key.keysym.sym == SDLK_F5) {
                 // toggle debug logging
                 Settings::instance()->debugOutput = !Settings::instance()->debugOutput;

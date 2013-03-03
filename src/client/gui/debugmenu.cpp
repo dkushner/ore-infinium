@@ -35,6 +35,7 @@
 DebugMenu::DebugMenu(Client* client) : m_client(client)
 {
     loadDocument();
+    setCollapsed(true);
 }
 
 DebugMenu::~DebugMenu()
@@ -58,7 +59,24 @@ void DebugMenu::loadDocument()
     m_debug = GUI::instance()->context()->LoadDocument("../client/gui/assets/debugMenu.rml");
 
 //    m_debug->GetElementById("sendButton")->AddEventListener("click", this);
-//    m_debug->GetElementById("inputLine")->AddEventListener("keydown", this);
+}
+
+void DebugMenu::setCollapsed(bool collapsed)
+{
+    m_collapsed = collapsed;
+
+    int height = 35;
+    int width = 30;
+
+    if (!collapsed) {
+        height = Settings::instance()->screenResolutionHeight;
+        width = 100;
+    }
+
+    Rocket::Core::Colourb shit(255, 0, 0, 155);
+    m_debug->SetProperty("background-color", Rocket::Core::Property(shit, Rocket::Core::Property::COLOUR));
+    m_debug->SetProperty("height", Rocket::Core::Property(height, Rocket::Core::Property::PX));
+    m_debug->SetProperty("width", Rocket::Core::Property(width, Rocket::Core::Property::PERCENT));
 }
 
 void DebugMenu::update()

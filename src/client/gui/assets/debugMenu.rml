@@ -7,20 +7,29 @@
                         body
                         {
                             z-index: 99;
+/*
+NOTE: overridden at runtime
+                            width: 25%;
+                            height: 25%;
+*/
+                            overflow-y: hidden;
                         }
 
                         div#mostlyTransparentWindow
                         {
+
                                 background-color: rgba(0, 0, 0, 0);
+
                                 text-align: left;
                                 float: right;
-                                width: 25%;
-                                height: 25%;
+                                overflow-y: hidden;
                         }
 
                         div#content
                         {
                             text-align: left;
+                            overflow-y: hidden;
+                          background-color: rgba(0, 0, 0, 0);
                         }
 
                 </style>
@@ -34,7 +43,23 @@
         <text id="5">HALP</text><br/>
         <text id="6">HALP</text><br/>
         <text id="7">HALP</text><br/>
-        <text id="8">HALP</text>
+
+        <text id="8">HALP</text><br/>
+
+        <text id="9">HALP</text><br/>
+        <text id="10">HALP</text><br/>
+        <text id="11">HALP</text><br/>
+        <text id="12">HALP</text><br/>
+        <text id="13">HALP</text><br/>
+        <text id="14">HALP</text><br/>
+        <text id="15">HALP</text><br/>
+        <text id="16">HALP</text><br/>
+        <text id="17">HALP</text><br/>
+        <text id="18">HALP</text><br/>
+        <text id="19">HALP</text><br/>
+        <text id="20">HALP</text><br/>
+        <text id="21">HALP</text><br/>
+        <text id="22">HALP</text><br/>
         </body>
 
 </rml>
