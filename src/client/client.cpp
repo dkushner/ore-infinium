@@ -476,11 +476,15 @@ bool Client::startMultiplayerClientConnection(const std::string& playername, con
 void Client::startMultiplayerHost(const std::string& playername, unsigned int port)
 {
     Debug::log(Debug::Area::NetworkClient) << "starting multiplayer, hosting! Playername: " << playername << " port: " << port;
-    m_playerName = playername;
+    if (!m_server) {
+        m_playerName = playername;
 
-    m_server = new Server(8, port);
-    m_serverThread = new std::thread(&Server::tick, m_server);
-    connect();
+        m_server = new Server(8, port);
+        m_serverThread = new std::thread(&Server::tick, m_server);
+        connect();
+    } else {
+        Debug::log(Debug::Area::NetworkClient) << "error, attempted to create player-hosted a server but we're still connected to this one";
+    }
 }
 
 void Client::sendInitialConnectionData()
