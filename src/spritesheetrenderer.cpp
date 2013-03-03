@@ -110,21 +110,27 @@ glm::vec2 SpriteSheetRenderer::spriteSheetSize(SpriteSheetRenderer::SpriteSheetT
 void SpriteSheetRenderer::registerSprite(Sprite* sprite)
 {
     switch (sprite->spriteSheetType()) {
-    case SpriteSheetType::Character:
+    case SpriteSheetType::Character: {
         m_characterSprites.insert(m_characterSprites.end(), sprite);
         // TODO: look up the size of the graphic/frame, in the spritesheet map.
-        //NOTE: this is terraria's exact player size, it's a nice size.
-        sprite->m_size = glm::vec2(Block::blockSize * 2, Block::blockSize * 3);
-        Debug::log(Debug::Area::Graphics) << "character sprite registered, new sprite count: " << m_characterSprites.size();
-        break;
+        auto frameIdentifier = m_spriteSheetCharactersDescription.find(sprite->frameName());
+        SpriteFrameIdentifier& frame = frameIdentifier->second;
+        sprite->m_size = glm::vec2(frame.width, frame.height);
 
-    case SpriteSheetType::Entity:
-        m_entitySprites.insert(m_entitySprites.end(), sprite);
-        // TODO: look up the size of the graphic/frame, in the spritesheet map.
-        //NOTE: THIS IS A SOMEWHAT DECENT PLAYER SIZE
-        sprite->m_size = glm::vec2(40.0f, 50.0f);
-        Debug::log(Debug::Area::Graphics) << "entity sprite registered, new sprite count: " << m_entitySprites.size();
+        //NOTE: terraria's player size is (blocksize*2, blocksize*3), and that's a great default. sprite->m_size = glm::vec2(Block::blockSize * 2, Block::blockSize * 3);
+        Debug::log(Debug::Area::Graphics) << "character sprite registered, setting default size, which is that of source texture: width: " << frame.width << " height: " << frame.height << " new sprite count: " << m_entitySprites.size();
         break;
+    }
+
+    case SpriteSheetType::Entity: {
+        m_entitySprites.insert(m_entitySprites.end(), sprite);
+        auto frameIdentifier = m_spriteSheetEntitiesDescription.find(sprite->frameName());
+        SpriteFrameIdentifier& frame = frameIdentifier->second;
+        sprite->m_size = glm::vec2(frame.width, frame.height);
+
+        Debug::log(Debug::Area::Graphics) << "entity sprite registered, setting default size, which is that of source texture: width: " << frame.width << " height: " << frame.height << " new sprite count: " << m_entitySprites.size();
+        break;
+    }
     }
 }
 
