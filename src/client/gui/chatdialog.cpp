@@ -140,6 +140,8 @@ void ChatDialog::clearChatHistory()
 void ChatDialog::show()
 {
     m_chat->Show();
+    //focus something else, so the input line doesn't get input by default..
+    m_chat->GetElementById("title")->Focus();
 }
 
 void ChatDialog::close()
