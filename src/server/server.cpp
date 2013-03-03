@@ -248,7 +248,7 @@ void Server::sendInitialPlayerDataFinished(ENetPeer* peer)
 
 Player* Server::createPlayer(const std::string& playerName)
 {
-    Player* player = new Player("testframe");
+    Player* player = new Player("player1Standing1");
     player->setName(playerName);
     player->setPlayerID(m_freePlayerID);
     player->setPosition(2500, 1492);

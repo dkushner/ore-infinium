@@ -546,7 +546,7 @@ void Client::receiveInitialPlayerData(std::stringstream* ss)
     Packet::deserialize(ss, &message);
     Debug::log(Debug::Area::NetworkClient) << "initial player data received";
 
-    Player* player = new Player("test");
+    Player* player = new Player("player1Standing1");
     std::stringstream chatMessage;
     if (!m_mainPlayer) {
         //this is must be *our* player, so create it

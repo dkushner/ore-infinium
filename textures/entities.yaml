@@ -3,10 +3,8 @@
 # describes the coordinates of each frameName/sprite to use
 # used by the animation/sprite rendering system
 sprite:
-    frameName: player1Standing1
-    x: 0
-    y: 0
-    # blocksize (16) * 2
-    width: 32
-    # blocksize (16) * 3
-    height: 48
+    frameName: test
+    x: 1
+    y: 2
+    width: 50
+    height: 40

@@ -96,6 +96,7 @@ void SpriteSheetRenderer::unloadAllSpriteSheets()
 void SpriteSheetRenderer::bindSpriteSheet(SpriteSheetRenderer::SpriteSheetType type)
 {
     m_spriteSheetTextures[type].texture->bind();
+    //Debug::log() << "binding spritesehet, width: " <<(int) m_spriteSheetTextures[type].texture->width() << "height:"  << (int) m_spriteSheetTextures[type].texture->height();
 }
 
 glm::vec2 SpriteSheetRenderer::spriteSheetSize(SpriteSheetRenderer::SpriteSheetType type)
@@ -138,27 +139,35 @@ std::map<std::string, SpriteSheetRenderer::SpriteFrameIdentifier> SpriteSheetRen
     std::map<std::string, SpriteFrameIdentifier> descriptionMap;
 
     struct stat fileAttribute;
-    bool fileExists = stat(filename.c_str(), &fileAttribute) != 0;
+    bool fileExists = stat(filename.c_str(), &fileAttribute) == 0;
 
+    Debug::log(Debug::Area::System) << "parsing: '" << filename << "' spreadsheet description...";
     Debug::fatal(fileExists, Debug::Area::System, "sprite sheet description file failed to load, filename: " + filename);
 
-    YAML::Node description(filename);
+    YAML::Node description = YAML::LoadFile(filename);
 
-//    for(std::size_t i=0;i < primes.size();i++)
-//        std::cout << primes[i].as<int>() << "\n";
+    for(std::size_t i=0;i < description.size();i++) {
+        //FIXME: this non const ref scares me...are my concerns valid?
+        auto sprite = description["sprite"];
 
-    Debug::log() << "PARSED SIZE: " << description.size();
+        Debug::log(Debug::Area::System) << "parsing description sheet...";
+        Debug::log(Debug::Area::System) << "frameName: " << sprite["frameName"].as<std::string>();
+        Debug::log(Debug::Area::System) << "x: " << sprite["x"].as<int>();
+        Debug::log(Debug::Area::System) << "y: " << sprite["y"].as<int>();
+        Debug::log(Debug::Area::System) << "width: " << sprite["width"].as<int>();
+        Debug::log(Debug::Area::System) << "height: " << sprite["height"].as<int>();
 
+        SpriteFrameIdentifier frame;
+        frame.x = sprite["x"].as<int>();
+        frame.y = sprite["y"].as<int>();
+        frame.width = sprite["width"].as<int>();
+        frame.height = sprite["height"].as<int>();
 
-    //FIXME hardcoded to "load" 1 character for now.
-    SpriteFrameIdentifier frame;
-    frame.x = 0;
-    frame.y = 0;
-    frame.width = 40;
-    frame.height = 50;
-    descriptionMap["player_frame1"] = frame;
+        const std::string frameName = sprite["frameName"].as<std::string>();
 
-    // load the filename (yaml file), populate the map with the information and return it.
+        descriptionMap[frameName] = frame;
+    }
+
     return descriptionMap;
 }
 
@@ -174,7 +183,6 @@ void SpriteSheetRenderer::renderCharacters()
 for (Sprite * sprite: m_characterSprites) {
         auto frameIdentifier = m_spriteSheetCharactersDescription.find(sprite->frameName());
         SpriteFrameIdentifier& frame = frameIdentifier->second;
-        frame.x; //FIXME:
 
         // vertices that will be uploaded.
         Vertex vertices[4];
@@ -210,7 +218,7 @@ for (Sprite * sprite: m_characterSprites) {
         vertices[3].y = y; // top right Y
 
         Debug::checkGLError();
-
+        Debug::log() << "RENDERING OUR FRAME WIDTH: " << frame.width << " SPRITE SIZE: " << sprite->size().x;
         // copy color to the buffer
         for (size_t i = 0; i < sizeof(vertices) / sizeof(*vertices); i++) {
             //        *colorp = color.bgra;
@@ -222,11 +230,29 @@ for (Sprite * sprite: m_characterSprites) {
             vertices[i].color = color;
         }
 
+        const int texcoordBottom = 0.0f;
+        const int texcoordLeft = 0.0f;
+        const int texcoordRight = 1.0f;//texcoordLeft + (frame.width / SPRITESHEET_WIDTH);
+        const int texcoordTop = 0.0f;
+
         // copy texcoords to the buffer
-        vertices[0].u = vertices[1].u = 0.0f;
-        vertices[0].v = vertices[3].v = 1.0f;
-        vertices[1].v = vertices[2].v = 0.0f;
-        vertices[2].u = vertices[3].u = 1.0f;
+
+        const float tileWidth = 1.0f / 512 * 16.0f;
+        const float tileHeight = 1.0f / 512 * 16.0f;
+
+        float xPadding = 1.0f / 512 * 1.0f * (0 + 1);
+        float yPadding = 1.0f / 512 * 1.0f * (0 + 1);
+
+        const float tileLeft = (0 *  tileWidth) + xPadding;
+        const float tileRight = tileLeft + tileWidth;
+        const float tileTop = 1.0f - ((0 * tileHeight)) - yPadding;
+        const float tileBottom = tileTop - tileHeight;
+
+        // copy texcoords to the buffer
+        vertices[0].u = vertices[1].u = tileLeft;
+        vertices[0].v = vertices[3].v = tileTop;
+        vertices[1].v = vertices[2].v = tileBottom;
+        vertices[2].u = vertices[3].u = tileRight;
 
         // finally upload everything to the actual vbo
         glBindBuffer(GL_ARRAY_BUFFER, m_vbo);

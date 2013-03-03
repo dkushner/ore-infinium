@@ -47,7 +47,7 @@ World::World(Player* mainPlayer, Server* server)
 //    m_player = new Player("someframe");
 //    m_entities.insert(m_entities.end(), m_player);
 
-    m_uselessEntity = new Entity("test", SpriteSheetRenderer::SpriteSheetType::Character);
+    m_uselessEntity = new Entity("player1Standing1", SpriteSheetRenderer::SpriteSheetType::Character);
     m_uselessEntity->setPosition(2300, 1400);
     m_entities.insert(m_entities.end(), m_uselessEntity);
 

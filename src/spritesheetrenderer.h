@@ -163,6 +163,9 @@ private:
     int m_maxSpriteCount = 2200;
     int m_maxEntityCount = 2200;
 
+    const uint32_t SPRITESHEET_HEIGHT = 512;
+    const uint32_t SPRITESHEET_WIDTH = 512;
+
     Camera* m_camera = nullptr;
     Shader* m_shader = nullptr;
 };
