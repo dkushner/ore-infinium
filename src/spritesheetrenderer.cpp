@@ -230,29 +230,20 @@ for (Sprite * sprite: m_characterSprites) {
             vertices[i].color = color;
         }
 
-        const int texcoordBottom = 0.0f;
-        const int texcoordLeft = 0.0f;
-        const int texcoordRight = 1.0f;//texcoordLeft + (frame.width / SPRITESHEET_WIDTH);
-        const int texcoordTop = 0.0f;
+        // copy texcoords to the buffer
+        const float textureWidth = 1.0f / 512 * frame.width;
+        const float textureHeight = 1.0f / 512 * frame.height;
+
+        const float spriteLeft = (frame.x *  textureWidth);
+        const float spriteRight = spriteLeft + textureWidth;
+        const float spriteTop = 1.0f - ((frame.y * textureHeight));
+        const float spriteBottom = spriteTop - textureHeight;
 
         // copy texcoords to the buffer
-
-        const float tileWidth = 1.0f / 512 * 16.0f;
-        const float tileHeight = 1.0f / 512 * 16.0f;
-
-        float xPadding = 1.0f / 512 * 1.0f * (0 + 1);
-        float yPadding = 1.0f / 512 * 1.0f * (0 + 1);
-
-        const float tileLeft = (0 *  tileWidth) + xPadding;
-        const float tileRight = tileLeft + tileWidth;
-        const float tileTop = 1.0f - ((0 * tileHeight)) - yPadding;
-        const float tileBottom = tileTop - tileHeight;
-
-        // copy texcoords to the buffer
-        vertices[0].u = vertices[1].u = tileLeft;
-        vertices[0].v = vertices[3].v = tileTop;
-        vertices[1].v = vertices[2].v = tileBottom;
-        vertices[2].u = vertices[3].u = tileRight;
+        vertices[0].u = vertices[1].u = spriteLeft;
+        vertices[0].v = vertices[3].v = spriteTop;
+        vertices[1].v = vertices[2].v = spriteBottom;
+        vertices[2].u = vertices[3].u = spriteRight;
 
         // finally upload everything to the actual vbo
         glBindBuffer(GL_ARRAY_BUFFER, m_vbo);
