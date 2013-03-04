@@ -417,83 +417,6 @@ void World::performBlockAttack(Player* player)
 
     std::cout << "ERROR: " << " no block found to attack?" << "\n";
 }
-/*
- * FIXME: USELESS, UNNEEDED, GET RID OF THAT SHIT
- v *oid World::generatePixelTileMap()
- {
-     const glm::vec2 playerPosition = m_player->position();
-     //consider block map as starting at player pos == 0,0 and going down and to the right-ward
-     //tilesBefore{X,Y} is only at the center of the view though..find the whole screen real estate
-     //column
-     int tilesBeforeX = playerPosition.x() / Block::blockSize;
-     //row
-     int tilesBeforeY = playerPosition.y() / Block::blockSize;
-
-     //FIXME: only calculate this crap when we move/change tiles
-     // -1 so that we render an additional row and column..to smoothly scroll
-     const int startRow = tilesBeforeY - ((Settings::instance()->screenResolutionHeight * 0.5) / Block::blockSize) - 1;
-     const int endRow = tilesBeforeY + ((Settings::instance()->screenResolutionHeight * 0.5) / Block::blockSize);
-
-     //columns are our X value, rows the Y
-     const int startColumn = tilesBeforeX - ((Settings::instance()->screenResolutionWidth * 0.5) / Block::blockSize) - 1;
-     const int endColumn = tilesBeforeX + ((Settings::instance()->screenResolutionWidth * 0.5) / Block::blockSize);
-
-     if (std::abs(startColumn) != startColumn) {
-         std::cout << "FIXME, WENT INTO NEGATIVE COLUMN!!";
-         assert(0);
-     } else if (std::abs(startRow) != startRow) {
-         std::cout << "FIXME, WENT INTO NEGATIVE ROW!!";
-         assert(0);
-     }
-
-     // only make it as big as we need it, remember this is a pixel representation of the visible
-     // tile map, with the red channel identifying what type of tile it is
-     // x is columns..since they move from left to right, rows start at top and move to bottom
-     // (and yes..i confused this fact before, leaving a headache here ;)
-     m_tileMapPixelsTexture = al_create_bitmap(endColumn - startColumn, endRow - startRow);
-
-     al_lock_bitmap(m_tileMapPixelsTexture, ALLEGRO_PIXEL_FORMAT_ANY, ALLEGRO_LOCK_WRITEONLY);
-
-     al_set_target_bitmap(m_tileMapPixelsTexture);
-
-     int x = 0;
-     int y = 0;
-
-     // [y*rowlength + x]
-     for (int currentRow = startRow; currentRow < endRow; ++currentRow) {
-         for (int currentColumn = startColumn; currentColumn < endColumn; ++currentColumn) {
-
-             const int index = currentColumn * WORLD_ROWCOUNT + currentRow;
-             assert(index < WORLD_ROWCOUNT * WORLD_COLUMNCOUNT);
-
-             ALLEGRO_COLOR color = al_map_rgb(m_blocks[index].primitiveType, 0, 0);
-
-             //FIXME: possibly use al_lock_bitmap and use ALLEGRO_LOCKED_REGION
-             al_put_pixel(x, y, color);
-             ++x;
-         }
-         ++y;
-         x = 0;
-     }
-
-     al_unlock_bitmap(m_tileMapPixelsTexture);
-
-     al_save_bitmap("pixelmap.png", m_tileMapPixelsTexture);
-
-     al_set_target_backbuffer(m_display);
-
-     //FIXME: hugely fucking expensive..fix the above loops so we *generate* it upside down
-     // or...change the shader to calculate it properly
-     //HACK:  m_tileMapPixelsImage.flipVertically();
-
-     //TODO: al_get_shader_log here?
-     //    Debug::fatal(al_set_shader_sampler(m_shader, "tilemap_pixels", m_tileMapPixelsTexture, 0), Debug::Area::Graphics, "shader tilemap_pixels set failure");
-
-     // to get per-pixel smooth scrolling, we get the remainders and pass it as an offset to the shader
-     float floatArray[2] = { tileOffset().x(), tileOffset().y() };
-     //    Debug::fatal(al_set_shader_float_vector(m_shader, "offset", 2, floatArray, 2), Debug::Area::Graphics, "shader offset set failure");
-     }
-     */
 
 glm::ivec2 World::tileOffset(Player* player) const
 {
@@ -545,26 +468,8 @@ void World::generateMap()
 
 void World::saveMap()
 {
-    //FIXME: use binary methods only, no more pixel saving/png saving/loading
     /*
-     *   std::cout << "saving map!" << std::endl;
-     *   sf::Image image;
-     *   image.create(WORLD_ROWCOUNT, WORLD_COLUMNCOUNT, sf::Color::White);
-     *
-     *   sf::Color color(0, 0, 0, 255);
-     *   sf::Clock clock;
-     *
-     *   for (int row = 0; row < WORLD_ROWCOUNT; ++row) {
-     *       for (int column = 0; column < WORLD_COLUMNCOUNT; ++column) {
-     *           color.r = m_blocks[column * WORLD_ROWCOUNT + row].primitiveType;
-     *           image.setPixel(row, column, color);
-     }
-     }
 
-     bool saved = image.saveToFile("levelsave.png");
-     assert(saved);
-
-     const int elapsedTime = clock.getElapsedTime().asMilliseconds();
      std::cout << "Time taken for map saving: " << elapsedTime << " Milliseconds" << std::endl;
      */
     /*
