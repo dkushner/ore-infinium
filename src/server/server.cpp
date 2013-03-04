@@ -270,8 +270,8 @@ void Server::sendInitialWorldChunk(ENetPeer* peer)
 
    Chunk chunk = m_world->createChunk(startX, startY, endX, endY);
 
-   for (int row; row < WORLD_ROWCOUNT; ++row) {
-       for (int column = 0; column < WORLD_COLUMNCOUNT; ++column) {
+   for (int row = startY; row < endY; ++row) {
+       for (int column = startX; column < endX; ++column) {
 
            uint32_t index = column * WORLD_ROWCOUNT + row;
            Block& block = chunk.blocks()[index];
@@ -281,6 +281,8 @@ void Server::sendInitialWorldChunk(ENetPeer* peer)
            message.add_walltype(block.wallType);
        }
    }
+
+    Packet::sendPacket(peer, &message, Packet::FromServerPacketContents::ChunkFromServerPacket, ENET_PACKET_FLAG_RELIABLE);
 }
 
 Player* Server::createPlayer(const std::string& playerName)

@@ -615,11 +615,26 @@ void Client::receivePlayerMove(std::stringstream* ss)
 
 void Client::receiveChunk(std::stringstream* ss)
 {
+    Debug::log(Debug::Area::NetworkClient) << "receiving chunk...";
     PacketBuf::Chunk message;
     Packet::deserialize(ss, &message);
 
     std::vector<Block> blocks;
+
+    int index = 0;
+    for (int row = message.starty(); row < message.endy(); ++row) {
+        for (int column = message.startx(); column < message.endx(); ++column) {
+            Block block;
+            block.meshType = message.meshtype(index);
+            block.primitiveType = message.primitivetype(index);
+            block.wallType = message.walltype(index);
+            blocks.push_back(block);
+
+            ++index;
+        }
+    }
+
     Chunk chunk(message.startx(), message.starty(), message.endx(), message.endy(), blocks);
 
-    m_world->loadChunk(chunk);
+    m_world->loadChunk(&chunk);
 }

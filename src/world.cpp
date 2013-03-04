@@ -583,6 +583,19 @@ void World::saveMap()
     */
 }
 
+void World::loadChunk(Chunk* chunk)
+{
+    int sourceIndex = 0;
+    for (int row = chunk->startY(); row < chunk->endY(); ++row) {
+        for (int column = chunk->startX(); column < chunk->endX(); ++column) {
+
+            uint32_t index = column * WORLD_ROWCOUNT + row;
+            m_blocks.at(index) = chunk->blocks().at(sourceIndex);
+            ++sourceIndex;
+        }
+    }
+}
+
 void World::toggleLightRenderingEnabled()
 {
     m_lightRenderer->setRenderingEnabled(!m_lightRenderer->lightRenderingEnabled());

@@ -93,6 +93,7 @@ public:
     void toggleLightRenderingEnabled();
 
     Chunk createChunk(uint32_t startX, uint32_t startY, uint32_t endX, uint32_t endY);
+    void loadChunk(Chunk* chunk);
 
     //create containers of various entities, and implement a tile system
     //game.cpp calls into this each tick, which this descends downward into each entity
