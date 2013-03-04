@@ -3,30 +3,34 @@
 set(EXECUTABLE_NAME "ore-infinium")
 
 set(SRC
-main.cpp
-game.cpp
-debug.cpp
-spritesheetrenderer.cpp
-shader.cpp
-camera.cpp
-sprite.cpp
 block.cpp
-world.cpp
-player.cpp
-entity.cpp
-tilerenderer.cpp
-lightrenderer.cpp
-image.cpp
-texture.cpp
-torch.cpp
+camera.cpp
+chunk.cpp
 collisionmap.cpp
+debug.cpp
+entity.cpp
+game.cpp
+image.cpp
+lightrenderer.cpp
+main.cpp
+player.cpp
+shader.cpp
+sprite.cpp
+spritesheetrenderer.cpp
+texture.cpp
+tilerenderer.cpp
+torch.cpp
+world.cpp
+
+#cloudsystem.cpp
+#sky.cpp
 
 client/client.cpp
+client/gui/chatdialog.cpp
+client/gui/debugmenu.cpp
 client/gui/gui.cpp
 client/gui/mainmenu.cpp
 client/gui/optionsdialog.cpp
-client/gui/chatdialog.cpp
-client/gui/debugmenu.cpp
 
 client/gui/core/Shell.cpp
 client/gui/core/ShellFileInterface.cpp
@@ -39,8 +43,6 @@ settings/settings.cpp
 
 network/packet.cpp
 network/protobuf-compiled/packet.pb.cc
-#cloudsystem.cpp
-#sky.cpp
 )
 
 include(FindPkgConfig)

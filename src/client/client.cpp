@@ -526,17 +526,25 @@ void Client::processMessage(ENetEvent& event)
     case Packet::FromServerPacketContents::ChatMessageFromServerPacket:
         receiveChatMessage(&ss);
         break;
+
     case Packet::FromServerPacketContents::InitialPlayerDataFromServerPacket:
         receiveInitialPlayerData(&ss);
         break;
+
     case Packet::FromServerPacketContents::PlayerDisconnectedFromServerPacket:
         receivePlayerDisconnected(&ss);
         break;
+
     case Packet::FromServerPacketContents::PlayerMoveFromServerPacket:
         receivePlayerMove(&ss);
         break;
+
     case Packet::FromServerPacketContents::InitialPlayerDataFinishedFromServerPacket:
         m_initialPlayersReceivedFinished = true;
+        break;
+
+    case Packet::FromServerPacketContents::ChunkFromServerPacket:
+        receiveChunk(&ss);
         break;
     }
 
@@ -603,4 +611,15 @@ void Client::receivePlayerMove(std::stringstream* ss)
 
     Player* player = m_world->findPlayer(message.playerid());
     player->setPosition(message.x(), message.y());
+}
+
+void Client::receiveChunk(std::stringstream* ss)
+{
+    PacketBuf::Chunk message;
+    Packet::deserialize(ss, &message);
+
+    std::vector<Block> blocks;
+    Chunk chunk(message.startx(), message.starty(), message.endx(), message.endy(), blocks);
+
+    m_world->loadChunk(chunk);
 }

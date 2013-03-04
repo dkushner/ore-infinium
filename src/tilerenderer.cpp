@@ -118,17 +118,17 @@ void TileRenderer::render()
 //    Debug::log() << "OFFSET: " << offset.x << " Y : " << offset.y;
     Debug::checkGLError();
     glm::vec2 playerPosition = m_mainPlayer->position();
-    int tilesBeforeX = playerPosition.x / Block::blockSize;
+    int tilesBeforeX = playerPosition.x / Block::BLOCK_SIZE;
     //row
-    int tilesBeforeY = playerPosition.y / Block::blockSize;
+    int tilesBeforeY = playerPosition.y / Block::BLOCK_SIZE;
 
     // -1 so that we render an additional row and column..to smoothly scroll
-    const int startRow = tilesBeforeY - ((Settings::instance()->screenResolutionHeight * 0.5) / Block::blockSize) - 1;
-    const int endRow = tilesBeforeY + ((Settings::instance()->screenResolutionHeight * 0.5) / Block::blockSize);
+    const int startRow = tilesBeforeY - ((Settings::instance()->screenResolutionHeight * 0.5) / Block::BLOCK_SIZE) - 1;
+    const int endRow = tilesBeforeY + ((Settings::instance()->screenResolutionHeight * 0.5) / Block::BLOCK_SIZE);
 
     //columns are our X value, rows the Y
-    const int startColumn = tilesBeforeX - ((Settings::instance()->screenResolutionWidth * 0.5) / Block::blockSize) - 1;
-    const int endColumn = tilesBeforeX + ((Settings::instance()->screenResolutionWidth * 0.5) / Block::blockSize);
+    const int startColumn = tilesBeforeX - ((Settings::instance()->screenResolutionWidth * 0.5) / Block::BLOCK_SIZE) - 1;
+    const int endColumn = tilesBeforeX + ((Settings::instance()->screenResolutionWidth * 0.5) / Block::BLOCK_SIZE);
 //    Debug:: log() << "starRow: " << startRow << "endrow: " << endRow << "startcol: " << startColumn << " endcol: " << endColumn;
 
     if (std::abs(startColumn) != startColumn) {
@@ -158,14 +158,14 @@ void TileRenderer::render()
             // vertices[2] -> bottom right
             // vertices[3] -> top right
 
-            float positionX = Block::blockSize * drawingColumn;
-            float positionY = Block::blockSize * drawingRow;
+            float positionX = Block::BLOCK_SIZE * drawingColumn;
+            float positionY = Block::BLOCK_SIZE * drawingRow;
 
             float x = positionX;
-            float width = x +  Block::blockSize;
+            float width = x +  Block::BLOCK_SIZE;
 
             float y = positionY;
-            float height = y  +  Block::blockSize;
+            float height = y  +  Block::BLOCK_SIZE;
 
             vertices[0].x = x; // top left X
             vertices[0].y = y; //top left Y

@@ -51,7 +51,7 @@ public:
 
 public:
     // radius indicating how many pixels out the player can pick blocks
-    static constexpr float blockPickingRadius = Block::blockSize * 8.0f;
+    static constexpr float blockPickingRadius = Block::BLOCK_SIZE * 8.0f;
 
     //FIXME: MOVE MORE UPSTREAM, halfass attempt at making a unit system, instead of making it pixel based for movement.
     static constexpr float movementUnits = 1.0f / 100.0f;

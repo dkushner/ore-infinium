@@ -20,6 +20,7 @@
 
 #include "block.h"
 #include "player.h"
+#include "chunk.h"
 
 #include <stdlib.h>
 
@@ -91,6 +92,8 @@ public:
 
     void toggleLightRenderingEnabled();
 
+    Chunk createChunk(uint32_t startX, uint32_t startY, uint32_t endX, uint32_t endY);
+
     //create containers of various entities, and implement a tile system
     //game.cpp calls into this each tick, which this descends downward into each entity
 private:
@@ -147,7 +150,7 @@ private:
 
     // it's easier to manage with a linear array. access is trivial - array[y][x] simply becomes array[y*rowlength + x]
     // [column * WORLD_ROWCOUNT + row]
-    Block m_blocks[WORLD_ROWCOUNT * WORLD_COLUMNCOUNT];
+    std::vector<Block> m_blocks;
 
     TileRenderer* m_tileRenderer = nullptr;
     LightRenderer* m_lightRenderer = nullptr;

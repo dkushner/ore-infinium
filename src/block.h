@@ -50,7 +50,7 @@ public:
     };
 
     // height is the same as width (they're square)
-    static constexpr unsigned char blockSize = 16;
+    static constexpr unsigned char BLOCK_SIZE = 16;
 
     struct BlockStruct {
         BlockStruct(const char *_texture, bool _collides) {

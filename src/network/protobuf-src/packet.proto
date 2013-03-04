@@ -48,3 +48,14 @@ message PlayerMoveFromClient {
    optional int32 directionY = 2;
 }
 
+message Chunk {
+    optional uint32 startX = 1;
+    optional uint32 endX = 2;
+    optional uint32 startY = 3;
+    optional uint32 endY = 4;
+
+    repeated uint32 meshType = 5;
+    repeated uint32 primitiveType = 6;
+    repeated uint32 wallType = 7;
+}
+

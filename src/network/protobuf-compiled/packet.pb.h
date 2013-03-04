@@ -42,6 +42,7 @@ class InitialPlayerDataFromServer;
 class PlayerDisconnectedFromServer;
 class PlayerMoveFromServer;
 class PlayerMoveFromClient;
+class Chunk;
 
 // ===================================================================
 
@@ -886,6 +887,157 @@ class PlayerMoveFromClient : public ::google::protobuf::Message {
   void InitAsDefaultInstance();
   static PlayerMoveFromClient* default_instance_;
 };
+// -------------------------------------------------------------------
+
+class Chunk : public ::google::protobuf::Message {
+ public:
+  Chunk();
+  virtual ~Chunk();
+
+  Chunk(const Chunk& from);
+
+  inline Chunk& operator=(const Chunk& from) {
+    CopyFrom(from);
+    return *this;
+  }
+
+  inline const ::google::protobuf::UnknownFieldSet& unknown_fields() const {
+    return _unknown_fields_;
+  }
+
+  inline ::google::protobuf::UnknownFieldSet* mutable_unknown_fields() {
+    return &_unknown_fields_;
+  }
+
+  static const ::google::protobuf::Descriptor* descriptor();
+  static const Chunk& default_instance();
+
+  void Swap(Chunk* other);
+
+  // implements Message ----------------------------------------------
+
+  Chunk* New() const;
+  void CopyFrom(const ::google::protobuf::Message& from);
+  void MergeFrom(const ::google::protobuf::Message& from);
+  void CopyFrom(const Chunk& from);
+  void MergeFrom(const Chunk& from);
+  void Clear();
+  bool IsInitialized() const;
+
+  int ByteSize() const;
+  bool MergePartialFromCodedStream(
+      ::google::protobuf::io::CodedInputStream* input);
+  void SerializeWithCachedSizes(
+      ::google::protobuf::io::CodedOutputStream* output) const;
+  ::google::protobuf::uint8* SerializeWithCachedSizesToArray(::google::protobuf::uint8* output) const;
+  int GetCachedSize() const { return _cached_size_; }
+  private:
+  void SharedCtor();
+  void SharedDtor();
+  void SetCachedSize(int size) const;
+  public:
+
+  ::google::protobuf::Metadata GetMetadata() const;
+
+  // nested types ----------------------------------------------------
+
+  // accessors -------------------------------------------------------
+
+  // optional uint32 startX = 1;
+  inline bool has_startx() const;
+  inline void clear_startx();
+  static const int kStartXFieldNumber = 1;
+  inline ::google::protobuf::uint32 startx() const;
+  inline void set_startx(::google::protobuf::uint32 value);
+
+  // optional uint32 endX = 2;
+  inline bool has_endx() const;
+  inline void clear_endx();
+  static const int kEndXFieldNumber = 2;
+  inline ::google::protobuf::uint32 endx() const;
+  inline void set_endx(::google::protobuf::uint32 value);
+
+  // optional uint32 startY = 3;
+  inline bool has_starty() const;
+  inline void clear_starty();
+  static const int kStartYFieldNumber = 3;
+  inline ::google::protobuf::uint32 starty() const;
+  inline void set_starty(::google::protobuf::uint32 value);
+
+  // optional uint32 endY = 4;
+  inline bool has_endy() const;
+  inline void clear_endy();
+  static const int kEndYFieldNumber = 4;
+  inline ::google::protobuf::uint32 endy() const;
+  inline void set_endy(::google::protobuf::uint32 value);
+
+  // repeated uint32 meshType = 5;
+  inline int meshtype_size() const;
+  inline void clear_meshtype();
+  static const int kMeshTypeFieldNumber = 5;
+  inline ::google::protobuf::uint32 meshtype(int index) const;
+  inline void set_meshtype(int index, ::google::protobuf::uint32 value);
+  inline void add_meshtype(::google::protobuf::uint32 value);
+  inline const ::google::protobuf::RepeatedField< ::google::protobuf::uint32 >&
+      meshtype() const;
+  inline ::google::protobuf::RepeatedField< ::google::protobuf::uint32 >*
+      mutable_meshtype();
+
+  // repeated uint32 primitiveType = 6;
+  inline int primitivetype_size() const;
+  inline void clear_primitivetype();
+  static const int kPrimitiveTypeFieldNumber = 6;
+  inline ::google::protobuf::uint32 primitivetype(int index) const;
+  inline void set_primitivetype(int index, ::google::protobuf::uint32 value);
+  inline void add_primitivetype(::google::protobuf::uint32 value);
+  inline const ::google::protobuf::RepeatedField< ::google::protobuf::uint32 >&
+      primitivetype() const;
+  inline ::google::protobuf::RepeatedField< ::google::protobuf::uint32 >*
+      mutable_primitivetype();
+
+  // repeated uint32 wallType = 7;
+  inline int walltype_size() const;
+  inline void clear_walltype();
+  static const int kWallTypeFieldNumber = 7;
+  inline ::google::protobuf::uint32 walltype(int index) const;
+  inline void set_walltype(int index, ::google::protobuf::uint32 value);
+  inline void add_walltype(::google::protobuf::uint32 value);
+  inline const ::google::protobuf::RepeatedField< ::google::protobuf::uint32 >&
+      walltype() const;
+  inline ::google::protobuf::RepeatedField< ::google::protobuf::uint32 >*
+      mutable_walltype();
+
+  // @@protoc_insertion_point(class_scope:PacketBuf.Chunk)
+ private:
+  inline void set_has_startx();
+  inline void clear_has_startx();
+  inline void set_has_endx();
+  inline void clear_has_endx();
+  inline void set_has_starty();
+  inline void clear_has_starty();
+  inline void set_has_endy();
+  inline void clear_has_endy();
+
+  ::google::protobuf::UnknownFieldSet _unknown_fields_;
+
+  ::google::protobuf::uint32 startx_;
+  ::google::protobuf::uint32 endx_;
+  ::google::protobuf::uint32 starty_;
+  ::google::protobuf::uint32 endy_;
+  ::google::protobuf::RepeatedField< ::google::protobuf::uint32 > meshtype_;
+  ::google::protobuf::RepeatedField< ::google::protobuf::uint32 > primitivetype_;
+  ::google::protobuf::RepeatedField< ::google::protobuf::uint32 > walltype_;
+
+  mutable int _cached_size_;
+  ::google::protobuf::uint32 _has_bits_[(7 + 31) / 32];
+
+  friend void  protobuf_AddDesc_packet_2eproto();
+  friend void protobuf_AssignDesc_packet_2eproto();
+  friend void protobuf_ShutdownFile_packet_2eproto();
+
+  void InitAsDefaultInstance();
+  static Chunk* default_instance_;
+};
 // ===================================================================
 
 
@@ -1537,6 +1689,173 @@ inline ::google::protobuf::int32 PlayerMoveFromClient::directiony() const {
 inline void PlayerMoveFromClient::set_directiony(::google::protobuf::int32 value) {
   set_has_directiony();
   directiony_ = value;
+}
+
+// -------------------------------------------------------------------
+
+// Chunk
+
+// optional uint32 startX = 1;
+inline bool Chunk::has_startx() const {
+  return (_has_bits_[0] & 0x00000001u) != 0;
+}
+inline void Chunk::set_has_startx() {
+  _has_bits_[0] |= 0x00000001u;
+}
+inline void Chunk::clear_has_startx() {
+  _has_bits_[0] &= ~0x00000001u;
+}
+inline void Chunk::clear_startx() {
+  startx_ = 0u;
+  clear_has_startx();
+}
+inline ::google::protobuf::uint32 Chunk::startx() const {
+  return startx_;
+}
+inline void Chunk::set_startx(::google::protobuf::uint32 value) {
+  set_has_startx();
+  startx_ = value;
+}
+
+// optional uint32 endX = 2;
+inline bool Chunk::has_endx() const {
+  return (_has_bits_[0] & 0x00000002u) != 0;
+}
+inline void Chunk::set_has_endx() {
+  _has_bits_[0] |= 0x00000002u;
+}
+inline void Chunk::clear_has_endx() {
+  _has_bits_[0] &= ~0x00000002u;
+}
+inline void Chunk::clear_endx() {
+  endx_ = 0u;
+  clear_has_endx();
+}
+inline ::google::protobuf::uint32 Chunk::endx() const {
+  return endx_;
+}
+inline void Chunk::set_endx(::google::protobuf::uint32 value) {
+  set_has_endx();
+  endx_ = value;
+}
+
+// optional uint32 startY = 3;
+inline bool Chunk::has_starty() const {
+  return (_has_bits_[0] & 0x00000004u) != 0;
+}
+inline void Chunk::set_has_starty() {
+  _has_bits_[0] |= 0x00000004u;
+}
+inline void Chunk::clear_has_starty() {
+  _has_bits_[0] &= ~0x00000004u;
+}
+inline void Chunk::clear_starty() {
+  starty_ = 0u;
+  clear_has_starty();
+}
+inline ::google::protobuf::uint32 Chunk::starty() const {
+  return starty_;
+}
+inline void Chunk::set_starty(::google::protobuf::uint32 value) {
+  set_has_starty();
+  starty_ = value;
+}
+
+// optional uint32 endY = 4;
+inline bool Chunk::has_endy() const {
+  return (_has_bits_[0] & 0x00000008u) != 0;
+}
+inline void Chunk::set_has_endy() {
+  _has_bits_[0] |= 0x00000008u;
+}
+inline void Chunk::clear_has_endy() {
+  _has_bits_[0] &= ~0x00000008u;
+}
+inline void Chunk::clear_endy() {
+  endy_ = 0u;
+  clear_has_endy();
+}
+inline ::google::protobuf::uint32 Chunk::endy() const {
+  return endy_;
+}
+inline void Chunk::set_endy(::google::protobuf::uint32 value) {
+  set_has_endy();
+  endy_ = value;
+}
+
+// repeated uint32 meshType = 5;
+inline int Chunk::meshtype_size() const {
+  return meshtype_.size();
+}
+inline void Chunk::clear_meshtype() {
+  meshtype_.Clear();
+}
+inline ::google::protobuf::uint32 Chunk::meshtype(int index) const {
+  return meshtype_.Get(index);
+}
+inline void Chunk::set_meshtype(int index, ::google::protobuf::uint32 value) {
+  meshtype_.Set(index, value);
+}
+inline void Chunk::add_meshtype(::google::protobuf::uint32 value) {
+  meshtype_.Add(value);
+}
+inline const ::google::protobuf::RepeatedField< ::google::protobuf::uint32 >&
+Chunk::meshtype() const {
+  return meshtype_;
+}
+inline ::google::protobuf::RepeatedField< ::google::protobuf::uint32 >*
+Chunk::mutable_meshtype() {
+  return &meshtype_;
+}
+
+// repeated uint32 primitiveType = 6;
+inline int Chunk::primitivetype_size() const {
+  return primitivetype_.size();
+}
+inline void Chunk::clear_primitivetype() {
+  primitivetype_.Clear();
+}
+inline ::google::protobuf::uint32 Chunk::primitivetype(int index) const {
+  return primitivetype_.Get(index);
+}
+inline void Chunk::set_primitivetype(int index, ::google::protobuf::uint32 value) {
+  primitivetype_.Set(index, value);
+}
+inline void Chunk::add_primitivetype(::google::protobuf::uint32 value) {
+  primitivetype_.Add(value);
+}
+inline const ::google::protobuf::RepeatedField< ::google::protobuf::uint32 >&
+Chunk::primitivetype() const {
+  return primitivetype_;
+}
+inline ::google::protobuf::RepeatedField< ::google::protobuf::uint32 >*
+Chunk::mutable_primitivetype() {
+  return &primitivetype_;
+}
+
+// repeated uint32 wallType = 7;
+inline int Chunk::walltype_size() const {
+  return walltype_.size();
+}
+inline void Chunk::clear_walltype() {
+  walltype_.Clear();
+}
+inline ::google::protobuf::uint32 Chunk::walltype(int index) const {
+  return walltype_.Get(index);
+}
+inline void Chunk::set_walltype(int index, ::google::protobuf::uint32 value) {
+  walltype_.Set(index, value);
+}
+inline void Chunk::add_walltype(::google::protobuf::uint32 value) {
+  walltype_.Add(value);
+}
+inline const ::google::protobuf::RepeatedField< ::google::protobuf::uint32 >&
+Chunk::walltype() const {
+  return walltype_;
+}
+inline ::google::protobuf::RepeatedField< ::google::protobuf::uint32 >*
+Chunk::mutable_walltype() {
+  return &walltype_;
 }
 
 

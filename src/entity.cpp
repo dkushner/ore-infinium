@@ -88,13 +88,13 @@ glm::vec2 Entity::moveOutsideSolid(const glm::vec2& firstPosition, const glm::ve
 
         if (horDir != 0) {
             int horMove;
-            for (horMove = int(std::ceil(tempPosition.x) / Block::blockSize) * Block::blockSize; horMove * horDir <= (tempPosition.x + m_velocity.x) * horDir; horMove += Block::blockSize * horDir) {
+            for (horMove = int(std::ceil(tempPosition.x) / Block::BLOCK_SIZE) * Block::BLOCK_SIZE; horMove * horDir <= (tempPosition.x + m_velocity.x) * horDir; horMove += Block::BLOCK_SIZE * horDir) {
                 glm::vec2 tempDest = tempPosition;
                 tempDest.x = horMove;
                 if (collidingWithTile(tempDest, dimensions, world)) {
-                    horMove -= Block::blockSize * horDir;
+                    horMove -= Block::BLOCK_SIZE * horDir;
                     if (horDir == 1) {
-                        horMove += Block::blockSize - (dimensions.x % Block::blockSize);
+                        horMove += Block::BLOCK_SIZE - (dimensions.x % Block::BLOCK_SIZE);
                     }
                     break;
                 }
@@ -117,15 +117,15 @@ glm::vec2 Entity::moveOutsideSolid(const glm::vec2& firstPosition, const glm::ve
 
         if (verDir != 0) {
             int verMove;
-            for (verMove = int(std::ceil(tempPosition.y) / Block::blockSize) * Block::blockSize; verMove * verDir <= (tempPosition.y + m_velocity.y) * verDir; verMove += Block::blockSize * horDir) {
+            for (verMove = int(std::ceil(tempPosition.y) / Block::BLOCK_SIZE) * Block::BLOCK_SIZE; verMove * verDir <= (tempPosition.y + m_velocity.y) * verDir; verMove += Block::BLOCK_SIZE * horDir) {
                 glm::vec2 tempDest = tempPosition;
                 tempDest.y = verMove;
 
                 if (collidingWithTile(tempDest, dimensions, world)) {
-                    verMove -= Block::blockSize * verDir;
+                    verMove -= Block::BLOCK_SIZE * verDir;
 
                     if (verDir == 1) {
-                        verMove += Block::blockSize - (dimensions.y % Block::blockSize);
+                        verMove += Block::BLOCK_SIZE - (dimensions.y % Block::BLOCK_SIZE);
                     }
                     break;
                 }
@@ -146,8 +146,8 @@ glm::vec2 Entity::moveOutsideSolid(const glm::vec2& firstPosition, const glm::ve
 
 bool Entity::collidingWithTile(const glm::vec2& destPosition, const glm::ivec2& dimensions, World* world) const
 {
-    for (int i = 0; i < dimensions.x + Block::blockSize; i += Block::blockSize) {
-        for (int j = 0; j < dimensions.y + Block::blockSize; j += Block::blockSize) {
+    for (int i = 0; i < dimensions.x + Block::BLOCK_SIZE; i += Block::BLOCK_SIZE) {
+        for (int j = 0; j < dimensions.y + Block::BLOCK_SIZE; j += Block::BLOCK_SIZE) {
             glm::vec2 tempDest = destPosition;
             tempDest.x += i;
             tempDest.y += j;

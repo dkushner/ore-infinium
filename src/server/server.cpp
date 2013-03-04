@@ -155,6 +155,7 @@ void Server::processMessage(ENetEvent& event)
             }
 
             sendInitialPlayerDataFinished(event.peer);
+            sendInitialWorldChunk(event.peer);
             break;
         }
 
@@ -246,6 +247,42 @@ void Server::sendInitialPlayerDataFinished(ENetPeer* peer)
     Packet::sendPacket(peer, &message, Packet::FromServerPacketContents::InitialPlayerDataFinishedFromServerPacket, ENET_PACKET_FLAG_RELIABLE);
 }
 
+void Server::sendInitialWorldChunk(ENetPeer* peer)
+{
+    PacketBuf::Chunk message;
+
+    Player* player = m_clients[peer];
+
+    //FIXME: use a nice value, maybe constant or dynamic..constant is easier though
+    // it needs to be bigger than the player's viewport, obviously
+    //NOTE: it covers a 16 block radius. 16 blocks to the left, 16 to the right, 16 to the top, 16 to the bottom = 64
+    uint32_t startX = (player->position().x - 256) / Block::BLOCK_SIZE;
+    uint32_t endX = (player->position().x + 256) / Block::BLOCK_SIZE;
+
+    uint32_t startY = (player->position().y - 256) / Block::BLOCK_SIZE;
+    uint32_t endY = (player->position().y + 256) / Block::BLOCK_SIZE;
+
+    message.set_startx(startX);
+    message.set_endx(endX);
+
+    message.set_starty(startY);
+    message.set_endy(endY);
+
+   Chunk chunk = m_world->createChunk(startX, startY, endX, endY);
+
+   for (int row; row < WORLD_ROWCOUNT; ++row) {
+       for (int column = 0; column < WORLD_COLUMNCOUNT; ++column) {
+
+           uint32_t index = column * WORLD_ROWCOUNT + row;
+           Block& block = chunk.blocks()[index];
+
+           message.add_meshtype(block.meshType);
+           message.add_primitivetype(block.primitiveType);
+           message.add_walltype(block.wallType);
+       }
+   }
+}
+
 Player* Server::createPlayer(const std::string& playerName)
 {
     Player* player = new Player("player1Standing1");
@@ -269,3 +306,4 @@ void Server::sendPlayerMove(Player* player)
 
     Packet::sendPacketBroadcast(m_server, &message, Packet::FromServerPacketContents::PlayerMoveFromServerPacket, ENET_PACKET_FLAG_UNSEQUENCED);
 }
+

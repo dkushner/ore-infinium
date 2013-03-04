@@ -39,13 +39,15 @@
 #include <fstream>
 
 World::World(Player* mainPlayer, Server* server)
-    : m_mainPlayer(mainPlayer),
-      m_server(server)
+  : m_mainPlayer(mainPlayer),
+    m_server(server)
 {
 
     //FIXME:
 //    m_player = new Player("someframe");
 //    m_entities.insert(m_entities.end(), m_player);
+
+    m_blocks.resize(WORLD_ROWCOUNT * WORLD_COLUMNCOUNT);
 
     m_uselessEntity = new Entity("player1Standing1", SpriteSheetRenderer::SpriteSheetType::Character);
     m_uselessEntity->setPosition(2300, 1400);
@@ -76,6 +78,7 @@ World::World(Player* mainPlayer, Server* server)
     if (m_server) {
         loadMap();
     }
+
 
     //FIXME: saveMap();
 
@@ -143,13 +146,13 @@ void World::render(Player* player)
 
     const float radius = 16.0f;
     const float halfRadius = radius * 0.5;
-    const float halfBlockSize = Block::blockSize * 0.5;
+    const float halfBlockSize = Block::BLOCK_SIZE * 0.5;
 
     const glm::ivec2 offset = tileOffset(player);
 
     // NOTE: (Settings::instance()->screenResolutionHeight % Block::blockSize) is what we add so that it is aligned properly to the tile grid, even though the screen is not evenly divisible by such.
-    glm::vec2 crosshairPosition(mouse.x - mouse.x % Block::blockSize + (Settings::instance()->screenResolutionWidth % Block::blockSize) - offset.x + Block::blockSize,
-                                mouse.y - mouse.y % Block::blockSize + (Settings::instance()->screenResolutionHeight % Block::blockSize) - offset.y + Block::blockSize);
+    glm::vec2 crosshairPosition(mouse.x - mouse.x % Block::BLOCK_SIZE + (Settings::instance()->screenResolutionWidth % Block::BLOCK_SIZE) - offset.x + Block::BLOCK_SIZE,
+                                mouse.y - mouse.y % Block::BLOCK_SIZE + (Settings::instance()->screenResolutionHeight % Block::BLOCK_SIZE) - offset.y + Block::BLOCK_SIZE);
 
     //    ALLEGRO_COLOR color = al_map_rgb(255, 0, 0);
     //   al_draw_rectangle(crosshairPosition.x(), crosshairPosition.y(), crosshairPosition.x() + radius, crosshairPosition.y() + radius, color, 1.0f);
@@ -275,8 +278,8 @@ uint8_t World::calculateTileMeshingType(int tileX, int tileY) const
 
 bool World::isBlockSolid(const glm::vec2& vecDest) const
 {
-    const int column = int(std::ceil(vecDest.x) / Block::blockSize);
-    const int row = int(std::ceil(vecDest.y) / Block::blockSize);
+    const int column = int(std::ceil(vecDest.x) / Block::BLOCK_SIZE);
+    const int row = int(std::ceil(vecDest.y) / Block::BLOCK_SIZE);
 
     int index = column * WORLD_ROWCOUNT + row;
     assert(index < WORLD_ROWCOUNT * WORLD_COLUMNCOUNT);
@@ -289,8 +292,8 @@ bool World::isBlockSolid(const glm::vec2& vecDest) const
 
 uint8_t World::getBlockType(const glm::vec2& vecPoint) const
 {
-    const int column = int(std::ceil(vecPoint.x) / Block::blockSize);
-    const int row = int(std::ceil(vecPoint.y) / Block::blockSize);
+    const int column = int(std::ceil(vecPoint.x) / Block::BLOCK_SIZE);
+    const int row = int(std::ceil(vecPoint.y) / Block::BLOCK_SIZE);
 
     int index = column * WORLD_ROWCOUNT + row;
     assert(index < WORLD_ROWCOUNT * WORLD_COLUMNCOUNT);
@@ -373,10 +376,10 @@ void World::performBlockAttack(Player* player)
         return;
     }
 
-    mouse.x /= int(Block::blockSize);
-    mouse.y /= int(Block::blockSize);
+    mouse.x /= int(Block::BLOCK_SIZE);
+    mouse.y /= int(Block::BLOCK_SIZE);
 
-    const int radius = Player::blockPickingRadius / Block::blockSize;
+    const int radius = Player::blockPickingRadius / Block::BLOCK_SIZE;
 
     int attackX = 0 ; //HACK= mouse.x() + (m_view->getCenter().x() - Settings::instance()->screenResolutionWidth * 0.5) / Block::blockSize;
     int attackY = 0; //HACK= mouse.y() + (m_view->getCenter().y() - Settings::instance()->screenResolutionHeight * 0.5) / Block::blockSize;
@@ -387,16 +390,16 @@ void World::performBlockAttack(Player* player)
     //tilesBefore{X,Y} is only at the center of the view though..find the whole screen real estate
     // which is why startRow etc add and subtract half the screen
     //column
-    int tilesBeforeX = playerPosition.x / Block::blockSize;
+    int tilesBeforeX = playerPosition.x / Block::BLOCK_SIZE;
     //row
-    int tilesBeforeY = playerPosition.y / Block::blockSize;
+    int tilesBeforeY = playerPosition.y / Block::BLOCK_SIZE;
 
-    const int startRow = tilesBeforeY - ((Settings::instance()->screenResolutionHeight * 0.5) / Block::blockSize);
-    const int endRow = tilesBeforeY + ((Settings::instance()->screenResolutionHeight * 0.5) / Block::blockSize);
+    const int startRow = tilesBeforeY - ((Settings::instance()->screenResolutionHeight * 0.5) / Block::BLOCK_SIZE);
+    const int endRow = tilesBeforeY + ((Settings::instance()->screenResolutionHeight * 0.5) / Block::BLOCK_SIZE);
 
     //columns are our X value, rows the Y
-    const int startColumn = tilesBeforeX - ((Settings::instance()->screenResolutionWidth * 0.5) / Block::blockSize);
-    const int endColumn = tilesBeforeX + ((Settings::instance()->screenResolutionWidth * 0.5) / Block::blockSize);
+    const int startColumn = tilesBeforeX - ((Settings::instance()->screenResolutionWidth * 0.5) / Block::BLOCK_SIZE);
+    const int endColumn = tilesBeforeX + ((Settings::instance()->screenResolutionWidth * 0.5) / Block::BLOCK_SIZE);
 
     int index = 0;
 
@@ -495,7 +498,7 @@ glm::ivec2 World::tileOffset(Player* player) const
 {
     const glm::vec2 playerPosition = player->position();
     // to get per-pixel smooth scrolling, we get the remainders and pass it as an offset to things that need to know the tile positions
-    const glm::ivec2 ret = glm::ivec2(int(playerPosition.x) & Block::blockSize - 1, int(playerPosition.y) & Block::blockSize - 1);
+    const glm::ivec2 ret = glm::ivec2(int(playerPosition.x) & Block::BLOCK_SIZE - 1, int(playerPosition.y) & Block::BLOCK_SIZE - 1);
     return ret;
 }
 
@@ -583,6 +586,12 @@ void World::saveMap()
 void World::toggleLightRenderingEnabled()
 {
     m_lightRenderer->setRenderingEnabled(!m_lightRenderer->lightRenderingEnabled());
+}
+
+Chunk World::createChunk(uint32_t startX, uint32_t startY, uint32_t endX, uint32_t endY)
+{
+    Chunk chunk(startX, startY, endX, endY, m_blocks);
+    return chunk;
 }
 
 void World::zoomIn()

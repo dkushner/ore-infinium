@@ -60,6 +60,7 @@ private:
     void sendChatMessage(const std::string& message, const std::string& playerName);
     void sendInitialPlayerData(ENetPeer* peer, Player* player);
     void sendInitialPlayerDataFinished(ENetPeer* peer);
+    void sendInitialWorldChunk(ENetPeer* peer);
 
     Player* createPlayer(const std::string& playerName);
 

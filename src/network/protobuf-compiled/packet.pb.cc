@@ -47,6 +47,9 @@ const ::google::protobuf::internal::GeneratedMessageReflection*
 const ::google::protobuf::Descriptor* PlayerMoveFromClient_descriptor_ = NULL;
 const ::google::protobuf::internal::GeneratedMessageReflection*
   PlayerMoveFromClient_reflection_ = NULL;
+const ::google::protobuf::Descriptor* Chunk_descriptor_ = NULL;
+const ::google::protobuf::internal::GeneratedMessageReflection*
+  Chunk_reflection_ = NULL;
 
 }  // namespace
 
@@ -200,6 +203,27 @@ void protobuf_AssignDesc_packet_2eproto() {
       ::google::protobuf::DescriptorPool::generated_pool(),
       ::google::protobuf::MessageFactory::generated_factory(),
       sizeof(PlayerMoveFromClient));
+  Chunk_descriptor_ = file->message_type(9);
+  static const int Chunk_offsets_[7] = {
+    GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(Chunk, startx_),
+    GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(Chunk, endx_),
+    GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(Chunk, starty_),
+    GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(Chunk, endy_),
+    GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(Chunk, meshtype_),
+    GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(Chunk, primitivetype_),
+    GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(Chunk, walltype_),
+  };
+  Chunk_reflection_ =
+    new ::google::protobuf::internal::GeneratedMessageReflection(
+      Chunk_descriptor_,
+      Chunk::default_instance_,
+      Chunk_offsets_,
+      GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(Chunk, _has_bits_[0]),
+      GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(Chunk, _unknown_fields_),
+      -1,
+      ::google::protobuf::DescriptorPool::generated_pool(),
+      ::google::protobuf::MessageFactory::generated_factory(),
+      sizeof(Chunk));
 }
 
 namespace {
@@ -230,6 +254,8 @@ void protobuf_RegisterTypes(const ::std::string&) {
     PlayerMoveFromServer_descriptor_, &PlayerMoveFromServer::default_instance());
   ::google::protobuf::MessageFactory::InternalRegisterGeneratedMessage(
     PlayerMoveFromClient_descriptor_, &PlayerMoveFromClient::default_instance());
+  ::google::protobuf::MessageFactory::InternalRegisterGeneratedMessage(
+    Chunk_descriptor_, &Chunk::default_instance());
 }
 
 }  // namespace
@@ -253,6 +279,8 @@ void protobuf_ShutdownFile_packet_2eproto() {
   delete PlayerMoveFromServer_reflection_;
   delete PlayerMoveFromClient::default_instance_;
   delete PlayerMoveFromClient_reflection_;
+  delete Chunk::default_instance_;
+  delete Chunk_reflection_;
 }
 
 void protobuf_AddDesc_packet_2eproto() {
@@ -275,7 +303,10 @@ void protobuf_AddDesc_packet_2eproto() {
     "Server\022\020\n\010playerID\030\001 \001(\r\">\n\024PlayerMoveFr"
     "omServer\022\020\n\010playerID\030\001 \001(\r\022\t\n\001x\030\002 \001(\002\022\t\n"
     "\001y\030\003 \001(\002\">\n\024PlayerMoveFromClient\022\022\n\ndire"
-    "ctionX\030\001 \001(\005\022\022\n\ndirectionY\030\002 \001(\005", 552);
+    "ctionX\030\001 \001(\005\022\022\n\ndirectionY\030\002 \001(\005\"~\n\005Chun"
+    "k\022\016\n\006startX\030\001 \001(\r\022\014\n\004endX\030\002 \001(\r\022\016\n\006start"
+    "Y\030\003 \001(\r\022\014\n\004endY\030\004 \001(\r\022\020\n\010meshType\030\005 \003(\r\022"
+    "\025\n\rprimitiveType\030\006 \003(\r\022\020\n\010wallType\030\007 \003(\r", 680);
   ::google::protobuf::MessageFactory::InternalRegisterGeneratedFile(
     "packet.proto", &protobuf_RegisterTypes);
   Packet::default_instance_ = new Packet();
@@ -287,6 +318,7 @@ void protobuf_AddDesc_packet_2eproto() {
   PlayerDisconnectedFromServer::default_instance_ = new PlayerDisconnectedFromServer();
   PlayerMoveFromServer::default_instance_ = new PlayerMoveFromServer();
   PlayerMoveFromClient::default_instance_ = new PlayerMoveFromClient();
+  Chunk::default_instance_ = new Chunk();
   Packet::default_instance_->InitAsDefaultInstance();
   ClientInitialConnection::default_instance_->InitAsDefaultInstance();
   ChatMessageFromClient::default_instance_->InitAsDefaultInstance();
@@ -296,6 +328,7 @@ void protobuf_AddDesc_packet_2eproto() {
   PlayerDisconnectedFromServer::default_instance_->InitAsDefaultInstance();
   PlayerMoveFromServer::default_instance_->InitAsDefaultInstance();
   PlayerMoveFromClient::default_instance_->InitAsDefaultInstance();
+  Chunk::default_instance_->InitAsDefaultInstance();
   ::google::protobuf::internal::OnShutdown(&protobuf_ShutdownFile_packet_2eproto);
 }
 
@@ -2559,6 +2592,478 @@ void PlayerMoveFromClient::Swap(PlayerMoveFromClient* other) {
   ::google::protobuf::Metadata metadata;
   metadata.descriptor = PlayerMoveFromClient_descriptor_;
   metadata.reflection = PlayerMoveFromClient_reflection_;
+  return metadata;
+}
+
+
+// ===================================================================
+
+#ifndef _MSC_VER
+const int Chunk::kStartXFieldNumber;
+const int Chunk::kEndXFieldNumber;
+const int Chunk::kStartYFieldNumber;
+const int Chunk::kEndYFieldNumber;
+const int Chunk::kMeshTypeFieldNumber;
+const int Chunk::kPrimitiveTypeFieldNumber;
+const int Chunk::kWallTypeFieldNumber;
+#endif  // !_MSC_VER
+
+Chunk::Chunk()
+  : ::google::protobuf::Message() {
+  SharedCtor();
+}
+
+void Chunk::InitAsDefaultInstance() {
+}
+
+Chunk::Chunk(const Chunk& from)
+  : ::google::protobuf::Message() {
+  SharedCtor();
+  MergeFrom(from);
+}
+
+void Chunk::SharedCtor() {
+  _cached_size_ = 0;
+  startx_ = 0u;
+  endx_ = 0u;
+  starty_ = 0u;
+  endy_ = 0u;
+  ::memset(_has_bits_, 0, sizeof(_has_bits_));
+}
+
+Chunk::~Chunk() {
+  SharedDtor();
+}
+
+void Chunk::SharedDtor() {
+  if (this != default_instance_) {
+  }
+}
+
+void Chunk::SetCachedSize(int size) const {
+  GOOGLE_SAFE_CONCURRENT_WRITES_BEGIN();
+  _cached_size_ = size;
+  GOOGLE_SAFE_CONCURRENT_WRITES_END();
+}
+const ::google::protobuf::Descriptor* Chunk::descriptor() {
+  protobuf_AssignDescriptorsOnce();
+  return Chunk_descriptor_;
+}
+
+const Chunk& Chunk::default_instance() {
+  if (default_instance_ == NULL) protobuf_AddDesc_packet_2eproto();
+  return *default_instance_;
+}
+
+Chunk* Chunk::default_instance_ = NULL;
+
+Chunk* Chunk::New() const {
+  return new Chunk;
+}
+
+void Chunk::Clear() {
+  if (_has_bits_[0 / 32] & (0xffu << (0 % 32))) {
+    startx_ = 0u;
+    endx_ = 0u;
+    starty_ = 0u;
+    endy_ = 0u;
+  }
+  meshtype_.Clear();
+  primitivetype_.Clear();
+  walltype_.Clear();
+  ::memset(_has_bits_, 0, sizeof(_has_bits_));
+  mutable_unknown_fields()->Clear();
+}
+
+bool Chunk::MergePartialFromCodedStream(
+    ::google::protobuf::io::CodedInputStream* input) {
+#define DO_(EXPRESSION) if (!(EXPRESSION)) return false
+  ::google::protobuf::uint32 tag;
+  while ((tag = input->ReadTag()) != 0) {
+    switch (::google::protobuf::internal::WireFormatLite::GetTagFieldNumber(tag)) {
+      // optional uint32 startX = 1;
+      case 1: {
+        if (::google::protobuf::internal::WireFormatLite::GetTagWireType(tag) ==
+            ::google::protobuf::internal::WireFormatLite::WIRETYPE_VARINT) {
+          DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
+                   ::google::protobuf::uint32, ::google::protobuf::internal::WireFormatLite::TYPE_UINT32>(
+                 input, &startx_)));
+          set_has_startx();
+        } else {
+          goto handle_uninterpreted;
+        }
+        if (input->ExpectTag(16)) goto parse_endX;
+        break;
+      }
+
+      // optional uint32 endX = 2;
+      case 2: {
+        if (::google::protobuf::internal::WireFormatLite::GetTagWireType(tag) ==
+            ::google::protobuf::internal::WireFormatLite::WIRETYPE_VARINT) {
+         parse_endX:
+          DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
+                   ::google::protobuf::uint32, ::google::protobuf::internal::WireFormatLite::TYPE_UINT32>(
+                 input, &endx_)));
+          set_has_endx();
+        } else {
+          goto handle_uninterpreted;
+        }
+        if (input->ExpectTag(24)) goto parse_startY;
+        break;
+      }
+
+      // optional uint32 startY = 3;
+      case 3: {
+        if (::google::protobuf::internal::WireFormatLite::GetTagWireType(tag) ==
+            ::google::protobuf::internal::WireFormatLite::WIRETYPE_VARINT) {
+         parse_startY:
+          DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
+                   ::google::protobuf::uint32, ::google::protobuf::internal::WireFormatLite::TYPE_UINT32>(
+                 input, &starty_)));
+          set_has_starty();
+        } else {
+          goto handle_uninterpreted;
+        }
+        if (input->ExpectTag(32)) goto parse_endY;
+        break;
+      }
+
+      // optional uint32 endY = 4;
+      case 4: {
+        if (::google::protobuf::internal::WireFormatLite::GetTagWireType(tag) ==
+            ::google::protobuf::internal::WireFormatLite::WIRETYPE_VARINT) {
+         parse_endY:
+          DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
+                   ::google::protobuf::uint32, ::google::protobuf::internal::WireFormatLite::TYPE_UINT32>(
+                 input, &endy_)));
+          set_has_endy();
+        } else {
+          goto handle_uninterpreted;
+        }
+        if (input->ExpectTag(40)) goto parse_meshType;
+        break;
+      }
+
+      // repeated uint32 meshType = 5;
+      case 5: {
+        if (::google::protobuf::internal::WireFormatLite::GetTagWireType(tag) ==
+            ::google::protobuf::internal::WireFormatLite::WIRETYPE_VARINT) {
+         parse_meshType:
+          DO_((::google::protobuf::internal::WireFormatLite::ReadRepeatedPrimitive<
+                   ::google::protobuf::uint32, ::google::protobuf::internal::WireFormatLite::TYPE_UINT32>(
+                 1, 40, input, this->mutable_meshtype())));
+        } else if (::google::protobuf::internal::WireFormatLite::GetTagWireType(tag)
+                   == ::google::protobuf::internal::WireFormatLite::
+                      WIRETYPE_LENGTH_DELIMITED) {
+          DO_((::google::protobuf::internal::WireFormatLite::ReadPackedPrimitiveNoInline<
+                   ::google::protobuf::uint32, ::google::protobuf::internal::WireFormatLite::TYPE_UINT32>(
+                 input, this->mutable_meshtype())));
+        } else {
+          goto handle_uninterpreted;
+        }
+        if (input->ExpectTag(40)) goto parse_meshType;
+        if (input->ExpectTag(48)) goto parse_primitiveType;
+        break;
+      }
+
+      // repeated uint32 primitiveType = 6;
+      case 6: {
+        if (::google::protobuf::internal::WireFormatLite::GetTagWireType(tag) ==
+            ::google::protobuf::internal::WireFormatLite::WIRETYPE_VARINT) {
+         parse_primitiveType:
+          DO_((::google::protobuf::internal::WireFormatLite::ReadRepeatedPrimitive<
+                   ::google::protobuf::uint32, ::google::protobuf::internal::WireFormatLite::TYPE_UINT32>(
+                 1, 48, input, this->mutable_primitivetype())));
+        } else if (::google::protobuf::internal::WireFormatLite::GetTagWireType(tag)
+                   == ::google::protobuf::internal::WireFormatLite::
+                      WIRETYPE_LENGTH_DELIMITED) {
+          DO_((::google::protobuf::internal::WireFormatLite::ReadPackedPrimitiveNoInline<
+                   ::google::protobuf::uint32, ::google::protobuf::internal::WireFormatLite::TYPE_UINT32>(
+                 input, this->mutable_primitivetype())));
+        } else {
+          goto handle_uninterpreted;
+        }
+        if (input->ExpectTag(48)) goto parse_primitiveType;
+        if (input->ExpectTag(56)) goto parse_wallType;
+        break;
+      }
+
+      // repeated uint32 wallType = 7;
+      case 7: {
+        if (::google::protobuf::internal::WireFormatLite::GetTagWireType(tag) ==
+            ::google::protobuf::internal::WireFormatLite::WIRETYPE_VARINT) {
+         parse_wallType:
+          DO_((::google::protobuf::internal::WireFormatLite::ReadRepeatedPrimitive<
+                   ::google::protobuf::uint32, ::google::protobuf::internal::WireFormatLite::TYPE_UINT32>(
+                 1, 56, input, this->mutable_walltype())));
+        } else if (::google::protobuf::internal::WireFormatLite::GetTagWireType(tag)
+                   == ::google::protobuf::internal::WireFormatLite::
+                      WIRETYPE_LENGTH_DELIMITED) {
+          DO_((::google::protobuf::internal::WireFormatLite::ReadPackedPrimitiveNoInline<
+                   ::google::protobuf::uint32, ::google::protobuf::internal::WireFormatLite::TYPE_UINT32>(
+                 input, this->mutable_walltype())));
+        } else {
+          goto handle_uninterpreted;
+        }
+        if (input->ExpectTag(56)) goto parse_wallType;
+        if (input->ExpectAtEnd()) return true;
+        break;
+      }
+
+      default: {
+      handle_uninterpreted:
+        if (::google::protobuf::internal::WireFormatLite::GetTagWireType(tag) ==
+            ::google::protobuf::internal::WireFormatLite::WIRETYPE_END_GROUP) {
+          return true;
+        }
+        DO_(::google::protobuf::internal::WireFormat::SkipField(
+              input, tag, mutable_unknown_fields()));
+        break;
+      }
+    }
+  }
+  return true;
+#undef DO_
+}
+
+void Chunk::SerializeWithCachedSizes(
+    ::google::protobuf::io::CodedOutputStream* output) const {
+  // optional uint32 startX = 1;
+  if (has_startx()) {
+    ::google::protobuf::internal::WireFormatLite::WriteUInt32(1, this->startx(), output);
+  }
+
+  // optional uint32 endX = 2;
+  if (has_endx()) {
+    ::google::protobuf::internal::WireFormatLite::WriteUInt32(2, this->endx(), output);
+  }
+
+  // optional uint32 startY = 3;
+  if (has_starty()) {
+    ::google::protobuf::internal::WireFormatLite::WriteUInt32(3, this->starty(), output);
+  }
+
+  // optional uint32 endY = 4;
+  if (has_endy()) {
+    ::google::protobuf::internal::WireFormatLite::WriteUInt32(4, this->endy(), output);
+  }
+
+  // repeated uint32 meshType = 5;
+  for (int i = 0; i < this->meshtype_size(); i++) {
+    ::google::protobuf::internal::WireFormatLite::WriteUInt32(
+      5, this->meshtype(i), output);
+  }
+
+  // repeated uint32 primitiveType = 6;
+  for (int i = 0; i < this->primitivetype_size(); i++) {
+    ::google::protobuf::internal::WireFormatLite::WriteUInt32(
+      6, this->primitivetype(i), output);
+  }
+
+  // repeated uint32 wallType = 7;
+  for (int i = 0; i < this->walltype_size(); i++) {
+    ::google::protobuf::internal::WireFormatLite::WriteUInt32(
+      7, this->walltype(i), output);
+  }
+
+  if (!unknown_fields().empty()) {
+    ::google::protobuf::internal::WireFormat::SerializeUnknownFields(
+        unknown_fields(), output);
+  }
+}
+
+::google::protobuf::uint8* Chunk::SerializeWithCachedSizesToArray(
+    ::google::protobuf::uint8* target) const {
+  // optional uint32 startX = 1;
+  if (has_startx()) {
+    target = ::google::protobuf::internal::WireFormatLite::WriteUInt32ToArray(1, this->startx(), target);
+  }
+
+  // optional uint32 endX = 2;
+  if (has_endx()) {
+    target = ::google::protobuf::internal::WireFormatLite::WriteUInt32ToArray(2, this->endx(), target);
+  }
+
+  // optional uint32 startY = 3;
+  if (has_starty()) {
+    target = ::google::protobuf::internal::WireFormatLite::WriteUInt32ToArray(3, this->starty(), target);
+  }
+
+  // optional uint32 endY = 4;
+  if (has_endy()) {
+    target = ::google::protobuf::internal::WireFormatLite::WriteUInt32ToArray(4, this->endy(), target);
+  }
+
+  // repeated uint32 meshType = 5;
+  for (int i = 0; i < this->meshtype_size(); i++) {
+    target = ::google::protobuf::internal::WireFormatLite::
+      WriteUInt32ToArray(5, this->meshtype(i), target);
+  }
+
+  // repeated uint32 primitiveType = 6;
+  for (int i = 0; i < this->primitivetype_size(); i++) {
+    target = ::google::protobuf::internal::WireFormatLite::
+      WriteUInt32ToArray(6, this->primitivetype(i), target);
+  }
+
+  // repeated uint32 wallType = 7;
+  for (int i = 0; i < this->walltype_size(); i++) {
+    target = ::google::protobuf::internal::WireFormatLite::
+      WriteUInt32ToArray(7, this->walltype(i), target);
+  }
+
+  if (!unknown_fields().empty()) {
+    target = ::google::protobuf::internal::WireFormat::SerializeUnknownFieldsToArray(
+        unknown_fields(), target);
+  }
+  return target;
+}
+
+int Chunk::ByteSize() const {
+  int total_size = 0;
+
+  if (_has_bits_[0 / 32] & (0xffu << (0 % 32))) {
+    // optional uint32 startX = 1;
+    if (has_startx()) {
+      total_size += 1 +
+        ::google::protobuf::internal::WireFormatLite::UInt32Size(
+          this->startx());
+    }
+
+    // optional uint32 endX = 2;
+    if (has_endx()) {
+      total_size += 1 +
+        ::google::protobuf::internal::WireFormatLite::UInt32Size(
+          this->endx());
+    }
+
+    // optional uint32 startY = 3;
+    if (has_starty()) {
+      total_size += 1 +
+        ::google::protobuf::internal::WireFormatLite::UInt32Size(
+          this->starty());
+    }
+
+    // optional uint32 endY = 4;
+    if (has_endy()) {
+      total_size += 1 +
+        ::google::protobuf::internal::WireFormatLite::UInt32Size(
+          this->endy());
+    }
+
+  }
+  // repeated uint32 meshType = 5;
+  {
+    int data_size = 0;
+    for (int i = 0; i < this->meshtype_size(); i++) {
+      data_size += ::google::protobuf::internal::WireFormatLite::
+        UInt32Size(this->meshtype(i));
+    }
+    total_size += 1 * this->meshtype_size() + data_size;
+  }
+
+  // repeated uint32 primitiveType = 6;
+  {
+    int data_size = 0;
+    for (int i = 0; i < this->primitivetype_size(); i++) {
+      data_size += ::google::protobuf::internal::WireFormatLite::
+        UInt32Size(this->primitivetype(i));
+    }
+    total_size += 1 * this->primitivetype_size() + data_size;
+  }
+
+  // repeated uint32 wallType = 7;
+  {
+    int data_size = 0;
+    for (int i = 0; i < this->walltype_size(); i++) {
+      data_size += ::google::protobuf::internal::WireFormatLite::
+        UInt32Size(this->walltype(i));
+    }
+    total_size += 1 * this->walltype_size() + data_size;
+  }
+
+  if (!unknown_fields().empty()) {
+    total_size +=
+      ::google::protobuf::internal::WireFormat::ComputeUnknownFieldsSize(
+        unknown_fields());
+  }
+  GOOGLE_SAFE_CONCURRENT_WRITES_BEGIN();
+  _cached_size_ = total_size;
+  GOOGLE_SAFE_CONCURRENT_WRITES_END();
+  return total_size;
+}
+
+void Chunk::MergeFrom(const ::google::protobuf::Message& from) {
+  GOOGLE_CHECK_NE(&from, this);
+  const Chunk* source =
+    ::google::protobuf::internal::dynamic_cast_if_available<const Chunk*>(
+      &from);
+  if (source == NULL) {
+    ::google::protobuf::internal::ReflectionOps::Merge(from, this);
+  } else {
+    MergeFrom(*source);
+  }
+}
+
+void Chunk::MergeFrom(const Chunk& from) {
+  GOOGLE_CHECK_NE(&from, this);
+  meshtype_.MergeFrom(from.meshtype_);
+  primitivetype_.MergeFrom(from.primitivetype_);
+  walltype_.MergeFrom(from.walltype_);
+  if (from._has_bits_[0 / 32] & (0xffu << (0 % 32))) {
+    if (from.has_startx()) {
+      set_startx(from.startx());
+    }
+    if (from.has_endx()) {
+      set_endx(from.endx());
+    }
+    if (from.has_starty()) {
+      set_starty(from.starty());
+    }
+    if (from.has_endy()) {
+      set_endy(from.endy());
+    }
+  }
+  mutable_unknown_fields()->MergeFrom(from.unknown_fields());
+}
+
+void Chunk::CopyFrom(const ::google::protobuf::Message& from) {
+  if (&from == this) return;
+  Clear();
+  MergeFrom(from);
+}
+
+void Chunk::CopyFrom(const Chunk& from) {
+  if (&from == this) return;
+  Clear();
+  MergeFrom(from);
+}
+
+bool Chunk::IsInitialized() const {
+
+  return true;
+}
+
+void Chunk::Swap(Chunk* other) {
+  if (other != this) {
+    std::swap(startx_, other->startx_);
+    std::swap(endx_, other->endx_);
+    std::swap(starty_, other->starty_);
+    std::swap(endy_, other->endy_);
+    meshtype_.Swap(&other->meshtype_);
+    primitivetype_.Swap(&other->primitivetype_);
+    walltype_.Swap(&other->walltype_);
+    std::swap(_has_bits_[0], other->_has_bits_[0]);
+    _unknown_fields_.Swap(&other->_unknown_fields_);
+    std::swap(_cached_size_, other->_cached_size_);
+  }
+}
+
+::google::protobuf::Metadata Chunk::GetMetadata() const {
+  protobuf_AssignDescriptorsOnce();
+  ::google::protobuf::Metadata metadata;
+  metadata.descriptor = Chunk_descriptor_;
+  metadata.reflection = Chunk_reflection_;
   return metadata;
 }
 

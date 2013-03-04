@@ -55,7 +55,8 @@ public:
         /// sent when the server has sent all currently connected players, to a newly-connected client, meaning all future "initial player data" will be considered "new" players
         InitialPlayerDataFinishedFromServerPacket,
         PlayerDisconnectedFromServerPacket,
-        PlayerMoveFromServerPacket
+        PlayerMoveFromServerPacket,
+        ChunkFromServerPacket
     };
 
     enum ConnectionEventType {
