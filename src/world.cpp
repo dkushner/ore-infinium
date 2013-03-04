@@ -37,6 +37,7 @@
 #include <assert.h>
 #include <math.h>
 #include <fstream>
+#include <chrono>
 
 World::World(Player* mainPlayer, Server* server)
   : m_mainPlayer(mainPlayer),
@@ -508,15 +509,11 @@ void World::loadMap()
     Debug::log(Debug::Area::General) << "SIZEOF Block class: " << sizeof(Block);
     Debug::log(Debug::Area::General) << "SIZEOF m_blocks: " << sizeof(m_blocks) / 1e6 << " MiB";
     generateMap();
-
-    //FIXME:
-//    m_player->setPosition(100, 200);
 }
 
 void World::generateMap()
 {
-    //FIXME: use std::chrono
-//    const double startTime = SDL_GetTicks();
+    auto timerStart = std::chrono::high_resolution_clock::now();
 
     std::random_device device;
     std::mt19937 rand(device());
@@ -540,8 +537,10 @@ void World::generateMap()
 
     generateTileMeshes();
 
-//    const double elapsedTime = SDL_GetTicks() - startTime;
-//   Debug::log(Debug::Area::General) << "Time taken for map generation: " << elapsedTime << " Milliseconds";
+    auto timerEnd = std::chrono::high_resolution_clock::now();
+
+    auto timeTaken = std::chrono::duration_cast<std::chrono::milliseconds>(timerEnd - timerStart).count();
+   Debug::log(Debug::Area::General) << "Time taken for map generation: " << timeTaken << " Milliseconds";
 }
 
 void World::saveMap()
