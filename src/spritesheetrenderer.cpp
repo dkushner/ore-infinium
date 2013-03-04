@@ -193,6 +193,8 @@ void SpriteSheetRenderer::renderCharacters()
     int index = 0;
     for (Sprite * sprite: m_characterSprites) {
         auto frameIdentifier = m_spriteSheetCharactersDescription.find(sprite->frameName());
+        Debug::fatal(frameIdentifier != m_spriteSheetCharactersDescription.end(), Debug::Area::Graphics, "sprite sheet character frame description could not be located, name: " + sprite->frameName());
+
         SpriteFrameIdentifier& frame = frameIdentifier->second;
 
         // vertices that will be uploaded.
@@ -307,6 +309,8 @@ void SpriteSheetRenderer::renderEntities()
     int index = 0;
     for (Sprite * sprite: m_entitySprites) {
         auto frameIdentifier = m_spriteSheetEntitiesDescription.find(sprite->frameName());
+        Debug::fatal(frameIdentifier != m_spriteSheetEntitiesDescription.end(), Debug::Area::Graphics, "sprite sheet entity frame description could not be located framename: " + sprite->frameName());
+
         SpriteFrameIdentifier& frame = frameIdentifier->second;
 
         // vertices that will be uploaded.
