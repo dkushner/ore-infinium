@@ -190,15 +190,14 @@ void World::handleEvent(const SDL_Event& event)
 
 void World::update(double elapsedTime)
 {
-    //FIXME:
-//    if (m_mouseLeftHeld) {
-//        performBlockAttack();
-//    }
+    if (m_mouseLeftHeld) {
+        performBlockAttack();
+    }
 
     //    m_sky->update(elapsedTime);
 
     //NOTE: players are not exactly considered entities. they are, but they aren't
-for (Entity * currentEntity : m_entities) {
+    for (Entity * currentEntity : m_entities) {
         currentEntity->update(elapsedTime, this);
         if (m_server) {
             if (currentEntity->dirtyFlags() & Entity::DirtyFlags::PositionDirty) {
@@ -208,7 +207,7 @@ for (Entity * currentEntity : m_entities) {
         }
     }
 
-for (Player * player : m_players) {
+    for (Player * player : m_players) {
         player->update(elapsedTime, this);
 
         if (m_server) {
@@ -348,7 +347,7 @@ void World::calculateAttackPosition()
 
 //FIXME: this function needs a lot of help.
 //so make it so it doesn't iterate over the whole visible screen but just the blockPickingRadius size.
-void World::performBlockAttack(Player* player)
+void World::performBlockAttack()
 {
     /*
      *   const glm::vec2 viewCenter = m_view->getCenter();
@@ -369,8 +368,6 @@ void World::performBlockAttack(Player* player)
 
     glm::ivec2 mouse = mousePosition();
 
-    //FIXME: eventually will need to make this go to the players center
-    // can we divide player pos by half of screen h/w ?
     glm::vec2 center(Settings::instance()->screenResolutionWidth * 0.5, Settings::instance()->screenResolutionHeight * 0.5);
 
     // if the attempted block pick location is out of range, do nothing.
@@ -381,15 +378,18 @@ void World::performBlockAttack(Player* player)
         return;
     }
 
-    mouse.x /= int(Block::BLOCK_SIZE);
-    mouse.y /= int(Block::BLOCK_SIZE);
+    glm::ivec2 transformedMouse = glm::ivec2(floor((mousePosition().x/2 + m_mainPlayer->position().x) / Block::BLOCK_SIZE), floor((mousePosition().y/2 + m_mainPlayer->position().y) / Block::BLOCK_SIZE));
+    Debug::log() << "attempting to strike block: " << transformedMouse.x << " y: " << transformedMouse.y;
 
     const int radius = Player::blockPickingRadius / Block::BLOCK_SIZE;
 
-    int attackX = 0 ; //HACK= mouse.x() + (m_view->getCenter().x() - Settings::instance()->screenResolutionWidth * 0.5) / Block::blockSize;
-    int attackY = 0; //HACK= mouse.y() + (m_view->getCenter().y() - Settings::instance()->screenResolutionHeight * 0.5) / Block::blockSize;
+    int attackX = transformedMouse.x;
+    //mouse.x + (m_mainPlayer->position().x - Settings::instance()->screenResolutionWidth * 0.5) / Block::BLOCK_SIZE;
+    int attackY = transformedMouse.y;
+    //mouse.y + (m_mainPlayer->position().y - Settings::instance()->screenResolutionHeight * 0.5) / Block::BLOCK_SIZE;
+    Debug::log() << "attempting to strike block index: " << attackX << " y: " << attackY;
 
-    const glm::vec2 playerPosition = player->position();
+    const glm::vec2 playerPosition = m_mainPlayer->position();
 
     //consider block map as starting at player pos == 0,0 and going down and to the right-ward
     //tilesBefore{X,Y} is only at the center of the view though..find the whole screen real estate

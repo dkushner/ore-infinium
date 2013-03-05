@@ -116,7 +116,7 @@ private:
 
     void calculateAttackPosition();
 
-    void performBlockAttack(Player* player);
+    void performBlockAttack();
 
     void saveMap();
 

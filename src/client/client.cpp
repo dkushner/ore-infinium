@@ -230,7 +230,6 @@ void Client::poll()
         break;
         }
     }
-
 }
 
 void Client::render(double elapsedTime)
@@ -350,6 +349,8 @@ void Client::handleInputEvents()
 
 void Client::handlePlayerInput(SDL_Event& event)
 {
+    m_world->handleEvent(event);
+
     int32_t originalX = m_playerInputDirectionX;
     int32_t originalY = m_playerInputDirectionY;
 
@@ -615,7 +616,6 @@ void Client::receivePlayerMove(std::stringstream* ss)
 
 void Client::receiveChunk(std::stringstream* ss)
 {
-    Debug::log(Debug::Area::NetworkClient) << "receiving chunk...";
     PacketBuf::Chunk message;
     Packet::deserialize(ss, &message);
 
@@ -637,4 +637,6 @@ void Client::receiveChunk(std::stringstream* ss)
     Chunk chunk(message.startx(), message.starty(), message.endx(), message.endy(), blocks);
 
     m_world->loadChunk(&chunk);
+
+    Debug::log(Debug::Area::NetworkClient) << "received chunk";
 }
