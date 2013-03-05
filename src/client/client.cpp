@@ -271,7 +271,7 @@ void Client::handleInputEvents()
 
         m_gui->handleEvent(event);
 
-        if (m_mainPlayer && m_peer && m_connected) {
+        if (m_mainPlayer && m_peer && m_connected && m_gui->inputDemanded() == false) {
             handlePlayerInput(event);
         }
 
