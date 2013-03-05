@@ -170,7 +170,7 @@ void World::render(Player* player)
 void World::update(double elapsedTime)
 {
     if (m_mouseLeftHeld) {
-        performBlockAttack();
+//FIXME:        performBlockAttack();
     }
 
     //    m_sky->update(elapsedTime);
@@ -218,13 +218,6 @@ void World::update(double elapsedTime)
     }
 
     //calculateAttackPosition();
-}
-
-glm::ivec2 World::mousePosition() const
-{
-    int x; int y;
-    SDL_GetMouseState(&x, &y);
-    return glm::ivec2(x, y);
 }
 
 void World::generateTileMeshes()
@@ -329,9 +322,16 @@ void World::setBlockToAttack(int32_t column, int32_t row)
             m_client->sendPlayerMousePosition(column, row);
 }
 
+glm::ivec2 World::mousePosition() const
+{
+    int x; int y;
+    SDL_GetMouseState(&x, &y);
+    return glm::ivec2(x, y);
+}
+
 //FIXME: this function needs a lot of help.
 //so make it so it doesn't iterate over the whole visible screen but just the blockPickingRadius size.
-void World::performBlockAttack()
+void World::performBlockAttack(Player* player)
 {
     /*
      *   const glm::vec2 viewCenter = m_view->getCenter();
@@ -350,7 +350,7 @@ void World::performBlockAttack()
      *   const int endColumn = (m_player->position().x / Block::blockSize) + radius;
      */
 
-    glm::ivec2 mouse = mousePosition();
+    glm::ivec2 mouse = player->mousePosition();
 
     glm::vec2 center(Settings::instance()->screenResolutionWidth * 0.5, Settings::instance()->screenResolutionHeight * 0.5);
 
@@ -363,7 +363,7 @@ void World::performBlockAttack()
         return;
     }
 
-    glm::ivec2 transformedMouse = glm::ivec2(floor((mousePosition().x/2 + m_mainPlayer->position().x) / Block::BLOCK_SIZE), floor((mousePosition().y/2 + m_mainPlayer->position().y) / Block::BLOCK_SIZE));
+    glm::ivec2 transformedMouse = glm::ivec2(floor((mouse.x/2 + m_mainPlayer->position().x) / Block::BLOCK_SIZE), floor((mouse.y/2 + m_mainPlayer->position().y) / Block::BLOCK_SIZE));
     Debug::log() << "attempting to strike block: " << transformedMouse.x << " y: " << transformedMouse.y;
 
     const int radius = Player::blockPickingRadius / Block::BLOCK_SIZE;

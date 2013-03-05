@@ -42,6 +42,12 @@ public:
     uint32_t playerID() const;
 
     /**
+     * Server side only, to asociate and keep track of each player's (clients) mouse position
+     */
+    void setMousePosition(int32_t x, int32_t y) { m_mousePosition = glm::ivec2(x, y); }
+    glm::ivec2 mousePosition() { return m_mousePosition; }
+
+    /**
      * Accepts player input result, which is a vector from -1 to 1 indicating
      * direction, not magnitude.
      *
@@ -73,6 +79,8 @@ private:
      * (allowing name changes seems likemore of a problem than a solution to anything.)
      */
     std::string m_name;
+
+    glm::ivec2 m_mousePosition;
 
     uint16_t m_ping = 0;
 };

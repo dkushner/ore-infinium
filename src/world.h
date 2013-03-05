@@ -100,6 +100,9 @@ public:
     //game.cpp calls into this each tick, which this descends downward into each entity
 private:
 
+    /**
+     * NOTE: CLIENT ONLY
+     */
     glm::ivec2 mousePosition() const;
 
     /**
@@ -117,7 +120,7 @@ private:
 
     void calculateAttackPosition();
 
-    void performBlockAttack();
+    void performBlockAttack(Player* player);
 
     void setBlockToAttack(int32_t x, int32_t y);
 
