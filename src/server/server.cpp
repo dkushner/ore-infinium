@@ -226,7 +226,9 @@ void Server::receivePlayerMouseState(std::stringstream* ss, Player* player)
     PacketBuf::PlayerMouseStateFromClient message;
     Packet::deserialize(ss, &message);
 
-    Debug::log() << "player mouse pos: x: " << message.x() << " y : " << message.y() << " left held: " << message.leftbuttonheld() << " right held: " << message.rightbuttonheld();
+    player->setMouseLeftButtonHeld(message.leftbuttonheld());
+    player->setMouseRightButtonHeld(message.rightbuttonheld());
+    player->setMousePosition(message.x(), message.y());
 }
 
 void Server::sendChatMessage(const std::string& message, const std::string& playerName)
