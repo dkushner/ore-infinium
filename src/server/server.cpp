@@ -153,7 +153,7 @@ void Server::processMessage(ENetEvent& event)
             }
 
             sendInitialPlayerDataFinished(event.peer);
-            sendInitialWorldChunk(event.peer);
+//            sendInitialWorldChunk(event.peer);
             break;
         }
 
@@ -259,11 +259,17 @@ void Server::sendInitialPlayerDataFinished(ENetPeer* peer)
     Packet::sendPacket(peer, &message, Packet::FromServerPacketContents::InitialPlayerDataFinishedFromServerPacket, ENET_PACKET_FLAG_RELIABLE);
 }
 
-void Server::sendInitialWorldChunk(ENetPeer* peer)
+void Server::sendInitialWorldChunkHACK(Player* player)
+{
+    sendInitialWorldChunk(player);
+}
+
+
+void Server::sendInitialWorldChunk(Player* player)//HACK: ENetPeer* peer)
 {
     PacketBuf::Chunk message;
 
-    Player* player = m_clients[peer];
+//    Player* player = player; //FIXME:: HACK HOLY FUCK BATMAN m_clients[peer];
 
     //FIXME: use a nice value, maybe constant or dynamic..constant is easier though
     // it needs to be bigger than the player's viewport, obviously
@@ -294,7 +300,9 @@ void Server::sendInitialWorldChunk(ENetPeer* peer)
        }
    }
 
-    Packet::sendPacket(peer, &message, Packet::FromServerPacketContents::ChunkFromServerPacket, ENET_PACKET_FLAG_RELIABLE);
+   //FIXME: HACK
+//    Packet::sendPacket(peer, &message, Packet::FromServerPacketContents::ChunkFromServerPacket, ENET_PACKET_FLAG_RELIABLE);
+    Packet::sendPacketBroadcast(m_server, &message, Packet::FromServerPacketContents::ChunkFromServerPacket, ENET_PACKET_FLAG_RELIABLE);
 }
 
 void Server::sendWorldChunk(Chunk* chunk)

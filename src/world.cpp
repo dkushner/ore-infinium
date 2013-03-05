@@ -407,9 +407,10 @@ void World::performBlockAttack(Player* player)
         }
     }
 
-    Chunk chunk(startColumn, startRow, endColumn, endRow, blocks);
-    m_server->sendWorldChunk(&chunk);
+//    Chunk chunk(startColumn, startRow, endColumn, endRow, blocks);
+//    m_server->sendWorldChunk(&chunk);
 
+m_server->sendInitialWorldChunkHACK(player);
     Debug::log(Debug::Area::NetworkServer) << "ERROR: " << " no block found to attack?" << "\n";
 }
 
