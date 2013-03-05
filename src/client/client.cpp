@@ -640,6 +640,7 @@ void Client::receiveChunk(std::stringstream* ss)
     int index = 0;
     for (int row = message.starty(); row < message.endy(); ++row) {
         for (int column = message.startx(); column < message.endx(); ++column) {
+            Debug::log() << "receiving chunk, client";
             Block block;
             block.meshType = message.meshtype(index);
             block.primitiveType = message.primitivetype(index);

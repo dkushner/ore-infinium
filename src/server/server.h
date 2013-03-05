@@ -49,7 +49,7 @@ public:
     /**
      * Broadcast a chunk change.
      */
-    void sendWorldChunk(const Chunk& chunk);
+    void sendWorldChunk(Chunk* chunk);
 
 private:
     /**

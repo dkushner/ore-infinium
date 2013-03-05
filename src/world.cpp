@@ -169,10 +169,12 @@ void World::render(Player* player)
 
 void World::update(double elapsedTime)
 {
-    if (m_mouseLeftHeld) {
+    if (m_server) {
         for (auto* player : m_players) {
             //TODO: HANDLE INVENTORY AND TAKE THAT INTO ACCOUNT
-            performBlockAttack(player);
+            if (player->mouseLeftButtonHeld()) {
+                performBlockAttack(player);
+            }
         }
     }
 
@@ -400,7 +402,7 @@ void World::performBlockAttack(Player* player)
                 std::vector<Block> blocks;
                 blocks.push_back(m_blocks[index]);
                 Chunk chunk(column, row, column, row, blocks);
-                m_server->sendWorldChunk(chunk);
+                m_server->sendWorldChunk(&chunk);
                 return;
             }
         }

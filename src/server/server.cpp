@@ -297,17 +297,17 @@ void Server::sendInitialWorldChunk(ENetPeer* peer)
     Packet::sendPacket(peer, &message, Packet::FromServerPacketContents::ChunkFromServerPacket, ENET_PACKET_FLAG_RELIABLE);
 }
 
-void Server::sendWorldChunk(const Chunk& chunk)
+void Server::sendWorldChunk(Chunk* chunk)
 {
     PacketBuf::Chunk message;
 
-    message.set_startx(chunk.startX());
-    message.set_endx(chunk.endX());
+    message.set_startx(chunk->startX());
+    message.set_endx(chunk->endX());
 
-    message.set_starty(chunk.startY());
-    message.set_endy(chunk.endY());
+    message.set_starty(chunk->startY());
+    message.set_endy(chunk->endY());
 
-    for (auto& block : chunk.blocks()) {
+    for (auto& block : chunk->blocks()) {
         message.add_meshtype(block.meshType);
         message.add_primitivetype(block.primitiveType);
         message.add_walltype(block.wallType);
