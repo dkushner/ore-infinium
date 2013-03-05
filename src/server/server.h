@@ -26,6 +26,7 @@
 
 class World;
 class Player;
+class Chunk;
 
 class Server
 {
@@ -45,6 +46,11 @@ public:
      */
     void sendPlayerMove(Player* player);
 
+    /**
+     * Broadcast a chunk change.
+     */
+    void sendWorldChunk(const Chunk& chunk);
+
 private:
     /**
      * If the client validated successfully, also creates a player and appends client and player
@@ -62,6 +68,7 @@ private:
     void sendInitialPlayerData(ENetPeer* peer, Player* player);
     void sendInitialPlayerDataFinished(ENetPeer* peer);
     void sendInitialWorldChunk(ENetPeer* peer);
+
 
     Player* createPlayer(const std::string& playerName);
 

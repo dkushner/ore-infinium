@@ -26,6 +26,7 @@
 #include "src/debug.h"
 #include <src/camera.h>
 #include <src/world.h>
+#include <src/chunk.h>
 #include "src/../config.h"
 
 #include <google/protobuf/stubs/common.h>
@@ -294,6 +295,25 @@ void Server::sendInitialWorldChunk(ENetPeer* peer)
    }
 
     Packet::sendPacket(peer, &message, Packet::FromServerPacketContents::ChunkFromServerPacket, ENET_PACKET_FLAG_RELIABLE);
+}
+
+void Server::sendWorldChunk(const Chunk& chunk)
+{
+    PacketBuf::Chunk message;
+
+    message.set_startx(chunk.startX());
+    message.set_endx(chunk.endX());
+
+    message.set_starty(chunk.startY());
+    message.set_endy(chunk.endY());
+
+    for (auto& block : chunk.blocks()) {
+        message.add_meshtype(block.meshType);
+        message.add_primitivetype(block.primitiveType);
+        message.add_walltype(block.wallType);
+    }
+
+    Packet::sendPacketBroadcast(m_server, &message, Packet::FromServerPacketContents::ChunkFromServerPacket, ENET_PACKET_FLAG_RELIABLE);
 }
 
 Player* Server::createPlayer(const std::string& playerName)

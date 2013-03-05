@@ -118,8 +118,6 @@ private:
 
     void performBlockAttack(Player* player);
 
-    void setBlockToAttack(int32_t x, int32_t y);
-
     void saveMap();
 
     glm::ivec2 tileOffset(Player* player) const;

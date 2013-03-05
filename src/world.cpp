@@ -170,7 +170,10 @@ void World::render(Player* player)
 void World::update(double elapsedTime)
 {
     if (m_mouseLeftHeld) {
-//FIXME:        performBlockAttack();
+        for (auto* player : m_players) {
+            //TODO: HANDLE INVENTORY AND TAKE THAT INTO ACCOUNT
+            performBlockAttack(player);
+        }
     }
 
     //    m_sky->update(elapsedTime);
@@ -317,10 +320,6 @@ void World::calculateAttackPosition()
      */
 }
 
-void World::setBlockToAttack(int32_t column, int32_t row)
-{
-}
-
 glm::ivec2 World::mousePosition() const
 {
     int x; int y;
@@ -358,7 +357,6 @@ void World::performBlockAttack(Player* player)
             mouse.x > center.x + Player::blockPickingRadius ||
             mouse.y < center.y - Player::blockPickingRadius ||
             mouse.y > center.y + Player::blockPickingRadius) {
-        setBlockToAttack(-1, -1);
         return;
     }
 
@@ -397,13 +395,18 @@ void World::performBlockAttack(Player* player)
             if (row == attackY && column == attackX) {
                 index = column * WORLD_ROWCOUNT + row;
                 assert(index < WORLD_ROWCOUNT * WORLD_COLUMNCOUNT);
-                setBlockToAttack(column, row);
+                m_blocks[index].primitiveType = 0;
+
+                std::vector<Block> blocks;
+                blocks.push_back(m_blocks[index]);
+                Chunk chunk(column, row, column, row, blocks);
+                m_server->sendWorldChunk(chunk);
                 return;
             }
         }
     }
 
-    std::cout << "ERROR: " << " no block found to attack?" << "\n";
+    Debug::log(Debug::Area::NetworkServer) << "ERROR: " << " no block found to attack?" << "\n";
 }
 
 glm::ivec2 World::tileOffset(Player* player) const
