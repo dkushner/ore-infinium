@@ -255,12 +255,12 @@ void Server::sendInitialWorldChunk(ENetPeer* peer)
 
     //FIXME: use a nice value, maybe constant or dynamic..constant is easier though
     // it needs to be bigger than the player's viewport, obviously
-    //NOTE: it covers a 16 block radius. 16 blocks to the left, 16 to the right, 16 to the top, 16 to the bottom = 64
-    uint32_t startX = (player->position().x - 256) / Block::BLOCK_SIZE;
-    uint32_t endX = (player->position().x + 256) / Block::BLOCK_SIZE;
+    //NOTE: divide the value by block size, then get range between left and right and that's how many blocks we are sending
+    uint32_t startX = (player->position().x - 1024) / Block::BLOCK_SIZE;
+    uint32_t endX = (player->position().x + 1024) / Block::BLOCK_SIZE;
 
-    uint32_t startY = (player->position().y - 256) / Block::BLOCK_SIZE;
-    uint32_t endY = (player->position().y + 256) / Block::BLOCK_SIZE;
+    uint32_t startY = (player->position().y - 1024) / Block::BLOCK_SIZE;
+    uint32_t endY = (player->position().y + 1024) / Block::BLOCK_SIZE;
 
     message.set_startx(startX);
     message.set_endx(endX);
