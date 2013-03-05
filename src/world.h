@@ -44,10 +44,6 @@ static constexpr unsigned short WORLD_ROWCOUNT = 8400;
 //width
 static constexpr unsigned short WORLD_COLUMNCOUNT = 2400;
 
-enum MouseButton {
-    Left = 1
-};
-
 /*
  e.g. [ ] [ ] [ ] [ ] [ ]  ... 8400
         [ ] [ ] [ ] [ ] [ ]  ... 8400

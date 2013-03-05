@@ -47,9 +47,9 @@ const ::google::protobuf::internal::GeneratedMessageReflection*
 const ::google::protobuf::Descriptor* PlayerMoveFromClient_descriptor_ = NULL;
 const ::google::protobuf::internal::GeneratedMessageReflection*
   PlayerMoveFromClient_reflection_ = NULL;
-const ::google::protobuf::Descriptor* PlayerMousePositionFromClient_descriptor_ = NULL;
+const ::google::protobuf::Descriptor* PlayerMouseStateFromClient_descriptor_ = NULL;
 const ::google::protobuf::internal::GeneratedMessageReflection*
-  PlayerMousePositionFromClient_reflection_ = NULL;
+  PlayerMouseStateFromClient_reflection_ = NULL;
 const ::google::protobuf::Descriptor* PlayerBlockPickRequestFromClient_descriptor_ = NULL;
 const ::google::protobuf::internal::GeneratedMessageReflection*
   PlayerBlockPickRequestFromClient_reflection_ = NULL;
@@ -209,22 +209,24 @@ void protobuf_AssignDesc_packet_2eproto() {
       ::google::protobuf::DescriptorPool::generated_pool(),
       ::google::protobuf::MessageFactory::generated_factory(),
       sizeof(PlayerMoveFromClient));
-  PlayerMousePositionFromClient_descriptor_ = file->message_type(9);
-  static const int PlayerMousePositionFromClient_offsets_[2] = {
-    GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(PlayerMousePositionFromClient, x_),
-    GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(PlayerMousePositionFromClient, y_),
+  PlayerMouseStateFromClient_descriptor_ = file->message_type(9);
+  static const int PlayerMouseStateFromClient_offsets_[4] = {
+    GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(PlayerMouseStateFromClient, x_),
+    GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(PlayerMouseStateFromClient, y_),
+    GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(PlayerMouseStateFromClient, leftbuttonheld_),
+    GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(PlayerMouseStateFromClient, rightbuttonheld_),
   };
-  PlayerMousePositionFromClient_reflection_ =
+  PlayerMouseStateFromClient_reflection_ =
     new ::google::protobuf::internal::GeneratedMessageReflection(
-      PlayerMousePositionFromClient_descriptor_,
-      PlayerMousePositionFromClient::default_instance_,
-      PlayerMousePositionFromClient_offsets_,
-      GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(PlayerMousePositionFromClient, _has_bits_[0]),
-      GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(PlayerMousePositionFromClient, _unknown_fields_),
+      PlayerMouseStateFromClient_descriptor_,
+      PlayerMouseStateFromClient::default_instance_,
+      PlayerMouseStateFromClient_offsets_,
+      GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(PlayerMouseStateFromClient, _has_bits_[0]),
+      GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(PlayerMouseStateFromClient, _unknown_fields_),
       -1,
       ::google::protobuf::DescriptorPool::generated_pool(),
       ::google::protobuf::MessageFactory::generated_factory(),
-      sizeof(PlayerMousePositionFromClient));
+      sizeof(PlayerMouseStateFromClient));
   PlayerBlockPickRequestFromClient_descriptor_ = file->message_type(10);
   static const int PlayerBlockPickRequestFromClient_offsets_[2] = {
     GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(PlayerBlockPickRequestFromClient, x_),
@@ -293,7 +295,7 @@ void protobuf_RegisterTypes(const ::std::string&) {
   ::google::protobuf::MessageFactory::InternalRegisterGeneratedMessage(
     PlayerMoveFromClient_descriptor_, &PlayerMoveFromClient::default_instance());
   ::google::protobuf::MessageFactory::InternalRegisterGeneratedMessage(
-    PlayerMousePositionFromClient_descriptor_, &PlayerMousePositionFromClient::default_instance());
+    PlayerMouseStateFromClient_descriptor_, &PlayerMouseStateFromClient::default_instance());
   ::google::protobuf::MessageFactory::InternalRegisterGeneratedMessage(
     PlayerBlockPickRequestFromClient_descriptor_, &PlayerBlockPickRequestFromClient::default_instance());
   ::google::protobuf::MessageFactory::InternalRegisterGeneratedMessage(
@@ -321,8 +323,8 @@ void protobuf_ShutdownFile_packet_2eproto() {
   delete PlayerMoveFromServer_reflection_;
   delete PlayerMoveFromClient::default_instance_;
   delete PlayerMoveFromClient_reflection_;
-  delete PlayerMousePositionFromClient::default_instance_;
-  delete PlayerMousePositionFromClient_reflection_;
+  delete PlayerMouseStateFromClient::default_instance_;
+  delete PlayerMouseStateFromClient_reflection_;
   delete PlayerBlockPickRequestFromClient::default_instance_;
   delete PlayerBlockPickRequestFromClient_reflection_;
   delete Chunk::default_instance_;
@@ -349,13 +351,14 @@ void protobuf_AddDesc_packet_2eproto() {
     "Server\022\020\n\010playerID\030\001 \001(\r\">\n\024PlayerMoveFr"
     "omServer\022\020\n\010playerID\030\001 \001(\r\022\t\n\001x\030\002 \001(\002\022\t\n"
     "\001y\030\003 \001(\002\">\n\024PlayerMoveFromClient\022\022\n\ndire"
-    "ctionX\030\001 \001(\005\022\022\n\ndirectionY\030\002 \001(\005\"5\n\035Play"
-    "erMousePositionFromClient\022\t\n\001x\030\001 \001(\r\022\t\n\001"
-    "y\030\002 \001(\r\"8\n PlayerBlockPickRequestFromCli"
-    "ent\022\t\n\001x\030\001 \001(\r\022\t\n\001y\030\002 \001(\r\"~\n\005Chunk\022\016\n\006st"
-    "artX\030\001 \001(\r\022\014\n\004endX\030\002 \001(\r\022\016\n\006startY\030\003 \001(\r"
-    "\022\014\n\004endY\030\004 \001(\r\022\020\n\010meshType\030\005 \003(\r\022\025\n\rprim"
-    "itiveType\030\006 \003(\r\022\020\n\010wallType\030\007 \003(\r", 793);
+    "ctionX\030\001 \001(\005\022\022\n\ndirectionY\030\002 \001(\005\"c\n\032Play"
+    "erMouseStateFromClient\022\t\n\001x\030\001 \001(\r\022\t\n\001y\030\002"
+    " \001(\r\022\026\n\016leftButtonHeld\030\003 \001(\010\022\027\n\017rightBut"
+    "tonHeld\030\004 \001(\010\"8\n PlayerBlockPickRequestF"
+    "romClient\022\t\n\001x\030\001 \001(\r\022\t\n\001y\030\002 \001(\r\"~\n\005Chunk"
+    "\022\016\n\006startX\030\001 \001(\r\022\014\n\004endX\030\002 \001(\r\022\016\n\006startY"
+    "\030\003 \001(\r\022\014\n\004endY\030\004 \001(\r\022\020\n\010meshType\030\005 \003(\r\022\025"
+    "\n\rprimitiveType\030\006 \003(\r\022\020\n\010wallType\030\007 \003(\r", 839);
   ::google::protobuf::MessageFactory::InternalRegisterGeneratedFile(
     "packet.proto", &protobuf_RegisterTypes);
   Packet::default_instance_ = new Packet();
@@ -367,7 +370,7 @@ void protobuf_AddDesc_packet_2eproto() {
   PlayerDisconnectedFromServer::default_instance_ = new PlayerDisconnectedFromServer();
   PlayerMoveFromServer::default_instance_ = new PlayerMoveFromServer();
   PlayerMoveFromClient::default_instance_ = new PlayerMoveFromClient();
-  PlayerMousePositionFromClient::default_instance_ = new PlayerMousePositionFromClient();
+  PlayerMouseStateFromClient::default_instance_ = new PlayerMouseStateFromClient();
   PlayerBlockPickRequestFromClient::default_instance_ = new PlayerBlockPickRequestFromClient();
   Chunk::default_instance_ = new Chunk();
   Packet::default_instance_->InitAsDefaultInstance();
@@ -379,7 +382,7 @@ void protobuf_AddDesc_packet_2eproto() {
   PlayerDisconnectedFromServer::default_instance_->InitAsDefaultInstance();
   PlayerMoveFromServer::default_instance_->InitAsDefaultInstance();
   PlayerMoveFromClient::default_instance_->InitAsDefaultInstance();
-  PlayerMousePositionFromClient::default_instance_->InitAsDefaultInstance();
+  PlayerMouseStateFromClient::default_instance_->InitAsDefaultInstance();
   PlayerBlockPickRequestFromClient::default_instance_->InitAsDefaultInstance();
   Chunk::default_instance_->InitAsDefaultInstance();
   ::google::protobuf::internal::OnShutdown(&protobuf_ShutdownFile_packet_2eproto);
@@ -2652,71 +2655,77 @@ void PlayerMoveFromClient::Swap(PlayerMoveFromClient* other) {
 // ===================================================================
 
 #ifndef _MSC_VER
-const int PlayerMousePositionFromClient::kXFieldNumber;
-const int PlayerMousePositionFromClient::kYFieldNumber;
+const int PlayerMouseStateFromClient::kXFieldNumber;
+const int PlayerMouseStateFromClient::kYFieldNumber;
+const int PlayerMouseStateFromClient::kLeftButtonHeldFieldNumber;
+const int PlayerMouseStateFromClient::kRightButtonHeldFieldNumber;
 #endif  // !_MSC_VER
 
-PlayerMousePositionFromClient::PlayerMousePositionFromClient()
+PlayerMouseStateFromClient::PlayerMouseStateFromClient()
   : ::google::protobuf::Message() {
   SharedCtor();
 }
 
-void PlayerMousePositionFromClient::InitAsDefaultInstance() {
+void PlayerMouseStateFromClient::InitAsDefaultInstance() {
 }
 
-PlayerMousePositionFromClient::PlayerMousePositionFromClient(const PlayerMousePositionFromClient& from)
+PlayerMouseStateFromClient::PlayerMouseStateFromClient(const PlayerMouseStateFromClient& from)
   : ::google::protobuf::Message() {
   SharedCtor();
   MergeFrom(from);
 }
 
-void PlayerMousePositionFromClient::SharedCtor() {
+void PlayerMouseStateFromClient::SharedCtor() {
   _cached_size_ = 0;
   x_ = 0u;
   y_ = 0u;
+  leftbuttonheld_ = false;
+  rightbuttonheld_ = false;
   ::memset(_has_bits_, 0, sizeof(_has_bits_));
 }
 
-PlayerMousePositionFromClient::~PlayerMousePositionFromClient() {
+PlayerMouseStateFromClient::~PlayerMouseStateFromClient() {
   SharedDtor();
 }
 
-void PlayerMousePositionFromClient::SharedDtor() {
+void PlayerMouseStateFromClient::SharedDtor() {
   if (this != default_instance_) {
   }
 }
 
-void PlayerMousePositionFromClient::SetCachedSize(int size) const {
+void PlayerMouseStateFromClient::SetCachedSize(int size) const {
   GOOGLE_SAFE_CONCURRENT_WRITES_BEGIN();
   _cached_size_ = size;
   GOOGLE_SAFE_CONCURRENT_WRITES_END();
 }
-const ::google::protobuf::Descriptor* PlayerMousePositionFromClient::descriptor() {
+const ::google::protobuf::Descriptor* PlayerMouseStateFromClient::descriptor() {
   protobuf_AssignDescriptorsOnce();
-  return PlayerMousePositionFromClient_descriptor_;
+  return PlayerMouseStateFromClient_descriptor_;
 }
 
-const PlayerMousePositionFromClient& PlayerMousePositionFromClient::default_instance() {
+const PlayerMouseStateFromClient& PlayerMouseStateFromClient::default_instance() {
   if (default_instance_ == NULL) protobuf_AddDesc_packet_2eproto();
   return *default_instance_;
 }
 
-PlayerMousePositionFromClient* PlayerMousePositionFromClient::default_instance_ = NULL;
+PlayerMouseStateFromClient* PlayerMouseStateFromClient::default_instance_ = NULL;
 
-PlayerMousePositionFromClient* PlayerMousePositionFromClient::New() const {
-  return new PlayerMousePositionFromClient;
+PlayerMouseStateFromClient* PlayerMouseStateFromClient::New() const {
+  return new PlayerMouseStateFromClient;
 }
 
-void PlayerMousePositionFromClient::Clear() {
+void PlayerMouseStateFromClient::Clear() {
   if (_has_bits_[0 / 32] & (0xffu << (0 % 32))) {
     x_ = 0u;
     y_ = 0u;
+    leftbuttonheld_ = false;
+    rightbuttonheld_ = false;
   }
   ::memset(_has_bits_, 0, sizeof(_has_bits_));
   mutable_unknown_fields()->Clear();
 }
 
-bool PlayerMousePositionFromClient::MergePartialFromCodedStream(
+bool PlayerMouseStateFromClient::MergePartialFromCodedStream(
     ::google::protobuf::io::CodedInputStream* input) {
 #define DO_(EXPRESSION) if (!(EXPRESSION)) return false
   ::google::protobuf::uint32 tag;
@@ -2749,6 +2758,38 @@ bool PlayerMousePositionFromClient::MergePartialFromCodedStream(
         } else {
           goto handle_uninterpreted;
         }
+        if (input->ExpectTag(24)) goto parse_leftButtonHeld;
+        break;
+      }
+
+      // optional bool leftButtonHeld = 3;
+      case 3: {
+        if (::google::protobuf::internal::WireFormatLite::GetTagWireType(tag) ==
+            ::google::protobuf::internal::WireFormatLite::WIRETYPE_VARINT) {
+         parse_leftButtonHeld:
+          DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
+                   bool, ::google::protobuf::internal::WireFormatLite::TYPE_BOOL>(
+                 input, &leftbuttonheld_)));
+          set_has_leftbuttonheld();
+        } else {
+          goto handle_uninterpreted;
+        }
+        if (input->ExpectTag(32)) goto parse_rightButtonHeld;
+        break;
+      }
+
+      // optional bool rightButtonHeld = 4;
+      case 4: {
+        if (::google::protobuf::internal::WireFormatLite::GetTagWireType(tag) ==
+            ::google::protobuf::internal::WireFormatLite::WIRETYPE_VARINT) {
+         parse_rightButtonHeld:
+          DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
+                   bool, ::google::protobuf::internal::WireFormatLite::TYPE_BOOL>(
+                 input, &rightbuttonheld_)));
+          set_has_rightbuttonheld();
+        } else {
+          goto handle_uninterpreted;
+        }
         if (input->ExpectAtEnd()) return true;
         break;
       }
@@ -2769,7 +2810,7 @@ bool PlayerMousePositionFromClient::MergePartialFromCodedStream(
 #undef DO_
 }
 
-void PlayerMousePositionFromClient::SerializeWithCachedSizes(
+void PlayerMouseStateFromClient::SerializeWithCachedSizes(
     ::google::protobuf::io::CodedOutputStream* output) const {
   // optional uint32 x = 1;
   if (has_x()) {
@@ -2781,13 +2822,23 @@ void PlayerMousePositionFromClient::SerializeWithCachedSizes(
     ::google::protobuf::internal::WireFormatLite::WriteUInt32(2, this->y(), output);
   }
 
+  // optional bool leftButtonHeld = 3;
+  if (has_leftbuttonheld()) {
+    ::google::protobuf::internal::WireFormatLite::WriteBool(3, this->leftbuttonheld(), output);
+  }
+
+  // optional bool rightButtonHeld = 4;
+  if (has_rightbuttonheld()) {
+    ::google::protobuf::internal::WireFormatLite::WriteBool(4, this->rightbuttonheld(), output);
+  }
+
   if (!unknown_fields().empty()) {
     ::google::protobuf::internal::WireFormat::SerializeUnknownFields(
         unknown_fields(), output);
   }
 }
 
-::google::protobuf::uint8* PlayerMousePositionFromClient::SerializeWithCachedSizesToArray(
+::google::protobuf::uint8* PlayerMouseStateFromClient::SerializeWithCachedSizesToArray(
     ::google::protobuf::uint8* target) const {
   // optional uint32 x = 1;
   if (has_x()) {
@@ -2799,6 +2850,16 @@ void PlayerMousePositionFromClient::SerializeWithCachedSizes(
     target = ::google::protobuf::internal::WireFormatLite::WriteUInt32ToArray(2, this->y(), target);
   }
 
+  // optional bool leftButtonHeld = 3;
+  if (has_leftbuttonheld()) {
+    target = ::google::protobuf::internal::WireFormatLite::WriteBoolToArray(3, this->leftbuttonheld(), target);
+  }
+
+  // optional bool rightButtonHeld = 4;
+  if (has_rightbuttonheld()) {
+    target = ::google::protobuf::internal::WireFormatLite::WriteBoolToArray(4, this->rightbuttonheld(), target);
+  }
+
   if (!unknown_fields().empty()) {
     target = ::google::protobuf::internal::WireFormat::SerializeUnknownFieldsToArray(
         unknown_fields(), target);
@@ -2806,7 +2867,7 @@ void PlayerMousePositionFromClient::SerializeWithCachedSizes(
   return target;
 }
 
-int PlayerMousePositionFromClient::ByteSize() const {
+int PlayerMouseStateFromClient::ByteSize() const {
   int total_size = 0;
 
   if (_has_bits_[0 / 32] & (0xffu << (0 % 32))) {
@@ -2824,6 +2885,16 @@ int PlayerMousePositionFromClient::ByteSize() const {
           this->y());
     }
 
+    // optional bool leftButtonHeld = 3;
+    if (has_leftbuttonheld()) {
+      total_size += 1 + 1;
+    }
+
+    // optional bool rightButtonHeld = 4;
+    if (has_rightbuttonheld()) {
+      total_size += 1 + 1;
+    }
+
   }
   if (!unknown_fields().empty()) {
     total_size +=
@@ -2836,10 +2907,10 @@ int PlayerMousePositionFromClient::ByteSize() const {
   return total_size;
 }
 
-void PlayerMousePositionFromClient::MergeFrom(const ::google::protobuf::Message& from) {
+void PlayerMouseStateFromClient::MergeFrom(const ::google::protobuf::Message& from) {
   GOOGLE_CHECK_NE(&from, this);
-  const PlayerMousePositionFromClient* source =
-    ::google::protobuf::internal::dynamic_cast_if_available<const PlayerMousePositionFromClient*>(
+  const PlayerMouseStateFromClient* source =
+    ::google::protobuf::internal::dynamic_cast_if_available<const PlayerMouseStateFromClient*>(
       &from);
   if (source == NULL) {
     ::google::protobuf::internal::ReflectionOps::Merge(from, this);
@@ -2848,7 +2919,7 @@ void PlayerMousePositionFromClient::MergeFrom(const ::google::protobuf::Message&
   }
 }
 
-void PlayerMousePositionFromClient::MergeFrom(const PlayerMousePositionFromClient& from) {
+void PlayerMouseStateFromClient::MergeFrom(const PlayerMouseStateFromClient& from) {
   GOOGLE_CHECK_NE(&from, this);
   if (from._has_bits_[0 / 32] & (0xffu << (0 % 32))) {
     if (from.has_x()) {
@@ -2857,42 +2928,50 @@ void PlayerMousePositionFromClient::MergeFrom(const PlayerMousePositionFromClien
     if (from.has_y()) {
       set_y(from.y());
     }
+    if (from.has_leftbuttonheld()) {
+      set_leftbuttonheld(from.leftbuttonheld());
+    }
+    if (from.has_rightbuttonheld()) {
+      set_rightbuttonheld(from.rightbuttonheld());
+    }
   }
   mutable_unknown_fields()->MergeFrom(from.unknown_fields());
 }
 
-void PlayerMousePositionFromClient::CopyFrom(const ::google::protobuf::Message& from) {
+void PlayerMouseStateFromClient::CopyFrom(const ::google::protobuf::Message& from) {
   if (&from == this) return;
   Clear();
   MergeFrom(from);
 }
 
-void PlayerMousePositionFromClient::CopyFrom(const PlayerMousePositionFromClient& from) {
+void PlayerMouseStateFromClient::CopyFrom(const PlayerMouseStateFromClient& from) {
   if (&from == this) return;
   Clear();
   MergeFrom(from);
 }
 
-bool PlayerMousePositionFromClient::IsInitialized() const {
+bool PlayerMouseStateFromClient::IsInitialized() const {
 
   return true;
 }
 
-void PlayerMousePositionFromClient::Swap(PlayerMousePositionFromClient* other) {
+void PlayerMouseStateFromClient::Swap(PlayerMouseStateFromClient* other) {
   if (other != this) {
     std::swap(x_, other->x_);
     std::swap(y_, other->y_);
+    std::swap(leftbuttonheld_, other->leftbuttonheld_);
+    std::swap(rightbuttonheld_, other->rightbuttonheld_);
     std::swap(_has_bits_[0], other->_has_bits_[0]);
     _unknown_fields_.Swap(&other->_unknown_fields_);
     std::swap(_cached_size_, other->_cached_size_);
   }
 }
 
-::google::protobuf::Metadata PlayerMousePositionFromClient::GetMetadata() const {
+::google::protobuf::Metadata PlayerMouseStateFromClient::GetMetadata() const {
   protobuf_AssignDescriptorsOnce();
   ::google::protobuf::Metadata metadata;
-  metadata.descriptor = PlayerMousePositionFromClient_descriptor_;
-  metadata.reflection = PlayerMousePositionFromClient_reflection_;
+  metadata.descriptor = PlayerMouseStateFromClient_descriptor_;
+  metadata.reflection = PlayerMouseStateFromClient_reflection_;
   return metadata;
 }
 

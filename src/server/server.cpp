@@ -175,8 +175,8 @@ void Server::processMessage(ENetEvent& event)
         receivePlayerMove(&ss, m_clients[event.peer]);
         break;
 
-    case Packet::FromClientPacketContents::PlayerMousePositionFromClient:
-        receivePlayerMousePosition(&ss, m_clients[event.peer]);
+    case Packet::FromClientPacketContents::PlayerMouseStateFromClient:
+        receivePlayerMouseState(&ss, m_clients[event.peer]);
         break;
     }
 
@@ -221,12 +221,12 @@ void Server::receivePlayerMove(std::stringstream* ss, Player* player)
     player->move(message.directionx(), message.directiony());
 }
 
-void Server::receivePlayerMousePosition(std::stringstream* ss, Player* player)
+void Server::receivePlayerMouseState(std::stringstream* ss, Player* player)
 {
-    PacketBuf::PlayerMousePositionFromClient message;
+    PacketBuf::PlayerMouseStateFromClient message;
     Packet::deserialize(ss, &message);
 
-    Debug::log() << "player mouse pos: x: " << message.x() << " y : " << message.y();
+    Debug::log() << "player mouse pos: x: " << message.x() << " y : " << message.y() << " left held: " << message.leftbuttonheld() << " right held: " << message.rightbuttonheld();
 }
 
 void Server::sendChatMessage(const std::string& message, const std::string& playerName)

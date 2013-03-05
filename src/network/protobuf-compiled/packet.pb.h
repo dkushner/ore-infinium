@@ -42,7 +42,7 @@ class InitialPlayerDataFromServer;
 class PlayerDisconnectedFromServer;
 class PlayerMoveFromServer;
 class PlayerMoveFromClient;
-class PlayerMousePositionFromClient;
+class PlayerMouseStateFromClient;
 class PlayerBlockPickRequestFromClient;
 class Chunk;
 
@@ -891,14 +891,14 @@ class PlayerMoveFromClient : public ::google::protobuf::Message {
 };
 // -------------------------------------------------------------------
 
-class PlayerMousePositionFromClient : public ::google::protobuf::Message {
+class PlayerMouseStateFromClient : public ::google::protobuf::Message {
  public:
-  PlayerMousePositionFromClient();
-  virtual ~PlayerMousePositionFromClient();
+  PlayerMouseStateFromClient();
+  virtual ~PlayerMouseStateFromClient();
 
-  PlayerMousePositionFromClient(const PlayerMousePositionFromClient& from);
+  PlayerMouseStateFromClient(const PlayerMouseStateFromClient& from);
 
-  inline PlayerMousePositionFromClient& operator=(const PlayerMousePositionFromClient& from) {
+  inline PlayerMouseStateFromClient& operator=(const PlayerMouseStateFromClient& from) {
     CopyFrom(from);
     return *this;
   }
@@ -912,17 +912,17 @@ class PlayerMousePositionFromClient : public ::google::protobuf::Message {
   }
 
   static const ::google::protobuf::Descriptor* descriptor();
-  static const PlayerMousePositionFromClient& default_instance();
+  static const PlayerMouseStateFromClient& default_instance();
 
-  void Swap(PlayerMousePositionFromClient* other);
+  void Swap(PlayerMouseStateFromClient* other);
 
   // implements Message ----------------------------------------------
 
-  PlayerMousePositionFromClient* New() const;
+  PlayerMouseStateFromClient* New() const;
   void CopyFrom(const ::google::protobuf::Message& from);
   void MergeFrom(const ::google::protobuf::Message& from);
-  void CopyFrom(const PlayerMousePositionFromClient& from);
-  void MergeFrom(const PlayerMousePositionFromClient& from);
+  void CopyFrom(const PlayerMouseStateFromClient& from);
+  void MergeFrom(const PlayerMouseStateFromClient& from);
   void Clear();
   bool IsInitialized() const;
 
@@ -959,27 +959,47 @@ class PlayerMousePositionFromClient : public ::google::protobuf::Message {
   inline ::google::protobuf::uint32 y() const;
   inline void set_y(::google::protobuf::uint32 value);
 
-  // @@protoc_insertion_point(class_scope:PacketBuf.PlayerMousePositionFromClient)
+  // optional bool leftButtonHeld = 3;
+  inline bool has_leftbuttonheld() const;
+  inline void clear_leftbuttonheld();
+  static const int kLeftButtonHeldFieldNumber = 3;
+  inline bool leftbuttonheld() const;
+  inline void set_leftbuttonheld(bool value);
+
+  // optional bool rightButtonHeld = 4;
+  inline bool has_rightbuttonheld() const;
+  inline void clear_rightbuttonheld();
+  static const int kRightButtonHeldFieldNumber = 4;
+  inline bool rightbuttonheld() const;
+  inline void set_rightbuttonheld(bool value);
+
+  // @@protoc_insertion_point(class_scope:PacketBuf.PlayerMouseStateFromClient)
  private:
   inline void set_has_x();
   inline void clear_has_x();
   inline void set_has_y();
   inline void clear_has_y();
+  inline void set_has_leftbuttonheld();
+  inline void clear_has_leftbuttonheld();
+  inline void set_has_rightbuttonheld();
+  inline void clear_has_rightbuttonheld();
 
   ::google::protobuf::UnknownFieldSet _unknown_fields_;
 
   ::google::protobuf::uint32 x_;
   ::google::protobuf::uint32 y_;
+  bool leftbuttonheld_;
+  bool rightbuttonheld_;
 
   mutable int _cached_size_;
-  ::google::protobuf::uint32 _has_bits_[(2 + 31) / 32];
+  ::google::protobuf::uint32 _has_bits_[(4 + 31) / 32];
 
   friend void  protobuf_AddDesc_packet_2eproto();
   friend void protobuf_AssignDesc_packet_2eproto();
   friend void protobuf_ShutdownFile_packet_2eproto();
 
   void InitAsDefaultInstance();
-  static PlayerMousePositionFromClient* default_instance_;
+  static PlayerMouseStateFromClient* default_instance_;
 };
 // -------------------------------------------------------------------
 
@@ -1879,50 +1899,94 @@ inline void PlayerMoveFromClient::set_directiony(::google::protobuf::int32 value
 
 // -------------------------------------------------------------------
 
-// PlayerMousePositionFromClient
+// PlayerMouseStateFromClient
 
 // optional uint32 x = 1;
-inline bool PlayerMousePositionFromClient::has_x() const {
+inline bool PlayerMouseStateFromClient::has_x() const {
   return (_has_bits_[0] & 0x00000001u) != 0;
 }
-inline void PlayerMousePositionFromClient::set_has_x() {
+inline void PlayerMouseStateFromClient::set_has_x() {
   _has_bits_[0] |= 0x00000001u;
 }
-inline void PlayerMousePositionFromClient::clear_has_x() {
+inline void PlayerMouseStateFromClient::clear_has_x() {
   _has_bits_[0] &= ~0x00000001u;
 }
-inline void PlayerMousePositionFromClient::clear_x() {
+inline void PlayerMouseStateFromClient::clear_x() {
   x_ = 0u;
   clear_has_x();
 }
-inline ::google::protobuf::uint32 PlayerMousePositionFromClient::x() const {
+inline ::google::protobuf::uint32 PlayerMouseStateFromClient::x() const {
   return x_;
 }
-inline void PlayerMousePositionFromClient::set_x(::google::protobuf::uint32 value) {
+inline void PlayerMouseStateFromClient::set_x(::google::protobuf::uint32 value) {
   set_has_x();
   x_ = value;
 }
 
 // optional uint32 y = 2;
-inline bool PlayerMousePositionFromClient::has_y() const {
+inline bool PlayerMouseStateFromClient::has_y() const {
   return (_has_bits_[0] & 0x00000002u) != 0;
 }
-inline void PlayerMousePositionFromClient::set_has_y() {
+inline void PlayerMouseStateFromClient::set_has_y() {
   _has_bits_[0] |= 0x00000002u;
 }
-inline void PlayerMousePositionFromClient::clear_has_y() {
+inline void PlayerMouseStateFromClient::clear_has_y() {
   _has_bits_[0] &= ~0x00000002u;
 }
-inline void PlayerMousePositionFromClient::clear_y() {
+inline void PlayerMouseStateFromClient::clear_y() {
   y_ = 0u;
   clear_has_y();
 }
-inline ::google::protobuf::uint32 PlayerMousePositionFromClient::y() const {
+inline ::google::protobuf::uint32 PlayerMouseStateFromClient::y() const {
   return y_;
 }
-inline void PlayerMousePositionFromClient::set_y(::google::protobuf::uint32 value) {
+inline void PlayerMouseStateFromClient::set_y(::google::protobuf::uint32 value) {
   set_has_y();
   y_ = value;
+}
+
+// optional bool leftButtonHeld = 3;
+inline bool PlayerMouseStateFromClient::has_leftbuttonheld() const {
+  return (_has_bits_[0] & 0x00000004u) != 0;
+}
+inline void PlayerMouseStateFromClient::set_has_leftbuttonheld() {
+  _has_bits_[0] |= 0x00000004u;
+}
+inline void PlayerMouseStateFromClient::clear_has_leftbuttonheld() {
+  _has_bits_[0] &= ~0x00000004u;
+}
+inline void PlayerMouseStateFromClient::clear_leftbuttonheld() {
+  leftbuttonheld_ = false;
+  clear_has_leftbuttonheld();
+}
+inline bool PlayerMouseStateFromClient::leftbuttonheld() const {
+  return leftbuttonheld_;
+}
+inline void PlayerMouseStateFromClient::set_leftbuttonheld(bool value) {
+  set_has_leftbuttonheld();
+  leftbuttonheld_ = value;
+}
+
+// optional bool rightButtonHeld = 4;
+inline bool PlayerMouseStateFromClient::has_rightbuttonheld() const {
+  return (_has_bits_[0] & 0x00000008u) != 0;
+}
+inline void PlayerMouseStateFromClient::set_has_rightbuttonheld() {
+  _has_bits_[0] |= 0x00000008u;
+}
+inline void PlayerMouseStateFromClient::clear_has_rightbuttonheld() {
+  _has_bits_[0] &= ~0x00000008u;
+}
+inline void PlayerMouseStateFromClient::clear_rightbuttonheld() {
+  rightbuttonheld_ = false;
+  clear_has_rightbuttonheld();
+}
+inline bool PlayerMouseStateFromClient::rightbuttonheld() const {
+  return rightbuttonheld_;
+}
+inline void PlayerMouseStateFromClient::set_rightbuttonheld(bool value) {
+  set_has_rightbuttonheld();
+  rightbuttonheld_ = value;
 }
 
 // -------------------------------------------------------------------

@@ -319,7 +319,6 @@ void World::calculateAttackPosition()
 
 void World::setBlockToAttack(int32_t column, int32_t row)
 {
-            m_client->sendPlayerMousePosition(column, row);
 }
 
 glm::ivec2 World::mousePosition() const

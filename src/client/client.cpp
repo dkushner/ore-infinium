@@ -391,9 +391,7 @@ void Client::handlePlayerInput(SDL_Event& event)
         sendPlayerMovement();
     }
 
-    int x; int y;
-    SDL_GetMouseState(&x, &y);
-    sendPlayerMousePosition(x, y);
+    sendPlayerMouseState();
 }
 
 void Client::shutdown()
@@ -516,14 +514,23 @@ void Client::sendPlayerMovement()
     Packet::sendPacket(m_peer, &message, Packet::FromClientPacketContents::PlayerMoveFromClientPacket, ENET_PACKET_FLAG_RELIABLE);
 }
 
-void Client::sendPlayerMousePosition(int32_t x, int32_t y)
+void Client::sendPlayerMouseState()
 {
-    PacketBuf::PlayerMousePositionFromClient message;
+    int x; int y;
+    SDL_GetMouseState(&x, &y);
+
+    bool leftHeld = SDL_GetMouseState(nullptr, nullptr) & SDL_BUTTON(1);
+    bool rightHeld = SDL_GetMouseState(nullptr, nullptr) & SDL_BUTTON(3);
+
+    PacketBuf::PlayerMouseStateFromClient message;
     message.set_x(x);
     message.set_y(y);
+    message.set_leftbuttonheld(leftHeld);
+    message.set_rightbuttonheld(rightHeld);
+
 
     //FIXME: make UNRELIABLE, and verify it is safe to do so..
-    Packet::sendPacket(m_peer, &message, Packet::FromClientPacketContents::PlayerMousePositionFromClient, ENET_PACKET_FLAG_RELIABLE);
+    Packet::sendPacket(m_peer, &message, Packet::FromClientPacketContents::PlayerMouseStateFromClient, ENET_PACKET_FLAG_RELIABLE);
 }
 
 void Client::processMessage(ENetEvent& event)

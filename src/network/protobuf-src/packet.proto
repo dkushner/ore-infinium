@@ -48,9 +48,11 @@ message PlayerMoveFromClient {
    optional int32 directionY = 2;
 }
 
-message PlayerMousePositionFromClient {
-   optional uint32 x = 1;
-   optional uint32 y = 2;
+message PlayerMouseStateFromClient {
+    optional uint32 x = 1;
+    optional uint32 y = 2;
+    optional bool leftButtonHeld = 3;
+    optional bool rightButtonHeld = 4;
 }
 
 message PlayerBlockPickRequestFromClient {

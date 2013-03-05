@@ -79,11 +79,7 @@ public:
 public:
     void sendChatMessage(const std::string& message);
 
-    /**
-     * @p x column
-     * @p y row
-     */
-    void sendPlayerMousePosition(int32_t x, int32_t y);
+    void sendPlayerMouseState();
 
 private:
     /**

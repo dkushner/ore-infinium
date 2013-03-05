@@ -47,6 +47,11 @@ public:
     void setMousePosition(int32_t x, int32_t y) { m_mousePosition = glm::ivec2(x, y); }
     glm::ivec2 mousePosition() { return m_mousePosition; }
 
+    void setMouseLeftButtonHeld(bool held) { m_mouseLeftButtonHeld = held; }
+    void setMouseRightButtonHeld(bool held) { m_mouseRightButtonHeld = held; }
+    bool mouseLeftButtonHeld() { return m_mouseLeftButtonHeld; }
+    bool mouseRightButtonHeld() { return m_mouseRightButtonHeld; }
+
     /**
      * Accepts player input result, which is a vector from -1 to 1 indicating
      * direction, not magnitude.
@@ -81,6 +86,8 @@ private:
     std::string m_name;
 
     glm::ivec2 m_mousePosition;
+    bool m_mouseLeftButtonHeld = false;
+    bool m_mouseRightButtonHeld = false;
 
     uint16_t m_ping = 0;
 };
