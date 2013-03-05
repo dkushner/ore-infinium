@@ -19,6 +19,7 @@
 #include "debug.h"
 
 #include "src/server/server.h"
+#include "src/client/client.h"
 #include "block.h"
 #include "torch.h"
 #include "game.h"
@@ -39,8 +40,9 @@
 #include <fstream>
 #include <chrono>
 
-World::World(Player* mainPlayer, Server* server)
+World::World(Player* mainPlayer, Client* client, Server* server)
   : m_mainPlayer(mainPlayer),
+    m_client(client),
     m_server(server)
 {
 
@@ -345,6 +347,11 @@ void World::calculateAttackPosition()
      */
 }
 
+void World::setBlockToAttack(int32_t column, int32_t row)
+{
+            m_client->sendPlayerBlockPickRequest(column, row);
+}
+
 //FIXME: this function needs a lot of help.
 //so make it so it doesn't iterate over the whole visible screen but just the blockPickingRadius size.
 void World::performBlockAttack()
@@ -375,6 +382,7 @@ void World::performBlockAttack()
             mouse.x > center.x + Player::blockPickingRadius ||
             mouse.y < center.y - Player::blockPickingRadius ||
             mouse.y > center.y + Player::blockPickingRadius) {
+        setBlockToAttack(-1, -1);
         return;
     }
 
@@ -413,7 +421,7 @@ void World::performBlockAttack()
             if (row == attackY && column == attackX) {
                 index = column * WORLD_ROWCOUNT + row;
                 assert(index < WORLD_ROWCOUNT * WORLD_COLUMNCOUNT);
-                World::m_blocks[index].primitiveType = 0;
+                setBlockToAttack(column, row);
                 return;
             }
         }

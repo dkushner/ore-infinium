@@ -79,6 +79,12 @@ public:
 public:
     void sendChatMessage(const std::string& message);
 
+    /**
+     * @p x column
+     * @p y row
+     */
+    void sendPlayerBlockPickRequest(uint32_t x, uint32_t y);
+
 private:
     /**
      * blocks until it can connect within a timeout.

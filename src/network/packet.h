@@ -42,7 +42,8 @@ public:
         //FIXME: not sure wtf to do with that one..i don't think we want a huge generic thing, it also is unused presently
         PlayerStateFromClientPacket,
         ///movement attempted left/right/up/down
-        PlayerMoveFromClientPacket
+        PlayerMoveFromClientPacket,
+        PlayerBlockPickRequestFromClientPacket
     };
 
     /**

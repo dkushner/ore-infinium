@@ -31,6 +31,7 @@
 
 class LightRenderer;
 class Server;
+class Client;
 class TileRenderer;
 class Sky;
 class Camera;
@@ -62,7 +63,7 @@ public:
      * @p mainPlayer If this world is owned by a client, then the mainPlayer should point
      * to a player instance which is 'us'/'me'. It is null if we are on a server.
      */
-    World(Player* mainPlayer, Server* server);
+    World(Player* mainPlayer, Client* client, Server* server);
     ~World();
 
     void update(double elapsedTime);
@@ -117,6 +118,8 @@ private:
     void calculateAttackPosition();
 
     void performBlockAttack();
+
+    void setBlockToAttack(int32_t x, int32_t y);
 
     void saveMap();
 
@@ -189,6 +192,10 @@ private:
     Player* m_mainPlayer = nullptr;
 
     Server* m_server = nullptr;
+    Client* m_client = nullptr;
+
+    int32_t m_blockToAttackX = -1;
+    int32_t m_blockToAttackY = -1;
 
     const float m_zoomInFactor = 1.02;
     const float m_zoomOutFactor = 0.98;

@@ -188,10 +188,7 @@ void Client::poll()
     ENetEvent event;
     int eventStatus;
 
-    eventStatus = enet_host_service(m_client, &event, 0);
-
-    // If we had some event that interested us
-    if (eventStatus > 0) {
+    while(enet_host_service(m_client, &event, 0)) {
         switch (event.type) {
         case ENET_EVENT_TYPE_CONNECT: {
             assert(0);
@@ -517,6 +514,13 @@ void Client::sendPlayerMovement()
     Packet::sendPacket(m_peer, &message, Packet::FromClientPacketContents::PlayerMoveFromClientPacket, ENET_PACKET_FLAG_RELIABLE);
 }
 
+void Client::sendPlayerBlockPickRequest(uint32_t x, uint32_t y)
+{
+    PacketBuf::PlayerBlockPickRequestFromClient message;
+
+    Packet::sendPacket(m_peer, &message, Packet::FromClientPacketContents::PlayerBlockPickRequestFromClientPacket, ENET_PACKET_FLAG_RELIABLE);
+}
+
 void Client::processMessage(ENetEvent& event)
 {
     std::stringstream ss(std::string(event.packet->data, event.packet->dataLength));
@@ -578,7 +582,7 @@ void Client::receiveInitialPlayerData(std::stringstream* ss)
         m_chat->addChatLine("", chatMessage.str());
 
         // this is us, the first player so this means the world creation is up to us
-        m_world = new World(m_mainPlayer, nullptr);
+        m_world = new World(m_mainPlayer, this, nullptr);
     } else {
         player->setName(message.playername());
         player->setPlayerID(message.playerid());

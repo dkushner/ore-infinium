@@ -52,7 +52,7 @@ Server::Server(unsigned int maxClients, unsigned int port)
 
     Debug::assertf(m_server, "failed to create ENet server");
 
-    m_world = new World(nullptr, this);
+    m_world = new World(nullptr, nullptr, this);
 }
 
 Server::~Server()
@@ -84,9 +84,7 @@ void Server::poll()
     ENetEvent event;
     int eventStatus;
 
-    eventStatus = enet_host_service(m_server, &event, 20);
-
-    if (eventStatus > 0) {
+    while(enet_host_service(m_server, &event, 0)) {
 
         switch (event.type) {
         case ENET_EVENT_TYPE_CONNECT:
@@ -109,7 +107,7 @@ void Server::poll()
         case ENET_EVENT_TYPE_DISCONNECT:
             Debug::log(Debug::Area::NetworkServer) << "Peer has disconnected:  " << event.peer->address.host << " at port: " << event.peer->address.port;
             printf("%s disconnected.\n", event.peer->data);
-        for (auto & client : m_clients) {
+            for (auto & client : m_clients) {
                 if (client.first == event.peer) {
                     Debug::log(Debug::Area::NetworkServer) << "FOUND PEER for disconnect, deleting it";
                     m_clients.erase(client.first);

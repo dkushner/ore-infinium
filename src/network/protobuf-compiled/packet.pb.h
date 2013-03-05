@@ -42,6 +42,7 @@ class InitialPlayerDataFromServer;
 class PlayerDisconnectedFromServer;
 class PlayerMoveFromServer;
 class PlayerMoveFromClient;
+class PlayerBlockPickRequestFromClient;
 class Chunk;
 
 // ===================================================================
@@ -889,6 +890,98 @@ class PlayerMoveFromClient : public ::google::protobuf::Message {
 };
 // -------------------------------------------------------------------
 
+class PlayerBlockPickRequestFromClient : public ::google::protobuf::Message {
+ public:
+  PlayerBlockPickRequestFromClient();
+  virtual ~PlayerBlockPickRequestFromClient();
+
+  PlayerBlockPickRequestFromClient(const PlayerBlockPickRequestFromClient& from);
+
+  inline PlayerBlockPickRequestFromClient& operator=(const PlayerBlockPickRequestFromClient& from) {
+    CopyFrom(from);
+    return *this;
+  }
+
+  inline const ::google::protobuf::UnknownFieldSet& unknown_fields() const {
+    return _unknown_fields_;
+  }
+
+  inline ::google::protobuf::UnknownFieldSet* mutable_unknown_fields() {
+    return &_unknown_fields_;
+  }
+
+  static const ::google::protobuf::Descriptor* descriptor();
+  static const PlayerBlockPickRequestFromClient& default_instance();
+
+  void Swap(PlayerBlockPickRequestFromClient* other);
+
+  // implements Message ----------------------------------------------
+
+  PlayerBlockPickRequestFromClient* New() const;
+  void CopyFrom(const ::google::protobuf::Message& from);
+  void MergeFrom(const ::google::protobuf::Message& from);
+  void CopyFrom(const PlayerBlockPickRequestFromClient& from);
+  void MergeFrom(const PlayerBlockPickRequestFromClient& from);
+  void Clear();
+  bool IsInitialized() const;
+
+  int ByteSize() const;
+  bool MergePartialFromCodedStream(
+      ::google::protobuf::io::CodedInputStream* input);
+  void SerializeWithCachedSizes(
+      ::google::protobuf::io::CodedOutputStream* output) const;
+  ::google::protobuf::uint8* SerializeWithCachedSizesToArray(::google::protobuf::uint8* output) const;
+  int GetCachedSize() const { return _cached_size_; }
+  private:
+  void SharedCtor();
+  void SharedDtor();
+  void SetCachedSize(int size) const;
+  public:
+
+  ::google::protobuf::Metadata GetMetadata() const;
+
+  // nested types ----------------------------------------------------
+
+  // accessors -------------------------------------------------------
+
+  // optional uint32 x = 1;
+  inline bool has_x() const;
+  inline void clear_x();
+  static const int kXFieldNumber = 1;
+  inline ::google::protobuf::uint32 x() const;
+  inline void set_x(::google::protobuf::uint32 value);
+
+  // optional uint32 y = 2;
+  inline bool has_y() const;
+  inline void clear_y();
+  static const int kYFieldNumber = 2;
+  inline ::google::protobuf::uint32 y() const;
+  inline void set_y(::google::protobuf::uint32 value);
+
+  // @@protoc_insertion_point(class_scope:PacketBuf.PlayerBlockPickRequestFromClient)
+ private:
+  inline void set_has_x();
+  inline void clear_has_x();
+  inline void set_has_y();
+  inline void clear_has_y();
+
+  ::google::protobuf::UnknownFieldSet _unknown_fields_;
+
+  ::google::protobuf::uint32 x_;
+  ::google::protobuf::uint32 y_;
+
+  mutable int _cached_size_;
+  ::google::protobuf::uint32 _has_bits_[(2 + 31) / 32];
+
+  friend void  protobuf_AddDesc_packet_2eproto();
+  friend void protobuf_AssignDesc_packet_2eproto();
+  friend void protobuf_ShutdownFile_packet_2eproto();
+
+  void InitAsDefaultInstance();
+  static PlayerBlockPickRequestFromClient* default_instance_;
+};
+// -------------------------------------------------------------------
+
 class Chunk : public ::google::protobuf::Message {
  public:
   Chunk();
@@ -1689,6 +1782,54 @@ inline ::google::protobuf::int32 PlayerMoveFromClient::directiony() const {
 inline void PlayerMoveFromClient::set_directiony(::google::protobuf::int32 value) {
   set_has_directiony();
   directiony_ = value;
+}
+
+// -------------------------------------------------------------------
+
+// PlayerBlockPickRequestFromClient
+
+// optional uint32 x = 1;
+inline bool PlayerBlockPickRequestFromClient::has_x() const {
+  return (_has_bits_[0] & 0x00000001u) != 0;
+}
+inline void PlayerBlockPickRequestFromClient::set_has_x() {
+  _has_bits_[0] |= 0x00000001u;
+}
+inline void PlayerBlockPickRequestFromClient::clear_has_x() {
+  _has_bits_[0] &= ~0x00000001u;
+}
+inline void PlayerBlockPickRequestFromClient::clear_x() {
+  x_ = 0u;
+  clear_has_x();
+}
+inline ::google::protobuf::uint32 PlayerBlockPickRequestFromClient::x() const {
+  return x_;
+}
+inline void PlayerBlockPickRequestFromClient::set_x(::google::protobuf::uint32 value) {
+  set_has_x();
+  x_ = value;
+}
+
+// optional uint32 y = 2;
+inline bool PlayerBlockPickRequestFromClient::has_y() const {
+  return (_has_bits_[0] & 0x00000002u) != 0;
+}
+inline void PlayerBlockPickRequestFromClient::set_has_y() {
+  _has_bits_[0] |= 0x00000002u;
+}
+inline void PlayerBlockPickRequestFromClient::clear_has_y() {
+  _has_bits_[0] &= ~0x00000002u;
+}
+inline void PlayerBlockPickRequestFromClient::clear_y() {
+  y_ = 0u;
+  clear_has_y();
+}
+inline ::google::protobuf::uint32 PlayerBlockPickRequestFromClient::y() const {
+  return y_;
+}
+inline void PlayerBlockPickRequestFromClient::set_y(::google::protobuf::uint32 value) {
+  set_has_y();
+  y_ = value;
 }
 
 // -------------------------------------------------------------------
