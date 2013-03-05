@@ -363,7 +363,7 @@ void World::performBlockAttack(Player* player)
     }
 
     glm::ivec2 transformedMouse = glm::ivec2(floor((mouse.x/2 + player->position().x) / Block::BLOCK_SIZE), floor((mouse.y/2 + player->position().y) / Block::BLOCK_SIZE));
-    Debug::log() << "attempting to strike block: " << transformedMouse.x << " y: " << transformedMouse.y;
+//    Debug::log() << "attempting to strike block: " << transformedMouse.x << " y: " << transformedMouse.y;
 
     const int radius = Player::blockPickingRadius / Block::BLOCK_SIZE;
 
@@ -371,7 +371,7 @@ void World::performBlockAttack(Player* player)
     //mouse.x + (m_mainPlayer->position().x - Settings::instance()->screenResolutionWidth * 0.5) / Block::BLOCK_SIZE;
     int attackY = transformedMouse.y;
     //mouse.y + (m_mainPlayer->position().y - Settings::instance()->screenResolutionHeight * 0.5) / Block::BLOCK_SIZE;
-    Debug::log() << "attempting to strike block index: " << attackX << " y: " << attackY;
+//    Debug::log() << "attempting to strike block index: " << attackX << " y: " << attackY;
 
     const glm::vec2 playerPosition = player->position();
 
@@ -383,30 +383,32 @@ void World::performBlockAttack(Player* player)
     //row
     int tilesBeforeY = playerPosition.y / Block::BLOCK_SIZE;
 
-    const int startRow = tilesBeforeY - ((Settings::instance()->screenResolutionHeight * 0.5) / Block::BLOCK_SIZE);
-    const int endRow = tilesBeforeY + ((Settings::instance()->screenResolutionHeight * 0.5) / Block::BLOCK_SIZE);
+    const int startRow = 0;//tilesBeforeY - ((Settings::instance()->screenResolutionHeight * 0.5) / Block::BLOCK_SIZE);
+    const int endRow = WORLD_ROWCOUNT;//tilesBeforeY + ((Settings::instance()->screenResolutionHeight * 0.5) / Block::BLOCK_SIZE);
 
     //columns are our X value, rows the Y
-    const int startColumn = tilesBeforeX - ((Settings::instance()->screenResolutionWidth * 0.5) / Block::BLOCK_SIZE);
-    const int endColumn = tilesBeforeX + ((Settings::instance()->screenResolutionWidth * 0.5) / Block::BLOCK_SIZE);
+    const int startColumn =0;// tilesBeforeX - ((Settings::instance()->screenResolutionWidth * 0.5) / Block::BLOCK_SIZE);
+    const int endColumn =WORLD_COLUMNCOUNT;// tilesBeforeX + ((Settings::instance()->screenResolutionWidth * 0.5) / Block::BLOCK_SIZE);
 
     int index = 0;
 
+                std::vector<Block> blocks;
     for (int row = startRow; row < endRow; ++row) {
         for (int column = startColumn; column < endColumn; ++column) {
-            if (row == attackY && column == attackX) {
+//            if (row == attackY && column == attackX) {
                 index = column * WORLD_ROWCOUNT + row;
                 assert(index < WORLD_ROWCOUNT * WORLD_COLUMNCOUNT);
-                m_blocks[index].primitiveType = 0;
+                m_blocks[index].primitiveType = 2; //FIXME:
+//                Debug::log(Debug::Area::NetworkServer) << "INDEX MODIFIED: " << index;
 
-                std::vector<Block> blocks;
                 blocks.push_back(m_blocks[index]);
-                Chunk chunk(column, row, column, row, blocks);
-                m_server->sendWorldChunk(&chunk);
-                return;
-            }
+//                return;
+ //           }
         }
     }
+
+    Chunk chunk(startColumn, startRow, endColumn, endRow, blocks);
+    m_server->sendWorldChunk(&chunk);
 
     Debug::log(Debug::Area::NetworkServer) << "ERROR: " << " no block found to attack?" << "\n";
 }
