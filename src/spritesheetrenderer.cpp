@@ -390,7 +390,6 @@ void SpriteSheetRenderer::renderEntities()
         const float spriteRight = spriteLeft + textureWidth;
         const float spriteTop = 1.0f - (textureY);
         const float spriteBottom = spriteTop - textureHeight;
-        Debug::log() << "tex width: " << textureWidth << " tex height: " << textureHeight << " tex x : " << textureX << " tex y: " << textureY;
 
         // copy texcoords to the buffer
         vertices[0].u = vertices[1].u = spriteLeft;

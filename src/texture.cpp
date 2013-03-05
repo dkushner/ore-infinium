@@ -67,7 +67,7 @@ void Texture::generate()
 
     BYTE* bits = m_image->bytes();
     Debug::assertf(bits, "Image::generate, could not gen texture, image bits are empty.");
-    //GLenum image_format = GL_BGRA, GLint internal_format = GL_RGBA, GLint level = 0, GLint border = 0
+
     m_internal_format = GL_RGBA;
     m_image_format = GL_BGRA;
     m_level = 0;
