@@ -346,8 +346,6 @@ void Client::handleInputEvents()
 
 void Client::handlePlayerInput(SDL_Event& event)
 {
-    m_world->handleEvent(event);
-
     int32_t originalX = m_playerInputDirectionX;
     int32_t originalY = m_playerInputDirectionY;
 
@@ -392,6 +390,10 @@ void Client::handlePlayerInput(SDL_Event& event)
     if (m_playerInputDirectionX != originalX || m_playerInputDirectionY != originalY) {
         sendPlayerMovement();
     }
+
+    int x; int y;
+    SDL_GetMouseState(&x, &y);
+    sendPlayerMousePosition(x, y);
 }
 
 void Client::shutdown()
@@ -514,11 +516,14 @@ void Client::sendPlayerMovement()
     Packet::sendPacket(m_peer, &message, Packet::FromClientPacketContents::PlayerMoveFromClientPacket, ENET_PACKET_FLAG_RELIABLE);
 }
 
-void Client::sendPlayerBlockPickRequest(uint32_t x, uint32_t y)
+void Client::sendPlayerMousePosition(int32_t x, int32_t y)
 {
-    PacketBuf::PlayerBlockPickRequestFromClient message;
+    PacketBuf::PlayerMousePositionFromClient message;
+    message.set_x(x);
+    message.set_y(y);
 
-    Packet::sendPacket(m_peer, &message, Packet::FromClientPacketContents::PlayerBlockPickRequestFromClientPacket, ENET_PACKET_FLAG_RELIABLE);
+    //FIXME: make UNRELIABLE, and verify it is safe to do so..
+    Packet::sendPacket(m_peer, &message, Packet::FromClientPacketContents::PlayerMousePositionFromClient, ENET_PACKET_FLAG_RELIABLE);
 }
 
 void Client::processMessage(ENetEvent& event)

@@ -118,7 +118,6 @@ void Server::poll()
             // Reset client's information
             event.peer->data = NULL;
             break;
-
         }
     }
 }
@@ -175,6 +174,10 @@ void Server::processMessage(ENetEvent& event)
     case Packet::FromClientPacketContents::PlayerMoveFromClientPacket:
         receivePlayerMove(&ss, m_clients[event.peer]);
         break;
+
+    case Packet::FromClientPacketContents::PlayerMousePositionFromClient:
+        receivePlayerMousePosition(&ss, m_clients[event.peer]);
+        break;
     }
 
     enet_packet_destroy(event.packet);
@@ -216,6 +219,14 @@ void Server::receivePlayerMove(std::stringstream* ss, Player* player)
 
 //    Debug::log(Debug::Area::NetworkServer) << " PLAYER MOVE RECEIVED, directionx: " <<  message.directionx() << " Y: " <<
     player->move(message.directionx(), message.directiony());
+}
+
+void Server::receivePlayerMousePosition(std::stringstream* ss, Player* player)
+{
+    PacketBuf::PlayerMousePositionFromClient message;
+    Packet::deserialize(ss, &message);
+
+    Debug::log() << "player mouse pos: x: " << message.x() << " y : " << message.y();
 }
 
 void Server::sendChatMessage(const std::string& message, const std::string& playerName)

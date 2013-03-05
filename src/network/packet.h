@@ -43,7 +43,7 @@ public:
         PlayerStateFromClientPacket,
         ///movement attempted left/right/up/down
         PlayerMoveFromClientPacket,
-        PlayerBlockPickRequestFromClientPacket
+        PlayerMousePositionFromClient
     };
 
     /**

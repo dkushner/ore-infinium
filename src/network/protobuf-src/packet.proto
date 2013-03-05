@@ -48,6 +48,11 @@ message PlayerMoveFromClient {
    optional int32 directionY = 2;
 }
 
+message PlayerMousePositionFromClient {
+   optional uint32 x = 1;
+   optional uint32 y = 2;
+}
+
 message PlayerBlockPickRequestFromClient {
     // x,y (column, row), this player wants to "pick"/break
     optional uint32 x = 1;

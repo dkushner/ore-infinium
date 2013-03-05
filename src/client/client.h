@@ -83,7 +83,7 @@ public:
      * @p x column
      * @p y row
      */
-    void sendPlayerBlockPickRequest(uint32_t x, uint32_t y);
+    void sendPlayerMousePosition(int32_t x, int32_t y);
 
 private:
     /**

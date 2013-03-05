@@ -167,29 +167,6 @@ void World::render(Player* player)
     //    m_sky->render();
 }
 
-void World::handleEvent(const SDL_Event& event)
-{
-    //FIXME:!!!! unused, we just pass events to the player..among other children (currently just player though)
-    //here, the inventory ui and other stuff may need to be factored in. who knows.
-    switch (event.type) {
-    case SDL_MOUSEBUTTONDOWN: {
-        if (SDL_GetMouseState(nullptr, nullptr) & SDL_BUTTON(MouseButton::Left)) {
-            m_mouseLeftHeld = true;
-        }
-        break;
-    }
-
-    case SDL_MOUSEBUTTONUP: {
-        if (!SDL_GetMouseState(nullptr, nullptr) & SDL_BUTTON(MouseButton::Left)) {
-            m_mouseLeftHeld = false;
-        }
-        break;
-    }
-    }
-
-//    m_player->handleEvent(event);
-}
-
 void World::update(double elapsedTime)
 {
     if (m_mouseLeftHeld) {
@@ -349,7 +326,7 @@ void World::calculateAttackPosition()
 
 void World::setBlockToAttack(int32_t column, int32_t row)
 {
-            m_client->sendPlayerBlockPickRequest(column, row);
+            m_client->sendPlayerMousePosition(column, row);
 }
 
 //FIXME: this function needs a lot of help.
