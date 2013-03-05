@@ -76,6 +76,7 @@ World::World(Player* mainPlayer, Server* server)
 
         //FIXME: call each update, and make it only do visible ones
         m_lightRenderer->setTorches(m_torches);
+
     }
 
     //client doesn't actually load/generate any world
@@ -150,24 +151,17 @@ void World::render(Player* player)
     const float halfRadius = radius * 0.5;
     const float halfBlockSize = Block::BLOCK_SIZE * 0.5;
 
-    const glm::ivec2 offset = tileOffset(player);
-
-    // NOTE: (Settings::instance()->screenResolutionHeight % Block::blockSize) is what we add so that it is aligned properly to the tile grid, even though the screen is not evenly divisible by such.
-//    glm::vec2 crosshairPosition(m_mainPlayer->position().x - mouse.x % Block::BLOCK_SIZE + (Settings::instance()->screenResolutionWidth % Block::BLOCK_SIZE) - offset.x + Block::BLOCK_SIZE,
-//                                m_mainPlayer->position().y - mouse.y % Block::BLOCK_SIZE + (Settings::instance()->screenResolutionHeight % Block::BLOCK_SIZE) - offset.y + Block::BLOCK_SIZE);
-
     glm::vec2 topLeftLocalCoordinates = glm::vec2(m_mainPlayer->position().x - 1600 /2, m_mainPlayer->position().y - 900/2);
-    glm::vec2 crosshairPosition(topLeftLocalCoordinates.x + (mouse.x) + (mouse.x % Block::BLOCK_SIZE),
-                                topLeftLocalCoordinates.y + (mouse.y) + (mouse.y % Block::BLOCK_SIZE));
+    glm::vec2 transformedMouse = glm::vec2(topLeftLocalCoordinates.x + mouse.x, topLeftLocalCoordinates.y + mouse.y);
+    //snap crosshair to the tile grid..the offset is already calculated for us (apparently), so even with per-pixel tilemap scrolling it snaps fine.
+    glm::vec2 crosshairPosition(floor(transformedMouse.x / Block::BLOCK_SIZE) * Block::BLOCK_SIZE, floor(transformedMouse.y / Block::BLOCK_SIZE) * Block::BLOCK_SIZE );
 
-//    Debug::log() << "player pos: x:" << m_mainPlayer->position().x << " y: " << m_mainPlayer->position().y;
-//    Debug::log() << "crosshair pos: x:" << crosshairPosition.x << " y: " << crosshairPosition.y;
-        m_blockPickingCrosshair->setPosition(m_mainPlayer->position());
-//    m_blockPickingCrosshair->setPosition(crosshairPosition);
+    m_blockPickingCrosshair->setPosition(crosshairPosition);
+    // ==================================================
 
     //    ALLEGRO_COLOR color = al_map_rgb(255, 0, 0);
     //   al_draw_rectangle(crosshairPosition.x(), crosshairPosition.y(), crosshairPosition.x() + radius, crosshairPosition.y() + radius, color, 1.0f);
-    // ==================================================
+
     //    m_sky->render();
 }
 
