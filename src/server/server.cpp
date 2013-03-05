@@ -315,11 +315,18 @@ void Server::sendWorldChunk(Chunk* chunk)
     message.set_starty(chunk->startY());
     message.set_endy(chunk->endY());
 
-    for (auto& block : chunk->blocks()) {
-        message.add_meshtype(block.meshType);
-        message.add_primitivetype(block.primitiveType);
-        message.add_walltype(block.wallType);
+    for (int row = chunk->startY(); row < chunk->endY(); ++row) {
+        for (int column = chunk->startX(); column < chunk->endX(); ++column) {
+
+            uint32_t index = column * WORLD_ROWCOUNT + row;
+            Block& block = chunk->blocks()[index];
+
+            message.add_meshtype(block.meshType);
+            message.add_primitivetype(block.primitiveType);
+            message.add_walltype(block.wallType);
+        }
     }
+
 
     Packet::sendPacketBroadcast(m_server, &message, Packet::FromServerPacketContents::ChunkFromServerPacket, ENET_PACKET_FLAG_RELIABLE);
 }

@@ -392,7 +392,6 @@ void World::performBlockAttack(Player* player)
 
     int index = 0;
 
-                std::vector<Block> blocks;
     for (int row = startRow; row < endRow; ++row) {
         for (int column = startColumn; column < endColumn; ++column) {
 //            if (row == attackY && column == attackX) {
@@ -401,17 +400,18 @@ void World::performBlockAttack(Player* player)
                 m_blocks[index].primitiveType = 2; //FIXME:
 //                Debug::log(Debug::Area::NetworkServer) << "INDEX MODIFIED: " << index;
 
-                blocks.push_back(m_blocks[index]);
 //                return;
  //           }
         }
     }
 
+    Chunk chunk(startColumn, startRow, endColumn, endRow, m_blocks);
+
 //    Chunk chunk(startColumn, startRow, endColumn, endRow, blocks);
 //    m_server->sendWorldChunk(&chunk);
 
-m_server->sendInitialWorldChunkHACK(player);
-    Debug::log(Debug::Area::NetworkServer) << "ERROR: " << " no block found to attack?" << "\n";
+m_server->sendWorldChunk(&chunk);
+//    Debug::log(Debug::Area::NetworkServer) << "ERROR: " << " no block found to attack?" << "\n";
 }
 
 glm::ivec2 World::tileOffset(Player* player) const
