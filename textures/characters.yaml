@@ -2,8 +2,8 @@
 # written in YAML
 # describes the coordinates of each frameName/sprite to use
 # used by the animation/sprite rendering system
-sprite:
-    frameName: player1Standing1
+sprites:
+ -  frameName: player1Standing1
     x: 0
     y: 0
     # blocksize (16) * 2

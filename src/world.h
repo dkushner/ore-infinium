@@ -149,6 +149,8 @@ private:
     std::vector<Entity*> m_entities;
     std::vector<Torch*> m_torches;
 
+    Sprite* m_blockPickingCrosshair = nullptr;
+
     // it's easier to manage with a linear array. access is trivial - array[y][x] simply becomes array[y*rowlength + x]
     // [column * WORLD_ROWCOUNT + row]
     std::vector<Block> m_blocks;

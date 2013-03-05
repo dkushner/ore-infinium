@@ -153,24 +153,27 @@ std::map<std::string, SpriteSheetRenderer::SpriteFrameIdentifier> SpriteSheetRen
     YAML::Node description = YAML::LoadFile(filename);
 
     try {
-        for(std::size_t i=0;i < description.size();i++) {
-            //FIXME: this non const ref scares me...are my concerns valid?
-            auto sprite = description["sprite"];
+        auto spriteMap = description["sprites"];
+        Debug::log() << "SPRITE MAP COUNT SIZE: " << spriteMap.size();
 
-            Debug::log(Debug::Area::System) << "parsing description sheet...";
-            Debug::log(Debug::Area::System) << "frameName: " << sprite["frameName"].as<std::string>();
-            Debug::log(Debug::Area::System) << "x: " << sprite["x"].as<int>();
-            Debug::log(Debug::Area::System) << "y: " << sprite["y"].as<int>();
-            Debug::log(Debug::Area::System) << "width: " << sprite["width"].as<int>();
-            Debug::log(Debug::Area::System) << "height: " << sprite["height"].as<int>();
+        for(std::size_t i = 0; i < spriteMap.size(); ++i) {
+            //FIXME: this non const ref scares me...are my concerns valid?
+            Debug::log() << "SPRITE MAP: " << spriteMap[i]["frameName"];
+            auto sprites = spriteMap[i];
+
+            Debug::log(Debug::Area::System) << "frameName: " << sprites["frameName"].as<std::string>();
+            Debug::log(Debug::Area::System) << "x: " << sprites["x"].as<int>();
+            Debug::log(Debug::Area::System) << "y: " << sprites["y"].as<int>();
+            Debug::log(Debug::Area::System) << "width: " << sprites["width"].as<int>();
+            Debug::log(Debug::Area::System) << "height: " << sprites["height"].as<int>();
 
             SpriteFrameIdentifier frame;
-            frame.x = sprite["x"].as<int>();
-            frame.y = sprite["y"].as<int>();
-            frame.width = sprite["width"].as<int>();
-            frame.height = sprite["height"].as<int>();
+            frame.x = sprites["x"].as<int>();
+            frame.y = sprites["y"].as<int>();
+            frame.width = sprites["width"].as<int>();
+            frame.height = sprites["height"].as<int>();
 
-            const std::string frameName = sprite["frameName"].as<std::string>();
+            const std::string frameName = sprites["frameName"].as<std::string>();
 
             descriptionMap[frameName] = frame;
         }
@@ -358,15 +361,36 @@ void SpriteSheetRenderer::renderEntities()
             int32_t color = red | (green << 8) | (blue << 16) | (alpha << 24);
             vertices[i].color = color;
         }
+        /*
+        const float tileWidth = 1.0f / TILESHEET_WIDTH * 16.0f;
+        const float tileHeight = 1.0f / TILESHEET_HEIGHT * 16.0f;
+
+        float xPadding = 1.0f / TILESHEET_WIDTH * 1.0f * (column + 1);
+        float yPadding = 1.0f / TILESHEET_HEIGHT * 1.0f * (row + 1);
+
+        const float tileLeft = (column *  tileWidth) + xPadding;
+        const float tileRight = tileLeft + tileWidth;
+        const float tileTop = 1.0f - ((row * tileHeight)) - yPadding;
+        const float tileBottom = tileTop - tileHeight;
 
         // copy texcoords to the buffer
-        const float textureWidth = 1.0f / SPRITESHEET_WIDTH * frame.width;
-        const float textureHeight = 1.0f / SPRITESHEET_HEIGHT * frame.height;
+        vertices[0].u = vertices[1].u = tileLeft;
+        vertices[0].v = vertices[3].v = tileTop;
+        vertices[1].v = vertices[2].v = tileBottom;
+        vertices[2].u = vertices[3].u = tileRight;
+        */
 
-        const float spriteLeft = (frame.x *  textureWidth);
+        // copy texcoords to the buffer
+        const float textureWidth = float(frame.width) / float(SPRITESHEET_WIDTH);
+        const float textureHeight = float(frame.height) / float(SPRITESHEET_HEIGHT);
+        const float textureX = float(frame.x) / float(SPRITESHEET_WIDTH);
+        const float textureY = float(frame.y) / float(SPRITESHEET_HEIGHT);
+
+        const float spriteLeft = textureX;
         const float spriteRight = spriteLeft + textureWidth;
-        const float spriteTop = 1.0f - ((frame.y * textureHeight));
+        const float spriteTop = 1.0f - (textureY);
         const float spriteBottom = spriteTop - textureHeight;
+        Debug::log() << "tex width: " << textureWidth << " tex height: " << textureHeight << " tex x : " << textureX << " tex y: " << textureY;
 
         // copy texcoords to the buffer
         vertices[0].u = vertices[1].u = spriteLeft;
