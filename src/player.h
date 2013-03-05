@@ -85,7 +85,7 @@ private:
      */
     std::string m_name;
 
-    glm::ivec2 m_mousePosition;
+    glm::ivec2 m_mousePosition = glm::ivec2(0, 0);
     bool m_mouseLeftButtonHeld = false;
     bool m_mouseRightButtonHeld = false;
 

@@ -362,7 +362,7 @@ void World::performBlockAttack(Player* player)
         return;
     }
 
-    glm::ivec2 transformedMouse = glm::ivec2(floor((mouse.x/2 + m_mainPlayer->position().x) / Block::BLOCK_SIZE), floor((mouse.y/2 + m_mainPlayer->position().y) / Block::BLOCK_SIZE));
+    glm::ivec2 transformedMouse = glm::ivec2(floor((mouse.x/2 + player->position().x) / Block::BLOCK_SIZE), floor((mouse.y/2 + player->position().y) / Block::BLOCK_SIZE));
     Debug::log() << "attempting to strike block: " << transformedMouse.x << " y: " << transformedMouse.y;
 
     const int radius = Player::blockPickingRadius / Block::BLOCK_SIZE;
@@ -373,7 +373,7 @@ void World::performBlockAttack(Player* player)
     //mouse.y + (m_mainPlayer->position().y - Settings::instance()->screenResolutionHeight * 0.5) / Block::BLOCK_SIZE;
     Debug::log() << "attempting to strike block index: " << attackX << " y: " << attackY;
 
-    const glm::vec2 playerPosition = m_mainPlayer->position();
+    const glm::vec2 playerPosition = player->position();
 
     //consider block map as starting at player pos == 0,0 and going down and to the right-ward
     //tilesBefore{X,Y} is only at the center of the view though..find the whole screen real estate
