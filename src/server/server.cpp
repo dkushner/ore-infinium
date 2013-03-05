@@ -291,8 +291,6 @@ Player* Server::createPlayer(const std::string& playerName)
     player->setName(playerName);
     player->setPlayerID(m_freePlayerID);
     player->setPosition(2500, 1492);
-        //FIXME: HACK FUCKING MAJOR HOLY HELL HACK
-        player->setPosition(player->position().x - 4, player->position().y - 4);
 
     m_world->addPlayer(player);;
 
