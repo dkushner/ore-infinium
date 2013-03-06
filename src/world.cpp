@@ -333,23 +333,6 @@ glm::ivec2 World::mousePosition() const
 //so make it so it doesn't iterate over the whole visible screen but just the blockPickingRadius size.
 void World::performBlockAttack(Player* player)
 {
-    /*
-     *   const glm::vec2 viewCenter = m_view->getCenter();
-     *
-     *   glm::vec2 viewPosition;
-     *   //    std::cout << "viewportcenter" << " viewportcenter y: " << viewportCenter().y << " view->getcenter() y: " << viewCenter.y << "\n";
-     *   viewPosition.x = viewCenter.x - viewportCenter().x;
-     *   viewPosition.y = viewCenter.y - viewportCenter().y;
-     *   const int column = int((m_relativeVectorToAttack.x + viewPosition.x) / Block::blockSize);
-     *   const int row = int((m_relativeVectorToAttack.y + viewPosition.y) / Block::blockSize);
-     *   //    std::cout << "relativevector y: " << m_relativeVectorToAttack.y << " view position y: " << viewPosition.y << "\n";
-     *
-     *   const int startRow = (m_player->position().y / Block::blockSize) - radius;
-     *   const int startColumn = (m_player->position().x / Block::blockSize) - radius;
-     *   const int endRow = (m_player->position().y / Block::blockSize) + radius;
-     *   const int endColumn = (m_player->position().x / Block::blockSize) + radius;
-     */
-
     glm::ivec2 mouse = player->mousePosition();
 
     glm::vec2 center(Settings::instance()->screenResolutionWidth * 0.5, Settings::instance()->screenResolutionHeight * 0.5);
@@ -363,15 +346,11 @@ void World::performBlockAttack(Player* player)
     }
 
     glm::ivec2 transformedMouse = glm::ivec2(floor((mouse.x/2 + player->position().x) / Block::BLOCK_SIZE), floor((mouse.y/2 + player->position().y) / Block::BLOCK_SIZE));
-//    Debug::log() << "attempting to strike block: " << transformedMouse.x << " y: " << transformedMouse.y;
 
     const int radius = Player::blockPickingRadius / Block::BLOCK_SIZE;
 
     int attackX = transformedMouse.x;
-    //mouse.x + (m_mainPlayer->position().x - Settings::instance()->screenResolutionWidth * 0.5) / Block::BLOCK_SIZE;
     int attackY = transformedMouse.y;
-    //mouse.y + (m_mainPlayer->position().y - Settings::instance()->screenResolutionHeight * 0.5) / Block::BLOCK_SIZE;
-//    Debug::log() << "attempting to strike block index: " << attackX << " y: " << attackY;
 
     const glm::vec2 playerPosition = player->position();
 
@@ -382,21 +361,15 @@ void World::performBlockAttack(Player* player)
     int tilesBeforeX = playerPosition.x / Block::BLOCK_SIZE;
     //row
     int tilesBeforeY = playerPosition.y / Block::BLOCK_SIZE;
+    Debug::log() << "tilesbeforeX: " << tilesBeforeX << " tilesbeforey: " << tilesBeforeY;
 
     //FIXME:
-//    const int startRow = 0;//tilesBeforeY - ((Settings::instance()->screenResolutionHeight * 0.5) / Block::BLOCK_SIZE);
-//    const int endRow = WORLD_ROWCOUNT;//tilesBeforeY + ((Settings::instance()->screenResolutionHeight * 0.5) / Block::BLOCK_SIZE);
+    const int startX = ((playerPosition.x - (Settings::instance()->screenResolutionWidth * 0.5) + player->mousePosition().x) / Block::BLOCK_SIZE) - 1; // -1 for alignment with crosshair
+    const int endX = startX + 1;
 //
-//    //columns are our X value, rows the Y
-//    const int startColumn =0;// tilesBeforeX - ((Settings::instance()->screenResolutionWidth * 0.5) / Block::BLOCK_SIZE);
-//    const int endColumn =WORLD_COLUMNCOUNT;// tilesBeforeX + ((Settings::instance()->screenResolutionWidth * 0.5) / Block::BLOCK_SIZE);
-
-    uint32_t startX = (player->position().x - 32) / Block::BLOCK_SIZE;
-    uint32_t endX = (player->position().x + 32) / Block::BLOCK_SIZE;
-
-    uint32_t startY = (player->position().y - 32) / Block::BLOCK_SIZE;
-    uint32_t endY = (player->position().y + 32) / Block::BLOCK_SIZE;
-
+    //columns are our X value, rows the Y
+    const int startY = ((playerPosition.y - (Settings::instance()->screenResolutionHeight * 0.5) + player->mousePosition().y) / Block::BLOCK_SIZE) - 2; //HACK: -2 for alignment..fuck if i know why it's needed
+    const int endY = startY + 1;
     int index = 0;
 
     bool blocksModified = false;
@@ -411,26 +384,14 @@ void World::performBlockAttack(Player* player)
                     block.primitiveType = 0; //FIXME:
                     blocksModified = true;
                 }
-
-//                Debug::log(Debug::Area::NetworkServer) << "INDEX MODIFIED: " << index;
-
-//                return;
- //           }
         }
     }
 
     Chunk chunk(startX, startY, endX, endY, &m_blocks);
 
-//    Chunk chunk(startColumn, startRow, endColumn, endRow, blocks);
-//    m_server->sendWorldChunk(&chunk);
-
-//    m_server->sendInitialWorldChunkHACK(player);
     if (blocksModified) {
         m_server->sendWorldChunk(&chunk);
     }
-//    Debug::log(Debug::Area::NetworkServer) << "ERROR: " << " no block found to attack?" << "\n";
-
-
 }
 
 glm::ivec2 World::tileOffset(Player* player) const
