@@ -31,6 +31,7 @@ client/gui/debugmenu.cpp
 client/gui/gui.cpp
 client/gui/mainmenu.cpp
 client/gui/optionsdialog.cpp
+client/gui/quickbarmenu.cpp
 
 client/gui/core/Shell.cpp
 client/gui/core/ShellFileInterface.cpp
