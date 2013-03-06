@@ -383,17 +383,24 @@ void World::performBlockAttack(Player* player)
     //row
     int tilesBeforeY = playerPosition.y / Block::BLOCK_SIZE;
 
-    const int startRow = 0;//tilesBeforeY - ((Settings::instance()->screenResolutionHeight * 0.5) / Block::BLOCK_SIZE);
-    const int endRow = WORLD_ROWCOUNT;//tilesBeforeY + ((Settings::instance()->screenResolutionHeight * 0.5) / Block::BLOCK_SIZE);
+    //FIXME:
+//    const int startRow = 0;//tilesBeforeY - ((Settings::instance()->screenResolutionHeight * 0.5) / Block::BLOCK_SIZE);
+//    const int endRow = WORLD_ROWCOUNT;//tilesBeforeY + ((Settings::instance()->screenResolutionHeight * 0.5) / Block::BLOCK_SIZE);
+//
+//    //columns are our X value, rows the Y
+//    const int startColumn =0;// tilesBeforeX - ((Settings::instance()->screenResolutionWidth * 0.5) / Block::BLOCK_SIZE);
+//    const int endColumn =WORLD_COLUMNCOUNT;// tilesBeforeX + ((Settings::instance()->screenResolutionWidth * 0.5) / Block::BLOCK_SIZE);
 
-    //columns are our X value, rows the Y
-    const int startColumn =0;// tilesBeforeX - ((Settings::instance()->screenResolutionWidth * 0.5) / Block::BLOCK_SIZE);
-    const int endColumn =WORLD_COLUMNCOUNT;// tilesBeforeX + ((Settings::instance()->screenResolutionWidth * 0.5) / Block::BLOCK_SIZE);
+    uint32_t startX = (player->position().x - 32) / Block::BLOCK_SIZE;
+    uint32_t endX = (player->position().x + 32) / Block::BLOCK_SIZE;
+
+    uint32_t startY = (player->position().y - 32) / Block::BLOCK_SIZE;
+    uint32_t endY = (player->position().y + 32) / Block::BLOCK_SIZE;
 
     int index = 0;
 
-    for (int row = startRow; row < endRow; ++row) {
-        for (int column = startColumn; column < endColumn; ++column) {
+    for (int row = startY; row < endY; ++row) {
+        for (int column = startX; column < endX; ++column) {
 //            if (row == attackY && column == attackX) {
                 index = column * WORLD_ROWCOUNT + row;
                 assert(index < WORLD_ROWCOUNT * WORLD_COLUMNCOUNT);
@@ -405,11 +412,12 @@ void World::performBlockAttack(Player* player)
         }
     }
 
-    Chunk chunk(startColumn, startRow, endColumn, endRow, m_blocks);
+    Chunk chunk(startX, startY, endX, endY, m_blocks);
 
 //    Chunk chunk(startColumn, startRow, endColumn, endRow, blocks);
 //    m_server->sendWorldChunk(&chunk);
 
+//    m_server->sendInitialWorldChunkHACK(player);
 m_server->sendWorldChunk(&chunk);
 //    Debug::log(Debug::Area::NetworkServer) << "ERROR: " << " no block found to attack?" << "\n";
 }

@@ -315,6 +315,7 @@ void Server::sendWorldChunk(Chunk* chunk)
     message.set_starty(chunk->startY());
     message.set_endy(chunk->endY());
 
+            Debug::log(Debug::Area::NetworkServer) << "sending world chunk, startx: " << chunk->startX() << " endx: " << chunk->endX() << " starty: " << chunk->startY() << " endy: " << chunk->endY();
     for (int row = chunk->startY(); row < chunk->endY(); ++row) {
         for (int column = chunk->startX(); column < chunk->endX(); ++column) {
 
@@ -327,7 +328,7 @@ void Server::sendWorldChunk(Chunk* chunk)
         }
     }
 
-
+    Debug::log() << "SERVER SENDING PACKET";
     Packet::sendPacketBroadcast(m_server, &message, Packet::FromServerPacketContents::ChunkFromServerPacket, ENET_PACKET_FLAG_RELIABLE);
 }
 
