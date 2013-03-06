@@ -54,16 +54,15 @@ Client::Client()
     m_debugMenu = new DebugMenu(this);
     m_debugMenu->show();
 
-    //HACK: for debug only so i don't have to piss around
-    std::stringstream ss;
-    ss << "Player";
-    std::random_device device;
-    std::mt19937 rand(device());
-    std::uniform_int_distribution<> distribution(0, INT_MAX);
-
-    ss << distribution(rand);
-
-    startMultiplayerHost(ss.str());
+//dws    std::stringstream ss;
+//    ss << "Player";
+//    std::random_device device;
+//    std::mt19937 rand(device());
+//    std::uniform_int_distribution<> distribution(0, INT_MAX);
+//
+//    ss << distribution(rand);
+//
+//    startMultiplayerHost(ss.str());
 }
 
 Client::~Client()
