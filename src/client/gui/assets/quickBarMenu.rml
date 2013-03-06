@@ -47,8 +47,12 @@ FIXME
         </head>
 
         <body template="frame">
-                    <quickbarslot id="0">0</quickbarslot>
-                    <quickbarslot id="1">1</quickbarslot>
-                    <quickbarslot id="2">3</quickbarslot>
+                    <quickbarparentslot id="0">
+                    0
+                        <quickbarslot>
+                        </quickbarslot>
+                    </quickbarparentslot>
+                    <quickbarparentslot id="1">1</quickbarparentslot>
+                    <quickbarparentslot id="2">3</quickbarparentslot>
         </body>
 </rml>
