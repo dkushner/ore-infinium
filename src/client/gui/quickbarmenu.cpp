@@ -56,6 +56,12 @@ void QuickBarMenu::ProcessEvent(Rocket::Core::Event& event)
 void QuickBarMenu::loadDocument()
 {
     m_menu = GUI::instance()->context()->LoadDocument("../client/gui/assets/quickBarMenu.rml");
+
+    Rocket::Core::Colourb shit(255, 255, 0, 155);
+    m_menu->SetProperty("background-color", Rocket::Core::Property(shit, Rocket::Core::Property::COLOUR));
+
+    Rocket::Core::Colourb shit2(0, 255, 255, 255);
+    m_menu->GetElementById("0sub")->SetProperty("background-color", Rocket::Core::Property(shit2, Rocket::Core::Property::COLOUR));
 //    m_chat->GetElementById("title")->SetInnerRML("Chat");
 
 //    m_tabSet = dynamic_cast<Rocket::Controls::ElementTabSet*>(m_chat->GetElementById("tabset"));
