@@ -141,7 +141,6 @@ div#window
         background-center-image: gui.tga stretch 44px 428px 277px 569px;
 }
 
-
 div#content
 {
         z-index: 2;
@@ -163,7 +162,7 @@ quickbarparentslot
     width: 80px;
     height: 80px;
     padding: 0px 0px 0px 0px;
-    margin: 10px;
+    margin: 6px;
 
     background-color: rgba(0, 255, 0, 255);
     background-decorator: image;
@@ -196,6 +195,18 @@ quickbarslot
 div#framecontent
 {
         padding: -100px -105px;
+
+        margin-bottom: 0px;
+        padding-bottom: 0px;
+        padding-top: 0px;
+}
+
+frame
+{
+
+        margin-bottom: 0px;
+        padding-bottom: 0px;
+        padding-top: 0px;
 }
 
 p

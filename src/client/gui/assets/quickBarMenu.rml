@@ -7,16 +7,45 @@
                 <style>
                         body
                         {
-
+/*
+                            z-index: 0;
                             width: 50%;
                             height: 16px;
-
+*/
+margin-bottom: 0px;
+padding-bottom: 0px;
+padding-top: 0px;
                         }
+
+body.window
+{
+        margin-bottom: 0px;
+        padding-bottom: 0px;
+        padding-top: 0px;
+        min-width: 0px;
+        max-width: 1000px;
+
+        min-height: 0px;
+        max-height: 1000px;;
+}
 
                         div#content
                         {
                             text-align: left;
+                            padding-left: 0px;
+                            padding-right: 0px;
+                            padding-top: 0px;
+                            padding-bottom: 0px;
+                            margin-bottom: 0px;
+                            margin-top: 0px;
                         }
+div#framecontent
+{
+
+margin-bottom: 0px;
+padding-bottom: 0px;
+padding-top: 0px;
+}
 
 /*
                         div#subicon
@@ -48,8 +77,13 @@ FIXME
         </head>
 
         <body template="frame">
-                    <quickbarparentslot id="0">0<quickbarslot id="0sub"> </quickbarslot> </quickbarparentslot>
-                    <quickbarparentslot id="1">1<quickbarslot id="1sub"> </quickbarslot> </quickbarparentslot>
-                    <quickbarparentslot id="2">2<quickbarslot id="2sub"> </quickbarslot> </quickbarparentslot>
+                    <quickbarparentslot id="0">1<quickbarslot id="0sub"> </quickbarslot> </quickbarparentslot>
+                    <quickbarparentslot id="1">2<quickbarslot id="1sub"> </quickbarslot> </quickbarparentslot>
+                    <quickbarparentslot id="2">3<quickbarslot id="2sub"> </quickbarslot> </quickbarparentslot>
+                    <quickbarparentslot id="3">4<quickbarslot id="3sub"> </quickbarslot> </quickbarparentslot>
+                    <quickbarparentslot id="4">5<quickbarslot id="4sub"> </quickbarslot> </quickbarparentslot>
+                    <quickbarparentslot id="5">6<quickbarslot id="5sub"> </quickbarslot> </quickbarparentslot>
+                    <quickbarparentslot id="6">7<quickbarslot id="6sub"> </quickbarslot> </quickbarparentslot>
+                    <quickbarparentslot id="7">8<quickbarslot id="7sub"> </quickbarslot> </quickbarparentslot>
         </body>
 </rml>
