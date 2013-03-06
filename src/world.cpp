@@ -404,7 +404,7 @@ void World::performBlockAttack(Player* player)
 //            if (row == attackY && column == attackX) {
                 index = column * WORLD_ROWCOUNT + row;
                 assert(index < WORLD_ROWCOUNT * WORLD_COLUMNCOUNT);
-                m_blocks[index].primitiveType = 2; //FIXME:
+                m_blocks[index].primitiveType = 0; //FIXME:
 //                Debug::log(Debug::Area::NetworkServer) << "INDEX MODIFIED: " << index;
 
 //                return;

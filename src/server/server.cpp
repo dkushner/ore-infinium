@@ -153,7 +153,7 @@ void Server::processMessage(ENetEvent& event)
             }
 
             sendInitialPlayerDataFinished(event.peer);
-//            sendInitialWorldChunk(event.peer);
+            sendInitialWorldChunk(event.peer);
             break;
         }
 
