@@ -350,7 +350,6 @@ void World::performBlockAttack(Player* player)
      *   const int endColumn = (m_player->position().x / Block::blockSize) + radius;
      */
 
-
     glm::ivec2 mouse = player->mousePosition();
 
     glm::vec2 center(Settings::instance()->screenResolutionWidth * 0.5, Settings::instance()->screenResolutionHeight * 0.5);
@@ -413,18 +412,15 @@ void World::performBlockAttack(Player* player)
         }
     }
 
-    auto timerStart = std::chrono::high_resolution_clock::now();
     Chunk chunk(startX, startY, endX, endY, &m_blocks);
-    auto timerEnd = std::chrono::high_resolution_clock::now();
 
-    auto timeTaken = std::chrono::duration_cast<std::chrono::milliseconds>(timerEnd - timerStart).count();
-    Debug::log(Debug::Area::General) << "Time taken for sending block breaking chunk: " << timeTaken << " milliseconds";
 //    Chunk chunk(startColumn, startRow, endColumn, endRow, blocks);
 //    m_server->sendWorldChunk(&chunk);
 
 //    m_server->sendInitialWorldChunkHACK(player);
 m_server->sendWorldChunk(&chunk);
 //    Debug::log(Debug::Area::NetworkServer) << "ERROR: " << " no block found to attack?" << "\n";
+
 
 }
 
