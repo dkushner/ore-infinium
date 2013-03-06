@@ -155,21 +155,19 @@ div#content
         text-align: center;
 }
 
-
 quickbarparentslot
 {
     /* The icons are floated left so they appear left-to-right. */
     float: left;
 
-    /* The padding is added to push the text down to the bottom of the element. The inner dimensions plus the
-       padding come to 100px square. */
     width: 80px;
     height: 80px;
     padding: 0px 0px 0px 0px;
     margin: 10px;
-        background-color: rgba(0, 255, 0, 255);
-        background-decorator: image;
-        background-image: gui.tga 823px 410px 1128px 595px;
+
+    background-color: rgba(0, 255, 0, 255);
+    background-decorator: image;
+    background-image: gui.tga 823px 410px 1128px 595px;
 
     font-size: 12;
     text-align: center;
@@ -178,18 +176,17 @@ quickbarparentslot
 
 quickbarslot
 {
-    /* The icons are floated left so they appear left-to-right. */
-    float: left;
-
-    /* The padding is added to push the text down to the bottom of the element. The inner dimensions plus the
-       padding come to 100px square. */
-    width: 64px;
-    height: 64px;
+    width: 70%;
+    height: 70%;
     padding: 0px 0px 0px 0px;
-    margin: 10px;
-        background-color: rgba(0, 0, 255, 255);
-        background-decorator: image;
-        background-image: gui.tga 823px 410px 1128px 595px;
+
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+
+    background-color: rgba(0, 0, 255, 255);
+    background-decorator: image;
+    background-image: gui.tga 823px 410px 1128px 595px;
 
     font-size: 12;
     text-align: center;
