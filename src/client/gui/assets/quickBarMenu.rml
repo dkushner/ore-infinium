@@ -12,40 +12,50 @@
                             width: 50%;
                             height: 16px;
 */
-margin-bottom: 0px;
-padding-bottom: 0px;
-padding-top: 0px;
+                            margin-bottom: 0px;
+                            padding-bottom: 0px;
+                            padding-top: 0px;
+                            padding-left: 0px;
+                            padding-right: 0px;
+                            min-width: 0px;
+                            position:relative;
                         }
 
-body.window
-{
-        margin-bottom: 0px;
-        padding-bottom: 0px;
-        padding-top: 0px;
-        min-width: 0px;
-        max-width: 1000px;
+                        body.window
+                        {
+                                margin-bottom: 0px;
+                                padding-bottom: 0px;
+                                padding-top: 0px;
+                                padding-left: 0px;
+                                padding-right: 0px;
+                                position:relative;
 
-        min-height: 0px;
-        max-height: 1000px;;
-}
+                                /*
+                                    HACK: FIXME: motherfucking bullshit css shit. i want it to use fucking autosizes, so what does it do, it fucking makes this shit paddingo n the right. fucking hell.
+                                    thanks bitch! that's exactly what i fucking wanted.
+                                */
+                                width: 100%;
+                                height: auto;
+                                min-height: 0px;
+                                min-width: 0px;
+                        }
 
                         div#content
                         {
-                            text-align: left;
-                            padding-left: 0px;
-                            padding-right: 0px;
                             padding-top: 0px;
                             padding-bottom: 0px;
                             margin-bottom: 0px;
                             margin-top: 0px;
+                            min-width: 0px;
                         }
-div#framecontent
-{
 
-margin-bottom: 0px;
-padding-bottom: 0px;
-padding-top: 0px;
-}
+                        div#framecontent
+                        {
+                                margin-bottom: 0px;
+                                padding-bottom: 0px;
+                                padding-top: 0px;
+                                min-width: 0px;
+                        }
 
 /*
                         div#subicon
