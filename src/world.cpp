@@ -399,12 +399,19 @@ void World::performBlockAttack(Player* player)
 
     int index = 0;
 
+    bool blocksModified = false;
     for (int row = startY; row < endY; ++row) {
         for (int column = startX; column < endX; ++column) {
 //            if (row == attackY && column == attackX) {
                 index = column * WORLD_ROWCOUNT + row;
                 assert(index < WORLD_ROWCOUNT * WORLD_COLUMNCOUNT);
-                m_blocks[index].primitiveType = 0; //FIXME:
+                Block& block = m_blocks[index];
+                if (block.primitiveType != 0) {
+                    //FIXME: decrement health..
+                    block.primitiveType = 0; //FIXME:
+                    blocksModified = true;
+                }
+
 //                Debug::log(Debug::Area::NetworkServer) << "INDEX MODIFIED: " << index;
 
 //                return;
@@ -418,7 +425,9 @@ void World::performBlockAttack(Player* player)
 //    m_server->sendWorldChunk(&chunk);
 
 //    m_server->sendInitialWorldChunkHACK(player);
-m_server->sendWorldChunk(&chunk);
+    if (blocksModified) {
+        m_server->sendWorldChunk(&chunk);
+    }
 //    Debug::log(Debug::Area::NetworkServer) << "ERROR: " << " no block found to attack?" << "\n";
 
 
