@@ -7,13 +7,10 @@
                 <style>
                         body
                         {
-                            min-width: 36%;
-                            min-height: 28%;
 
-                            width: 36%;
-                            height: 28%;
+                            width: 50%;
+                            height: 16px;
 
-                            margin-top: auto;
                         }
 
                         div#content
@@ -46,41 +43,12 @@
 FIXME
                         }
 */
-
-                        div#framecontent
-                        {
-                            text-align: left;
-                        }
-                        input.text
-                        {
-                            margin-left: 0px;
-                            margin-bottom: 0px;
-                            padding-bottom: 0px;
-                            vertical-align: 0px;
-                        }
-
-                        button,
-                        input.submit
-                        {
-                            display: inline-block;
-
-                            width: 159px;
-                            height: 30px;
-
-                            padding-top: 0px;
-                            margin-bottom: 0px;
-                            padding-bottom: 0px;
-                            vertical-align: 0px;
-                        }
-
                 </style>
         </head>
 
-        <body template="window">
-                        This is where some text for the chat history goes
-
-                    <quickbarslot/>
-                    <input id="inputLine" type="text" value="" maxLength="128" />
-                    <button id="sendButton">send</button>
+        <body template="frame">
+                    <quickbarslot id="0">0</quickbarslot>
+                    <quickbarslot id="1">1</quickbarslot>
+                    <quickbarslot id="2">3</quickbarslot>
         </body>
 </rml>
