@@ -25,6 +25,7 @@
 #include "gui/mainmenu.h"
 #include "gui/chatdialog.h"
 #include "gui/debugmenu.h"
+#include "gui/quickbarmenu.h"
 
 #include "src/settings/settings.h"
 
@@ -427,6 +428,9 @@ bool Client::connect(const char* address, unsigned int port)
 
         m_chat = new ChatDialog(this, m_mainMenu);
         m_chat->show();
+
+        m_quickBarMenu = new QuickBarMenu(this);
+        m_quickBarMenu->show();
 
         //NOTE: no world is created yet. we now wait for the server to receive our initial connection data, and give us back a
         //player id, which we then create as the main player and finally, create the world.

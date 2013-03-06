@@ -22,14 +22,14 @@
 
 namespace Rocket
 {
-namespace Core
-{
-class ElementDocument;
-}
-namespace Controls
-{
-class ElementTabSet;
-}
+    namespace Core
+    {
+        class ElementDocument;
+    }
+    namespace Controls
+    {
+        class ElementTabSet;
+    }
 }
 
 class Client;

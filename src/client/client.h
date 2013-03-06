@@ -25,6 +25,7 @@
 #include <SDL_log.h>
 #include <thread>
 
+class QuickBarMenu;
 class Player;
 class GUI;
 class MainMenu;
@@ -115,6 +116,7 @@ private:
     MainMenu* m_mainMenu = nullptr;
     ChatDialog* m_chat = nullptr;
     DebugMenu* m_debugMenu = nullptr;
+    QuickBarMenu* m_quickBarMenu = nullptr;
 
     SDL_Window *m_window = nullptr;
     SDL_GLContext m_GLcontext;

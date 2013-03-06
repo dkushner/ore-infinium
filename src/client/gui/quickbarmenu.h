@@ -46,12 +46,19 @@ public:
 
     bool visible();
 
+    void show();
+
+    /**
+     * @p index 0-based index of the slot and data stored therein
+     */
+    void setSlot(uint8_t index, std::string str);
+
 private:
     std::vector<std::string> m_items;
 
     Client* m_client = nullptr;
 
-    Rocket::Core::ElementDocument* m_chat = nullptr;
+    Rocket::Core::ElementDocument* m_menu = nullptr;
 };
 
 #endif

@@ -55,22 +55,26 @@ void QuickBarMenu::ProcessEvent(Rocket::Core::Event& event)
 
 void QuickBarMenu::loadDocument()
 {
-    m_chat = GUI::instance()->context()->LoadDocument("../client/gui/assets/chatDialog.rml");
-    m_chat->GetElementById("title")->SetInnerRML("Chat");
+    m_menu = GUI::instance()->context()->LoadDocument("../client/gui/assets/quickBarMenu.rml");
+//    m_chat->GetElementById("title")->SetInnerRML("Chat");
 
 //    m_tabSet = dynamic_cast<Rocket::Controls::ElementTabSet*>(m_chat->GetElementById("tabset"));
 
-    m_chat->GetElementById("sendButton")->AddEventListener("click", this);
-    m_chat->GetElementById("inputLine")->AddEventListener("keydown", this);
+ //   m_chat->GetElementById("sendButton")->AddEventListener("click", this);
+  //  m_chat->GetElementById("inputLine")->AddEventListener("keydown", this);
 }
 
 bool QuickBarMenu::visible()
 {
-    return m_chat->IsVisible();
+    return m_menu->IsVisible();
 }
 
 Rocket::Core::ElementDocument* QuickBarMenu::document()
 {
-    return m_chat;
+    return m_menu;
 }
 
+void QuickBarMenu::show()
+{
+    m_menu->Show();
+}
