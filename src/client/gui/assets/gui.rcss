@@ -155,6 +155,37 @@ div#content
         text-align: center;
 }
 
+
+quickbarslot
+{
+    /* The icons are floated left so they appear left-to-right. */
+    float: left;
+
+    /* The padding is added to push the text down to the bottom of the element. The inner dimensions plus the
+       padding come to 100px square. */
+    width: 80px;
+    height: 40px;
+    padding: 60px 10px 0px 10px;
+    margin: 10px;
+        background-decorator: tiled-box;
+
+        background-top-left-image: gui.tga 9px 404px 305px 579px;
+        background-top-right-image: gui.tga 305px 404px 314px 415px;
+
+        background-bottom-left-image: gui.tga 9px 578px 21px 589px;
+        background-bottom-right-image: gui.tga 295px 578px 314px 589px;
+        background-bottom-image: gui.tga stretch 19px 582px 20px 589px;
+
+        background-top-image: gui.tga stretch 304px 404px 305px 579px;
+
+        background-left-image: gui.tga stretch 9px 578px 19px 579px;
+        background-center-image: gui.tga stretch 44px 428px 277px 569px;
+
+    font-size: 12;
+    text-align: center;
+    text-shadow: 1px 1px black;
+}
+
 div#framecontent
 {
         padding: -100px -105px;
