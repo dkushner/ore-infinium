@@ -637,7 +637,6 @@ void Client::receiveChunk(std::stringstream* ss)
 
     std::vector<Block> blocks;
 
-            Debug::log() << "receiving chunk, client, startx: " << message.startx() << " endX: " << message.endx() << " starty: " << message.starty() << " endy: " << message.endy();
     int index = 0;
     for (int row = message.starty(); row < message.endy(); ++row) {
         for (int column = message.startx(); column < message.endx(); ++column) {
@@ -654,6 +653,4 @@ void Client::receiveChunk(std::stringstream* ss)
     Chunk chunk(message.startx(), message.starty(), message.endx(), message.endy(), blocks);
 
     m_world->loadChunk(&chunk);
-
-    Debug::log(Debug::Area::NetworkClient) << "received chunk";
 }

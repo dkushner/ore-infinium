@@ -259,17 +259,11 @@ void Server::sendInitialPlayerDataFinished(ENetPeer* peer)
     Packet::sendPacket(peer, &message, Packet::FromServerPacketContents::InitialPlayerDataFinishedFromServerPacket, ENET_PACKET_FLAG_RELIABLE);
 }
 
-void Server::sendInitialWorldChunkHACK(Player* player)
-{
-    sendInitialWorldChunk(player);
-}
-
-
-void Server::sendInitialWorldChunk(Player* player)//HACK: ENetPeer* peer)
+void Server::sendInitialWorldChunk(ENetPeer* peer)
 {
     PacketBuf::Chunk message;
 
-//    Player* player = player; //FIXME:: HACK HOLY FUCK BATMAN m_clients[peer];
+    Player* player = m_clients[peer];
 
     //FIXME: use a nice value, maybe constant or dynamic..constant is easier though
     // it needs to be bigger than the player's viewport, obviously
@@ -300,9 +294,7 @@ void Server::sendInitialWorldChunk(Player* player)//HACK: ENetPeer* peer)
        }
    }
 
-   //FIXME: HACK
-//    Packet::sendPacket(peer, &message, Packet::FromServerPacketContents::ChunkFromServerPacket, ENET_PACKET_FLAG_RELIABLE);
-    Packet::sendPacketBroadcast(m_server, &message, Packet::FromServerPacketContents::ChunkFromServerPacket, ENET_PACKET_FLAG_RELIABLE);
+    Packet::sendPacket(peer, &message, Packet::FromServerPacketContents::ChunkFromServerPacket, ENET_PACKET_FLAG_RELIABLE);
 }
 
 void Server::sendWorldChunk(Chunk* chunk)
@@ -315,7 +307,6 @@ void Server::sendWorldChunk(Chunk* chunk)
     message.set_starty(chunk->startY());
     message.set_endy(chunk->endY());
 
-            Debug::log(Debug::Area::NetworkServer) << "sending world chunk, startx: " << chunk->startX() << " endx: " << chunk->endX() << " starty: " << chunk->startY() << " endy: " << chunk->endY();
     for (int row = chunk->startY(); row < chunk->endY(); ++row) {
         for (int column = chunk->startX(); column < chunk->endX(); ++column) {
 
@@ -328,7 +319,6 @@ void Server::sendWorldChunk(Chunk* chunk)
         }
     }
 
-    Debug::log() << "SERVER SENDING PACKET";
     Packet::sendPacketBroadcast(m_server, &message, Packet::FromServerPacketContents::ChunkFromServerPacket, ENET_PACKET_FLAG_RELIABLE);
 }
 

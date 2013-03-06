@@ -50,7 +50,6 @@ public:
      * Broadcast a chunk change.
      */
     void sendWorldChunk(Chunk* chunk);
-    void sendInitialWorldChunkHACK(Player* player);
 
 private:
     /**
@@ -68,7 +67,7 @@ private:
     void sendChatMessage(const std::string& message, const std::string& playerName);
     void sendInitialPlayerData(ENetPeer* peer, Player* player);
     void sendInitialPlayerDataFinished(ENetPeer* peer);
-    void sendInitialWorldChunk(Player* player); //FIXME: HACK: ENetPeer* peer);
+    void sendInitialWorldChunk(ENetPeer* peer);
 
 
     Player* createPlayer(const std::string& playerName);
