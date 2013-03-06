@@ -649,7 +649,7 @@ void Client::receiveChunk(std::stringstream* ss)
         }
     }
 
-    Chunk chunk(message.startx(), message.starty(), message.endx(), message.endy(), blocks);
+    Chunk chunk(message.startx(), message.starty(), message.endx(), message.endy(), &blocks);
 
     m_world->loadChunk(&chunk);
 }

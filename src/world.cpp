@@ -414,7 +414,7 @@ void World::performBlockAttack(Player* player)
     }
 
     auto timerStart = std::chrono::high_resolution_clock::now();
-    Chunk chunk(startX, startY, endX, endY, m_blocks);
+    Chunk chunk(startX, startY, endX, endY, &m_blocks);
     auto timerEnd = std::chrono::high_resolution_clock::now();
 
     auto timeTaken = std::chrono::duration_cast<std::chrono::milliseconds>(timerEnd - timerStart).count();
@@ -504,7 +504,7 @@ void World::loadChunk(Chunk* chunk)
         for (int column = chunk->startX(); column < chunk->endX(); ++column) {
 
             uint32_t index = column * WORLD_ROWCOUNT + row;
-            m_blocks.at(index) = chunk->blocks().at(sourceIndex);
+            m_blocks.at(index) = chunk->blocks()->at(sourceIndex);
             ++sourceIndex;
         }
     }
@@ -517,7 +517,7 @@ void World::toggleLightRenderingEnabled()
 
 Chunk World::createChunk(uint32_t startX, uint32_t startY, uint32_t endX, uint32_t endY)
 {
-    Chunk chunk(startX, startY, endX, endY, m_blocks);
+    Chunk chunk(startX, startY, endX, endY, &m_blocks);
     return chunk;
 }
 

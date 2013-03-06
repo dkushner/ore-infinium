@@ -286,11 +286,11 @@ void Server::sendInitialWorldChunk(ENetPeer* peer)
        for (int column = startX; column < endX; ++column) {
 
            uint32_t index = column * WORLD_ROWCOUNT + row;
-           Block& block = chunk.blocks()[index];
+           Block& block = chunk.blocks()->at(index);
 
-           message.add_meshtype(block.meshType);
-           message.add_primitivetype(block.primitiveType);
-           message.add_walltype(block.wallType);
+            message.add_meshtype(block.meshType);
+            message.add_primitivetype(block.primitiveType);
+            message.add_walltype(block.wallType);
        }
    }
 
@@ -311,7 +311,7 @@ void Server::sendWorldChunk(Chunk* chunk)
         for (int column = chunk->startX(); column < chunk->endX(); ++column) {
 
             uint32_t index = column * WORLD_ROWCOUNT + row;
-            Block& block = chunk->blocks()[index];
+            Block& block = chunk->blocks()->at(index);
 
             message.add_meshtype(block.meshType);
             message.add_primitivetype(block.primitiveType);

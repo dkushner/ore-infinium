@@ -28,7 +28,7 @@
 class Chunk
 {
 public:
-    Chunk(uint32_t startX, uint32_t startY, uint32_t endX, uint32_t endY, std::vector<Block>& blocks);
+    Chunk(uint32_t startX, uint32_t startY, uint32_t endX, uint32_t endY, std::vector<Block> *blocks);
     ~Chunk();
 
     uint32_t startX() { return m_startX; }
@@ -37,10 +37,10 @@ public:
     uint32_t startY() { return m_startY; }
     uint32_t endY() { return m_endY; }
 
-    std::vector<Block>& blocks() { return m_blocks; }
+    std::vector<Block>* blocks() { return m_blocks; }
 
 private:
-    std::vector<Block> m_blocks;
+    std::vector<Block> *m_blocks = nullptr;
 
     /// left-most x value (column)
     uint32_t m_startX = 0;
