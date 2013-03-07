@@ -17,24 +17,18 @@
                             padding-top: 0px;
                             padding-left: 0px;
                             padding-right: 0px;
+margin-right: 8px;
                             min-width: 0px;
-                            position:relative;
+                            right: 0;
+                            width: 90px;
                         }
 
                         body.window
                         {
-                                margin-bottom: 0px;
-                                padding-bottom: 0px;
-                                padding-top: 0px;
-                                padding-left: 0px;
-                                padding-right: 0px;
-                                position:relative;
-
                                 /*
                                     HACK: FIXME: motherfucking bullshit css shit. i want it to use fucking autosizes, so what does it do, it fucking makes this shit paddingo n the right. fucking hell.
                                     thanks bitch! that's exactly what i fucking wanted.
                                 */
-                                width: 100%;
                                 height: auto;
                                 min-height: 0px;
                                 min-width: 0px;
@@ -85,6 +79,7 @@ FIXME
 */
                 </style>
         </head>
+
 
         <body template="frame">
                     <quickbarparentslot id="0">1<quickbarslot id="0sub"> </quickbarslot> </quickbarparentslot>
