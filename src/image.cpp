@@ -74,5 +74,3 @@ BYTE* Image::bytes()
     Debug::fatal(m_bitmap, Debug::Area::Graphics, "bitmap invalid!");
     return FreeImage_GetBits(m_bitmap);
 }
-
-
