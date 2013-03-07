@@ -22,6 +22,7 @@
 #include <string>
 
 #include <Rocket/Core.h>
+#include <SDL_events.h>
 
 namespace Rocket
 {
@@ -47,6 +48,8 @@ public:
     bool visible();
 
     void show();
+
+    void handleEvent(const SDL_Event& event);
 
     /**
      * @p index 0-based index of the slot and data stored therein

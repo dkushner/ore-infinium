@@ -77,6 +77,13 @@ void QuickBarMenu::loadDocument()
 //    m_chat->GetElementById("title")->SetInnerRML("Chat");
 
 //    m_tabSet = dynamic_cast<Rocket::Controls::ElementTabSet*>(m_chat->GetElementById("tabset"));
+//    background-image: ../../../../textures/entities.png 0px 0px 22px 22px;
+//    background-image: ../../../../textures/entities.png 0px 0px 22px 22px;
+ //   m_menu->GetElementById("0sub")->SetProperty("background-decorator", Rocket::Core::Property("image", Rocket::Core::Property::STRING));
+    m_menu->GetElementById("0sub")->SetAttribute("background-decorator", "image");
+//    m_menu->GetElementById("0sub")->SetProperty("background-image", Rocket::Core::Property("../../../../textures/entities.png 0px 0px 22px 22px", Rocket::Core::Property::STRING));
+//    m_menu->GetElementById("0sub")->SetProperty("background-image", Rocket::Core::Property("../../../../textures/entities.png 0px 0px 512px 512px", Rocket::Core::Property::KEYWORD));
+    m_menu->GetElementById("0sub")->SetAttribute("background-image", "../../../../textures/entities.png 0px 0px 512px 512px");
 
    m_menu->GetElementById("0")->AddEventListener("click", this);
    m_menu->GetElementById("1")->AddEventListener("click", this);
@@ -134,6 +141,32 @@ void QuickBarMenu::setSlot(uint8_t index, std::string str)
 {
 
 }
+
+void QuickBarMenu::handleEvent(const SDL_Event& event)
+{
+    switch (event.type) {
+        case SDL_KEYDOWN:
+            if (event.key.keysym.sym == SDLK_1) {
+                selectSlot(0);
+            } else if (event.key.keysym.sym == SDLK_2) {
+                selectSlot(1);
+            } else if (event.key.keysym.sym == SDLK_3) {
+                selectSlot(2);
+            } else if (event.key.keysym.sym == SDLK_4) {
+                selectSlot(3);
+            } else if (event.key.keysym.sym == SDLK_5) {
+                selectSlot(4);
+            } else if (event.key.keysym.sym == SDLK_6) {
+                selectSlot(5);
+            } else if (event.key.keysym.sym == SDLK_7) {
+                selectSlot(6);
+           } else if (event.key.keysym.sym == SDLK_8) {
+                selectSlot(7);
+            }
+            break;
+    }
+}
+
 
 bool QuickBarMenu::visible()
 {

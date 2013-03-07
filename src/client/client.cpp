@@ -273,6 +273,7 @@ void Client::handleInputEvents()
 
         if (m_mainPlayer && m_peer && m_connected && m_gui->inputDemanded() == false) {
             handlePlayerInput(event);
+            m_quickBarMenu->handleEvent(event);
         }
 
         switch (event.type) {
