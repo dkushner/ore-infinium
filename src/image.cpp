@@ -69,6 +69,12 @@ void Image::loadImage(const std::string& filename)
     }
 }
 
+void Image::flipVertically()
+{
+    FreeImage_FlipVertical(m_bitmap);
+}
+
+
 BYTE* Image::bytes()
 {
     Debug::fatal(m_bitmap, Debug::Area::Graphics, "bitmap invalid!");

@@ -25,7 +25,10 @@
  *
  */
 
+#include "src/image.h"
+
 #include "ShellRenderInterfaceOpenGL.h"
+#include <src/debug.h>
 #include <Rocket/Core.h>
 
 #define GL_CLAMP_TO_EDGE 0x812F
@@ -101,28 +104,10 @@ void ShellRenderInterfaceOpenGL::SetScissorRegion(int x, int y, int width, int h
     glScissor(x, m_height - (y + height), width, height);
 }
 
-// Set to byte packing, or the compiler will expand our struct, which means it won't read correctly from file
-#pragma pack(1)
-struct TGAHeader {
-    char  idLength;
-    char  colourMapType;
-    char  dataType;
-    short int colourMapOrigin;
-    short int colourMapLength;
-    char  colourMapDepth;
-    short int xOrigin;
-    short int yOrigin;
-    short int width;
-    short int height;
-    char  bitsPerPixel;
-    char  imageDescriptor;
-};
-// Restore packing
-#pragma pack()
-
 // Called by Rocket when a texture is required by the library.
 bool ShellRenderInterfaceOpenGL::LoadTexture(Rocket::Core::TextureHandle& texture_handle, Rocket::Core::Vector2i& texture_dimensions, const Rocket::Core::String& source)
 {
+    /*
     Rocket::Core::FileInterface* file_interface = Rocket::Core::GetFileInterface();
     Rocket::Core::FileHandle file_handle = file_interface->Open(source);
     if (!file_handle) {
@@ -174,14 +159,19 @@ bool ShellRenderInterfaceOpenGL::LoadTexture(Rocket::Core::TextureHandle& textur
             read_index += color_mode;
         }
     }
+    */
 
-    texture_dimensions.x = header.width;
-    texture_dimensions.y = header.height;
+    Image* image = new Image(source.CString());
+    image->flipVertically();
 
-    bool success = GenerateTexture(texture_handle, image_dest, texture_dimensions);
+    texture_dimensions.x = image->width();
+    texture_dimensions.y = image->height();
+    Debug::log() << " TEX WIDTH :" << texture_dimensions.x << " y: " << texture_dimensions.y;
 
-    delete [] image_dest;
-    delete [] buffer;
+    bool success = GenerateTexture(texture_handle, image->bytes(), texture_dimensions);
+//
+//    delete [] image_dest;
+//    delete [] buffer;
 
     return success;
 }
@@ -203,10 +193,10 @@ bool ShellRenderInterfaceOpenGL::GenerateTexture(Rocket::Core::TextureHandle& te
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
 
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
 
-    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA8, source_dimensions.x, source_dimensions.y, 0, GL_RGBA, GL_UNSIGNED_BYTE, source);
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA8, source_dimensions.x, source_dimensions.y, 0, GL_BGRA, GL_UNSIGNED_BYTE, source);
 
     texture_handle = (Rocket::Core::TextureHandle) texture_id;
 

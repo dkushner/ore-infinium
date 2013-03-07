@@ -35,6 +35,8 @@ public:
     unsigned int width() const;
     unsigned int height() const;
 
+    void flipVertically();
+
     BYTE* bytes();
 
 private:
