@@ -34,6 +34,7 @@ QuickBarMenu::QuickBarMenu(Client* client)
     m_items.push_back("test4");
 
     loadDocument();
+    selectSlot(0);
 }
 
 QuickBarMenu::~QuickBarMenu()
@@ -46,10 +47,22 @@ void QuickBarMenu::ProcessEvent(Rocket::Core::Event& event)
     const Rocket::Core::String& id = event.GetCurrentElement()->GetId();
     const Rocket::Core::String& type = event.GetType();
 
-    if (id == "sendButton") {
-    } else if (type == "keydown") {
-        if (event.GetParameter<int>("key_identifier", Rocket::Core::Input::KI_0) == Rocket::Core::Input::KI_RETURN) {
-        }
+    if (id == "0") {
+        selectSlot(0);
+    } else if (id == "1") {
+        selectSlot(1);
+    } else if (id == "2") {
+        selectSlot(2);
+    } else if (id == "3") {
+        selectSlot(3);
+    } else if (id == "4") {
+        selectSlot(4);
+    } else if (id == "5") {
+        selectSlot(5);
+    } else if (id == "6") {
+        selectSlot(6);
+    } else if (id == "7") {
+        selectSlot(7);
     }
 }
 
@@ -57,17 +70,69 @@ void QuickBarMenu::loadDocument()
 {
     m_menu = GUI::instance()->context()->LoadDocument("../client/gui/assets/quickBarMenu.rml");
 
-    Rocket::Core::Colourb shit(255, 255, 0, 155);
-    m_menu->SetProperty("background-color", Rocket::Core::Property(shit, Rocket::Core::Property::COLOUR));
+    //Rocket::Core::Colourb shit(255, 255, 0, 155);
+    //m_menu->SetProperty("background-color", Rocket::Core::Property(shit, Rocket::Core::Property::COLOUR));
 
-    Rocket::Core::Colourb shit2(0, 255, 255, 255);
-    m_menu->GetElementById("0sub")->SetProperty("background-color", Rocket::Core::Property(shit2, Rocket::Core::Property::COLOUR));
+//    m_menu->GetElementById("0sub")->SetProperty("background-color", Rocket::Core::Property(shit2, Rocket::Core::Property::COLOUR));
 //    m_chat->GetElementById("title")->SetInnerRML("Chat");
 
 //    m_tabSet = dynamic_cast<Rocket::Controls::ElementTabSet*>(m_chat->GetElementById("tabset"));
 
- //   m_chat->GetElementById("sendButton")->AddEventListener("click", this);
-  //  m_chat->GetElementById("inputLine")->AddEventListener("keydown", this);
+   m_menu->GetElementById("0")->AddEventListener("click", this);
+   m_menu->GetElementById("1")->AddEventListener("click", this);
+   m_menu->GetElementById("2")->AddEventListener("click", this);
+   m_menu->GetElementById("3")->AddEventListener("click", this);
+   m_menu->GetElementById("4")->AddEventListener("click", this);
+   m_menu->GetElementById("5")->AddEventListener("click", this);
+   m_menu->GetElementById("6")->AddEventListener("click", this);
+   m_menu->GetElementById("7")->AddEventListener("click", this);
+}
+
+void QuickBarMenu::selectSlot(uint8_t index)
+{
+    Rocket::Core::Colourb unselectedColor(0, 0, 100, 255);
+    m_menu->GetElementById("0")->SetProperty("background-color", Rocket::Core::Property(unselectedColor, Rocket::Core::Property::COLOUR));
+    m_menu->GetElementById("1")->SetProperty("background-color", Rocket::Core::Property(unselectedColor, Rocket::Core::Property::COLOUR));
+    m_menu->GetElementById("2")->SetProperty("background-color", Rocket::Core::Property(unselectedColor, Rocket::Core::Property::COLOUR));
+    m_menu->GetElementById("3")->SetProperty("background-color", Rocket::Core::Property(unselectedColor, Rocket::Core::Property::COLOUR));
+    m_menu->GetElementById("4")->SetProperty("background-color", Rocket::Core::Property(unselectedColor, Rocket::Core::Property::COLOUR));
+    m_menu->GetElementById("5")->SetProperty("background-color", Rocket::Core::Property(unselectedColor, Rocket::Core::Property::COLOUR));
+    m_menu->GetElementById("6")->SetProperty("background-color", Rocket::Core::Property(unselectedColor, Rocket::Core::Property::COLOUR));
+    m_menu->GetElementById("7")->SetProperty("background-color", Rocket::Core::Property(unselectedColor, Rocket::Core::Property::COLOUR));
+
+    Rocket::Core::Colourb selectedColor(0, 255, 0, 255);
+
+    switch (index) {
+        case 0:
+            m_menu->GetElementById("0")->SetProperty("background-color", Rocket::Core::Property(selectedColor, Rocket::Core::Property::COLOUR));
+            break;
+        case 1:
+            m_menu->GetElementById("1")->SetProperty("background-color", Rocket::Core::Property(selectedColor, Rocket::Core::Property::COLOUR));
+            break;
+        case 2:
+            m_menu->GetElementById("2")->SetProperty("background-color", Rocket::Core::Property(selectedColor, Rocket::Core::Property::COLOUR));
+            break;
+        case 3:
+            m_menu->GetElementById("3")->SetProperty("background-color", Rocket::Core::Property(selectedColor, Rocket::Core::Property::COLOUR));
+            break;
+        case 4:
+            m_menu->GetElementById("4")->SetProperty("background-color", Rocket::Core::Property(selectedColor, Rocket::Core::Property::COLOUR));
+            break;
+        case 5:
+            m_menu->GetElementById("5")->SetProperty("background-color", Rocket::Core::Property(selectedColor, Rocket::Core::Property::COLOUR));
+            break;
+        case 6:
+            m_menu->GetElementById("6")->SetProperty("background-color", Rocket::Core::Property(selectedColor, Rocket::Core::Property::COLOUR));
+            break;
+        case 7:
+            m_menu->GetElementById("7")->SetProperty("background-color", Rocket::Core::Property(selectedColor, Rocket::Core::Property::COLOUR));
+            break;
+    }
+}
+
+void QuickBarMenu::setSlot(uint8_t index, std::string str)
+{
+
 }
 
 bool QuickBarMenu::visible()

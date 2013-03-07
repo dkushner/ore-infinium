@@ -54,6 +54,8 @@ public:
     void setSlot(uint8_t index, std::string str);
 
 private:
+    void selectSlot(uint8_t index);
+
     std::vector<std::string> m_items;
 
     Client* m_client = nullptr;
