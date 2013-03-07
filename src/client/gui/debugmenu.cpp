@@ -66,7 +66,7 @@ void DebugMenu::setCollapsed(bool collapsed)
     m_collapsed = collapsed;
 
     int height = 35;
-    int width = 30;
+    int width = 18;
 
     if (!collapsed) {
         height = Settings::instance()->screenResolutionHeight;
