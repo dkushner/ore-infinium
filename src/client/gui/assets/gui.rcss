@@ -57,7 +57,7 @@ div#title_bar div#icon
         height: 39px;
 
         icon-decorator: image;
-        icon-image-src: gui.tga;
+        icon-image-src: gui.png;
 }
 */
 
@@ -76,34 +76,34 @@ div#title_bar
         outline-color: black;
 
         background-decorator: tiled-horizontal;
-        background-left-image: gui.tga 523px 37px 557px 71px;
-        background-center-image: gui.tga stretch 548px 37px 582px 71px;
-        background-right-image: gui.tga 566px 37px 600px 71px;
+        background-left-image: gui.png 523px 37px 557px 71px;
+        background-center-image: gui.png stretch 548px 37px 582px 71px;
+        background-right-image: gui.png 566px 37px 600px 71px;
 }
 
 /*
-        background-top-left-image: gui.tga 0px 0px 133px 140px;
-        background-top-right-image: gui.tga 136px 0px 146px 140px;
-        background-top-image: gui.tga stretch 134px 0px 135px 140px;
+        background-top-left-image: gui.png 0px 0px 133px 140px;
+        background-top-right-image: gui.png 136px 0px 146px 140px;
+        background-top-image: gui.png stretch 134px 0px 135px 140px;
 
-        background-bottom-left-image: gui.tga 0px 140px 11px 151px;
-        background-bottom-right-image: gui.tga 136px 140px 146px 151px;
-        background-bottom-image: gui.tga stretch 11px 140px 12px 151px;
-        background-left-image: gui.tga stretch 0px 139px 10px 140px;
-        background-center-image: gui.tga stretch 11px 139px 12px 140px;
+        background-bottom-left-image: gui.png 0px 140px 11px 151px;
+        background-bottom-right-image: gui.png 136px 140px 146px 151px;
+        background-bottom-image: gui.png stretch 11px 140px 12px 151px;
+        background-left-image: gui.png stretch 0px 139px 10px 140px;
+        background-center-image: gui.png stretch 11px 139px 12px 140px;
 */
 /*
-        background-top-left-image: gui.tga 9px 404px 305px 579px;
-        background-top-right-image: gui.tga 305px 404px 601px 579px;
+        background-top-left-image: gui.png 9px 404px 305px 579px;
+        background-top-right-image: gui.png 305px 404px 601px 579px;
 
-        background-bottom-left-image: gui.tga 9px 578px 21px 589px;
-        background-bottom-right-image: gui.tga 295px 578px 314px 589px;
-        background-bottom-image: gui.tga stretch 19px 582px 20px 589px;
+        background-bottom-left-image: gui.png 9px 578px 21px 589px;
+        background-bottom-right-image: gui.png 295px 578px 314px 589px;
+        background-bottom-image: gui.png stretch 19px 582px 20px 589px;
 
-        background-top-image: gui.tga stretch 304px 404px 305px 579px;
+        background-top-image: gui.png stretch 304px 404px 305px 579px;
 
-        background-left-image: gui.tga stretch 9px 578px 19px 579px;
-        background-center-image: gui.tga stretch 14px 582px 15px 583px;
+        background-left-image: gui.png stretch 9px 578px 19px 579px;
+        background-center-image: gui.png stretch 14px 582px 15px 583px;
 */
 div#transparentWindow
 {
@@ -117,7 +117,7 @@ div#mostlyTransparentWindow
         padding: 10px 15px;
         background-color: rgba(0, 0, 0, 255);
         background-decorator: image;
-        background-image: gui.tga 823px 410px 1128px 595px;
+        background-image: gui.png 823px 410px 1128px 595px;
         text-align: center;
 }
 
@@ -128,17 +128,17 @@ div#window
 
         background-decorator: tiled-box;
 
-        background-top-left-image: gui.tga 9px 404px 305px 579px;
-        background-top-right-image: gui.tga 305px 404px 314px 415px;
+        background-top-left-image: gui.png 9px 404px 305px 579px;
+        background-top-right-image: gui.png 305px 404px 314px 415px;
 
-        background-bottom-left-image: gui.tga 9px 578px 21px 589px;
-        background-bottom-right-image: gui.tga 295px 578px 314px 589px;
-        background-bottom-image: gui.tga stretch 19px 582px 20px 589px;
+        background-bottom-left-image: gui.png 9px 578px 21px 589px;
+        background-bottom-right-image: gui.png 295px 578px 314px 589px;
+        background-bottom-image: gui.png stretch 19px 582px 20px 589px;
 
-        background-top-image: gui.tga stretch 304px 404px 305px 579px;
+        background-top-image: gui.png stretch 304px 404px 305px 579px;
 
-        background-left-image: gui.tga stretch 9px 578px 19px 579px;
-        background-center-image: gui.tga stretch 44px 428px 277px 569px;
+        background-left-image: gui.png stretch 9px 578px 19px 579px;
+        background-center-image: gui.png stretch 44px 428px 277px 569px;
 }
 
 div#content
@@ -257,7 +257,7 @@ input.submit
         tab-index: auto;
 
         background-decorator: image;
-        background-image: gui.tga 398px 72px 494px 103px;
+        background-image: gui.png 398px 72px 494px 103px;
 }
 
 button:focus,
@@ -293,7 +293,7 @@ input.text
         margin-bottom: 15px;
 
         background-decorator: image;
-        background-image: gui.tga 161px 110px 384px 138px;
+        background-image: gui.png 161px 110px 384px 138px;
 }
 
 input.text,
@@ -338,7 +338,7 @@ dataselect selectvalue
         height: 28px;
 
         background-decorator: image;
-        background-image: gui.tga 392px 150px 589px 178px;
+        background-image: gui.png 392px 150px 589px 178px;
 }
 
 select selectvalue:hover,
@@ -356,7 +356,7 @@ dataselect selectarrow
         padding-left: 5px;
 
         icon-decorator: image;
-        icon-image: gui.tga 589px 150px 614px 178px;
+        icon-image: gui.png 589px 150px 614px 178px;
 }
 
 select selectarrow:hover,
@@ -387,14 +387,14 @@ dataselect selectbox,
 datagrid datagridbody
 {
         background-decorator: tiled-box;
-        background-top-left-image: gui.tga 281px 275px 292px 284px;
-        background-top-right-image: gui.tga 294px 275px 305px 284px;
-        background-top-image: gui.tga stretch 292px 275px 293px 284px;
-        background-bottom-left-image: gui.tga 281px 285px 292px 296px;
-        background-bottom-right-image: gui.tga 294px 285px 305px 296px;
-        background-bottom-image: gui.tga stretch 292px 285px 293px 296px;
-        background-left-image: gui.tga stretch 281px 283px 292px 284px;
-        background-center-image: gui.tga stretch 292px 283px 293px 284px;
+        background-top-left-image: gui.png 281px 275px 292px 284px;
+        background-top-right-image: gui.png 294px 275px 305px 284px;
+        background-top-image: gui.png stretch 292px 275px 293px 284px;
+        background-bottom-left-image: gui.png 281px 285px 292px 296px;
+        background-bottom-right-image: gui.png 294px 285px 305px 296px;
+        background-bottom-image: gui.png stretch 292px 285px 293px 296px;
+        background-left-image: gui.png stretch 281px 283px 292px 284px;
+        background-center-image: gui.png stretch 292px 283px 293px 284px;
 }
 
 select selectbox option,
@@ -421,9 +421,9 @@ dataselect selectbox option:hover
 input.range slidertrack
 {
         background-decorator: tiled-horizontal;
-        background-left-image: gui.tga 148px 15px 310px 31px;
-        background-center-image: gui.tga stretch 311px 432px 15px 31px;
-        background-right-image: gui.tga 432px 15px 537px 31px;
+        background-left-image: gui.png 148px 15px 310px 31px;
+        background-center-image: gui.png stretch 311px 432px 15px 31px;
+        background-right-image: gui.png 432px 15px 537px 31px;
 }
 
 input.range sliderbar
@@ -433,9 +433,9 @@ input.range sliderbar
         height: 5;
 
         background-decorator: tiled-horizontal;
-        background-left-image: gui.tga 196px 33px 311px 38px;
-        background-center-image: gui.tga stretch 306px 33px 399px 38px;
-        background-right-image: gui.tga 400px 33px 479px 38px;
+        background-left-image: gui.png 196px 33px 311px 38px;
+        background-center-image: gui.png stretch 306px 33px 399px 38px;
+        background-right-image: gui.png 400px 33px 479px 38px;
 }
 
 /* Animate the bar's decorator on hover. */
@@ -491,7 +491,7 @@ input.checkbox
 input.radio
 {
         icon-decorator: image;
-        icon-image: gui.tga 100px 12px 114px 26px;
+        icon-image: gui.png 100px 12px 114px 26px;
 }
 
 input.radio:hover
@@ -524,7 +524,7 @@ input.radio:checked:active
 input.checkbox
 {
         icon-decorator: image;
-        icon-image: gui.tga 99px 81px 113px 95px;
+        icon-image: gui.png 99px 81px 113px 95px;
 }
 
 input.checkbox:hover
@@ -563,9 +563,9 @@ datagrid datagridheader
         padding: 5px 10px 0px 10px;
 
         background-decorator: tiled-horizontal;
-        background-left-image: gui.tga 127px 192px 143px 223px;
-        background-center-image: gui.tga stretch 143px 192px 145px 223px;
-        background-right-image: gui.tga 145px 192px 160px 223px;
+        background-left-image: gui.png 127px 192px 143px 223px;
+        background-center-image: gui.png stretch 143px 192px 145px 223px;
+        background-right-image: gui.png 145px 192px 160px 223px;
 }
 
 datagrid datagridbody
@@ -586,7 +586,7 @@ datagridexpand
         width: 17px;
 
         icon-decorator: image;
-        icon-image: gui.tga 3px 232px 20px 249px;
+        icon-image: gui.png 3px 232px 20px 249px;
 }
 
 datagridexpand:hover
@@ -615,9 +615,9 @@ scrollbarvertical
 scrollbarvertical slidertrack
 {
         background-decorator: tiled-vertical;
-        background-top-image: gui.tga 772px 401px 792px 445px;
-        background-center-image: gui.tga stretch 772px 450px 792px 539px;
-        background-bottom-image: gui.tga 772px 544px 792px 599px;
+        background-top-image: gui.png 772px 401px 792px 445px;
+        background-center-image: gui.png stretch 772px 450px 792px 539px;
+        background-bottom-image: gui.png 772px 544px 792px 599px;
 }
 
 scrollbarvertical sliderbar
@@ -627,9 +627,9 @@ scrollbarvertical sliderbar
         min-height: 46px;
 
         background-decorator: tiled-vertical;
-        background-top-image: gui.tga 756px 421px 767px 459px;
-        background-center-image: gui.tga stretch 756px 459px 767px 461px;
-        background-bottom-image: gui.tga 756px 461px 767px 500px;
+        background-top-image: gui.png 756px 421px 767px 459px;
+        background-center-image: gui.png stretch 756px 459px 767px 461px;
+        background-bottom-image: gui.png 756px 461px 767px 500px;
 }
 
 /*
@@ -655,7 +655,7 @@ scrollbarvertical sliderarrowdec
         height: 11px;
 
         icon-decorator: image;
-        icon-image: gui.tga 751px 401px 771px 413px;
+        icon-image: gui.png 751px 401px 771px 413px;
 }
 
 scrollbarvertical sliderarrowdec:hover,
@@ -676,7 +676,7 @@ scrollbarvertical sliderarrowinc
         height: 11px;
 
         icon-decorator: image;
-        icon-image: gui.tga 751px 588px 771px 599px;
+        icon-image: gui.png 751px 588px 771px 599px;
 }
 
 scrollbarvertical sliderarrowinc:active

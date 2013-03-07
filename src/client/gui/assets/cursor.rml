@@ -9,7 +9,7 @@
 				
 				<!-- Add a simple image decorator onto the body element. -->
 				cursor-decorator: image;
-				cursor-image: gui.tga 667px 449px 686px 481px;
+				cursor-image: gui.png 667px 449px 686px 481px;
 			}
 		</style>
 	</head>
