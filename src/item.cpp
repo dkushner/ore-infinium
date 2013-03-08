@@ -48,9 +48,22 @@ void Item::activateSecondary()
 
 Item Item::dropStack(uint32_t amount)
 {
+    uint32_t newItemAmount = 0;
+
     if (amount > m_stackSize) {
+        Debug::log() << "warning, item was told to drop a stack amount greater than m_stackSize, ignoring and dropping as much as we can.";
+
+        newItemAmount = m_stackSize;
         m_stackSize = 0;
     }
+
     m_stackSize -= amount;
+    newItemAmount = amount;
+
+    // create a new item
+    Item item = Item(Sprite::frameName());
+    item.setStackSize(amount);
+
+    return item;
 }
 

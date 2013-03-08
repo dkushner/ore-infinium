@@ -99,6 +99,9 @@ public:
     uint32_t state() { return m_state; }
     void setState(uint32_t state) { m_state = state; }
 
+protected:
+    uint32_t m_properties = 0;
+
 private:
     /**
      * Each item subclass needs to set this, the default is 0 and indicates invalid.

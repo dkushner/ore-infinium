@@ -17,23 +17,18 @@
 
 #include "torch.h"
 
-Torch::Torch(const glm::vec2& position)
-    :   Entity("torch1Ground1", SpriteSheetRenderer::SpriteSheetType::Entity)
+Torch::Torch(const glm::vec2& position): Item("torch1Ground1")
 {
-    setPosition(position);
+    Item::setPosition(position);
 }
 
-Torch::~Torch()
-{
 
+void Torch::activatePrimary()
+{
+    Item::activatePrimary();
 }
 
-void Torch::setRadius(float radius)
+void Torch::activateSecondary()
 {
-    m_radius = radius;
-}
-
-float Torch::radius() const
-{
-    return m_radius;
+    Item::activateSecondary();
 }

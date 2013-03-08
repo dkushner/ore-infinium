@@ -18,19 +18,35 @@
 #ifndef TORCH_H
 #define TORCH_H
 
-#include <glm/glm.hpp>
-#include <glm/gtc/matrix_transform.hpp>
-#include <glm/core/type.hpp>
-#include "entity.h"
+#include "item.h"
 
-class Torch : public Entity
+#include <vector>
+#include <string>
+
+/**
+ */
+class Torch : public Item
 {
 public:
     Torch(const glm::vec2& position);
     ~Torch();
 
-    float radius() const;
-    void setRadius(float radius);
+    /**
+     * Typically meaning the left mouse has been pressed.
+     * In most cases it means firing a weapon/picking an axe.
+     * It's up to the implementation.
+     */
+    virtual void activatePrimary();
+
+    /**
+     * Typically meaning the right mouse has been pressed.
+     * In most cases this means placing an item. In other cases it means firing an alternate
+     * weapon. It's up to the implementation.
+     */
+    virtual void activateSecondary();
+
+    float radius() { return m_radius; }
+    void setRadius(float radius) { m_radius = radius; }
 
 private:
     float m_radius = 300.0f;
