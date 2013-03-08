@@ -45,7 +45,6 @@ public:
     void clearDirtyFlag(uint32_t dirtyFlag);
 
     /**
-     * Overrides/hides member functions from Sprite
      * Use only to reset the entities position to some other place.
      * ALL OTHER CASES USE VELOCITY.
      * Upon calling update, it will move it by that vector, as well as integrate
@@ -76,6 +75,8 @@ public:
      */
     bool collidingWithTile(const glm::vec2& destPosition, const glm::ivec2& dimensions, World* world) const;
 
+    void setName(const std::string& name) { m_name = name; }
+    void setDetails(const std::string& details) { m_details = details; }
 
 private:
     glm::vec2 m_velocity = glm::vec2(0, 0);
@@ -83,6 +84,11 @@ private:
 
     /// utilized only by collision map for speedy lookups (insertions and removals as well as findings)
     int m_index = -1;
+
+    bool m_hasGravity : 1;
+
+    std::string m_name;
+    std::string m_details;
 
     friend class CollisionMap;
 };

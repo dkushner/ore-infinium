@@ -21,6 +21,7 @@ texture.cpp
 tilerenderer.cpp
 torch.cpp
 world.cpp
+item.cpp
 
 #cloudsystem.cpp
 #sky.cpp

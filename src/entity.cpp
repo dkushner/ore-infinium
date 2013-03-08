@@ -22,7 +22,7 @@
 #include "block.h"
 
 Entity::Entity(const std::string& frameName, SpriteSheetRenderer::SpriteSheetType spriteSheetType)
-    : Sprite(frameName, spriteSheetType)
+    : Sprite(frameName, spriteSheetType), m_hasGravity(true)
 {
 
 }
@@ -55,8 +55,7 @@ void Entity::update(double elapsedTime, World* world)
         //Remove this and add the above when the definition for dim is fixed.
 //    if (!World::instance()->isBlockSolid(dest)) {
 
-        m_dirtyFlags |= DirtyFlags::PositionDirty;
-        Sprite::setPosition(dest);
+        setPosition(dest);
     }
 //   }
 }

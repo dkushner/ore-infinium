@@ -15,57 +15,42 @@
  *   along with this program.  If not, see <http://www.gnu.org/licenses/>.    *
  *****************************************************************************/
 
-#ifndef QUICKBARMENU_H
-#define QUICKBARMENU_H
+#include "item.h"
 
-#include <vector>
-#include <string>
+#include "src/world.h"
 
-#include <Rocket/Core.h>
-#include <SDL_events.h>
+#include "debug.h"
 
-namespace Rocket
+Item::Item(const std::string& frameName) : Entity(frameName, SpriteSheetRenderer::SpriteSheetType::Entity)
 {
-    namespace Core
-    {
-        class ElementDocument;
-    }
+
 }
 
-class Client;
-
-class QuickBarMenu : public Rocket::Core::EventListener
+Item::~Item()
 {
-public:
-    QuickBarMenu(Client* client);
-    ~QuickBarMenu();
 
-    void ProcessEvent(Rocket::Core::Event& event);
+}
 
-    void loadDocument();
-    Rocket::Core::ElementDocument* document();
+void Item::update(double elapsedTime, World* world)
+{
+//    Entity::update(elapsedTime, world);
+}
 
-    bool visible();
+void Item::activatePrimary()
+{
 
-    void show();
+}
 
-    void handleEvent(const SDL_Event& event);
+void Item::activateSecondary()
+{
 
-    /**
-     * @p index 0-based index of the slot and data stored therein
-     */
-    void setSlot(uint8_t index, std::string str);
+}
 
-private:
-    void selectSlot(uint8_t index);
+Item Item::dropStack(uint32_t amount)
+{
+    if (amount > m_stackSize) {
+        m_stackSize = 0;
+    }
+    m_stackSize -= amount;
+}
 
-    std::vector<std::string> m_items;
-
-    Client* m_client = nullptr;
-
-    uint8_t m_equippedIndex = 0;
-
-    Rocket::Core::ElementDocument* m_menu = nullptr;
-};
-
-#endif

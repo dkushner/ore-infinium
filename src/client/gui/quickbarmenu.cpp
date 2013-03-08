@@ -97,6 +97,8 @@ void QuickBarMenu::loadDocument()
 
 void QuickBarMenu::selectSlot(uint8_t index)
 {
+    m_equippedIndex = index;
+
     Rocket::Core::Colourb unselectedColor(0, 0, 255, 255);
     m_menu->GetElementById("0")->SetProperty("background-color", Rocket::Core::Property(unselectedColor, Rocket::Core::Property::COLOUR));
     m_menu->GetElementById("1")->SetProperty("background-color", Rocket::Core::Property(unselectedColor, Rocket::Core::Property::COLOUR));

@@ -26,6 +26,8 @@
 
 #include <string>
 
+class Item;
+
 class Sprite
 {
 public:
@@ -101,6 +103,7 @@ private:
     glm::vec2 m_origin;
 
     friend SpriteSheetRenderer;
+    friend Item;
 };
 
 #endif
