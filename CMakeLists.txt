@@ -31,38 +31,48 @@ set(ore_infinium_VERSION_MINOR 1)
 
 include(FindProtobuf)
 
-find_package(SDL2 REQUIRED)
+find_package(SDL2)
 
-find_package(OpenGL REQUIRED)
-find_package(GLEW REQUIRED)
+find_package(OpenGL)
+find_package(GLEW)
 
-find_package(FreeImage REQUIRED)
+find_package(FreeImage)
 
-find_package(YamlCpp REQUIRED)
+find_package(YamlCpp)
 
-find_package(GLM REQUIRED)
-find_package(LibRocket REQUIRED)
-find_package(enet REQUIRED)
-find_package(Protobuf REQUIRED)
+find_package(GLM)
+find_package(LibRocket)
+find_package(enet)
+find_package(Protobuf)
 
-set_package_properties(SDL2 PROPERTIES DESCRIPTION "SDL2, used for creating an open source, cross-platform OpenGL window, audio and input" URL "http://hg.libsdl.org/SDL/")
+set_package_properties(SDL2 PROPERTIES DESCRIPTION "SDL2" URL "http://hg.libsdl.org/SDL/")
+set_package_properties(SDL2 PROPERTIES TYPE REQUIRED PURPOSE "Used for setting up an OpenGL 3.0+ context as well as for input.")
 
 set_package_properties(OpenGL PROPERTIES DESCRIPTION "OpenGL >= 3.0 is required. Version check is done at runtime" URL "-")
-set_package_properties(GLEW PROPERTIES DESCRIPTION "OpenGL Extension Wrangler, to create our function pointers and extension loading" URL "http://glew.sourceforge.net/")
+set_package_properties(OpenGL PROPERTIES TYPE REQUIRED PURPOSE "OpenGL is used for all rendering, without it you won't see anything :)")
+
+set_package_properties(GLEW PROPERTIES DESCRIPTION "OpenGL Extension Wrangler" URL "http://glew.sourceforge.net/")
+set_package_properties(GLEW PROPERTIES TYPE REQUIRED PURPOSE "To create our function pointers and extension loading for OpenGL")
 
 set_package_properties(FreeImage PROPERTIES DESCRIPTION "Cross-platform open source image loading library" URL "http://freeimage.sourceforge.net/")
+set_package_properties(FreeImage PROPERTIES TYPE REQUIRED PURPOSE "For loading textures from disk")
 
-set_package_properties(Yaml-Cpp PROPERTIES DESCRIPTION "YAML CPP, for config file and sprite sheet reading" URL "http://code.google.com/p/yaml-cpp/")
+set_package_properties(YamlCpp PROPERTIES DESCRIPTION "YAML CPP < 0.5, >= 0.30" URL "http://code.google.com/p/yaml-cpp/")
+set_package_properties(YamlCpp PROPERTIES TYPE REQUIRED PURPOSE "For config file and sprite sheet reading")
 
-set_package_properties(GLM PROPERTIES DESCRIPTION "OpenGL Open Source Mathematics Library (for all our math, in a GLSL-like nature)" URL "http://glm.g-truc.net/")
-set_package_properties(LibRocket PROPERTIES DESCRIPTION "LibRocket GUI library" URL "")
-set_package_properties(enet PROPERTIES DESCRIPTION "enet UDP networking library" URL "http://enet.bespin.org/index.html")
+set_package_properties(GLM PROPERTIES DESCRIPTION "OpenGL Open Source Mathematics Library" URL "http://glm.g-truc.net/")
+set_package_properties(GLM PROPERTIES TYPE REQUIRED PURPOSE "For matrix transformations, for camera and position setup, etc.")
 
-message("\n----------------------------------------------------------------------------------------------")
-feature_summary(WHAT REQUIRED_PACKAGES_FOUND DESCRIPTION "Successfully Enabled REQUIRED Features:\n")
-message("\n----------------------------------------------------------------------------------------------")
-feature_summary(WHAT REQUIRED_PACKAGES_NOT_FOUND DESCRIPTION "NOT FOUND REQUIRED FEATURES:\n")
-message("\n----------------------------------------------------------------------------------------------")
+set_package_properties(LibRocket PROPERTIES DESCRIPTION "LibRocket Cross-Platform GUI library that is described with CSS and HTML" URL "")
+set_package_properties(LibRocket PROPERTIES TYPE REQUIRED PURPOSE "For our game's user interface (inventory, game menu, etc.)")
+
+set_package_properties(enet PROPERTIES DESCRIPTION "enet reliabale UDP networking library" URL "http://enet.bespin.org/index.html")
+set_package_properties(enet PROPERTIES TYPE REQUIRED PURPOSE "For networking, obviously.")
+
+set_package_properties(Protobuf PROPERTIES DESCRIPTION "Google's protobuf Protocol Buffers implementation" URL "http://code.google.com/p/protobuf/")
+set_package_properties(Protobuf PROPERTIES TYPE REQUIRED PURPOSE "For serializing and deserializing data in a cross-architecture/platform manner. Used for network communication as well as saving game files and such.")
+
+feature_summary(WHAT ALL FATAL_ON_MISSING_REQUIRED_PACKAGES)
 
 include_directories(${CMAKE_SOURCE_DIR})
 
