@@ -140,6 +140,15 @@ void SpriteSheetRenderer::parseAllSpriteSheets()
     m_spriteSheetEntitiesDescription = parseSpriteSheet("../textures/entities.yaml");
 }
 
+void operator >> (const YAML::Node& node, SpriteSheetRenderer::SpriteFrameIdentifier& frame)
+{
+    node["frameName"] >> frame.frameName;
+    node["x"] >> frame.x;
+    node["y"] >> frame.y;
+    node["width"] >> frame.width;
+    node["height"] >> frame.height;
+}
+
 std::map<std::string, SpriteSheetRenderer::SpriteFrameIdentifier> SpriteSheetRenderer::parseSpriteSheet(const std::string& filename)
 {
     std::map<std::string, SpriteFrameIdentifier> descriptionMap;
@@ -150,36 +159,23 @@ std::map<std::string, SpriteSheetRenderer::SpriteFrameIdentifier> SpriteSheetRen
     Debug::log(Debug::Area::System) << "parsing: '" << filename << "' spreadsheet description...";
     Debug::fatal(fileExists, Debug::Area::System, "sprite sheet description file failed to load, filename: " + filename);
 
-    YAML::Node description = YAML::LoadFile(filename);
+    std::ifstream fin(filename);
+    YAML::Parser parser(fin);
 
-    try {
-        auto spriteMap = description["sprites"];
-        Debug::log() << "SPRITE MAP COUNT SIZE: " << spriteMap.size();
+    YAML::Node doc;
+    parser.GetNextDocument(doc);
 
-        for(std::size_t i = 0; i < spriteMap.size(); ++i) {
-            //FIXME: this non const ref scares me...are my concerns valid?
-            Debug::log() << "SPRITE MAP: " << spriteMap[i]["frameName"];
-            auto sprites = spriteMap[i];
+    for(int i=0; i < doc.size(); i++) {
+        SpriteFrameIdentifier frame;
+        doc[i] >> frame;
 
-            Debug::log(Debug::Area::System) << "frameName: " << sprites["frameName"].as<std::string>();
-            Debug::log(Debug::Area::System) << "x: " << sprites["x"].as<int>();
-            Debug::log(Debug::Area::System) << "y: " << sprites["y"].as<int>();
-            Debug::log(Debug::Area::System) << "width: " << sprites["width"].as<int>();
-            Debug::log(Debug::Area::System) << "height: " << sprites["height"].as<int>();
+        Debug::log(Debug::Area::System) << "frameName: " << frame.frameName;
+        Debug::log(Debug::Area::System) << "x: " << frame.x;
+        Debug::log(Debug::Area::System) << "y: " << frame.y;
+        Debug::log(Debug::Area::System) << "width: " << frame.width;
+        Debug::log(Debug::Area::System) << "height: " << frame.height;
 
-            SpriteFrameIdentifier frame;
-            frame.x = sprites["x"].as<int>();
-            frame.y = sprites["y"].as<int>();
-            frame.width = sprites["width"].as<int>();
-            frame.height = sprites["height"].as<int>();
-
-            const std::string frameName = sprites["frameName"].as<std::string>();
-
-            descriptionMap[frameName] = frame;
-        }
-    } catch (YAML::Exception &e) {
-        Debug::log(Debug::Area::System) << "fatal error, converting from YAML, filename: " << filename << " Error: " << e.what();
-        Debug::fatal(false, Debug::Area::System, "bailing out");
+        descriptionMap[frame.frameName] = frame;
     }
 
     return descriptionMap;
@@ -194,6 +190,7 @@ void SpriteSheetRenderer::renderCharacters()
     Debug::checkGLError();
 
     int index = 0;
+
     for (Sprite * sprite: m_characterSprites) {
         auto frameIdentifier = m_spriteSheetCharactersDescription.find(sprite->frameName());
         Debug::fatal(frameIdentifier != m_spriteSheetCharactersDescription.end(), Debug::Area::Graphics, "sprite sheet character frame description could not be located, name: " + sprite->frameName());

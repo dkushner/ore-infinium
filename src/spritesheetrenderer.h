@@ -75,6 +75,18 @@ public:
 
     void setCamera(Camera* camera);
 
+    /**
+     * In-mem representation of each sprite frame from the spritesheets
+     * So we know the position within the frame (x,y) and size of it.
+     */
+    struct SpriteFrameIdentifier {
+        std::string frameName;
+        unsigned int x;
+        unsigned int y;
+        unsigned int width;
+        unsigned int height;
+    };
+
 private:
     struct SpriteSheet {
         SpriteSheetType type;
@@ -96,17 +108,6 @@ private:
         float x, y;
         unsigned int color; // packed with 4 u8s (unsigned chars) for color
         float u, v;
-    };
-
-    /**
-     * In-mem representation of each sprite frame from the spritesheets
-     * So we know the position within the frame (x,y) and size of it.
-     */
-    struct SpriteFrameIdentifier {
-        unsigned int x;
-        unsigned int y;
-        unsigned int width;
-        unsigned int height;
     };
 
     void parseAllSpriteSheets();
