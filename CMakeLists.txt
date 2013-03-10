@@ -83,5 +83,27 @@ configure_file(
 
 include_directories("${PROJECT_BINARY_DIR}")
 
-add_subdirectory(src)
+#message("PROJ BIN DITR: " + ${CMAKE_SOURCE_DIR} + "/src/network/protobuf-src")
+## protoc -I=protobuf-src --cpp_out=protobuf-compiled protobuf-src/packet.proto
+##kexecute_process("protoc -I=" + ${PROJECT_BINARY_DIR} + " --cpp out=")
+#
+#set (NETWORKPATH ${CMAKE_SOURCE_DIR}/src/network)
+#set (PROTOBUF_SRC_GEN ${NETWORKPATH}/protobuf-src)
+#set (PROTOBUF_COMPILED_GEN ${NETWORKPATH}/protobuf-compiled)
+#
+#set(PROTOBUF_CMD_ARGS "protoc -I=" "${PROTOBUF_SRC_GEN} --cpp_out=${PROTOBUF_COMPILED_GEN}" " ${PROTOBUF_SRC_GEN}/packet.proto")
+#
+#message(${PROTOBUF_CMD_ARGS})
+#execute_process(COMMAND "${PROTOBUF_CMD_ARGS}" RESULT_VARIABLE result)
+#message("GENERATED PROTOBUF FILES, result: " ${result})
+#
+#add_custom_command(
+#OUTPUT foo
+#COMMAND protoc
+#DEPENDS foo.in)
+#)
+#
+#add_custom_target(process_protoc DEPENDS protoc)
+#add_dependencies(main-target process_protoc)
 
+add_subdirectory(src)
