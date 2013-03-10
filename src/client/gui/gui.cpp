@@ -62,11 +62,11 @@ GUI::GUI()
     m_renderer->SetViewport(1600, 900);
     Rocket::Core::SetRenderInterface(m_renderer);
 
-    m_fileInterface = new ShellFileInterface("../client/gui/assets");
-    Rocket::Core::SetFileInterface(m_fileInterface);
+ //   m_fileInterface = new ShellFileInterface("../client/gui/assets");
+//    Rocket::Core::SetFileInterface(m_fileInterface);
 
     Debug::fatal(Rocket::Core::Initialise(), Debug::Area::Graphics, "rocket init failure");
-    Rocket::Controls::Initialise();
+//    Rocket::Controls::Initialise();
 
     m_context = Rocket::Core::CreateContext("main", Rocket::Core::Vector2i(1600, 900));
 

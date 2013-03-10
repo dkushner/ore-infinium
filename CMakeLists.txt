@@ -83,6 +83,7 @@ configure_file(
 
 include_directories("${PROJECT_BINARY_DIR}")
 
+
 #message("PROJ BIN DITR: " + ${CMAKE_SOURCE_DIR} + "/src/network/protobuf-src")
 ## protoc -I=protobuf-src --cpp_out=protobuf-compiled protobuf-src/packet.proto
 ##kexecute_process("protoc -I=" + ${PROJECT_BINARY_DIR} + " --cpp out=")
