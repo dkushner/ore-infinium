@@ -18,7 +18,7 @@
 #include "client.h"
 
 #include "src/network/packet.h"
-#include "src/network/protobuf-compiled/packet.pb.h"
+#include "src/packet.pb.h"
 #include "src/server/server.h"
 
 #include "gui/gui.h"

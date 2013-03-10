@@ -18,7 +18,7 @@
 #ifndef PACKET_H
 #define PACKET_H
 
-#include "src/network/protobuf-compiled/packet.pb.h"
+#include "src/packet.pb.h"
 
 #include <enet/enet.h>
 

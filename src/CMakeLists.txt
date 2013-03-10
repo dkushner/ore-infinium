@@ -44,49 +44,25 @@ server/server.cpp
 settings/settings.cpp
 
 network/packet.cpp
-#${CMAKE_CURRENT_BINARY_DIR}/packet.pb.cc
-network/protobuf-compiled/packet.pb.cc
+${CMAKE_CURRENT_BINARY_DIR}/packet.pb.cc
 )
 
 include(FindPkgConfig)
 
 add_executable(${EXECUTABLE_NAME} ${SRC})
 
-#message("PROJ BIN DITR: " + ${CMAKE_SOURCE_DIR} + "/src/network/protobuf-src")
-## protoc -I=protobuf-src --cpp_out=protobuf-compiled protobuf-src/packet.proto
-##kexecute_process("protoc -I=" + ${PROJECT_BINARY_DIR} + " --cpp out=")
-##
-#set (NETWORKPATH ${CMAKE_SOURCE_DIR}/src/network)
-#set (PROTOBUF_SRC_GEN ${NETWORKPATH}/protobuf-src)
-#set (PROTOBUF_COMPILED_GEN ${NETWORKPATH}/protobuf-compiled)
-##
-#set(PROTOBUF_CMD_ARGS "-I=" "${PROTOBUF_SRC_GEN} --cpp_out=${PROTOBUF_COMPILED_GEN}" " ${PROTOBUF_SRC_GEN}/packet.proto")
-#message(${PROTOBUF_CMD_ARGS})
-#
-
-#execute_process(COMMAND "${PROTOBUF_CMD_ARGS}" RESULT_VARIABLE result)
-#message("GENERATED PROTOBUF FILES, result: " ${result})
-#
-
-message(${CMAKE_CURRENT_BINARY_DIR})
-message(${CMAKE_CURRENT_SOURCE_DIR})
-
-#message(somemessage protoc -I=${CMAKE_CURRENT_SOURCE_DIR} --cpp_out=${CMAKE_CURRENT_BINARY_DIR} ${CMAKE_CURRENT_SOURCE_DIR}/packet.proto DEPENDS ${CMAKE_CURRENT_SOURCE_DIR}/packet.proto)
-
-#add_custom_command(OUTPUT ${CMAKE_CURRENT_BINARY_DIR}/packet.cc
-#COMMAND protoc -I=${CMAKE_CURRENT_SOURCE_DIR} --cpp_out=${CMAKE_CURRENT_BINARY_DIR} ${CMAKE_CURRENT_SOURCE_DIR}/packet.proto DEPENDS ${CMAKE_CURRENT_SOURCE_DIR}/packet.proto)
-
-#add_custom_command(OUTPUT ${CMAKE_CURRENT_BINARY_DIR}/packet.h
-#COMMAND "protoc -I=" #${CMAKE_CURRENT_SOURCE_DIR} "--cpp_out=${CMAKE_CURRENT_BINARY_DIR}" "${CMAKE_CURRENT_SOURCE_DIR}/network/protobuf-src/packet.proto"
-#DEPENDS ${CMAKE_CURRENT_SOURCE_DIR}/packet.proto
-#)
-#
-add_custom_command(OUTPUT ${CMAKE_CURRENT_BINARY_DIR}/packet.h
-COMMAND protoc
- DEPENDS ${CMAKE_CURRENT_SOURCE_DIR}/packet.h.in
+add_custom_command(
+  OUTPUT ${CMAKE_CURRENT_BINARY_DIR}/packet.pb.cc
+  COMMAND protoc  -I=${CMAKE_CURRENT_SOURCE_DIR} --cpp_out=${CMAKE_CURRENT_BINARY_DIR} ${CMAKE_CURRENT_SOURCE_DIR}/packet.proto
+  DEPENDS ${CMAKE_CURRENT_SOURCE_DIR}/packet.proto
 )
-# -I=${CMAKE_CURRENT_SOURCE_DIR} --cpp_out=${CMAKE_CURRENT_BINARY_DIR} ${CMAKE_CURRENT_SOURCE_DIR}/packet.proto
- add_dependencies(ore-infinium ${CMAKE_CURRENT_BINARY_DIR}/packet.h)
+
+add_custom_target(
+  do_protoc
+  DEPENDS ${CMAKE_CURRENT_BINARY_DIR}/packet.pb.cc
+)
+
+add_dependencies(${EXECUTABLE_NAME} do_protoc)
 
 include_directories(
 ${CMAKE_SOURCE_DIR}

@@ -19,7 +19,7 @@
 
 #include "src/network/packet.h"
 
-#include "src/network/protobuf-compiled/packet.pb.h"
+#include "src/packet.pb.h"
 
 #include "src/player.h"
 
