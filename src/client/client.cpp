@@ -324,7 +324,7 @@ void Client::handleInputEvents()
             break;
 
         case SDL_MOUSEWHEEL:
-            //greater than 0 is moving mouse wheel *up*
+            //greater than 0 is moving mouse wheel *up*, so we want previous.
             if (m_quickBarMenu) {
                 if (event.wheel.y > 0) {
                     m_quickBarMenu->previousSlot();
@@ -335,6 +335,9 @@ void Client::handleInputEvents()
             break;
 
         case SDL_WINDOWEVENT_CLOSE:
+            //FIXME: fucking useless. doesn't get called for..gee, what would this event be called for? oh yeah, window closing. No, instead that's fucking SDL_QUIT, which is
+            // also for some fucking reason, also ctrl-C/break. That shit don't make sense brah
+
             // if (m_peer) {
             //     m_mainMenu->toggleShown();
             // } else {
@@ -346,7 +349,8 @@ void Client::handleInputEvents()
 //            if (m_peer) {
 //                m_mainMenu->showEscapeMenu();
 //            } else {
-                shutdown();
+            //NOTE: so far this seems to be ctrl-C as well as window close button. Who the fuck knows why the above one does nothing
+            shutdown();
             //}
             break;
 

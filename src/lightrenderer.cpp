@@ -76,44 +76,6 @@ void LightRenderer::setTileRendererTexture(GLuint texture)
     m_tileRendererTexture = texture;
 }
 
-
-/*
-    glGenTextures(1, &m_tileMapTexture);
-    glBindTexture(GL_TEXTURE_2D_ARRAY, m_tileMapTexture);
-
-    glTexParameteri(GL_TEXTURE_2D_ARRAY, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
-    glTexParameteri(GL_TEXTURE_2D_ARRAY, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
-    glTexParameteri(GL_TEXTURE_2D_ARRAY, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
-    glTexParameteri(GL_TEXTURE_2D_ARRAY, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
-
-    const GLint level = 0;
-    glTexImage3D(GL_TEXTURE_2D_ARRAY, level, GL_RGBA, TILESHEET_WIDTH, TILESHEET_HEIGHT, Block::blockTypeMap.size(), 0, GL_RGBA, GL_UNSIGNED_BYTE, 0 /* if it's null it tells GL we will send in 2D images as elements one by one, later );
-/*
-for (auto & tile : Block::blockTypeMap) {
-        loadTileSheet(tile.second.texture, tile.first);
-    }
-}
-*/
-
-/*
-void TileRenderer::loadTileSheet(const std::string& fileName, Block::BlockType type)
-{
-    Image* image = new Image(Block::blockTypeMap.at(type).texture);
-
-    const GLint level = 0;
-    const GLint xoffset = 0;
-    const GLint yoffset = 0;
-    const GLint zoffset = m_tileSheetCount;
-    const GLsizei depth = 1;
-
-    glTexSubImage3D(GL_TEXTURE_2D_ARRAY, level, xoffset, yoffset, zoffset, TILESHEET_WIDTH, TILESHEET_HEIGHT, depth, GL_BGRA, GL_UNSIGNED_BYTE, image->bytes());
-
-    m_tileSheets[type] = image;
-
-    ++m_tileSheetCount;
-}
-*/
-
 //FIXME: TODO: take a slightly different approach, clear to white instead, draw black whereever there are tiles that have back-tiles, and then draw user-placed lights which would brighten up those tiles
 void LightRenderer::renderToFBO()
 {
