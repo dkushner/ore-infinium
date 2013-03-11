@@ -323,6 +323,17 @@ void Client::handleInputEvents()
             }
             break;
 
+        case SDL_MOUSEWHEEL:
+            //greater than 0 is moving mouse wheel *up*
+            if (m_quickBarMenu) {
+                if (event.wheel.y > 0) {
+                    m_quickBarMenu->previousSlot();
+                } else if (event.wheel.y < 0) {
+                    m_quickBarMenu->nextSlot();
+                }
+            }
+            break;
+
         case SDL_WINDOWEVENT_CLOSE:
             // if (m_peer) {
             //     m_mainMenu->toggleShown();

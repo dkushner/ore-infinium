@@ -139,6 +139,26 @@ void QuickBarMenu::selectSlot(uint8_t index)
     }
 }
 
+void QuickBarMenu::nextSlot()
+{
+    //at the right bound
+    if (m_equippedIndex == m_maxEquippedSlots - 1) {
+        return;
+    }
+
+    selectSlot(m_equippedIndex + 1);
+}
+
+void QuickBarMenu::previousSlot()
+{
+    //at the left bound
+    if (m_equippedIndex == 0) {
+        return;
+    }
+
+    selectSlot(m_equippedIndex - 1);
+}
+
 void QuickBarMenu::setSlot(uint8_t index, std::string str)
 {
 
@@ -168,7 +188,6 @@ void QuickBarMenu::handleEvent(const SDL_Event& event)
             break;
     }
 }
-
 
 bool QuickBarMenu::visible()
 {

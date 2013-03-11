@@ -52,9 +52,13 @@ public:
     void handleEvent(const SDL_Event& event);
 
     /**
+     * Sets the Item stored in this slot
      * @p index 0-based index of the slot and data stored therein
      */
     void setSlot(uint8_t index, std::string str);
+
+    void nextSlot();
+    void previousSlot();
 
 private:
     void selectSlot(uint8_t index);
@@ -63,6 +67,8 @@ private:
 
     Client* m_client = nullptr;
 
+    /// 1-indexed. 1-8
+    uint8_t m_maxEquippedSlots = 8;
     uint8_t m_equippedIndex = 0;
 
     Rocket::Core::ElementDocument* m_menu = nullptr;
