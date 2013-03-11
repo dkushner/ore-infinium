@@ -9,8 +9,16 @@ uniform float time;
 out vec4 fragColor;
 
 void main() {
-//    float distance = 8 * distance(frag_texcoord.xy, vec2(0.5, 0.5));
-    fragColor = vec4(modf(time, ));
-//texture2D(lightMap, frag_texcoord) * (frag_color);
-//vec4(frag_color.rgb * (1/distance), frag_color.a * (2/ distance));
+    vec2 texcoord = frag_texcoord;
+
+    //transform the texcoord by several pixels, somewhat randomly based on time
+    //this makes the light flicker and sway a bit from origin, and around radius
+    texcoord *= sin(time * 3) * sin((time + 2.0)* 5) * sin((time + 3) * 7) * .05 + 1;
+
+    vec4 light = texture2D(lightMap, texcoord) * (frag_color);
+
+    //modify the actual light values to affect the light itself, and make it dim/brighten with time random
+    light *= sin(time * 3) * sin((time + 2.0)* 5) * sin((time + 3) * 7) * .15 + 1;
+
+    fragColor = light;
 }

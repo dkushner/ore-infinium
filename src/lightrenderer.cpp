@@ -36,6 +36,7 @@
 
 #include <GL/glew.h>
 #include <GL/glext.h>
+#include <SDL_timer.h>
 
 LightRenderer::LightRenderer(World* world, Camera* camera, Player* mainPlayer)
     :   m_world(world),
@@ -103,6 +104,9 @@ void LightRenderer::renderToFBO()
 
     GLint lightMapLoc = glGetUniformLocation(m_shader->shaderProgram(), "lightMap");
     glUniform1i(lightMapLoc, 0);
+
+    GLint timeLoc = glGetUniformLocation(m_shader->shaderProgram(), "time");
+    glUniform1f(timeLoc, float(SDL_GetTicks()));
 
     int index = 0;
     Debug::checkGLError();
