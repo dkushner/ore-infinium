@@ -16,19 +16,33 @@
  *****************************************************************************/
 
 #include "torch.h"
+#include "debug.h"
 
 Torch::Torch(const glm::vec2& position): Item("torch1Ground1")
 {
     Item::setPosition(position);
+    Item::setName("Torch Testname");
+    Item::setDetails("a motherfucking torch.");
+    Item::m_maximumStackSize = 64;
 }
 
+Torch::~Torch()
+{
+
+}
+
+Item* Torch::duplicate()
+{
+    Torch* torch = new Torch(*this);
+    Debug::log() << "duplicating torch, position: " << torch->position().x << " y: " << torch->position().y;
+
+    return torch;
+}
 
 void Torch::activatePrimary()
 {
-    Item::activatePrimary();
 }
 
 void Torch::activateSecondary()
 {
-    Item::activateSecondary();
 }

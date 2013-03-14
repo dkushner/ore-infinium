@@ -38,6 +38,7 @@ class Camera;
 class SpriteSheetRenderer;
 class CollisionMap;
 class Torch;
+class Item;
 
 //height
 static constexpr unsigned short WORLD_ROWCOUNT = 8400;
@@ -67,8 +68,6 @@ public:
 
     void loadMap();
 
-    void handleEvent(const SDL_Event& event);
-
     bool isBlockSolid(const glm::vec2& vecDest) const;
 
     unsigned char getBlockType(const glm::vec2& vecPoint) const;
@@ -83,6 +82,13 @@ public:
      */
     void removePlayer(Player* player);
     Player* findPlayer(uint32_t playerID);
+
+    void itemPrimaryActivated(Player* player, Item* item);
+    void itemSecondaryActivated(Player* player, Item* item);
+    /**
+     * The player that this item belongs to (inventory)
+     */
+    void itemQuickBarDropped(Player* player, Item* item, uint32_t amount);
 
     void zoomIn();
     void zoomOut();

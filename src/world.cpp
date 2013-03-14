@@ -20,6 +20,7 @@
 
 #include "src/server/server.h"
 #include "src/client/client.h"
+#include "item.h"
 #include "block.h"
 #include "torch.h"
 #include "game.h"
@@ -497,4 +498,30 @@ void World::zoomOut()
 {
     m_camera->zoom(m_zoomOutFactor);
     m_tileMapCamera->zoom(m_zoomOutFactor);
+}
+
+void World::itemQuickBarDropped(Player* player, Item* item, uint32_t amount)
+{
+    Item* droppedItem = item->duplicate();
+    assert(droppedItem);
+
+    droppedItem->setStackSize(item->dropStack(amount));
+
+    m_entities.insert(m_entities.end(), droppedItem);
+}
+
+void World::itemPrimaryActivated(Player* player, Item* item)
+{
+    if (item->placeable()) {
+        // place the item in the world (append to entity list)
+        //TODO: if it's dynamic_cast a Torch, then put it in torch list
+
+    }
+
+    item->activatePrimary();
+}
+
+void World::itemSecondaryActivated(Player* player, Item* item)
+{
+    item->activateSecondary();
 }

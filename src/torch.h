@@ -32,18 +32,16 @@ public:
     ~Torch();
 
     /**
-     * Typically meaning the left mouse has been pressed.
-     * In most cases it means firing a weapon/picking an axe.
-     * It's up to the implementation.
+     * NOOP: torches do nothing other than be placed.
      */
     virtual void activatePrimary();
 
     /**
-     * Typically meaning the right mouse has been pressed.
-     * In most cases this means placing an item. In other cases it means firing an alternate
-     * weapon. It's up to the implementation.
+     * NOOP: torches do nothing other than be placed.
      */
     virtual void activateSecondary();
+
+    virtual Item* duplicate();
 
     float radius() { return m_radius; }
     void setRadius(float radius) { m_radius = radius; }
