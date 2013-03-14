@@ -17,6 +17,8 @@
 
 #include "quickbarmenu.h"
 
+#include "src/quickbarinventory.h"
+
 #include "src/client/client.h"
 #include "src/client/gui/gui.h"
 
@@ -28,10 +30,7 @@
 QuickBarMenu::QuickBarMenu(Client* client)
 :   m_client(client)
 {
-    m_items.push_back("test1");
-    m_items.push_back("test2");
-    m_items.push_back("test3");
-    m_items.push_back("test4");
+    m_inventory = new QuickBarInventory();
 
     loadDocument();
     selectSlot(0);
@@ -39,7 +38,7 @@ QuickBarMenu::QuickBarMenu(Client* client)
 
 QuickBarMenu::~QuickBarMenu()
 {
-
+    delete m_inventory;
 }
 
 void QuickBarMenu::ProcessEvent(Rocket::Core::Event& event)
@@ -97,7 +96,7 @@ void QuickBarMenu::loadDocument()
 
 void QuickBarMenu::selectSlot(uint8_t index)
 {
-    m_equippedIndex = index;
+    m_inventory->selectSlot(index);
 
     Rocket::Core::Colourb unselectedColor(0, 0, 255, 255);
     m_menu->GetElementById("0")->SetProperty("background-color", Rocket::Core::Property(unselectedColor, Rocket::Core::Property::COLOUR));
@@ -142,26 +141,21 @@ void QuickBarMenu::selectSlot(uint8_t index)
 void QuickBarMenu::nextSlot()
 {
     //at the right bound
-    if (m_equippedIndex == m_maxEquippedSlots - 1) {
+    if (m_inventory->equippedIndex() == m_inventory->maxEquippedSlots() - 1) {
         return;
     }
 
-    selectSlot(m_equippedIndex + 1);
+    selectSlot(m_inventory->equippedIndex() + 1);
 }
 
 void QuickBarMenu::previousSlot()
 {
     //at the left bound
-    if (m_equippedIndex == 0) {
+    if (m_inventory->equippedIndex() == 0) {
         return;
     }
 
-    selectSlot(m_equippedIndex - 1);
-}
-
-void QuickBarMenu::setSlot(uint8_t index, std::string str)
-{
-
+    selectSlot(m_inventory->equippedIndex() - 1);
 }
 
 void QuickBarMenu::handleEvent(const SDL_Event& event)

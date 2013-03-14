@@ -22,6 +22,7 @@ tilerenderer.cpp
 torch.cpp
 world.cpp
 item.cpp
+quickbarinventory.cpp
 
 #cloudsystem.cpp
 #sky.cpp

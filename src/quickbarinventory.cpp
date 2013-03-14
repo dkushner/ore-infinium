@@ -15,53 +15,21 @@
  *   along with this program.  If not, see <http://www.gnu.org/licenses/>.    *
  *****************************************************************************/
 
-#ifndef QUICKBARMENU_H
-#define QUICKBARMENU_H
+#include "quickbarinventory.h"
 
-#include <vector>
-#include <string>
+#include "src/item.h"
 
-#include <Rocket/Core.h>
-#include <SDL_events.h>
-
-namespace Rocket
+QuickBarInventory::QuickBarInventory()
 {
-    namespace Core
-    {
-        class ElementDocument;
-    }
+
 }
 
-class Client;
-class QuickBarInventory;
-
-class QuickBarMenu : public Rocket::Core::EventListener
+QuickBarInventory::~QuickBarInventory()
 {
-public:
-    QuickBarMenu(Client* client);
-    ~QuickBarMenu();
 
-    void ProcessEvent(Rocket::Core::Event& event);
+}
 
-    void loadDocument();
-    Rocket::Core::ElementDocument* document();
+void QuickBarInventory::setSlot(uint8_t index, Item* item)
+{
 
-    bool visible();
-
-    void show();
-
-    void handleEvent(const SDL_Event& event);
-
-    void nextSlot();
-    void previousSlot();
-
-private:
-    void selectSlot(uint8_t index);
-
-    QuickBarInventory* m_inventory = nullptr;
-    Client* m_client = nullptr;
-
-    Rocket::Core::ElementDocument* m_menu = nullptr;
-};
-
-#endif
+}

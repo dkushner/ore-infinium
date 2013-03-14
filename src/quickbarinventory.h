@@ -15,53 +15,40 @@
  *   along with this program.  If not, see <http://www.gnu.org/licenses/>.    *
  *****************************************************************************/
 
-#ifndef QUICKBARMENU_H
-#define QUICKBARMENU_H
+#ifndef QUICKINVENTORYMENU_H
+#define QUICKINVENTORYMENU_H
 
 #include <vector>
 #include <string>
 
-#include <Rocket/Core.h>
-#include <SDL_events.h>
+class Item;
 
-namespace Rocket
-{
-    namespace Core
-    {
-        class ElementDocument;
-    }
-}
-
-class Client;
-class QuickBarInventory;
-
-class QuickBarMenu : public Rocket::Core::EventListener
+class QuickBarInventory
 {
 public:
-    QuickBarMenu(Client* client);
-    ~QuickBarMenu();
+    QuickBarInventory();
+    ~QuickBarInventory();
 
-    void ProcessEvent(Rocket::Core::Event& event);
+    /**
+     * Sets the Item stored in this slot
+     * @p index 0-based index of the slot and data stored therein
+     */
+    void setSlot(uint8_t index, Item* item);
 
-    void loadDocument();
-    Rocket::Core::ElementDocument* document();
+    /**
+     * Selects/equips the @p index slot
+     */
+    void selectSlot(uint8_t index) { m_equippedIndex = index; }
+    uint8_t equippedIndex() { return m_equippedIndex; }
 
-    bool visible();
-
-    void show();
-
-    void handleEvent(const SDL_Event& event);
-
-    void nextSlot();
-    void previousSlot();
+    uint8_t maxEquippedSlots() { return m_maxEquippedSlots; }
 
 private:
-    void selectSlot(uint8_t index);
+    std::vector<Item*> m_items;
 
-    QuickBarInventory* m_inventory = nullptr;
-    Client* m_client = nullptr;
-
-    Rocket::Core::ElementDocument* m_menu = nullptr;
+    /// 1-indexed. 1-8
+    uint8_t m_maxEquippedSlots = 8;
+    uint8_t m_equippedIndex = 0;
 };
 
 #endif

@@ -85,10 +85,14 @@ public:
 
     void itemPrimaryActivated(Player* player, Item* item);
     void itemSecondaryActivated(Player* player, Item* item);
+
     /**
-     * The player that this item belongs to (inventory)
+     * An item contained within the quickbar inventory is attempting to be dropped
+     * @p player The player that this item belongs to (inventory)
+     * @p item pointer to the item to drop
+     * @p amount how much of said item to drop, amounts greater than the item's stack size is OK and will be handled.
      */
-    void itemQuickBarDropped(Player* player, Item* item, uint32_t amount);
+    void itemQuickBarInventoryDropped(Player* player, Item* item, uint32_t amount);
 
     void zoomIn();
     void zoomOut();

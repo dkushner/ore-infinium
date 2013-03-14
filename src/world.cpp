@@ -500,7 +500,7 @@ void World::zoomOut()
     m_tileMapCamera->zoom(m_zoomOutFactor);
 }
 
-void World::itemQuickBarDropped(Player* player, Item* item, uint32_t amount)
+void World::itemQuickBarInventoryDropped(Player* player, Item* item, uint32_t amount)
 {
     Item* droppedItem = item->duplicate();
     assert(droppedItem);
