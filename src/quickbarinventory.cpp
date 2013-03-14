@@ -18,10 +18,11 @@
 #include "quickbarinventory.h"
 
 #include "src/item.h"
+#include "debug.h"
 
 QuickBarInventory::QuickBarInventory()
 {
-
+    m_items.resize(m_maxEquippedSlots);
 }
 
 QuickBarInventory::~QuickBarInventory()
@@ -31,5 +32,21 @@ QuickBarInventory::~QuickBarInventory()
 
 void QuickBarInventory::setSlot(uint8_t index, Item* item)
 {
+    assert(index < m_items.size());
 
+    m_items.assign(index, item);
+}
+
+Item* QuickBarInventory::item(uint8_t index)
+{
+    assert(index < m_items.size());
+
+    for (int i = 0; i < m_items.size(); ++i) {
+        return m_items[i];
+    }
+}
+
+void QuickBarInventory::removeItem(uint8_t index)
+{
+    m_items[index] = nullptr;
 }

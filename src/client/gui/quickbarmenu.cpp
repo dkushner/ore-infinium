@@ -27,18 +27,16 @@
 #include <Rocket/Core.h>
 #include <Rocket/Controls.h>
 
-QuickBarMenu::QuickBarMenu(Client* client)
-:   m_client(client)
+QuickBarMenu::QuickBarMenu(Client* client, QuickBarInventory* inventory)
+:   m_client(client),
+    m_inventory(inventory)
 {
-    m_inventory = new QuickBarInventory();
-
     loadDocument();
     selectSlot(0);
 }
 
 QuickBarMenu::~QuickBarMenu()
 {
-    delete m_inventory;
 }
 
 void QuickBarMenu::ProcessEvent(Rocket::Core::Event& event)

@@ -38,7 +38,7 @@ class QuickBarInventory;
 class QuickBarMenu : public Rocket::Core::EventListener
 {
 public:
-    QuickBarMenu(Client* client);
+    QuickBarMenu(Client* client, QuickBarInventory* inventory);
     ~QuickBarMenu();
 
     void ProcessEvent(Rocket::Core::Event& event);

@@ -15,8 +15,8 @@
  *   along with this program.  If not, see <http://www.gnu.org/licenses/>.    *
  *****************************************************************************/
 
-#ifndef QUICKINVENTORYMENU_H
-#define QUICKINVENTORYMENU_H
+#ifndef QUICKINVENTORY_H
+#define QUICKINVENTORY_H
 
 #include <vector>
 #include <string>
@@ -31,9 +31,21 @@ public:
 
     /**
      * Sets the Item stored in this slot
+     * @p item Ownership is NOT taken on this pointer.
      * @p index 0-based index of the slot and data stored therein
      */
     void setSlot(uint8_t index, Item* item);
+
+    /**
+     * Ownership of pointer is caller's responsibility. Will NOT delete.
+     * Removes @p index from the item/slot list.
+     */
+    void removeItem(uint8_t index);
+
+    /**
+     * Returns the item at @p index, or nullptr if no item exists there.
+     */
+    Item* item(uint8_t index);
 
     /**
      * Selects/equips the @p index slot
@@ -46,7 +58,7 @@ public:
 private:
     std::vector<Item*> m_items;
 
-    /// 1-indexed. 1-8
+    /// 1-indexed. 1-8, initially/for now.
     uint8_t m_maxEquippedSlots = 8;
     uint8_t m_equippedIndex = 0;
 };
