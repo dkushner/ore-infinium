@@ -90,3 +90,7 @@ message Item {
     // 0-based
     optional uint32 index = 9;
 }
+
+message QuickBarInventorySelectSlotRequestFromClient {
+    optional uint32 index = 1;
+}

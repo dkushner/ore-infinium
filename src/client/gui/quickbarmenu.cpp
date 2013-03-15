@@ -135,6 +135,8 @@ void QuickBarMenu::selectSlot(uint8_t index)
         m_menu->GetElementById("7")->SetProperty("background-color", Rocket::Core::Property(selectedColor, Rocket::Core::Property::COLOUR));
         break;
     }
+
+    m_client->sendQuickBarInventorySlotSelectRequest(index);
 }
 
 void QuickBarMenu::nextSlot()

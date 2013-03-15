@@ -552,6 +552,14 @@ void Client::sendPlayerMouseState()
     Packet::sendPacket(m_peer, &message, Packet::FromClientPacketContents::PlayerMouseStateFromClient, ENET_PACKET_FLAG_RELIABLE);
 }
 
+void Client::sendQuickBarInventorySlotSelectRequest(uint8_t index)
+{
+    PacketBuf::QuickBarInventorySelectSlotRequestFromClient message;
+    message.set_index(index);
+
+    Packet::sendPacket(m_peer, &message, Packet::FromClientPacketContents::QuickBarInventorySelectSlotRequestFromClient, ENET_PACKET_FLAG_RELIABLE);
+}
+
 void Client::processMessage(ENetEvent& event)
 {
     std::stringstream ss(std::string(event.packet->data, event.packet->dataLength));

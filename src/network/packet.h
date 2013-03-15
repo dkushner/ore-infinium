@@ -44,7 +44,9 @@ public:
         /// movement attempted left/right/up/down
         PlayerMoveFromClientPacket,
         /// mouse position as well as button
-        PlayerMouseStateFromClient
+        PlayerMouseStateFromClient,
+
+        QuickBarInventorySelectSlotRequestFromClient
     };
 
     /**

@@ -82,6 +82,8 @@ public:
 
     void sendPlayerMouseState();
 
+    void sendQuickBarInventorySlotSelectRequest(uint8_t index);
+
 private:
     /**
      * blocks until it can connect within a timeout.

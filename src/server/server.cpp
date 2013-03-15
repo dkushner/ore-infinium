@@ -345,7 +345,6 @@ Player* Server::createPlayer(const std::string& playerName)
     //FIXME: convert to 1, n
     std::uniform_int_distribution<> distribution(1, 64);
 
-
     //TODO: load the player's inventory from file..for now, initialize *the whole thing* with bullshit
     for (uint8_t i = 0; i < quickBarInventory->maxEquippedSlots(); ++i) {
         Torch *torch = new Torch(glm::vec2(0, 0));
