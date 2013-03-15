@@ -27,6 +27,7 @@
 #include <src/camera.h>
 #include <src/world.h>
 #include <src/chunk.h>
+#include <src/quickbarinventory.h>
 #include "src/../config.h"
 
 #include <google/protobuf/stubs/common.h>
@@ -145,16 +146,22 @@ void Server::processMessage(ENetEvent& event)
             }
 
         for (auto & client : m_clients) {
-                // send this new client every player we know about so far, except its own player,
-                // since we already sent that first.
+                // now we have to send this new client every player we know about so far, except not himself (don't send his own player, obviously,
+                // he already knows what it is) since we already sent that first.
                 if (client.first != event.peer) {
                     sendInitialPlayerData(event.peer, client.second);
                 }
             }
 
-            sendInitialPlayerDataFinished(event.peer);
-            sendInitialWorldChunk(event.peer);
-            break;
+        sendInitialPlayerDataFinished(event.peer);
+        sendInitialWorldChunk(event.peer);
+
+        // tell our (this) player/client what his quickbar inventory contains (send all items within it)
+        uint8_t maxIndex = m_clients[event.peer]->quickBarInventory()->maxEquippedSlots();
+        for (uint8_t index = 0; index < maxIndex; ++index) {
+            sendPlayerQuickBarInventory(m_clients[event.peer], index);
+        }
+        break;
         }
 
         case Packet::ConnectionEventType::DisconnectedInvalidPlayerName:
@@ -344,5 +351,10 @@ void Server::sendPlayerMove(Player* player)
     message.set_y(player->position().y);
 
     Packet::sendPacketBroadcast(m_server, &message, Packet::FromServerPacketContents::PlayerMoveFromServerPacket, ENET_PACKET_FLAG_UNSEQUENCED);
+}
+
+void Server::sendPlayerQuickBarInventory(Player* player, uint8_t index)
+{
+
 }
 

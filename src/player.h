@@ -54,6 +54,7 @@ public:
     bool mouseRightButtonHeld() { return m_mouseRightButtonHeld; }
 
     void setQuickBarInventory(QuickBarInventory* inventory) { m_quickBarInventory = inventory; }
+    QuickBarInventory* quickBarInventory() { return m_quickBarInventory; }
 
     /**
      * Accepts player input result, which is a vector from -1 to 1 indicating
@@ -88,6 +89,7 @@ private:
      */
     std::string m_name;
 
+    /// only utilized by server. as of present, the client stores this in itself
     QuickBarInventory* m_quickBarInventory = nullptr;
 
     glm::ivec2 m_mousePosition = glm::ivec2(0, 0);

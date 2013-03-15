@@ -51,6 +51,12 @@ public:
      */
     void sendWorldChunk(Chunk* chunk);
 
+    /**
+     * Should be called when player's quickbarinventory has been modified at @p index,
+     * as it will then send this to the client associated with this player, with the new up-to-date item.
+     */
+    void sendPlayerQuickBarInventory(Player* player, uint8_t index);
+
 private:
     /**
      * If the client validated successfully, also creates a player and appends client and player
