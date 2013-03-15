@@ -69,6 +69,7 @@ private:
     void receiveChatMessage(std::stringstream* ss, const std::string& playerName);
     void receivePlayerMove(std::stringstream* ss, Player* player);
     void receivePlayerMouseState(std::stringstream* ss, Player* player);
+    void receiveQuickBarInventorySelectSlotRequest(std::stringstream* ss, Player* player);
 
     void sendChatMessage(const std::string& message, const std::string& playerName);
     void sendInitialPlayerData(ENetPeer* peer, Player* player);

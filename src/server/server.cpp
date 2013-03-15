@@ -187,6 +187,10 @@ void Server::processMessage(ENetEvent& event)
     case Packet::FromClientPacketContents::PlayerMouseStateFromClient:
         receivePlayerMouseState(&ss, m_clients[event.peer]);
         break;
+
+    case Packet::FromClientPacketContents::QuickBarInventorySelectSlotRequestFromClient:
+        receiveQuickBarInventorySelectSlotRequest(&ss, m_clients[event.peer]);
+        break;
     }
 
     enet_packet_destroy(event.packet);
@@ -238,6 +242,14 @@ void Server::receivePlayerMouseState(std::stringstream* ss, Player* player)
     player->setMouseLeftButtonHeld(message.leftbuttonheld());
     player->setMouseRightButtonHeld(message.rightbuttonheld());
     player->setMousePosition(message.x(), message.y());
+}
+
+void Server::receiveQuickBarInventorySelectSlotRequest(std::stringstream* ss, Player* player)
+{
+    PacketBuf::QuickBarInventorySelectSlotRequestFromClient message;
+    Packet::deserialize(ss, &message);
+
+    player->quickBarInventory()->selectSlot(message.index());
 }
 
 void Server::sendChatMessage(const std::string& message, const std::string& playerName)
