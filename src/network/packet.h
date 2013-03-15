@@ -58,10 +58,7 @@ public:
         /// sent when the server has sent all currently connected players, to a newly-connected client, meaning all future "initial player data" will be considered "new" players
         InitialPlayerDataFinishedFromServerPacket,
 
-        /// sent only to the main player, aka if you're receiving this, it belongs to you alone.
-        /// contains a list of items, though after the first send it will mostly be a list with 1 element,
-        /// for incremental updates.
-        QuickBarInventoryItemsFromServerPacket,
+        QuickBarInventoryItemFromServerPacket,
 
         PlayerDisconnectedFromServerPacket,
         PlayerMoveFromServerPacket,

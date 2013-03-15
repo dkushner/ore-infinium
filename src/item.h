@@ -142,6 +142,8 @@ protected:
      */
     uint32_t m_stackSize = 0;
 
+    uint32_t m_type = 0;
+
     uint32_t m_state = 0;
 };
 

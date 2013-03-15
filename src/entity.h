@@ -76,7 +76,10 @@ public:
     bool collidingWithTile(const glm::vec2& destPosition, const glm::ivec2& dimensions, World* world) const;
 
     void setName(const std::string& name) { m_name = name; }
+    std::string name() { return m_name; }
+
     void setDetails(const std::string& details) { m_details = details; }
+    std::string details() { return m_details; }
 
 private:
     glm::vec2 m_velocity = glm::vec2(0, 0);

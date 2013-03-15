@@ -48,6 +48,17 @@ public:
     Item* item(uint8_t index);
 
     /**
+     * Only useful for the client, should be called *before* a new item is being set to replace the old one,
+     * as the client is a bit different and doesn't hang onto stuff in inventories, as the items get wiped out and
+     * re-added in whichever state they are in, if any(e.g. in a chest inventory, quickbar, main player inventory, etc.)
+     *
+     * NOTE: the server should never need to call this, as the server should just set the pointer at that index to nullptr,
+     * and move the item pointer to whereever the new place is., as the client is just acting as a dumb viewer, essentially,
+     * but the server needs to keep track of it all.
+     */
+    void deleteItem(uint8_t index);
+
+    /**
      * Selects/equips the @p index slot
      */
     void selectSlot(uint8_t index) { m_equippedIndex = index; }

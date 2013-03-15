@@ -34,6 +34,8 @@
 #include "src/player.h"
 #include "src/camera.h"
 #include "src/debug.h"
+#include <src/item.h>
+#include <src/torch.h>
 #include "src/../config.h"
 
 #include <random>
@@ -581,8 +583,8 @@ void Client::processMessage(ENetEvent& event)
         receiveChunk(&ss);
         break;
 
-    case Packet::QuickBarInventoryItemsFromServerPacket:
-        receiveQuickBarInventoryItems(&ss);
+    case Packet::QuickBarInventoryItemFromServerPacket:
+        receiveQuickBarInventoryItem(&ss);
         break;
     }
 
@@ -639,9 +641,39 @@ void Client::receiveInitialPlayerData(std::stringstream* ss)
     m_world->addPlayer(player);
 }
 
-void Client::receiveQuickBarInventoryItems(std::stringstream* ss)
+void Client::receiveQuickBarInventoryItem(std::stringstream* ss)
 {
+    PacketBuf::Item message;
+    Packet::deserialize(ss, &message);
 
+    const glm::vec2 position = glm::vec2(message.x(), message.y());
+
+    Item *baseItem = nullptr;
+    switch (message.itemtype()) {
+        case Item::ItemType::Block:
+            break;
+
+        case Item::ItemType::Torch: {
+            Torch *torch = new Torch(position);
+            torch->setRadius(message.radius());
+
+            baseItem = torch;
+            break;
+        }
+    }
+
+    baseItem->setStackSize(message.stacksize());
+    baseItem->setName(message.itemname());
+    baseItem->setDetails(message.itemdetails());
+    baseItem->setState(message.itemstate());
+
+    uint32_t index = message.index();
+
+    //delete the old one as we'll get resent it in whatever new form it is in (whether it's moving to the world, or to a different inventory)
+    m_quickBarMenu->inventory()->deleteItem(index);
+
+    m_quickBarMenu->inventory()->setSlot(index, baseItem);
+    m_quickBarMenu->reloadSlot(index);
 }
 
 void Client::receivePlayerDisconnected(std::stringstream* ss)

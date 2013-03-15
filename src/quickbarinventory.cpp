@@ -46,6 +46,12 @@ Item* QuickBarInventory::item(uint8_t index)
     }
 }
 
+void QuickBarInventory::deleteItem(uint8_t index)
+{
+    delete m_items[index];
+    m_items[index] = nullptr;
+}
+
 void QuickBarInventory::removeItem(uint8_t index)
 {
     m_items[index] = nullptr;

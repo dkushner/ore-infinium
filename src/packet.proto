@@ -72,20 +72,21 @@ message Chunk {
     repeated uint32 wallType = 7;
 }
 
-message Torch {
-    optional uint32 itemState = 1;
-    optional uint32 stackSize = 2;
-    optional string itemName = 3;
-    optional string itemDetails = 4;
+// this is a consolidation of all base item types/properties.
+// in one message. used for passing an item to inventory, or to the world
+message Item {
+    optional uint32 itemType = 1;
+    optional uint32 itemState = 2;
+    optional uint32 stackSize = 3;
+    optional string itemName = 4;
+    optional string itemDetails = 5;
 
-    optional float radius = 5;
+    optional float radius = 6;
 
     // the position of the item in the world, will be ignored if it is not in the world
-    optional float x = 6;
-    optional float y = 7;
+    optional float x = 7;
+    optional float y = 8;
 
-    // the index in the container that this should belong to.
-    // if the item is placed in the world, it will be ignored. e.g. the index of the
-    // quickbarinventory which should be set, or the playerinventory
-    optional uint32 index = 8;
+    // 0-based
+    optional uint32 index = 9;
 }

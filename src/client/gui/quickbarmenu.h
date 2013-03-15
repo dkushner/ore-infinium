@@ -55,6 +55,10 @@ public:
     void nextSlot();
     void previousSlot();
 
+    void reloadSlot(uint8_t index);
+
+    QuickBarInventory* inventory() { return m_inventory; }
+
 private:
     void selectSlot(uint8_t index);
 

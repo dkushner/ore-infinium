@@ -96,7 +96,7 @@ private:
     void processMessage(ENetEvent& event);
     void receiveChatMessage(std::stringstream* ss);
     void receiveInitialPlayerData(std::stringstream* ss);
-    void receiveQuickBarInventoryItems(std::stringstream* ss);
+    void receiveQuickBarInventoryItem(std::stringstream* ss);
     void receivePlayerDisconnected(std::stringstream* ss);
     void receivePlayerMove(std::stringstream* ss);
     void receiveChunk(std::stringstream* ss);

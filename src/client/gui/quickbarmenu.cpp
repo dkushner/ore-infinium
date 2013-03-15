@@ -23,6 +23,7 @@
 #include "src/client/gui/gui.h"
 
 #include <src/debug.h>
+#include <src/item.h>
 
 #include <Rocket/Core.h>
 #include <Rocket/Controls.h>
@@ -154,6 +155,13 @@ void QuickBarMenu::previousSlot()
     }
 
     selectSlot(m_inventory->equippedIndex() - 1);
+}
+
+void QuickBarMenu::reloadSlot(uint8_t index)
+{
+    Debug::log() << "QUICKBAR MENU IS RELOADING SLOT, index: " << index;
+    Item* item = m_inventory->item(index);
+    Debug::log() << "ITEM INFO: name: " << item->name() << " details: " << item->details() << " item stacksize: " << item->stackSize();
 }
 
 void QuickBarMenu::handleEvent(const SDL_Event& event)
