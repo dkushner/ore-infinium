@@ -23,6 +23,7 @@
 
 #include <SDL2/SDL_events.h>
 
+class QuickBarInventory;
 class Camera;
 
 class Player : public Entity
@@ -51,6 +52,8 @@ public:
     void setMouseRightButtonHeld(bool held) { m_mouseRightButtonHeld = held; }
     bool mouseLeftButtonHeld() { return m_mouseLeftButtonHeld; }
     bool mouseRightButtonHeld() { return m_mouseRightButtonHeld; }
+
+    void setQuickBarInventory(QuickBarInventory* inventory) { m_quickBarInventory = inventory; }
 
     /**
      * Accepts player input result, which is a vector from -1 to 1 indicating
@@ -84,6 +87,8 @@ private:
      * (allowing name changes seems likemore of a problem than a solution to anything.)
      */
     std::string m_name;
+
+    QuickBarInventory* m_quickBarInventory = nullptr;
 
     glm::ivec2 m_mousePosition = glm::ivec2(0, 0);
     bool m_mouseLeftButtonHeld = false;

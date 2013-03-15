@@ -18,6 +18,7 @@
 #include "player.h"
 
 #include "src/camera.h"
+#include "src/quickbarinventory.h"
 
 #include "spritesheetmanager.h"
 #include "debug.h"

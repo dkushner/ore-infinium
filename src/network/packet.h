@@ -41,8 +41,9 @@ public:
         PlayerInitialDataFromClientPacket,
         //FIXME: not sure wtf to do with that one..i don't think we want a huge generic thing, it also is unused presently
         PlayerStateFromClientPacket,
-        ///movement attempted left/right/up/down
+        /// movement attempted left/right/up/down
         PlayerMoveFromClientPacket,
+        /// mouse position as well as button
         PlayerMouseStateFromClient
     };
 
@@ -53,8 +54,15 @@ public:
         InvalidFromServerPacket = 0,
         ChatMessageFromServerPacket,
         InitialPlayerDataFromServerPacket,
+
         /// sent when the server has sent all currently connected players, to a newly-connected client, meaning all future "initial player data" will be considered "new" players
         InitialPlayerDataFinishedFromServerPacket,
+
+        /// sent only to the main player, aka if you're receiving this, it belongs to you alone.
+        /// contains a list of items, though after the first send it will mostly be a list with 1 element,
+        /// for incremental updates.
+        QuickBarInventoryItemsFromServerPacket,
+
         PlayerDisconnectedFromServerPacket,
         PlayerMoveFromServerPacket,
         ChunkFromServerPacket

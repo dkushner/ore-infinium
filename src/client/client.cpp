@@ -29,6 +29,7 @@
 
 #include "src/settings/settings.h"
 
+#include "src/quickbarinventory.h"
 #include "src/world.h"
 #include "src/player.h"
 #include "src/camera.h"
@@ -445,9 +446,6 @@ bool Client::connect(const char* address, unsigned int port)
         m_chat = new ChatDialog(this, m_mainMenu);
         m_chat->show();
 
-        m_quickBarMenu = new QuickBarMenu(this);
-        m_quickBarMenu->show();
-
         //NOTE: no world is created yet. we now wait for the server to receive our initial connection data, and give us back a
         //player id, which we then create as the main player and finally, create the world.
         m_connected = true;
@@ -582,6 +580,10 @@ void Client::processMessage(ENetEvent& event)
     case Packet::FromServerPacketContents::ChunkFromServerPacket:
         receiveChunk(&ss);
         break;
+
+    case Packet::QuickBarInventoryItemsFromServerPacket:
+        receiveQuickBarInventoryItems(&ss);
+        break;
     }
 
     enet_packet_destroy(event.packet);
@@ -609,6 +611,12 @@ void Client::receiveInitialPlayerData(std::stringstream* ss)
         m_mainPlayer->setPlayerID(message.playerid());
         m_mainPlayer->setPosition(message.x(), message.y());
 
+        QuickBarInventory* quickBarInventory = new QuickBarInventory();
+        m_mainPlayer->setQuickBarInventory(quickBarInventory);
+
+        m_quickBarMenu = new QuickBarMenu(this, quickBarInventory);
+        m_quickBarMenu->show();
+
         chatMessage << m_mainPlayer->name() << " has joined";
         m_chat->addChatLine("", chatMessage.str());
 
@@ -629,6 +637,11 @@ void Client::receiveInitialPlayerData(std::stringstream* ss)
     }
 
     m_world->addPlayer(player);
+}
+
+void Client::receiveQuickBarInventoryItems(std::stringstream* ss)
+{
+
 }
 
 void Client::receivePlayerDisconnected(std::stringstream* ss)

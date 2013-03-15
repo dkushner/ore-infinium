@@ -56,7 +56,7 @@ message PlayerMouseStateFromClient {
 }
 
 message PlayerBlockPickRequestFromClient {
-    // x,y (column, row), this player wants to "pick"/break
+    // x,y (column, row), the block this player wants to "pick"/break
     optional uint32 x = 1;
     optional uint32 y = 2;
 }
@@ -72,3 +72,20 @@ message Chunk {
     repeated uint32 wallType = 7;
 }
 
+message Torch {
+    optional uint32 itemState = 1;
+    optional uint32 stackSize = 2;
+    optional string itemName = 3;
+    optional string itemDetails = 4;
+
+    optional float radius = 5;
+
+    // the position of the item in the world, will be ignored if it is not in the world
+    optional float x = 6;
+    optional float y = 7;
+
+    // the index in the container that this should belong to.
+    // if the item is placed in the world, it will be ignored. e.g. the index of the
+    // quickbarinventory which should be set, or the playerinventory
+    optional uint32 index = 8;
+}

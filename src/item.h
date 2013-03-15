@@ -42,7 +42,6 @@ public:
     enum ItemProperties {
         Placeable = 0,
         Consumable, //potions and such FIXME UNUSED maybe unneeded too?
-        Block /// blocks are handled super specially. they have different placement rules, adn they are not rendered as an Entity, but something totally different.
     };
 
     /*
@@ -56,7 +55,15 @@ public:
 
     */
 
-    struct PlaceHints {
+    /// should be used for serialization purposes.
+    enum ItemType {
+       Torch = 0,
+       ContainerChest,
+       Weapon,
+        Block /// blocks are handled super specially. they have different placement rules, adn they are not rendered as an Entity, but something totally different.
+    };
+
+    struct PlacementHints {
 
     };
 
