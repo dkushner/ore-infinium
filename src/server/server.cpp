@@ -249,7 +249,14 @@ void Server::receiveQuickBarInventorySelectSlotRequest(std::stringstream* ss, Pl
     PacketBuf::QuickBarInventorySelectSlotRequestFromClient message;
     Packet::deserialize(ss, &message);
 
-    player->quickBarInventory()->selectSlot(message.index());
+    const uint32_t index = message.index();
+
+    if (index > player->quickBarInventory()->maxEquippedSlots()) {
+        Debug::log(Debug::Area::General) << "server told to equip a quickbar inventory slot, but index was greater than maxEquippedSlots. this is likely a sync failure(or malicious intent).";
+        return;
+    }
+
+    player->quickBarInventory()->selectSlot(index);
 }
 
 void Server::sendChatMessage(const std::string& message, const std::string& playerName)
