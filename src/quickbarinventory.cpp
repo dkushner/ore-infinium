@@ -32,18 +32,16 @@ QuickBarInventory::~QuickBarInventory()
 
 void QuickBarInventory::setSlot(uint8_t index, Item* item)
 {
-    assert(index < m_items.size());
+    assert(index < m_maxEquippedSlots);
 
-    m_items.assign(index, item);
+    m_items[index] = item;
 }
 
 Item* QuickBarInventory::item(uint8_t index)
 {
     assert(index < m_items.size());
 
-    for (int i = 0; i < m_items.size(); ++i) {
-        return m_items[i];
-    }
+    return m_items[index];
 }
 
 void QuickBarInventory::deleteItem(uint8_t index)

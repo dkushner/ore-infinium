@@ -27,6 +27,7 @@
 #include <src/camera.h>
 #include <src/world.h>
 #include <src/chunk.h>
+#include <src/torch.h>
 #include <src/quickbarinventory.h>
 #include "src/../config.h"
 
@@ -336,6 +337,15 @@ Player* Server::createPlayer(const std::string& playerName)
     player->setPlayerID(m_freePlayerID);
     player->setPosition(2500, 1492);
 
+    QuickBarInventory* quickBarInventory = new QuickBarInventory();
+    player->setQuickBarInventory(quickBarInventory);
+
+    //TODO: load the player's inventory from file..for now, initialize *the whole thing* with bullshit
+    for (uint8_t i = 0; i < quickBarInventory->maxEquippedSlots(); ++i) {
+        Torch *torch = new Torch(glm::vec2(0, 0));
+        quickBarInventory->setSlot(i, torch);
+    }
+
     m_world->addPlayer(player);;
 
     ++m_freePlayerID;
@@ -355,6 +365,8 @@ void Server::sendPlayerMove(Player* player)
 
 void Server::sendPlayerQuickBarInventory(Player* player, uint8_t index)
 {
-
+    Item* item = player->quickBarInventory()->item(index);
+    assert(item);
+    Debug::log(Debug::Area::NetworkServer) << "SERVER, qucikbar inventory item name: " << item->name();
 }
 
