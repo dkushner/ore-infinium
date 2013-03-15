@@ -80,15 +80,61 @@ FIXME
                 </style>
         </head>
 
-
         <body template="frame">
-                    <quickbarparentslot id="0">1<quickbarslot id="0sub"> </quickbarslot> </quickbarparentslot>
-                    <quickbarparentslot id="1">2<quickbarslot id="1sub"> </quickbarslot> </quickbarparentslot>
-                    <quickbarparentslot id="2">3<quickbarslot id="2sub"> </quickbarslot> </quickbarparentslot>
-                    <quickbarparentslot id="3">4<quickbarslot id="3sub"> </quickbarslot> </quickbarparentslot>
-                    <quickbarparentslot id="4">5<quickbarslot id="4sub"> </quickbarslot> </quickbarparentslot>
-                    <quickbarparentslot id="5">6<quickbarslot id="5sub"> </quickbarslot> </quickbarparentslot>
-                    <quickbarparentslot id="6">7<quickbarslot id="6sub"> </quickbarslot> </quickbarparentslot>
-                    <quickbarparentslot id="7">8<quickbarslot id="7sub"> </quickbarslot> </quickbarparentslot>
+                    <quickbarparentslot id="0">
+                                <quickbarslot id="0sub">
+                                        <quickbarslotitemcount id="0subcount">
+                                        </quickbarslotitemcount>
+                                </quickbarslot>
+                        </quickbarparentslot>
+
+                    <quickbarparentslot id="1">
+                                <quickbarslot id="1sub">
+                                        <quickbarslotitemcount id="1subcount">
+                                        </quickbarslotitemcount>
+                                </quickbarslot>
+                        </quickbarparentslot>
+
+                    <quickbarparentslot id="2">
+                                <quickbarslot id="2sub">
+                                        <quickbarslotitemcount id="2subcount">
+                                        </quickbarslotitemcount>
+                                </quickbarslot>
+                        </quickbarparentslot>
+
+                    <quickbarparentslot id="3">
+                                <quickbarslot id="3sub">
+                                        <quickbarslotitemcount id="3subcount">
+                                        </quickbarslotitemcount>
+                                </quickbarslot>
+                        </quickbarparentslot>
+
+                    <quickbarparentslot id="4">
+                                <quickbarslot id="4sub">
+                                        <quickbarslotitemcount id="4subcount">
+                                        </quickbarslotitemcount>
+                                </quickbarslot>
+                        </quickbarparentslot>
+
+                    <quickbarparentslot id="5">
+                                <quickbarslot id="5sub">
+                                        <quickbarslotitemcount id="5subcount">
+                                        </quickbarslotitemcount>
+                                </quickbarslot>
+                        </quickbarparentslot>
+
+                    <quickbarparentslot id="6">
+                                <quickbarslot id="6sub">
+                                        <quickbarslotitemcount id="6subcount">
+                                        </quickbarslotitemcount>
+                                </quickbarslot>
+                        </quickbarparentslot>
+
+                    <quickbarparentslot id="7">
+                                <quickbarslot id="7sub">
+                                        <quickbarslotitemcount id="7subcount">
+                                        </quickbarslotitemcount>
+                                </quickbarslot>
+                        </quickbarparentslot>
         </body>
 </rml>
