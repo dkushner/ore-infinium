@@ -144,7 +144,7 @@ void Client::initSDL()
 
     Debug::checkGLError();
     m_GLcontext = SDL_GL_CreateContext(m_window);
-        Debug::checkSDLError();
+    Debug::checkSDLError();
     Debug::checkGLError();
 
     SDL_ShowCursor(0);
@@ -191,7 +191,7 @@ void Client::poll()
     ENetEvent event;
     int eventStatus;
 
-    while(enet_host_service(m_client, &event, 0)) {
+    while (enet_host_service(m_client, &event, 0)) {
         switch (event.type) {
         case ENET_EVENT_TYPE_CONNECT: {
             assert(0);
@@ -313,7 +313,7 @@ void Client::handleInputEvents()
                 startMultiplayerHost(ss.str());
             } else if (event.key.keysym.sym == SDLK_F9) {
                 if (m_world) {
-                   m_world->toggleLightRenderingEnabled();
+                    m_world->toggleLightRenderingEnabled();
                 }
             } else if (event.key.keysym.sym == SDLK_EQUALS) {
                 if (m_world) {
@@ -650,16 +650,16 @@ void Client::receiveQuickBarInventoryItem(std::stringstream* ss)
 
     Item *baseItem = nullptr;
     switch (message.itemtype()) {
-        case Item::ItemType::Block:
-            break;
+    case Item::ItemType::Block:
+        break;
 
-        case Item::ItemType::Torch: {
-            Torch *torch = new Torch(position);
-            torch->setRadius(message.radius());
+    case Item::ItemType::Torch: {
+        Torch *torch = new Torch(position);
+        torch->setRadius(message.radius());
 
-            baseItem = torch;
-            break;
-        }
+        baseItem = torch;
+        break;
+    }
     }
 
     baseItem->setStackSize(message.stacksize());

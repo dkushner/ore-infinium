@@ -31,13 +31,23 @@ public:
     Chunk(uint32_t startX, uint32_t startY, uint32_t endX, uint32_t endY, std::vector<Block> *blocks);
     ~Chunk();
 
-    uint32_t startX() { return m_startX; }
-    uint32_t endX() { return m_endX; }
+    uint32_t startX() {
+        return m_startX;
+    }
+    uint32_t endX() {
+        return m_endX;
+    }
 
-    uint32_t startY() { return m_startY; }
-    uint32_t endY() { return m_endY; }
+    uint32_t startY() {
+        return m_startY;
+    }
+    uint32_t endY() {
+        return m_endY;
+    }
 
-    std::vector<Block>* blocks() { return m_blocks; }
+    std::vector<Block>* blocks() {
+        return m_blocks;
+    }
 
 private:
     std::vector<Block> *m_blocks = nullptr;

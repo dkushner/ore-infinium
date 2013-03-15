@@ -39,7 +39,8 @@ CollisionMap::CollisionMap(unsigned int width, unsigned int height, unsigned int
     }
 }
 
-CollisionMap::~CollisionMap() {
+CollisionMap::~CollisionMap()
+{
     for (unsigned int x = 0; x < m_width; x++) {
         for (unsigned int y = 0; y < m_height; y++) {
             GridNode* next = m_map[x][y];
@@ -64,7 +65,8 @@ CollisionMap::~CollisionMap() {
     */
 }
 
-void CollisionMap::Add(Entity* entity) {
+void CollisionMap::Add(Entity* entity)
+{
     unsigned int index = m_nextEntryIndex++;
     entity->m_index = index;
 
@@ -73,12 +75,14 @@ void CollisionMap::Add(Entity* entity) {
     addToGrid(entity);
 }
 
-void CollisionMap::Remove(Entity* entity) {
+void CollisionMap::Remove(Entity* entity)
+{
     removeFromGrid(entity);
     m_entities[entity->m_index] = nullptr;
 }
 
-void CollisionMap::Change(Entity* entity) {
+void CollisionMap::Change(Entity* entity)
+{
 //
 //    unsigned int minX, maxX;
 //
@@ -145,14 +149,16 @@ void CollisionMap::Change(Entity* entity) {
     Add(entity);
 }
 
-inline void CollisionMap::addEntryToCell(unsigned int x, unsigned int y, Entity* entity) {
+inline void CollisionMap::addEntryToCell(unsigned int x, unsigned int y, Entity* entity)
+{
     GridNode* node = new GridNode;
     node->entity = entity;
     node->next = m_map[x][y];
     m_map[x][y] = node;
 }
 
-void CollisionMap::addToGrid(Entity* entity) {
+void CollisionMap::addToGrid(Entity* entity)
+{
     const glm::vec2& position = entity->position();
     const glm::vec2& size = entity->size();
 
@@ -169,7 +175,8 @@ void CollisionMap::addToGrid(Entity* entity) {
     }
 }
 
-inline void CollisionMap::removeEntryFromCell(unsigned int x, unsigned int y, Entity* entity) {
+inline void CollisionMap::removeEntryFromCell(unsigned int x, unsigned int y, Entity* entity)
+{
     GridNode* parent = nullptr;
     GridNode* current = m_map[x][y];
 
@@ -178,8 +185,7 @@ inline void CollisionMap::removeEntryFromCell(unsigned int x, unsigned int y, En
             if (parent != nullptr) {
                 parent->next = current->next;
                 m_map[x][y] = parent;
-            }
-            else {
+            } else {
                 m_map[x][y] = current->next;
             }
 
@@ -192,7 +198,8 @@ inline void CollisionMap::removeEntryFromCell(unsigned int x, unsigned int y, En
     }
 }
 
-void CollisionMap::removeFromGrid(Entity* entity) {
+void CollisionMap::removeFromGrid(Entity* entity)
+{
     const glm::vec2& position = entity->position();
     const glm::vec2& size = entity->size();
 
@@ -251,7 +258,8 @@ sf::Texture CollisionMap::RenderDebugTexture() {
 */
 
 //FIXME: impleament when i feel like doing entity->entity collision..
-bool CollisionMap::collidesAt(const glm::vec2& position) {
+bool CollisionMap::collidesAt(const glm::vec2& position)
+{
     if (position.x < 0 || position.y < 0) {
         return false;
     }
@@ -259,7 +267,8 @@ bool CollisionMap::collidesAt(const glm::vec2& position) {
     return CheckCollision(position);
 }
 
-bool CollisionMap::CheckCollision(const glm::vec2& position) {
+bool CollisionMap::CheckCollision(const glm::vec2& position)
+{
     /*
     if (position.x >= m_totalWidth || position.y >= m_totalHeight) return false;
 

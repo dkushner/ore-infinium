@@ -56,8 +56,12 @@ public:
      * goes straight to the passthrough shader and combines a blank FBO (white)
      * with the scene, so technically also decreases rendering complexity.
      */
-    void setRenderingEnabled(bool enabled) { m_renderingEnabled = enabled; }
-    bool lightRenderingEnabled() { return m_renderingEnabled; }
+    void setRenderingEnabled(bool enabled) {
+        m_renderingEnabled = enabled;
+    }
+    bool lightRenderingEnabled() {
+        return m_renderingEnabled;
+    }
 
 private:
     typedef uint32_t u32;

@@ -110,7 +110,7 @@ void LightRenderer::renderToFBO()
 
     int index = 0;
     Debug::checkGLError();
-    for (Torch* torch : m_torches) {
+for (Torch * torch : m_torches) {
 
         // vertices that will be uploaded.
         Vertex vertices[4];
@@ -293,8 +293,8 @@ void LightRenderer::renderToBackbuffer()
     glBufferSubData(
         GL_ARRAY_BUFFER,
         sizeof(vertices) * 0,
-                    sizeof(vertices),
-                    vertices);
+        sizeof(vertices),
+        vertices);
     Debug::checkGLError();
 
     Debug::checkGLError();
@@ -311,8 +311,8 @@ void LightRenderer::renderToBackbuffer()
     glDrawElements(
         GL_TRIANGLES,
         6 * (1), // 6 indices per 2 triangles
-                   GL_UNSIGNED_INT,
-                   (const GLvoid*)0);
+        GL_UNSIGNED_INT,
+        (const GLvoid*)0);
     Debug::checkGLError();
 
     m_shaderPassthrough->unbindProgram();
@@ -325,7 +325,7 @@ void LightRenderer::renderToBackbuffer()
     Debug::checkGLError();
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
 
-   glActiveTexture(GL_TEXTURE0);
+    glActiveTexture(GL_TEXTURE0);
 
     Debug::checkGLError();
 }
@@ -475,8 +475,8 @@ void LightRenderer::initBackbufferGL()
     glBufferData(
         GL_ARRAY_BUFFER,
         quadCount * 4 * sizeof(Vertex),
-                 NULL,
-                 GL_DYNAMIC_DRAW);
+        NULL,
+        GL_DYNAMIC_DRAW);
 
     Debug::checkGLError();
 
@@ -496,8 +496,8 @@ void LightRenderer::initBackbufferGL()
     glBufferData(
         GL_ELEMENT_ARRAY_BUFFER,
         indicesv.size()*sizeof(u32),
-                 indicesv.data(),
-                 GL_STATIC_DRAW);
+        indicesv.data(),
+        GL_STATIC_DRAW);
 
     Debug::checkGLError();
 
@@ -511,7 +511,7 @@ void LightRenderer::initBackbufferGL()
         GL_FLOAT,
         GL_FALSE,
         sizeof(Vertex),
-                          (const GLvoid*)buffer_offset);
+        (const GLvoid*)buffer_offset);
     buffer_offset += sizeof(f32) * 2;
 
     GLint color_attrib = glGetAttribLocation(m_shaderPassthrough->shaderProgram(), "color");
@@ -525,7 +525,7 @@ void LightRenderer::initBackbufferGL()
         GL_UNSIGNED_BYTE,
         GL_TRUE,
         sizeof(Vertex),
-                          (const GLvoid*)buffer_offset);
+        (const GLvoid*)buffer_offset);
     buffer_offset += sizeof(u32);
 
     Debug::checkGLError();
@@ -538,7 +538,7 @@ void LightRenderer::initBackbufferGL()
         GL_FLOAT,
         GL_FALSE,
         sizeof(Vertex),
-                          (const GLvoid*)buffer_offset);
+        (const GLvoid*)buffer_offset);
     Debug::checkGLError();
 
     glBindVertexArray(0);

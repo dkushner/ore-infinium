@@ -42,9 +42,9 @@
 #include <chrono>
 
 World::World(Player* mainPlayer, Client* client, Server* server)
-  : m_mainPlayer(mainPlayer),
-    m_client(client),
-    m_server(server)
+    : m_mainPlayer(mainPlayer),
+      m_client(client),
+      m_server(server)
 {
 
     //FIXME:
@@ -154,10 +154,10 @@ void World::render(Player* player)
     const float halfRadius = radius * 0.5;
     const float halfBlockSize = Block::BLOCK_SIZE * 0.5;
 
-    glm::vec2 topLeftLocalCoordinates = glm::vec2(m_mainPlayer->position().x - 1600 /2, m_mainPlayer->position().y - 900/2);
+    glm::vec2 topLeftLocalCoordinates = glm::vec2(m_mainPlayer->position().x - 1600 / 2, m_mainPlayer->position().y - 900 / 2);
     glm::vec2 transformedMouse = glm::vec2(topLeftLocalCoordinates.x + mouse.x, topLeftLocalCoordinates.y + mouse.y);
     //snap crosshair to the tile grid..the offset is already calculated for us (apparently), so even with per-pixel tilemap scrolling it snaps fine.
-    glm::vec2 crosshairPosition(floor(transformedMouse.x / Block::BLOCK_SIZE) * Block::BLOCK_SIZE, floor(transformedMouse.y / Block::BLOCK_SIZE) * Block::BLOCK_SIZE );
+    glm::vec2 crosshairPosition(floor(transformedMouse.x / Block::BLOCK_SIZE) * Block::BLOCK_SIZE, floor(transformedMouse.y / Block::BLOCK_SIZE) * Block::BLOCK_SIZE);
 
     m_blockPickingCrosshair->setPosition(crosshairPosition);
     // ==================================================
@@ -171,7 +171,7 @@ void World::render(Player* player)
 void World::update(double elapsedTime)
 {
     if (m_server) {
-        for (auto* player : m_players) {
+    for (auto * player : m_players) {
             //TODO: HANDLE INVENTORY AND TAKE THAT INTO ACCOUNT
             if (player->mouseLeftButtonHeld()) {
                 performBlockAttack(player);
@@ -182,7 +182,7 @@ void World::update(double elapsedTime)
     //    m_sky->update(elapsedTime);
 
     //NOTE: players are not exactly considered entities. they are, but they aren't
-    for (Entity * currentEntity : m_entities) {
+for (Entity * currentEntity : m_entities) {
         currentEntity->update(elapsedTime, this);
         if (m_server) {
             if (currentEntity->dirtyFlags() & Entity::DirtyFlags::PositionDirty) {
@@ -192,7 +192,7 @@ void World::update(double elapsedTime)
         }
     }
 
-    for (Player * player : m_players) {
+for (Player * player : m_players) {
         player->update(elapsedTime, this);
 
         if (m_server) {
@@ -346,7 +346,7 @@ void World::performBlockAttack(Player* player)
         return;
     }
 
-    glm::ivec2 transformedMouse = glm::ivec2(floor((mouse.x/2 + player->position().x) / Block::BLOCK_SIZE), floor((mouse.y/2 + player->position().y) / Block::BLOCK_SIZE));
+    glm::ivec2 transformedMouse = glm::ivec2(floor((mouse.x / 2 + player->position().x) / Block::BLOCK_SIZE), floor((mouse.y / 2 + player->position().y) / Block::BLOCK_SIZE));
 
     const int radius = Player::blockPickingRadius / Block::BLOCK_SIZE;
 
@@ -377,14 +377,14 @@ void World::performBlockAttack(Player* player)
     for (int row = startY; row < endY; ++row) {
         for (int column = startX; column < endX; ++column) {
 //            if (row == attackY && column == attackX) {
-                index = column * WORLD_ROWCOUNT + row;
-                assert(index < WORLD_ROWCOUNT * WORLD_COLUMNCOUNT);
-                Block& block = m_blocks[index];
-                if (block.primitiveType != 0) {
-                    //FIXME: decrement health..
-                    block.primitiveType = 0; //FIXME:
-                    blocksModified = true;
-                }
+            index = column * WORLD_ROWCOUNT + row;
+            assert(index < WORLD_ROWCOUNT * WORLD_COLUMNCOUNT);
+            Block& block = m_blocks[index];
+            if (block.primitiveType != 0) {
+                //FIXME: decrement health..
+                block.primitiveType = 0; //FIXME:
+                blocksModified = true;
+            }
         }
     }
 
@@ -440,7 +440,7 @@ void World::generateMap()
     auto timerEnd = std::chrono::high_resolution_clock::now();
 
     auto timeTaken = std::chrono::duration_cast<std::chrono::milliseconds>(timerEnd - timerStart).count();
-   Debug::log(Debug::Area::General) << "Time taken for map generation: " << timeTaken << " Milliseconds";
+    Debug::log(Debug::Area::General) << "Time taken for map generation: " << timeTaken << " Milliseconds";
 }
 
 void World::saveMap()

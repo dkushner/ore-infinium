@@ -24,7 +24,8 @@
 
 class Entity;
 
-class CollisionMap {
+class CollisionMap
+{
 public:
 
     /**
@@ -44,7 +45,8 @@ public:
     bool CheckCollision(const glm::vec2& position);
 
 private:
-    class GridNode {
+    class GridNode
+    {
         friend class CollisionMap;
         Entity* entity;
         GridNode* next;

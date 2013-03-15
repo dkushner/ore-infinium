@@ -165,7 +165,7 @@ std::map<std::string, SpriteSheetRenderer::SpriteFrameIdentifier> SpriteSheetRen
     YAML::Node doc;
     parser.GetNextDocument(doc);
 
-    for(int i=0; i < doc.size(); i++) {
+    for (int i = 0; i < doc.size(); i++) {
         SpriteFrameIdentifier frame;
         doc[i] >> frame;
 
@@ -191,7 +191,7 @@ void SpriteSheetRenderer::renderCharacters()
 
     int index = 0;
 
-    for (Sprite * sprite: m_characterSprites) {
+for (Sprite * sprite: m_characterSprites) {
         auto frameIdentifier = m_spriteSheetCharactersDescription.find(sprite->frameName());
         Debug::fatal(frameIdentifier != m_spriteSheetCharactersDescription.end(), Debug::Area::Graphics, "sprite sheet character frame description could not be located, name: " + sprite->frameName());
 
@@ -307,7 +307,7 @@ void SpriteSheetRenderer::renderEntities()
     Debug::checkGLError();
 
     int index = 0;
-    for (Sprite * sprite: m_entitySprites) {
+for (Sprite * sprite: m_entitySprites) {
         auto frameIdentifier = m_spriteSheetEntitiesDescription.find(sprite->frameName());
         Debug::fatal(frameIdentifier != m_spriteSheetEntitiesDescription.end(), Debug::Area::Graphics, "sprite sheet entity frame description could not be located framename: " + sprite->frameName());
 
@@ -399,8 +399,8 @@ void SpriteSheetRenderer::renderEntities()
         glBufferSubData(
             GL_ARRAY_BUFFER,
             sizeof(vertices) * index,
-                        sizeof(vertices),
-                        vertices);
+            sizeof(vertices),
+            vertices);
 
         ++index;
     }
@@ -422,8 +422,8 @@ void SpriteSheetRenderer::renderEntities()
     glDrawElements(
         GL_TRIANGLES,
         6 * (m_entitySprites.size()), // 6 indices per 2 triangles
-                   GL_UNSIGNED_INT,
-                   (const GLvoid*)0);
+        GL_UNSIGNED_INT,
+        (const GLvoid*)0);
 
     m_shader->unbindProgram();
     glBindVertexArray(0);
@@ -541,8 +541,8 @@ void SpriteSheetRenderer::initGLEntities()
     glBufferData(
         GL_ARRAY_BUFFER,
         m_maxEntityCount * 4 * sizeof(Vertex),
-                 NULL,
-                 GL_DYNAMIC_DRAW);
+        NULL,
+        GL_DYNAMIC_DRAW);
 
     Debug::checkGLError();
 
@@ -562,8 +562,8 @@ void SpriteSheetRenderer::initGLEntities()
     glBufferData(
         GL_ELEMENT_ARRAY_BUFFER,
         indicesv.size() * sizeof(u32),
-                 indicesv.data(),
-                 GL_STATIC_DRAW);
+        indicesv.data(),
+        GL_STATIC_DRAW);
 
     Debug::checkGLError();
 
@@ -577,7 +577,7 @@ void SpriteSheetRenderer::initGLEntities()
         GL_FLOAT,
         GL_FALSE,
         sizeof(Vertex),
-                          (const GLvoid*)buffer_offset);
+        (const GLvoid*)buffer_offset);
     buffer_offset += sizeof(f32) * 2;
 
     GLint color_attrib = glGetAttribLocation(m_shader->shaderProgram(), "color");
@@ -591,7 +591,7 @@ void SpriteSheetRenderer::initGLEntities()
         GL_UNSIGNED_BYTE,
         GL_TRUE,
         sizeof(Vertex),
-                          (const GLvoid*)buffer_offset);
+        (const GLvoid*)buffer_offset);
     buffer_offset += sizeof(u32);
 
     Debug::checkGLError();
@@ -604,7 +604,7 @@ void SpriteSheetRenderer::initGLEntities()
         GL_FLOAT,
         GL_FALSE,
         sizeof(Vertex),
-                          (const GLvoid*)buffer_offset);
+        (const GLvoid*)buffer_offset);
 
     glBindVertexArray(0);
     glBindBuffer(GL_ARRAY_BUFFER, 0);

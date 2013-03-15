@@ -43,8 +43,12 @@ public:
 
     virtual Item* duplicate();
 
-    float radius() { return m_radius; }
-    void setRadius(float radius) { m_radius = radius; }
+    float radius() {
+        return m_radius;
+    }
+    void setRadius(float radius) {
+        m_radius = radius;
+    }
 
 private:
     float m_radius = 300.0f;

@@ -29,8 +29,8 @@
 #include <Rocket/Controls.h>
 
 QuickBarMenu::QuickBarMenu(Client* client, QuickBarInventory* inventory)
-:   m_client(client),
-    m_inventory(inventory)
+    :   m_client(client),
+        m_inventory(inventory)
 {
     loadDocument();
     selectSlot(0);
@@ -77,20 +77,20 @@ void QuickBarMenu::loadDocument()
 //    m_tabSet = dynamic_cast<Rocket::Controls::ElementTabSet*>(m_chat->GetElementById("tabset"));
 //    background-image: ../../../../textures/entities.png 0px 0px 22px 22px;
 //    background-image: ../../../../textures/entities.png 0px 0px 22px 22px;
- //   m_menu->GetElementById("0sub")->SetProperty("background-decorator", Rocket::Core::Property("image", Rocket::Core::Property::STRING));
+//   m_menu->GetElementById("0sub")->SetProperty("background-decorator", Rocket::Core::Property("image", Rocket::Core::Property::STRING));
     m_menu->GetElementById("0sub")->SetAttribute("background-decorator", "image");
 //    m_menu->GetElementById("0sub")->SetProperty("background-image", Rocket::Core::Property("../../../../textures/entities.png 0px 0px 22px 22px", Rocket::Core::Property::STRING));
 //    m_menu->GetElementById("0sub")->SetProperty("background-image", Rocket::Core::Property("../../../../textures/entities.png 0px 0px 512px 512px", Rocket::Core::Property::KEYWORD));
     m_menu->GetElementById("0sub")->SetAttribute("background-image", "../../../../textures/entities.png 0px 0px 512px 512px");
 
-   m_menu->GetElementById("0")->AddEventListener("click", this);
-   m_menu->GetElementById("1")->AddEventListener("click", this);
-   m_menu->GetElementById("2")->AddEventListener("click", this);
-   m_menu->GetElementById("3")->AddEventListener("click", this);
-   m_menu->GetElementById("4")->AddEventListener("click", this);
-   m_menu->GetElementById("5")->AddEventListener("click", this);
-   m_menu->GetElementById("6")->AddEventListener("click", this);
-   m_menu->GetElementById("7")->AddEventListener("click", this);
+    m_menu->GetElementById("0")->AddEventListener("click", this);
+    m_menu->GetElementById("1")->AddEventListener("click", this);
+    m_menu->GetElementById("2")->AddEventListener("click", this);
+    m_menu->GetElementById("3")->AddEventListener("click", this);
+    m_menu->GetElementById("4")->AddEventListener("click", this);
+    m_menu->GetElementById("5")->AddEventListener("click", this);
+    m_menu->GetElementById("6")->AddEventListener("click", this);
+    m_menu->GetElementById("7")->AddEventListener("click", this);
 }
 
 void QuickBarMenu::selectSlot(uint8_t index)
@@ -110,30 +110,30 @@ void QuickBarMenu::selectSlot(uint8_t index)
     Rocket::Core::Colourb selectedColor(0, 255, 0, 255);
 
     switch (index) {
-        case 0:
-            m_menu->GetElementById("0")->SetProperty("background-color", Rocket::Core::Property(selectedColor, Rocket::Core::Property::COLOUR));
-            break;
-        case 1:
-            m_menu->GetElementById("1")->SetProperty("background-color", Rocket::Core::Property(selectedColor, Rocket::Core::Property::COLOUR));
-            break;
-        case 2:
-            m_menu->GetElementById("2")->SetProperty("background-color", Rocket::Core::Property(selectedColor, Rocket::Core::Property::COLOUR));
-            break;
-        case 3:
-            m_menu->GetElementById("3")->SetProperty("background-color", Rocket::Core::Property(selectedColor, Rocket::Core::Property::COLOUR));
-            break;
-        case 4:
-            m_menu->GetElementById("4")->SetProperty("background-color", Rocket::Core::Property(selectedColor, Rocket::Core::Property::COLOUR));
-            break;
-        case 5:
-            m_menu->GetElementById("5")->SetProperty("background-color", Rocket::Core::Property(selectedColor, Rocket::Core::Property::COLOUR));
-            break;
-        case 6:
-            m_menu->GetElementById("6")->SetProperty("background-color", Rocket::Core::Property(selectedColor, Rocket::Core::Property::COLOUR));
-            break;
-        case 7:
-            m_menu->GetElementById("7")->SetProperty("background-color", Rocket::Core::Property(selectedColor, Rocket::Core::Property::COLOUR));
-            break;
+    case 0:
+        m_menu->GetElementById("0")->SetProperty("background-color", Rocket::Core::Property(selectedColor, Rocket::Core::Property::COLOUR));
+        break;
+    case 1:
+        m_menu->GetElementById("1")->SetProperty("background-color", Rocket::Core::Property(selectedColor, Rocket::Core::Property::COLOUR));
+        break;
+    case 2:
+        m_menu->GetElementById("2")->SetProperty("background-color", Rocket::Core::Property(selectedColor, Rocket::Core::Property::COLOUR));
+        break;
+    case 3:
+        m_menu->GetElementById("3")->SetProperty("background-color", Rocket::Core::Property(selectedColor, Rocket::Core::Property::COLOUR));
+        break;
+    case 4:
+        m_menu->GetElementById("4")->SetProperty("background-color", Rocket::Core::Property(selectedColor, Rocket::Core::Property::COLOUR));
+        break;
+    case 5:
+        m_menu->GetElementById("5")->SetProperty("background-color", Rocket::Core::Property(selectedColor, Rocket::Core::Property::COLOUR));
+        break;
+    case 6:
+        m_menu->GetElementById("6")->SetProperty("background-color", Rocket::Core::Property(selectedColor, Rocket::Core::Property::COLOUR));
+        break;
+    case 7:
+        m_menu->GetElementById("7")->SetProperty("background-color", Rocket::Core::Property(selectedColor, Rocket::Core::Property::COLOUR));
+        break;
     }
 }
 
@@ -167,25 +167,25 @@ void QuickBarMenu::reloadSlot(uint8_t index)
 void QuickBarMenu::handleEvent(const SDL_Event& event)
 {
     switch (event.type) {
-        case SDL_KEYDOWN:
-            if (event.key.keysym.sym == SDLK_1) {
-                selectSlot(0);
-            } else if (event.key.keysym.sym == SDLK_2) {
-                selectSlot(1);
-            } else if (event.key.keysym.sym == SDLK_3) {
-                selectSlot(2);
-            } else if (event.key.keysym.sym == SDLK_4) {
-                selectSlot(3);
-            } else if (event.key.keysym.sym == SDLK_5) {
-                selectSlot(4);
-            } else if (event.key.keysym.sym == SDLK_6) {
-                selectSlot(5);
-            } else if (event.key.keysym.sym == SDLK_7) {
-                selectSlot(6);
-           } else if (event.key.keysym.sym == SDLK_8) {
-                selectSlot(7);
-            }
-            break;
+    case SDL_KEYDOWN:
+        if (event.key.keysym.sym == SDLK_1) {
+            selectSlot(0);
+        } else if (event.key.keysym.sym == SDLK_2) {
+            selectSlot(1);
+        } else if (event.key.keysym.sym == SDLK_3) {
+            selectSlot(2);
+        } else if (event.key.keysym.sym == SDLK_4) {
+            selectSlot(3);
+        } else if (event.key.keysym.sym == SDLK_5) {
+            selectSlot(4);
+        } else if (event.key.keysym.sym == SDLK_6) {
+            selectSlot(5);
+        } else if (event.key.keysym.sym == SDLK_7) {
+            selectSlot(6);
+        } else if (event.key.keysym.sym == SDLK_8) {
+            selectSlot(7);
+        }
+        break;
     }
 }
 

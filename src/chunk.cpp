@@ -20,10 +20,10 @@
 #include "world.h"
 
 Chunk::Chunk(uint32_t startX, uint32_t startY, uint32_t endX, uint32_t endY, std::vector<Block>* blocks)
-:   m_startX(startX),
-    m_startY(startY),
-    m_endX(endX),
-    m_endY(endY)
+    :   m_startX(startX),
+        m_startY(startY),
+        m_endX(endX),
+        m_endY(endY)
 {
     m_blocks = blocks;
 }

@@ -50,7 +50,9 @@ public:
     bool visible();
 
     void setCollapsed(bool collapsed);
-    bool collapsed() { return m_collapsed; }
+    bool collapsed() {
+        return m_collapsed;
+    }
 
     Rocket::Core::ElementDocument* document();
 

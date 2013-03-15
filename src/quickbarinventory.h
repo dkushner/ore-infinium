@@ -61,10 +61,16 @@ public:
     /**
      * Selects/equips the @p index slot
      */
-    void selectSlot(uint8_t index) { m_equippedIndex = index; }
-    uint8_t equippedIndex() { return m_equippedIndex; }
+    void selectSlot(uint8_t index) {
+        m_equippedIndex = index;
+    }
+    uint8_t equippedIndex() {
+        return m_equippedIndex;
+    }
 
-    uint8_t maxEquippedSlots() { return m_maxEquippedSlots; }
+    uint8_t maxEquippedSlots() {
+        return m_maxEquippedSlots;
+    }
 
 private:
     std::vector<Item*> m_items;

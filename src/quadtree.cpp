@@ -110,7 +110,8 @@ bool Quadtree::contains(Quadtree *child, Entity *entity)
  * exceeds the capacity, it will split and add all
  * objects to their corresponding nodes.
  */
-void QuadTree::insert(Entity* entity) {
+void QuadTree::insert(Entity* entity)
+{
     if (nodes[0] != nullptr) {
         int index = getIndex(entity);
 
@@ -133,8 +134,7 @@ void QuadTree::insert(Entity* entity) {
             int index = getIndex(m_entities.at(i));
             if (index != -1) {
                 nodes[index]->insert(m_entities.remove(i));
-            }
-            else {
+            } else {
                 i++;
             }
         }
@@ -147,7 +147,8 @@ void QuadTree::insert(Entity* entity) {
  * object cannot completely fit within a child node and is part
  * of the parent node
  */
-int QuadTree::getIndex(Entity* entity) {
+int QuadTree::getIndex(Entity* entity)
+{
     int index = -1;
 
     const glm::vec2& position = entity->position();
@@ -165,8 +166,7 @@ int QuadTree::getIndex(Entity* entity) {
     if (position.x < verticalMidpoint && position.x + size.x < verticalMidpoint) {
         if (topQuadrant) {
             index = 1;
-        }
-        else if (bottomQuadrant) {
+        } else if (bottomQuadrant) {
             index = 2;
         }
     }
@@ -174,8 +174,7 @@ int QuadTree::getIndex(Entity* entity) {
     else if (position.x > verticalMidpoint) {
         if (topQuadrant) {
             index = 0;
-        }
-        else if (bottomQuadrant) {
+        } else if (bottomQuadrant) {
             index = 3;
         }
     }
@@ -186,13 +185,14 @@ int QuadTree::getIndex(Entity* entity) {
 /*
  * Return all objects that could collide with the given object
  */
-vector<Entity*> QuadTree::retrieve(vector<Entity*> returnObjects, Entity* entity) {
+vector<Entity*> QuadTree::retrieve(vector<Entity*> returnObjects, Entity* entity)
+{
     int index = getIndex(entity);
     if (index != -1 && nodes[0] != nullptr) {
         nodes[index]->retrieve(returnObjects, entity);
     }
 
-    for (Entity* currentEntity : m_entities) {
+for (Entity * currentEntity : m_entities) {
         returnObjects.push_back(currentEntity);
     }
 

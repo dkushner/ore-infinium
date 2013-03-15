@@ -26,10 +26,10 @@
 
 namespace Rocket
 {
-    namespace Core
-    {
-        class ElementDocument;
-    }
+namespace Core
+{
+class ElementDocument;
+}
 }
 
 class Client;
@@ -57,7 +57,9 @@ public:
 
     void reloadSlot(uint8_t index);
 
-    QuickBarInventory* inventory() { return m_inventory; }
+    QuickBarInventory* inventory() {
+        return m_inventory;
+    }
 
 private:
     void selectSlot(uint8_t index);

@@ -45,16 +45,32 @@ public:
     /**
      * Server side only, to asociate and keep track of each player's (clients) mouse position
      */
-    void setMousePosition(int32_t x, int32_t y) { m_mousePosition = glm::ivec2(x, y); }
-    glm::ivec2 mousePosition() { return m_mousePosition; }
+    void setMousePosition(int32_t x, int32_t y) {
+        m_mousePosition = glm::ivec2(x, y);
+    }
+    glm::ivec2 mousePosition() {
+        return m_mousePosition;
+    }
 
-    void setMouseLeftButtonHeld(bool held) { m_mouseLeftButtonHeld = held; }
-    void setMouseRightButtonHeld(bool held) { m_mouseRightButtonHeld = held; }
-    bool mouseLeftButtonHeld() { return m_mouseLeftButtonHeld; }
-    bool mouseRightButtonHeld() { return m_mouseRightButtonHeld; }
+    void setMouseLeftButtonHeld(bool held) {
+        m_mouseLeftButtonHeld = held;
+    }
+    void setMouseRightButtonHeld(bool held) {
+        m_mouseRightButtonHeld = held;
+    }
+    bool mouseLeftButtonHeld() {
+        return m_mouseLeftButtonHeld;
+    }
+    bool mouseRightButtonHeld() {
+        return m_mouseRightButtonHeld;
+    }
 
-    void setQuickBarInventory(QuickBarInventory* inventory) { m_quickBarInventory = inventory; }
-    QuickBarInventory* quickBarInventory() { return m_quickBarInventory; }
+    void setQuickBarInventory(QuickBarInventory* inventory) {
+        m_quickBarInventory = inventory;
+    }
+    QuickBarInventory* quickBarInventory() {
+        return m_quickBarInventory;
+    }
 
     /**
      * Accepts player input result, which is a vector from -1 to 1 indicating

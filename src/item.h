@@ -57,9 +57,9 @@ public:
 
     /// should be used for serialization purposes.
     enum ItemType {
-       Torch = 0,
-       ContainerChest,
-       Weapon,
+        Torch = 0,
+        ContainerChest,
+        Weapon,
         Block /// blocks are handled super specially. they have different placement rules, adn they are not rendered as an Entity, but something totally different.
     };
 
@@ -106,25 +106,39 @@ public:
      * Has the item accessing the world to figure out where to place itself.
      * in other words, used for item placement inside world.
      */
-    void setWorld(World* world) { m_world = world; }
+    void setWorld(World* world) {
+        m_world = world;
+    }
 
     /**
      * Set the player who owns this item, used for consumables.
      * It will be null *only* if the item is within the world (is not attached to a player)
      */
-    void setPlayer(Player* player) { m_player = player; }
+    void setPlayer(Player* player) {
+        m_player = player;
+    }
 
-    bool placeable() { return m_properties & ItemProperties::Placeable; }
+    bool placeable() {
+        return m_properties & ItemProperties::Placeable;
+    }
 
     /**
      */
     uint32_t dropStack(uint32_t amount);
 
-    void setStackSize(uint32_t stackSize) { m_stackSize = stackSize; }
-    uint32_t stackSize() { return m_stackSize; }
+    void setStackSize(uint32_t stackSize) {
+        m_stackSize = stackSize;
+    }
+    uint32_t stackSize() {
+        return m_stackSize;
+    }
 
-    uint32_t state() { return m_state; }
-    void setState(uint32_t state) { m_state = state; }
+    uint32_t state() {
+        return m_state;
+    }
+    void setState(uint32_t state) {
+        m_state = state;
+    }
 
 protected:
     uint32_t m_properties = 0;

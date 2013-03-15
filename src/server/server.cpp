@@ -86,7 +86,7 @@ void Server::poll()
     ENetEvent event;
     int eventStatus;
 
-    while(enet_host_service(m_server, &event, 0)) {
+    while (enet_host_service(m_server, &event, 0)) {
 
         switch (event.type) {
         case ENET_EVENT_TYPE_CONNECT:
@@ -109,7 +109,7 @@ void Server::poll()
         case ENET_EVENT_TYPE_DISCONNECT:
             Debug::log(Debug::Area::NetworkServer) << "Peer has disconnected:  " << event.peer->address.host << " at port: " << event.peer->address.port;
             printf("%s disconnected.\n", event.peer->data);
-            for (auto & client : m_clients) {
+        for (auto & client : m_clients) {
                 if (client.first == event.peer) {
                     Debug::log(Debug::Area::NetworkServer) << "FOUND PEER for disconnect, deleting it";
                     m_clients.erase(client.first);
@@ -153,15 +153,15 @@ void Server::processMessage(ENetEvent& event)
                 }
             }
 
-        sendInitialPlayerDataFinished(event.peer);
-        sendInitialWorldChunk(event.peer);
+            sendInitialPlayerDataFinished(event.peer);
+            sendInitialWorldChunk(event.peer);
 
-        // tell our (this) player/client what his quickbar inventory contains (send all items within it)
-        uint8_t maxIndex = m_clients[event.peer]->quickBarInventory()->maxEquippedSlots();
-        for (uint8_t index = 0; index < maxIndex; ++index) {
-            sendPlayerQuickBarInventory(m_clients[event.peer], index);
-        }
-        break;
+            // tell our (this) player/client what his quickbar inventory contains (send all items within it)
+            uint8_t maxIndex = m_clients[event.peer]->quickBarInventory()->maxEquippedSlots();
+            for (uint8_t index = 0; index < maxIndex; ++index) {
+                sendPlayerQuickBarInventory(m_clients[event.peer], index);
+            }
+            break;
         }
 
         case Packet::ConnectionEventType::DisconnectedInvalidPlayerName:
@@ -287,19 +287,19 @@ void Server::sendInitialWorldChunk(ENetPeer* peer)
     message.set_starty(startY);
     message.set_endy(endY);
 
-   Chunk chunk = m_world->createChunk(startX, startY, endX, endY);
+    Chunk chunk = m_world->createChunk(startX, startY, endX, endY);
 
-   for (int row = startY; row < endY; ++row) {
-       for (int column = startX; column < endX; ++column) {
+    for (int row = startY; row < endY; ++row) {
+        for (int column = startX; column < endX; ++column) {
 
-           uint32_t index = column * WORLD_ROWCOUNT + row;
-           Block& block = chunk.blocks()->at(index);
+            uint32_t index = column * WORLD_ROWCOUNT + row;
+            Block& block = chunk.blocks()->at(index);
 
             message.add_meshtype(block.meshType);
             message.add_primitivetype(block.primitiveType);
             message.add_walltype(block.wallType);
-       }
-   }
+        }
+    }
 
     Packet::sendPacket(peer, &message, Packet::FromServerPacketContents::ChunkFromServerPacket, ENET_PACKET_FLAG_RELIABLE);
 }
