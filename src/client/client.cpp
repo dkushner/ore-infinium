@@ -662,6 +662,8 @@ void Client::receiveQuickBarInventoryItem(std::stringstream* ss)
     }
     }
 
+    //NOTE: we don't give a shit about position and such, the server doesn't even send that
+    //in inventory scenarios, since it doesn't matter.
     baseItem->setStackSize(message.stacksize());
     baseItem->setName(message.itemname());
     baseItem->setDetails(message.itemdetails());

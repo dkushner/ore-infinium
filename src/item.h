@@ -140,6 +140,8 @@ public:
         m_state = state;
     }
 
+    uint32_t type() { return m_type; }
+
 protected:
     uint32_t m_properties = 0;
 

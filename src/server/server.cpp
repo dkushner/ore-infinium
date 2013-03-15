@@ -343,6 +343,7 @@ Player* Server::createPlayer(const std::string& playerName)
     //TODO: load the player's inventory from file..for now, initialize *the whole thing* with bullshit
     for (uint8_t i = 0; i < quickBarInventory->maxEquippedSlots(); ++i) {
         Torch *torch = new Torch(glm::vec2(0, 0));
+        torch->setStackSize(10);
         quickBarInventory->setSlot(i, torch);
     }
 
@@ -366,7 +367,39 @@ void Server::sendPlayerMove(Player* player)
 void Server::sendPlayerQuickBarInventory(Player* player, uint8_t index)
 {
     Item* item = player->quickBarInventory()->item(index);
-    assert(item);
+
+    if (item == nullptr) {
+        Debug::log(Debug::Area::NetworkServer) << "warning, BAD SHIT HAPPENED, server tried sending a player's quickbar inventory but an element was nullptr, which means we didn't send as much as we should have, so the client is empty for this element index..VERY BAD SHIT";
+        return;
+    }
+
     Debug::log(Debug::Area::NetworkServer) << "SERVER, qucikbar inventory item name: " << item->name();
+
+    PacketBuf::Item message;
+    //NOTE: position and such are not sent, as client doesn't need to know that for inventories.
+    message.set_itemtype(item->type());
+    message.set_itemdetails(item->details());
+    message.set_itemname(item->name());
+    message.set_itemstate(item->state());
+    message.set_stacksize(item->stackSize());
+    message.set_index(index);
+
+    switch(item->type()) {
+        case Item::ItemType::Torch:
+            Torch* torch = dynamic_cast<Torch*>(item);
+            message.set_radius(torch->radius());
+            break;
+    }
+
+    // search for the client associated with this player
+    ENetPeer* peer = nullptr;
+    for (auto c : m_clients) {
+       if (c.second == player) {
+           peer = c.first;
+           break;
+       }
+    }
+
+    Packet::sendPacket(peer, &message, Packet::QuickBarInventoryItemFromServerPacket, ENET_PACKET_FLAG_RELIABLE);
 }
 
