@@ -372,7 +372,6 @@ void Server::sendQuickBarInventoryItemCountChanged(Player* player, uint8_t index
     Packet::sendPacket(peer, &message, Packet::FromServerPacketContents::QuickBarInventoryItemCountChangedFromServerPacket, ENET_PACKET_FLAG_RELIABLE);
 }
 
-
 Player* Server::createPlayer(const std::string& playerName)
 {
     Player* player = new Player("player1Standing1");

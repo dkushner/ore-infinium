@@ -741,4 +741,5 @@ void Client::receiveQuickBarInventoryItemCountChanged(std::stringstream* ss)
 
     m_quickBarMenu->inventory()->item(message.index())->setStackSize(message.newcount());
     m_quickBarMenu->reloadSlot(message.index());
+    //FIXME: TODO: if stacksize 0, delete item, it's implied from the server(and this packet).
 }

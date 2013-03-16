@@ -557,22 +557,32 @@ void World::attemptItemPlacement(Player* player)
     }
     limiter++;
 
+    if (item == nullptr) {
+        return;
+    }
+
+    if (item->stackSize() == 0) {
+        Debug::log() << "server: well that's odd, was told that we should place an item, but the item is valid/hanging around, but has no stack size..so it's a count of 0...shouldn't happen.";
+        return;
+    }
+
     switch (item->type()) {
         case Item::ItemType::Torch: {
             Torch* torch = dynamic_cast<Torch*>(item);
 
-            if (torch->dropStack(1) > 0) {
-                Torch* newTorch = torch->duplicate();
-                newTorch->setStackSize(1);
-                m_torches.push_back(newTorch);
+            uint8_t newCount = torch->dropStack(1);
+            Torch* newTorch = torch->duplicate();
+            newTorch->setStackSize(1);
+            m_torches.push_back(newTorch);
 
-                Debug::log() << "server: item count changed, new count: " << torch->stackSize();
+            Debug::log() << "server: item count changed, new count: " << torch->stackSize();
 
-                //send the new inventory item count to this player's client.
-                m_server->sendQuickBarInventoryItemCountChanged(player, inventory->equippedIndex(), torch->stackSize());
-                m_server->sendItemSpawned(newTorch);
-            } else {
-                //tell client that this item is now empty, and to remove it from the inventory.
+            //send the new inventory item count to this player's client.
+            m_server->sendQuickBarInventoryItemCountChanged(player, inventory->equippedIndex(), torch->stackSize());
+            m_server->sendItemSpawned(newTorch);
+
+            if (newCount == 0) {
+                //remove it from *our* inventory. the client has already done so.
             }
             break;
         }
