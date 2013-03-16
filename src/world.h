@@ -126,7 +126,16 @@ private:
 
     void calculateAttackPosition();
 
+    /**
+     * Attempts to pick a block at a position. Assumes caller checked inventory to see if it's possible.
+     */
     void performBlockAttack(Player* player);
+
+    /**
+     * Calls various functions determining which sort of action should be taken. Should be called on each update()
+     * if the player mouse is held.
+     */
+    void handlePlayerLeftMouse(Player* player);
 
     void saveMap();
 

@@ -30,6 +30,7 @@
 
 //HACK #include "sky.h"
 #include "settings/settings.h"
+#include "quickbarinventory.h"
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -172,9 +173,9 @@ void World::update(double elapsedTime)
 {
     if (m_server) {
     for (auto * player : m_players) {
-            //TODO: HANDLE INVENTORY AND TAKE THAT INTO ACCOUNT
             if (player->mouseLeftButtonHeld()) {
-                performBlockAttack(player);
+
+                handlePlayerLeftMouse(player);
             }
         }
     }
@@ -524,4 +525,23 @@ void World::itemPrimaryActivated(Player* player, Item* item)
 void World::itemSecondaryActivated(Player* player, Item* item)
 {
     item->activateSecondary();
+}
+
+void World::handlePlayerLeftMouse(Player* player)
+{
+    //TODO: HANDLE INVENTORY AND TAKE THAT INTO ACCOUNT
+    // performBlockAttack(player);
+
+    // FIXME: HACK: perform the action based on what type of thing is equipped.
+    // if it's a sword we attack shit, if it's a pickaxe we attack blocks. for now, lets
+    // just try to place the equipped object in the world
+    QuickBarInventory* inventory = player->quickBarInventory();
+    Item* item = inventory->item(inventory->equippedIndex());
+
+    switch (item->type()) {
+        case Item::ItemType::Torch:
+            Torch* torch = dynamic_cast<Torch*>(item);
+            Debug::log(Debug::Area::NetworkServer) << "TORCH RADIUS: " << torch->radius();
+            break;
+    }
 }
