@@ -571,7 +571,7 @@ void World::attemptItemPlacement(Player* player)
             Torch* torch = dynamic_cast<Torch*>(item);
 
             uint8_t newCount = torch->dropStack(1);
-            Torch* newTorch = torch->duplicate();
+            Torch* newTorch = dynamic_cast<Torch*>(torch->duplicate());
             newTorch->setStackSize(1);
             m_torches.push_back(newTorch);
 
