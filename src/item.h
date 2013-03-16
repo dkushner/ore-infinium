@@ -40,8 +40,8 @@ public:
     ~Item();
 
     enum ItemProperties {
-        Placeable = 0,
-        Consumable, //potions and such FIXME UNUSED maybe unneeded too?
+        Placeable = 1 << 0,
+        Consumable = 1 << 1, //potions and such FIXME UNUSED maybe unneeded too?
     };
 
     /*

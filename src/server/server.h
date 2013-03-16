@@ -24,6 +24,7 @@
 
 #include <map>
 
+class Item;
 class World;
 class Player;
 class Chunk;
@@ -50,6 +51,8 @@ public:
      * Broadcast a chunk change.
      */
     void sendWorldChunk(Chunk* chunk);
+    void sendItemSpawned(Item* item);
+    void sendQuickBarInventoryItemCountChanged(Player* player, uint8_t index, uint8_t newCount);
 
     /**
      * Should be called when player's quickbarinventory has been modified at @p index,

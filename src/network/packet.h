@@ -62,9 +62,17 @@ public:
 
         QuickBarInventoryItemFromServerPacket,
 
+        /// when the item count of the quickbar inventory has changed
+        /// e.g. someone placed or dropped or consumed an item, and now the mentioned client needs
+        /// to know the new count.
+        QuickBarInventoryItemCountChangedFromServerPacket,
+
         PlayerDisconnectedFromServerPacket,
         PlayerMoveFromServerPacket,
-        ChunkFromServerPacket
+        ChunkFromServerPacket,
+
+        /// when a new item has been spawned in the world (dropped or placed)
+        ItemSpawnedFromServerPacket
     };
 
     enum ConnectionEventType {

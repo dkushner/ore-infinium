@@ -102,6 +102,7 @@ private:
     void receivePlayerDisconnected(std::stringstream* ss);
     void receivePlayerMove(std::stringstream* ss);
     void receiveChunk(std::stringstream* ss);
+    void receiveQuickBarInventoryItemCountChanged(std::stringstream* ss);
 
 ///////////////////////////////////////////////
 

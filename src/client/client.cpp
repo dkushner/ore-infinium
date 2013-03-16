@@ -595,6 +595,10 @@ void Client::processMessage(ENetEvent& event)
     case Packet::QuickBarInventoryItemFromServerPacket:
         receiveQuickBarInventoryItem(&ss);
         break;
+
+    case Packet::QuickBarInventoryItemCountChangedFromServerPacket:
+        receiveQuickBarInventoryItemCountChanged(&ss);
+        break;
     }
 
     enet_packet_destroy(event.packet);
@@ -728,4 +732,13 @@ void Client::receiveChunk(std::stringstream* ss)
     Chunk chunk(message.startx(), message.starty(), message.endx(), message.endy(), &blocks);
 
     m_world->loadChunk(&chunk);
+}
+
+void Client::receiveQuickBarInventoryItemCountChanged(std::stringstream* ss)
+{
+    PacketBuf::ItemCountChanged message;
+    Packet::deserialize(ss, &message);
+
+    m_quickBarMenu->inventory()->item(message.index())->setStackSize(message.newcount());
+    m_quickBarMenu->reloadSlot(message.index());
 }

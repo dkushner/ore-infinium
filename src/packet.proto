@@ -91,6 +91,11 @@ message Item {
     optional uint32 index = 9;
 }
 
+message ItemCountChanged {
+    optional uint32 index = 1;
+    optional uint32 newCount = 2;
+}
+
 message QuickBarInventorySelectSlotRequestFromClient {
     optional uint32 index = 1;
 }

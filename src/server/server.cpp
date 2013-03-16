@@ -349,6 +349,30 @@ void Server::sendWorldChunk(Chunk* chunk)
     Packet::sendPacketBroadcast(m_server, &message, Packet::FromServerPacketContents::ChunkFromServerPacket, ENET_PACKET_FLAG_RELIABLE);
 }
 
+void Server::sendItemSpawned(Item* item)
+{
+    Debug::log() << "sending item spawned, from server.";
+}
+
+void Server::sendQuickBarInventoryItemCountChanged(Player* player, uint8_t index, uint8_t newCount)
+{
+    PacketBuf::ItemCountChanged message;
+    message.set_index(index);
+    message.set_newcount(newCount);
+
+    // search for the client associated with this player
+    ENetPeer* peer = nullptr;
+    for (auto c : m_clients) {
+       if (c.second == player) {
+           peer = c.first;
+           break;
+       }
+    }
+
+    Packet::sendPacket(peer, &message, Packet::FromServerPacketContents::QuickBarInventoryItemCountChangedFromServerPacket, ENET_PACKET_FLAG_RELIABLE);
+}
+
+
 Player* Server::createPlayer(const std::string& playerName)
 {
     Player* player = new Player("player1Standing1");

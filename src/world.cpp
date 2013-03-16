@@ -539,7 +539,7 @@ void World::handlePlayerLeftMouse(Player* player)
     Item* item = inventory->item(inventory->equippedIndex());
 
     //these items are placeable
-    if (item->placeable()) {
+    if (item != nullptr && item->placeable()) {
         attemptItemPlacement(player);
     }
 }
@@ -549,11 +549,33 @@ void World::attemptItemPlacement(Player* player)
     QuickBarInventory* inventory = player->quickBarInventory();
     Item* item = inventory->item(inventory->equippedIndex());
 
+    //HACK: as just some way to limit item placement events..
+    //since we don't have a validator for placement handling yet.
+    static int limiter = 0;
+    if (limiter > 10) {
+        return;
+    }
+    limiter++;
+
     switch (item->type()) {
-        case Item::ItemType::Torch:
+        case Item::ItemType::Torch: {
             Torch* torch = dynamic_cast<Torch*>(item);
-            Debug::log(Debug::Area::NetworkServer) << "TORCH RADIUS: " << torch->radius();
+
+            if (torch->dropStack(1) > 0) {
+                Torch* newTorch = torch->duplicate();
+                newTorch->setStackSize(1);
+                m_torches.push_back(newTorch);
+
+                Debug::log() << "server: item count changed, new count: " << torch->stackSize();
+
+                //send the new inventory item count to this player's client.
+                m_server->sendQuickBarInventoryItemCountChanged(player, inventory->equippedIndex(), torch->stackSize());
+                m_server->sendItemSpawned(newTorch);
+            } else {
+                //tell client that this item is now empty, and to remove it from the inventory.
+            }
             break;
+        }
     }
 }
 
