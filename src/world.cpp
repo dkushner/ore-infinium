@@ -570,7 +570,8 @@ void World::attemptItemPlacement(Player* player)
         case Item::ItemType::Torch: {
             Torch* torch = dynamic_cast<Torch*>(item);
 
-            uint8_t newCount = torch->dropStack(1);
+            torch->dropStack(1);
+
             Torch* newTorch = dynamic_cast<Torch*>(torch->duplicate());
             newTorch->setStackSize(1);
             m_torches.push_back(newTorch);
@@ -581,8 +582,10 @@ void World::attemptItemPlacement(Player* player)
             m_server->sendQuickBarInventoryItemCountChanged(player, inventory->equippedIndex(), torch->stackSize());
             m_server->sendItemSpawned(newTorch);
 
-            if (newCount == 0) {
+            if (torch->stackSize() == 0) {
+                Debug::log() << "NEW COUNT IS ZERO DELETING ITEM";
                 //remove it from *our* inventory. the client has already done so.
+                player->quickBarInventory()->deleteItem(inventory->equippedIndex());
             }
             break;
         }
