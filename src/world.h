@@ -105,6 +105,8 @@ public:
     //create containers of various entities, and implement a tile system
     //game.cpp calls into this each tick, which this descends downward into each entity
 private:
+    void attemptItemPlacement(Player* player);
+    void attemptItemPrimaryAttack(Player* player);
 
     /**
      * NOTE: CLIENT ONLY

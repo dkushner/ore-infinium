@@ -55,11 +55,14 @@ public:
 
     */
 
-    /// should be used for serialization purposes.
+    /// should be used for serialization purposes, to quickly and over the network determine which item base class an item should
+    /// turn into
     enum ItemType {
         Torch = 0,
-        ContainerChest,
+        Container,
         Weapon,
+        Armor,
+        Vegetation,
         Block /// blocks are handled super specially. they have different placement rules, adn they are not rendered as an Entity, but something totally different.
     };
 

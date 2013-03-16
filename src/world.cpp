@@ -538,10 +538,26 @@ void World::handlePlayerLeftMouse(Player* player)
     QuickBarInventory* inventory = player->quickBarInventory();
     Item* item = inventory->item(inventory->equippedIndex());
 
+    //these items are placeable
+    if (item->placeable()) {
+        attemptItemPlacement(player);
+    }
+}
+
+void World::attemptItemPlacement(Player* player)
+{
+    QuickBarInventory* inventory = player->quickBarInventory();
+    Item* item = inventory->item(inventory->equippedIndex());
+
     switch (item->type()) {
         case Item::ItemType::Torch:
             Torch* torch = dynamic_cast<Torch*>(item);
             Debug::log(Debug::Area::NetworkServer) << "TORCH RADIUS: " << torch->radius();
             break;
     }
+}
+
+void World::attemptItemPrimaryAttack(Player* player)
+{
+
 }

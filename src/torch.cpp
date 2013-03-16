@@ -25,6 +25,7 @@ Torch::Torch(const glm::vec2& position): Item("torch1Ground1")
     Item::setDetails("a motherfucking torch.");
     Item::m_maximumStackSize = 64;
     Item::m_type = Item::ItemType::Torch;
+    Item::m_properties = Item::ItemProperties::Placeable;
 }
 
 Torch::~Torch()
