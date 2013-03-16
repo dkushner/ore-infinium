@@ -38,6 +38,7 @@
 
 #include <iostream>
 #include <fstream>
+#include <random>
 
 #include <SDL2/SDL.h>
 
