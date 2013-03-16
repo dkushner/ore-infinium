@@ -23,6 +23,7 @@ torch.cpp
 world.cpp
 item.cpp
 quickbarinventory.cpp
+timer.cpp
 
 #cloudsystem.cpp
 #sky.cpp
