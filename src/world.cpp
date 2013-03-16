@@ -31,6 +31,7 @@
 //HACK #include "sky.h"
 #include "settings/settings.h"
 #include "quickbarinventory.h"
+#include "timer.h"
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -414,7 +415,7 @@ void World::loadMap()
 
 void World::generateMap()
 {
-    auto timerStart = std::chrono::high_resolution_clock::now();
+    Timer timer;
 
     std::random_device device;
     std::mt19937 rand(device());
@@ -438,10 +439,7 @@ void World::generateMap()
 
     generateTileMeshes();
 
-    auto timerEnd = std::chrono::high_resolution_clock::now();
-
-    auto timeTaken = std::chrono::duration_cast<std::chrono::milliseconds>(timerEnd - timerStart).count();
-    Debug::log(Debug::Area::General) << "Time taken for map generation: " << timeTaken << " Milliseconds";
+    Debug::log(Debug::Area::General) << "Time taken for map generation: " << timer.milliseconds() << " Milliseconds";
 }
 
 void World::saveMap()
@@ -549,13 +547,6 @@ void World::attemptItemPlacement(Player* player)
     QuickBarInventory* inventory = player->quickBarInventory();
     Item* item = inventory->item(inventory->equippedIndex());
 
-    //HACK: as just some way to limit item placement events..
-    //since we don't have a validator for placement handling yet.
-    static int limiter = 0;
-    if (limiter > 10) {
-        return;
-    }
-    limiter++;
 
     if (item == nullptr) {
         return;
@@ -565,6 +556,15 @@ void World::attemptItemPlacement(Player* player)
         Debug::log() << "server: well that's odd, was told that we should place an item, but the item is valid/hanging around, but has no stack size..so it's a count of 0...shouldn't happen.";
         return;
     }
+
+    if (player->canPlaceItem() == false) {
+        // FIXME: has an arbitrary delay between item placement timings, i'm not sure if this is even needed..maybe.
+        // but as of right now it's definitely needed since there's no placement rules, so it will blow through a whole stack in a fraction fo a second.,
+        // all placed at the same position.
+        return;
+    }
+
+    player->placeItem();
 
     switch (item->type()) {
         case Item::ItemType::Torch: {

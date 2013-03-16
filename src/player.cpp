@@ -22,12 +22,13 @@
 
 #include "spritesheetmanager.h"
 #include "debug.h"
+#include "timer.h"
 #include <assert.h>
 
 Player::Player(const std::string& frameName)
     : Entity(frameName, SpriteSheetRenderer::SpriteSheetType::Character)
 {
-
+    m_placeableDelayTimer = new Timer();
 }
 
 /*
@@ -98,4 +99,24 @@ void Player::setPlayerID(uint32_t id)
 uint32_t Player::playerID() const
 {
     return m_playerID;
+}
+
+bool Player::canAttackPrimary()
+{
+
+}
+
+bool Player::canPlaceItem()
+{
+    if (m_placeableDelayTimer->milliseconds() >= m_placeableDelay) {
+        //player has been forced to wait this long before he can place an item again, so now it's okay to do.
+       return true;
+    }
+
+    return false;
+}
+
+void Player::placeItem()
+{
+    m_placeableDelayTimer->reset();
 }

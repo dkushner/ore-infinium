@@ -23,6 +23,7 @@
 
 #include <SDL2/SDL_events.h>
 
+class Timer;
 class QuickBarInventory;
 class Camera;
 
@@ -72,6 +73,11 @@ public:
         return m_quickBarInventory;
     }
 
+    bool canAttackPrimary();
+
+    void placeItem();
+    bool canPlaceItem();
+
     /**
      * Accepts player input result, which is a vector from -1 to 1 indicating
      * direction, not magnitude.
@@ -99,6 +105,9 @@ private:
      */
     uint32_t m_playerID;
 
+    /// milliseconds
+    const int64_t m_placeableDelay = 500;
+
     /**
      * NOTE: presently not designed to allow name changing mid-connection. You need to reconnect to do that.
      * (allowing name changes seems likemore of a problem than a solution to anything.)
@@ -107,6 +116,8 @@ private:
 
     /// only utilized by server. as of present, the client stores this in itself
     QuickBarInventory* m_quickBarInventory = nullptr;
+
+    Timer* m_placeableDelayTimer = nullptr;
 
     glm::ivec2 m_mousePosition = glm::ivec2(0, 0);
     bool m_mouseLeftButtonHeld = false;
