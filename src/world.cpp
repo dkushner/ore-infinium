@@ -80,8 +80,7 @@ World::World(Player* mainPlayer, Client* client, Server* server)
         m_lightRenderer->setTileRendererTexture(m_tileRenderer->fboTexture());
 
         //FIXME: call each update, and make it only do visible ones
-        m_lightRenderer->setTorches(m_torches);
-
+        m_lightRenderer->setTorches(&m_torches);
     }
 
     //client doesn't actually load/generate any world
@@ -603,8 +602,6 @@ void World::attemptItemPrimaryAttack(Player* player)
 void World::spawnItem(Item* item)
 {
     Torch* torch = dynamic_cast<Torch*>(item);
-
-    Debug::log() << "CLIENT SPAWN ITEM: x: " << item->position().x << " y: " << item->position().y;
 
     //FIXME: HACK;
     m_torches.push_back(torch);

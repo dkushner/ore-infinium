@@ -48,7 +48,7 @@ public:
 
     void setCamera(Camera* camera);
 
-    void setTorches(const std::vector<Torch*>& torches);
+    void setTorches(std::vector<Torch*>* torches);
     void setTileRendererTexture(GLuint texture);
 
     /**
@@ -83,7 +83,7 @@ private:
     void initGL();
     void initBackbufferGL();
 
-    std::vector<Torch*> m_torches;
+    std::vector<Torch*> *m_torches;
 
     // GLuint m_tileMapTexture;
 

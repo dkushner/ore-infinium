@@ -67,7 +67,7 @@ void LightRenderer::setCamera(Camera* camera)
     m_camera->setShader(m_shader);
 }
 
-void LightRenderer::setTorches(const std::vector< Torch* >& torches)
+void LightRenderer::setTorches(std::vector<Torch*>* torches)
 {
     m_torches = torches;
 }
@@ -110,7 +110,7 @@ void LightRenderer::renderToFBO()
 
     int index = 0;
     Debug::checkGLError();
-for (Torch * torch : m_torches) {
+for (Torch * torch : *m_torches) {
 
         // vertices that will be uploaded.
         Vertex vertices[4];
@@ -185,7 +185,7 @@ for (Torch * torch : m_torches) {
 
     glDrawElements(
         GL_TRIANGLES,
-        6 * (m_torches.size()), // 6 indices per 2 triangles
+        6 * (m_torches->size()), // 6 indices per 2 triangles
         GL_UNSIGNED_INT,
         (const GLvoid*)0);
     Debug::checkGLError();
