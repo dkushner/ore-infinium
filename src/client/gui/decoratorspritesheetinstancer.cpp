@@ -14,7 +14,7 @@
  *
  * The above copyright notice and this permission notice shall be included in
  * all copies or substantial portions of the Software.
- * 
+ *
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
  * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -25,55 +25,54 @@
  *
  */
 
-#include "precompiled.h"
-#include "DecoratorTiledHorizontalInstancer.h"
-#include "DecoratorTiledHorizontal.h"
+#include "decoratorspritesheetinstancer.h"
+#include "decoratorspritesheet.h"
 
-namespace Rocket {
-namespace Core {
+#include <Rocket/Core/Math.h>
 
-DecoratorTiledHorizontalInstancer::DecoratorTiledHorizontalInstancer()
+DecoratorSpriteSheetInstancer::DecoratorSpriteSheetInstancer()
 {
-	RegisterTileProperty("left-image", false);
-	RegisterTileProperty("right-image", false);
-	RegisterTileProperty("center-image", true);
+    RegisterProperty("num-layers", "3").AddParser("number");
+    RegisterProperty("top-colour", "#dddc").AddParser("color");
+    RegisterProperty("bottom-colour", "#333c").AddParser("color");
+    RegisterProperty("top-speed", "10.0").AddParser("number");
+    RegisterProperty("bottom-speed", "2.0").AddParser("number");
+    RegisterProperty("top-density", "15").AddParser("number");
+    RegisterProperty("bottom-density", "10").AddParser("number");
 }
 
-DecoratorTiledHorizontalInstancer::~DecoratorTiledHorizontalInstancer()
+DecoratorSpriteSheetInstancer::~DecoratorSpriteSheetInstancer()
 {
 }
 
-// Instances a box decorator.
-Decorator* DecoratorTiledHorizontalInstancer::InstanceDecorator(const String& ROCKET_UNUSED(name), const PropertyDictionary& properties)
+// Instances a decorator given the property tag and attributes from the RCSS file.
+Rocket::Core::Decorator* DecoratorSpriteSheetInstancer::InstanceDecorator(const Rocket::Core::String& ROCKET_UNUSED(name), const Rocket::Core::PropertyDictionary& properties)
 {
-	DecoratorTiled::Tile tiles[3];
-	String texture_names[3];
-	String rcss_paths[3];
+    int num_layers = Rocket::Core::Math::RealToInteger(properties.GetProperty("num-layers")->Get< float >());
+    Rocket::Core::Colourb top_colour = properties.GetProperty("top-colour")->Get< Rocket::Core::Colourb >();
+    Rocket::Core::Colourb bottom_colour = properties.GetProperty("bottom-colour")->Get< Rocket::Core::Colourb >();
+    float top_speed = properties.GetProperty("top-speed")->Get< float >();
+    float bottom_speed = properties.GetProperty("bottom-speed")->Get< float >();
+    int top_density = Rocket::Core::Math::RealToInteger(properties.GetProperty("top-density")->Get< float >());
+    int bottom_density = Rocket::Core::Math::RealToInteger(properties.GetProperty("bottom-density")->Get< float >());
 
-	GetTileProperties(tiles[0], texture_names[0], rcss_paths[0], properties, "left-image");
-	GetTileProperties(tiles[1], texture_names[1], rcss_paths[1], properties, "right-image");
-	GetTileProperties(tiles[2], texture_names[2], rcss_paths[2], properties, "center-image");
+    DecoratorStarfield* decorator = new DecoratorStarfield();
+    if (decorator->Initialise(num_layers, top_colour, bottom_colour, top_speed, bottom_speed, top_density, bottom_density))
+        return decorator;
 
-	DecoratorTiledHorizontal* decorator = new DecoratorTiledHorizontal();
-	if (decorator->Initialise(tiles, texture_names, rcss_paths))
-		return decorator;
-
-	decorator->RemoveReference();
-	ReleaseDecorator(decorator);
-	return NULL;
+    decorator->RemoveReference();
+    ReleaseDecorator(decorator);
+    return NULL;
 }
 
 // Releases the given decorator.
-void DecoratorTiledHorizontalInstancer::ReleaseDecorator(Decorator* decorator)
+void DecoratorSpriteSheetInstancer::ReleaseDecorator(Rocket::Core::Decorator* decorator)
 {
-	delete decorator;
+    delete decorator;
 }
 
 // Releases the instancer.
-void DecoratorTiledHorizontalInstancer::Release()
+void DecoratorSpriteSheetInstancer::Release()
 {
-	delete this;
-}
-
-}
+    delete this;
 }

@@ -14,7 +14,7 @@
  *
  * The above copyright notice and this permission notice shall be included in
  * all copies or substantial portions of the Software.
- * 
+ *
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
  * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -25,34 +25,34 @@
  *
  */
 
-#ifndef ROCKETCOREDECORATORTILEDHORIZONTALINSTANCER_H
-#define ROCKETCOREDECORATORTILEDHORIZONTALINSTANCER_H
+#ifndef ROCKETINVADERSDECORATORINSTANCERSTARFIELD_H
+#define ROCKETINVADERSDECORATORINSTANCERSTARFIELD_H
 
-#include "DecoratorTiledInstancer.h"
+#include "decoratorspritesheet.h"
 
-namespace Rocket {
-namespace Core {
+#include <Rocket/Core/DecoratorInstancer.h>
 
 /**
-	@author Peter Curry
+ *        @author Robert Curry
  */
 
-class DecoratorTiledHorizontalInstancer : public DecoratorTiledInstancer
+class DecoratorSpriteSheetInstancer : public Rocket::Core::DecoratorInstancer
 {
 public:
-	DecoratorTiledHorizontalInstancer();
-	virtual ~DecoratorTiledHorizontalInstancer();
+    DecoratorSpriteSheetInstancer();
+    virtual ~DecoratorSpriteSheetInstancer();
 
-	/// Instances a horizontal decorator.
-	virtual Decorator* InstanceDecorator(const String& name, const PropertyDictionary& properties);
-	/// Releases the given decorator.
-	virtual void ReleaseDecorator(Decorator* decorator);
+    /// Instances a decorator given the property tag and attributes from the RCSS file.
+    /// @param name The type of decorator desired. For example, "background-decorator: simple;" is declared as type "simple".
+    /// @param properties All RCSS properties associated with the decorator.
+    /// @return The decorator if it was instanced successful, NULL if an error occured.
+    Rocket::Core::Decorator* InstanceDecorator(const Rocket::Core::String& name, const Rocket::Core::PropertyDictionary& properties);
+    /// Releases the given decorator.
+    /// @param decorator Decorator to release. This is guaranteed to have been constructed by this instancer.
+    void ReleaseDecorator(Rocket::Core::Decorator* decorator);
 
-	/// Releases the instancer.
-	virtual void Release();
+    /// Releases the instancer.
+    void Release();
 };
-
-}
-}
 
 #endif
