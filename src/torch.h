@@ -51,7 +51,7 @@ public:
     }
 
 private:
-    float m_radius = 300.0f;
+    float m_radius = 200.0f;
 };
 
 #endif
