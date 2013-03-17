@@ -568,6 +568,10 @@ void World::attemptItemPlacement(Player* player)
 
     item->setState(Item::ItemState::Placed);
 
+    //FIXME: use mouse cursor
+    glm::vec2 position = glm::vec2(player->position());
+    item->setPosition(position);
+
     switch (item->type()) {
         case Item::ItemType::Torch: {
             Torch* torch = dynamic_cast<Torch*>(item);
