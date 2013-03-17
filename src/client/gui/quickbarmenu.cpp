@@ -34,6 +34,7 @@ QuickBarMenu::QuickBarMenu(Client* client, QuickBarInventory* inventory)
 {
     loadDocument();
     selectSlot(0);
+
 }
 
 QuickBarMenu::~QuickBarMenu()
