@@ -1,10 +1,52 @@
-In order to use Ore Infinium, you must compile it (I don't have time to make
+In order to use Ore Infinium, you must compile it..for now (I don't have time to make
 binaries each day). Before you can do that, you must install the following:
 
+IMPORTANT: this game requires at least OpenGL 3.2 or newer. You can figure this
+out usually by running 'glxinfo'. Mesa doesn't yet have 3.2 drivers.
+
+To get started building this on Kubuntu (which is what I'm using as a test
+machine, and is, as a rule, a good base for shipping software), you can install
+some packages so that you don't have to build all of them yourself.
+
+
+Here's a list, just to keep in mind. Commands are further down.
+
 * SDL 2.x http://www.libsdl.org/hg.php
-* SDL_mixer 2.x http://hg.libsdl.org/
-* PugiXML http://pugixml.org/
-* FreeType (also for fonts)
-* FTGL (for font rendering) 'svn co https://ftgl.svn.sourceforge.net/svnroot/ftgl'
+
+* protobuf (google's libprotobuf. needs both the library and the 'protoc'
+binary, which e.g. ubuntu ships in a separate package
+
+* enet (networking lib)
+
+* GLEW
+
+* librocket (GUI HTML/CSS C++ library)
+
+* C++11 compatible compiler (GCC 4.7 is fine and clang 3.2
+
+* YAML-CPP (0.3.0. NOT GREATER THAN. Newer versions like 0.5 have a new API
+which I unfortunately cannot yet use as evidently, nothing ships it yet, not
+until the next version of ubuntu).
+
+
+If you're running Ubuntu 12.10 (which is what I support the most), then type:
+
+'apt-get install libenet-dev libglew-dev libprotobuf-dev protobuf-compiler
+libyaml-cpp-dev'
+
+And just to make sure, if you've never done development, you probably need to
+run:
+
+'apt-get install mercurial git cmake'
+
+Okay, so basically this gives us everything except the following:
+
+* SDL 2.0(which is unreleased right now
+
+and
+
+* librocket
+
+So those need to be built from source.
 
 
