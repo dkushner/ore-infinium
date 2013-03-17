@@ -29,16 +29,11 @@
 #include "decoratorspritesheet.h"
 
 #include <Rocket/Core/Math.h>
+#include <Rocket/Core/String.h>
 
 DecoratorSpriteSheetInstancer::DecoratorSpriteSheetInstancer()
 {
-    RegisterProperty("num-layers", "3").AddParser("number");
-    RegisterProperty("top-colour", "#dddc").AddParser("color");
-    RegisterProperty("bottom-colour", "#333c").AddParser("color");
-    RegisterProperty("top-speed", "10.0").AddParser("number");
-    RegisterProperty("bottom-speed", "2.0").AddParser("number");
-    RegisterProperty("top-density", "15").AddParser("number");
-    RegisterProperty("bottom-density", "10").AddParser("number");
+    RegisterProperty("image-src", "").AddParser("string");
 }
 
 DecoratorSpriteSheetInstancer::~DecoratorSpriteSheetInstancer()
@@ -48,20 +43,17 @@ DecoratorSpriteSheetInstancer::~DecoratorSpriteSheetInstancer()
 // Instances a decorator given the property tag and attributes from the RCSS file.
 Rocket::Core::Decorator* DecoratorSpriteSheetInstancer::InstanceDecorator(const Rocket::Core::String& ROCKET_UNUSED(name), const Rocket::Core::PropertyDictionary& properties)
 {
-    int num_layers = Rocket::Core::Math::RealToInteger(properties.GetProperty("num-layers")->Get< float >());
-    Rocket::Core::Colourb top_colour = properties.GetProperty("top-colour")->Get< Rocket::Core::Colourb >();
-    Rocket::Core::Colourb bottom_colour = properties.GetProperty("bottom-colour")->Get< Rocket::Core::Colourb >();
-    float top_speed = properties.GetProperty("top-speed")->Get< float >();
-    float bottom_speed = properties.GetProperty("bottom-speed")->Get< float >();
-    int top_density = Rocket::Core::Math::RealToInteger(properties.GetProperty("top-density")->Get< float >());
-    int bottom_density = Rocket::Core::Math::RealToInteger(properties.GetProperty("bottom-density")->Get< float >());
+    const Rocket::Core::Property* image_source_property = properties.GetProperty("image-src");
+    Rocket::Core::String image_source = image_source_property->Get< Rocket::Core::String >();
 
-    DecoratorStarfield* decorator = new DecoratorStarfield();
-    if (decorator->Initialise(num_layers, top_colour, bottom_colour, top_speed, bottom_speed, top_density, bottom_density))
+    DecoratorSpriteSheet* decorator = new DecoratorSpriteSheet();
+    if (decorator->Initialise(image_source, image_source_property->source)) {
         return decorator;
+    }
 
     decorator->RemoveReference();
     ReleaseDecorator(decorator);
+
     return NULL;
 }
 
