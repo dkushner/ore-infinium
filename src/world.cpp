@@ -578,14 +578,11 @@ void World::attemptItemPlacement(Player* player)
             newTorch->setStackSize(1);
             m_torches.push_back(newTorch);
 
-            Debug::log() << "server: item count changed, new count: " << torch->stackSize();
-
             //send the new inventory item count to this player's client.
             m_server->sendQuickBarInventoryItemCountChanged(player, inventory->equippedIndex(), torch->stackSize());
             m_server->sendItemSpawned(newTorch);
 
             if (torch->stackSize() == 0) {
-                Debug::log() << "NEW COUNT IS ZERO DELETING ITEM";
                 //remove it from *our* inventory. the client has already done so.
                 player->quickBarInventory()->deleteItem(inventory->equippedIndex());
             }
@@ -601,6 +598,12 @@ void World::attemptItemPrimaryAttack(Player* player)
 
 void World::spawnItem(Item* item)
 {
+    Torch* torch = dynamic_cast<Torch*>(item);
 
+    Debug::log() << "CLIENT SPAWN ITEM: x: " << item->position().x << " y: " << item->position().y;
+
+    //FIXME: HACK;
+    m_torches.push_back(torch);
+    m_spriteSheetRenderer->registerSprite(item);
 }
 

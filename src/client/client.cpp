@@ -599,6 +599,10 @@ void Client::processMessage(ENetEvent& event)
     case Packet::QuickBarInventoryItemCountChangedFromServerPacket:
         receiveQuickBarInventoryItemCountChanged(&ss);
         break;
+
+    case Packet::ItemSpawnedFromServerPacket:
+        receiveItemSpawned(&ss);
+        break;
     }
 
     enet_packet_destroy(event.packet);
