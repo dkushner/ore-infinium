@@ -601,10 +601,16 @@ void World::attemptItemPrimaryAttack(Player* player)
 
 void World::spawnItem(Item* item)
 {
-    Torch* torch = dynamic_cast<Torch*>(item);
+    switch (item->type()) {
+        case Item::ItemType::Torch: {
+            Torch* torch = dynamic_cast<Torch*>(item);
 
-    //FIXME: HACK;
-    m_torches.push_back(torch);
+            //FIXME: HACK;
+            m_torches.push_back(torch);
+            break;
+        }
+    }
+
     m_spriteSheetRenderer->registerSprite(item);
 }
 
