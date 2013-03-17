@@ -30,3 +30,8 @@ Sprite::Sprite(const std::string& frameName, SpriteSheetRenderer::SpriteSheetTyp
         FIXME:
     */
 }
+
+Sprite::~Sprite()
+{
+
+}

@@ -27,6 +27,11 @@ Entity::Entity(const std::string& frameName, SpriteSheetRenderer::SpriteSheetTyp
 
 }
 
+Entity::~Entity()
+{
+
+}
+
 void Entity::setVelocity(const glm::vec2& velocity)
 {
     m_velocity = velocity;
