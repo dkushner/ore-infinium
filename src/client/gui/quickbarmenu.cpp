@@ -163,9 +163,6 @@ void QuickBarMenu::reloadSlot(uint8_t index)
 {
     Debug::log() << "QUICKBAR MENU IS RELOADING SLOT, index: " << index;
     Item* item = m_inventory->item(index);
-    assert(item);
-
-    Debug::log() << "ITEM INFO: name: " << item->name() << " details: " << item->details() << " item stacksize: " << item->stackSize();
 
     std::stringstream ss;
     ss << int(index) << "subcount";
@@ -173,8 +170,14 @@ void QuickBarMenu::reloadSlot(uint8_t index)
     const std::string id = ss.str();
     ss.str("");
 
-    ss << item->stackSize();
-    m_menu->GetElementById(id.c_str())->SetInnerRML(ss.str().c_str());
+    if (item == nullptr) {
+        m_menu->GetElementById(id.c_str())->SetInnerRML("empty");
+    } else {
+        Debug::log() << "ITEM INFO: name: " << item->name() << " details: " << item->details() << " item stacksize: " << item->stackSize();
+
+        ss << item->stackSize();
+        m_menu->GetElementById(id.c_str())->SetInnerRML(ss.str().c_str());
+    }
 }
 
 void QuickBarMenu::handleEvent(const SDL_Event& event)
