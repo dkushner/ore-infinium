@@ -566,6 +566,8 @@ void World::attemptItemPlacement(Player* player)
 
     player->placeItem();
 
+    item->setState(Item::ItemState::Placed);
+
     switch (item->type()) {
         case Item::ItemType::Torch: {
             Torch* torch = dynamic_cast<Torch*>(item);
@@ -596,3 +598,9 @@ void World::attemptItemPrimaryAttack(Player* player)
 {
 
 }
+
+void World::spawnItem(Item* item)
+{
+
+}
+

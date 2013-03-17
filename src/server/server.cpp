@@ -353,6 +353,26 @@ void Server::sendWorldChunk(Chunk* chunk)
 void Server::sendItemSpawned(Item* item)
 {
     Debug::log() << "sending item spawned, from server.";
+
+    PacketBuf::Item message;
+
+    message.set_x(item->position().x);
+    message.set_y(item->position().y);
+    message.set_itemtype(item->type());
+    message.set_itemdetails(item->details());
+    message.set_itemname(item->name());
+    message.set_itemstate(item->state());
+    message.set_stacksize(item->stackSize());
+    //NOTE: index is not set, as it is not in a container of any kidn.
+
+    switch(item->type()) {
+        case Item::ItemType::Torch:
+            Torch* torch = dynamic_cast<Torch*>(item);
+            message.set_radius(torch->radius());
+            break;
+    }
+
+    Packet::sendPacketBroadcast(m_server, &message, Packet::FromServerPacketContents::ItemSpawnedFromServerPacket, ENET_PACKET_FLAG_RELIABLE);
 }
 
 void Server::sendQuickBarInventoryItemCountChanged(Player* player, uint8_t index, uint8_t newCount)

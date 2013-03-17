@@ -654,43 +654,6 @@ void Client::receiveInitialPlayerData(std::stringstream* ss)
     m_world->addPlayer(player);
 }
 
-void Client::receiveQuickBarInventoryItem(std::stringstream* ss)
-{
-    PacketBuf::Item message;
-    Packet::deserialize(ss, &message);
-
-    const glm::vec2 position = glm::vec2(message.x(), message.y());
-
-    Item *baseItem = nullptr;
-    switch (message.itemtype()) {
-    case Item::ItemType::Block:
-        break;
-
-    case Item::ItemType::Torch: {
-        Torch *torch = new Torch(position);
-        torch->setRadius(message.radius());
-
-        baseItem = torch;
-        break;
-    }
-    }
-
-    //NOTE: we don't give a shit about position and such, the server doesn't even send that
-    //in inventory scenarios, since it doesn't matter.
-    baseItem->setStackSize(message.stacksize());
-    baseItem->setName(message.itemname());
-    baseItem->setDetails(message.itemdetails());
-    baseItem->setState(message.itemstate());
-
-    uint32_t index = message.index();
-
-    //delete the old one as we'll get resent it in whatever new form it is in (whether it's moving to the world, or to a different inventory)
-    m_quickBarMenu->inventory()->deleteItem(index);
-
-    m_quickBarMenu->inventory()->setSlot(index, baseItem);
-    m_quickBarMenu->reloadSlot(index);
-}
-
 void Client::receivePlayerDisconnected(std::stringstream* ss)
 {
     PacketBuf::PlayerDisconnectedFromServer message;
@@ -746,4 +709,71 @@ void Client::receiveQuickBarInventoryItemCountChanged(std::stringstream* ss)
     }
 
     m_quickBarMenu->reloadSlot(message.index());
+}
+
+void Client::receiveQuickBarInventoryItem(std::stringstream* ss)
+{
+    PacketBuf::Item message;
+    Packet::deserialize(ss, &message);
+
+    //position isn't used even..but who cares.
+    const glm::vec2 position = glm::vec2(message.x(), message.y());
+
+    Item *baseItem = nullptr;
+    switch (message.itemtype()) {
+    case Item::ItemType::Block:
+        break;
+
+    case Item::ItemType::Torch: {
+        Torch *torch = new Torch(position);
+        torch->setRadius(message.radius());
+
+        baseItem = torch;
+        break;
+    }
+    }
+
+    //NOTE: we don't give a shit about position and such, the server doesn't even send that
+    //in inventory scenarios, since it doesn't matter.
+    baseItem->setStackSize(message.stacksize());
+    baseItem->setName(message.itemname());
+    baseItem->setDetails(message.itemdetails());
+    baseItem->setState(message.itemstate());
+
+    uint32_t index = message.index();
+
+    //delete the old one as we'll get resent it in whatever new form it is in (whether it's moving to the world, or to a different inventory)
+    m_quickBarMenu->inventory()->deleteItem(index);
+
+    m_quickBarMenu->inventory()->setSlot(index, baseItem);
+    m_quickBarMenu->reloadSlot(index);
+}
+
+void Client::receiveItemSpawned(std::stringstream* ss)
+{
+    PacketBuf::Item message;
+    Packet::deserialize(ss, &message);
+
+    const glm::vec2 position = glm::vec2(message.x(), message.y());
+
+    Item *baseItem = nullptr;
+    switch (message.itemtype()) {
+    case Item::ItemType::Block:
+        break;
+
+    case Item::ItemType::Torch: {
+        Torch *torch = new Torch(position);
+        torch->setRadius(message.radius());
+
+        baseItem = torch;
+        break;
+    }
+    }
+
+    baseItem->setStackSize(message.stacksize());
+    baseItem->setName(message.itemname());
+    baseItem->setDetails(message.itemdetails());
+    baseItem->setState(message.itemstate());
+
+   m_world->spawnItem(baseItem);
 }
