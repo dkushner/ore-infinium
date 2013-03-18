@@ -39,11 +39,7 @@ QuickBarMenu::QuickBarMenu(Client* client, QuickBarInventory* inventory)
     instancer->RemoveReference();
 
     loadDocument();
-    m_menu->GetElementById("0sub")->SetProperty("image-src", "../textures/entities.png");
-    m_menu->GetElementById("0sub")->SetProperty("image-x1", "0");
-    m_menu->GetElementById("0sub")->SetProperty("image-x2", "16");
-    m_menu->GetElementById("0sub")->SetProperty("image-y1", "0");
-    m_menu->GetElementById("0sub")->SetProperty("image-y2", "16");
+
     selectSlot(0);
 }
 
@@ -181,13 +177,28 @@ void QuickBarMenu::reloadSlot(uint8_t index)
     const std::string id = ss.str();
     ss.str("");
 
+    ss << int(index) << "sub";
+    const std::string subid = ss.str();
+    ss.str("");
+
     if (item == nullptr) {
         m_menu->GetElementById(id.c_str())->SetInnerRML("empty");
+        m_menu->GetElementById(subid.c_str())->SetProperty("image-src", "../textures/entities.png");
+        m_menu->GetElementById(subid.c_str())->SetProperty("image-x1", "0");
+        m_menu->GetElementById(subid.c_str())->SetProperty("image-x2", "0");
+        m_menu->GetElementById(subid.c_str())->SetProperty("image-y1", "0");
+        m_menu->GetElementById(subid.c_str())->SetProperty("image-y2", "0");
     } else {
         Debug::log() << "ITEM INFO: name: " << item->name() << " details: " << item->details() << " item stacksize: " << item->stackSize();
 
         ss << item->stackSize();
         m_menu->GetElementById(id.c_str())->SetInnerRML(ss.str().c_str());
+
+        m_menu->GetElementById(subid.c_str())->SetProperty("image-src", "../textures/entities.png");
+        m_menu->GetElementById(subid.c_str())->SetProperty("image-x1", "0");
+        m_menu->GetElementById(subid.c_str())->SetProperty("image-x2", "16");
+        m_menu->GetElementById(subid.c_str())->SetProperty("image-y1", "0");
+        m_menu->GetElementById(subid.c_str())->SetProperty("image-y2", "16");
     }
 }
 
