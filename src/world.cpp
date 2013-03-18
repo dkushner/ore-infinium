@@ -574,12 +574,14 @@ void World::attemptItemPlacement(Player* player)
         return;
     }
 
+    //use player's placement timing and such.
     player->placeItem();
 
     item->setState(Item::ItemState::Placed);
 
     //FIXME: use mouse cursor
-    glm::vec2 position = glm::vec2(player->position());
+    const glm::vec2 topLeft = topLeftScreenWorldCoordinates(player);
+    glm::vec2 position = glm::vec2(topLeft.x + player->mousePosition().x, topLeft.y + player->mousePosition().y);
     item->setPosition(position);
 
     switch (item->type()) {
@@ -629,4 +631,3 @@ void World::spawnItem(Item* item)
 
     m_spriteSheetRenderer->registerSprite(item);
 }
-

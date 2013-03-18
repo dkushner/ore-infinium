@@ -567,7 +567,7 @@ void Client::sendQuickBarInventorySlotSelectRequest(uint8_t index)
 
 void Client::processMessage(ENetEvent& event)
 {
-    std::stringstream ss(std::string(event.packet->data, event.packet->dataLength));
+    std::stringstream ss(std::string((char*)(event.packet->data), event.packet->dataLength));
 
     uint32_t packetType = Packet::deserializePacketType(ss);
 
