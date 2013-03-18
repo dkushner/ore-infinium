@@ -10,7 +10,8 @@ out vec4 fragColor;
 void main() {
     vec2 texcoord = frag_texcoord;
 
-    vec4 light = texture2D(lightMap, texcoord) * (frag_color);
+    vec4 source = texture2D(lightMap, texcoord);
+    vec4 light =  vec4(source.rgb * frag_color.rgb, source.a);
 
-    fragColor = light;
+    fragColor += light;
 }
