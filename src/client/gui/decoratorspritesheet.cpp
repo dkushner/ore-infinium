@@ -109,7 +109,6 @@ void DecoratorSpriteSheet::RenderElement(Rocket::Core::Element* element, Rocket:
     const float spriteRight = spriteLeft + textureWidth;
     const float spriteTop = (textureY);
     const float spriteBottom = textureHeight;
-    Debug::log() << " spritteTop: " << spriteTop << " bottom: " << spriteBottom;
 
     glBegin(GL_QUADS);
 

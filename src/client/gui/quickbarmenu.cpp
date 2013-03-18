@@ -170,7 +170,6 @@ void QuickBarMenu::previousSlot()
 
 void QuickBarMenu::reloadSlot(uint8_t index)
 {
-    Debug::log() << "QUICKBAR MENU IS RELOADING SLOT, index: " << index;
     Item* item = m_inventory->item(index);
 
     std::stringstream ss;
@@ -192,7 +191,6 @@ void QuickBarMenu::reloadSlot(uint8_t index)
         m_menu->GetElementById(subid.c_str())->SetProperty("image-y1", "0");
         m_menu->GetElementById(subid.c_str())->SetProperty("image-y2", "0");
     } else {
-        Debug::log() << "ITEM INFO: name: " << item->name() << " details: " << item->details() << " item stacksize: " << item->stackSize();
 
         ss << item->stackSize();
         m_menu->GetElementById(id.c_str())->SetInnerRML(ss.str().c_str());
