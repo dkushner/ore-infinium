@@ -613,6 +613,11 @@ void World::spawnItem(Item* item)
             m_torches.push_back(torch);
             break;
         }
+
+        case Item::ItemType::Block: {
+
+            break;
+        }
     }
 
     m_spriteSheetRenderer->registerSprite(item);

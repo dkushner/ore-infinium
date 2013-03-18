@@ -13,5 +13,5 @@ void main() {
     vec4 source = texture2D(lightMap, texcoord);
     vec4 light =  vec4(source.rgb * frag_color.rgb, source.a);
 
-    fragColor += light;
+    fragColor = light;
 }
