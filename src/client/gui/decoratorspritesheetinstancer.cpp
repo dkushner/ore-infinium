@@ -34,7 +34,7 @@
 
 DecoratorSpriteSheetInstancer::DecoratorSpriteSheetInstancer()
 {
-    RegisterProperty("image-src", "../textures/e.png").AddParser("string");
+    RegisterProperty("image-src", "../textures/entities.png").AddParser("string");
 }
 
 DecoratorSpriteSheetInstancer::~DecoratorSpriteSheetInstancer()
@@ -44,12 +44,8 @@ DecoratorSpriteSheetInstancer::~DecoratorSpriteSheetInstancer()
 // Instances a decorator given the property tag and attributes from the RCSS file.
 Rocket::Core::Decorator* DecoratorSpriteSheetInstancer::InstanceDecorator(const Rocket::Core::String& ROCKET_UNUSED(name), const Rocket::Core::PropertyDictionary& properties)
 {
-    const Rocket::Core::Property* image_source_property = properties.GetProperty("image-src");
-    Debug::log() << "PROPERTY: " << image_source_property->ToString().CString();
-    Rocket::Core::String image_source = image_source_property->Get<Rocket::Core::String>();
-
     DecoratorSpriteSheet* decorator = new DecoratorSpriteSheet();
-    if (decorator->Initialise(image_source, image_source_property->source)) {
+    if (decorator->Initialise()) {
         return decorator;
     }
 

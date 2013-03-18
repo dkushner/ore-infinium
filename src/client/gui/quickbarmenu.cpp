@@ -39,6 +39,7 @@ QuickBarMenu::QuickBarMenu(Client* client, QuickBarInventory* inventory)
     instancer->RemoveReference();
 
     loadDocument();
+    m_menu->GetElementById("0sub")->SetProperty("image-src", "../textures/characters.png");
     selectSlot(0);
 }
 

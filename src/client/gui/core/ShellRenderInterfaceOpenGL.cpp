@@ -107,12 +107,13 @@ void ShellRenderInterfaceOpenGL::SetScissorRegion(int x, int y, int width, int h
 // Called by Rocket when a texture is required by the library.
 bool ShellRenderInterfaceOpenGL::LoadTexture(Rocket::Core::TextureHandle& texture_handle, Rocket::Core::Vector2i& texture_dimensions, const Rocket::Core::String& source)
 {
+    Debug::log(Debug::Area::Graphics) << "Rocket OpenGL Renderer, loading texture name: " << source.CString() << " TEX WIDTH :" << texture_dimensions.x << " y: " << texture_dimensions.y;
+
     Image* image = new Image(source.CString());
     image->flipVertically();
 
     texture_dimensions.x = image->width();
     texture_dimensions.y = image->height();
-    Debug::log() << " TEX WIDTH :" << texture_dimensions.x << " y: " << texture_dimensions.y;
 
     bool success = GenerateTexture(texture_handle, image->bytes(), texture_dimensions);
 

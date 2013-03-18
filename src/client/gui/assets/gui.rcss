@@ -183,9 +183,7 @@ quickbarslot
 /*
     background-color: rgba(0, 0, 155, 255);
 */
-
     background-decorator: spritesheet-decorator;
-
     font-size: 12;
     text-align: right;
     text-shadow: 1px 1px black;

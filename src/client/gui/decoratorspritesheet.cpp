@@ -32,19 +32,27 @@
 #include <Rocket/Core/Math.h>
 
 #include "core/ShellOpenGL.h"
+#include <src/debug.h>
 
 DecoratorSpriteSheet::~DecoratorSpriteSheet()
 {
 }
 
-bool DecoratorSpriteSheet::Initialise(const Rocket::Core::String& image_source, const Rocket::Core::String& image_path)
+bool DecoratorSpriteSheet::Initialise()
 {
+    /*
+    Debug::log() << "DECORATOR LOADING TEX: " << image_source.CString() << " imagepath: " << image_path.CString();
+
+    if (image_source == "") {
+        return false;
+    }
+
     image_index = LoadTexture(image_source, image_path);
     if (image_index == -1)
     {
         return false;
     }
-
+    */
     return true;
 }
 
@@ -62,6 +70,34 @@ void DecoratorSpriteSheet::ReleaseElementData(Rocket::Core::DecoratorDataHandle 
 // Called to render the decorator on an element.
 void DecoratorSpriteSheet::RenderElement(Rocket::Core::Element* element, Rocket::Core::DecoratorDataHandle ROCKET_UNUSED(element_data))
 {
+    Debug::log() << "DECORATOR SPRITESHEET, rendering element id: " << element->GetId().CString();
+    Rocket::Core::Property* imageSourceProperty = element->GetProperty("image-src");
+
+    //don't render it, property has not been set.
+    if (!imageSourceProperty) {
+        return;
+    }
+
+    Rocket::Core::String imageSource = imageSourceProperty->ToString();
+
+    //don't render it, the property image source has been set to null, in other words they don't want anything renderered on it.
+    if (imageSource == "") {
+       return;
+    }
+
+    if (m_textureName != imageSource) {
+        //requested a new texture
+        //FIXME:: this doesn't unload the texture because it makes an assumption..which i am not yet certain is correct/valid.
+
+        image_index = LoadTexture(imageSource, imageSourceProperty->source);
+
+        if ( image_index == -1) {
+            Debug::fatal(false, Debug::Area::Graphics, "librocket inventory decorator render element texture load failure. likely invalid path specified, or something.");
+        }
+    }
+
+    m_textureName = imageSource;
+
     Rocket::Core::Vector2f position = element->GetAbsoluteOffset(Rocket::Core::Box::PADDING);
     Rocket::Core::Vector2f size = element->GetBox().GetSize(Rocket::Core::Box::PADDING);
 
@@ -70,7 +106,7 @@ void DecoratorSpriteSheet::RenderElement(Rocket::Core::Element* element, Rocket:
 
     Rocket::Core::Colourb colour = element->GetProperty<Rocket::Core::Colourb>("color");
 
-    glColor4ubv(element->GetProperty< Rocket::Core::Colourb >("color"));
+    glColor4ubv(element->GetProperty<Rocket::Core::Colourb>("color"));
     glBegin(GL_QUADS);
 
     glVertex2f(position.x, position.y);

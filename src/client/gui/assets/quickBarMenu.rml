@@ -77,6 +77,7 @@
 FIXME
                         }
 */
+
                 </style>
         </head>
 
@@ -89,49 +90,49 @@ FIXME
                         </quickbarparentslot>
 
                     <quickbarparentslot id="1">
-                                <quickbarslot id="1sub">
+                                <quickbarslot id="1sub" img-src="../textures/entities.png">
                                         <quickbarslotitemcount id="1subcount">
                                         </quickbarslotitemcount>
                                 </quickbarslot>
                         </quickbarparentslot>
 
                     <quickbarparentslot id="2">
-                                <quickbarslot id="2sub">
+                                <quickbarslot id="2sub" img-src="../textures/entities.png">
                                         <quickbarslotitemcount id="2subcount">
                                         </quickbarslotitemcount>
                                 </quickbarslot>
                         </quickbarparentslot>
 
                     <quickbarparentslot id="3">
-                                <quickbarslot id="3sub">
+                                <quickbarslot id="3sub" img-src="../textures/entities.png">
                                         <quickbarslotitemcount id="3subcount">
                                         </quickbarslotitemcount>
                                 </quickbarslot>
                         </quickbarparentslot>
 
                     <quickbarparentslot id="4">
-                                <quickbarslot id="4sub">
+                                <quickbarslot id="4sub" img-src="../textures/entities.png">
                                         <quickbarslotitemcount id="4subcount">
                                         </quickbarslotitemcount>
                                 </quickbarslot>
                         </quickbarparentslot>
 
                     <quickbarparentslot id="5">
-                                <quickbarslot id="5sub">
+                                <quickbarslot id="5sub" img-src="../textures/entities.png">
                                         <quickbarslotitemcount id="5subcount">
                                         </quickbarslotitemcount>
                                 </quickbarslot>
                         </quickbarparentslot>
 
                     <quickbarparentslot id="6">
-                                <quickbarslot id="6sub">
+                                <quickbarslot id="6sub" img-src="../textures/entities.png">
                                         <quickbarslotitemcount id="6subcount">
                                         </quickbarslotitemcount>
                                 </quickbarslot>
                         </quickbarparentslot>
 
                     <quickbarparentslot id="7">
-                                <quickbarslot id="7sub">
+                                <quickbarslot id="7sub" img-src="../textures/entities.png">
                                         <quickbarslotitemcount id="7subcount">
                                         </quickbarslotitemcount>
                                 </quickbarslot>

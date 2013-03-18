@@ -20,6 +20,7 @@
 #include "debug.h"
 
 #include <FreeImage.h>
+#include <sys/stat.h>
 
 Image::Image(const std::string& fileName)
 {
@@ -45,9 +46,13 @@ void Image::loadImage(const std::string& filename)
 {
     FREE_IMAGE_FORMAT imageFormat = FIF_UNKNOWN;
 
+    struct stat fileAttribute;
+    bool fileExists = stat(filename.c_str(), &fileAttribute) == 0;
+
+    Debug::fatal(fileExists, Debug::Area::System, "image file failed to load, file does not exist. Filename: " + filename);
+
     imageFormat = FreeImage_GetFileType(filename.c_str());
 
-    Debug::log(Debug::Area::Graphics) << "Image loader...attempt at loading filename: " << filename;
 
     //if still unknown, try to guess the file format from the file extension
     if (imageFormat == FIF_UNKNOWN) {

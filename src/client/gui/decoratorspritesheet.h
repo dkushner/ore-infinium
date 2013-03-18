@@ -35,7 +35,7 @@ class DecoratorSpriteSheet : public Rocket::Core::Decorator
 public:
     virtual ~DecoratorSpriteSheet();
 
-    bool Initialise(const Rocket::Core::String& image_source, const Rocket::Core::String& image_path);
+    bool Initialise();
 
     /// Called on a decorator to generate any required per-element data for a newly decorated element.
     /// @param element[in] The newly decorated element.
@@ -53,6 +53,7 @@ public:
 
 private:
     int image_index;
+    Rocket::Core::String m_textureName;
 };
 
 #endif
