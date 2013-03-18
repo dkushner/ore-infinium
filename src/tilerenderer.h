@@ -48,6 +48,9 @@ public:
 
     void setCamera(Camera* camera);
 
+    void setRenderingEnabled(bool enabled);
+    bool renderingEnabled() { return m_renderingEnabled; }
+
 private:
     typedef uint32_t u32;
     typedef float f32;
@@ -82,6 +85,8 @@ private:
      */
 //    std::map<std::string, SpriteFrameIdentifier> m_spriteSheetCharactersDescription;
     std::map<Block::BlockType, Image*> m_tileSheets;
+
+    bool m_renderingEnabled = true;
 
     /// the 3D tilemap texture, whose z texcoord indicates which tile type it is.
     int m_tileSheetCount = 0;

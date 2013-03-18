@@ -92,7 +92,8 @@ public:
 
     //FIXME: MOVE MORE UPSTREAM, halfass attempt at making a unit system, instead of making it pixel based for movement.
     static constexpr float movementUnits = 1.0f / 100.0f;
-    static constexpr float movementSpeed = 10.0f * movementUnits;
+    //HACK: was 10, 1.0 now for debugging
+    static constexpr float movementSpeed = 1.0f * movementUnits;
 
 private:
     uint32_t m_maxHealth = 2500;

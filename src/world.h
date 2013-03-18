@@ -98,6 +98,7 @@ public:
     void zoomOut();
 
     void toggleLightRenderingEnabled();
+    void toggleTileRenderingEnabled();
 
     Chunk createChunk(uint32_t startX, uint32_t startY, uint32_t endX, uint32_t endY);
     void loadChunk(Chunk* chunk);

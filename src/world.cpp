@@ -479,6 +479,11 @@ void World::toggleLightRenderingEnabled()
     m_lightRenderer->setRenderingEnabled(!m_lightRenderer->lightRenderingEnabled());
 }
 
+void World::toggleTileRenderingEnabled()
+{
+    m_tileRenderer->setRenderingEnabled(!m_tileRenderer->renderingEnabled());
+}
+
 Chunk World::createChunk(uint32_t startX, uint32_t startY, uint32_t endX, uint32_t endY)
 {
     Chunk chunk(startX, startY, endX, endY, &m_blocks);

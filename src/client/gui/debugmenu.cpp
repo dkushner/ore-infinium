@@ -154,9 +154,8 @@ void DebugMenu::update()
     m_debug->GetElementById("5")->SetInnerRML("F8 instant multiplayer host session");
     m_debug->GetElementById("6")->SetInnerRML(connectedString.c_str());
     m_debug->GetElementById("7")->SetInnerRML("F9 to toggle light rendering pass");
+    m_debug->GetElementById("8")->SetInnerRML("F10 to toggle tile rendering pass");
     // 8 is up top, player pos
-
-
 }
 
 void DebugMenu::show()

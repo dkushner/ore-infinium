@@ -62,6 +62,11 @@ void TileRenderer::setCamera(Camera* camera)
     m_camera->setShader(m_shader);
 }
 
+void TileRenderer::setRenderingEnabled(bool enabled)
+{
+    m_renderingEnabled = enabled;
+}
+
 void TileRenderer::loadTileSheets()
 {
     glGenTextures(1, &m_tileMapTexture);
@@ -110,10 +115,15 @@ void TileRenderer::render()
 {
 //    m_shader->bindProgram();
 
+
     glBindFramebuffer(GL_FRAMEBUFFER, m_fbo);
     glBindRenderbuffer(GL_RENDERBUFFER, m_rb);
     glClearColor(0.f, 0.f, 0.f, 0.0f);
     glClear(GL_COLOR_BUFFER_BIT);
+
+    if (!m_renderingEnabled) {
+        return;
+    }
 
 //    Debug::log() << "OFFSET: " << offset.x << " Y : " << offset.y;
     Debug::checkGLError();
