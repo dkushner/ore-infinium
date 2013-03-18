@@ -48,7 +48,6 @@ World::World(Player* mainPlayer, Client* client, Server* server)
       m_client(client),
       m_server(server)
 {
-
     //FIXME:
 //    m_player = new Player("someframe");
 //    m_entities.insert(m_entities.end(), m_player);

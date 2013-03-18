@@ -105,9 +105,6 @@ void LightRenderer::renderToFBO()
     GLint lightMapLoc = glGetUniformLocation(m_shader->shaderProgram(), "lightMap");
     glUniform1i(lightMapLoc, 0);
 
-    GLint timeLoc = glGetUniformLocation(m_shader->shaderProgram(), "time");
-    glUniform1f(timeLoc, float(SDL_GetTicks()));
-
     int index = 0;
     Debug::checkGLError();
 for (Torch * torch : *m_torches) {
