@@ -6,7 +6,7 @@
     x: 0
     y: 0
     width: 9
-    height: 16
+    height: 24
 
  -  frameName: crosshairPickingActive
     x: 3
