@@ -247,12 +247,14 @@ for (Sprite * sprite: m_characterSprites) {
         }
 
         // copy texcoords to the buffer
-        const float textureWidth = 1.0f / SPRITESHEET_WIDTH * frame.width;
-        const float textureHeight = 1.0f / SPRITESHEET_HEIGHT * frame.height;
+        const float textureWidth = float(frame.width) / float(SPRITESHEET_WIDTH);
+        const float textureHeight = float(frame.height) / float(SPRITESHEET_HEIGHT);
+        const float textureX = float(frame.x) / float(SPRITESHEET_WIDTH);
+        const float textureY = float(frame.y) / float(SPRITESHEET_HEIGHT);
 
-        const float spriteLeft = (frame.x *  textureWidth);
+        const float spriteLeft = textureX;
         const float spriteRight = spriteLeft + textureWidth;
-        const float spriteTop = 1.0f - ((frame.y * textureHeight));
+        const float spriteTop = 1.0f - (textureY);
         const float spriteBottom = spriteTop - textureHeight;
 
         // copy texcoords to the buffer
