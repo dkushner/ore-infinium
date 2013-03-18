@@ -92,7 +92,7 @@ void DecoratorSpriteSheet::RenderElement(Rocket::Core::Element* element, Rocket:
 
     Rocket::Core::Colourb colour = element->GetProperty<Rocket::Core::Colourb>("color");
 
-   
+
     const int frameX = element->GetProperty<int>("image-x1");
     const int frameY = element->GetProperty<int>("image-y1");
     const int frameWidth = element->GetProperty<int>("image-x2");
@@ -114,16 +114,16 @@ void DecoratorSpriteSheet::RenderElement(Rocket::Core::Element* element, Rocket:
     glBegin(GL_QUADS);
 
     glVertex2f(position.x, position.y);
-    glTexCoord2f(0, 1);
+    glTexCoord2f(spriteLeft, 1);
 
     glVertex2f(position.x, position.y + size.y);
-    glTexCoord2f(1, 1);
+    glTexCoord2f(spriteRight, 1);
 
     glVertex2f(position.x + size.x, position.y + size.y);
-    glTexCoord2f(1, 0);
+    glTexCoord2f(spriteRight, 0);
 
     glVertex2f(position.x + size.x, position.y);
-    glTexCoord2f(0, 0);
+    glTexCoord2f(spriteLeft, 0);
 
     glEnd();
     glColor4ub(255, 255, 255, 255);
