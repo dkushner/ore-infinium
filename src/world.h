@@ -113,6 +113,8 @@ private:
     void attemptItemPlacement(Player* player);
     void attemptItemPrimaryAttack(Player* player);
 
+    glm::vec2 topLeftScreenWorldCoordinates(Player* player);
+
     /**
      * NOTE: CLIENT ONLY
      */
