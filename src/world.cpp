@@ -502,6 +502,13 @@ void World::zoomOut()
     m_tileMapCamera->zoom(m_zoomOutFactor);
 }
 
+glm::vec2 World::topLeftScreenWorldCoordinates(Player* player)
+{
+    const glm::vec2 position = player->position();
+    const glm::vec2 topLeft = glm::vec2(position.x - Settings::instance()->screenResolutionWidth * 0.5, position.y - Settings::instance()->screenResolutionHeight * 0.5);
+    return topLeft;
+}
+
 void World::itemQuickBarInventoryDropped(Player* player, Item* item, uint32_t amount)
 {
     Item* droppedItem = item->duplicate();

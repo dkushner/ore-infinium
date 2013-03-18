@@ -113,6 +113,9 @@ private:
     void attemptItemPlacement(Player* player);
     void attemptItemPrimaryAttack(Player* player);
 
+    /**
+     * Finds the position of the top-left corner of screen, in world coordinates (based on player position).
+     */
     glm::vec2 topLeftScreenWorldCoordinates(Player* player);
 
     /**
