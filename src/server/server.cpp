@@ -108,7 +108,7 @@ void Server::poll()
             processMessage(event);
             break;
 
-        case ENET_EVENT_TYPE_DISCONNECT:
+        case ENET_EVENT_TYPE_DISCONNECT: {
             Debug::log(Debug::Area::NetworkServer) << "Peer has disconnected:  " << event.peer->address.host << " at port: " << event.peer->address.port;
             printf("%s disconnected.\n", event.peer->data);
         for (auto & client : m_clients) {
@@ -121,6 +121,10 @@ void Server::poll()
 
             // Reset client's information
             event.peer->data = NULL;
+            break;
+        }
+
+        case ENET_EVENT_TYPE_NONE:
             break;
         }
     }

@@ -104,6 +104,8 @@ uint32_t Player::playerID() const
 bool Player::canAttackPrimary()
 {
 
+    //FIXME:
+    return true;
 }
 
 bool Player::canPlaceItem()

@@ -228,6 +228,9 @@ void Client::poll()
             m_peer = nullptr;
         }
         break;
+
+            case ENET_EVENT_TYPE_NONE:
+                break;
         }
     }
 }

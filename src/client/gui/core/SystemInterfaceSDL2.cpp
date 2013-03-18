@@ -71,6 +71,10 @@ int SystemInterfaceSDL2::TranslateMouseButton(Uint8 button)
         return 3;
     case 3: //right
         return 2;
+
+    //unhandled.
+    default:
+        return -1;
     }
 }
 
@@ -366,6 +370,9 @@ bool SystemInterfaceSDL2::LogMessage(Rocket::Core::Log::Type type, const Rocket:
         break;
     case Rocket::Core::Log::LT_DEBUG:
         Type = "[Debug]";
+        break;
+    case Rocket::Core::Log::LT_MAX:
+        Type = "[Max]";
         break;
     };
 
