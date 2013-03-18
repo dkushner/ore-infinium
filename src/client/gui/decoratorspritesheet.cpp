@@ -92,6 +92,24 @@ void DecoratorSpriteSheet::RenderElement(Rocket::Core::Element* element, Rocket:
 
     Rocket::Core::Colourb colour = element->GetProperty<Rocket::Core::Colourb>("color");
 
+   
+    const int frameX = element->GetProperty<int>("image-x1");
+    const int frameY = element->GetProperty<int>("image-y1");
+    const int frameWidth = element->GetProperty<int>("image-x2");
+    const int frameHeight = element->GetProperty<int>("image-y2");
+
+    Rocket::Core::Vector2i textureDimensions = GetTexture(image_index)->GetDimensions(element->GetRenderInterface());
+
+    const float textureWidth = float(frameWidth) / float(textureDimensions.x);
+    const float textureHeight = float(frameHeight) / float(textureDimensions.y);
+    const float textureX = float(frameX) / float(textureDimensions.x);
+    const float textureY = float(frameY) / float(textureDimensions.y);
+
+    const float spriteLeft = textureX;
+    const float spriteRight = spriteLeft + textureWidth;
+    const float spriteTop = 1.0f - (textureY);
+    const float spriteBottom = spriteTop - textureHeight;
+
     glColor4ubv(element->GetProperty<Rocket::Core::Colourb>("color"));
     glBegin(GL_QUADS);
 

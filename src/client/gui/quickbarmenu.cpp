@@ -40,6 +40,10 @@ QuickBarMenu::QuickBarMenu(Client* client, QuickBarInventory* inventory)
 
     loadDocument();
     m_menu->GetElementById("0sub")->SetProperty("image-src", "../textures/characters.png");
+    m_menu->GetElementById("0sub")->SetProperty("image-x1", "100");
+    m_menu->GetElementById("0sub")->SetProperty("image-x2", "100");
+    m_menu->GetElementById("0sub")->SetProperty("image-y1", "100");
+    m_menu->GetElementById("0sub")->SetProperty("image-y2", "100");
     selectSlot(0);
 }
 
