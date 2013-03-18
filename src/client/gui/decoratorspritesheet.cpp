@@ -31,7 +31,7 @@
 #include <Rocket/Core/Texture.h>
 #include <Rocket/Core/Math.h>
 
-#include <ShellOpenGL.h>
+#include "core/ShellOpenGL.h"
 
 DecoratorSpriteSheet::~DecoratorSpriteSheet()
 {
@@ -67,7 +67,9 @@ void DecoratorSpriteSheet::RenderElement(Rocket::Core::Element* element, Rocket:
 
     glEnable(GL_TEXTURE_2D);
     glBindTexture(GL_TEXTURE_2D, (GLuint) GetTexture(image_index)->GetHandle(element->GetRenderInterface()));
-    Rocket::Core::Colourb colour = element->GetProperty< Rocket::Core::Colourb >("color");
+
+    Rocket::Core::Colourb colour = element->GetProperty<Rocket::Core::Colourb>("color");
+
     glColor4ubv(element->GetProperty< Rocket::Core::Colourb >("color"));
     glBegin(GL_QUADS);
 

@@ -41,6 +41,9 @@ client/gui/core/ShellFileInterface.cpp
 client/gui/core/ShellRenderInterfaceOpenGL.cpp
 client/gui/core/SystemInterfaceSDL2.cpp
 
+client/gui/decoratorspritesheet.cpp
+client/gui/decoratorspritesheetinstancer.cpp
+
 server/server.cpp
 
 settings/settings.cpp

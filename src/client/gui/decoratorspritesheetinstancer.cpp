@@ -44,7 +44,7 @@ DecoratorSpriteSheetInstancer::~DecoratorSpriteSheetInstancer()
 Rocket::Core::Decorator* DecoratorSpriteSheetInstancer::InstanceDecorator(const Rocket::Core::String& ROCKET_UNUSED(name), const Rocket::Core::PropertyDictionary& properties)
 {
     const Rocket::Core::Property* image_source_property = properties.GetProperty("image-src");
-    Rocket::Core::String image_source = image_source_property->Get< Rocket::Core::String >();
+    Rocket::Core::String image_source = image_source_property->Get<Rocket::Core::String>();
 
     DecoratorSpriteSheet* decorator = new DecoratorSpriteSheet();
     if (decorator->Initialise(image_source, image_source_property->source)) {

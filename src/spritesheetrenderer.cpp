@@ -214,7 +214,6 @@ for (Sprite * sprite: m_characterSprites) {
 
         float x = rect.x;
         float width = rect.z;
-
         float y = rect.y;
         float height = rect.w;
 
