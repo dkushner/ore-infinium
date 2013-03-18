@@ -107,24 +107,23 @@ void DecoratorSpriteSheet::RenderElement(Rocket::Core::Element* element, Rocket:
 
     const float spriteLeft = textureX;
     const float spriteRight = spriteLeft + textureWidth;
-    const float spriteTop = 1.0f - (textureY);
-    const float spriteBottom = spriteTop - textureHeight;
+    const float spriteTop = (textureY);
+    const float spriteBottom = textureHeight;
+    Debug::log() << " spritteTop: " << spriteTop << " bottom: " << spriteBottom;
 
-    glColor4ubv(element->GetProperty<Rocket::Core::Colourb>("color"));
     glBegin(GL_QUADS);
 
     glVertex2f(position.x, position.y);
-    glTexCoord2f(spriteLeft, 1);
+    glTexCoord2f(spriteLeft, spriteBottom);
 
     glVertex2f(position.x, position.y + size.y);
-    glTexCoord2f(spriteRight, 1);
+    glTexCoord2f(spriteRight, spriteBottom);
 
     glVertex2f(position.x + size.x, position.y + size.y);
-    glTexCoord2f(spriteRight, 0);
+    glTexCoord2f(spriteRight, spriteTop);
 
     glVertex2f(position.x + size.x, position.y);
-    glTexCoord2f(spriteLeft, 0);
+    glTexCoord2f(spriteLeft, spriteTop);
 
     glEnd();
-    glColor4ub(255, 255, 255, 255);
 }

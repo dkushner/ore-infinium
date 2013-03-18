@@ -39,11 +39,11 @@ QuickBarMenu::QuickBarMenu(Client* client, QuickBarInventory* inventory)
     instancer->RemoveReference();
 
     loadDocument();
-    m_menu->GetElementById("0sub")->SetProperty("image-src", "../textures/characters.png");
+    m_menu->GetElementById("0sub")->SetProperty("image-src", "../textures/entities.png");
     m_menu->GetElementById("0sub")->SetProperty("image-x1", "0");
-    m_menu->GetElementById("0sub")->SetProperty("image-x2", "100");
+    m_menu->GetElementById("0sub")->SetProperty("image-x2", "16");
     m_menu->GetElementById("0sub")->SetProperty("image-y1", "0");
-    m_menu->GetElementById("0sub")->SetProperty("image-y2", "100");
+    m_menu->GetElementById("0sub")->SetProperty("image-y2", "16");
     selectSlot(0);
 }
 
