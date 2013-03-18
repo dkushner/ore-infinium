@@ -34,7 +34,11 @@
 
 DecoratorSpriteSheetInstancer::DecoratorSpriteSheetInstancer()
 {
-    RegisterProperty("image-src", "../textures/entities.png").AddParser("string");
+    RegisterProperty("image-src", "").AddParser("string");
+    RegisterProperty("image-x1", "0").AddParser("number");
+    RegisterProperty("image-x2", "50").AddParser("number");
+    RegisterProperty("image-y1", "0").AddParser("number");
+    RegisterProperty("image-y2", "50").AddParser("number");
 }
 
 DecoratorSpriteSheetInstancer::~DecoratorSpriteSheetInstancer()
