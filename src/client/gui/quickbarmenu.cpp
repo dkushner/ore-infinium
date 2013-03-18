@@ -23,6 +23,7 @@
 #include "src/client/gui/gui.h"
 #include "src/client/gui/decoratorspritesheetinstancer.h"
 
+#include <src/spritesheetrenderer.h>
 
 #include <src/debug.h>
 #include <src/item.h>
@@ -30,9 +31,10 @@
 #include <Rocket/Core.h>
 #include <Rocket/Controls.h>
 
-QuickBarMenu::QuickBarMenu(Client* client, QuickBarInventory* inventory)
+QuickBarMenu::QuickBarMenu(Client* client, QuickBarInventory* inventory, SpriteSheetRenderer* spriteSheetRenderer)
     :   m_client(client),
-        m_inventory(inventory)
+        m_inventory(inventory),
+        m_spriteSheetRenderer(spriteSheetRenderer)
 {
     DecoratorSpriteSheetInstancer* instancer = new DecoratorSpriteSheetInstancer();
     Rocket::Core::Factory::RegisterDecoratorInstancer("spritesheet-decorator", instancer);
@@ -183,7 +185,8 @@ void QuickBarMenu::reloadSlot(uint8_t index)
 
     if (item == nullptr) {
         m_menu->GetElementById(id.c_str())->SetInnerRML("empty");
-        m_menu->GetElementById(subid.c_str())->SetProperty("image-src", "../textures/entities.png");
+
+        // set the icon image to null/empty
         m_menu->GetElementById(subid.c_str())->SetProperty("image-x1", "0");
         m_menu->GetElementById(subid.c_str())->SetProperty("image-x2", "0");
         m_menu->GetElementById(subid.c_str())->SetProperty("image-y1", "0");
@@ -194,11 +197,29 @@ void QuickBarMenu::reloadSlot(uint8_t index)
         ss << item->stackSize();
         m_menu->GetElementById(id.c_str())->SetInnerRML(ss.str().c_str());
 
+        SpriteSheetRenderer::SpriteFrameIdentifier frameIdentifier = m_spriteSheetRenderer->spriteFrame(item->frameName());
+
+        ss.str("");
+        ss << frameIdentifier.x;
+        const std::string x1 = ss.str();
+
+        ss.str("");
+        ss << frameIdentifier.width;
+        const std::string x2 = ss.str();
+
+        ss.str("");
+        ss << frameIdentifier.y;
+        const std::string y1 = ss.str();
+
+        ss.str("");
+        ss << frameIdentifier.height;
+        const std::string y2 = ss.str();
+
         m_menu->GetElementById(subid.c_str())->SetProperty("image-src", "../textures/entities.png");
-        m_menu->GetElementById(subid.c_str())->SetProperty("image-x1", "0");
-        m_menu->GetElementById(subid.c_str())->SetProperty("image-x2", "16");
-        m_menu->GetElementById(subid.c_str())->SetProperty("image-y1", "0");
-        m_menu->GetElementById(subid.c_str())->SetProperty("image-y2", "16");
+        m_menu->GetElementById(subid.c_str())->SetProperty("image-x1", x1.c_str());
+        m_menu->GetElementById(subid.c_str())->SetProperty("image-x2", x2.c_str());
+        m_menu->GetElementById(subid.c_str())->SetProperty("image-y1", y1.c_str());
+        m_menu->GetElementById(subid.c_str())->SetProperty("image-y2", y2.c_str());
     }
 }
 

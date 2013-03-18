@@ -107,6 +107,11 @@ glm::vec2 SpriteSheetRenderer::spriteSheetSize(SpriteSheetRenderer::SpriteSheetT
     return imageSize;
 }
 
+SpriteSheetRenderer::SpriteFrameIdentifier SpriteSheetRenderer::spriteFrame(const std::string& frameName)
+{
+    return m_spriteSheetEntitiesDescription.find(frameName)->second;
+}
+
 void SpriteSheetRenderer::registerSprite(Sprite* sprite)
 {
     switch (sprite->spriteSheetType()) {

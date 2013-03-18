@@ -87,6 +87,8 @@ public:
         unsigned int height;
     };
 
+    SpriteSheetRenderer::SpriteFrameIdentifier spriteFrame(const std::string& frameName);
+
 private:
     struct SpriteSheet {
         SpriteSheetType type;

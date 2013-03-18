@@ -24,6 +24,7 @@
 #include <Rocket/Core.h>
 #include <SDL_events.h>
 
+class SpriteSheetRenderer;
 namespace Rocket
 {
 namespace Core
@@ -38,7 +39,7 @@ class QuickBarInventory;
 class QuickBarMenu : public Rocket::Core::EventListener
 {
 public:
-    QuickBarMenu(Client* client, QuickBarInventory* inventory);
+    QuickBarMenu(Client* client, QuickBarInventory* inventory, SpriteSheetRenderer* spriteSheetRenderer);
     ~QuickBarMenu();
 
     void ProcessEvent(Rocket::Core::Event& event);
@@ -66,6 +67,8 @@ private:
 
     QuickBarInventory* m_inventory = nullptr;
     Client* m_client = nullptr;
+
+    SpriteSheetRenderer* m_spriteSheetRenderer = nullptr;
 
     Rocket::Core::ElementDocument* m_menu = nullptr;
 };

@@ -94,6 +94,8 @@ public:
      */
     void itemQuickBarInventoryDropped(Player* player, Item* item, uint32_t amount);
 
+    SpriteSheetRenderer* spriteSheetRenderer() { return m_spriteSheetRenderer; }
+
     void zoomIn();
     void zoomOut();
 

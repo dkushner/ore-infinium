@@ -637,14 +637,16 @@ void Client::receiveInitialPlayerData(std::stringstream* ss)
         QuickBarInventory* quickBarInventory = new QuickBarInventory();
         m_mainPlayer->setQuickBarInventory(quickBarInventory);
 
-        m_quickBarMenu = new QuickBarMenu(this, quickBarInventory);
-        m_quickBarMenu->show();
 
         chatMessage << m_mainPlayer->name() << " has joined";
         m_chat->addChatLine("", chatMessage.str());
 
         // this is us, the first player so this means the world creation is up to us
         m_world = new World(m_mainPlayer, this, nullptr);
+
+        m_quickBarMenu = new QuickBarMenu(this, quickBarInventory, m_world->spriteSheetRenderer());
+        m_quickBarMenu->show();
+
     } else {
         player->setName(message.playername());
         player->setPlayerID(message.playerid());
