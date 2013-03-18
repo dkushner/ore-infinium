@@ -47,12 +47,17 @@ void Image::loadImage(const std::string& filename)
 
     imageFormat = FreeImage_GetFileType(filename.c_str());
 
+    Debug::log(Debug::Area::Graphics) << "Image loader...attempt at loading filename: " << filename;
+
     //if still unknown, try to guess the file format from the file extension
     if (imageFormat == FIF_UNKNOWN) {
         imageFormat = FreeImage_GetFIFFromFilename(filename.c_str());
     }
 
-    Debug::fatal(imageFormat != FIF_UNKNOWN, Debug::Area::Graphics, "failure to load image, type unknown");
+    //still unknown, we're boned.
+    if (imageFormat == FIF_UNKNOWN) {
+        Debug::fatal(false, Debug::Area::Graphics, "failure to load image, type unknown");
+    }
 
     //check that the plugin has reading capabilities for this file and load the file
     if (FreeImage_FIFSupportsReading(imageFormat)) {

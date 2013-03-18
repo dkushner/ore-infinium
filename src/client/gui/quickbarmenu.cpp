@@ -21,6 +21,8 @@
 
 #include "src/client/client.h"
 #include "src/client/gui/gui.h"
+#include "src/client/gui/decoratorspritesheetinstancer.h"
+
 
 #include <src/debug.h>
 #include <src/item.h>
@@ -32,9 +34,12 @@ QuickBarMenu::QuickBarMenu(Client* client, QuickBarInventory* inventory)
     :   m_client(client),
         m_inventory(inventory)
 {
+    DecoratorSpriteSheetInstancer* instancer = new DecoratorSpriteSheetInstancer();
+    Rocket::Core::Factory::RegisterDecoratorInstancer("spritesheet-decorator", instancer);
+    instancer->RemoveReference();
+
     loadDocument();
     selectSlot(0);
-
 }
 
 QuickBarMenu::~QuickBarMenu()

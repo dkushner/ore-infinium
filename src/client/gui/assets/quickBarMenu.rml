@@ -82,7 +82,7 @@ FIXME
 
         <body template="frame">
                     <quickbarparentslot id="0">
-                                <quickbarslot id="0sub">
+                                <quickbarslot id="0sub" img-src="../textures/entities.png">
                                         <quickbarslotitemcount id="0subcount">
                                         </quickbarslotitemcount>
                                 </quickbarslot>

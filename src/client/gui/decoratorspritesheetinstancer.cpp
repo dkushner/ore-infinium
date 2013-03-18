@@ -27,13 +27,14 @@
 
 #include "decoratorspritesheetinstancer.h"
 #include "decoratorspritesheet.h"
+#include <src/debug.h>
 
 #include <Rocket/Core/Math.h>
 #include <Rocket/Core/String.h>
 
 DecoratorSpriteSheetInstancer::DecoratorSpriteSheetInstancer()
 {
-    RegisterProperty("image-src", "").AddParser("string");
+    RegisterProperty("image-src", "../textures/e.png").AddParser("string");
 }
 
 DecoratorSpriteSheetInstancer::~DecoratorSpriteSheetInstancer()
@@ -44,6 +45,7 @@ DecoratorSpriteSheetInstancer::~DecoratorSpriteSheetInstancer()
 Rocket::Core::Decorator* DecoratorSpriteSheetInstancer::InstanceDecorator(const Rocket::Core::String& ROCKET_UNUSED(name), const Rocket::Core::PropertyDictionary& properties)
 {
     const Rocket::Core::Property* image_source_property = properties.GetProperty("image-src");
+    Debug::log() << "PROPERTY: " << image_source_property->ToString().CString();
     Rocket::Core::String image_source = image_source_property->Get<Rocket::Core::String>();
 
     DecoratorSpriteSheet* decorator = new DecoratorSpriteSheet();

@@ -180,12 +180,11 @@ quickbarslot
     margin-left: auto;
     margin-right: auto;
     margin-top: 8px;
-    background-color: rgba(0, 0, 155, 255);
-
 /*
-    background-decorator: image;
-    background-image: ../../../../textures/entities.png 0px 0px 22px 22px;
+    background-color: rgba(0, 0, 155, 255);
 */
+
+    background-decorator: spritesheet-decorator;
 
     font-size: 12;
     text-align: right;
