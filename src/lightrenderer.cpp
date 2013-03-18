@@ -64,7 +64,7 @@ LightRenderer::~LightRenderer()
 void LightRenderer::setCamera(Camera* camera)
 {
     m_camera = camera;
-    m_camera->setShader(m_shader);
+    m_camera->addShader(m_shader);
 }
 
 void LightRenderer::setTorches(std::vector<Torch*>* torches)
@@ -80,7 +80,7 @@ void LightRenderer::setTileRendererTexture(GLuint texture)
 //FIXME: TODO: take a slightly different approach, clear to white instead, draw black whereever there are tiles that have back-tiles, and then draw user-placed lights which would brighten up those tiles
 void LightRenderer::renderToFBO()
 {
-    m_camera->setShader(m_shader);
+    m_camera->addShader(m_shader);
     m_shader->bindProgram();
 
     Debug::checkGLError();

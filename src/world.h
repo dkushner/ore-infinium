@@ -209,7 +209,6 @@ private:
      */
     Camera* m_camera = nullptr;
 
-    Camera* m_tileMapCamera = nullptr;
     Camera* m_lightingCamera = nullptr;
 
     /**

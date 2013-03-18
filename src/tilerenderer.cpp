@@ -42,9 +42,6 @@ TileRenderer::TileRenderer(World* world, Camera* camera, Player* mainPlayer)
 
     initGL();
 
-    float scale = 1.0f;
-    m_modelMatrix = glm::scale(glm::mat4(1.0f), glm::vec3(scale));
-    m_projectionMatrix = glm::ortho(0.0f, float(Settings::instance()->screenResolutionWidth), float(Settings::instance()->screenResolutionHeight), 0.0f, -1.0f, 1.0f);
     loadTileSheets();
 }
 
@@ -59,7 +56,7 @@ TileRenderer::~TileRenderer()
 void TileRenderer::setCamera(Camera* camera)
 {
     m_camera = camera;
-    m_camera->setShader(m_shader);
+    m_camera->addShader(m_shader);
 }
 
 void TileRenderer::setRenderingEnabled(bool enabled)
@@ -171,10 +168,14 @@ void TileRenderer::render()
             float positionX = Block::BLOCK_SIZE * drawingColumn;
             float positionY = Block::BLOCK_SIZE * drawingRow;
 
+            glm::vec2 topLeftWorldCoordinates = m_world->topLeftScreenWorldCoordinates(m_mainPlayer);
+
             float x = positionX;
+            x += topLeftWorldCoordinates.x;
             float width = x +  Block::BLOCK_SIZE;
 
             float y = positionY;
+            y += topLeftWorldCoordinates.y;
             float height = y  +  Block::BLOCK_SIZE;
 
             vertices[0].x = x; // top left X
@@ -261,7 +262,7 @@ void TileRenderer::render()
     // for smooth per-pixel scrolling, a value from 0-15 and when it's 16 we snap to the next tile
     glm::ivec2 offset = m_world->tileOffset(m_mainPlayer);
     GLint offsetLoc = glGetUniformLocation(m_shader->shaderProgram(), "offset");
-    glUniform2f(offsetLoc, GLfloat(offset.x), GLfloat(offset.y));
+    glUniform2f(offsetLoc, float(offset.x), float(offset.y));
 
     Debug::checkGLError();
 //    Debug::log() << "RENDERING TILECOUNT: " << m_tileCount;

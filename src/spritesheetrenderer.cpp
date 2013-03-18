@@ -60,7 +60,7 @@ SpriteSheetRenderer::~SpriteSheetRenderer()
 void SpriteSheetRenderer::setCamera(Camera* camera)
 {
     m_camera = camera;
-    m_camera->setShader(m_shader);
+    m_camera->addShader(m_shader);
 }
 
 void SpriteSheetRenderer::loadAllSpriteSheets()

@@ -59,9 +59,10 @@ void Camera::setPosition(const glm::vec2 vec)
     pushMatrix();
 }
 
-void Camera::setShader(Shader* shader)
+void Camera::addShader(Shader* shader)
 {
-    m_shader = shader;
+    assert(shader);
+    m_shaders.push_back(shader);
     pushMatrix();
 }
 
@@ -76,15 +77,18 @@ glm::mat4 Camera::view() const
 
 void Camera::pushMatrix()
 {
-    Debug::assertf(m_shader, "no shader to push the camera matrix too. This is INVALID");
-    m_shader->bindProgram();
+    Debug::assertf(m_shaders.size() > 0, "no shader to push the camera matrix too. This is INVALID");
 
-    glm::mat4 mvp =  m_orthoMatrix * m_viewMatrix;
+    for (auto* shader : m_shaders) {
+        shader->bindProgram();
 
-    int mvpLoc = glGetUniformLocation(m_shader->shaderProgram(), "mvp");
-    glUniformMatrix4fv(mvpLoc, 1, GL_FALSE, &mvp[0][0]);
+        glm::mat4 mvp =  m_orthoMatrix * m_viewMatrix;
 
-    m_shader->unbindProgram();
+        int mvpLoc = glGetUniformLocation(shader->shaderProgram(), "mvp");
+        glUniformMatrix4fv(mvpLoc, 1, GL_FALSE, &mvp[0][0]);
+
+        shader->unbindProgram();
+    }
 }
 
 void Camera::setOrtho(const glm::mat4& ortho)

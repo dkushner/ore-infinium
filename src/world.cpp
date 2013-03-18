@@ -59,13 +59,12 @@ World::World(Player* mainPlayer, Client* client, Server* server)
     m_entities.insert(m_entities.end(), m_uselessEntity);
 
     if (!m_server) {
-        m_tileMapCamera = new Camera();
-        m_tileRenderer = new TileRenderer(this, m_tileMapCamera, m_mainPlayer);
-        m_tileMapCamera->setPosition(glm::vec2(0.0, 0.0));
 
         m_camera = new Camera();
         m_spriteSheetRenderer = new SpriteSheetRenderer(m_camera);
         m_spriteSheetRenderer->registerSprite(m_uselessEntity);
+
+        m_tileRenderer = new TileRenderer(this, m_camera, m_mainPlayer);
 
         Torch* torch = new Torch(glm::vec2(2400, 1420));
         m_torches.push_back(torch);
@@ -493,13 +492,11 @@ Chunk World::createChunk(uint32_t startX, uint32_t startY, uint32_t endX, uint32
 void World::zoomIn()
 {
     m_camera->zoom(m_zoomInFactor);
-    m_tileMapCamera->zoom(m_zoomInFactor);
 }
 
 void World::zoomOut()
 {
     m_camera->zoom(m_zoomOutFactor);
-    m_tileMapCamera->zoom(m_zoomOutFactor);
 }
 
 glm::vec2 World::topLeftScreenWorldCoordinates(Player* player)

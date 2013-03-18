@@ -101,9 +101,6 @@ private:
     GLuint m_vbo; // vertex buffer object
     GLuint m_ebo; // element buffer object
 
-    glm::mat4 m_modelMatrix;
-    glm::mat4 m_projectionMatrix;
-
     //FIXME: count max tiles to render
     int m_maxTileCount = 8200;
 

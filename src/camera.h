@@ -24,6 +24,8 @@
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 
+#include <vector>
+
 class Shader;
 
 class Camera
@@ -45,7 +47,7 @@ public:
     void centerOn(const glm::vec2 vec);
     void setPosition(const glm::vec2 vec);
 
-    void setShader(Shader* shader);
+    void addShader(Shader* shader);
 
     void setView(const glm::mat4& view);
     void setOrtho(const glm::mat4& ortho);
@@ -58,7 +60,7 @@ private:
 
 private:
     float m_scaleFactor = 1.0;
-    Shader* m_shader = nullptr;
+    std::vector<Shader*> m_shaders;
 
     glm::mat4 m_viewMatrix;
     glm::mat4 m_orthoMatrix;
