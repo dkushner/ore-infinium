@@ -150,6 +150,11 @@ void TileRenderer::render()
 
     int index = 0;
 
+    glm::vec2 topLeftWorldCoordinates = m_world->topLeftScreenWorldCoordinates(m_mainPlayer);
+
+    // for smooth per-pixel scrolling, a value from 0-15 and when it's 16 we snap to the next tile
+    glm::ivec2 offset = m_world->tileOffset(m_mainPlayer);
+
     Debug::checkGLError();
     // [y*rowlength + x]
     for (int currentRow = startRow; currentRow < endRow; ++currentRow) {
@@ -168,13 +173,11 @@ void TileRenderer::render()
             float positionX = Block::BLOCK_SIZE * drawingColumn;
             float positionY = Block::BLOCK_SIZE * drawingRow;
 
-            glm::vec2 topLeftWorldCoordinates = m_world->topLeftScreenWorldCoordinates(m_mainPlayer);
-
-            float x = positionX;
+            float x = positionX - offset.x;
             x += topLeftWorldCoordinates.x;
             float width = x +  Block::BLOCK_SIZE;
 
-            float y = positionY;
+            float y = positionY - offset.y;
             y += topLeftWorldCoordinates.y;
             float height = y  +  Block::BLOCK_SIZE;
 
@@ -259,10 +262,6 @@ void TileRenderer::render()
 
     m_shader->bindProgram();
 
-    // for smooth per-pixel scrolling, a value from 0-15 and when it's 16 we snap to the next tile
-    glm::ivec2 offset = m_world->tileOffset(m_mainPlayer);
-    GLint offsetLoc = glGetUniformLocation(m_shader->shaderProgram(), "offset");
-    glUniform2f(offsetLoc, float(offset.x), float(offset.y));
 
     Debug::checkGLError();
 //    Debug::log() << "RENDERING TILECOUNT: " << m_tileCount;

@@ -399,7 +399,7 @@ glm::ivec2 World::tileOffset(Player* player) const
     const glm::vec2 playerPosition = player->position();
     // to get per-pixel smooth scrolling, we get the remainders and pass it as an offset to things that need to know the tile positions
     const glm::ivec2 ret = glm::ivec2(int(round(playerPosition.x)) & Block::BLOCK_SIZE - 1, int(round(playerPosition.y)) & Block::BLOCK_SIZE - 1);
-    Debug::log() << "RETURNING OFFSET: " << ret.x << " Y: " << ret.y;
+//    Debug::log() << "RETURNING OFFSET: " << ret.x << " Y: " << ret.y;
     return ret;
 }
 
