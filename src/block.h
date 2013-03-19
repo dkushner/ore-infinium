@@ -41,7 +41,7 @@ public:
         Null = 0,
         Dirt,
         Stone,
-        Grass
+        Copper
     };
 
     enum class WallType

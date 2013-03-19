@@ -68,9 +68,8 @@ private:
         float u, v, w;
     };
 
-    //FIXME: don't use NPOT
-    GLsizei TILESHEET_WIDTH = 170;
-    GLsizei TILESHEET_HEIGHT = 253;
+    GLsizei TILESHEET_WIDTH = 256;
+    GLsizei TILESHEET_HEIGHT = 32;
 
     void loadTileSheets();
     void loadTileSheet(const std::string& fileName, Block::BlockType type);
