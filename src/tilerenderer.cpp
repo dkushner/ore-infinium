@@ -75,8 +75,8 @@ void TileRenderer::loadTileSheets()
     glTexParameteri(GL_TEXTURE_2D_ARRAY, GL_TEXTURE_MAX_LEVEL, 0);
     glTexParameteri(GL_TEXTURE_2D_ARRAY, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
     glTexParameteri(GL_TEXTURE_2D_ARRAY, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
-    glTexParameteri(GL_TEXTURE_2D_ARRAY, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
-    glTexParameteri(GL_TEXTURE_2D_ARRAY, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+    glTexParameteri(GL_TEXTURE_2D_ARRAY, GL_TEXTURE_WRAP_S, GL_CLAMP);
+    glTexParameteri(GL_TEXTURE_2D_ARRAY, GL_TEXTURE_WRAP_T, GL_CLAMP);
 
     const GLint level = 0;
     glTexImage3D(GL_TEXTURE_2D_ARRAY, level, GL_RGBA, TILESHEET_WIDTH, TILESHEET_HEIGHT, Block::blockTypeMap.size(), 0, GL_RGBA, GL_UNSIGNED_BYTE, 0 /* if it's null it tells GL we will send in 2D images as elements one by one, later */);
@@ -112,7 +112,6 @@ void TileRenderer::render()
 {
 //    m_shader->bindProgram();
 
-
     glBindFramebuffer(GL_FRAMEBUFFER, m_fbo);
     glBindRenderbuffer(GL_RENDERBUFFER, m_rb);
     glClearColor(0.f, 0.f, 0.f, 0.0f);
@@ -131,11 +130,11 @@ void TileRenderer::render()
 
     // -1 so that we render an additional row and column..to smoothly scroll
     const int startRow = tilesBeforeY - ((Settings::instance()->screenResolutionHeight * 0.5) / Block::BLOCK_SIZE) - 1;
-    const int endRow = tilesBeforeY + ((Settings::instance()->screenResolutionHeight * 0.5) / Block::BLOCK_SIZE);
+    const int endRow = tilesBeforeY + ((Settings::instance()->screenResolutionHeight * 0.5) / Block::BLOCK_SIZE) + 1;
 
     //columns are our X value, rows the Y
     const int startColumn = tilesBeforeX - ((Settings::instance()->screenResolutionWidth * 0.5) / Block::BLOCK_SIZE) - 1;
-    const int endColumn = tilesBeforeX + ((Settings::instance()->screenResolutionWidth * 0.5) / Block::BLOCK_SIZE);
+    const int endColumn = tilesBeforeX + ((Settings::instance()->screenResolutionWidth * 0.5) / Block::BLOCK_SIZE) + 1;
 //    Debug:: log() << "starRow: " << startRow << "endrow: " << endRow << "startcol: " << startColumn << " endcol: " << endColumn;
 
     if (std::abs(startColumn) != startColumn) {
@@ -147,13 +146,9 @@ void TileRenderer::render()
     }
 
     int drawingRow = 0;
-
     int index = 0;
 
     glm::vec2 topLeftWorldCoordinates = m_world->topLeftScreenWorldCoordinates(m_mainPlayer);
-
-    // for smooth per-pixel scrolling, a value from 0-15 and when it's 16 we snap to the next tile
-    glm::ivec2 offset = m_world->tileOffset(m_mainPlayer);
 
     Debug::checkGLError();
     // [y*rowlength + x]
@@ -170,15 +165,13 @@ void TileRenderer::render()
             // vertices[2] -> bottom right
             // vertices[3] -> top right
 
-            float positionX = Block::BLOCK_SIZE * drawingColumn;
-            float positionY = Block::BLOCK_SIZE * drawingRow;
+            float positionX = Block::BLOCK_SIZE * currentColumn;
+            float positionY = Block::BLOCK_SIZE * currentRow;
 
-            float x = positionX - offset.x;
-            x += topLeftWorldCoordinates.x;
+            float x = positionX;
             float width = x +  Block::BLOCK_SIZE;
 
-            float y = positionY - offset.y;
-            y += topLeftWorldCoordinates.y;
+            float y = positionY;
             float height = y  +  Block::BLOCK_SIZE;
 
             vertices[0].x = x; // top left X
@@ -207,17 +200,17 @@ void TileRenderer::render()
             }
 
             //tilesheet index/row, column
-            int row = 1;
-            int column = 5;
+            int row = 0;
+            int column = 0;
 
             int blockIndex = currentColumn * WORLD_ROWCOUNT + currentRow;
             Block& block = m_world->m_blocks[blockIndex];
 
-            const float tileWidth = 1.0f / TILESHEET_WIDTH * 16.0f;
-            const float tileHeight = 1.0f / TILESHEET_HEIGHT * 16.0f;
+            const float tileWidth = 1.0f / float(TILESHEET_WIDTH) * 16.0f;
+            const float tileHeight = 1.0f / float(TILESHEET_HEIGHT) * 16.0f;
 
-            float xPadding = 1.0f / TILESHEET_WIDTH * 1.0f * (column + 1);
-            float yPadding = 1.0f / TILESHEET_HEIGHT * 1.0f * (row + 1);
+            float xPadding = 1.0f / float(TILESHEET_WIDTH) * 1.0f * (float(column) + 1.0);
+            float yPadding = 1.0f / float(TILESHEET_HEIGHT) * 1.0f * (float(row) + 1.0);
 
             const float tileLeft = (column *  tileWidth) + xPadding;
             const float tileRight = tileLeft + tileWidth;
@@ -302,10 +295,10 @@ void TileRenderer::initGL()
     glGenTextures(1, &m_fboTexture);
     glBindTexture(GL_TEXTURE_2D, m_fboTexture);
 
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP);
 
     glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, 1600, 900, 0, GL_RGBA, GL_UNSIGNED_BYTE, nullptr);
 

@@ -117,7 +117,6 @@ for (Torch * torch : *m_torches) {
         // vertices[1] -> bottom left
         // vertices[2] -> bottom right
         // vertices[3] -> top right
-
         const glm::vec2& position = torch->position();
         const float radius = torch->radius();
 

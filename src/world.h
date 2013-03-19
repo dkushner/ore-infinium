@@ -151,7 +151,7 @@ private:
 
     void saveMap();
 
-    glm::ivec2 tileOffset(Player* player) const;
+    glm::vec2 tileOffset(Player* player) const;
 
     /**
      * Should be called AFTER the world has been fully processed in raw block form.

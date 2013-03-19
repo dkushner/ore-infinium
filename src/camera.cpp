@@ -49,7 +49,7 @@ void Camera::centerOn(const glm::vec2 vec)
 {
     glm::vec2 position = glm::vec2((vec.x), (vec.y));
 
-    glm::vec2 halfScreen(round(Settings::instance()->screenResolutionWidth * 0.5), round(Settings::instance()->screenResolutionHeight * 0.5));
+    glm::vec2 halfScreen((Settings::instance()->screenResolutionWidth * 0.5), (Settings::instance()->screenResolutionHeight * 0.5));
 
 
     m_viewMatrix =  glm::translate(glm::mat4(), -glm::vec3(position - halfScreen, 0.0f)) ;
