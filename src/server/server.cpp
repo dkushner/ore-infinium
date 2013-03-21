@@ -377,8 +377,6 @@ void Server::sendWorldChunk(Chunk* chunk)
 
 void Server::sendItemSpawned(Item* item)
 {
-    Debug::log() << "sending item spawned, from server.";
-
     PacketBuf::Item message;
 
     message.set_x(item->position().x);
@@ -465,8 +463,6 @@ void Server::sendPlayerQuickBarInventory(Player* player, uint8_t index)
         Debug::log(Debug::Area::NetworkServer) << "warning, BAD SHIT HAPPENED, server tried sending a player's quickbar inventory but an element was nullptr, which means we didn't send as much as we should have, so the client is empty for this element index..VERY BAD SHIT";
         return;
     }
-
-    Debug::log(Debug::Area::NetworkServer) << "SERVER, qucikbar inventory item name: " << item->name();
 
     PacketBuf::Item message;
     //NOTE: position and such are not sent, as client doesn't need to know that for inventories.
