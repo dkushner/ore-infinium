@@ -30,6 +30,7 @@
 #include <list>
 #include <Box2D/Common/b2Math.h>
 
+class b2Body;
 class b2World;
 class LightRenderer;
 class Server;
@@ -47,7 +48,7 @@ static constexpr unsigned short WORLD_ROWCOUNT = 8400;
 //width
 static constexpr unsigned short WORLD_COLUMNCOUNT = 2400;
 
-static constexpr double FIXED_TIMESTEP = 1.0 / 60.0;
+static constexpr double FIXED_TIMESTEP = 1.0 / 10.0;
 static constexpr int32_t VELOCITY_ITERATIONS = 6;
 static constexpr int32_t POSITION_ITERATIONS = 2;
 
@@ -78,6 +79,7 @@ public:
 
     static float pixelsToMeters(float pixels);
     static float metersToPixels(float meters);
+    b2Body* m_body = nullptr;
 
     bool isBlockSolid(const glm::vec2& vecDest) const;
 
