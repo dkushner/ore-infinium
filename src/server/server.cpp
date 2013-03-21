@@ -39,6 +39,8 @@
 #include <iostream>
 #include <fstream>
 #include <random>
+#include <chrono>
+#include <thread>
 
 #include <SDL2/SDL.h>
 
@@ -66,20 +68,40 @@ Server::~Server()
 
 void Server::tick()
 {
-    Uint32 lastTime = SDL_GetTicks();
-    int frameCount = 0;
+    std::chrono::system_clock::time_point currentTime = std::chrono::high_resolution_clock::now();
 
-    double fps = 0.0;
+    double accumulator = 0.0;
+    const double dt = (1.0 / 2.0) * 1000.0; // runs at 30 hz
+    double t = 0.0;
+
     while (1) {
-        const double delta = static_cast<double>(SDL_GetTicks() - lastTime);
-        lastTime = SDL_GetTicks();
 
-        fps = (frameCount / delta) * 1000;
+        std::chrono::system_clock::time_point newTime = std::chrono::high_resolution_clock::now();
+        double frameTime = std::chrono::duration_cast<std::chrono::duration<double, std::milli> >(newTime - currentTime).count();
+
+        if ( frameTime > 1.0/15.0 * 1000.0) {
+            frameTime = 1.0/15.0 * 1000.0;   // note: max frame time to avoid spiral of death
+        }
+        currentTime = newTime;
+
+        accumulator += frameTime;
+
+        while ( accumulator >= dt )
+        {
+        Debug::log() << "FRAMETIME: " << frameTime;
+            m_world->update(dt);
+
+            t += dt;
+            accumulator -= dt;
+        }
+
+        const double alpha = accumulator / dt;
+
         poll();
-
-        m_world->update(delta);
-
-        ++frameCount;
+        // do network shit
+        // sleep so we don't burn cpu
+        std::chrono::milliseconds timeUntilNextFrame(int( dt - accumulator));
+        std::this_thread::sleep_for(timeUntilNextFrame);
     }
 }
 
