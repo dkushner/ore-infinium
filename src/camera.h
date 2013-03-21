@@ -33,6 +33,8 @@ class Camera
 public:
     Camera();
 
+    const float SCALE_FACTOR = 10.0f;
+
     /**
      * Translates the camera's current position by the given vec2.
      */

@@ -28,7 +28,9 @@
 #include <GL/gl.h>
 #include <SDL2/SDL_events.h>
 #include <list>
+#include <Box2D/Common/b2Math.h>
 
+class b2World;
 class LightRenderer;
 class Server;
 class Client;
@@ -44,6 +46,10 @@ class Item;
 static constexpr unsigned short WORLD_ROWCOUNT = 8400;
 //width
 static constexpr unsigned short WORLD_COLUMNCOUNT = 2400;
+
+static constexpr double FIXED_TIMESTEP = 1.0 / 60.0;
+static constexpr int32_t VELOCITY_ITERATIONS = 6;
+static constexpr int32_t POSITION_ITERATIONS = 2;
 
 /*
  e.g. [ ] [ ] [ ] [ ] [ ]  ... 8400
@@ -210,6 +216,9 @@ private:
     Camera* m_camera = nullptr;
 
     Camera* m_lightingCamera = nullptr;
+
+    b2World* m_box2DWorld = nullptr;
+    b2Vec2 m_gravity = b2Vec2(0.0f, -10.0f);
 
     /**
      * Null if we are in server mode.

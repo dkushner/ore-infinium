@@ -28,11 +28,13 @@
 #include "tilerenderer.h"
 #include "lightrenderer.h"
 
+
 //HACK #include "sky.h"
 #include "settings/settings.h"
 #include "quickbarinventory.h"
 #include "timer.h"
 
+#include <Box2D/Box2D.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <iostream>
@@ -83,6 +85,9 @@ World::World(Player* mainPlayer, Client* client, Server* server)
 
     //client doesn't actually load/generate any world
     if (m_server) {
+        m_box2DWorld = new b2World(m_gravity);
+        m_box2DWorld->SetAllowSleeping(true);
+
         loadMap();
     }
 
@@ -203,16 +208,7 @@ for (Player * player : m_players) {
     }
 
     if (m_server) {
-        float x = m_uselessEntity->position().x;
-        float y = m_uselessEntity->position().y;
-
-        if (x > 3200) {
-            x = 2200;
-        } else {
-            x += 1.0f;
-        }
-
-        m_uselessEntity->setPosition(x, y);
+        m_box2DWorld->Step(FIXED_TIMESTEP, VELOCITY_ITERATIONS, POSITION_ITERATIONS);
     }
 
     //FIXME: MAKE IT CENTER ON THE CENTER OF THE PLAYER SPRITE

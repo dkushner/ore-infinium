@@ -71,7 +71,7 @@ void Server::tick()
     std::chrono::system_clock::time_point currentTime = std::chrono::high_resolution_clock::now();
 
     double accumulator = 0.0;
-    const double dt = (1.0 / 2.0) * 1000.0; // runs at 30 hz
+    const double dt = (FIXED_TIMESTEP) * 1000.0; // runs at 30 hz
     double t = 0.0;
 
     while (1) {
@@ -79,8 +79,8 @@ void Server::tick()
         std::chrono::system_clock::time_point newTime = std::chrono::high_resolution_clock::now();
         double frameTime = std::chrono::duration_cast<std::chrono::duration<double, std::milli> >(newTime - currentTime).count();
 
-        if ( frameTime > 1.0/15.0 * 1000.0) {
-            frameTime = 1.0/15.0 * 1000.0;   // note: max frame time to avoid spiral of death
+        if ( frameTime > (1.0/15.0) * 1000.0) {
+            frameTime = (1.0/15.0) * 1000.0;   // note: max frame time to avoid spiral of death
         }
         currentTime = newTime;
 
