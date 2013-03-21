@@ -88,6 +88,16 @@ World::World(Player* mainPlayer, Client* client, Server* server)
         m_box2DWorld = new b2World(m_gravity);
         m_box2DWorld->SetAllowSleeping(true);
 
+        b2BodyDef groundBodyDef;
+        groundBodyDef.position.Set(0.0f, -10.0f);
+
+        b2Body* groundBody = m_box2DWorld->CreateBody(&groundBodyDef);
+
+        b2PolygonShape groundBox;
+        groundBox.SetAsBox(50.0f, 10.0f);
+
+        groundBody->CreateFixture(&groundBox, 0.0f);
+
         loadMap();
     }
 
@@ -170,6 +180,16 @@ void World::render(Player* player)
     //   al_draw_rectangle(crosshairPosition.x(), crosshairPosition.y(), crosshairPosition.x() + radius, crosshairPosition.y() + radius, color, 1.0f);
 
     //    m_sky->render();
+}
+
+float World::metersToPixels(float meters)
+{
+    return meters * PIXELS_PER_METER;
+}
+
+float World::pixelsToMeters(float pixels)
+{
+    return pixels / PIXELS_PER_METER;
 }
 
 void World::update(double elapsedTime)

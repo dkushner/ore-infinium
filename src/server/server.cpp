@@ -88,7 +88,6 @@ void Server::tick()
 
         while ( accumulator >= dt )
         {
-        Debug::log() << "FRAMETIME: " << frameTime;
             m_world->update(dt);
 
             t += dt;

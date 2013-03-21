@@ -51,6 +51,8 @@ static constexpr double FIXED_TIMESTEP = 1.0 / 60.0;
 static constexpr int32_t VELOCITY_ITERATIONS = 6;
 static constexpr int32_t POSITION_ITERATIONS = 2;
 
+// 50px per 1 meter. so that box2d has a range of entity sizes between 0.1 and 10 meters.
+static constexpr double PIXELS_PER_METER = 50;
 /*
  e.g. [ ] [ ] [ ] [ ] [ ]  ... 8400
         [ ] [ ] [ ] [ ] [ ]  ... 8400
@@ -73,6 +75,9 @@ public:
     void render(Player* player);
 
     void loadMap();
+
+    static float pixelsToMeters(float pixels);
+    static float metersToPixels(float meters);
 
     bool isBlockSolid(const glm::vec2& vecDest) const;
 
