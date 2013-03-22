@@ -89,23 +89,28 @@ World::World(Player* mainPlayer, Client* client, Server* server)
         m_box2DWorld->SetAllowSleeping(true);
 
         b2BodyDef groundBodyDef;
-        groundBodyDef.position.Set(0.0f, -10.0f);
+        groundBodyDef.position.Set(0.0f, 100.0f);//pixelsToMeters(1000));
 
         b2Body* groundBody = m_box2DWorld->CreateBody(&groundBodyDef);
 
         b2PolygonShape groundBox;
-        groundBox.SetAsBox(pixelsToMeters(1000), pixelsToMeters(1000));
+        const float groundHeight = 2200.0f;
+        const float groundWidth = 2200.0f;
+//        groundBox.SetAsBox(pixelsToMeters(groundWidth / 2.0f), pixelsToMeters(groundHeight / 2.0f));
+        groundBox.SetAsBox(50.0f, 10.0f);
 
         groundBody->CreateFixture(&groundBox, 0.0f);
 
         //create dynamic body
         b2BodyDef bodyDef;
         bodyDef.type = b2_dynamicBody;
+//        bodyDef.position.Set(pixelsToMeters(200), -pixelsToMeters(100));
         bodyDef.position.Set(0.0f, 4.0f);
 
         m_body = m_box2DWorld->CreateBody(&bodyDef);
 
         b2PolygonShape dynamicBox;
+/////        dynamicBox.SetAsBox(pixelsToMeters(50), pixelsToMeters(50));
         dynamicBox.SetAsBox(1.0f, 1.0f);
 
         b2FixtureDef fixtureDef;
@@ -247,8 +252,7 @@ for (Player * player : m_players) {
     if (m_server) {
         m_box2DWorld->Step(FIXED_TIMESTEP, VELOCITY_ITERATIONS, POSITION_ITERATIONS);
 
-        Debug::log() << "SERVER DYNBOX POSITION: " << m_body->GetPosition().x << " Y: " << m_body->GetPosition().y <<
-        " CONVERTED TO PIXELS: " << metersToPixels(m_body->GetPosition().x) << " Y PIXELS: " << metersToPixels(m_body->GetPosition().y);
+        Debug::log() << "SERVER DYNBOX POSITION CONVERTED TO PIXELS: X: " << metersToPixels(m_body->GetPosition().x) << " Y PIXELS: " << metersToPixels(m_body->GetPosition().y);
     }
 
     //FIXME: MAKE IT CENTER ON THE CENTER OF THE PLAYER SPRITE
