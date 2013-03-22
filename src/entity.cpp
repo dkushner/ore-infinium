@@ -21,8 +21,13 @@
 #include "debug.h"
 #include "block.h"
 
+#include <Box2D/Dynamics/b2Body.h>
+#include <Box2D/Dynamics/b2World.h>
+#include <Box2D/Dynamics/b2Fixture.h>
+#include <Box2D/Collision/Shapes/b2PolygonShape.h>
+
 Entity::Entity(const std::string& frameName, SpriteSheetRenderer::SpriteSheetType spriteSheetType)
-    : Sprite(frameName, spriteSheetType), m_hasGravity(true)
+    : Sprite(frameName, spriteSheetType)
 {
 
 }
@@ -41,6 +46,28 @@ void Entity::setVelocity(float x, float y)
 {
     const glm::vec2 velocity(x, y);
     m_velocity = velocity;
+}
+
+void Entity::createPhysicsBody(World* world)
+{
+
+    //create dynamic body
+    b2BodyDef bodyDef;
+    bodyDef.type = b2_dynamicBody;
+    //        bodyDef.position.Set(pixelsToMeters(200), -pixelsToMeters(100));
+    bodyDef.position.Set(World::pixelsToMeters(2350.0f), World::pixelsToMeters(1420.f));
+
+    m_body = world->m_box2DWorld->CreateBody(&bodyDef);
+
+    b2PolygonShape dynamicBox;
+    dynamicBox.SetAsBox(World::pixelsToMeters(50.0f), World::pixelsToMeters(50.0f));
+
+    b2FixtureDef fixtureDef;
+    fixtureDef.shape = &dynamicBox;
+    fixtureDef.density = 1.0f;
+    fixtureDef.friction = 0.3f;
+
+    m_body->CreateFixture(&fixtureDef);
 }
 
 void Entity::update(double elapsedTime, World* world)
@@ -75,92 +102,6 @@ void Entity::setPosition(const glm::vec2& vect)
 {
     m_dirtyFlags |= DirtyFlags::PositionDirty;
     Sprite::setPosition(vect);
-}
-
-glm::vec2 Entity::moveOutsideSolid(const glm::vec2& firstPosition, const glm::vec2& destPosition, const glm::ivec2& dimensions, World* world) const
-{
-    glm::vec2 tempPosition = firstPosition;
-    if (collidingWithTile(destPosition, dimensions, world)) {
-        int horDir;
-        if (m_velocity.x > 0) {
-            horDir = 1;
-        } else if (m_velocity.x < 0) {
-            horDir = -1;
-        } else {
-            horDir = 0;
-        }
-
-        if (horDir != 0) {
-            int horMove;
-            for (horMove = int(std::ceil(tempPosition.x) / Block::BLOCK_SIZE) * Block::BLOCK_SIZE; horMove * horDir <= (tempPosition.x + m_velocity.x) * horDir; horMove += Block::BLOCK_SIZE * horDir) {
-                glm::vec2 tempDest = tempPosition;
-                tempDest.x = horMove;
-                if (collidingWithTile(tempDest, dimensions, world)) {
-                    horMove -= Block::BLOCK_SIZE * horDir;
-                    if (horDir == 1) {
-                        horMove += Block::BLOCK_SIZE - (dimensions.x % Block::BLOCK_SIZE);
-                    }
-                    break;
-                }
-            }
-
-            if (horMove * horDir > (tempPosition.x + m_velocity.x) * horDir) {
-                horMove = tempPosition.x + m_velocity.x;
-            }
-            tempPosition.x = horMove;
-        }
-
-        int verDir;
-        if (m_velocity.y > 0) {
-            verDir = 1;
-        } else if (m_velocity.y < 0) {
-            verDir = -1;
-        } else {
-            verDir = 0;
-        }
-
-        if (verDir != 0) {
-            int verMove;
-            for (verMove = int(std::ceil(tempPosition.y) / Block::BLOCK_SIZE) * Block::BLOCK_SIZE; verMove * verDir <= (tempPosition.y + m_velocity.y) * verDir; verMove += Block::BLOCK_SIZE * horDir) {
-                glm::vec2 tempDest = tempPosition;
-                tempDest.y = verMove;
-
-                if (collidingWithTile(tempDest, dimensions, world)) {
-                    verMove -= Block::BLOCK_SIZE * verDir;
-
-                    if (verDir == 1) {
-                        verMove += Block::BLOCK_SIZE - (dimensions.y % Block::BLOCK_SIZE);
-                    }
-                    break;
-                }
-            }
-
-            if (verMove * verDir <= (tempPosition.y + m_velocity.y) * verDir) {
-                verMove = tempPosition.y + m_velocity.y;
-            }
-
-            tempPosition.y = verMove;
-        }
-    } else {
-        tempPosition = destPosition;
-    }
-
-    return tempPosition;
-}
-
-bool Entity::collidingWithTile(const glm::vec2& destPosition, const glm::ivec2& dimensions, World* world) const
-{
-    for (int i = 0; i < dimensions.x + Block::BLOCK_SIZE; i += Block::BLOCK_SIZE) {
-        for (int j = 0; j < dimensions.y + Block::BLOCK_SIZE; j += Block::BLOCK_SIZE) {
-            glm::vec2 tempDest = destPosition;
-            tempDest.x += i;
-            tempDest.y += j;
-            if (world->isBlockSolid(tempDest)) {
-                return true;
-            }
-        }
-    }
-    return false;
 }
 
 uint32_t Entity::dirtyFlags()

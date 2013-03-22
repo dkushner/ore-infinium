@@ -101,24 +101,6 @@ World::World(Player* mainPlayer, Client* client, Server* server)
 
         groundBody->CreateFixture(&groundBox, 0.0f);
 
-        //create dynamic body
-        b2BodyDef bodyDef;
-        bodyDef.type = b2_dynamicBody;
-//        bodyDef.position.Set(pixelsToMeters(200), -pixelsToMeters(100));
-        bodyDef.position.Set(pixelsToMeters(2350.0f), pixelsToMeters(.0f));
-
-        m_body = m_box2DWorld->CreateBody(&bodyDef);
-
-        b2PolygonShape dynamicBox;
-/////        dynamicBox.SetAsBox(pixelsToMeters(50), pixelsToMeters(50));
-        dynamicBox.SetAsBox(pixelsToMeters(50.0f), pixelsToMeters(50.0f));
-
-        b2FixtureDef fixtureDef;
-        fixtureDef.shape = &dynamicBox;
-        fixtureDef.density = 1.0f;
-        fixtureDef.friction = 0.3f;
-
-        m_body->CreateFixture(&fixtureDef);
 
         loadMap();
     }
@@ -251,8 +233,6 @@ for (Player * player : m_players) {
 
     if (m_server) {
         m_box2DWorld->Step(FIXED_TIMESTEP, VELOCITY_ITERATIONS, POSITION_ITERATIONS);
-
-        Debug::log() << "SERVER DYNBOX POSITION CONVERTED TO PIXELS: X: " << metersToPixels(m_body->GetPosition().x) << " Y PIXELS: " << metersToPixels(m_body->GetPosition().y);
     }
 
     //FIXME: MAKE IT CENTER ON THE CENTER OF THE PLAYER SPRITE

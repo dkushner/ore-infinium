@@ -22,9 +22,9 @@
 #include "collisionmap.h"
 #include <glm/core/type.hpp>
 
-const float GRAVITY = 0.05f;
-
+class b2Body;
 class World;
+const float GRAVITY = 0.05f;
 
 class Entity : public Sprite
 {
@@ -45,6 +45,8 @@ public:
     uint32_t dirtyFlags();
     void clearDirtyFlag(uint32_t dirtyFlag);
 
+    void createPhysicsBody(World* world);
+
     /**
      * Use only to reset the entities position to some other place.
      * ALL OTHER CASES USE VELOCITY.
@@ -62,19 +64,6 @@ public:
      */
     void setVelocity(const glm::vec2& velocity);
     void setVelocity(float x, float y);
-
-    /**
-     * Returns the final position the player should move to after collision checking
-     * based on initial position firstPosition, final position destPosition, and
-     * width/height dimensions.
-     */
-    glm::vec2 moveOutsideSolid(const glm::vec2& firstPosition, const glm::vec2& destPosition, const glm::ivec2& dimensions, World* world) const;
-
-    /**
-     * Determines if the entity will collide at position destPosition if it has
-     * dimensions as defined by dimensions.
-     */
-    bool collidingWithTile(const glm::vec2& destPosition, const glm::ivec2& dimensions, World* world) const;
 
     void setName(const std::string& name) {
         m_name = name;
@@ -97,10 +86,10 @@ private:
     /// utilized only by collision map for speedy lookups (insertions and removals as well as findings)
     int m_index = -1;
 
-    bool m_hasGravity : 1;
-
     std::string m_name;
     std::string m_details;
+
+    b2Body* m_body = nullptr;
 
     friend class CollisionMap;
 };

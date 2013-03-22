@@ -79,7 +79,6 @@ public:
 
     static float pixelsToMeters(float pixels);
     static float metersToPixels(float meters);
-    b2Body* m_body = nullptr;
 
     bool isBlockSolid(const glm::vec2& vecDest) const;
 
@@ -244,6 +243,7 @@ private:
     const float m_zoomOutFactor = 0.98;
 
     friend class TileRenderer;
+    friend class Entity;
 };
 
 #endif
