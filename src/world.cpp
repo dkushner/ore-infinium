@@ -89,7 +89,7 @@ World::World(Player* mainPlayer, Client* client, Server* server)
         m_box2DWorld->SetAllowSleeping(true);
 
         b2BodyDef groundBodyDef;
-        groundBodyDef.position.Set(0.0f, 100.0f);//pixelsToMeters(1000));
+        groundBodyDef.position.Set(pixelsToMeters(0.0f), pixelsToMeters(6000.0f));//pixelsToMeters(1000));
 
         b2Body* groundBody = m_box2DWorld->CreateBody(&groundBodyDef);
 
@@ -97,7 +97,7 @@ World::World(Player* mainPlayer, Client* client, Server* server)
         const float groundHeight = 2200.0f;
         const float groundWidth = 2200.0f;
 //        groundBox.SetAsBox(pixelsToMeters(groundWidth / 2.0f), pixelsToMeters(groundHeight / 2.0f));
-        groundBox.SetAsBox(50.0f, 10.0f);
+        groundBox.SetAsBox(pixelsToMeters(2500), pixelsToMeters(500));
 
         groundBody->CreateFixture(&groundBox, 0.0f);
 
@@ -105,13 +105,13 @@ World::World(Player* mainPlayer, Client* client, Server* server)
         b2BodyDef bodyDef;
         bodyDef.type = b2_dynamicBody;
 //        bodyDef.position.Set(pixelsToMeters(200), -pixelsToMeters(100));
-        bodyDef.position.Set(0.0f, 4.0f);
+        bodyDef.position.Set(pixelsToMeters(0.0f), pixelsToMeters(0.0f));
 
         m_body = m_box2DWorld->CreateBody(&bodyDef);
 
         b2PolygonShape dynamicBox;
 /////        dynamicBox.SetAsBox(pixelsToMeters(50), pixelsToMeters(50));
-        dynamicBox.SetAsBox(1.0f, 1.0f);
+        dynamicBox.SetAsBox(pixelsToMeters(50.0f), pixelsToMeters(50.0f));
 
         b2FixtureDef fixtureDef;
         fixtureDef.shape = &dynamicBox;
