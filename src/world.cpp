@@ -97,7 +97,7 @@ World::World(Player* mainPlayer, Client* client, Server* server)
         const float groundHeight = 2200.0f;
         const float groundWidth = 2200.0f;
 //        groundBox.SetAsBox(pixelsToMeters(groundWidth / 2.0f), pixelsToMeters(groundHeight / 2.0f));
-        groundBox.SetAsBox(pixelsToMeters(2500), pixelsToMeters(500));
+        groundBox.SetAsBox(pixelsToMeters(2500), pixelsToMeters(50));
 
         groundBody->CreateFixture(&groundBox, 0.0f);
 
@@ -105,7 +105,7 @@ World::World(Player* mainPlayer, Client* client, Server* server)
         b2BodyDef bodyDef;
         bodyDef.type = b2_dynamicBody;
 //        bodyDef.position.Set(pixelsToMeters(200), -pixelsToMeters(100));
-        bodyDef.position.Set(pixelsToMeters(0.0f), pixelsToMeters(0.0f));
+        bodyDef.position.Set(pixelsToMeters(2350.0f), pixelsToMeters(.0f));
 
         m_body = m_box2DWorld->CreateBody(&bodyDef);
 
