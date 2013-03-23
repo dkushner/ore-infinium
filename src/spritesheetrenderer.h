@@ -74,6 +74,7 @@ public:
     void renderEntities();
 
     void setCamera(Camera* camera);
+    Camera* camera() { return m_camera; }
 
     /**
      * In-mem representation of each sprite frame from the spritesheets

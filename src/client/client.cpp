@@ -247,18 +247,19 @@ void Client::render(double elapsedTime)
     m_gui->render();
     drawDebugText(elapsedTime);
 
-
     if (m_physicsDebugRenderingEnabled) {
-        if (!m_physicsDebugRenderer && m_box2DWorld) {
-            m_physicsDebugRenderer = new PhysicsDebugRenderer();
+        if (!m_physicsDebugRenderer && m_box2DWorld && m_world && m_world->spriteSheetRenderer()) {
+            m_physicsDebugRenderer = new PhysicsDebugRenderer(m_world->spriteSheetRenderer()->camera());
             m_physicsDebugRenderer->SetFlags(b2Draw::e_shapeBit);
             // physics debug renderer first init...
             m_box2DWorld->SetDebugDraw(m_physicsDebugRenderer);
         }
 
 
-        if (m_box2DWorld) {
+        if (m_box2DWorld && m_physicsDebugRenderer && m_physicsDebugRenderingEnabled) {
             m_box2DWorld->DrawDebugData();
+            //finalize rendering to screen.
+            m_physicsDebugRenderer->render();
         }
     }
 

@@ -19,9 +19,10 @@
 #include "debug.h"
 #include "world.h"
 
-PhysicsDebugRenderer::PhysicsDebugRenderer()
+PhysicsDebugRenderer::PhysicsDebugRenderer(Camera* camera)
 {
-    m_shader = new Shader("sprite.vert", "sprite.frag");
+    m_shader = new Shader("physicsdebugrenderer.vert", "physicsdebugrenderer.frag");
+    setCamera(camera);
 
     Debug::checkGLError();
     initGL();
@@ -31,9 +32,15 @@ PhysicsDebugRenderer::PhysicsDebugRenderer()
 PhysicsDebugRenderer::~PhysicsDebugRenderer()
 {
     glDeleteBuffers(1, &m_vbo);
-    glDeleteBuffers(1, &m_ebo);
+//    glDeleteBuffers(1, &m_ebo);
 
     glDeleteVertexArrays(1, &m_vao);
+}
+
+void PhysicsDebugRenderer::setCamera(Camera* camera)
+{
+    m_camera = camera;
+//    m_camera->addShader(m_shader);
 }
 
 void PhysicsDebugRenderer::initGL()
@@ -64,8 +71,6 @@ void PhysicsDebugRenderer::initGL()
         }
     }
 
-    glGenBuffers(1, &m_ebo);
-    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_ebo);
     glBufferData(
         GL_ELEMENT_ARRAY_BUFFER,
         indicesv.size()*sizeof(u32),
@@ -73,6 +78,9 @@ void PhysicsDebugRenderer::initGL()
                  GL_STATIC_DRAW);
                  */
 
+    glGenBuffers(1, &m_ebo);
+
+    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_ebo);
     Debug::checkGLError();
 
     size_t buffer_offset = 0;
@@ -103,16 +111,6 @@ void PhysicsDebugRenderer::initGL()
     buffer_offset += sizeof(u32);
 
     Debug::checkGLError();
-
-    GLint texcoord_attrib = glGetAttribLocation(m_shader->shaderProgram(), "texcoord");
-    glEnableVertexAttribArray(texcoord_attrib);
-    glVertexAttribPointer(
-        texcoord_attrib,
-        2,
-        GL_FLOAT,
-        GL_FALSE,
-        sizeof(Vertex),
-                          (const GLvoid*)buffer_offset);
 
     glBindVertexArray(0);
     glBindBuffer(GL_ARRAY_BUFFER, 0);
@@ -170,6 +168,12 @@ glDrawArrays(GL_LINE_LOOP, 0, vertexCount);
 glPopMatrix();
 */
 
+    Box2DQuad box2DQuad;
+    box2DQuad.vec = vertices;
+    box2DQuad.vertexCount = vertexCount;
+    box2DQuad.color = color;
+
+    m_solidPolygons.push_back(box2DQuad);
 }
 
 void PhysicsDebugRenderer::DrawCircle(const b2Vec2& center, float32 radius, const b2Color& color)
@@ -290,14 +294,34 @@ void PhysicsDebugRenderer::DrawAABB(b2AABB* aabb, const b2Color& c)
 
 void PhysicsDebugRenderer::render()
 {
+    if (m_solidPolygons.size() == 0) {
+        Debug::log() << "POLYGON SET EMPTY!";
+        return;
+    }
+
+    m_shader->bindProgram();
+
+//    glm::mat4 ortho = m_camera->ortho();
+//    glm::mat4 view = m_camera->view();
+
+    glm::mat4 view = glm::mat4();
+    glm::mat4 ortho = glm::ortho(0.0f, float(1), float(1), 0.0f, -1.0f, 1.0f);
+    glm::mat4 mvp = glm::mat4(); //ortho * view;
+
+    int mvpLoc = glGetUniformLocation(m_shader->shaderProgram(), "mvp");
+    glUniformMatrix4fv(mvpLoc, 1, GL_FALSE, &mvp[0][0]);
 
     uint32_t index = 0;
     for (Box2DQuad box2DQuad: m_solidPolygons) {
     // vertices that will be uploaded.
     std::vector<Vertex> vertices;
 
+    /*
     for (int i = 0; i < box2DQuad.vertexCount; ++i) {
         Vertex vert;
+        vert.u = 0.0f;
+        vert.v = 0.0f;
+
         uint8_t red = 255;
         uint8_t green = 255;
         uint8_t blue = 0;
@@ -310,14 +334,43 @@ void PhysicsDebugRenderer::render()
         vert.y = box2DQuad.vec[i].y;
        vertices.push_back(vert);
     }
+    */
+            uint8_t red = 255;
+        uint8_t green = 255;
+        uint8_t blue = 0;
+        uint8_t alpha = 255;
+        uint32_t color = red | (green << 8) | (blue << 16) | (alpha << 24);
 
-    glGenBuffers(1, &m_ebo);
+    Vertex vert1;
+    vert1.color = color;
+    vert1.x = 0;
+    vert1.y = 0;
+    Vertex vert2;
+    vert2.color = color;
+    vert2.x = 1;
+    vert2.y = 1;
+    Vertex vert3;
+    vert3.color = color;
+    vert3.x = 0.5;
+    vert3.y = 0.5;
+    Vertex vert4;
+    vert4.color = color;
+    vert4.x = 0.8;
+    vert4.y = 0.8;
+
+    vertices.push_back(vert1);
+    vertices.push_back(vert2);
+    vertices.push_back(vert3);
+    vertices.push_back(vert4);
+
+    Debug::log() << "VERT COUNT:  " << vertices.size();
+
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_ebo);
     glBufferData(
         GL_ELEMENT_ARRAY_BUFFER,
-        vertices.size()*sizeof(Vertex),
+        vertices.size()*sizeof(u32),
                  vertices.data(),
-                 GL_STATIC_DRAW);
+                 GL_DYNAMIC_DRAW);
 
     Debug::checkGLError();
     /*
@@ -342,11 +395,9 @@ void PhysicsDebugRenderer::render()
                     &vertices[0]);
 
     ++index;
-}
+    }
 
     ////////////////////////////////FINALLY RENDER IT ALL //////////////////////////////////////////
-    glEnable(GL_BLEND);
-    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_ebo);
     glBindBuffer(GL_ARRAY_BUFFER, m_vbo);
@@ -359,17 +410,18 @@ void PhysicsDebugRenderer::render()
     Debug::checkGLError();
 
     glDrawElements(
-        GL_TRIANGLES,
-        6 * (m_solidPolygons.size()), // 6 indices per 2 triangles
+        GL_POINTS,
+       /* m_solidPolygons.size() * */ 4, //FIXME HACK 6 indices per 2 triangles
                 GL_UNSIGNED_INT,
                 (const GLvoid*)0);
 
     m_shader->unbindProgram();
     glBindVertexArray(0);
     glBindBuffer(GL_ARRAY_BUFFER, 0);
-    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
+   glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
 
-    glDisable(GL_BLEND);
 
     Debug::checkGLError();
+
+    m_solidPolygons.clear();
 }

@@ -31,7 +31,7 @@
 
 class PhysicsDebugRenderer : public b2Draw {
 public:
-    PhysicsDebugRenderer();
+    PhysicsDebugRenderer(Camera* camera);
     virtual ~PhysicsDebugRenderer();
 
     virtual void DrawPolygon(const b2Vec2* vertices, int32 vertexCount, const b2Color& color);
@@ -48,6 +48,8 @@ public:
     virtual void DrawString(int x, int y, const char* string, ...);
 
     virtual void DrawAABB(b2AABB* aabb, const b2Color& color);
+
+    void setCamera(Camera* camera);
 
     void render();
 
@@ -68,9 +70,6 @@ private:
     struct Vertex {
         float x, y;
         unsigned int color; // packed with 4 u8s (unsigned chars) for color
-
-        float u = 0.0f;
-        float v = 0.0f;
     };
 
     struct Box2DQuad {
@@ -84,13 +83,6 @@ private:
     GLuint m_vao; // vertex array object
     GLuint m_vbo; // vertex buffer object
     GLuint m_ebo; // element buffer object
-
-    GLuint m_vaoEntities; // vertex array object
-    GLuint m_vboEntities; // vertex buffer object
-    GLuint m_eboEntities; // element buffer object
-
-    glm::mat4 m_modelMatrix;
-    glm::mat4 m_projectionMatrix;
 
     int m_maxSpriteCount = 2200;
 
