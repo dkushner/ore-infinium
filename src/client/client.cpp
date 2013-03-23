@@ -507,7 +507,7 @@ void Client::startMultiplayerHost(const std::string& playername, unsigned int po
     if (!m_server) {
         m_playerName = playername;
 
-        m_server = new Server(8 /* 8 players (max) */, port);
+        m_server = new Server(8 /* 8 players (max) */, port, this);
         m_serverThread = new std::thread(&Server::tick, m_server);
         connect();
     } else {

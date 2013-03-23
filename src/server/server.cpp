@@ -23,6 +23,8 @@
 
 #include "src/player.h"
 
+#include "src/client/client.h"
+
 #include "src/debug.h"
 #include <src/camera.h>
 #include <src/world.h>
@@ -44,7 +46,8 @@
 
 #include <SDL2/SDL.h>
 
-Server::Server(unsigned int maxClients, unsigned int port)
+Server::Server(unsigned int maxClients, unsigned int port, Client* client) :
+    m_client(client)
 {
     Debug::log(Debug::Area::NetworkServer) << "creating server at port: " << port;
 

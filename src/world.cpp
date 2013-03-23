@@ -235,8 +235,10 @@ for (Player * player : m_players) {
     if (m_server) {
         m_box2DWorld->Step(FIXED_TIMESTEP, VELOCITY_ITERATIONS, POSITION_ITERATIONS);
 
-        if (m_client) {
-            if (m_client->physicsDebugRenderingEnabled() != m_physicsDebugRenderingEnabled) {
+        //NOTE: bit of redirection because the physics world is owned by the server, so we access the local client
+        // to do phys debug drawing
+        if (m_server->client()) {
+            if (m_physicsDebugRenderingEnabled) {
                 if (!m_physicsDebugRenderer) {
                     m_physicsDebugRenderer = new PhysicsDebugRenderer();
                     m_physicsDebugRenderer->SetFlags(b2Draw::e_shapeBit);
@@ -245,7 +247,7 @@ for (Player * player : m_players) {
                 }
             }
 
-            m_physicsDebugRenderingEnabled = m_client->physicsDebugRenderingEnabled();
+            m_physicsDebugRenderingEnabled = m_server->client()->physicsDebugRenderingEnabled();
         }
 
         if (m_physicsDebugRenderingEnabled) {

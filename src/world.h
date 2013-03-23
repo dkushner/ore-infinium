@@ -228,7 +228,7 @@ private:
 //    b2Vec2 m_gravity = b2Vec2(0.0f, 9.8f);
     b2Vec2 m_gravity = b2Vec2(0.0f, 9.8f);
 
-    PhysicsDebugRenderer *m_physicsDebugRenderer = nullptr;
+    PhysicsDebugRenderer* m_physicsDebugRenderer = nullptr;
 
     /**
      * Null if we are in server mode.
