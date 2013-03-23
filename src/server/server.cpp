@@ -422,6 +422,7 @@ Player* Server::createPlayer(const std::string& playerName)
     player->setName(playerName);
     player->setPlayerID(m_freePlayerID);
     player->setPosition(2500, 1492);
+    player->createPhysicsBody(m_world, glm::vec2(2300, 1092));
 
     QuickBarInventory* quickBarInventory = new QuickBarInventory();
     player->setQuickBarInventory(quickBarInventory);

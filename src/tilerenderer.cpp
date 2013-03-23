@@ -139,10 +139,12 @@ void TileRenderer::render()
 
     if (std::abs(startColumn) != startColumn) {
         std::cout << "FIXME, WENT INTO NEGATIVE COLUMN!!";
-        assert(0);
+//        assert(0);
+        return;
     } else if (std::abs(startRow) != startRow) {
         std::cout << "FIXME, WENT INTO NEGATIVE ROW!!";
-        assert(0);
+ //       assert(0);
+        return;
     }
 
     int drawingRow = 0;

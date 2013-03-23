@@ -48,7 +48,7 @@ static constexpr unsigned short WORLD_ROWCOUNT = 8400;
 //width
 static constexpr unsigned short WORLD_COLUMNCOUNT = 2400;
 
-static constexpr double FIXED_TIMESTEP = 1.0 / 10.0; // hertz
+static constexpr double FIXED_TIMESTEP = 1.0 / 2.0; // hertz
 static constexpr int32_t VELOCITY_ITERATIONS = 6;
 static constexpr int32_t POSITION_ITERATIONS = 2;
 
@@ -224,6 +224,7 @@ private:
     Camera* m_lightingCamera = nullptr;
 
     b2World* m_box2DWorld = nullptr;
+//    b2Vec2 m_gravity = b2Vec2(0.0f, 9.8f);
     b2Vec2 m_gravity = b2Vec2(0.0f, 9.8f);
 
     /**

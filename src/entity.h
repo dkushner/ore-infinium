@@ -45,7 +45,7 @@ public:
     uint32_t dirtyFlags();
     void clearDirtyFlag(uint32_t dirtyFlag);
 
-    void createPhysicsBody(World* world);
+    void createPhysicsBody(World* world, const glm::vec2& position);
 
     /**
      * Use only to reset the entities position to some other place.
