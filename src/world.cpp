@@ -89,7 +89,7 @@ World::World(Player* mainPlayer, Client* client, Server* server)
         m_box2DWorld->SetAllowSleeping(true);
 
         b2BodyDef groundBodyDef;
-        groundBodyDef.position.Set(pixelsToMeters(0.0f), pixelsToMeters(6000.0f));//pixelsToMeters(1000));
+        groundBodyDef.position.Set(pixelsToMeters(0.0f), pixelsToMeters(2000.0f));//pixelsToMeters(1000));
 
         b2Body* groundBody = m_box2DWorld->CreateBody(&groundBodyDef);
 
