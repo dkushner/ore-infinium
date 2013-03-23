@@ -59,7 +59,6 @@ void PhysicsDebugRenderer::initGL()
 
     Debug::checkGLError();
 
-    /*
     std::vector<u32> indicesv;
 
     // prepare and upload indices as a one time deal
@@ -71,16 +70,16 @@ void PhysicsDebugRenderer::initGL()
         }
     }
 
-    glBufferData(
-        GL_ELEMENT_ARRAY_BUFFER,
-        indicesv.size()*sizeof(u32),
-                 indicesv.data(),
-                 GL_STATIC_DRAW);
-                 */
 
     glGenBuffers(1, &m_ebo);
 
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_ebo);
+        glBufferData(
+        GL_ELEMENT_ARRAY_BUFFER,
+        indicesv.size()*sizeof(u32),
+                 indicesv.data(),
+                 GL_STREAM_DRAW);
+
     Debug::checkGLError();
 
     size_t buffer_offset = 0;
@@ -347,16 +346,16 @@ void PhysicsDebugRenderer::render()
     vert1.y = 0;
     Vertex vert2;
     vert2.color = color;
-    vert2.x = 1;
-    vert2.y = 1;
+    vert2.x = 0;;
+    vert2.y = 0;
     Vertex vert3;
     vert3.color = color;
-    vert3.x = 0.5;
-    vert3.y = 0.5;
+    vert3.x = 0;
+    vert3.y = 0;
     Vertex vert4;
     vert4.color = color;
-    vert4.x = 0.8;
-    vert4.y = 0.8;
+    vert4.x = 0;
+    vert4.y = 0;
 
     vertices.push_back(vert1);
     vertices.push_back(vert2);
@@ -366,11 +365,19 @@ void PhysicsDebugRenderer::render()
     Debug::log() << "VERT COUNT:  " << vertices.size();
 
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_ebo);
+    /*
     glBufferData(
         GL_ELEMENT_ARRAY_BUFFER,
-        vertices.size()*sizeof(u32),
+        vertices.size()  * sizeof(Vertex),
                  vertices.data(),
                  GL_DYNAMIC_DRAW);
+                 */
+
+    glBufferSubData(
+        GL_ELEMENT_ARRAY_BUFFER,
+        sizeof(Vertex) * index,
+                    sizeof(Vertex),
+                    &vertices[0]);
 
     Debug::checkGLError();
     /*
@@ -390,8 +397,8 @@ void PhysicsDebugRenderer::render()
     glBindBuffer(GL_ARRAY_BUFFER, m_vbo);
     glBufferSubData(
         GL_ARRAY_BUFFER,
-        sizeof(vertices) * index,
-                    sizeof(vertices),
+        sizeof(Vertex) * index,
+                    sizeof(Vertex),
                     &vertices[0]);
 
     ++index;
