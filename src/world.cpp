@@ -235,11 +235,14 @@ for (Player * player : m_players) {
     if (m_server) {
         m_box2DWorld->Step(FIXED_TIMESTEP, VELOCITY_ITERATIONS, POSITION_ITERATIONS);
 
-
         if (m_client) {
             if (m_client->physicsDebugRenderingEnabled() != m_physicsDebugRenderingEnabled) {
-                //turned on after being off
-                m_box2DWorld->SetDebugDraw(m_physicsDebugRenderer);
+                if (!m_physicsDebugRenderer) {
+                    m_physicsDebugRenderer = new PhysicsDebugRenderer();
+                    m_physicsDebugRenderer->SetFlags(b2Draw::e_shapeBit);
+                    // physics debug renderer first init...
+                    m_box2DWorld->SetDebugDraw(m_physicsDebugRenderer);
+                }
             }
 
             m_physicsDebugRenderingEnabled = m_client->physicsDebugRenderingEnabled();
