@@ -25,6 +25,7 @@
 #include <SDL_log.h>
 #include <thread>
 
+class PhysicsDebugRenderer;
 class QuickBarMenu;
 class Player;
 class GUI;
@@ -75,6 +76,8 @@ public:
     Player* mainPlayer() {
         return m_mainPlayer;
     }
+
+    bool physicsDebugRenderingEnabled() { return m_physicsDebugRenderingEnabled; }
 
 ///////////////// Network Communication ////////////////////
 public:
@@ -137,6 +140,8 @@ private:
 
     int32_t m_playerInputDirectionX = 0;
     int32_t m_playerInputDirectionY = 0;
+
+    bool m_physicsDebugRenderingEnabled = true;
 
     bool m_initialPlayersReceivedFinished = false;
 

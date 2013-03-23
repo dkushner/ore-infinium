@@ -27,6 +27,7 @@
 #include "camera.h"
 #include "tilerenderer.h"
 #include "lightrenderer.h"
+#include "physicsdebugrenderer.h"
 
 
 //HACK #include "sky.h"
@@ -233,6 +234,20 @@ for (Player * player : m_players) {
 
     if (m_server) {
         m_box2DWorld->Step(FIXED_TIMESTEP, VELOCITY_ITERATIONS, POSITION_ITERATIONS);
+
+
+        if (m_client) {
+            if (m_client->physicsDebugRenderingEnabled() != m_physicsDebugRenderingEnabled) {
+                //turned on after being off
+                m_box2DWorld->SetDebugDraw(m_physicsDebugRenderer);
+            }
+
+            m_physicsDebugRenderingEnabled = m_client->physicsDebugRenderingEnabled();
+        }
+
+        if (m_physicsDebugRenderingEnabled) {
+            m_box2DWorld->DrawDebugData();
+        }
     }
 
     //FIXME: MAKE IT CENTER ON THE CENTER OF THE PLAYER SPRITE

@@ -17,6 +17,7 @@ player.cpp
 shader.cpp
 sprite.cpp
 spritesheetrenderer.cpp
+physicsdebugrenderer.cpp
 texture.cpp
 tilerenderer.cpp
 torch.cpp

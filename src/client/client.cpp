@@ -21,6 +21,8 @@
 #include "src/packet.pb.h"
 #include "src/server/server.h"
 
+#include "src/physicsdebugrenderer.h"
+
 #include "gui/gui.h"
 #include "gui/mainmenu.h"
 #include "gui/chatdialog.h"
@@ -86,7 +88,6 @@ Client::~Client()
 
 void Client::initSDL()
 {
-
     Debug::log(Debug::Area::System) << "SDL on platform: " << SDL_GetPlatform();
 
     SDL_version compiled;
@@ -506,7 +507,7 @@ void Client::startMultiplayerHost(const std::string& playername, unsigned int po
     if (!m_server) {
         m_playerName = playername;
 
-        m_server = new Server(8, port);
+        m_server = new Server(8 /* 8 players (max) */, port);
         m_serverThread = new std::thread(&Server::tick, m_server);
         connect();
     } else {
