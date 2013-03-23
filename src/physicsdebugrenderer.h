@@ -82,7 +82,6 @@ private:
 
     GLuint m_vao; // vertex array object
     GLuint m_vbo; // vertex buffer object
-    GLuint m_ebo; // element buffer object
 
     int m_maxSpriteCount = 2200;
 

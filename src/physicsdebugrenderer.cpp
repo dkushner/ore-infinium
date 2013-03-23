@@ -32,7 +32,6 @@ PhysicsDebugRenderer::PhysicsDebugRenderer(Camera* camera)
 PhysicsDebugRenderer::~PhysicsDebugRenderer()
 {
     glDeleteBuffers(1, &m_vbo);
-//    glDeleteBuffers(1, &m_ebo);
 
     glDeleteVertexArrays(1, &m_vao);
 }
@@ -49,6 +48,7 @@ void PhysicsDebugRenderer::initGL()
     glGenVertexArrays(1, &m_vao);
     glBindVertexArray(m_vao);
 
+    Debug::checkGLError();
     glGenBuffers(1, &m_vbo);
     glBindBuffer(GL_ARRAY_BUFFER, m_vbo);
     glBufferData(
@@ -57,6 +57,7 @@ void PhysicsDebugRenderer::initGL()
                  NULL,
                  GL_DYNAMIC_DRAW);
 
+    Debug::checkGLError();
     Debug::checkGLError();
 
     std::vector<u32> indicesv;
@@ -70,15 +71,8 @@ void PhysicsDebugRenderer::initGL()
         }
     }
 
+    Debug::checkGLError();
 
-    glGenBuffers(1, &m_ebo);
-
-    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_ebo);
-        glBufferData(
-        GL_ELEMENT_ARRAY_BUFFER,
-        indicesv.size()*sizeof(u32),
-                 indicesv.data(),
-                 GL_STREAM_DRAW);
 
     Debug::checkGLError();
 
@@ -95,10 +89,12 @@ void PhysicsDebugRenderer::initGL()
                           (const GLvoid*)buffer_offset);
     buffer_offset += sizeof(f32) * 2;
 
+    Debug::checkGLError();
     GLint color_attrib = glGetAttribLocation(m_shader->shaderProgram(), "color");
 
     Debug::checkGLError();
 
+    Debug::checkGLError();
     glEnableVertexAttribArray(color_attrib);
     glVertexAttribPointer(
         color_attrib,
@@ -113,10 +109,10 @@ void PhysicsDebugRenderer::initGL()
 
     glBindVertexArray(0);
     glBindBuffer(GL_ARRAY_BUFFER, 0);
-    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
 
     Debug::checkGLError();
 
+    Debug::checkGLError();
 }
 
 void PhysicsDebugRenderer::DrawPolygon(const b2Vec2* vertices, int32 vertexCount, const b2Color& color)
@@ -305,16 +301,17 @@ void PhysicsDebugRenderer::render()
 
     glm::mat4 view = glm::mat4();
     glm::mat4 ortho = glm::ortho(0.0f, float(1), float(1), 0.0f, -1.0f, 1.0f);
-    glm::mat4 mvp = glm::mat4(); //ortho * view;
+    glm::mat4 mvp = ortho;// * view;
 
     int mvpLoc = glGetUniformLocation(m_shader->shaderProgram(), "mvp");
     glUniformMatrix4fv(mvpLoc, 1, GL_FALSE, &mvp[0][0]);
 
     uint32_t index = 0;
-    for (Box2DQuad box2DQuad: m_solidPolygons) {
+//    for (Box2DQuad box2DQuad: m_solidPolygons) {
     // vertices that will be uploaded.
     std::vector<Vertex> vertices;
 
+    Debug::checkGLError();
     /*
     for (int i = 0; i < box2DQuad.vertexCount; ++i) {
         Vertex vert;
@@ -342,29 +339,38 @@ void PhysicsDebugRenderer::render()
 
     Vertex vert1;
     vert1.color = color;
-    vert1.x = 0;
-    vert1.y = 0;
+    vert1.x = 0.1;
+    vert1.y = 0.1;
     Vertex vert2;
     vert2.color = color;
-    vert2.x = 0;;
-    vert2.y = 0;
+    vert2.x = 1;
+    vert2.y = 1;
     Vertex vert3;
     vert3.color = color;
-    vert3.x = 0;
-    vert3.y = 0;
+    vert3.x = 0.5;
+    vert3.y = 0.5;
     Vertex vert4;
     vert4.color = color;
-    vert4.x = 0;
-    vert4.y = 0;
+    vert4.x = 0.8;
+    vert4.y = 0.8;
+    Vertex vert5;
+    vert4.color = color;
+    vert4.x = 0.2;
+    vert4.y = 0.2;
+    Vertex vert6;
+    vert4.color = color;
+    vert4.x = 0.4;
+    vert4.y = 0.4;
 
     vertices.push_back(vert1);
     vertices.push_back(vert2);
     vertices.push_back(vert3);
     vertices.push_back(vert4);
+    vertices.push_back(vert5);
+    vertices.push_back(vert6);
 
     Debug::log() << "VERT COUNT:  " << vertices.size();
 
-    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_ebo);
     /*
     glBufferData(
         GL_ELEMENT_ARRAY_BUFFER,
@@ -373,11 +379,13 @@ void PhysicsDebugRenderer::render()
                  GL_DYNAMIC_DRAW);
                  */
 
+    /*
     glBufferSubData(
         GL_ELEMENT_ARRAY_BUFFER,
         sizeof(Vertex) * index,
                     sizeof(Vertex),
                     &vertices[0]);
+                    */
 
     Debug::checkGLError();
     /*
@@ -395,18 +403,20 @@ void PhysicsDebugRenderer::render()
 
     // finally upload everything to the actual vbo
     glBindBuffer(GL_ARRAY_BUFFER, m_vbo);
+
     glBufferSubData(
         GL_ARRAY_BUFFER,
-        sizeof(Vertex) * index,
-                    sizeof(Vertex),
-                    &vertices[0]);
+        1,
+        sizeof(Vertex) * 1,//index,
+                    &vertices[0]
+    );
 
+    Debug::checkGLError();
     ++index;
-    }
+//    }
 
     ////////////////////////////////FINALLY RENDER IT ALL //////////////////////////////////////////
 
-    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_ebo);
     glBindBuffer(GL_ARRAY_BUFFER, m_vbo);
     glBindVertexArray(m_vao);
 
@@ -416,16 +426,11 @@ void PhysicsDebugRenderer::render()
 
     Debug::checkGLError();
 
-    glDrawElements(
-        GL_POINTS,
-       /* m_solidPolygons.size() * */ 4, //FIXME HACK 6 indices per 2 triangles
-                GL_UNSIGNED_INT,
-                (const GLvoid*)0);
+    glDrawArrays(GL_TRIANGLES, 0, 20);
 
     m_shader->unbindProgram();
     glBindVertexArray(0);
     glBindBuffer(GL_ARRAY_BUFFER, 0);
-   glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
 
 
     Debug::checkGLError();
