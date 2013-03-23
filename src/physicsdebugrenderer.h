@@ -18,12 +18,16 @@
 #ifndef PHYSICSDEBUGRENDERER_H
 #define PHYSICSDEBUGRENDERER_H
 
-#include <GL/glew.h>
-#include <Box2D/Box2D.h>
-#include <glm/core/type.hpp>
-
 #include "src/camera.h"
 #include "src/shader.h"
+
+#include <GL/glew.h>
+#include <Box2D/Box2D.h>
+
+#include <glm/glm.hpp>
+#include <glm/gtc/matrix_transform.hpp>
+#include <glm/gtc/swizzle.hpp>
+
 
 class PhysicsDebugRenderer : public b2Draw {
 public:

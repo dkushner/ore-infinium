@@ -291,13 +291,23 @@ void PhysicsDebugRenderer::DrawAABB(b2AABB* aabb, const b2Color& c)
 void PhysicsDebugRenderer::render()
 {
 
+    uint32_t index = 0;
     for (Box2DQuad box2DQuad: m_solidPolygons) {
     // vertices that will be uploaded.
     std::vector<Vertex> vertices;
 
     for (int i = 0; i < box2DQuad.vertexCount; ++i) {
         Vertex vert;
-        vert.x
+        uint8_t red = 255;
+        uint8_t green = 255;
+        uint8_t blue = 0;
+        uint8_t alpha = 255;
+        uint32_t color = red | (green << 8) | (blue << 16) | (alpha << 24);
+
+        vert.color = color;
+
+        vert.x = box2DQuad.vec[i].x;
+        vert.y = box2DQuad.vec[i].y;
        vertices.push_back(vert);
     }
 
@@ -308,10 +318,6 @@ void PhysicsDebugRenderer::render()
         vertices.size()*sizeof(Vertex),
                  vertices.data(),
                  GL_STATIC_DRAW);
-
-    glm::vec2 spritePosition = box2DQuad.
-
-    glm::vec2 spriteSize = sprite->size();
 
     Debug::checkGLError();
     /*
@@ -333,7 +339,7 @@ void PhysicsDebugRenderer::render()
         GL_ARRAY_BUFFER,
         sizeof(vertices) * index,
                     sizeof(vertices),
-                    vertices);
+                    &vertices[0]);
 
     ++index;
 }
