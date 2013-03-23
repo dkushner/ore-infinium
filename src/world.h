@@ -228,16 +228,12 @@ private:
 //    b2Vec2 m_gravity = b2Vec2(0.0f, 9.8f);
     b2Vec2 m_gravity = b2Vec2(0.0f, 9.8f);
 
-    PhysicsDebugRenderer* m_physicsDebugRenderer = nullptr;
-
     /**
      * Null if we are in server mode.
      * Else we're in client mode and this is OUR player, the one
      * the client's user is driving.
      */
     Player* m_mainPlayer = nullptr;
-
-    bool m_physicsDebugRenderingEnabled = true;
 
     Server* m_server = nullptr;
     Client* m_client = nullptr;

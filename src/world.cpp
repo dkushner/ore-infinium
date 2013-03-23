@@ -102,6 +102,9 @@ World::World(Player* mainPlayer, Client* client, Server* server)
 
         groundBody->CreateFixture(&groundBox, 0.0f);
 
+        if (m_server->client()) {
+           m_server->client()->setBox2DWorld(m_box2DWorld);
+        }
 
         loadMap();
     }
@@ -234,25 +237,6 @@ for (Player * player : m_players) {
 
     if (m_server) {
         m_box2DWorld->Step(FIXED_TIMESTEP, VELOCITY_ITERATIONS, POSITION_ITERATIONS);
-
-        //NOTE: bit of redirection because the physics world is owned by the server, so we access the local client
-        // to do phys debug drawing
-        if (m_server->client()) {
-            if (m_physicsDebugRenderingEnabled) {
-                if (!m_physicsDebugRenderer) {
-                    m_physicsDebugRenderer = new PhysicsDebugRenderer();
-                    m_physicsDebugRenderer->SetFlags(b2Draw::e_shapeBit);
-                    // physics debug renderer first init...
-                    m_box2DWorld->SetDebugDraw(m_physicsDebugRenderer);
-                }
-            }
-
-            m_physicsDebugRenderingEnabled = m_server->client()->physicsDebugRenderingEnabled();
-        }
-
-        if (m_physicsDebugRenderingEnabled) {
-            m_box2DWorld->DrawDebugData();
-        }
     }
 
     //FIXME: MAKE IT CENTER ON THE CENTER OF THE PLAYER SPRITE
@@ -261,6 +245,7 @@ for (Player * player : m_players) {
         m_camera->centerOn(m_mainPlayer->position());
         m_lightingCamera->centerOn(m_mainPlayer->position());
     }
+
 
     //calculateAttackPosition();
 }
