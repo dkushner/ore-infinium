@@ -121,13 +121,11 @@ void ShellRenderInterfaceOpenGL::RenderGeometry(Rocket::Core::Vertex* vertices, 
    int mvpLoc = glGetUniformLocation(m_shader->shaderProgram(), "mvp");
    glUniformMatrix4fv(mvpLoc, 1, GL_FALSE, &mvp[0][0]);
 
-//   glBindTexture(GL_TEXTURE_2D, GLuint(texture));
 
    glActiveTexture(GL_TEXTURE0);
-    m_tempTexture->bind();
+   glBindTexture(GL_TEXTURE_2D, GLuint(texture));
 
    Debug::checkGLError();
-
 
    glBindVertexArray(m_vao);
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_ebo);
