@@ -107,7 +107,6 @@ glPopMatrix();
     glUniformMatrix4fv(mvpLoc, 1, GL_FALSE, &mvp[0][0]);
 
     glBindVertexArray(m_vao);
-    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_ebo);
     glBindBuffer(GL_ARRAY_BUFFER, m_vbo);
     // vertices that will be uploaded.
     size_t buffer_offset = 0;
@@ -137,13 +136,6 @@ glPopMatrix();
                         (const GLvoid*)buffer_offset
     );
 
-    glBufferData(
-        GL_ELEMENT_ARRAY_BUFFER,
-        num_indices*sizeof(indices),
-                indices,
-                GL_DYNAMIC_DRAW
-    );
-
     // finally upload everything to the actual vbo
     glBufferData(
         GL_ARRAY_BUFFER,
@@ -158,11 +150,10 @@ glPopMatrix();
 
     m_shader->bindProgram();
 
-    glDrawElements(
+    glDrawArrays(
         GL_TRIANGLES,
-        num_indices,
-        GL_UNSIGNED_INT,
-        (const GLvoid*)0
+        0,
+        vertexCount
     );
 
     m_shader->unbindProgram();
