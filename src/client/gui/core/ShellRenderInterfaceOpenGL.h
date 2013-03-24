@@ -41,6 +41,7 @@
     @author Peter Curry
  */
 
+class Texture;
 class Shader;
 class ShellRenderInterfaceOpenGL : public Rocket::Core::RenderInterface
 {
@@ -102,7 +103,7 @@ private:
         float u, v;
     };
     */
-
+Texture* m_tempTexture = nullptr;
     GLuint m_vao; // vertex array object
     GLuint m_vbo; // vertex buffer object
     GLuint m_ebo; // element buffer object

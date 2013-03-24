@@ -30,6 +30,7 @@
 #include "src/image.h"
 #include "src/debug.h"
 #include "src/shader.h"
+#include <src/texture.h>
 
 #include <Rocket/Core.h>
 
@@ -44,6 +45,9 @@ ShellRenderInterfaceOpenGL::ShellRenderInterfaceOpenGL()
     m_shader = new Shader("guirenderer.vert", "guirenderer.frag");
     m_shader->bindProgram();
 
+    m_tempTexture = new Texture("../textures/error.png");
+    m_tempTexture->generate();
+    m_tempTexture->bind();
 
     Debug::checkGLError();
     initGL();
@@ -55,34 +59,17 @@ void ShellRenderInterfaceOpenGL::initGL()
     glGenVertexArrays(1, &m_vao);
     glBindVertexArray(m_vao);
 
+    glGenBuffers(1, &m_ebo);
     glGenBuffers(1, &m_vbo);
     glBindBuffer(GL_ARRAY_BUFFER, m_vbo);
     glBufferData(
         GL_ARRAY_BUFFER,
-        m_maxSpriteCount * 4 * sizeof(Vertex),
+        m_maxSpriteCount * 4 * sizeof(Rocket::Core::Vertex),
                  NULL,
                  GL_DYNAMIC_DRAW);
 
     Debug::checkGLError();
 
-    std::vector<u32> indicesv;
-
-    // prepare and upload indices as a one time deal
-    const u32 indices[] = { 0, 1, 2, 0, 2, 3 }; // pattern for a triangle array
-    // for each possible sprite, add the 6 index pattern
-    for (size_t j = 0; j < m_maxSpriteCount; j++) {
-        for (size_t i = 0; i < sizeof(indices) / sizeof(*indices); i++) {
-            indicesv.push_back(4 * j + indices[i]);
-        }
-    }
-
-    glGenBuffers(1, &m_ebo);
-    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_ebo);
-    glBufferData(
-        GL_ELEMENT_ARRAY_BUFFER,
-        indicesv.size()*sizeof(u32),
-                 indicesv.data(),
-                 GL_STATIC_DRAW);
 
     Debug::checkGLError();
 
@@ -112,83 +99,77 @@ void ShellRenderInterfaceOpenGL::RenderGeometry(Rocket::Core::Vertex* vertices, 
 
    m_shader->bindProgram();
 
+//   glBindTexture(GL_TEXTURE_2D, GLuint(texture));
+
+   glActiveTexture(GL_TEXTURE0);
+    m_tempTexture->bind();
 
    Debug::checkGLError();
 
-   int index = 0;
 
-       // vertices that will be uploaded.
-       size_t buffer_offset = 0;
+    // vertices that will be uploaded.
+    size_t buffer_offset = 0;
 
-       GLint pos_attrib = glGetAttribLocation(m_shader->shaderProgram(), "position");
-       glEnableVertexAttribArray(pos_attrib);
-       glVertexAttribPointer(
-           pos_attrib,
-           2,
-           GL_FLOAT,
-           GL_FALSE,
-           sizeof(Rocket::Core::Vertex)
-                             &vertices[0].position);
+    GLint pos_attrib = glGetAttribLocation(m_shader->shaderProgram(), "position");
+    glEnableVertexAttribArray(pos_attrib);
+    glVertexAttribPointer(
+        pos_attrib,
+        2,
+        GL_FLOAT,
+        GL_FALSE,
+        sizeof(Rocket::Core::Vertex),
+                            &vertices[0].position);
 
-       GLint color_attrib = glGetAttribLocation(m_shader->shaderProgram(), "color");
+    GLint color_attrib = glGetAttribLocation(m_shader->shaderProgram(), "color");
 
-       Debug::checkGLError();
+    Debug::checkGLError();
 
-       glEnableVertexAttribArray(color_attrib);
-       glVertexAttribPointer(
-           color_attrib,
-           4,
-           GL_UNSIGNED_BYTE,
-           GL_TRUE,
-           sizeof(Rocket::Core::Vertex),
-                             &vertices[0].colour);
+    glEnableVertexAttribArray(color_attrib);
+    glVertexAttribPointer(
+        color_attrib,
+        4,
+        GL_UNSIGNED_BYTE,
+        GL_TRUE,
+        sizeof(Rocket::Core::Vertex),
+                            &vertices[0].colour);
 
-       Debug::checkGLError();
+    Debug::checkGLError();
 
-       GLint texcoord_attrib = glGetAttribLocation(m_shader->shaderProgram(), "texcoord");
-       glEnableVertexAttribArray(texcoord_attrib);
-       glVertexAttribPointer(
-           texcoord_attrib,
-           2,
-           GL_FLOAT,
-           GL_FALSE,
-           sizeof(Rocket::Core::Vertex),
-                             &vertices[0].tex_coord);
+    GLint texcoord_attrib = glGetAttribLocation(m_shader->shaderProgram(), "texcoord");
+    glEnableVertexAttribArray(texcoord_attrib);
+    glVertexAttribPointer(
+        texcoord_attrib,
+        2,
+        GL_FLOAT,
+        GL_FALSE,
+        sizeof(Rocket::Core::Vertex),
+                            &vertices[0].tex_coord);
 
-       // vertices[n][0] -> X, and [1] -> Y
-       // vertices[0] -> top left
-       // vertices[1] -> bottom left
-       // vertices[2] -> bottom right
-       // vertices[3] -> top right
+glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_ebo);
 
-       glm::vec2 spritePosition = glm::vec2(0, 0);
+glBufferData(
+    GL_ELEMENT_ARRAY_BUFFER,
+    num_indices*sizeof(indices),
+                indices,
+                GL_DYNAMIC_DRAW);
 
-       glm::vec2 spriteSize = glm::vec2(1600, 900);
 
-       glm::vec4 rect = glm::vec4(spritePosition.x, spritePosition.y, spritePosition.x + spriteSize.x, spritePosition.y + spriteSize.y);
-
-       float x = rect.x;
-       float width = rect.z;
-       float y = rect.y;
-       float height = rect.w;
-
-       // finally upload everything to the actual vbo
-       glBindBuffer(GL_ARRAY_BUFFER, m_vbo);
-       glBufferSubData(
-           GL_ARRAY_BUFFER,
-           sizeof(vertices) * index,
-                       sizeof(vertices),
-                       vertices);
-
-       ++index;
+    // finally upload everything to the actual vbo
+    glBindBuffer(GL_ARRAY_BUFFER, m_vbo);
+    glBufferData(
+        GL_ARRAY_BUFFER,
+        sizeof(Rocket::Core::Vertex) * num_vertices,
+                    vertices,
+                    GL_DYNAMIC_DRAW
+                );
 
    ////////////////////////////////FINALLY RENDER IT ALL //////////////////////////////////////////
    glEnable(GL_BLEND);
    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
-   glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_ebo);
-   glBindBuffer(GL_ARRAY_BUFFER, m_vbo);
    glBindVertexArray(m_vao);
+    glBindBuffer(GL_ARRAY_BUFFER, m_vbo);
+    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_ebo);
 
    Debug::checkGLError();
 
@@ -198,7 +179,7 @@ void ShellRenderInterfaceOpenGL::RenderGeometry(Rocket::Core::Vertex* vertices, 
 
    glDrawElements(
        GL_TRIANGLES,
-       6 * (m_characterSprites.size()), // 6 indices per 2 triangles
+       num_vertices * (num_indices),
                   GL_UNSIGNED_INT,
                   (const GLvoid*)0);
 
