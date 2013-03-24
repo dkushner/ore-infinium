@@ -4,6 +4,7 @@
  * For the latest information, see http://www.librocket.com
  *
  * Copyright (c) 2008-2010 CodePoint Ltd, Shift Technology Ltd
+ * Copyright (C) 2013 Shaun Reich <sreich@kde.org>
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -37,8 +38,6 @@
 
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
-
-#define GL_CLAMP_TO_EDGE 0x812F
 
 ShellRenderInterfaceOpenGL::ShellRenderInterfaceOpenGL()
 {
@@ -160,8 +159,8 @@ void ShellRenderInterfaceOpenGL::RenderGeometry(Rocket::Core::Vertex* vertices, 
         GL_ELEMENT_ARRAY_BUFFER,
         num_indices*sizeof(indices),
                     indices,
-                    GL_DYNAMIC_DRAW);
-
+                    GL_DYNAMIC_DRAW
+    );
 
     // finally upload everything to the actual vbo
     glBufferData(
@@ -169,7 +168,7 @@ void ShellRenderInterfaceOpenGL::RenderGeometry(Rocket::Core::Vertex* vertices, 
         sizeof(Rocket::Core::Vertex) * num_vertices,
                     vertices,
                     GL_DYNAMIC_DRAW
-                );
+    );
 
    ////////////////////////////////FINALLY RENDER IT ALL //////////////////////////////////////////
    glEnable(GL_BLEND);
@@ -272,4 +271,3 @@ void ShellRenderInterfaceOpenGL::ReleaseTexture(Rocket::Core::TextureHandle text
 {
     glDeleteTextures(1, (GLuint*) &texture_handle);
 }
-
