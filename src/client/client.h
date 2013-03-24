@@ -24,7 +24,9 @@
 #include <SDL2/SDL.h>
 #include <SDL_log.h>
 #include <thread>
+#include <Box2D/Dynamics/b2World.h>
 
+class PhysicsDebugRenderer;
 class QuickBarMenu;
 class Player;
 class GUI;
@@ -59,6 +61,8 @@ public:
 
     const float FPS = 60.0;
 
+    void setBox2DWorld(b2World* world) { m_box2DWorld = world; }
+
     void disconnect();
 
     void shutdown();
@@ -75,6 +79,8 @@ public:
     Player* mainPlayer() {
         return m_mainPlayer;
     }
+
+    bool physicsDebugRenderingEnabled() { return m_physicsDebugRenderingEnabled; }
 
 ///////////////// Network Communication ////////////////////
 public:
@@ -137,6 +143,11 @@ private:
 
     int32_t m_playerInputDirectionX = 0;
     int32_t m_playerInputDirectionY = 0;
+
+    b2World* m_box2DWorld = nullptr;
+    PhysicsDebugRenderer* m_physicsDebugRenderer = nullptr;
+
+    bool m_physicsDebugRenderingEnabled = true;
 
     bool m_initialPlayersReceivedFinished = false;
 

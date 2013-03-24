@@ -23,6 +23,8 @@
 
 #include "src/player.h"
 
+#include "src/client/client.h"
+
 #include "src/debug.h"
 #include <src/camera.h>
 #include <src/world.h>
@@ -39,10 +41,13 @@
 #include <iostream>
 #include <fstream>
 #include <random>
+#include <chrono>
+#include <thread>
 
 #include <SDL2/SDL.h>
 
-Server::Server(unsigned int maxClients, unsigned int port)
+Server::Server(unsigned int maxClients, unsigned int port, Client* client) :
+    m_client(client)
 {
     Debug::log(Debug::Area::NetworkServer) << "creating server at port: " << port;
 
@@ -66,20 +71,39 @@ Server::~Server()
 
 void Server::tick()
 {
-    Uint32 lastTime = SDL_GetTicks();
-    int frameCount = 0;
+    std::chrono::system_clock::time_point currentTime = std::chrono::high_resolution_clock::now();
 
-    double fps = 0.0;
+    double accumulator = 0.0;
+    const double dt = (FIXED_TIMESTEP) * 1000.0; // runs at 30 hz
+    double t = 0.0;
+
     while (1) {
-        const double delta = static_cast<double>(SDL_GetTicks() - lastTime);
-        lastTime = SDL_GetTicks();
 
-        fps = (frameCount / delta) * 1000;
+        std::chrono::system_clock::time_point newTime = std::chrono::high_resolution_clock::now();
+        double frameTime = std::chrono::duration_cast<std::chrono::duration<double, std::milli> >(newTime - currentTime).count();
+
+        if ( frameTime > (1.0/15.0) * 1000.0) {
+            frameTime = (1.0/15.0) * 1000.0;   // note: max frame time to avoid spiral of death
+        }
+        currentTime = newTime;
+
+        accumulator += frameTime;
+
+        while ( accumulator >= dt )
+        {
+            m_world->update(dt);
+
+            t += dt;
+            accumulator -= dt;
+        }
+
+        const double alpha = accumulator / dt;
+
         poll();
-
-        m_world->update(delta);
-
-        ++frameCount;
+        // do network shit
+        // sleep so we don't burn cpu
+        std::chrono::milliseconds timeUntilNextFrame(int( dt - accumulator));
+        std::this_thread::sleep_for(timeUntilNextFrame);
     }
 }
 
@@ -356,8 +380,6 @@ void Server::sendWorldChunk(Chunk* chunk)
 
 void Server::sendItemSpawned(Item* item)
 {
-    Debug::log() << "sending item spawned, from server.";
-
     PacketBuf::Item message;
 
     message.set_x(item->position().x);
@@ -403,6 +425,7 @@ Player* Server::createPlayer(const std::string& playerName)
     player->setName(playerName);
     player->setPlayerID(m_freePlayerID);
     player->setPosition(2500, 1492);
+    player->createPhysicsBody(m_world, glm::vec2(2300, 1092));
 
     QuickBarInventory* quickBarInventory = new QuickBarInventory();
     player->setQuickBarInventory(quickBarInventory);
@@ -444,8 +467,6 @@ void Server::sendPlayerQuickBarInventory(Player* player, uint8_t index)
         Debug::log(Debug::Area::NetworkServer) << "warning, BAD SHIT HAPPENED, server tried sending a player's quickbar inventory but an element was nullptr, which means we didn't send as much as we should have, so the client is empty for this element index..VERY BAD SHIT";
         return;
     }
-
-    Debug::log(Debug::Area::NetworkServer) << "SERVER, qucikbar inventory item name: " << item->name();
 
     PacketBuf::Item message;
     //NOTE: position and such are not sent, as client doesn't need to know that for inventories.

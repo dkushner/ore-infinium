@@ -31,7 +31,6 @@ class Item;
 class Sprite
 {
 public:
-
     /**
      * Creates a sprite with the requested framename (required)
      * and with the category (also required)

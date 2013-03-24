@@ -27,12 +27,15 @@
 #include "camera.h"
 #include "tilerenderer.h"
 #include "lightrenderer.h"
+#include "physicsdebugrenderer.h"
+
 
 //HACK #include "sky.h"
 #include "settings/settings.h"
 #include "quickbarinventory.h"
 #include "timer.h"
 
+#include <Box2D/Box2D.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <iostream>
@@ -83,6 +86,26 @@ World::World(Player* mainPlayer, Client* client, Server* server)
 
     //client doesn't actually load/generate any world
     if (m_server) {
+        m_box2DWorld = new b2World(m_gravity);
+        m_box2DWorld->SetAllowSleeping(true);
+
+        b2BodyDef groundBodyDef;
+        groundBodyDef.position.Set(pixelsToMeters(0.0f), pixelsToMeters(2000.0f));//pixelsToMeters(1000));
+
+        b2Body* groundBody = m_box2DWorld->CreateBody(&groundBodyDef);
+
+        b2PolygonShape groundBox;
+        const float groundHeight = 2200.0f;
+        const float groundWidth = 2200.0f;
+//        groundBox.SetAsBox(pixelsToMeters(groundWidth / 2.0f), pixelsToMeters(groundHeight / 2.0f));
+        groundBox.SetAsBox(pixelsToMeters(2500), pixelsToMeters(50));
+
+        groundBody->CreateFixture(&groundBox, 0.0f);
+
+        if (m_server->client()) {
+           m_server->client()->setBox2DWorld(m_box2DWorld);
+        }
+
         loadMap();
     }
 
@@ -167,6 +190,16 @@ void World::render(Player* player)
     //    m_sky->render();
 }
 
+float World::metersToPixels(float meters)
+{
+    return meters * PIXELS_PER_METER;
+}
+
+float World::pixelsToMeters(float pixels)
+{
+    return pixels / PIXELS_PER_METER;
+}
+
 void World::update(double elapsedTime)
 {
     if (m_server) {
@@ -203,16 +236,7 @@ for (Player * player : m_players) {
     }
 
     if (m_server) {
-        float x = m_uselessEntity->position().x;
-        float y = m_uselessEntity->position().y;
-
-        if (x > 3200) {
-            x = 2200;
-        } else {
-            x += 1.0f;
-        }
-
-        m_uselessEntity->setPosition(x, y);
+        m_box2DWorld->Step(FIXED_TIMESTEP, VELOCITY_ITERATIONS, POSITION_ITERATIONS);
     }
 
     //FIXME: MAKE IT CENTER ON THE CENTER OF THE PLAYER SPRITE
@@ -221,6 +245,7 @@ for (Player * player : m_players) {
         m_camera->centerOn(m_mainPlayer->position());
         m_lightingCamera->centerOn(m_mainPlayer->position());
     }
+
 
     //calculateAttackPosition();
 }

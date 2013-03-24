@@ -28,12 +28,13 @@ class Item;
 class World;
 class Player;
 class Chunk;
+class Client;
 
 class Server
 {
 public:
     /// we use port 44543 for our server by default..
-    Server(unsigned int maxClients, unsigned int port = 44543);
+    Server(unsigned int maxClients, unsigned int port = 44543, Client* client = nullptr);
     ~Server();
 
     void poll();
@@ -41,6 +42,8 @@ public:
     void processMessage(ENetEvent& event);
 
     static constexpr int MAXPLAYERS = 8;
+
+    Client* client() { return m_client; }
 
     /**
      * Broadcast to clients that this player's position has changed
@@ -90,6 +93,8 @@ private:
     uint32_t m_freePlayerID = 0;
 
     World* m_world = nullptr;
+
+    Client* m_client = nullptr;
 
 private:
     ENetHost* m_server = nullptr;

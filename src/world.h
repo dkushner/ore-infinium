@@ -28,7 +28,10 @@
 #include <GL/gl.h>
 #include <SDL2/SDL_events.h>
 #include <list>
+#include <Box2D/Common/b2Math.h>
 
+class b2Body;
+class b2World;
 class LightRenderer;
 class Server;
 class Client;
@@ -39,12 +42,19 @@ class SpriteSheetRenderer;
 class CollisionMap;
 class Torch;
 class Item;
+class PhysicsDebugRenderer;
 
 //height
 static constexpr unsigned short WORLD_ROWCOUNT = 8400;
 //width
 static constexpr unsigned short WORLD_COLUMNCOUNT = 2400;
 
+static constexpr double FIXED_TIMESTEP = 1.0 / 30.0; // hertz
+static constexpr int32_t VELOCITY_ITERATIONS = 6;
+static constexpr int32_t POSITION_ITERATIONS = 2;
+
+// 50px per 1 meter. so that box2d has a range of entity sizes between 0.1 and 10 meters.
+static constexpr double PIXELS_PER_METER = 50;
 /*
  e.g. [ ] [ ] [ ] [ ] [ ]  ... 8400
         [ ] [ ] [ ] [ ] [ ]  ... 8400
@@ -67,6 +77,9 @@ public:
     void render(Player* player);
 
     void loadMap();
+
+    static float pixelsToMeters(float pixels);
+    static float metersToPixels(float meters);
 
     bool isBlockSolid(const glm::vec2& vecDest) const;
 
@@ -211,6 +224,10 @@ private:
 
     Camera* m_lightingCamera = nullptr;
 
+    b2World* m_box2DWorld = nullptr;
+//    b2Vec2 m_gravity = b2Vec2(0.0f, 9.8f);
+    b2Vec2 m_gravity = b2Vec2(0.0f, 9.8f);
+
     /**
      * Null if we are in server mode.
      * Else we're in client mode and this is OUR player, the one
@@ -228,6 +245,7 @@ private:
     const float m_zoomOutFactor = 0.98;
 
     friend class TileRenderer;
+    friend class Entity;
 };
 
 #endif

@@ -41,6 +41,8 @@ find_package(FreeImage)
 
 find_package(YamlCpp)
 
+find_package(Box2D)
+
 find_package(GLM)
 find_package(LibRocket)
 find_package(enet)
@@ -55,14 +57,14 @@ set_package_properties(OpenGL PROPERTIES TYPE REQUIRED PURPOSE "OpenGL is used f
 set_package_properties(GLEW PROPERTIES DESCRIPTION "OpenGL Extension Wrangler" URL "http://glew.sourceforge.net/")
 set_package_properties(GLEW PROPERTIES TYPE REQUIRED PURPOSE "To create our function pointers and extension loading for OpenGL")
 
+set_package_properties(GLM PROPERTIES DESCRIPTION "OpenGL Open Source Mathematics Library" URL "http://glm.g-truc.net/")
+set_package_properties(GLM PROPERTIES TYPE REQUIRED PURPOSE "For matrix transformations, for camera and position setup, etc.")
+
 set_package_properties(FreeImage PROPERTIES DESCRIPTION "Cross-platform open source image loading library" URL "http://freeimage.sourceforge.net/")
 set_package_properties(FreeImage PROPERTIES TYPE REQUIRED PURPOSE "For loading textures from disk")
 
-set_package_properties(YamlCpp PROPERTIES DESCRIPTION "YAML CPP < 0.5, >= 0.30" URL "http://code.google.com/p/yaml-cpp/")
-set_package_properties(YamlCpp PROPERTIES TYPE REQUIRED PURPOSE "For config file and sprite sheet reading")
-
-set_package_properties(GLM PROPERTIES DESCRIPTION "OpenGL Open Source Mathematics Library" URL "http://glm.g-truc.net/")
-set_package_properties(GLM PROPERTIES TYPE REQUIRED PURPOSE "For matrix transformations, for camera and position setup, etc.")
+set_package_properties(Box2D PROPERTIES DESCRIPTION "Box2D open source 2D iterative solver physics engine" URL "")
+set_package_properties(Box2D PROPERTIES TYPE REQUIRED PURPOSE "I use it for everything collision-wise in the game.")
 
 set_package_properties(LibRocket PROPERTIES DESCRIPTION "LibRocket Cross-Platform GUI library that is described with CSS and HTML" URL "")
 set_package_properties(LibRocket PROPERTIES TYPE REQUIRED PURPOSE "For our game's user interface (inventory, game menu, etc.)")
@@ -72,6 +74,9 @@ set_package_properties(enet PROPERTIES TYPE REQUIRED PURPOSE "For networking, ob
 
 set_package_properties(Protobuf PROPERTIES DESCRIPTION "Google's protobuf Protocol Buffers implementation" URL "http://code.google.com/p/protobuf/")
 set_package_properties(Protobuf PROPERTIES TYPE REQUIRED PURPOSE "For serializing and deserializing data in a cross-architecture/platform manner. Used for network communication as well as saving game files and such.")
+
+set_package_properties(YamlCpp PROPERTIES DESCRIPTION "YAML CPP < 0.5, >= 0.30" URL "http://code.google.com/p/yaml-cpp/")
+set_package_properties(YamlCpp PROPERTIES TYPE REQUIRED PURPOSE "For config file and sprite sheet reading")
 
 feature_summary(WHAT ALL FATAL_ON_MISSING_REQUIRED_PACKAGES)
 

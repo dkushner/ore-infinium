@@ -21,6 +21,8 @@
 #include "src/packet.pb.h"
 #include "src/server/server.h"
 
+#include "src/physicsdebugrenderer.h"
+
 #include "gui/gui.h"
 #include "gui/mainmenu.h"
 #include "gui/chatdialog.h"
@@ -86,7 +88,6 @@ Client::~Client()
 
 void Client::initSDL()
 {
-
     Debug::log(Debug::Area::System) << "SDL on platform: " << SDL_GetPlatform();
 
     SDL_version compiled;
@@ -245,6 +246,22 @@ void Client::render(double elapsedTime)
 
     m_gui->render();
     drawDebugText(elapsedTime);
+
+    if (m_physicsDebugRenderingEnabled) {
+        if (!m_physicsDebugRenderer && m_box2DWorld && m_world && m_world->spriteSheetRenderer()) {
+            m_physicsDebugRenderer = new PhysicsDebugRenderer(m_world->spriteSheetRenderer()->camera());
+            m_physicsDebugRenderer->SetFlags(b2Draw::e_shapeBit);
+            // physics debug renderer first init...
+            m_box2DWorld->SetDebugDraw(m_physicsDebugRenderer);
+        }
+
+
+        if (m_box2DWorld && m_physicsDebugRenderer && m_physicsDebugRenderingEnabled) {
+            m_box2DWorld->DrawDebugData();
+            //finalize rendering to screen.
+            m_physicsDebugRenderer->render();
+        }
+    }
 
     SDL_GL_SwapWindow(m_window);
 }
@@ -506,7 +523,7 @@ void Client::startMultiplayerHost(const std::string& playername, unsigned int po
     if (!m_server) {
         m_playerName = playername;
 
-        m_server = new Server(8, port);
+        m_server = new Server(8 /* 8 players (max) */, port, this);
         m_serverThread = new std::thread(&Server::tick, m_server);
         connect();
     } else {

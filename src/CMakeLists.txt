@@ -17,6 +17,7 @@ player.cpp
 shader.cpp
 sprite.cpp
 spritesheetrenderer.cpp
+physicsdebugrenderer.cpp
 texture.cpp
 tilerenderer.cpp
 torch.cpp
@@ -95,6 +96,7 @@ ${GLEW_INCLUDE_PATH}
 ${LIBROCKET_INCLUDE_DIRS}
 ${ENET_INCLUDE_DIRS}
 ${PROTOBUF_INCLUDE_DIR}
+${BOX2D_INCLUDE_DIR}
 )
 
 target_link_libraries(
@@ -112,6 +114,7 @@ ${LIBROCKET_CONTROLS_LIBRARY}
 ${YAMLCPP_LIBRARY}
 ${ENET_LIBRARIES}
 ${PROTOBUF_LIBRARY}
+${BOX2D_LIBRARY}
 )
 
 # CPack packaging
