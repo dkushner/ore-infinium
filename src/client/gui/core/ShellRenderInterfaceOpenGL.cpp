@@ -99,6 +99,15 @@ void ShellRenderInterfaceOpenGL::RenderGeometry(Rocket::Core::Vertex* vertices, 
 
    m_shader->bindProgram();
 
+   glm::mat4 view = glm::mat4(); // glm::translate(glm::mat4(), glm::vec3(x, y, 0.0f));
+   glm::mat4 ortho = glm::ortho(0.0f, float(1600), float(900), 0.0f, -1.0f, 1.0f);
+
+   glm::mat4 mvp =  ortho * view;
+
+   int mvpLoc = glGetUniformLocation(m_shader->shaderProgram(), "mvp");
+   glUniformMatrix4fv(mvpLoc, 1, GL_FALSE, &mvp[0][0]);
+
+
 //   glBindTexture(GL_TEXTURE_2D, GLuint(texture));
 
    glActiveTexture(GL_TEXTURE0);
