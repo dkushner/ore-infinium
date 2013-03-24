@@ -30,6 +30,9 @@
 
 #include <GL/glew.h>
 
+#include <glm/glm.hpp>
+#include <glm/gtc/matrix_transform.hpp>
+
 #include "Rocket/Core/RenderInterface.h"
 #include "ShellOpenGL.h"
 
@@ -75,8 +78,40 @@ public:
     virtual void ReleaseTexture(Rocket::Core::TextureHandle texture_handle);
 
 private:
+
+    void initGL();
+
+private:
     int m_width;
     int m_height;
+
+    typedef uint32_t u32;
+    typedef float f32;
+
+    /* Each vertex is:
+     * two floats for the 2d coordinate
+     * four u8s for the color
+     * two f32s for the texcoords
+     * the vbo contains data of the aforementioned elements interleaved.
+     * Each sprite has four vertices.
+     * */
+    /*
+    struct Vertex {
+        float x, y;
+        unsigned int color; // packed with 4 u8s (unsigned chars) for color
+        float u, v;
+    };
+    */
+
+    GLuint m_vao; // vertex array object
+    GLuint m_vbo; // vertex buffer object
+    GLuint m_ebo; // element buffer object
+
+    glm::mat4 m_modelMatrix;
+    glm::mat4 m_projectionMatrix;
+
+    int m_maxSpriteCount = 2200;
+    int m_maxEntityCount = 2200;
 
     Shader* m_shader = nullptr;
 };

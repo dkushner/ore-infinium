@@ -44,17 +44,57 @@ ShellRenderInterfaceOpenGL::ShellRenderInterfaceOpenGL()
     m_shader = new Shader("guirenderer.vert", "guirenderer.frag");
     m_shader->bindProgram();
 
-    glm::mat4 view = glm::mat4(); // glm::translate(glm::mat4(), glm::vec3(x, y, 0.0f));
 
-    glm::mat4 ortho = glm::ortho(0.0f, float(1600), float(900), 0.0f, -1.0f, 1.0f);
-
-    glm::mat4 mvp =  ortho * view;
-
-    int mvpLoc = glGetUniformLocation(m_shader->shaderProgram(), "mvp");
-    glUniformMatrix4fv(mvpLoc, 1, GL_FALSE, &mvp[0][0]);
-    m_shader->unbindProgram();
     Debug::checkGLError();
+    initGL();
 }
+
+void ShellRenderInterfaceOpenGL::initGL()
+{
+    ///////////CHARACTERS////////////////
+    glGenVertexArrays(1, &m_vao);
+    glBindVertexArray(m_vao);
+
+    glGenBuffers(1, &m_vbo);
+    glBindBuffer(GL_ARRAY_BUFFER, m_vbo);
+    glBufferData(
+        GL_ARRAY_BUFFER,
+        m_maxSpriteCount * 4 * sizeof(Vertex),
+                 NULL,
+                 GL_DYNAMIC_DRAW);
+
+    Debug::checkGLError();
+
+    std::vector<u32> indicesv;
+
+    // prepare and upload indices as a one time deal
+    const u32 indices[] = { 0, 1, 2, 0, 2, 3 }; // pattern for a triangle array
+    // for each possible sprite, add the 6 index pattern
+    for (size_t j = 0; j < m_maxSpriteCount; j++) {
+        for (size_t i = 0; i < sizeof(indices) / sizeof(*indices); i++) {
+            indicesv.push_back(4 * j + indices[i]);
+        }
+    }
+
+    glGenBuffers(1, &m_ebo);
+    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_ebo);
+    glBufferData(
+        GL_ELEMENT_ARRAY_BUFFER,
+        indicesv.size()*sizeof(u32),
+                 indicesv.data(),
+                 GL_STATIC_DRAW);
+
+    Debug::checkGLError();
+
+
+    glBindVertexArray(0);
+    glBindBuffer(GL_ARRAY_BUFFER, 0);
+    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
+
+    Debug::checkGLError();
+
+}
+
 
 void ShellRenderInterfaceOpenGL::SetViewport(int width, int height)
 {
@@ -63,76 +103,113 @@ void ShellRenderInterfaceOpenGL::SetViewport(int width, int height)
 }
 
 // Called by Rocket when it wants to render geometry that it does not wish to optimise.
-void ShellRenderInterfaceOpenGL::RenderGeometry(Rocket::Core::Vertex* vertices, int ROCKET_UNUSED(num_vertices), int* indices, int num_indices, const Rocket::Core::TextureHandle texture, const Rocket::Core::Vector2f& translation)
+void ShellRenderInterfaceOpenGL::RenderGeometry(Rocket::Core::Vertex* vertices, int num_vertices, int* indices, int num_indices, const Rocket::Core::TextureHandle texture, const Rocket::Core::Vector2f& translation)
 {
-   /*
-    glPushMatrix();
-    glTranslatef(translation.x, translation.y, 0);
+   if (!texture) {
+       //HACK
+       return;
+   }
 
-    glVertexPointer(2, GL_FLOAT, sizeof(Rocket::Core::Vertex), &vertices[0].position);
-    glEnableClientState(GL_COLOR_ARRAY);
-    glColorPointer(4, GL_UNSIGNED_BYTE, sizeof(Rocket::Core::Vertex), &vertices[0].colour);
-
-    if (!texture) {
-        glDisable(GL_TEXTURE_2D);
-        glDisableClientState(GL_TEXTURE_COORD_ARRAY);
-    } else {
-        glEnable(GL_TEXTURE_2D);
-        glBindTexture(GL_TEXTURE_2D, (GLuint) texture);
-        glEnableClientState(GL_TEXTURE_COORD_ARRAY);
-        glTexCoordPointer(2, GL_FLOAT, sizeof(Rocket::Core::Vertex), &vertices[0].tex_coord);
-    }
+   m_shader->bindProgram();
 
 
-    glDrawElements(GL_TRIANGLES, num_indices, GL_UNSIGNED_INT, indices);
+   Debug::checkGLError();
 
-    */
+   int index = 0;
 
-    glEnable(GL_BLEND);
-    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-    float texw, texh;
+       // vertices that will be uploaded.
+       size_t buffer_offset = 0;
 
-    unsigned short newIndicies[num_indices];
-    for (int i = 0; i < num_indices; i++)
-    {
-        newIndicies[i] = (unsigned short) indices[i];
-    }
+       GLint pos_attrib = glGetAttribLocation(m_shader->shaderProgram(), "position");
+       glEnableVertexAttribArray(pos_attrib);
+       glVertexAttribPointer(
+           pos_attrib,
+           2,
+           GL_FLOAT,
+           GL_FALSE,
+           sizeof(Rocket::Core::Vertex)
+                             &vertices[0].position);
 
-    GLint posLoc = glGetAttribLocation(m_shader->shaderProgram(), "position");
-    GLint colorLoc = glGetAttribLocation(m_shader->shaderProgram(), "color");
-    GLint texLoc = glGetAttribLocation(m_shader->shaderProgram(), "texcoord");
+       GLint color_attrib = glGetAttribLocation(m_shader->shaderProgram(), "color");
 
-    glVertexAttribPointer(posLoc, 2, GL_FLOAT, GL_FALSE, sizeof(Rocket::Core::Vertex), &vertices[0].position);
-    glVertexAttribPointer(colorLoc, 4, GL_UNSIGNED_BYTE, GL_TRUE, sizeof(Rocket::Core::Vertex), &vertices[0].colour);
+       Debug::checkGLError();
 
-    glEnableVertexAttribArray(posLoc);
-    glEnableVertexAttribArray(texLoc);
-    glEnableVertexAttribArray(colorLoc);
+       glEnableVertexAttribArray(color_attrib);
+       glVertexAttribPointer(
+           color_attrib,
+           4,
+           GL_UNSIGNED_BYTE,
+           GL_TRUE,
+           sizeof(Rocket::Core::Vertex),
+                             &vertices[0].colour);
 
-    if(texture) {
-        glEnable(GL_TEXTURE_2D);
-        glActiveTexture(GL_TEXTURE0);
-        glBindTexture(GL_TEXTURE_2D, (GLuint) texture);
+       Debug::checkGLError();
 
-        glVertexAttribPointer(texLoc, 2, GL_FLOAT, GL_FALSE, sizeof(Rocket::Core::Vertex), &vertices[0].tex_coord);
-    } else {
-        glActiveTexture(GL_TEXTURE0);
-        glDisable(GL_TEXTURE_2D);
-        glDisableVertexAttribArray(texLoc);
-    }
+       GLint texcoord_attrib = glGetAttribLocation(m_shader->shaderProgram(), "texcoord");
+       glEnableVertexAttribArray(texcoord_attrib);
+       glVertexAttribPointer(
+           texcoord_attrib,
+           2,
+           GL_FLOAT,
+           GL_FALSE,
+           sizeof(Rocket::Core::Vertex),
+                             &vertices[0].tex_coord);
 
-    glDrawElements(GL_TRIANGLES, num_indices, GL_UNSIGNED_SHORT, newIndicies);
+       // vertices[n][0] -> X, and [1] -> Y
+       // vertices[0] -> top left
+       // vertices[1] -> bottom left
+       // vertices[2] -> bottom right
+       // vertices[3] -> top right
 
-    /* We can disable ROCKETGLUE_ATTRIBUTE_COLOR (2) safely as SDL will reenable the vertex attrib 2 if it is required */
-    /*
-    glDisableVertexAttribArray(ROCKETGLUE_ATTRIBUTE_COLOR);
+       glm::vec2 spritePosition = glm::vec2(0, 0);
 
+       glm::vec2 spriteSize = glm::vec2(1600, 900);
 
-    if(sdl_texture) SDL_GL_UnbindTexture(sdl_texture);
-    else render_data.glEnableVertexAttribArray(ROCKETGLUE_ATTRIBUTE_TEXCOORD);
-    */
+       glm::vec4 rect = glm::vec4(spritePosition.x, spritePosition.y, spritePosition.x + spriteSize.x, spritePosition.y + spriteSize.y);
 
-    glDisable(GL_BLEND);
+       float x = rect.x;
+       float width = rect.z;
+       float y = rect.y;
+       float height = rect.w;
+
+       // finally upload everything to the actual vbo
+       glBindBuffer(GL_ARRAY_BUFFER, m_vbo);
+       glBufferSubData(
+           GL_ARRAY_BUFFER,
+           sizeof(vertices) * index,
+                       sizeof(vertices),
+                       vertices);
+
+       ++index;
+
+   ////////////////////////////////FINALLY RENDER IT ALL //////////////////////////////////////////
+   glEnable(GL_BLEND);
+   glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+
+   glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_ebo);
+   glBindBuffer(GL_ARRAY_BUFFER, m_vbo);
+   glBindVertexArray(m_vao);
+
+   Debug::checkGLError();
+
+   m_shader->bindProgram();
+
+   Debug::checkGLError();
+
+   glDrawElements(
+       GL_TRIANGLES,
+       6 * (m_characterSprites.size()), // 6 indices per 2 triangles
+                  GL_UNSIGNED_INT,
+                  (const GLvoid*)0);
+
+   m_shader->unbindProgram();
+   glBindVertexArray(0);
+   glBindBuffer(GL_ARRAY_BUFFER, 0);
+   glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
+
+   glDisable(GL_BLEND);
+
+   Debug::checkGLError();
 }
 
 // Called by Rocket when it wants to compile geometry it believes will be static for the forseeable future.
