@@ -22,6 +22,7 @@
 PhysicsDebugRenderer::PhysicsDebugRenderer(Camera* camera)
 {
     m_shader = new Shader("physicsdebugrenderer.vert", "physicsdebugrenderer.frag");
+    m_shader->bindProgram();
     setCamera(camera);
 
     Debug::checkGLError();
@@ -44,75 +45,7 @@ void PhysicsDebugRenderer::setCamera(Camera* camera)
 
 void PhysicsDebugRenderer::initGL()
 {
-    ///////////CHARACTERS////////////////
-    glGenVertexArrays(1, &m_vao);
-    glBindVertexArray(m_vao);
 
-    Debug::checkGLError();
-    glGenBuffers(1, &m_vbo);
-    glBindBuffer(GL_ARRAY_BUFFER, m_vbo);
-    glBufferData(
-        GL_ARRAY_BUFFER,
-        m_maxSpriteCount * 4 * sizeof(Vertex),
-                 NULL,
-                 GL_DYNAMIC_DRAW);
-
-    Debug::checkGLError();
-    Debug::checkGLError();
-
-    std::vector<u32> indicesv;
-
-    // prepare and upload indices as a one time deal
-    const u32 indices[] = { 0, 1, 2, 0, 2, 3 }; // pattern for a triangle array
-    // for each possible sprite, add the 6 index pattern
-    for (size_t j = 0; j < m_maxSpriteCount; j++) {
-        for (size_t i = 0; i < sizeof(indices) / sizeof(*indices); i++) {
-            indicesv.push_back(4 * j + indices[i]);
-        }
-    }
-
-    Debug::checkGLError();
-
-
-    Debug::checkGLError();
-
-    size_t buffer_offset = 0;
-
-    GLint pos_attrib = glGetAttribLocation(m_shader->shaderProgram(), "position");
-    glEnableVertexAttribArray(pos_attrib);
-    glVertexAttribPointer(
-        pos_attrib,
-        2,
-        GL_FLOAT,
-        GL_FALSE,
-        sizeof(Vertex),
-                          (const GLvoid*)buffer_offset);
-    buffer_offset += sizeof(f32) * 2;
-
-    Debug::checkGLError();
-    GLint color_attrib = glGetAttribLocation(m_shader->shaderProgram(), "color");
-
-    Debug::checkGLError();
-
-    Debug::checkGLError();
-    glEnableVertexAttribArray(color_attrib);
-    glVertexAttribPointer(
-        color_attrib,
-        4,
-        GL_UNSIGNED_BYTE,
-        GL_TRUE,
-        sizeof(Vertex),
-                          (const GLvoid*)buffer_offset);
-    buffer_offset += sizeof(u32);
-
-    Debug::checkGLError();
-
-    glBindVertexArray(0);
-    glBindBuffer(GL_ARRAY_BUFFER, 0);
-
-    Debug::checkGLError();
-
-    Debug::checkGLError();
 }
 
 void PhysicsDebugRenderer::DrawPolygon(const b2Vec2* vertices, int32 vertexCount, const b2Color& color)
@@ -163,12 +96,96 @@ glDrawArrays(GL_LINE_LOOP, 0, vertexCount);
 glPopMatrix();
 */
 
-    Box2DQuad box2DQuad;
-    box2DQuad.vec = vertices;
-    box2DQuad.vertexCount = vertexCount;
-    box2DQuad.color = color;
+    glActiveTexture(GL_TEXTURE0);
 
-    m_solidPolygons.push_back(box2DQuad);
+    glBindTexture(GL_TEXTURE_2D, m_whiteTexture);
+
+    m_shader->bindProgram();
+
+    glm::mat4 view = glm::mat4(); // glm::translate(glm::mat4(), glm::vec3(translation.x, translation.y, 0.0f));
+
+    glm::mat4 mvp = m_camera->ortho() * m_camera->view();
+
+    int mvpLoc = glGetUniformLocation(m_shader->shaderProgram(), "mvp");
+    glUniformMatrix4fv(mvpLoc, 1, GL_FALSE, &mvp[0][0]);
+
+    glBindVertexArray(m_vao);
+    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_ebo);
+    glBindBuffer(GL_ARRAY_BUFFER, m_vbo);
+    // vertices that will be uploaded.
+    size_t buffer_offset = 0;
+
+    GLint pos_attrib = glGetAttribLocation(m_shader->shaderProgram(), "position");
+    glEnableVertexAttribArray(pos_attrib);
+    glVertexAttribPointer(
+        pos_attrib,
+        2,
+        GL_FLOAT,
+        GL_FALSE,
+        sizeof(Rocket::Core::Vertex),
+                        (const GLvoid*)buffer_offset
+    );
+
+    buffer_offset += sizeof(f32)*2;
+
+    GLint color_attrib = glGetAttribLocation(m_shader->shaderProgram(), "color");
+
+    glEnableVertexAttribArray(color_attrib);
+    glVertexAttribPointer(
+        color_attrib,
+        4,
+        GL_UNSIGNED_BYTE,
+        GL_TRUE,
+        sizeof(Rocket::Core::Vertex),
+                        (const GLvoid*)buffer_offset
+    );
+    buffer_offset += sizeof(u32);
+
+    GLint texcoord_attrib = glGetAttribLocation(m_shader->shaderProgram(), "texcoord");
+    glEnableVertexAttribArray(texcoord_attrib);
+    glVertexAttribPointer(
+        texcoord_attrib,
+        2,
+        GL_FLOAT,
+        GL_FALSE,
+        sizeof(Rocket::Core::Vertex),
+                        (const GLvoid*)buffer_offset
+    );
+
+    glBufferData(
+        GL_ELEMENT_ARRAY_BUFFER,
+        num_indices*sizeof(indices),
+                indices,
+                GL_DYNAMIC_DRAW
+    );
+
+    // finally upload everything to the actual vbo
+    glBufferData(
+        GL_ARRAY_BUFFER,
+        sizeof(Rocket::Core::Vertex) * num_vertices,
+                vertices,
+                GL_DYNAMIC_DRAW
+    );
+
+    ////////////////////////////////FINALLY RENDER IT ALL //////////////////////////////////////////
+    glEnable(GL_BLEND);
+    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+
+    m_shader->bindProgram();
+
+    glDrawElements(
+        GL_TRIANGLES,
+        num_indices,
+        GL_UNSIGNED_INT,
+        (const GLvoid*)0
+    );
+
+    m_shader->unbindProgram();
+    glBindVertexArray(0);
+    glBindBuffer(GL_ARRAY_BUFFER, 0);
+    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
+
+    glDisable(GL_BLEND);
 }
 
 void PhysicsDebugRenderer::DrawCircle(const b2Vec2& center, float32 radius, const b2Color& color)
@@ -289,151 +306,5 @@ void PhysicsDebugRenderer::DrawAABB(b2AABB* aabb, const b2Color& c)
 
 void PhysicsDebugRenderer::render()
 {
-    if (m_solidPolygons.size() == 0) {
-        Debug::log() << "POLYGON SET EMPTY!";
-        return;
-    }
 
-    m_shader->bindProgram();
-
-//    glm::mat4 ortho = m_camera->ortho();
-//    glm::mat4 view = m_camera->view();
-
-    glm::mat4 view = glm::mat4();
-    glm::mat4 ortho = glm::ortho(0.0f, float(1), float(1), 0.0f, -1.0f, 1.0f);
-    glm::mat4 mvp = ortho;// * view;
-
-    int mvpLoc = glGetUniformLocation(m_shader->shaderProgram(), "mvp");
-    glUniformMatrix4fv(mvpLoc, 1, GL_FALSE, &mvp[0][0]);
-
-    uint32_t index = 0;
-//    for (Box2DQuad box2DQuad: m_solidPolygons) {
-    // vertices that will be uploaded.
-    std::vector<Vertex> vertices;
-
-    Debug::checkGLError();
-    /*
-    for (int i = 0; i < box2DQuad.vertexCount; ++i) {
-        Vertex vert;
-        vert.u = 0.0f;
-        vert.v = 0.0f;
-
-        uint8_t red = 255;
-        uint8_t green = 255;
-        uint8_t blue = 0;
-        uint8_t alpha = 255;
-        uint32_t color = red | (green << 8) | (blue << 16) | (alpha << 24);
-
-        vert.color = color;
-
-        vert.x = box2DQuad.vec[i].x;
-        vert.y = box2DQuad.vec[i].y;
-       vertices.push_back(vert);
-    }
-    */
-            uint8_t red = 255;
-        uint8_t green = 255;
-        uint8_t blue = 0;
-        uint8_t alpha = 255;
-        uint32_t color = red | (green << 8) | (blue << 16) | (alpha << 24);
-
-    Vertex vert1;
-    vert1.color = color;
-    vert1.x = 0.1;
-    vert1.y = 0.1;
-    Vertex vert2;
-    vert2.color = color;
-    vert2.x = 1;
-    vert2.y = 1;
-    Vertex vert3;
-    vert3.color = color;
-    vert3.x = 0.5;
-    vert3.y = 0.5;
-    Vertex vert4;
-    vert4.color = color;
-    vert4.x = 0.8;
-    vert4.y = 0.8;
-    Vertex vert5;
-    vert4.color = color;
-    vert4.x = 0.2;
-    vert4.y = 0.2;
-    Vertex vert6;
-    vert4.color = color;
-    vert4.x = 0.4;
-    vert4.y = 0.4;
-
-    vertices.push_back(vert1);
-    vertices.push_back(vert2);
-    vertices.push_back(vert3);
-    vertices.push_back(vert4);
-    vertices.push_back(vert5);
-    vertices.push_back(vert6);
-
-    Debug::log() << "VERT COUNT:  " << vertices.size();
-
-    /*
-    glBufferData(
-        GL_ELEMENT_ARRAY_BUFFER,
-        vertices.size()  * sizeof(Vertex),
-                 vertices.data(),
-                 GL_DYNAMIC_DRAW);
-                 */
-
-    /*
-    glBufferSubData(
-        GL_ELEMENT_ARRAY_BUFFER,
-        sizeof(Vertex) * index,
-                    sizeof(Vertex),
-                    &vertices[0]);
-                    */
-
-    Debug::checkGLError();
-    /*
-    // copy color to the buffer
-    for (size_t i = 0; i < sizeof(vertices) / sizeof(*vertices); i++) {
-        //        *colorp = color.bgra;
-        uint8_t red = 255;
-        uint8_t green = 255;
-        uint8_t blue = 255;
-        uint8_t alpha = 255;
-        int32_t color = red | (green << 8) | (blue << 16) | (alpha << 24);
-        vertices[i].color = color;
-    }
-    */
-
-    // finally upload everything to the actual vbo
-    glBindBuffer(GL_ARRAY_BUFFER, m_vbo);
-
-    glBufferSubData(
-        GL_ARRAY_BUFFER,
-        1,
-        sizeof(Vertex) * 1,//index,
-                    &vertices[0]
-    );
-
-    Debug::checkGLError();
-    ++index;
-//    }
-
-    ////////////////////////////////FINALLY RENDER IT ALL //////////////////////////////////////////
-
-    glBindBuffer(GL_ARRAY_BUFFER, m_vbo);
-    glBindVertexArray(m_vao);
-
-    Debug::checkGLError();
-
-    m_shader->bindProgram();
-
-    Debug::checkGLError();
-
-    glDrawArrays(GL_TRIANGLES, 0, 20);
-
-    m_shader->unbindProgram();
-    glBindVertexArray(0);
-    glBindBuffer(GL_ARRAY_BUFFER, 0);
-
-
-    Debug::checkGLError();
-
-    m_solidPolygons.clear();
 }

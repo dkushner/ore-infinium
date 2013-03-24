@@ -57,33 +57,17 @@ private:
     void initGL();
 
 private:
+
     typedef uint32_t u32;
     typedef float f32;
 
-    /* Each vertex is:
-     * two floats for the 2d coordinate
-     * four u8s for the color
-     * two f32s for the texcoords
-     * the vbo contains data of the aforementioned elements interleaved.
-     * Each sprite has four vertices.
-     * */
-    struct Vertex {
-        float x, y;
-        unsigned int color; // packed with 4 u8s (unsigned chars) for color
-    };
-
-    struct Box2DQuad {
-        b2Vec2* vec;
-        int32_t vertexCount;
-        b2Color color;
-    };
-
-    std::vector<Box2DQuad> m_solidPolygons;
+    GLuint m_whiteTexture;
 
     GLuint m_vao; // vertex array object
     GLuint m_vbo; // vertex buffer object
+    GLuint m_ebo; // element buffer object
 
-    int m_maxSpriteCount = 2200;
+    glm::mat4 m_ortho;
 
     Camera* m_camera = nullptr;
     Shader* m_shader = nullptr;
