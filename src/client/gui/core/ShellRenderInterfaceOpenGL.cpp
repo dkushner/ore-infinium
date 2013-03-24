@@ -45,10 +45,6 @@ ShellRenderInterfaceOpenGL::ShellRenderInterfaceOpenGL()
     m_shader = new Shader("guirenderer.vert", "guirenderer.frag");
     m_shader->bindProgram();
 
-    m_tempTexture = new Texture("../textures/error.png");
-    m_tempTexture->generate();
-    m_tempTexture->bind();
-
     Debug::checkGLError();
     initGL();
      Debug::log() << "SIZEOF ROCKET CORE VERTEX: " <<    sizeof(Rocket::Core::Vertex);
@@ -71,16 +67,35 @@ void ShellRenderInterfaceOpenGL::initGL()
 
     Debug::checkGLError();
 
-
-    Debug::checkGLError();
-
-
     glBindVertexArray(0);
     glBindBuffer(GL_ARRAY_BUFFER, 0);
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
 
     Debug::checkGLError();
 
+    uint8_t red = 255;
+    uint8_t green = 255;
+    uint8_t blue = 255;
+    uint8_t alpha = 255;
+    int32_t color = red | (green << 8) | (blue << 16) | (alpha << 24);
+
+
+    GLubyte imageData = color;
+
+    glActiveTexture(GL_TEXTURE0);
+
+    glGenTextures(1, &m_whiteTexture);
+    glBindTexture(GL_TEXTURE_2D, m_whiteTexture);
+
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_BASE_LEVEL, 0);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAX_LEVEL, 0);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, 1, 1, 0, GL_BGRA, GL_UNSIGNED_BYTE, &imageData);
 }
 
 
@@ -96,7 +111,7 @@ void ShellRenderInterfaceOpenGL::RenderGeometry(Rocket::Core::Vertex* vertices, 
    glActiveTexture(GL_TEXTURE0);
 
    if (!texture) {
-        m_tempTexture->bind();
+       glBindTexture(GL_TEXTURE_2D, m_whiteTexture);
    } else {
         glBindTexture(GL_TEXTURE_2D, GLuint(texture));
    }
