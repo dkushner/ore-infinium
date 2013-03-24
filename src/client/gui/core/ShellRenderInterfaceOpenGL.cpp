@@ -45,6 +45,7 @@ ShellRenderInterfaceOpenGL::ShellRenderInterfaceOpenGL()
     m_shader = new Shader("guirenderer.vert", "guirenderer.frag");
     m_shader->bindProgram();
 
+
     Debug::checkGLError();
     initGL();
 }
@@ -72,7 +73,6 @@ void ShellRenderInterfaceOpenGL::initGL()
     uint8_t alpha = 255;
     int32_t color = red | (green << 8) | (blue << 16) | (alpha << 24);
 
-
     GLubyte imageData = color;
 
     glActiveTexture(GL_TEXTURE0);
@@ -96,6 +96,8 @@ void ShellRenderInterfaceOpenGL::SetViewport(int width, int height)
 {
     m_width = width;
     m_height = height;
+
+    m_ortho = glm::ortho(0.0f, float(m_width), float(m_height), 0.0f, -1.0f, 1.0f);
 }
 
 // Called by Rocket when it wants to render geometry that it does not wish to optimise.
@@ -112,9 +114,8 @@ void ShellRenderInterfaceOpenGL::RenderGeometry(Rocket::Core::Vertex* vertices, 
    m_shader->bindProgram();
 
    glm::mat4 view =  glm::translate(glm::mat4(), glm::vec3(translation.x, translation.y, 0.0f));
-   glm::mat4 ortho = glm::ortho(0.0f, float(m_width), float(m_height), 0.0f, -1.0f, 1.0f);
 
-   glm::mat4 mvp =  ortho * view;
+   glm::mat4 mvp =  m_ortho * view;
 
    int mvpLoc = glGetUniformLocation(m_shader->shaderProgram(), "mvp");
    glUniformMatrix4fv(mvpLoc, 1, GL_FALSE, &mvp[0][0]);
