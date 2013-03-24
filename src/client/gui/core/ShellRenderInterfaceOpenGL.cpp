@@ -99,6 +99,7 @@ void ShellRenderInterfaceOpenGL::RenderGeometry(Rocket::Core::Vertex* vertices, 
 
    m_shader->bindProgram();
 
+   /*
    Debug::log() << "VERT count! " << num_vertices;
    Debug::log() << "INDICE count! " << num_indices;
 
@@ -109,6 +110,7 @@ void ShellRenderInterfaceOpenGL::RenderGeometry(Rocket::Core::Vertex* vertices, 
     for (int i = 0; i < num_indices; ++i) {
         Debug::log() << "INDICE i: " << i << " INDICE: " << indices[i];
    }
+   */
 
 
    glm::mat4 view = glm::mat4(); // glm::translate(glm::mat4(), glm::vec3(x, y, 0.0f));
