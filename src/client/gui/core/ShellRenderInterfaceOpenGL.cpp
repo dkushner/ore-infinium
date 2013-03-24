@@ -45,8 +45,6 @@ ShellRenderInterfaceOpenGL::ShellRenderInterfaceOpenGL()
     m_shader = new Shader("guirenderer.vert", "guirenderer.frag");
     m_shader->bindProgram();
 
-
-    Debug::checkGLError();
     initGL();
 }
 
@@ -59,13 +57,9 @@ void ShellRenderInterfaceOpenGL::initGL()
     glGenBuffers(1, &m_ebo);
     glGenBuffers(1, &m_vbo);
 
-    Debug::checkGLError();
-
     glBindVertexArray(0);
     glBindBuffer(GL_ARRAY_BUFFER, 0);
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
-
-    Debug::checkGLError();
 
     uint8_t red = 255;
     uint8_t green = 255;
@@ -90,7 +84,6 @@ void ShellRenderInterfaceOpenGL::initGL()
 
     glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, 1, 1, 0, GL_BGRA, GL_UNSIGNED_BYTE, &imageData);
 }
-
 
 void ShellRenderInterfaceOpenGL::SetViewport(int width, int height)
 {
@@ -120,14 +113,11 @@ void ShellRenderInterfaceOpenGL::RenderGeometry(Rocket::Core::Vertex* vertices, 
    int mvpLoc = glGetUniformLocation(m_shader->shaderProgram(), "mvp");
    glUniformMatrix4fv(mvpLoc, 1, GL_FALSE, &mvp[0][0]);
 
-   Debug::checkGLError();
-
    glBindVertexArray(m_vao);
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_ebo);
     glBindBuffer(GL_ARRAY_BUFFER, m_vbo);
     // vertices that will be uploaded.
     size_t buffer_offset = 0;
-    Debug::checkGLError();
 
     GLint pos_attrib = glGetAttribLocation(m_shader->shaderProgram(), "position");
     glEnableVertexAttribArray(pos_attrib);
@@ -142,10 +132,7 @@ void ShellRenderInterfaceOpenGL::RenderGeometry(Rocket::Core::Vertex* vertices, 
 
     buffer_offset += sizeof(f32)*2;
 
-    Debug::checkGLError();
     GLint color_attrib = glGetAttribLocation(m_shader->shaderProgram(), "color");
-
-    Debug::checkGLError();
 
     glEnableVertexAttribArray(color_attrib);
     glVertexAttribPointer(
@@ -157,8 +144,6 @@ void ShellRenderInterfaceOpenGL::RenderGeometry(Rocket::Core::Vertex* vertices, 
         (const GLvoid*)buffer_offset
     );
     buffer_offset += sizeof(u32);
-
-    Debug::checkGLError();
 
     GLint texcoord_attrib = glGetAttribLocation(m_shader->shaderProgram(), "texcoord");
     glEnableVertexAttribArray(texcoord_attrib);
@@ -190,11 +175,7 @@ void ShellRenderInterfaceOpenGL::RenderGeometry(Rocket::Core::Vertex* vertices, 
    glEnable(GL_BLEND);
    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
-   Debug::checkGLError();
-
    m_shader->bindProgram();
-
-   Debug::checkGLError();
 
    glDrawElements(
         GL_TRIANGLES,
@@ -209,8 +190,6 @@ void ShellRenderInterfaceOpenGL::RenderGeometry(Rocket::Core::Vertex* vertices, 
    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
 
    glDisable(GL_BLEND);
-
-   Debug::checkGLError();
 }
 
 // Called by Rocket when it wants to compile geometry it believes will be static for the forseeable future.
@@ -242,7 +221,7 @@ void ShellRenderInterfaceOpenGL::EnableScissorRegion(bool enable)
 // Called by Rocket when it wants to change the scissor region.
 void ShellRenderInterfaceOpenGL::SetScissorRegion(int x, int y, int width, int height)
 {
-//    glScissor(x, m_height - (y + height), width, height);
+    glScissor(x, m_height - (y + height), width, height);
 }
 
 // Called by Rocket when a texture is required by the library.
