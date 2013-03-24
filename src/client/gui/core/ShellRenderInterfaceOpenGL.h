@@ -112,9 +112,6 @@ private:
     glm::mat4 m_modelMatrix;
     glm::mat4 m_projectionMatrix;
 
-    int m_maxSpriteCount = 2200;
-    int m_maxEntityCount = 2200;
-
     Shader* m_shader = nullptr;
 };
 

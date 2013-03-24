@@ -47,7 +47,6 @@ ShellRenderInterfaceOpenGL::ShellRenderInterfaceOpenGL()
 
     Debug::checkGLError();
     initGL();
-     Debug::log() << "SIZEOF ROCKET CORE VERTEX: " <<    sizeof(Rocket::Core::Vertex);
 }
 
 void ShellRenderInterfaceOpenGL::initGL()
@@ -58,12 +57,6 @@ void ShellRenderInterfaceOpenGL::initGL()
 
     glGenBuffers(1, &m_ebo);
     glGenBuffers(1, &m_vbo);
-    glBindBuffer(GL_ARRAY_BUFFER, m_vbo);
-    glBufferData(
-        GL_ARRAY_BUFFER,
-        m_maxSpriteCount * 4 * sizeof(Rocket::Core::Vertex),
-                 NULL,
-                 GL_DYNAMIC_DRAW);
 
     Debug::checkGLError();
 
@@ -119,7 +112,7 @@ void ShellRenderInterfaceOpenGL::RenderGeometry(Rocket::Core::Vertex* vertices, 
    m_shader->bindProgram();
 
    glm::mat4 view =  glm::translate(glm::mat4(), glm::vec3(translation.x, translation.y, 0.0f));
-   glm::mat4 ortho = glm::ortho(0.0f, float(1600), float(900), 0.0f, -1.0f, 1.0f);
+   glm::mat4 ortho = glm::ortho(0.0f, float(m_width), float(m_height), 0.0f, -1.0f, 1.0f);
 
    glm::mat4 mvp =  ortho * view;
 
@@ -203,10 +196,11 @@ void ShellRenderInterfaceOpenGL::RenderGeometry(Rocket::Core::Vertex* vertices, 
    Debug::checkGLError();
 
    glDrawElements(
-       GL_TRIANGLES,
-       num_vertices * (num_indices),
-                  GL_UNSIGNED_INT,
-                  (const GLvoid*)0);
+        GL_TRIANGLES,
+        num_indices,
+        GL_UNSIGNED_INT,
+        (const GLvoid*)0
+    );
 
    m_shader->unbindProgram();
    glBindVertexArray(0);
