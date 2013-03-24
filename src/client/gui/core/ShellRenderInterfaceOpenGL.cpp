@@ -99,6 +99,18 @@ void ShellRenderInterfaceOpenGL::RenderGeometry(Rocket::Core::Vertex* vertices, 
 
    m_shader->bindProgram();
 
+   Debug::log() << "VERT count! " << num_vertices;
+   Debug::log() << "INDICE count! " << num_indices;
+
+   for (int i = 0; i < num_vertices; ++i) {
+        Debug::log() << "VERT i: " << i << " pos x: " << vertices[i].position.x << " Y: " << vertices[i].position.y;
+   }
+
+    for (int i = 0; i < num_indices; ++i) {
+        Debug::log() << "INDICE i: " << i << " INDICE: " << indices[i];
+   }
+
+
    glm::mat4 view = glm::mat4(); // glm::translate(glm::mat4(), glm::vec3(x, y, 0.0f));
    glm::mat4 ortho = glm::ortho(0.0f, float(1600), float(900), 0.0f, -1.0f, 1.0f);
 
@@ -106,7 +118,6 @@ void ShellRenderInterfaceOpenGL::RenderGeometry(Rocket::Core::Vertex* vertices, 
 
    int mvpLoc = glGetUniformLocation(m_shader->shaderProgram(), "mvp");
    glUniformMatrix4fv(mvpLoc, 1, GL_FALSE, &mvp[0][0]);
-
 
 //   glBindTexture(GL_TEXTURE_2D, GLuint(texture));
 
@@ -116,8 +127,12 @@ void ShellRenderInterfaceOpenGL::RenderGeometry(Rocket::Core::Vertex* vertices, 
    Debug::checkGLError();
 
 
+   glBindVertexArray(m_vao);
+    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_ebo);
+    glBindBuffer(GL_ARRAY_BUFFER, m_vbo);
     // vertices that will be uploaded.
     size_t buffer_offset = 0;
+    Debug::checkGLError();
 
     GLint pos_attrib = glGetAttribLocation(m_shader->shaderProgram(), "position");
     glEnableVertexAttribArray(pos_attrib);
@@ -129,6 +144,7 @@ void ShellRenderInterfaceOpenGL::RenderGeometry(Rocket::Core::Vertex* vertices, 
         sizeof(Rocket::Core::Vertex),
                             &vertices[0].position);
 
+    Debug::checkGLError();
     GLint color_attrib = glGetAttribLocation(m_shader->shaderProgram(), "color");
 
     Debug::checkGLError();
@@ -154,17 +170,14 @@ void ShellRenderInterfaceOpenGL::RenderGeometry(Rocket::Core::Vertex* vertices, 
         sizeof(Rocket::Core::Vertex),
                             &vertices[0].tex_coord);
 
-glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_ebo);
-
-glBufferData(
-    GL_ELEMENT_ARRAY_BUFFER,
-    num_indices*sizeof(indices),
-                indices,
-                GL_DYNAMIC_DRAW);
+    glBufferData(
+        GL_ELEMENT_ARRAY_BUFFER,
+        num_indices*sizeof(indices),
+                    indices,
+                    GL_DYNAMIC_DRAW);
 
 
     // finally upload everything to the actual vbo
-    glBindBuffer(GL_ARRAY_BUFFER, m_vbo);
     glBufferData(
         GL_ARRAY_BUFFER,
         sizeof(Rocket::Core::Vertex) * num_vertices,
@@ -176,9 +189,8 @@ glBufferData(
    glEnable(GL_BLEND);
    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
-   glBindVertexArray(m_vao);
-    glBindBuffer(GL_ARRAY_BUFFER, m_vbo);
-    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_ebo);
+//    glBindBuffer(GL_ARRAY_BUFFER, m_vbo);
+//    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_ebo);
 
    Debug::checkGLError();
 
@@ -188,7 +200,8 @@ glBufferData(
 
    glDrawElements(
        GL_TRIANGLES,
-       num_vertices * (num_indices),
+       //num_vertices * (num_indices),
+       2000,
                   GL_UNSIGNED_INT,
                   (const GLvoid*)0);
 
