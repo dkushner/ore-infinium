@@ -31,7 +31,7 @@ public:
     int screenResolutionHeight = 900;
 
     bool debugOutput = true;
-    bool debugRendererOutput = true;
+    bool debugRendererOutput = false;
     bool debugRenderingEnabled = false;
     bool debugGUIRenderingEnabled = false;
 //static int SDL_LOGPRIORITY = SDL_LOG_PRIORITY_WARN;

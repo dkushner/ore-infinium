@@ -51,6 +51,7 @@ ShellRenderInterfaceOpenGL::ShellRenderInterfaceOpenGL()
 
     Debug::checkGLError();
     initGL();
+     Debug::log() << "SIZEOF ROCKET CORE VERTEX: " <<    sizeof(Rocket::Core::Vertex);
 }
 
 void ShellRenderInterfaceOpenGL::initGL()
@@ -92,9 +93,12 @@ void ShellRenderInterfaceOpenGL::SetViewport(int width, int height)
 // Called by Rocket when it wants to render geometry that it does not wish to optimise.
 void ShellRenderInterfaceOpenGL::RenderGeometry(Rocket::Core::Vertex* vertices, int num_vertices, int* indices, int num_indices, const Rocket::Core::TextureHandle texture, const Rocket::Core::Vector2f& translation)
 {
+   glActiveTexture(GL_TEXTURE0);
+
    if (!texture) {
-       //HACK
-       return;
+        m_tempTexture->bind();
+   } else {
+        glBindTexture(GL_TEXTURE_2D, GLuint(texture));
    }
 
    m_shader->bindProgram();
@@ -116,14 +120,12 @@ void ShellRenderInterfaceOpenGL::RenderGeometry(Rocket::Core::Vertex* vertices, 
    glm::mat4 view = glm::mat4(); // glm::translate(glm::mat4(), glm::vec3(x, y, 0.0f));
    glm::mat4 ortho = glm::ortho(0.0f, float(1600), float(900), 0.0f, -1.0f, 1.0f);
 
-   glm::mat4 mvp =  ortho * view;
+   glm::mat4 mvp =  ortho;// * view;
 
    int mvpLoc = glGetUniformLocation(m_shader->shaderProgram(), "mvp");
    glUniformMatrix4fv(mvpLoc, 1, GL_FALSE, &mvp[0][0]);
 
 
-   glActiveTexture(GL_TEXTURE0);
-   glBindTexture(GL_TEXTURE_2D, GLuint(texture));
 
    Debug::checkGLError();
 
@@ -145,7 +147,9 @@ void ShellRenderInterfaceOpenGL::RenderGeometry(Rocket::Core::Vertex* vertices, 
         (const GLvoid*)buffer_offset
     );
 
-    buffer_offset += sizeof(f32) * 2;
+
+    buffer_offset += sizeof(f32)*2;
+
 
     Debug::checkGLError();
     GLint color_attrib = glGetAttribLocation(m_shader->shaderProgram(), "color");
@@ -206,8 +210,7 @@ void ShellRenderInterfaceOpenGL::RenderGeometry(Rocket::Core::Vertex* vertices, 
 
    glDrawElements(
        GL_TRIANGLES,
-       //num_vertices * (num_indices),
-       2000,
+       num_vertices * (num_indices),
                   GL_UNSIGNED_INT,
                   (const GLvoid*)0);
 
@@ -240,16 +243,17 @@ void ShellRenderInterfaceOpenGL::ReleaseCompiledGeometry(Rocket::Core::CompiledG
 // Called by Rocket when it wants to enable or disable scissoring to clip content.
 void ShellRenderInterfaceOpenGL::EnableScissorRegion(bool enable)
 {
-    if (enable)
+    if (enable) {
         glEnable(GL_SCISSOR_TEST);
-    else
+    } else {
         glDisable(GL_SCISSOR_TEST);
+    }
 }
 
 // Called by Rocket when it wants to change the scissor region.
 void ShellRenderInterfaceOpenGL::SetScissorRegion(int x, int y, int width, int height)
 {
-    glScissor(x, m_height - (y + height), width, height);
+//    glScissor(x, m_height - (y + height), width, height);
 }
 
 // Called by Rocket when a texture is required by the library.
