@@ -103,29 +103,13 @@ void ShellRenderInterfaceOpenGL::RenderGeometry(Rocket::Core::Vertex* vertices, 
 
    m_shader->bindProgram();
 
-   /*
-   Debug::log() << "VERT count! " << num_vertices;
-   Debug::log() << "INDICE count! " << num_indices;
-
-   for (int i = 0; i < num_vertices; ++i) {
-        Debug::log() << "VERT i: " << i << " pos x: " << vertices[i].position.x << " Y: " << vertices[i].position.y;
-   }
-
-    for (int i = 0; i < num_indices; ++i) {
-        Debug::log() << "INDICE i: " << i << " INDICE: " << indices[i];
-   }
-   */
-
-
-   glm::mat4 view = glm::mat4(); // glm::translate(glm::mat4(), glm::vec3(x, y, 0.0f));
+   glm::mat4 view =  glm::translate(glm::mat4(), glm::vec3(translation.x, translation.y, 0.0f));
    glm::mat4 ortho = glm::ortho(0.0f, float(1600), float(900), 0.0f, -1.0f, 1.0f);
 
-   glm::mat4 mvp =  ortho;// * view;
+   glm::mat4 mvp =  ortho * view;
 
    int mvpLoc = glGetUniformLocation(m_shader->shaderProgram(), "mvp");
    glUniformMatrix4fv(mvpLoc, 1, GL_FALSE, &mvp[0][0]);
-
-
 
    Debug::checkGLError();
 
@@ -147,9 +131,7 @@ void ShellRenderInterfaceOpenGL::RenderGeometry(Rocket::Core::Vertex* vertices, 
         (const GLvoid*)buffer_offset
     );
 
-
     buffer_offset += sizeof(f32)*2;
-
 
     Debug::checkGLError();
     GLint color_attrib = glGetAttribLocation(m_shader->shaderProgram(), "color");
@@ -198,9 +180,6 @@ void ShellRenderInterfaceOpenGL::RenderGeometry(Rocket::Core::Vertex* vertices, 
    ////////////////////////////////FINALLY RENDER IT ALL //////////////////////////////////////////
    glEnable(GL_BLEND);
    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-
-//    glBindBuffer(GL_ARRAY_BUFFER, m_vbo);
-//    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_ebo);
 
    Debug::checkGLError();
 
