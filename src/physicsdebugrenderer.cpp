@@ -96,9 +96,6 @@ glDrawArrays(GL_LINE_LOOP, 0, vertexCount);
 glPopMatrix();
 */
 
-    glActiveTexture(GL_TEXTURE0);
-
-    glBindTexture(GL_TEXTURE_2D, m_whiteTexture);
 
     m_shader->bindProgram();
 
@@ -136,18 +133,6 @@ glPopMatrix();
         4,
         GL_UNSIGNED_BYTE,
         GL_TRUE,
-        sizeof(Rocket::Core::Vertex),
-                        (const GLvoid*)buffer_offset
-    );
-    buffer_offset += sizeof(u32);
-
-    GLint texcoord_attrib = glGetAttribLocation(m_shader->shaderProgram(), "texcoord");
-    glEnableVertexAttribArray(texcoord_attrib);
-    glVertexAttribPointer(
-        texcoord_attrib,
-        2,
-        GL_FLOAT,
-        GL_FALSE,
         sizeof(Rocket::Core::Vertex),
                         (const GLvoid*)buffer_offset
     );

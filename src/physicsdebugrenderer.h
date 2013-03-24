@@ -61,8 +61,6 @@ private:
     typedef uint32_t u32;
     typedef float f32;
 
-    GLuint m_whiteTexture;
-
     GLuint m_vao; // vertex array object
     GLuint m_vbo; // vertex buffer object
     GLuint m_ebo; // element buffer object
