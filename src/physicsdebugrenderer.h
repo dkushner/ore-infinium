@@ -28,7 +28,6 @@
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/swizzle.hpp>
 
-
 class PhysicsDebugRenderer : public b2Draw {
 public:
     PhysicsDebugRenderer(Camera* camera);
@@ -57,7 +56,6 @@ private:
     void initGL();
 
 private:
-
     typedef uint32_t u32;
     typedef float f32;
 

@@ -49,7 +49,6 @@ ShellRenderInterfaceOpenGL::ShellRenderInterfaceOpenGL()
 
 void ShellRenderInterfaceOpenGL::initGL()
 {
-    ///////////CHARACTERS////////////////
     glGenVertexArrays(1, &m_vao);
     glBindVertexArray(m_vao);
 

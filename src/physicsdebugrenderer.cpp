@@ -45,7 +45,13 @@ void PhysicsDebugRenderer::setCamera(Camera* camera)
 
 void PhysicsDebugRenderer::initGL()
 {
+    glGenVertexArrays(1, &m_vao);
+    glBindVertexArray(m_vao);
 
+    glGenBuffers(1, &m_vbo);
+
+    glBindVertexArray(0);
+    glBindBuffer(GL_ARRAY_BUFFER, 0);
 }
 
 void PhysicsDebugRenderer::DrawPolygon(const b2Vec2* vertices, int32 vertexCount, const b2Color& color)
@@ -96,7 +102,6 @@ glDrawArrays(GL_LINE_LOOP, 0, vertexCount);
 glPopMatrix();
 */
 
-
     m_shader->bindProgram();
 
     glm::mat4 view = glm::mat4(); // glm::translate(glm::mat4(), glm::vec3(translation.x, translation.y, 0.0f));
@@ -118,28 +123,16 @@ glPopMatrix();
         2,
         GL_FLOAT,
         GL_FALSE,
-        sizeof(Rocket::Core::Vertex),
+        sizeof(b2Vec2),
                         (const GLvoid*)buffer_offset
     );
 
     buffer_offset += sizeof(f32)*2;
 
-    GLint color_attrib = glGetAttribLocation(m_shader->shaderProgram(), "color");
-
-    glEnableVertexAttribArray(color_attrib);
-    glVertexAttribPointer(
-        color_attrib,
-        4,
-        GL_UNSIGNED_BYTE,
-        GL_TRUE,
-        sizeof(Rocket::Core::Vertex),
-                        (const GLvoid*)buffer_offset
-    );
-
     // finally upload everything to the actual vbo
     glBufferData(
         GL_ARRAY_BUFFER,
-        sizeof(Rocket::Core::Vertex) * num_vertices,
+        sizeof(b2Vec2) * vertexCount,
                 vertices,
                 GL_DYNAMIC_DRAW
     );
