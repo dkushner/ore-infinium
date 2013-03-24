@@ -28,6 +28,8 @@
 #ifndef ROCKETSHELLRENDERINTERFACE_H
 #define ROCKETSHELLRENDERINTERFACE_H
 
+#include <GL/glew.h>
+
 #include "Rocket/Core/RenderInterface.h"
 #include "ShellOpenGL.h"
 
@@ -36,6 +38,7 @@
     @author Peter Curry
  */
 
+class Shader;
 class ShellRenderInterfaceOpenGL : public Rocket::Core::RenderInterface
 {
 public:
@@ -74,6 +77,8 @@ public:
 private:
     int m_width;
     int m_height;
+
+    Shader* m_shader = nullptr;
 };
 
 #endif

@@ -25,16 +25,35 @@
  *
  */
 
-#include "src/image.h"
-
 #include "ShellRenderInterfaceOpenGL.h"
-#include <src/debug.h>
+
+#include "src/image.h"
+#include "src/debug.h"
+#include "src/shader.h"
+
 #include <Rocket/Core.h>
+
+
+#include <glm/glm.hpp>
+#include <glm/gtc/matrix_transform.hpp>
 
 #define GL_CLAMP_TO_EDGE 0x812F
 
 ShellRenderInterfaceOpenGL::ShellRenderInterfaceOpenGL()
 {
+    m_shader = new Shader("guirenderer.vert", "guirenderer.frag");
+    m_shader->bindProgram();
+
+    glm::mat4 view = glm::mat4(); // glm::translate(glm::mat4(), glm::vec3(x, y, 0.0f));
+
+    glm::mat4 ortho = glm::ortho(0.0f, float(1600), float(900), 0.0f, -1.0f, 1.0f);
+
+    glm::mat4 mvp =  ortho * view;
+
+    int mvpLoc = glGetUniformLocation(m_shader->shaderProgram(), "mvp");
+    glUniformMatrix4fv(mvpLoc, 1, GL_FALSE, &mvp[0][0]);
+    m_shader->unbindProgram();
+    Debug::checkGLError();
 }
 
 void ShellRenderInterfaceOpenGL::SetViewport(int width, int height)
@@ -46,6 +65,7 @@ void ShellRenderInterfaceOpenGL::SetViewport(int width, int height)
 // Called by Rocket when it wants to render geometry that it does not wish to optimise.
 void ShellRenderInterfaceOpenGL::RenderGeometry(Rocket::Core::Vertex* vertices, int ROCKET_UNUSED(num_vertices), int* indices, int num_indices, const Rocket::Core::TextureHandle texture, const Rocket::Core::Vector2f& translation)
 {
+   /*
     glPushMatrix();
     glTranslatef(translation.x, translation.y, 0);
 
@@ -63,14 +83,56 @@ void ShellRenderInterfaceOpenGL::RenderGeometry(Rocket::Core::Vertex* vertices, 
         glTexCoordPointer(2, GL_FLOAT, sizeof(Rocket::Core::Vertex), &vertices[0].tex_coord);
     }
 
-    glEnable(GL_BLEND);
-    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
     glDrawElements(GL_TRIANGLES, num_indices, GL_UNSIGNED_INT, indices);
 
-    glDisable(GL_BLEND);
+    */
 
-    glPopMatrix();
+    glEnable(GL_BLEND);
+    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+    float texw, texh;
+
+    unsigned short newIndicies[num_indices];
+    for (int i = 0; i < num_indices; i++)
+    {
+        newIndicies[i] = (unsigned short) indices[i];
+    }
+
+    GLint posLoc = glGetAttribLocation(m_shader->shaderProgram(), "position");
+    GLint colorLoc = glGetAttribLocation(m_shader->shaderProgram(), "color");
+    GLint texLoc = glGetAttribLocation(m_shader->shaderProgram(), "texcoord");
+
+    glVertexAttribPointer(posLoc, 2, GL_FLOAT, GL_FALSE, sizeof(Rocket::Core::Vertex), &vertices[0].position);
+    glVertexAttribPointer(colorLoc0, 4, GL_UNSIGNED_BYTE, GL_TRUE, sizeof(Rocket::Core::Vertex), &vertices[0].colour);
+
+    glEnableVertexAttribArray(posLoc);
+    glEnableVertexAttribArray(texLoc);
+    glEnableVertexAttribArray(colorLoc);
+
+    if(texture) {
+        glEnable(GL_TEXTURE_2D);
+        glActiveTexture(GL_TEXTURE_0);
+        glBindTexture(GL_TEXTURE_2D, (GLuint) texture);
+
+        glVertexAttribPointer(texLoc, 2, GL_FLOAT, GL_FALSE, sizeof(Rocket::Core::Vertex), &vertices[0].tex_coord);
+    } else {
+        glActiveTexture(GL_TEXTURE_0);
+        glDisable(GL_TEXTURE_2D);
+        glDisableVertexAttribArray(texLoc);
+    }
+
+    glDrawElements(GL_TRIANGLES, num_indices, GL_UNSIGNED_SHORT, newIndicies);
+
+    /* We can disable ROCKETGLUE_ATTRIBUTE_COLOR (2) safely as SDL will reenable the vertex attrib 2 if it is required */
+    /*
+    glDisableVertexAttribArray(ROCKETGLUE_ATTRIBUTE_COLOR);
+
+
+    if(sdl_texture) SDL_GL_UnbindTexture(sdl_texture);
+    else render_data.glEnableVertexAttribArray(ROCKETGLUE_ATTRIBUTE_TEXCOORD);
+    */
+
+    glDisable(GL_BLEND);
 }
 
 // Called by Rocket when it wants to compile geometry it believes will be static for the forseeable future.
