@@ -142,7 +142,10 @@ void ShellRenderInterfaceOpenGL::RenderGeometry(Rocket::Core::Vertex* vertices, 
         GL_FLOAT,
         GL_FALSE,
         sizeof(Rocket::Core::Vertex),
-                            &vertices[0].position);
+        (const GLvoid*)buffer_offset
+    );
+
+    buffer_offset += sizeof(f32) * 2;
 
     Debug::checkGLError();
     GLint color_attrib = glGetAttribLocation(m_shader->shaderProgram(), "color");
@@ -156,7 +159,9 @@ void ShellRenderInterfaceOpenGL::RenderGeometry(Rocket::Core::Vertex* vertices, 
         GL_UNSIGNED_BYTE,
         GL_TRUE,
         sizeof(Rocket::Core::Vertex),
-                            &vertices[0].colour);
+        (const GLvoid*)buffer_offset
+    );
+    buffer_offset += sizeof(u32);
 
     Debug::checkGLError();
 
@@ -168,7 +173,8 @@ void ShellRenderInterfaceOpenGL::RenderGeometry(Rocket::Core::Vertex* vertices, 
         GL_FLOAT,
         GL_FALSE,
         sizeof(Rocket::Core::Vertex),
-                            &vertices[0].tex_coord);
+        (const GLvoid*)buffer_offset
+    );
 
     glBufferData(
         GL_ELEMENT_ARRAY_BUFFER,
