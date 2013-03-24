@@ -103,7 +103,7 @@ void ShellRenderInterfaceOpenGL::RenderGeometry(Rocket::Core::Vertex* vertices, 
     GLint texLoc = glGetAttribLocation(m_shader->shaderProgram(), "texcoord");
 
     glVertexAttribPointer(posLoc, 2, GL_FLOAT, GL_FALSE, sizeof(Rocket::Core::Vertex), &vertices[0].position);
-    glVertexAttribPointer(colorLoc0, 4, GL_UNSIGNED_BYTE, GL_TRUE, sizeof(Rocket::Core::Vertex), &vertices[0].colour);
+    glVertexAttribPointer(colorLoc, 4, GL_UNSIGNED_BYTE, GL_TRUE, sizeof(Rocket::Core::Vertex), &vertices[0].colour);
 
     glEnableVertexAttribArray(posLoc);
     glEnableVertexAttribArray(texLoc);
@@ -111,12 +111,12 @@ void ShellRenderInterfaceOpenGL::RenderGeometry(Rocket::Core::Vertex* vertices, 
 
     if(texture) {
         glEnable(GL_TEXTURE_2D);
-        glActiveTexture(GL_TEXTURE_0);
+        glActiveTexture(GL_TEXTURE0);
         glBindTexture(GL_TEXTURE_2D, (GLuint) texture);
 
         glVertexAttribPointer(texLoc, 2, GL_FLOAT, GL_FALSE, sizeof(Rocket::Core::Vertex), &vertices[0].tex_coord);
     } else {
-        glActiveTexture(GL_TEXTURE_0);
+        glActiveTexture(GL_TEXTURE0);
         glDisable(GL_TEXTURE_2D);
         glDisableVertexAttribArray(texLoc);
     }
