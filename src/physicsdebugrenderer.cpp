@@ -18,12 +18,15 @@
 #include "physicsdebugrenderer.h"
 #include "debug.h"
 #include "world.h"
+#include "settings/settings.h"
 
 PhysicsDebugRenderer::PhysicsDebugRenderer(Camera* camera)
 {
     m_shader = new Shader("physicsdebugrenderer.vert", "physicsdebugrenderer.frag");
     m_shader->bindProgram();
     setCamera(camera);
+
+    m_ortho = glm::ortho(0.0f, float(Settings::instance()->screenResolutionWidth), float(Settings::instance()->screenResolutionHeight), 0.0f, -1.0f, 1.0f);
 
     Debug::checkGLError();
     initGL();
@@ -101,12 +104,17 @@ glDrawArrays(GL_LINE_LOOP, 0, vertexCount);
 
 glPopMatrix();
 */
+    std::vector<b2Vec2> verts;
+    for (int i = 0; i < vertexCount; ++i) {
+        b2Vec2 newVec = vertices[i];
+        verts.push_back(newVec);
+    }
 
     m_shader->bindProgram();
 
     glm::mat4 view = glm::mat4(); // glm::translate(glm::mat4(), glm::vec3(translation.x, translation.y, 0.0f));
 
-    glm::mat4 mvp = m_camera->ortho() * m_camera->view();
+    glm::mat4 mvp = m_ortho; //m_camera->ortho() * m_camera->view();
 
     int mvpLoc = glGetUniformLocation(m_shader->shaderProgram(), "mvp");
     glUniformMatrix4fv(mvpLoc, 1, GL_FALSE, &mvp[0][0]);
@@ -114,7 +122,6 @@ glPopMatrix();
     glBindVertexArray(m_vao);
     glBindBuffer(GL_ARRAY_BUFFER, m_vbo);
     // vertices that will be uploaded.
-    size_t buffer_offset = 0;
 
     GLint pos_attrib = glGetAttribLocation(m_shader->shaderProgram(), "position");
     glEnableVertexAttribArray(pos_attrib);
@@ -124,16 +131,14 @@ glPopMatrix();
         GL_FLOAT,
         GL_FALSE,
         sizeof(b2Vec2),
-                        (const GLvoid*)buffer_offset
+                        (const GLvoid*)0
     );
-
-    buffer_offset += sizeof(f32)*2;
 
     // finally upload everything to the actual vbo
     glBufferData(
         GL_ARRAY_BUFFER,
         sizeof(b2Vec2) * vertexCount,
-                vertices,
+                verts.data(),
                 GL_DYNAMIC_DRAW
     );
 
@@ -144,7 +149,7 @@ glPopMatrix();
     m_shader->bindProgram();
 
     glDrawArrays(
-        GL_TRIANGLES,
+        GL_LINE_LOOP,
         0,
         vertexCount
     );
