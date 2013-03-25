@@ -26,7 +26,7 @@ PhysicsDebugRenderer::PhysicsDebugRenderer(Camera* camera)
     m_shader->bindProgram();
     setCamera(camera);
 
-    m_ortho = glm::ortho(0.0f, float(Settings::instance()->screenResolutionWidth), float(Settings::instance()->screenResolutionHeight), 0.0f, -1.0f, 1.0f);
+    m_ortho = glm::ortho(0.0f, float(50), float(50), 0.0f, -1.0f, 1.0f);
 
     Debug::checkGLError();
     initGL();
@@ -112,9 +112,9 @@ glPopMatrix();
 
     m_shader->bindProgram();
 
-    glm::mat4 view = glm::mat4(); // glm::translate(glm::mat4(), glm::vec3(translation.x, translation.y, 0.0f));
+//    glm::mat4 view = glm::translate(glm::mat4(), glm::vec3(50, 50, 0.0f));
 
-    glm::mat4 mvp = m_ortho; //m_camera->ortho() * m_camera->view();
+    glm::mat4 mvp = m_ortho;
 
     int mvpLoc = glGetUniformLocation(m_shader->shaderProgram(), "mvp");
     glUniformMatrix4fv(mvpLoc, 1, GL_FALSE, &mvp[0][0]);
