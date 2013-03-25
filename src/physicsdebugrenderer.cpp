@@ -26,7 +26,7 @@ PhysicsDebugRenderer::PhysicsDebugRenderer(Camera* camera)
     m_shader->bindProgram();
     setCamera(camera);
 
-    m_ortho = glm::ortho(0.0f, float(50), float(50), 0.0f, -1.0f, 1.0f);
+    m_ortho = glm::ortho(0.0f, float(PIXELS_PER_METER), float(PIXELS_PER_METER), 0.0f, -1.0f, 1.0f);
 
     Debug::checkGLError();
     initGL();
