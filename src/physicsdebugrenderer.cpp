@@ -36,14 +36,15 @@ PhysicsDebugRenderer::PhysicsDebugRenderer(Camera* camera)
 PhysicsDebugRenderer::~PhysicsDebugRenderer()
 {
     glDeleteBuffers(1, &m_vbo);
-
     glDeleteVertexArrays(1, &m_vao);
+
+    // NOTE: cam is not ours to delete.
+    delete m_shader;
 }
 
 void PhysicsDebugRenderer::setCamera(Camera* camera)
 {
     m_camera = camera;
-//    m_camera->addShader(m_shader);
 }
 
 void PhysicsDebugRenderer::initGL()
@@ -64,42 +65,6 @@ void PhysicsDebugRenderer::DrawPolygon(const b2Vec2* vertices, int32 vertexCount
 
 void PhysicsDebugRenderer::DrawSolidPolygon(const b2Vec2* vertices, int32 vertexCount, const b2Color& color)
 {
-//glTranslatef(100, 100, 0);
-
-/*    glViewport(500, 0, 1500, 900);
-//    vertices[0].x = 2;
-    glVertexPointer(2, GL_FLOAT, 0, vertices);
-
-    glColor4f(color.r, color.g, color.b,0.5f);
-    glDrawArrays(GL_TRIANGLE_FAN, 0, vertexCount);
-
-    glColor4f(color.r, color.g, color.b,1);
-    glDrawArrays(GL_LINE_LOOP, 0, vertexCount);
-    glViewport(0, 0, 1600, 900);
-    */
-//set up vertex array
-/*
-GLfloat glverts[16]; //allow for polygons up to 8 vertices
-glVertexPointer(2, GL_FLOAT, 0, glverts); //tell OpenGL where to find vertices
-glEnableClientState(GL_VERTEX_ARRAY); //use vertices in subsequent calls to glDrawArrays
-
-//fill in vertex positions as directed by Box2D
-for (int i = 0; i < vertexCount; i++) {
-    glverts[i*2]   = vertices[i].x;
-    glverts[i*2+1] = vertices[i].y;
-}
-
-//draw solid area
-glColor4f( color.r, color.g, color.b, 1);
-glDrawArrays(GL_TRIANGLE_FAN, 0, vertexCount);
-
-//draw lines
-glLineWidth(3); //fat lines
-glColor4f( 1, 0, 1, 1 ); //purple
-glDrawArrays(GL_LINE_LOOP, 0, vertexCount);
-
-glPopMatrix();
-*/
     std::vector<b2Vec2> verts;
     for (int i = 0; i < vertexCount; ++i) {
         b2Vec2 newVec = vertices[i];
@@ -114,7 +79,6 @@ glPopMatrix();
 
     int mvpLoc = glGetUniformLocation(m_shader->shaderProgram(), "mvp");
     glUniformMatrix4fv(mvpLoc, 1, GL_FALSE, &mvp[0][0]);
-
 
     int colorLoc = glGetUniformLocation(m_shader->shaderProgram(), "color");
     glUniform4f(colorLoc, color.r, color.g, color.b, 1.0);
@@ -149,7 +113,7 @@ glPopMatrix();
     m_shader->bindProgram();
 
     glDrawArrays(
-        GL_LINE_LOOP,
+        GL_TRIANGLE_FAN,
         0,
         vertexCount
     );
@@ -240,43 +204,6 @@ void PhysicsDebugRenderer::DrawTransform(const b2Transform& xf)
     DrawSegment(p1,p2,b2Color(0,1,0));
     */
 }
-
-void PhysicsDebugRenderer::DrawPoint(const b2Vec2& p, float32 size, const b2Color& color)
-{
-    /*
-    glColor4f(color.r, color.g, color.b,1);
-    glPointSize(size);
-    GLfloat                         glVertices[] = {
-        p.x,p.y
-    };
-    glVertexPointer(2, GL_FLOAT, 0, glVertices);
-    glDrawArrays(GL_POINTS, 0, 1);
-    glPointSize(1.0f);
-    */
-}
-
-void PhysicsDebugRenderer::DrawString(int x, int y, const char *string, ...)
-{
-
-    /* Unsupported as yet. Could replace with bitmap font renderer at a later date */
-}
-
-void PhysicsDebugRenderer::DrawAABB(b2AABB* aabb, const b2Color& c)
-{
-    /*
-    glColor4f(c.r, c.g, c.b,1);
-
-    GLfloat                         glVertices[] = {
-        aabb->lowerBound.x, aabb->lowerBound.y,
-        aabb->upperBound.x, aabb->lowerBound.y,
-        aabb->upperBound.x, aabb->upperBound.y,
-        aabb->lowerBound.x, aabb->upperBound.y
-    };
-    glVertexPointer(2, GL_FLOAT, 0, glVertices);
-    glDrawArrays(GL_LINE_LOOP, 0, 8);
-    */
-}
-
 
 void PhysicsDebugRenderer::render()
 {
