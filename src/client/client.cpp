@@ -255,7 +255,6 @@ void Client::render(double elapsedTime)
             m_box2DWorld->SetDebugDraw(m_physicsDebugRenderer);
         }
 
-
         if (m_box2DWorld && m_physicsDebugRenderer && m_physicsDebugRenderingEnabled) {
             m_box2DWorld->DrawDebugData();
             //finalize rendering to screen.

@@ -115,6 +115,10 @@ glPopMatrix();
     int mvpLoc = glGetUniformLocation(m_shader->shaderProgram(), "mvp");
     glUniformMatrix4fv(mvpLoc, 1, GL_FALSE, &mvp[0][0]);
 
+
+    int colorLoc = glGetUniformLocation(m_shader->shaderProgram(), "color");
+    glUniform4f(colorLoc, color.r, color.g, color.b, 1.0);
+
     glBindVertexArray(m_vao);
     glBindBuffer(GL_ARRAY_BUFFER, m_vbo);
     // vertices that will be uploaded.
