@@ -60,7 +60,65 @@ void PhysicsDebugRenderer::initGL()
 
 void PhysicsDebugRenderer::DrawPolygon(const b2Vec2* vertices, int32 vertexCount, const b2Color& color)
 {
-    DrawSolidPolygon(vertices, vertexCount, color);
+    std::vector<b2Vec2> verts;
+    for (int i = 0; i < vertexCount; ++i) {
+        b2Vec2 newVec = vertices[i];
+        verts.push_back(newVec);
+    }
+
+    m_shader->bindProgram();
+
+    //    glm::mat4 view = glm::translate(glm::mat4(), glm::vec3(50, 50, 0.0f));
+
+    glm::mat4 mvp = m_ortho;
+
+    int mvpLoc = glGetUniformLocation(m_shader->shaderProgram(), "mvp");
+    glUniformMatrix4fv(mvpLoc, 1, GL_FALSE, &mvp[0][0]);
+
+    int colorLoc = glGetUniformLocation(m_shader->shaderProgram(), "color");
+    glUniform4f(colorLoc, color.r, color.g, color.b, 1.0);
+
+    glBindVertexArray(m_vao);
+    glBindBuffer(GL_ARRAY_BUFFER, m_vbo);
+    // vertices that will be uploaded.
+
+    GLint pos_attrib = glGetAttribLocation(m_shader->shaderProgram(), "position");
+    glEnableVertexAttribArray(pos_attrib);
+    glVertexAttribPointer(
+        pos_attrib,
+        2,
+        GL_FLOAT,
+        GL_FALSE,
+        sizeof(b2Vec2),
+                          (const GLvoid*)0
+    );
+
+    // finally upload everything to the actual vbo
+    glBufferData(
+        GL_ARRAY_BUFFER,
+        sizeof(b2Vec2) * vertexCount,
+                 verts.data(),
+                 GL_DYNAMIC_DRAW
+    );
+
+    ////////////////////////////////FINALLY RENDER IT ALL //////////////////////////////////////////
+    glEnable(GL_BLEND);
+    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+
+    m_shader->bindProgram();
+
+    glDrawArrays(
+        GL_LINE_LOOP,
+        0,
+        vertexCount
+    );
+
+    m_shader->unbindProgram();
+    glBindVertexArray(0);
+    glBindBuffer(GL_ARRAY_BUFFER, 0);
+    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
+
+    glDisable(GL_BLEND);
 }
 
 void PhysicsDebugRenderer::DrawSolidPolygon(const b2Vec2* vertices, int32 vertexCount, const b2Color& color)
