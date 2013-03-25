@@ -232,35 +232,82 @@ void PhysicsDebugRenderer::DrawSolidCircle(const b2Vec2& center, float32 radius,
     glDrawArrays(GL_LINE_LOOP, 0, vertexCount);
 
 
+    */
     // Draw the axis line
     DrawSegment(center,center+radius*axis,color);
-    */
 }
 
 void PhysicsDebugRenderer::DrawSegment(const b2Vec2& p1, const b2Vec2& p2, const b2Color& color)
 {
-    /*
-    glColor4f(color.r, color.g, color.b,1);
-    GLfloat                         glVertices[] = {
-        p1.x,p1.y,p2.x,p2.y
-    };
-    glVertexPointer(2, GL_FLOAT, 0, glVertices);
-    glDrawArrays(GL_LINES, 0, 2);
-    */
+    std::vector<b2Vec2> verts;
+
+    verts.push_back(p1);
+    verts.push_back(p2);
+
+    m_shader->bindProgram();
+
+    //    glm::mat4 view = glm::translate(glm::mat4(), glm::vec3(50, 50, 0.0f));
+
+    glm::mat4 mvp = m_ortho;
+
+    int mvpLoc = glGetUniformLocation(m_shader->shaderProgram(), "mvp");
+    glUniformMatrix4fv(mvpLoc, 1, GL_FALSE, &mvp[0][0]);
+
+    int colorLoc = glGetUniformLocation(m_shader->shaderProgram(), "color");
+    glUniform4f(colorLoc, color.r, color.g, color.b, 1.0);
+
+    glBindVertexArray(m_vao);
+    glBindBuffer(GL_ARRAY_BUFFER, m_vbo);
+    // vertices that will be uploaded.
+
+    GLint pos_attrib = glGetAttribLocation(m_shader->shaderProgram(), "position");
+    glEnableVertexAttribArray(pos_attrib);
+    glVertexAttribPointer(
+        pos_attrib,
+        2,
+        GL_FLOAT,
+        GL_FALSE,
+        sizeof(b2Vec2),
+                          (const GLvoid*)0
+    );
+
+    // finally upload everything to the actual vbo
+    glBufferData(
+        GL_ARRAY_BUFFER,
+        sizeof(b2Vec2) * 2,
+                 verts.data(),
+                 GL_DYNAMIC_DRAW
+    );
+
+    ////////////////////////////////FINALLY RENDER IT ALL //////////////////////////////////////////
+    glEnable(GL_BLEND);
+    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+
+    m_shader->bindProgram();
+
+    glDrawArrays(
+        GL_LINES,
+        0,
+        2 // only 2 points
+    );
+
+    m_shader->unbindProgram();
+    glBindVertexArray(0);
+    glBindBuffer(GL_ARRAY_BUFFER, 0);
+    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
+
+    glDisable(GL_BLEND);
 }
 
 void PhysicsDebugRenderer::DrawTransform(const b2Transform& xf)
 {
-    /*
     b2Vec2 p1 = xf.p, p2;
     const float32 k_axisScale = 0.4f;
-
-    p2 = p1 + k_axisScale * xf.q.c;
+    p2 = p1 + k_axisScale * xf.q.GetXAxis();
     DrawSegment(p1,p2,b2Color(1,0,0));
 
-    p2 = p1 + k_axisScale * xf.q.s;
+    p2 = p1 + k_axisScale * xf.q.GetYAxis();
     DrawSegment(p1,p2,b2Color(0,1,0));
-    */
 }
 
 void PhysicsDebugRenderer::render()
