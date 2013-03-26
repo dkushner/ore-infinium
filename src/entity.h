@@ -46,6 +46,7 @@ public:
     void clearDirtyFlag(uint32_t dirtyFlag);
 
     void createPhysicsBody(World* world, const glm::vec2& position);
+    b2Body* physicsBody();
 
     /**
      * Use only to reset the entities position to some other place.
@@ -79,6 +80,9 @@ public:
         return m_details;
     }
 
+protected:
+    b2Body* m_body = nullptr;
+
 private:
     glm::vec2 m_velocity = glm::vec2(0, 0);
     uint32_t m_dirtyFlags = 0;
@@ -89,7 +93,6 @@ private:
     std::string m_name;
     std::string m_details;
 
-    b2Body* m_body = nullptr;
 
     friend class CollisionMap;
 };

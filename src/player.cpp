@@ -24,6 +24,7 @@
 #include "debug.h"
 #include "timer.h"
 #include <assert.h>
+#include <Box2D/Dynamics/b2Body.h>
 
 Player::Player(const std::string& frameName)
     : Entity(frameName, SpriteSheetRenderer::SpriteSheetType::Character)

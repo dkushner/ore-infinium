@@ -66,7 +66,7 @@ void Entity::createPhysicsBody(World* world, const glm::vec2& position)
     b2FixtureDef fixtureDef;
     fixtureDef.shape = &dynamicBox;
     fixtureDef.density = 1.0f;
-    fixtureDef.friction = 0.3f;
+    fixtureDef.friction = 1.0f;
 
     m_body->CreateFixture(&fixtureDef);
 }
@@ -79,6 +79,22 @@ void Entity::update(double elapsedTime, World* world)
         this->setPosition(position);
         Debug::log() << "SETTING SPRITE POSITION TO X: " << m_body->GetPosition().x << " Y : " << m_body->GetPosition().y <<
         "value actually is X: " << Sprite::position().x << " Y: " << Sprite::position().y;
+
+        glm::vec2 fullVector = m_velocity * glm::vec2(300, 300);
+
+//        b2Vec2 force = b2Vec2(fullVector.x, fullVector.y);
+        m_body->SetFixedRotation(true);
+
+        b2Vec2 currentVelocity = m_body->GetLinearVelocity();
+
+        b2Vec2 desiredVelocity = b2Vec2(fullVector.x, fullVector.y);
+        float velocityChange = desiredVelocity.x - currentVelocity.x;
+
+        float impulse = m_body->GetMass() * velocityChange;
+
+        m_body->ApplyLinearImpulse(b2Vec2(impulse, 0), m_body->GetWorldCenter());
+
+//        m_body->ApplyForceToCenter(force);
     }
 }
 
