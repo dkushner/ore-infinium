@@ -91,7 +91,8 @@ public:
      */
     void move(int32_t directionX, int32_t directionY);
 
-    void setCanJump(bool canJump) { m_canJump = canJump; }
+    void addJumpContact();
+    void removeJumpContact();
     void jump();
 
 public:
@@ -132,7 +133,8 @@ private:
     bool m_mouseLeftButtonHeld = false;
     bool m_mouseRightButtonHeld = false;
 
-    bool m_canJump = false;
+    // if > 0 means something is touching our feet, so we can jump.
+    uint32_t m_jumpContacts = 0;
 
     uint16_t m_ping = 0;
 

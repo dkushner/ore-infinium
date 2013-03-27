@@ -135,7 +135,7 @@ void Player::move(int32_t directionX, int32_t directionY)
 void Player::jump()
 {
     if (m_body) {
-        if (m_canJump) {
+        if (m_jumpContacts > 0) {
             if (m_jumpTimer->milliseconds() >= m_jumpDelay) {
                 glm::vec2 fullVector = glm::vec2(0, -5);
                 b2Vec2 currentVelocity = m_body->GetLinearVelocity();
@@ -150,6 +150,20 @@ void Player::jump()
             }
         }
     }
+}
+
+void Player::addJumpContact()
+{
+    ++m_jumpContacts;
+}
+
+void Player::removeJumpContact()
+{
+    if (m_jumpContacts == 0) {
+        return;
+    }
+
+    --m_jumpContacts;
 }
 
 void Player::setName(const std::string& name)
