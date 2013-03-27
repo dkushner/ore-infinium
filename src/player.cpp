@@ -137,7 +137,7 @@ void Player::jump()
     if (m_body) {
         if (m_canJump) {
             if (m_jumpTimer->milliseconds() >= m_jumpDelay) {
-                glm::vec2 fullVector = glm::vec2(0, -1);
+                glm::vec2 fullVector = glm::vec2(0, -5);
                 b2Vec2 currentVelocity = m_body->GetLinearVelocity();
 
                 float velocityChange = fullVector.y;
