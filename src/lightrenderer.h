@@ -30,7 +30,10 @@
 #include <string>
 #include <vector>
 
-class Player;
+namespace Entities {
+    class Player;
+}
+
 class Camera;
 class Image;
 class World;
@@ -40,7 +43,7 @@ class Torch;
 class LightRenderer
 {
 public:
-    explicit LightRenderer(World* world, Camera* camera, Player* mainPlayer);
+    explicit LightRenderer(World* world, Camera* camera, Entities::Player* mainPlayer);
     ~LightRenderer();
 
     void renderToFBO();
@@ -113,7 +116,7 @@ private:
     bool m_renderingEnabled = true;
 
     Camera* m_camera = nullptr;
-    Player* m_mainPlayer = nullptr;
+    Entities::Player* m_mainPlayer = nullptr;
 
     World* m_world = nullptr;
     Shader* m_shader = nullptr;

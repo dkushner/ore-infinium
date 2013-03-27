@@ -1,5 +1,5 @@
 /******************************************************************************
- *   Copyright (C) 2012 by Shaun Reich <sreich@kde.org>                       *
+ *   Copyright (C) 2012, 2013 by Shaun Reich <sreich@kde.org>                 *
  *                                                                            *
  *   This program is free software; you can redistribute it and/or            *
  *   modify it under the terms of the GNU General Public License as           *
@@ -19,12 +19,19 @@
 
 #include "src/camera.h"
 #include "src/quickbarinventory.h"
+#include "src/world.h"
+#include <src/server/contactlistener.h>
 
 #include "spritesheetmanager.h"
 #include "debug.h"
 #include "timer.h"
 #include <assert.h>
+
+#include <Box2D/Box2D.h>
 #include <Box2D/Dynamics/b2Body.h>
+#include <Box2D/Dynamics/Contacts/b2Contact.h>
+
+namespace Entities {
 
 Player::Player(const std::string& frameName)
     : Entity(frameName, SpriteSheetRenderer::SpriteSheetType::Character)
@@ -77,9 +84,67 @@ void Player::handleEvent(const SDL_Event& event)
 }
 */
 
+void Player::createPhysicsBody(World* world, const glm::vec2& position)
+{
+    Entity::createPhysicsBody(world, position);
+
+    //create dynamic body
+    b2BodyDef bodyDef;
+    bodyDef.type = b2_dynamicBody;
+    //        bodyDef.position.Set(pixelsToMeters(200), -pixelsToMeters(100));
+    bodyDef.position.Set(World::pixelsToMeters(position.x), World::pixelsToMeters(position.y));
+
+    m_body = world->box2DWorld()->CreateBody(&bodyDef);
+
+    ContactListener::BodyUserData* userData = new ContactListener::BodyUserData();
+    userData->type = ContactListener::BodyType::Player;
+    userData->data = this;
+    m_body->SetUserData(userData);
+
+    b2PolygonShape dynamicBox;
+    dynamicBox.SetAsBox(World::pixelsToMeters(50.0f), World::pixelsToMeters(50.0f));
+
+    // create main body's fixture
+    b2FixtureDef fixtureDef;
+    fixtureDef.shape = &dynamicBox;
+    fixtureDef.density = 1.0f;
+    fixtureDef.friction = 1.0f;
+
+    m_body->CreateFixture(&fixtureDef);
+
+    b2FixtureDef footSensorFixtureDef;
+    footSensorFixtureDef.shape = &dynamicBox;
+    footSensorFixtureDef.isSensor = true;
+
+    dynamicBox.SetAsBox(0.5, 0.3, b2Vec2(0, 1), 0);
+
+    b2Fixture* footSensorFixture = m_body->CreateFixture(&footSensorFixtureDef);
+
+    ContactListener::BodyUserData* userDataFoot = new ContactListener::BodyUserData();
+    userDataFoot->type = ContactListener::BodyType::PlayerFootSensor;
+    userDataFoot->data = this;
+    footSensorFixture->SetUserData(userDataFoot);
+}
+
 void Player::move(int32_t directionX, int32_t directionY)
 {
     Entity::setVelocity(directionX * movementSpeed, directionY * movementSpeed);
+}
+
+void Player::jump()
+{
+    if (m_body) {
+        if (m_canJump) {
+            glm::vec2 fullVector = glm::vec2(0, -1);
+            b2Vec2 currentVelocity = m_body->GetLinearVelocity();
+
+            float velocityChange = fullVector.y;
+
+            float impulse = m_body->GetMass() * velocityChange;
+
+            m_body->ApplyLinearImpulse(b2Vec2(0, impulse), m_body->GetWorldCenter());
+        }
+    }
 }
 
 void Player::setName(const std::string& name)
@@ -122,4 +187,6 @@ bool Player::canPlaceItem()
 void Player::placeItem()
 {
     m_placeableDelayTimer->reset();
+}
+
 }

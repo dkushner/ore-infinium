@@ -45,7 +45,7 @@ public:
     uint32_t dirtyFlags();
     void clearDirtyFlag(uint32_t dirtyFlag);
 
-    void createPhysicsBody(World* world, const glm::vec2& position);
+    virtual void createPhysicsBody(World* world, const glm::vec2& position);
     b2Body* physicsBody();
 
     /**

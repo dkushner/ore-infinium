@@ -409,6 +409,10 @@ void Client::handlePlayerInput(SDL_Event& event)
         if (event.key.keysym.sym == SDLK_w || event.key.keysym.sym == SDLK_UP) {
             m_playerInputDirectionY = -1;
         }
+
+        if (event.key.keysym.sym == SDLK_SPACE) {
+            m_playerJumpRequested = true;
+        }
         break;
 
     case SDL_KEYUP:
@@ -430,7 +434,7 @@ void Client::handlePlayerInput(SDL_Event& event)
         break;
     }
 
-    if (m_playerInputDirectionX != originalX || m_playerInputDirectionY != originalY) {
+    if (m_playerInputDirectionX != originalX || m_playerInputDirectionY != originalY || m_playerJumpRequested) {
         sendPlayerMovement();
     }
 
@@ -493,7 +497,7 @@ void Client::disconnect()
 
 void Client::startSinglePlayer(const std::string& playername)
 {
-    Debug::log(Debug::Area::NetworkClient) << "starting singleplayer! Playername: " << playername;
+    Debug::log(Debug::Area::NetworkClient) << "starting singleplayer! Entities::Playername: " << playername;
     m_playerName = playername;
 
     //create a local server, and connect to it.
@@ -504,7 +508,7 @@ void Client::startSinglePlayer(const std::string& playername)
 
 bool Client::startMultiplayerClientConnection(const std::string& playername, const char* address, unsigned int port)
 {
-    Debug::log(Debug::Area::NetworkClient) << "starting multiplayer joining address: " << address << "! Playername: " << playername;
+    Debug::log(Debug::Area::NetworkClient) << "starting multiplayer joining address: " << address << "! Entities::Playername: " << playername;
     m_playerName = playername;
 
     if (connect(address, port)) {
@@ -518,7 +522,7 @@ bool Client::startMultiplayerClientConnection(const std::string& playername, con
 
 void Client::startMultiplayerHost(const std::string& playername, unsigned int port)
 {
-    Debug::log(Debug::Area::NetworkClient) << "starting multiplayer, hosting! Playername: " << playername << " port: " << port;
+    Debug::log(Debug::Area::NetworkClient) << "starting multiplayer, hosting! Entities::Playername: " << playername << " port: " << port;
     if (!m_server) {
         m_playerName = playername;
 
@@ -553,6 +557,8 @@ void Client::sendPlayerMovement()
     PacketBuf::PlayerMoveFromClient message;
     message.set_directionx(m_playerInputDirectionX);
     message.set_directiony(m_playerInputDirectionY);
+    message.set_jump(m_playerJumpRequested);
+    m_playerJumpRequested = false;
 
     Packet::sendPacket(m_peer, &message, Packet::FromClientPacketContents::PlayerMoveFromClientPacket, ENET_PACKET_FLAG_RELIABLE);
 }
@@ -644,7 +650,7 @@ void Client::receiveInitialPlayerData(std::stringstream* ss)
     Packet::deserialize(ss, &message);
     Debug::log(Debug::Area::NetworkClient) << "initial player data received";
 
-    Player* player = new Player("player1Standing1");
+    Entities::Player* player = new Entities::Player("player1Standing1");
     std::stringstream chatMessage;
     if (!m_mainPlayer) {
         //this is must be *our* player, so create it
@@ -697,7 +703,7 @@ void Client::receivePlayerMove(std::stringstream* ss)
     PacketBuf::PlayerMoveFromServer message;
     Packet::deserialize(ss, &message);
 
-    Player* player = m_world->findPlayer(message.playerid());
+    Entities::Player* player = m_world->findPlayer(message.playerid());
     player->setPosition(message.x(), message.y());
 }
 

@@ -30,6 +30,7 @@
 #include <list>
 #include <Box2D/Common/b2Math.h>
 
+class ContactListener;
 class b2Body;
 class b2World;
 class LightRenderer;
@@ -68,14 +69,14 @@ class World
 {
 public:
     /**
-     * @p mainPlayer If this world is owned by a client, then the mainPlayer should point
+     * @p mainEntities::Player If this world is owned by a client, then the mainEntities::Player should point
      * to a player instance which is 'us'/'me'. It is null if we are on a server.
      */
-    World(Player* mainPlayer, Client* client, Server* server);
+    World(Entities::Player* main, Client* client, Server* server);
     ~World();
 
     void update(double elapsedTime);
-    void render(Player* player);
+    void render(Entities::Player* player);
 
     void loadMap();
 
@@ -89,16 +90,16 @@ public:
     /**
      * Adds the player to the world, but will not take ownership of (you delete it when you're done)
      */
-    void addPlayer(Player* player);
+    void addPlayer(Entities::Player* player);
 
     /**
      * Removes player from the world, but will *NOT* delete it. That's your job, bro
      */
-    void removePlayer(Player* player);
-    Player* findPlayer(uint32_t playerID);
+    void removePlayer(Entities::Player* player);
+    Entities::Player* findPlayer(uint32_t playerID);
 
-    void itemPrimaryActivated(Player* player, Item* item);
-    void itemSecondaryActivated(Player* player, Item* item);
+    void itemPrimaryActivated(Entities::Player* player, Item* item);
+    void itemSecondaryActivated(Entities::Player* player, Item* item);
 
     /**
      * An item contained within the quickbar inventory is attempting to be dropped
@@ -106,7 +107,7 @@ public:
      * @p item pointer to the item to drop
      * @p amount how much of said item to drop, amounts greater than the item's stack size is OK and will be handled.
      */
-    void itemQuickBarInventoryDropped(Player* player, Item* item, uint32_t amount);
+    void itemQuickBarInventoryDropped(Entities::Player* player, Item* item, uint32_t amount);
 
     SpriteSheetRenderer* spriteSheetRenderer() { return m_spriteSheetRenderer; }
 
@@ -121,16 +122,18 @@ public:
 
     void spawnItem(Item* item);
 
+    b2World* box2DWorld() { return m_box2DWorld; }
+
     //create containers of various entities, and implement a tile system
     //game.cpp calls into this each tick, which this descends downward into each entity
 private:
-    void attemptItemPlacement(Player* player);
-    void attemptItemPrimaryAttack(Player* player);
+    void attemptItemPlacement(Entities::Player* player);
+    void attemptItemPrimaryAttack(Entities::Player* player);
 
     /**
      * Finds the position of the top-left corner of screen, in world coordinates (based on player position).
      */
-    glm::vec2 topLeftScreenWorldCoordinates(Player* player);
+    glm::vec2 topLeftScreenWorldCoordinates(Entities::Player* player);
 
     /**
      * NOTE: CLIENT ONLY
@@ -155,17 +158,17 @@ private:
     /**
      * Attempts to pick a block at a position. Assumes caller checked inventory to see if it's possible.
      */
-    void performBlockAttack(Player* player);
+    void performBlockAttack(Entities::Player* player);
 
     /**
      * Calls various functions determining which sort of action should be taken. Should be called on each update()
      * if the player mouse is held.
      */
-    void handlePlayerLeftMouse(Player* player);
+    void handlePlayerLeftMouse(Entities::Player* player);
 
     void saveMap();
 
-    glm::vec2 tileOffset(Player* player) const;
+    glm::vec2 tileOffset(Entities::Player* player) const;
 
     /**
      * Should be called AFTER the world has been fully processed in raw block form.
@@ -204,8 +207,8 @@ private:
     LightRenderer* m_lightRenderer = nullptr;
     SpriteSheetRenderer* m_spriteSheetRenderer = nullptr;
 
-    /// inclusive of m_mainPlayer as well.
-    std::list<Player*> m_players;
+    /// inclusive of m_mainEntities::Player as well.
+    std::list<Entities::Player*> m_players;
 
     //HACK: remove when we get beyond just testing stupid shit
     Entity* m_uselessEntity = nullptr;
@@ -226,15 +229,16 @@ private:
     Camera* m_lightingCamera = nullptr;
 
     b2World* m_box2DWorld = nullptr;
-//    b2Vec2 m_gravity = b2Vec2(0.0f, 9.8f);
     b2Vec2 m_gravity = b2Vec2(0.0f, 9.8f);
+
+    ContactListener* m_contactListener = nullptr;
 
     /**
      * Null if we are in server mode.
      * Else we're in client mode and this is OUR player, the one
      * the client's user is driving.
      */
-    Player* m_mainPlayer = nullptr;
+    Entities::Player* m_mainPlayer = nullptr;
 
     Server* m_server = nullptr;
     Client* m_client = nullptr;
@@ -246,7 +250,6 @@ private:
     const float m_zoomOutFactor = 0.98;
 
     friend class TileRenderer;
-    friend class Entity;
 };
 
 #endif

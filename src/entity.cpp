@@ -20,6 +20,7 @@
 #include "world.h"
 #include "debug.h"
 #include "block.h"
+#include "server/contactlistener.h"
 
 #include <Box2D/Dynamics/b2Body.h>
 #include <Box2D/Dynamics/b2World.h>
@@ -51,24 +52,6 @@ void Entity::setVelocity(float x, float y)
 void Entity::createPhysicsBody(World* world, const glm::vec2& position)
 {
     assert(!m_body);
-
-    //create dynamic body
-    b2BodyDef bodyDef;
-    bodyDef.type = b2_dynamicBody;
-    //        bodyDef.position.Set(pixelsToMeters(200), -pixelsToMeters(100));
-    bodyDef.position.Set(World::pixelsToMeters(position.x), World::pixelsToMeters(position.y));
-
-    m_body = world->m_box2DWorld->CreateBody(&bodyDef);
-
-    b2PolygonShape dynamicBox;
-    dynamicBox.SetAsBox(World::pixelsToMeters(50.0f), World::pixelsToMeters(50.0f));
-
-    b2FixtureDef fixtureDef;
-    fixtureDef.shape = &dynamicBox;
-    fixtureDef.density = 1.0f;
-    fixtureDef.friction = 1.0f;
-
-    m_body->CreateFixture(&fixtureDef);
 }
 
 void Entity::update(double elapsedTime, World* world)
@@ -77,12 +60,11 @@ void Entity::update(double elapsedTime, World* world)
     if (m_body) {
         glm::vec2 position = glm::vec2(World::metersToPixels(m_body->GetPosition().x), World::metersToPixels(m_body->GetPosition().y));
         this->setPosition(position);
-        Debug::log() << "SETTING SPRITE POSITION TO X: " << m_body->GetPosition().x << " Y : " << m_body->GetPosition().y <<
-        "value actually is X: " << Sprite::position().x << " Y: " << Sprite::position().y;
+    //        Debug::log() << "SETTING SPRITE POSITION TO X: " << m_body->GetPosition().x << " Y : " << m_body->GetPosition().y <<
+    //        "value actually is X: " << Sprite::position().x << " Y: " << Sprite::position().y;
 
         glm::vec2 fullVector = m_velocity * glm::vec2(300, 300);
 
-//        b2Vec2 force = b2Vec2(fullVector.x, fullVector.y);
         m_body->SetFixedRotation(true);
 
         b2Vec2 currentVelocity = m_body->GetLinearVelocity();
@@ -93,8 +75,6 @@ void Entity::update(double elapsedTime, World* world)
         float impulse = m_body->GetMass() * velocityChange;
 
         m_body->ApplyLinearImpulse(b2Vec2(impulse, 0), m_body->GetWorldCenter());
-
-//        m_body->ApplyForceToCenter(force);
     }
 }
 

@@ -46,6 +46,7 @@ client/gui/decoratorspritesheet.cpp
 client/gui/decoratorspritesheetinstancer.cpp
 
 server/server.cpp
+server/contactlistener.cpp
 
 settings/settings.cpp
 

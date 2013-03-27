@@ -254,16 +254,19 @@ void Server::receiveChatMessage(std::stringstream* ss, const std::string& player
     sendChatMessage(receiveMessage.message(), playerName);
 }
 
-void Server::receivePlayerMove(std::stringstream* ss, Player* player)
+void Server::receivePlayerMove(std::stringstream* ss, Entities::Player* player)
 {
     PacketBuf::PlayerMoveFromClient message;
     Packet::deserialize(ss, &message);
 
 //    Debug::log(Debug::Area::NetworkServer) << " PLAYER MOVE RECEIVED, directionx: " <<  message.directionx() << " Y: " <<
     player->move(message.directionx(), message.directiony());
+    if (message.jump()) {
+        player->jump();
+    }
 }
 
-void Server::receivePlayerMouseState(std::stringstream* ss, Player* player)
+void Server::receivePlayerMouseState(std::stringstream* ss, Entities::Player* player)
 {
     PacketBuf::PlayerMouseStateFromClient message;
     Packet::deserialize(ss, &message);
@@ -273,7 +276,7 @@ void Server::receivePlayerMouseState(std::stringstream* ss, Player* player)
     player->setMousePosition(message.x(), message.y());
 }
 
-void Server::receiveQuickBarInventorySelectSlotRequest(std::stringstream* ss, Player* player)
+void Server::receiveQuickBarInventorySelectSlotRequest(std::stringstream* ss, Entities::Player* player)
 {
     PacketBuf::QuickBarInventorySelectSlotRequestFromClient message;
     Packet::deserialize(ss, &message);
@@ -297,7 +300,7 @@ void Server::sendChatMessage(const std::string& message, const std::string& play
     Packet::sendPacketBroadcast(m_server, &sendMessage, Packet::FromServerPacketContents::ChatMessageFromServerPacket, ENET_PACKET_FLAG_RELIABLE);
 }
 
-void Server::sendInitialPlayerData(ENetPeer* peer, Player* player)
+void Server::sendInitialPlayerData(ENetPeer* peer, Entities::Player* player)
 {
     PacketBuf::InitialPlayerDataFromServer message;
     message.set_playername(player->name());
@@ -319,7 +322,7 @@ void Server::sendInitialWorldChunk(ENetPeer* peer)
 {
     PacketBuf::Chunk message;
 
-    Player* player = m_clients[peer];
+    Entities::Player* player = m_clients[peer];
 
     //FIXME: use a nice value, maybe constant or dynamic..constant is easier though
     // it needs to be bigger than the player's viewport, obviously
@@ -401,7 +404,7 @@ void Server::sendItemSpawned(Item* item)
     Packet::sendPacketBroadcast(m_server, &message, Packet::FromServerPacketContents::ItemSpawnedFromServerPacket, ENET_PACKET_FLAG_RELIABLE);
 }
 
-void Server::sendQuickBarInventoryItemCountChanged(Player* player, uint8_t index, uint8_t newCount)
+void Server::sendQuickBarInventoryItemCountChanged(Entities::Player* player, uint8_t index, uint8_t newCount)
 {
     PacketBuf::ItemCountChanged message;
     message.set_index(index);
@@ -419,9 +422,9 @@ void Server::sendQuickBarInventoryItemCountChanged(Player* player, uint8_t index
     Packet::sendPacket(peer, &message, Packet::FromServerPacketContents::QuickBarInventoryItemCountChangedFromServerPacket, ENET_PACKET_FLAG_RELIABLE);
 }
 
-Player* Server::createPlayer(const std::string& playerName)
+Entities::Player* Server::createPlayer(const std::string& playerName)
 {
-    Player* player = new Player("player1Standing1");
+    Entities::Player* player = new Entities::Player("player1Standing1");
     player->setName(playerName);
     player->setPlayerID(m_freePlayerID);
     player->setPosition(2500, 1492);
@@ -449,7 +452,7 @@ Player* Server::createPlayer(const std::string& playerName)
     return player;
 }
 
-void Server::sendPlayerMove(Player* player)
+void Server::sendPlayerMove(Entities::Player* player)
 {
     PacketBuf::PlayerMoveFromServer message;
     message.set_playerid(player->playerID());
@@ -459,7 +462,7 @@ void Server::sendPlayerMove(Player* player)
     Packet::sendPacketBroadcast(m_server, &message, Packet::FromServerPacketContents::PlayerMoveFromServerPacket, ENET_PACKET_FLAG_UNSEQUENCED);
 }
 
-void Server::sendPlayerQuickBarInventory(Player* player, uint8_t index)
+void Server::sendPlayerQuickBarInventory(Entities::Player* player, uint8_t index)
 {
     Item* item = player->quickBarInventory()->item(index);
 

@@ -44,8 +44,9 @@ message PlayerMoveFromServer {
 }
 
 message PlayerMoveFromClient {
-   optional int32 directionX = 1;
-   optional int32 directionY = 2;
+    optional int32 directionX = 1;
+    optional int32 directionY = 2;
+    optional bool jump = 3;
 }
 
 message PlayerMouseStateFromClient {

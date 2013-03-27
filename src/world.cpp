@@ -19,7 +19,10 @@
 #include "debug.h"
 
 #include "src/server/server.h"
+#include "src/server/contactlistener.h"
+
 #include "src/client/client.h"
+
 #include "item.h"
 #include "block.h"
 #include "torch.h"
@@ -28,7 +31,6 @@
 #include "tilerenderer.h"
 #include "lightrenderer.h"
 #include "physicsdebugrenderer.h"
-
 
 //HACK #include "sky.h"
 #include "settings/settings.h"
@@ -46,13 +48,13 @@
 #include <fstream>
 #include <chrono>
 
-World::World(Player* mainPlayer, Client* client, Server* server)
+World::World(Entities::Player* mainPlayer, Client* client, Server* server)
     : m_mainPlayer(mainPlayer),
       m_client(client),
       m_server(server)
 {
     //FIXME:
-//    m_player = new Player("someframe");
+//    m_player = new Entities::Player("someframe");
 //    m_entities.insert(m_entities.end(), m_player);
 
     m_blocks.resize(WORLD_ROWCOUNT * WORLD_COLUMNCOUNT);
@@ -89,6 +91,9 @@ World::World(Player* mainPlayer, Client* client, Server* server)
         m_box2DWorld = new b2World(m_gravity);
         m_box2DWorld->SetAllowSleeping(true);
 
+        m_contactListener = new ContactListener();
+        m_box2DWorld->SetContactListener(m_contactListener);
+
         b2BodyDef groundBodyDef;
         groundBodyDef.position.Set(pixelsToMeters(0.0f), pixelsToMeters(2000.0f));//pixelsToMeters(1000));
 
@@ -123,7 +128,7 @@ World::~World()
     //    delete m_sky;
 }
 
-void World::addPlayer(Player* player)
+void World::addPlayer(Entities::Player* player)
 {
     m_players.push_back(player);
 
@@ -132,12 +137,12 @@ void World::addPlayer(Player* player)
     }
 }
 
-void World::removePlayer(Player* player)
+void World::removePlayer(Entities::Player* player)
 {
     m_players.remove(player);
 }
 
-Player* World::findPlayer(uint32_t playerID)
+Entities::Player* World::findPlayer(uint32_t playerID)
 {
 for (auto * player : m_players) {
         if (player->playerID() == playerID) {
@@ -148,7 +153,7 @@ for (auto * player : m_players) {
     Debug::assertf(false, "World::findPlayer, player does not exist? that shit's whack");
 }
 
-void World::render(Player* player)
+void World::render(Entities::Player* player)
 {
     assert(m_mainPlayer && !m_server);
 
@@ -224,7 +229,7 @@ for (Entity * currentEntity : m_entities) {
         }
     }
 
-for (Player * player : m_players) {
+for (Entities::Player * player : m_players) {
         player->update(elapsedTime, this);
 
         if (m_server) {
@@ -341,8 +346,8 @@ void World::calculateAttackPosition()
      *       diffVect.y = mousePos.y - _viewportCenter.y;
      *
      *       const double angle = atan2(diffVect.y, diffVect.x);
-     *       const float newX = _viewportCenter.x + cos(angle) * Player::blockPickingRadius;
-     *       const float newY= _viewportCenter.y  + sin(angle) * Player::blockPickingRadius;
+     *       const float newX = _viewportCenter.x + cos(angle) * Entities::Player::blockPickingRadius;
+     *       const float newY= _viewportCenter.y  + sin(angle) * Entities::Player::blockPickingRadius;
      *       m_relativeVectorToAttack = glm::vec2(newX, newY);
      */
 }
@@ -356,23 +361,23 @@ glm::ivec2 World::mousePosition() const
 
 //FIXME: this function needs a lot of help.
 //so make it so it doesn't iterate over the whole visible screen but just the blockPickingRadius size.
-void World::performBlockAttack(Player* player)
+void World::performBlockAttack(Entities::Player* player)
 {
     glm::ivec2 mouse = player->mousePosition();
 
     glm::vec2 center(Settings::instance()->screenResolutionWidth * 0.5, Settings::instance()->screenResolutionHeight * 0.5);
 
     // if the attempted block pick location is out of range, do nothing.
-    if (mouse.x < center.x - Player::blockPickingRadius ||
-            mouse.x > center.x + Player::blockPickingRadius ||
-            mouse.y < center.y - Player::blockPickingRadius ||
-            mouse.y > center.y + Player::blockPickingRadius) {
+    if (mouse.x < center.x - Entities::Player::blockPickingRadius ||
+            mouse.x > center.x + Entities::Player::blockPickingRadius ||
+            mouse.y < center.y - Entities::Player::blockPickingRadius ||
+            mouse.y > center.y + Entities::Player::blockPickingRadius) {
         return;
     }
 
     glm::ivec2 transformedMouse = glm::ivec2(floor((mouse.x / 2 + player->position().x) / Block::BLOCK_SIZE), floor((mouse.y / 2 + player->position().y) / Block::BLOCK_SIZE));
 
-    const int radius = Player::blockPickingRadius / Block::BLOCK_SIZE;
+    const int radius = Entities::Player::blockPickingRadius / Block::BLOCK_SIZE;
 
     int attackX = transformedMouse.x;
     int attackY = transformedMouse.y;
@@ -419,7 +424,7 @@ void World::performBlockAttack(Player* player)
     }
 }
 
-glm::vec2 World::tileOffset(Player* player) const
+glm::vec2 World::tileOffset(Entities::Player* player) const
 {
     const glm::vec2 playerPosition = player->position();
     // to get per-pixel smooth scrolling, we get the remainders and pass it as an offset to things that need to know the tile positions
@@ -526,14 +531,14 @@ void World::zoomOut()
     m_camera->zoom(m_zoomOutFactor);
 }
 
-glm::vec2 World::topLeftScreenWorldCoordinates(Player* player)
+glm::vec2 World::topLeftScreenWorldCoordinates(Entities::Player* player)
 {
     const glm::vec2 position = player->position();
     const glm::vec2 topLeft = glm::vec2(position.x - Settings::instance()->screenResolutionWidth * 0.5, position.y - Settings::instance()->screenResolutionHeight * 0.5);
     return topLeft;
 }
 
-void World::itemQuickBarInventoryDropped(Player* player, Item* item, uint32_t amount)
+void World::itemQuickBarInventoryDropped(Entities::Player* player, Item* item, uint32_t amount)
 {
     Item* droppedItem = item->duplicate();
     assert(droppedItem);
@@ -543,7 +548,7 @@ void World::itemQuickBarInventoryDropped(Player* player, Item* item, uint32_t am
     m_entities.insert(m_entities.end(), droppedItem);
 }
 
-void World::itemPrimaryActivated(Player* player, Item* item)
+void World::itemPrimaryActivated(Entities::Player* player, Item* item)
 {
     if (item->placeable()) {
         // place the item in the world (append to entity list)
@@ -554,12 +559,12 @@ void World::itemPrimaryActivated(Player* player, Item* item)
     item->activatePrimary();
 }
 
-void World::itemSecondaryActivated(Player* player, Item* item)
+void World::itemSecondaryActivated(Entities::Player* player, Item* item)
 {
     item->activateSecondary();
 }
 
-void World::handlePlayerLeftMouse(Player* player)
+void World::handlePlayerLeftMouse(Entities::Player* player)
 {
     //TODO: HANDLE INVENTORY AND TAKE THAT INTO ACCOUNT
     // performBlockAttack(player);
@@ -576,7 +581,7 @@ void World::handlePlayerLeftMouse(Player* player)
     }
 }
 
-void World::attemptItemPlacement(Player* player)
+void World::attemptItemPlacement(Entities::Player* player)
 {
     QuickBarInventory* inventory = player->quickBarInventory();
     Item* item = inventory->item(inventory->equippedIndex());
@@ -631,7 +636,7 @@ void World::attemptItemPlacement(Player* player)
     }
 }
 
-void World::attemptItemPrimaryAttack(Player* player)
+void World::attemptItemPrimaryAttack(Entities::Player* player)
 {
 
 }

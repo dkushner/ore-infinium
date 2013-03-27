@@ -26,7 +26,9 @@
 class Timer;
 class QuickBarInventory;
 class Camera;
+class World;
 
+namespace Entities {
 class Player : public Entity
 {
 public:
@@ -42,6 +44,8 @@ public:
 
     void setPlayerID(uint32_t id);
     uint32_t playerID() const;
+
+    virtual void createPhysicsBody(World* world, const glm::vec2& position);
 
     /**
      * Server side only, to asociate and keep track of each player's (clients) mouse position
@@ -86,6 +90,9 @@ public:
      */
     void move(int32_t directionX, int32_t directionY);
 
+    void setCanJump(bool canJump) { m_canJump = canJump; }
+    void jump();
+
 public:
     // radius indicating how many pixels out the player can pick blocks
     static constexpr float blockPickingRadius = Block::BLOCK_SIZE * 8.0f;
@@ -124,7 +131,11 @@ private:
     bool m_mouseLeftButtonHeld = false;
     bool m_mouseRightButtonHeld = false;
 
+    bool m_canJump = false;
+
     uint16_t m_ping = 0;
 };
+
+}
 
 #endif

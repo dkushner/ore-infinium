@@ -23,6 +23,7 @@
 #include <sstream>
 
 #include <map>
+#include <src/player.h>
 
 class Item;
 class World;
@@ -48,20 +49,20 @@ public:
     /**
      * Broadcast to clients that this player's position has changed
      */
-    void sendPlayerMove(Player* player);
+    void sendPlayerMove(Entities::Player* player);
 
     /**
      * Broadcast a chunk change.
      */
     void sendWorldChunk(Chunk* chunk);
     void sendItemSpawned(Item* item);
-    void sendQuickBarInventoryItemCountChanged(Player* player, uint8_t index, uint8_t newCount);
+    void sendQuickBarInventoryItemCountChanged(Entities::Player* player, uint8_t index, uint8_t newCount);
 
     /**
      * Should be called when player's quickbarinventory has been modified at @p index,
      * as it will then send this to the client associated with this player, with the new up-to-date item.
      */
-    void sendPlayerQuickBarInventory(Player* player, uint8_t index);
+    void sendPlayerQuickBarInventory(Entities::Player* player, uint8_t index);
 
 private:
     /**
@@ -73,17 +74,17 @@ private:
      */
     uint32_t receiveInitialClientData(std::stringstream* ss, ENetEvent& event);
     void receiveChatMessage(std::stringstream* ss, const std::string& playerName);
-    void receivePlayerMove(std::stringstream* ss, Player* player);
-    void receivePlayerMouseState(std::stringstream* ss, Player* player);
-    void receiveQuickBarInventorySelectSlotRequest(std::stringstream* ss, Player* player);
+    void receivePlayerMove(std::stringstream* ss, Entities::Player* player);
+    void receivePlayerMouseState(std::stringstream* ss, Entities::Player* player);
+    void receiveQuickBarInventorySelectSlotRequest(std::stringstream* ss, Entities::Player* player);
 
     void sendChatMessage(const std::string& message, const std::string& playerName);
-    void sendInitialPlayerData(ENetPeer* peer, Player* player);
+    void sendInitialPlayerData(ENetPeer* peer, Entities::Player* player);
     void sendInitialPlayerDataFinished(ENetPeer* peer);
     void sendInitialWorldChunk(ENetPeer* peer);
 
 
-    Player* createPlayer(const std::string& playerName);
+    Entities::Player* createPlayer(const std::string& playerName);
 
 private:
     /**
@@ -99,7 +100,7 @@ private:
 private:
     ENetHost* m_server = nullptr;
     ENetAddress m_address;
-    std::map<ENetPeer*, Player*> m_clients;
+    std::map<ENetPeer*, Entities::Player*> m_clients;
 };
 
 #endif

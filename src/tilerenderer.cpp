@@ -33,7 +33,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-TileRenderer::TileRenderer(World* world, Camera* camera, Player* mainPlayer)
+TileRenderer::TileRenderer(World* world, Camera* camera, Entities::Player* mainPlayer)
     :   m_world(world),
         m_mainPlayer(mainPlayer)
 {

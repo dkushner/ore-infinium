@@ -30,7 +30,10 @@
 #include <string>
 #include <vector>
 
-class Player;
+namespace Entities {
+    class Player;
+}
+
 class Camera;
 class Image;
 class World;
@@ -40,7 +43,7 @@ class Torch;
 class TileRenderer
 {
 public:
-    explicit TileRenderer(World* world, Camera* camera, Player* mainPlayer);
+    explicit TileRenderer(World* world, Camera* camera, Entities::Player* mainPlayer);
     ~TileRenderer();
 
     void render();
@@ -104,7 +107,7 @@ private:
     int m_maxTileCount = 8200;
 
     Camera* m_camera = nullptr;
-    Player* m_mainPlayer = nullptr;
+    Entities::Player* m_mainPlayer = nullptr;
 
     World* m_world = nullptr;
     Shader* m_shader = nullptr;

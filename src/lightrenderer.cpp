@@ -38,7 +38,7 @@
 #include <GL/glext.h>
 #include <SDL_timer.h>
 
-LightRenderer::LightRenderer(World* world, Camera* camera, Player* mainPlayer)
+LightRenderer::LightRenderer(World* world, Camera* camera, Entities::Player* mainPlayer)
     :   m_world(world),
         m_mainPlayer(mainPlayer)
 {

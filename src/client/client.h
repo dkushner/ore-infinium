@@ -21,6 +21,8 @@
 #include <enet/enet.h>
 #include <string>
 
+#include "src/player.h"
+
 #include <SDL2/SDL.h>
 #include <SDL_log.h>
 #include <thread>
@@ -76,7 +78,8 @@ public:
     bool hosting() {
         return m_server;
     }
-    Player* mainPlayer() {
+
+    Entities::Player* mainPlayer() {
         return m_mainPlayer;
     }
 
@@ -136,7 +139,7 @@ private:
 
     std::string m_playerName;
 
-    Player* m_mainPlayer = nullptr;
+    Entities::Player* m_mainPlayer = nullptr;
 
     std::thread* m_serverThread = nullptr;
     bool m_connected = false;
@@ -147,6 +150,7 @@ private:
     b2World* m_box2DWorld = nullptr;
     PhysicsDebugRenderer* m_physicsDebugRenderer = nullptr;
 
+    bool m_playerJumpRequested = false;
     bool m_physicsDebugRenderingEnabled = true;
 
     bool m_initialPlayersReceivedFinished = false;
