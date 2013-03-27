@@ -428,8 +428,13 @@ Entities::Player* Server::createPlayer(const std::string& playerName)
     Entities::Player* player = new Entities::Player("player1Standing1");
     player->setName(playerName);
     player->setPlayerID(m_freePlayerID);
-    player->setPosition(2500, 1492);
-    player->createPhysicsBody(m_world, glm::vec2(2300, 1092));
+
+    //HACK FIXME: HOLY FUCK BACKMAN this is fucked horribly until physics integration is 100% complete. both of these have to be at the same position, and that simpyl shouldn't be needed..
+    // if you don't set oen of them, BAD SHIT HAPPENS
+    float posX = 2500.0f;
+    float posY = 1492.0f;
+    player->setPosition(posX, posY);
+    player->createPhysicsBody(m_world, glm::vec2(posX, posY));
 
     QuickBarInventory* quickBarInventory = new QuickBarInventory();
     player->setQuickBarInventory(quickBarInventory);
