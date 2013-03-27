@@ -24,6 +24,7 @@
 #include <SDL2/SDL_events.h>
 
 class Timer;
+class Timer;
 class QuickBarInventory;
 class Camera;
 class World;
@@ -134,6 +135,9 @@ private:
     bool m_canJump = false;
 
     uint16_t m_ping = 0;
+
+    Timer* m_jumpTimer = nullptr;
+    uint32_t m_jumpDelay = 800;
 };
 
 }

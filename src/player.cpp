@@ -37,6 +37,7 @@ Player::Player(const std::string& frameName)
     : Entity(frameName, SpriteSheetRenderer::SpriteSheetType::Character)
 {
     m_placeableDelayTimer = new Timer();
+    m_jumpTimer = new Timer();
 }
 
 /*
@@ -135,14 +136,18 @@ void Player::jump()
 {
     if (m_body) {
         if (m_canJump) {
-            glm::vec2 fullVector = glm::vec2(0, -1);
-            b2Vec2 currentVelocity = m_body->GetLinearVelocity();
+            if (m_jumpTimer->milliseconds() >= m_jumpDelay) {
+                glm::vec2 fullVector = glm::vec2(0, -1);
+                b2Vec2 currentVelocity = m_body->GetLinearVelocity();
 
-            float velocityChange = fullVector.y;
+                float velocityChange = fullVector.y;
 
-            float impulse = m_body->GetMass() * velocityChange;
+                float impulse = m_body->GetMass() * velocityChange;
 
-            m_body->ApplyLinearImpulse(b2Vec2(0, impulse), m_body->GetWorldCenter());
+                m_body->ApplyLinearImpulse(b2Vec2(0, impulse), m_body->GetWorldCenter());
+
+                m_jumpTimer->reset();
+            }
         }
     }
 }
