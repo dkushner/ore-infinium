@@ -70,7 +70,7 @@ void ContactListener::checkBeginContact(ContactListener::BodyUserData* userData)
     switch (userData->type) {
         case BodyType::PlayerFootSensor: {
             Entities::Player* player = static_cast<Entities::Player*>(userData->data);
-
+            player->setCanJump(true);
             break;
         }
     }
@@ -80,6 +80,8 @@ void ContactListener::checkEndContact(ContactListener::BodyUserData* userData)
 {
     switch (userData->type) {
         case BodyType::PlayerFootSensor:
+            Entities::Player* player = static_cast<Entities::Player*>(userData->data);
+            player->setCanJump(false);
             break;
     }
 }
