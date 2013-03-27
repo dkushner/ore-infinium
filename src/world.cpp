@@ -130,9 +130,37 @@ World::~World()
 
 void World::addPlayer(Entities::Player* player)
 {
+
     m_players.push_back(player);
 
-    if (!m_server) {
+    if (m_server) {
+        Debug::log() << "ADDING PLAYE RPOS X :"  << player->position().x << " Y : " << player->position().y;
+
+        const glm::vec2& playerPosition = player->position();
+
+        //FIXME: this needs improvement. obviously..otherwise it could very easily destroy everything underneath wherever the player left off.
+        //clear an area around the player's rect, of tiles, so he can spawn properly.
+        const int startX = ((playerPosition.x ) / Block::BLOCK_SIZE)- 10;
+        const int endX = startX + 10;
+
+        //columns are our X value, rows the Y
+        const int startY = ((playerPosition.y) / Block::BLOCK_SIZE)- 10;
+        const int endY = startY + 10;
+        int index = 0;
+
+        for (int row = startY; row < endY; ++row) {
+            for (int column = startX; column < endX; ++column) {
+                index = column * WORLD_ROWCOUNT + row;
+                assert(index < WORLD_ROWCOUNT * WORLD_COLUMNCOUNT);
+                Block& block = m_blocks[index];
+                block.primitiveType = Block::BlockType::Stone;
+            }
+        }
+
+        //NOTE: you might be asking, why don't we send a chunk? that's because this happens as soon as the client is validated and its
+        // player is created. therefore the next calls will be sending player info, and then sending the initial world chunk at this player's position.
+
+    } else if (!m_server) {
         m_spriteSheetRenderer->registerSprite(player);
     }
 }
@@ -495,6 +523,7 @@ void World::saveMap()
 void World::loadChunk(Chunk* chunk)
 {
     int sourceIndex = 0;
+    Debug::log() << "LOADING CHUNK, CLIENT: START Y: " << chunk->startY() << " ENDY: " << chunk->endY() << " STARTX: " <<  chunk->startX() << " ENDX: " << chunk->endX();
     for (int row = chunk->startY(); row < chunk->endY(); ++row) {
         for (int column = chunk->startX(); column < chunk->endX(); ++column) {
 

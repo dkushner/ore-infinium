@@ -170,6 +170,7 @@ void Server::processMessage(ENetEvent& event)
         uint32_t result = receiveInitialClientData(&ss, event);
         switch (result) {
         case Packet::ConnectionEventType::None: {
+
             //he's good to go, validation succeeded, tell everyone, including himself that he joined
         for (auto & client : m_clients) {
                 sendInitialPlayerData(client.first, m_clients[event.peer]);
@@ -445,7 +446,7 @@ Entities::Player* Server::createPlayer(const std::string& playerName)
         quickBarInventory->setSlot(i, torch);
     }
 
-    m_world->addPlayer(player);;
+    m_world->addPlayer(player);
 
     ++m_freePlayerID;
 

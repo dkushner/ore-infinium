@@ -662,7 +662,6 @@ void Client::receiveInitialPlayerData(std::stringstream* ss)
         QuickBarInventory* quickBarInventory = new QuickBarInventory();
         m_mainPlayer->setQuickBarInventory(quickBarInventory);
 
-
         chatMessage << m_mainPlayer->name() << " has joined";
         m_chat->addChatLine("", chatMessage.str());
 
