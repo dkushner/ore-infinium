@@ -261,7 +261,7 @@ void DecoratorSpriteSheet::RenderElement(Rocket::Core::Element* element, Rocket:
     glBindBuffer(GL_ARRAY_BUFFER, m_vbo);
     glBufferSubData(
         GL_ARRAY_BUFFER,
-        sizeof(vertices),
+        sizeof(vertices) * 0,
                     sizeof(vertices),
                     vertices);
 
@@ -281,7 +281,7 @@ void DecoratorSpriteSheet::RenderElement(Rocket::Core::Element* element, Rocket:
 
     glDrawElements(
         GL_TRIANGLES,
-        12, // 1 quad
+        6, // 1 quad, 2 tri's
                 GL_UNSIGNED_INT,
                 (const GLvoid*)0);
 
