@@ -249,7 +249,7 @@ void World::render(Entities::Player* player)
     const float halfRadius = radius * 0.5;
     const float halfBlockSize = Block::BLOCK_SIZE * 0.5;
 
-    glm::vec2 topLeftLocalCoordinates = glm::vec2(m_mainPlayer->position().x - 1600 / 2, m_mainPlayer->position().y - 900 / 2);
+    glm::vec2 topLeftLocalCoordinates = glm::vec2(m_mainPlayer->position().x - Settings::instance()->screenResolutionWidth / 2, m_mainPlayer->position().y - Settings::instance()->screenResolutionHeight / 2);
     glm::vec2 transformedMouse = glm::vec2(topLeftLocalCoordinates.x + mouse.x, topLeftLocalCoordinates.y + mouse.y);
     //snap crosshair to the tile grid..the offset is already calculated for us (apparently), so even with per-pixel tilemap scrolling it snaps fine.
     glm::vec2 crosshairPosition(floor(transformedMouse.x / Block::BLOCK_SIZE) * Block::BLOCK_SIZE, floor(transformedMouse.y / Block::BLOCK_SIZE) * Block::BLOCK_SIZE);

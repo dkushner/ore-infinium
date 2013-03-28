@@ -43,23 +43,12 @@ GUI* GUI::instance()
 GUI::GUI()
 {
     Debug::log() << "GUI CTOR HIT!";
-    glEnableClientState(GL_VERTEX_ARRAY);
-    glEnableClientState(GL_COLOR_ARRAY);
-    glEnable(GL_BLEND);
-    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-
-    glMatrixMode(GL_PROJECTION);
-    glLoadIdentity();
-    glOrtho(0, 1600, 900, 0, -1, 1);
-
-    glMatrixMode(GL_MODELVIEW);
-    glLoadIdentity();
 
     m_system = new SystemInterfaceSDL2();
     Rocket::Core::SetSystemInterface(m_system);
 
     m_renderer = new ShellRenderInterfaceOpenGL();
-    m_renderer->SetViewport(1600, 900);
+    m_renderer->SetViewport(Settings::instance()->screenResolutionWidth, Settings::instance()->screenResolutionHeight);
     Rocket::Core::SetRenderInterface(m_renderer);
 
 //   m_fileInterface = new ShellFileInterface("../client/gui/assets");
@@ -68,7 +57,7 @@ GUI::GUI()
     Debug::fatal(Rocket::Core::Initialise(), Debug::Area::Graphics, "rocket init failure");
     Rocket::Controls::Initialise();
 
-    m_context = Rocket::Core::CreateContext("main", Rocket::Core::Vector2i(1600, 900));
+    m_context = Rocket::Core::CreateContext("main", Rocket::Core::Vector2i(Settings::instance()->windowWidth, Settings::instance()->windowHeight));
 
     Rocket::Debugger::Initialise(m_context);
 

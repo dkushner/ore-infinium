@@ -335,7 +335,7 @@ void LightRenderer::initGL()
 
     glGenRenderbuffers(1, &m_rb);
     glBindRenderbuffer(GL_RENDERBUFFER, m_rb);
-    glRenderbufferStorage(GL_RENDERBUFFER, GL_RGBA, 1600, 900);
+    glRenderbufferStorage(GL_RENDERBUFFER, GL_RGBA, Settings::instance()->screenResolutionWidth, Settings::instance()->screenResolutionHeight);
     glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_RENDERBUFFER, m_rb);
 
     GLenum buffers[] = { GL_COLOR_ATTACHMENT0 };
@@ -363,7 +363,7 @@ void LightRenderer::initGL()
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
 
-    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, 1600, 900, 0, GL_RGBA, GL_UNSIGNED_BYTE, nullptr);
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, Settings::instance()->screenResolutionWidth, Settings::instance()->screenResolutionHeight, 0, GL_RGBA, GL_UNSIGNED_BYTE, nullptr);
 
     // Attach the texture to the FBO
     glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, m_fboTexture, 0);
