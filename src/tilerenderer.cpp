@@ -204,6 +204,8 @@ void TileRenderer::render()
             int column = 0;
 
             int blockIndex = currentColumn * WORLD_ROWCOUNT + currentRow;
+            assert(blockIndex > 0);
+            assert(blockIndex < WORLD_ROWCOUNT * WORLD_COLUMNCOUNT);
             Block& block = m_world->m_blocks[blockIndex];
 
             const float tileWidth = 1.0f / float(TILESHEET_WIDTH) * 16.0f;
@@ -300,7 +302,7 @@ void TileRenderer::initGL()
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP);
 
-    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, Settings::instance()->screenResolutionWidth, Settings::instance()->screenResolutionWidth, 0, GL_RGBA, GL_UNSIGNED_BYTE, nullptr);
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, Settings::instance()->screenResolutionWidth, Settings::instance()->screenResolutionHeight, 0, GL_RGBA, GL_UNSIGNED_BYTE, nullptr);
 
     // Attach the texture to the FBO
     glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, m_fboTexture, 0);

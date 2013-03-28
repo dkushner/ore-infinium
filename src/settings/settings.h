@@ -27,11 +27,12 @@ public:
     virtual ~Settings();
 
 public:
-    int screenResolutionWidth = 1024;
-    int screenResolutionHeight = 768;
+    int screenResolutionWidth = 1920;
+    int screenResolutionHeight = 1080;
 
-    int windowWidth = 1920;
-    int windowHeight = 1080;
+    //HACK? Question mark question mark.
+    int windowWidth = screenResolutionWidth;
+    int windowHeight = screenResolutionHeight;
 
     bool debugOutput = true;
     bool debugRendererOutput = false;

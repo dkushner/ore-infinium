@@ -104,7 +104,8 @@ private:
     GLuint m_ebo; // element buffer object
 
     //FIXME: count max tiles to render
-    int m_maxTileCount = 8200;
+    //HACK: GOD AWFUL HACK, count this dynamically...based on how many fit inside our resolution
+    int m_maxTileCount = 8800;
 
     Camera* m_camera = nullptr;
     Entities::Player* m_mainPlayer = nullptr;
