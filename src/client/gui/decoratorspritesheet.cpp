@@ -52,6 +52,10 @@ bool DecoratorSpriteSheet::Initialise()
     m_shader->bindProgram();
 
     m_ortho = glm::ortho(0.0f, float(Settings::instance()->screenResolutionWidth), float(Settings::instance()->screenResolutionHeight), 0.0f, -1.0f, 1.0f);
+    glm::mat4 mvp =  m_ortho;
+
+    int mvpLoc = glGetUniformLocation(m_shader->shaderProgram(), "mvp");
+    glUniformMatrix4fv(mvpLoc, 1, GL_FALSE, &mvp[0][0]);
 
     initGL();
 
@@ -190,22 +194,22 @@ void DecoratorSpriteSheet::RenderElement(Rocket::Core::Element* element, Rocket:
     // vertices that will be uploaded.
     Vertex vertices[4];
 
-    // vertices[n][0] -> X, and [1] -> Y
-    // vertices[0] -> top left
-    // vertices[1] -> bottom left
-    // vertices[2] -> bottom right
-    // vertices[3] -> top right
+    Rocket::Core::Colourb colour = element->GetProperty<Rocket::Core::Colourb>("color");
 
-    glm::vec2 spritePosition = sprite->position();
+    Rocket::Core::Vector2i textureDimensions = GetTexture(image_index)->GetDimensions(element->GetRenderInterface());
 
-    glm::vec2 spriteSize = sprite->size();
-
-    glm::vec4 rect = glm::vec4(spritePosition.x, spritePosition.y, spritePosition.x + spriteSize.x, spritePosition.y + spriteSize.y);
+    glm::vec4 rect = glm::vec4(position.x, position.y, position.x + size.x, position.y + size.y);
 
     float x = rect.x;
     float width = rect.z;
     float y = rect.y;
     float height = rect.w;
+
+    // vertices[n][0] -> X, and [1] -> Y
+    // vertices[0] -> top left
+    // vertices[1] -> bottom left
+    // vertices[2] -> bottom right
+    // vertices[3] -> top right
 
     vertices[0].x = x; // top left X
     vertices[0].y = y; //top left Y
@@ -220,6 +224,7 @@ void DecoratorSpriteSheet::RenderElement(Rocket::Core::Element* element, Rocket:
     vertices[3].y = y; // top right Y
 
     Debug::checkGLError();
+
     // copy color to the buffer
     for (size_t i = 0; i < sizeof(vertices) / sizeof(*vertices); i++) {
         //        *colorp = color.bgra;
@@ -231,16 +236,20 @@ void DecoratorSpriteSheet::RenderElement(Rocket::Core::Element* element, Rocket:
         vertices[i].color = color;
     }
 
-    // copy texcoords to the buffer
-    const float textureWidth = float(frame.width) / float(SPRITESHEET_WIDTH);
-    const float textureHeight = float(frame.height) / float(SPRITESHEET_HEIGHT);
-    const float textureX = float(frame.x) / float(SPRITESHEET_WIDTH);
-    const float textureY = float(frame.y) / float(SPRITESHEET_HEIGHT);
+    const int frameX = element->GetProperty<int>("image-x1");
+    const int frameY = element->GetProperty<int>("image-y1");
+    const int frameWidth = element->GetProperty<int>("image-x2");
+    const int frameHeight = element->GetProperty<int>("image-y2");
+
+    const float textureWidth = float(frameWidth) / float(textureDimensions.x);
+    const float textureHeight = float(frameHeight) / float(textureDimensions.y);
+    const float textureX = float(frameX) / float(textureDimensions.x);
+    const float textureY = float(frameY) / float(textureDimensions.y);
 
     const float spriteLeft = textureX;
     const float spriteRight = spriteLeft + textureWidth;
-    const float spriteTop = 1.0f - (textureY);
-    const float spriteBottom = spriteTop - textureHeight;
+    const float spriteTop = (textureY);
+    const float spriteBottom = textureHeight;
 
     // copy texcoords to the buffer
     vertices[0].u = vertices[1].u = spriteLeft;
@@ -252,11 +261,9 @@ void DecoratorSpriteSheet::RenderElement(Rocket::Core::Element* element, Rocket:
     glBindBuffer(GL_ARRAY_BUFFER, m_vbo);
     glBufferSubData(
         GL_ARRAY_BUFFER,
-        sizeof(vertices) * index,
+        sizeof(vertices),
                     sizeof(vertices),
                     vertices);
-
-    ++index;
 
     ////////////////////////////////FINALLY RENDER IT ALL //////////////////////////////////////////
     glEnable(GL_BLEND);
@@ -274,7 +281,7 @@ void DecoratorSpriteSheet::RenderElement(Rocket::Core::Element* element, Rocket:
 
     glDrawElements(
         GL_TRIANGLES,
-        6 * (1), // 1 quad
+        12, // 1 quad
                 GL_UNSIGNED_INT,
                 (const GLvoid*)0);
 
@@ -286,41 +293,4 @@ void DecoratorSpriteSheet::RenderElement(Rocket::Core::Element* element, Rocket:
     glDisable(GL_BLEND);
 
     Debug::checkGLError();
-
-
-
-    Rocket::Core::Colourb colour = element->GetProperty<Rocket::Core::Colourb>("color");
-
-    const int frameX = element->GetProperty<int>("image-x1");
-    const int frameY = element->GetProperty<int>("image-y1");
-    const int frameWidth = element->GetProperty<int>("image-x2");
-    const int frameHeight = element->GetProperty<int>("image-y2");
-
-    Rocket::Core::Vector2i textureDimensions = GetTexture(image_index)->GetDimensions(element->GetRenderInterface());
-
-    const float textureWidth = float(frameWidth) / float(textureDimensions.x);
-    const float textureHeight = float(frameHeight) / float(textureDimensions.y);
-    const float textureX = float(frameX) / float(textureDimensions.x);
-    const float textureY = float(frameY) / float(textureDimensions.y);
-
-    const float spriteLeft = textureX;
-    const float spriteRight = spriteLeft + textureWidth;
-    const float spriteTop = (textureY);
-    const float spriteBottom = textureHeight;
-
-    glBegin(GL_QUADS);
-
-    glVertex2f(position.x, position.y);
-    glTexCoord2f(spriteLeft, spriteBottom);
-
-    glVertex2f(position.x, position.y + size.y);
-    glTexCoord2f(spriteRight, spriteBottom);
-
-    glVertex2f(position.x + size.x, position.y + size.y);
-    glTexCoord2f(spriteRight, spriteTop);
-
-    glVertex2f(position.x + size.x, position.y);
-    glTexCoord2f(spriteLeft, spriteTop);
-
-    glEnd();
 }

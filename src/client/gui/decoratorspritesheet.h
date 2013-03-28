@@ -85,7 +85,7 @@ private:
     glm::mat4 m_modelMatrix;
     glm::mat4 m_projectionMatrix;
 
-    int m_maxSpriteCount = 2200;
+    int m_maxSpriteCount = 1200;
 
     GLuint m_vao; // vertex array object
     GLuint m_vbo; // vertex buffer object
