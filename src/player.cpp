@@ -96,6 +96,8 @@ void Player::createPhysicsBody(World* world, const glm::vec2& position)
     bodyDef.position.Set(World::pixelsToMeters(position.x), World::pixelsToMeters(position.y));
 
     m_body = world->box2DWorld()->CreateBody(&bodyDef);
+    // sleeping doesn't make sense for a player body.
+    m_body->SetSleepingAllowed(false);
 
     ContactListener::BodyUserData* userData = new ContactListener::BodyUserData();
     userData->type = ContactListener::BodyType::Player;
