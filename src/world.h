@@ -131,6 +131,21 @@ private:
     void attemptItemPrimaryAttack(Entities::Player* player);
 
     /**
+     * Spawns the static tile physics objects (1 phys object per tile) in some area around
+     * the player. Future updates need to call @sa updateTilePhysicsObjects
+     * Should be called when a player spawns/teleports to a new area in the world
+     */
+    void createInitialTilePhysicsObjects(Entities::Player* player);
+
+    /**
+     *
+     * Similar in nature to createInitialTilePhysicsObjects, but this is meant to update ones near the edges of the screen, aka
+     * as the player moves. In other words it creates new ones near the screen and deletes old ones outside of the range of the screen
+     * @sa createInitialTilePhysicsObjects
+     */
+    void updateTilePhysicsObjects(Entities::Player* player);
+
+    /**
      * Finds the position of the top-left corner of screen, in world coordinates (based on player position).
      */
     glm::vec2 topLeftScreenWorldCoordinates(Entities::Player* player);
@@ -149,7 +164,7 @@ private:
     * FIXME: presently only calculates the center of the screen according to resolution.
     * i'm not sure how zooming will be affected with this..i don't *think* it would. but verify
     * if this is ideal or not
-    * NOTE: doesn't *actually* use m_view->getViewport, just a simple Settings::instance()->screenResolutionWidth,H / 2
+    * NOTE: doesn't *actually* use m_camera->getViewport, just a simple Settings::instance()->screenResolutionWidth,H / 2
     */
     glm::vec2 viewportCenter() const;
 

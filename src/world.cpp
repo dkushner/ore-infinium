@@ -126,6 +126,8 @@ World::~World()
     delete m_tileRenderer;
     delete m_spriteSheetRenderer;
     //    delete m_sky;
+
+    delete m_box2DWorld;
 }
 
 void World::addPlayer(Entities::Player* player)
@@ -157,6 +159,8 @@ void World::addPlayer(Entities::Player* player)
             }
         }
 
+        createInitialTilePhysicsObjects(player);
+
         //NOTE: you might be asking, why don't we send a chunk? that's because this happens as soon as the client is validated and its
         // player is created. therefore the next calls will be sending player info, and then sending the initial world chunk at this player's position.
 
@@ -168,6 +172,16 @@ void World::addPlayer(Entities::Player* player)
 void World::removePlayer(Entities::Player* player)
 {
     m_players.remove(player);
+}
+
+void World::createInitialTilePhysicsObjects(Entities::Player* player)
+{
+
+}
+
+void World::updateTilePhysicsObjects(Entities::Player* player)
+{
+
 }
 
 Entities::Player* World::findPlayer(uint32_t playerID)
