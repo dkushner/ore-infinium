@@ -25,8 +25,19 @@ PhysicsDebugRenderer::PhysicsDebugRenderer(Camera* camera)
     m_shader = new Shader("physicsdebugrenderer.vert", "physicsdebugrenderer.frag");
     m_shader->bindProgram();
     setCamera(camera);
+//m_ortho = m_camera->ortho();
 
-    m_ortho = glm::ortho(0.0f, float(PIXELS_PER_METER), float(PIXELS_PER_METER), 0.0f, -1.0f, 1.0f);
+//    glm::vec2 pos = glm::vec2(2500/50, 1492/50);
+//    glm::mat4 viewMatrix;// = m_camera->view();
+//    glm::vec2 position = glm::vec2(round(pos.x), round(pos.y));
+//
+    glm::vec2 halfScreen((Settings::instance()->screenResolutionWidth * 0.5)/50, (Settings::instance()->screenResolutionHeight * 0.5)/50);
+
+//    viewMatrix =  glm::translate(glm::mat4(), glm::vec3(position - halfScreen, 0.0f)) ;
+//    view = glm::scale(view, glm::vec3(50.0f, 50.0f, 1.0f));
+//   m_ortho = glm::ortho(0.0f, float(PIXELS_PER_METER), float(PIXELS_PER_METER), 0.0f, -1.0f, 1.0f);
+//   m_ortho = glm::ortho(0.0f, float(PIXELS_PER_METER), float(PIXELS_PER_METER), 0.0f, -1.0f, 1.0f) * m_camera->view() * glm::scale(m_camera->view(), glm::vec3(1/50.0f, 1/50.0f, 1.0f));
+    m_ortho = glm::scale(m_camera->view(), glm::vec3(-50.0f, -50.0f, 1.0f));
 
     Debug::checkGLError();
     initGL();
@@ -230,7 +241,6 @@ void PhysicsDebugRenderer::DrawSolidCircle(const b2Vec2& center, float32 radius,
     glDrawArrays(GL_TRIANGLE_FAN, 0, vertexCount);
     glColor4f(color.r, color.g, color.b,1);
     glDrawArrays(GL_LINE_LOOP, 0, vertexCount);
-
 
     */
     // Draw the axis line
