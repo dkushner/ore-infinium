@@ -176,7 +176,33 @@ void World::removePlayer(Entities::Player* player)
 
 void World::createInitialTilePhysicsObjects(Entities::Player* player)
 {
+    glm::vec2 position = player->position();
 
+    b2Body* body = nullptr;
+
+    //create dynamic body
+    b2BodyDef bodyDef;
+    bodyDef.type = b2_dynamicBody;
+    //        bodyDef.position.Set(pixelsToMeters(200), -pixelsToMeters(100));
+    bodyDef.position.Set(World::pixelsToMeters(position.x - 100), World::pixelsToMeters(position.y - 100));
+
+    body = m_box2DWorld->CreateBody(&bodyDef);
+
+    ContactListener::BodyUserData* userData = new ContactListener::BodyUserData();
+    userData->type = ContactListener::BodyType::Block;
+    //userData->data = m_blocks ...FIXME
+    body->SetUserData(userData);
+    body->SetType(b2BodyType::b2_staticBody);
+    b2PolygonShape dynamicBox;
+    dynamicBox.SetAsBox(World::pixelsToMeters(16.0f), World::pixelsToMeters(16.0f));
+
+    // create main body's fixture
+    b2FixtureDef fixtureDef;
+    fixtureDef.shape = &dynamicBox;
+    fixtureDef.density = 1.0f;
+    fixtureDef.friction = 1.0f;
+
+    body->CreateFixture(&fixtureDef);
 }
 
 void World::updateTilePhysicsObjects(Entities::Player* player)

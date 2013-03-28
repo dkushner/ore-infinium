@@ -87,7 +87,6 @@ void Player::handleEvent(const SDL_Event& event)
 
 void Player::createPhysicsBody(World* world, const glm::vec2& position)
 {
-    Entity::createPhysicsBody(world, position);
 
     //create dynamic body
     b2BodyDef bodyDef;

@@ -35,7 +35,8 @@ public:
     enum BodyType {
         Invalid = -1,
         Player = 0,
-        PlayerFootSensor = 1
+        PlayerFootSensor = 1,
+        Block
     };
 
     struct BodyUserData {
