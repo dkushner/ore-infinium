@@ -53,17 +53,18 @@ public:
     static constexpr unsigned char BLOCK_SIZE = 16;
 
     struct BlockStruct {
-        BlockStruct(const char *_texture, bool _collides) {
-            texture = _texture;
+        BlockStruct(bool _collides, uint8_t _row, uint8_t _column) {
             collides = _collides;
+            row = _row;
+            column = _column;
         };
-        const char* texture;
+
+        uint8_t row;
+        uint8_t column;
 
         // I thought about using flags..but this seems better, save for the might-be-fucking-huge-constructor
         // this will be useful for TODO: blocks that hurt or help the player's health, etc. (lava), liquids of types, etc.
         bool collides : 1;
-
-        //TODO: animations..array of textures for animation..for destroying and other shit
     };
 
     static std::map<BlockType, BlockStruct> blockTypeMap;

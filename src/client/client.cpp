@@ -341,11 +341,11 @@ void Client::handleInputEvents()
             } else if (event.key.keysym.sym == SDLK_EQUALS) {
                 if (m_world) {
                     //FIXME: do i even want zooming? it means a fuckton more work on the handling of just about everything
-                    // m_world->zoomIn();
+                     m_world->zoomIn();
                 }
             } else if (event.key.keysym.sym == SDLK_MINUS) {
                 if (m_world) {
-                    // m_world->zoomOut();
+                     m_world->zoomOut();
                 }
             }
             break;
