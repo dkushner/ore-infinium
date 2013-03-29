@@ -182,7 +182,7 @@ void Client::initSDL()
 
     glClearColor(0.f, .5f, 0.f, 1.0f);
 
-    glViewport(0, 0, Settings::instance()->screenResolutionWidth, Settings::instance()->screenResolutionHeight);
+    glViewport(0, 0, Settings::instance()->windowWidth, Settings::instance()->windowHeight);
 
     Debug::checkGLError();
 }
