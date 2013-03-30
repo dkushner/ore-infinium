@@ -287,7 +287,7 @@ void World::update(double elapsedTime)
     //    m_sky->update(elapsedTime);
 
     //NOTE: players are not exactly considered entities. they are, but they aren't
-    for (Entity * currentEntity : m_entities) {
+for (Entity * currentEntity : m_entities) {
         currentEntity->update(elapsedTime, this);
         if (m_server) {
             if (currentEntity->dirtyFlags() & Entity::DirtyFlags::PositionDirty) {
@@ -297,7 +297,7 @@ void World::update(double elapsedTime)
         }
     }
 
-    for (Entities::Player * player : m_players) {
+for (Entities::Player * player : m_players) {
         player->update(elapsedTime, this);
 
         if (m_server) {

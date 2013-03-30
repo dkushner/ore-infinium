@@ -31,11 +31,11 @@ void Block::update()
 
 }
 
-std::map<Block::BlockType, Block::BlockStruct> Block::blockTypeMap = {
-    { BlockType::Null, BlockStruct(false, 0, 0) },
-    { BlockType::Dirt, BlockStruct(true, 0, 1) },
-    { BlockType::Stone, BlockStruct(true, 0, 2) },
-    { BlockType::Copper, BlockStruct(true, 0, 3) }
+std::map<uint8_t, Block::BlockStruct> Block::blockTypeMap = {
+    { BlockType::Null, BlockStruct("../textures/null.png", false) },
+    { BlockType::Dirt, BlockStruct("../textures/dirt.png", true) },
+    { BlockType::Stone, BlockStruct("../textures/stone.png", true) },
+    { BlockType::Copper, BlockStruct("../textures/copper.png", true) }
 };
 
 std::map<uint8_t, uint8_t> Block::tileMeshingTable = {

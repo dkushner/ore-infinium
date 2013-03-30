@@ -42,8 +42,6 @@ TileRenderer::TileRenderer(World* world, Camera* camera, Entities::Player* mainP
 
     initGL();
 
-    m_spriteSheetImage = new Image("../textures/tiles.png");
-
     glGenTextures(1, &m_tileMapTexture);
     glBindTexture(GL_TEXTURE_2D_ARRAY, m_tileMapTexture);
 
@@ -61,10 +59,14 @@ TileRenderer::TileRenderer(World* world, Camera* camera, Entities::Player* mainP
 
     const GLint xoffset = 0;
     const GLint yoffset = 0;
-    const GLint zoffset = m_tileSheetCount;
     const GLsizei depth = 1;
 
-    glTexSubImage3D(GL_TEXTURE_2D_ARRAY, level, xoffset, yoffset, zoffset, 16, 16, depth, GL_BGRA, GL_UNSIGNED_BYTE, m_spriteSheetImage->bytes());
+    for (int i = 0; i < Block::blockTypeMap.size(); ++i) {
+        Debug::log() << "LOADING TILEMAP TEX: " << Block::blockTypeMap.at(i).texture;
+        Image image(Block::blockTypeMap.at(i).texture);
+
+        glTexSubImage3D(GL_TEXTURE_2D_ARRAY, level, xoffset, yoffset, i, 16, 16, depth, GL_BGRA, GL_UNSIGNED_BYTE, image.bytes());
+    }
 }
 
 TileRenderer::~TileRenderer()
@@ -191,11 +193,11 @@ void TileRenderer::render()
             assert(blockIndex < WORLD_ROWCOUNT * WORLD_COLUMNCOUNT);
             Block& block = m_world->m_blocks[blockIndex];
 
-            const float tileWidth = 1.0f / float(m_spriteSheetImage->width()) * 16.0f;
-            const float tileHeight = 1.0f / float(m_spriteSheetImage->height()) * 16.0f;
+            const float tileWidth = 1.0f / float(Block::BLOCK_SIZE) * 16.0f;
+            const float tileHeight = 1.0f / float(Block::BLOCK_SIZE) * 16.0f;
 
-            float xPadding = 1.0f / float(m_spriteSheetImage->width()) * 1.0f * (float(column) + 1.0);
-            float yPadding = 1.0f / float(m_spriteSheetImage->height()) * 1.0f * (float(row) + 1.0);
+            float xPadding = 1.0f / float(Block::BLOCK_SIZE) * 1.0f * (float(column) + 1.0);
+            float yPadding = 1.0f / float(Block::BLOCK_SIZE) * 1.0f * (float(row) + 1.0);
 
             const float tileLeft = (column *  tileWidth) + xPadding;
             const float tileRight = tileLeft + tileWidth;

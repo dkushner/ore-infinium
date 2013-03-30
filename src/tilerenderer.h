@@ -82,7 +82,6 @@ private:
     GLint m_texture_location;
 
     GLuint m_spriteSheetTexture = 0;
-    Image* m_spriteSheetImage = nullptr;
 
     GLuint m_fbo = 0;
     GLuint m_fboTexture = 0;
