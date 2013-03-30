@@ -42,7 +42,29 @@ TileRenderer::TileRenderer(World* world, Camera* camera, Entities::Player* mainP
 
     initGL();
 
-    loadTileSheets();
+    m_spriteSheetImage = new Image("../textures/tiles.png");
+
+    glGenTextures(1, &m_tileMapTexture);
+    glBindTexture(GL_TEXTURE_2D_ARRAY, m_tileMapTexture);
+
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_BASE_LEVEL, 0);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAX_LEVEL, 0);
+    glTexParameteri(GL_TEXTURE_2D_ARRAY, GL_TEXTURE_BASE_LEVEL, 0);
+    glTexParameteri(GL_TEXTURE_2D_ARRAY, GL_TEXTURE_MAX_LEVEL, 0);
+    glTexParameteri(GL_TEXTURE_2D_ARRAY, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+    glTexParameteri(GL_TEXTURE_2D_ARRAY, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+    glTexParameteri(GL_TEXTURE_2D_ARRAY, GL_TEXTURE_WRAP_S, GL_CLAMP);
+    glTexParameteri(GL_TEXTURE_2D_ARRAY, GL_TEXTURE_WRAP_T, GL_CLAMP);
+
+    const GLint level = 0;
+    glTexImage3D(GL_TEXTURE_2D_ARRAY, level, GL_RGBA, 16, 16, Block::blockTypeMap.size(), 0, GL_RGBA, GL_UNSIGNED_BYTE, 0 /* if it's null it tells GL we will send in 2D images as elements one by one, later */);
+
+    const GLint xoffset = 0;
+    const GLint yoffset = 0;
+    const GLint zoffset = m_tileSheetCount;
+    const GLsizei depth = 1;
+
+    glTexSubImage3D(GL_TEXTURE_2D_ARRAY, level, xoffset, yoffset, zoffset, 16, 16, depth, GL_BGRA, GL_UNSIGNED_BYTE, m_spriteSheetImage->bytes());
 }
 
 TileRenderer::~TileRenderer()
@@ -62,45 +84,6 @@ void TileRenderer::setCamera(Camera* camera)
 void TileRenderer::setRenderingEnabled(bool enabled)
 {
     m_renderingEnabled = enabled;
-}
-
-void TileRenderer::loadTileSheets()
-{
-    glGenTextures(1, &m_tileMapTexture);
-    glBindTexture(GL_TEXTURE_2D_ARRAY, m_tileMapTexture);
-
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_BASE_LEVEL, 0);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAX_LEVEL, 0);
-    glTexParameteri(GL_TEXTURE_2D_ARRAY, GL_TEXTURE_BASE_LEVEL, 0);
-    glTexParameteri(GL_TEXTURE_2D_ARRAY, GL_TEXTURE_MAX_LEVEL, 0);
-    glTexParameteri(GL_TEXTURE_2D_ARRAY, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
-    glTexParameteri(GL_TEXTURE_2D_ARRAY, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
-    glTexParameteri(GL_TEXTURE_2D_ARRAY, GL_TEXTURE_WRAP_S, GL_CLAMP);
-    glTexParameteri(GL_TEXTURE_2D_ARRAY, GL_TEXTURE_WRAP_T, GL_CLAMP);
-
-    const GLint level = 0;
-    glTexImage3D(GL_TEXTURE_2D_ARRAY, level, GL_RGBA, TILESHEET_WIDTH, TILESHEET_HEIGHT, Block::blockTypeMap.size(), 0, GL_RGBA, GL_UNSIGNED_BYTE, 0 /* if it's null it tells GL we will send in 2D images as elements one by one, later */);
-
-for (auto & tile : Block::blockTypeMap) {
-        loadTileSheet(tile.second.texture, tile.first);
-    }
-}
-
-void TileRenderer::loadTileSheet(const std::string& fileName, Block::BlockType type)
-{
-    Image* image = new Image(Block::blockTypeMap.at(type).texture);
-
-    const GLint level = 0;
-    const GLint xoffset = 0;
-    const GLint yoffset = 0;
-    const GLint zoffset = m_tileSheetCount;
-    const GLsizei depth = 1;
-
-    glTexSubImage3D(GL_TEXTURE_2D_ARRAY, level, xoffset, yoffset, zoffset, TILESHEET_WIDTH, TILESHEET_HEIGHT, depth, GL_BGRA, GL_UNSIGNED_BYTE, image->bytes());
-
-    m_tileSheets[type] = image;
-
-    ++m_tileSheetCount;
 }
 
 GLuint TileRenderer::fboTexture()
@@ -208,11 +191,11 @@ void TileRenderer::render()
             assert(blockIndex < WORLD_ROWCOUNT * WORLD_COLUMNCOUNT);
             Block& block = m_world->m_blocks[blockIndex];
 
-            const float tileWidth = 1.0f / float(TILESHEET_WIDTH) * 16.0f;
-            const float tileHeight = 1.0f / float(TILESHEET_HEIGHT) * 16.0f;
+            const float tileWidth = 1.0f / float(m_spriteSheetImage->width()) * 16.0f;
+            const float tileHeight = 1.0f / float(m_spriteSheetImage->height()) * 16.0f;
 
-            float xPadding = 1.0f / float(TILESHEET_WIDTH) * 1.0f * (float(column) + 1.0);
-            float yPadding = 1.0f / float(TILESHEET_HEIGHT) * 1.0f * (float(row) + 1.0);
+            float xPadding = 1.0f / float(m_spriteSheetImage->width()) * 1.0f * (float(column) + 1.0);
+            float yPadding = 1.0f / float(m_spriteSheetImage->height()) * 1.0f * (float(row) + 1.0);
 
             const float tileLeft = (column *  tileWidth) + xPadding;
             const float tileRight = tileLeft + tileWidth;

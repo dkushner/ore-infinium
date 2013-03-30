@@ -30,6 +30,7 @@
 #include <string>
 #include <vector>
 
+class Image;
 namespace Entities {
     class Player;
 }
@@ -71,22 +72,7 @@ private:
         float u, v, w;
     };
 
-    GLsizei TILESHEET_WIDTH = 256;
-    GLsizei TILESHEET_HEIGHT = 32;
-
-    void loadTileSheets();
-    void loadTileSheet(const std::string& fileName, Block::BlockType type);
-
     void initGL();
-
-//    std::map<SpriteSheetType, SpriteSheet> m_spriteSheetTextures;
-
-    /**
-     * Map containing all the sprite frame names and their properties for this
-     * particular spritesheet. e.g. x, y, width, height.
-     */
-//    std::map<std::string, SpriteFrameIdentifier> m_spriteSheetCharactersDescription;
-    std::map<Block::BlockType, Image*> m_tileSheets;
 
     bool m_renderingEnabled = true;
 
@@ -94,6 +80,9 @@ private:
     int m_tileSheetCount = 0;
     GLuint m_tileMapTexture;
     GLint m_texture_location;
+
+    GLuint m_spriteSheetTexture = 0;
+    Image* m_spriteSheetImage = nullptr;
 
     GLuint m_fbo = 0;
     GLuint m_fboTexture = 0;
