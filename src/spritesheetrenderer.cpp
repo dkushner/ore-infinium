@@ -196,7 +196,7 @@ void SpriteSheetRenderer::renderCharacters()
 
     int index = 0;
 
-for (Sprite * sprite: m_characterSprites) {
+    for (Sprite * sprite : m_characterSprites) {
         auto frameIdentifier = m_spriteSheetCharactersDescription.find(sprite->frameName());
         Debug::fatal(frameIdentifier != m_spriteSheetCharactersDescription.end(), Debug::Area::Graphics, "sprite sheet character frame description could not be located, name: " + sprite->frameName());
 
@@ -313,7 +313,7 @@ void SpriteSheetRenderer::renderEntities()
     Debug::checkGLError();
 
     int index = 0;
-for (Sprite * sprite: m_entitySprites) {
+    for (Sprite * sprite : m_entitySprites) {
         auto frameIdentifier = m_spriteSheetEntitiesDescription.find(sprite->frameName());
         Debug::fatal(frameIdentifier != m_spriteSheetEntitiesDescription.end(), Debug::Area::Graphics, "sprite sheet entity frame description could not be located framename: " + sprite->frameName());
 
@@ -332,7 +332,7 @@ for (Sprite * sprite: m_entitySprites) {
 
         glm::vec2 spriteSize = sprite->size();
 
-        glm::vec4 rect = glm::vec4(round(spritePosition.x), round(spritePosition.y),round(spritePosition.x + spriteSize.x),round(spritePosition.y + spriteSize.y));
+        glm::vec4 rect = glm::vec4(round(spritePosition.x), round(spritePosition.y), round(spritePosition.x + spriteSize.x), round(spritePosition.y + spriteSize.y));
 
         float x = rect.x;
         float width = rect.z;

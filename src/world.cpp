@@ -108,7 +108,7 @@ World::World(Entities::Player* mainPlayer, Client* client, Server* server)
         groundBody->CreateFixture(&groundBox, 0.0f);
 
         if (m_server->client()) {
-           m_server->client()->setBox2DWorld(m_box2DWorld);
+            m_server->client()->setBox2DWorld(m_box2DWorld);
         }
 
         loadMap();
@@ -142,7 +142,7 @@ void World::addPlayer(Entities::Player* player)
 
         //FIXME: HACK: this needs improvement. obviously..otherwise it could very easily destroy everything underneath wherever the player left off.
         //clear an area around the player's rect, of tiles, so he can spawn properly.
-        const int startX = ((playerPosition.x ) / Block::BLOCK_SIZE) - 5;
+        const int startX = ((playerPosition.x) / Block::BLOCK_SIZE) - 5;
         const int endX = startX + 10;
 
         //columns are our X value, rows the Y
@@ -212,7 +212,7 @@ void World::updateTilePhysicsObjects(Entities::Player* player)
 
 Entities::Player* World::findPlayer(uint32_t playerID)
 {
-for (auto * player : m_players) {
+    for (auto * player : m_players) {
         if (player->playerID() == playerID) {
             return player;
         }
@@ -276,7 +276,7 @@ float World::pixelsToMeters(float pixels)
 void World::update(double elapsedTime)
 {
     if (m_server) {
-    for (auto * player : m_players) {
+        for (auto * player : m_players) {
             if (player->mouseLeftButtonHeld()) {
 
                 handlePlayerLeftMouse(player);
@@ -284,10 +284,13 @@ void World::update(double elapsedTime)
         }
     }
 
+    for (int i = 0; i < 2; ++i) {
+
+    }
     //    m_sky->update(elapsedTime);
 
     //NOTE: players are not exactly considered entities. they are, but they aren't
-for (Entity * currentEntity : m_entities) {
+    for (Entity * currentEntity : m_entities) {
         currentEntity->update(elapsedTime, this);
         if (m_server) {
             if (currentEntity->dirtyFlags() & Entity::DirtyFlags::PositionDirty) {
@@ -297,7 +300,7 @@ for (Entity * currentEntity : m_entities) {
         }
     }
 
-for (Entities::Player * player : m_players) {
+    for (Entities::Player * player : m_players) {
         player->update(elapsedTime, this);
 
         if (m_server) {
@@ -683,25 +686,25 @@ void World::attemptItemPlacement(Entities::Player* player)
     item->setPosition(position);
 
     switch (item->type()) {
-        case Item::ItemType::Torch: {
-            Torch* torch = dynamic_cast<Torch*>(item);
+    case Item::ItemType::Torch: {
+        Torch* torch = dynamic_cast<Torch*>(item);
 
-            torch->dropStack(1);
+        torch->dropStack(1);
 
-            Torch* newTorch = dynamic_cast<Torch*>(torch->duplicate());
-            newTorch->setStackSize(1);
-            m_torches.push_back(newTorch);
+        Torch* newTorch = dynamic_cast<Torch*>(torch->duplicate());
+        newTorch->setStackSize(1);
+        m_torches.push_back(newTorch);
 
-            //send the new inventory item count to this player's client.
-            m_server->sendQuickBarInventoryItemCountChanged(player, inventory->equippedIndex(), torch->stackSize());
-            m_server->sendItemSpawned(newTorch);
+        //send the new inventory item count to this player's client.
+        m_server->sendQuickBarInventoryItemCountChanged(player, inventory->equippedIndex(), torch->stackSize());
+        m_server->sendItemSpawned(newTorch);
 
-            if (torch->stackSize() == 0) {
-                //remove it from *our* inventory. the client has already done so.
-                player->quickBarInventory()->deleteItem(inventory->equippedIndex());
-            }
-            break;
+        if (torch->stackSize() == 0) {
+            //remove it from *our* inventory. the client has already done so.
+            player->quickBarInventory()->deleteItem(inventory->equippedIndex());
         }
+        break;
+    }
     }
 }
 
@@ -713,18 +716,18 @@ void World::attemptItemPrimaryAttack(Entities::Player* player)
 void World::spawnItem(Item* item)
 {
     switch (item->type()) {
-        case Item::ItemType::Torch: {
-            Torch* torch = dynamic_cast<Torch*>(item);
+    case Item::ItemType::Torch: {
+        Torch* torch = dynamic_cast<Torch*>(item);
 
-            //FIXME: HACK;
-            m_torches.push_back(torch);
-            break;
-        }
+        //FIXME: HACK;
+        m_torches.push_back(torch);
+        break;
+    }
 
-        case Item::ItemType::Block: {
+    case Item::ItemType::Block: {
 
-            break;
-        }
+        break;
+    }
     }
 
     m_spriteSheetRenderer->registerSprite(item);

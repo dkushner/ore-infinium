@@ -192,7 +192,7 @@ vector<Entity*> QuadTree::retrieve(vector<Entity*> returnObjects, Entity* entity
         nodes[index]->retrieve(returnObjects, entity);
     }
 
-for (Entity * currentEntity : m_entities) {
+    for (Entity * currentEntity : m_entities) {
         returnObjects.push_back(currentEntity);
     }
 

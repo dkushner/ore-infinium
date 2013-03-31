@@ -29,7 +29,8 @@ class QuickBarInventory;
 class Camera;
 class World;
 
-namespace Entities {
+namespace Entities
+{
 class Player : public Entity
 {
 public:

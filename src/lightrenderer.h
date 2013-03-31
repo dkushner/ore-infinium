@@ -30,8 +30,9 @@
 #include <string>
 #include <vector>
 
-namespace Entities {
-    class Player;
+namespace Entities
+{
+class Player;
 }
 
 class Camera;

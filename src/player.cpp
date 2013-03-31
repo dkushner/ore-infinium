@@ -31,7 +31,8 @@
 #include <Box2D/Dynamics/b2Body.h>
 #include <Box2D/Dynamics/Contacts/b2Contact.h>
 
-namespace Entities {
+namespace Entities
+{
 
 Player::Player(const std::string& frameName)
     : Entity(frameName, SpriteSheetRenderer::SpriteSheetType::Character)
@@ -198,7 +199,7 @@ bool Player::canPlaceItem()
 {
     if (m_placeableDelayTimer->milliseconds() >= m_placeableDelay) {
         //player has been forced to wait this long before he can place an item again, so now it's okay to do.
-       return true;
+        return true;
     }
 
     return false;

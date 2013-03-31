@@ -31,7 +31,7 @@ PhysicsDebugRenderer::PhysicsDebugRenderer(Camera* camera)
 //    glm::mat4 viewMatrix;// = m_camera->view();
 //    glm::vec2 position = glm::vec2(round(pos.x), round(pos.y));
 //
-    glm::vec2 halfScreen((Settings::instance()->screenResolutionWidth * 0.5)/50, (Settings::instance()->screenResolutionHeight * 0.5)/50);
+    glm::vec2 halfScreen((Settings::instance()->screenResolutionWidth * 0.5) / 50, (Settings::instance()->screenResolutionHeight * 0.5) / 50);
 
 //    viewMatrix =  glm::translate(glm::mat4(), glm::vec3(position - halfScreen, 0.0f)) ;
 //    view = glm::scale(view, glm::vec3(50.0f, 50.0f, 1.0f));
@@ -101,15 +101,15 @@ void PhysicsDebugRenderer::DrawPolygon(const b2Vec2* vertices, int32 vertexCount
         GL_FLOAT,
         GL_FALSE,
         sizeof(b2Vec2),
-                          (const GLvoid*)0
+        (const GLvoid*)0
     );
 
     // finally upload everything to the actual vbo
     glBufferData(
         GL_ARRAY_BUFFER,
         sizeof(b2Vec2) * vertexCount,
-                 verts.data(),
-                 GL_DYNAMIC_DRAW
+        verts.data(),
+        GL_DYNAMIC_DRAW
     );
 
     ////////////////////////////////FINALLY RENDER IT ALL //////////////////////////////////////////
@@ -164,15 +164,15 @@ void PhysicsDebugRenderer::DrawSolidPolygon(const b2Vec2* vertices, int32 vertex
         GL_FLOAT,
         GL_FALSE,
         sizeof(b2Vec2),
-                        (const GLvoid*)0
+        (const GLvoid*)0
     );
 
     // finally upload everything to the actual vbo
     glBufferData(
         GL_ARRAY_BUFFER,
         sizeof(b2Vec2) * vertexCount,
-                verts.data(),
-                GL_DYNAMIC_DRAW
+        verts.data(),
+        GL_DYNAMIC_DRAW
     );
 
     ////////////////////////////////FINALLY RENDER IT ALL //////////////////////////////////////////
@@ -244,7 +244,7 @@ void PhysicsDebugRenderer::DrawSolidCircle(const b2Vec2& center, float32 radius,
 
     */
     // Draw the axis line
-    DrawSegment(center,center+radius*axis,color);
+    DrawSegment(center, center + radius * axis, color);
 }
 
 void PhysicsDebugRenderer::DrawSegment(const b2Vec2& p1, const b2Vec2& p2, const b2Color& color)
@@ -278,15 +278,15 @@ void PhysicsDebugRenderer::DrawSegment(const b2Vec2& p1, const b2Vec2& p2, const
         GL_FLOAT,
         GL_FALSE,
         sizeof(b2Vec2),
-                          (const GLvoid*)0
+        (const GLvoid*)0
     );
 
     // finally upload everything to the actual vbo
     glBufferData(
         GL_ARRAY_BUFFER,
         sizeof(b2Vec2) * 2,
-                 verts.data(),
-                 GL_DYNAMIC_DRAW
+        verts.data(),
+        GL_DYNAMIC_DRAW
     );
 
     ////////////////////////////////FINALLY RENDER IT ALL //////////////////////////////////////////
@@ -314,10 +314,10 @@ void PhysicsDebugRenderer::DrawTransform(const b2Transform& xf)
     b2Vec2 p1 = xf.p, p2;
     const float32 k_axisScale = 0.4f;
     p2 = p1 + k_axisScale * xf.q.GetXAxis();
-    DrawSegment(p1,p2,b2Color(1,0,0));
+    DrawSegment(p1, p2, b2Color(1, 0, 0));
 
     p2 = p1 + k_axisScale * xf.q.GetYAxis();
-    DrawSegment(p1,p2,b2Color(0,1,0));
+    DrawSegment(p1, p2, b2Color(0, 1, 0));
 }
 
 void PhysicsDebugRenderer::render()

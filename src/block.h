@@ -36,8 +36,7 @@ public:
      * Determines the health and texture of the Block.
      * NOTE: MUST be in sync with index of m_blockTextures
      */
-    enum BlockType
-    {
+    enum BlockType {
         Null = 0,
         Dirt,
         Stone,

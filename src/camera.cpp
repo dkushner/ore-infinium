@@ -83,7 +83,7 @@ void Camera::pushMatrix()
 {
     Debug::assertf(m_shaders.size() > 0, "no shader to push the camera matrix too. This is INVALID");
 
-    for (auto* shader : m_shaders) {
+    for (auto * shader : m_shaders) {
         shader->bindProgram();
 
         glm::mat4 mvp =  m_orthoMatrix * m_viewMatrix;

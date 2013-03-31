@@ -69,7 +69,7 @@ void ChatDialog::reloadChatHistory()
 {
     std::stringstream ss;
 
-for (auto & currentLine : m_chatHistory) {
+    for (auto & currentLine : m_chatHistory) {
         ss << currentLine;
     }
     m_tabSet->GetElementById("panel1")->SetInnerRML(ss.str().c_str());

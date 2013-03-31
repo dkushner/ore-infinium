@@ -72,7 +72,7 @@ int SystemInterfaceSDL2::TranslateMouseButton(Uint8 button)
     case 3: //right
         return 2;
 
-    //unhandled.
+        //unhandled.
     default:
         return -1;
     }

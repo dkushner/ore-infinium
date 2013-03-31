@@ -44,7 +44,9 @@ public:
 
     static constexpr int MAXPLAYERS = 8;
 
-    Client* client() { return m_client; }
+    Client* client() {
+        return m_client;
+    }
 
     /**
      * Broadcast to clients that this player's position has changed

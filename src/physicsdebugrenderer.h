@@ -28,7 +28,8 @@
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/swizzle.hpp>
 
-class PhysicsDebugRenderer : public b2Draw {
+class PhysicsDebugRenderer : public b2Draw
+{
 public:
     PhysicsDebugRenderer(Camera* camera);
     virtual ~PhysicsDebugRenderer();

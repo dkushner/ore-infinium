@@ -94,24 +94,24 @@ void ShellRenderInterfaceOpenGL::SetViewport(int width, int height)
 // Called by Rocket when it wants to render geometry that it does not wish to optimise.
 void ShellRenderInterfaceOpenGL::RenderGeometry(Rocket::Core::Vertex* vertices, int num_vertices, int* indices, int num_indices, const Rocket::Core::TextureHandle texture, const Rocket::Core::Vector2f& translation)
 {
-   glActiveTexture(GL_TEXTURE0);
+    glActiveTexture(GL_TEXTURE0);
 
-   if (!texture) {
-       glBindTexture(GL_TEXTURE_2D, m_whiteTexture);
-   } else {
+    if (!texture) {
+        glBindTexture(GL_TEXTURE_2D, m_whiteTexture);
+    } else {
         glBindTexture(GL_TEXTURE_2D, GLuint(texture));
-   }
+    }
 
-   m_shader->bindProgram();
+    m_shader->bindProgram();
 
-   glm::mat4 view =  glm::translate(glm::mat4(), glm::vec3(translation.x, translation.y, 0.0f));
+    glm::mat4 view =  glm::translate(glm::mat4(), glm::vec3(translation.x, translation.y, 0.0f));
 
-   glm::mat4 mvp =  m_ortho * view;
+    glm::mat4 mvp =  m_ortho * view;
 
-   int mvpLoc = glGetUniformLocation(m_shader->shaderProgram(), "mvp");
-   glUniformMatrix4fv(mvpLoc, 1, GL_FALSE, &mvp[0][0]);
+    int mvpLoc = glGetUniformLocation(m_shader->shaderProgram(), "mvp");
+    glUniformMatrix4fv(mvpLoc, 1, GL_FALSE, &mvp[0][0]);
 
-   glBindVertexArray(m_vao);
+    glBindVertexArray(m_vao);
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_ebo);
     glBindBuffer(GL_ARRAY_BUFFER, m_vbo);
     // vertices that will be uploaded.
@@ -128,7 +128,7 @@ void ShellRenderInterfaceOpenGL::RenderGeometry(Rocket::Core::Vertex* vertices, 
         (const GLvoid*)buffer_offset
     );
 
-    buffer_offset += sizeof(f32)*2;
+    buffer_offset += sizeof(f32) * 2;
 
     GLint color_attrib = glGetAttribLocation(m_shader->shaderProgram(), "color");
 
@@ -156,38 +156,38 @@ void ShellRenderInterfaceOpenGL::RenderGeometry(Rocket::Core::Vertex* vertices, 
 
     glBufferData(
         GL_ELEMENT_ARRAY_BUFFER,
-        num_indices*sizeof(indices),
-                    indices,
-                    GL_DYNAMIC_DRAW
+        num_indices * sizeof(indices),
+        indices,
+        GL_DYNAMIC_DRAW
     );
 
     // finally upload everything to the actual vbo
     glBufferData(
         GL_ARRAY_BUFFER,
         sizeof(Rocket::Core::Vertex) * num_vertices,
-                    vertices,
-                    GL_DYNAMIC_DRAW
+        vertices,
+        GL_DYNAMIC_DRAW
     );
 
-   ////////////////////////////////FINALLY RENDER IT ALL //////////////////////////////////////////
-   glEnable(GL_BLEND);
-   glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+    ////////////////////////////////FINALLY RENDER IT ALL //////////////////////////////////////////
+    glEnable(GL_BLEND);
+    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
-   m_shader->bindProgram();
+    m_shader->bindProgram();
 
-   glDrawElements(
+    glDrawElements(
         GL_TRIANGLES,
         num_indices,
         GL_UNSIGNED_INT,
         (const GLvoid*)0
     );
 
-   m_shader->unbindProgram();
-   glBindVertexArray(0);
-   glBindBuffer(GL_ARRAY_BUFFER, 0);
-   glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
+    m_shader->unbindProgram();
+    glBindVertexArray(0);
+    glBindBuffer(GL_ARRAY_BUFFER, 0);
+    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
 
-   glDisable(GL_BLEND);
+    glDisable(GL_BLEND);
 }
 
 // Called by Rocket when it wants to compile geometry it believes will be static for the forseeable future.

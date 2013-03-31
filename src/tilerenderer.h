@@ -31,8 +31,9 @@
 #include <vector>
 
 class Image;
-namespace Entities {
-    class Player;
+namespace Entities
+{
+class Player;
 }
 
 class Camera;
@@ -53,7 +54,9 @@ public:
     void setCamera(Camera* camera);
 
     void setRenderingEnabled(bool enabled);
-    bool renderingEnabled() { return m_renderingEnabled; }
+    bool renderingEnabled() {
+        return m_renderingEnabled;
+    }
 
 private:
     typedef uint32_t u32;

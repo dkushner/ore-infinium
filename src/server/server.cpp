@@ -82,15 +82,14 @@ void Server::tick()
         std::chrono::system_clock::time_point newTime = std::chrono::high_resolution_clock::now();
         double frameTime = std::chrono::duration_cast<std::chrono::duration<double, std::milli> >(newTime - currentTime).count();
 
-        if ( frameTime > (1.0/15.0) * 1000.0) {
-            frameTime = (1.0/15.0) * 1000.0;   // note: max frame time to avoid spiral of death
+        if (frameTime > (1.0 / 15.0) * 1000.0) {
+            frameTime = (1.0 / 15.0) * 1000.0; // note: max frame time to avoid spiral of death
         }
         currentTime = newTime;
 
         accumulator += frameTime;
 
-        while ( accumulator >= dt )
-        {
+        while (accumulator >= dt) {
             m_world->update(dt);
 
             t += dt;
@@ -102,7 +101,7 @@ void Server::tick()
         poll();
         // do network shit
         // sleep so we don't burn cpu
-        std::chrono::milliseconds timeUntilNextFrame(int( dt - accumulator));
+        std::chrono::milliseconds timeUntilNextFrame(int(dt - accumulator));
         std::this_thread::sleep_for(timeUntilNextFrame);
     }
 }
@@ -135,7 +134,7 @@ void Server::poll()
         case ENET_EVENT_TYPE_DISCONNECT: {
             Debug::log(Debug::Area::NetworkServer) << "Peer has disconnected:  " << event.peer->address.host << " at port: " << event.peer->address.port;
             printf("%s disconnected.\n", event.peer->data);
-        for (auto & client : m_clients) {
+            for (auto & client : m_clients) {
                 if (client.first == event.peer) {
                     Debug::log(Debug::Area::NetworkServer) << "FOUND PEER for disconnect, deleting it";
                     m_clients.erase(client.first);
@@ -172,11 +171,11 @@ void Server::processMessage(ENetEvent& event)
         case Packet::ConnectionEventType::None: {
 
             //he's good to go, validation succeeded, tell everyone, including himself that he joined
-        for (auto & client : m_clients) {
+            for (auto & client : m_clients) {
                 sendInitialPlayerData(client.first, m_clients[event.peer]);
             }
 
-        for (auto & client : m_clients) {
+            for (auto & client : m_clients) {
                 // now we have to send this new client every player we know about so far, except not himself (don't send his own player, obviously,
                 // he already knows what it is) since we already sent that first.
                 if (client.first != event.peer) {
@@ -395,11 +394,11 @@ void Server::sendItemSpawned(Item* item)
     message.set_stacksize(item->stackSize());
     //NOTE: index is not set, as it is not in a container of any kidn.
 
-    switch(item->type()) {
-        case Item::ItemType::Torch:
-            Torch* torch = dynamic_cast<Torch*>(item);
-            message.set_radius(torch->radius());
-            break;
+    switch (item->type()) {
+    case Item::ItemType::Torch:
+        Torch* torch = dynamic_cast<Torch*>(item);
+        message.set_radius(torch->radius());
+        break;
     }
 
     Packet::sendPacketBroadcast(m_server, &message, Packet::FromServerPacketContents::ItemSpawnedFromServerPacket, ENET_PACKET_FLAG_RELIABLE);
@@ -414,10 +413,10 @@ void Server::sendQuickBarInventoryItemCountChanged(Entities::Player* player, uin
     // search for the client associated with this player
     ENetPeer* peer = nullptr;
     for (auto c : m_clients) {
-       if (c.second == player) {
-           peer = c.first;
-           break;
-       }
+        if (c.second == player) {
+            peer = c.first;
+            break;
+        }
     }
 
     Packet::sendPacket(peer, &message, Packet::FromServerPacketContents::QuickBarInventoryItemCountChangedFromServerPacket, ENET_PACKET_FLAG_RELIABLE);
@@ -486,20 +485,20 @@ void Server::sendPlayerQuickBarInventory(Entities::Player* player, uint8_t index
     message.set_stacksize(item->stackSize());
     message.set_index(index);
 
-    switch(item->type()) {
-        case Item::ItemType::Torch:
-            Torch* torch = dynamic_cast<Torch*>(item);
-            message.set_radius(torch->radius());
-            break;
+    switch (item->type()) {
+    case Item::ItemType::Torch:
+        Torch* torch = dynamic_cast<Torch*>(item);
+        message.set_radius(torch->radius());
+        break;
     }
 
     // search for the client associated with this player
     ENetPeer* peer = nullptr;
     for (auto c : m_clients) {
-       if (c.second == player) {
-           peer = c.first;
-           break;
-       }
+        if (c.second == player) {
+            peer = c.first;
+            break;
+        }
     }
 
     Packet::sendPacket(peer, &message, Packet::QuickBarInventoryItemFromServerPacket, ENET_PACKET_FLAG_RELIABLE);

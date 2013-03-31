@@ -109,7 +109,9 @@ public:
      */
     void itemQuickBarInventoryDropped(Entities::Player* player, Item* item, uint32_t amount);
 
-    SpriteSheetRenderer* spriteSheetRenderer() { return m_spriteSheetRenderer; }
+    SpriteSheetRenderer* spriteSheetRenderer() {
+        return m_spriteSheetRenderer;
+    }
 
     void zoomIn();
     void zoomOut();
@@ -122,7 +124,9 @@ public:
 
     void spawnItem(Item* item);
 
-    b2World* box2DWorld() { return m_box2DWorld; }
+    b2World* box2DWorld() {
+        return m_box2DWorld;
+    }
 
     //create containers of various entities, and implement a tile system
     //game.cpp calls into this each tick, which this descends downward into each entity

@@ -60,8 +60,8 @@ void Entity::update(double elapsedTime, World* world)
     if (m_body) {
         glm::vec2 position = glm::vec2(World::metersToPixels(m_body->GetPosition().x), World::metersToPixels(m_body->GetPosition().y));
         this->setPosition(position);
-    //        Debug::log() << "SETTING SPRITE POSITION TO X: " << m_body->GetPosition().x << " Y : " << m_body->GetPosition().y <<
-    //        "value actually is X: " << Sprite::position().x << " Y: " << Sprite::position().y;
+        //        Debug::log() << "SETTING SPRITE POSITION TO X: " << m_body->GetPosition().x << " Y : " << m_body->GetPosition().y <<
+        //        "value actually is X: " << Sprite::position().x << " Y: " << Sprite::position().y;
 
         glm::vec2 fullVector = m_velocity * glm::vec2(300, 300);
 

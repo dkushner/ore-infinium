@@ -107,7 +107,7 @@ void LightRenderer::renderToFBO()
 
     int index = 0;
     Debug::checkGLError();
-for (Torch * torch : *m_torches) {
+    for (Torch * torch : *m_torches) {
 
         // vertices that will be uploaded.
         Vertex vertices[4];

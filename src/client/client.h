@@ -63,7 +63,9 @@ public:
 
     const float FPS = 60.0;
 
-    void setBox2DWorld(b2World* world) { m_box2DWorld = world; }
+    void setBox2DWorld(b2World* world) {
+        m_box2DWorld = world;
+    }
 
     void disconnect();
 
@@ -83,7 +85,9 @@ public:
         return m_mainPlayer;
     }
 
-    bool physicsDebugRenderingEnabled() { return m_physicsDebugRenderingEnabled; }
+    bool physicsDebugRenderingEnabled() {
+        return m_physicsDebugRenderingEnabled;
+    }
 
 ///////////////// Network Communication ////////////////////
 public:

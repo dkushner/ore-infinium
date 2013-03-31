@@ -230,8 +230,8 @@ void Client::poll()
         }
         break;
 
-            case ENET_EVENT_TYPE_NONE:
-                break;
+        case ENET_EVENT_TYPE_NONE:
+            break;
         }
     }
 }
@@ -335,9 +335,9 @@ void Client::handleInputEvents()
                     m_world->toggleLightRenderingEnabled();
                 }
             } else if (event.key.keysym.sym == SDLK_F10) {
-               if (m_world) {
+                if (m_world) {
                     m_world->toggleTileRenderingEnabled();
-               }
+                }
             } else if (event.key.keysym.sym == SDLK_EQUALS) {
                 if (m_world) {
                     //FIXME: do i even want zooming? it means a fuckton more work on the handling of just about everything
@@ -809,5 +809,5 @@ void Client::receiveItemSpawned(std::stringstream* ss)
     baseItem->setDetails(message.itemdetails());
     baseItem->setState(message.itemstate());
 
-   m_world->spawnItem(baseItem);
+    m_world->spawnItem(baseItem);
 }
