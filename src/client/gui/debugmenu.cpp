@@ -66,7 +66,7 @@ void DebugMenu::setCollapsed(bool collapsed)
     m_collapsed = collapsed;
 
     int height = 35;
-    int width = 18;
+    int width = 20;
 
     if (!collapsed) {
         height = Settings::instance()->screenResolutionHeight;
@@ -85,7 +85,7 @@ void DebugMenu::update(double frameTime)
     std::string str;
 
     ss.str("");
-    ss << "FPS: " << (1000.0 / frameTime) << " Frametime: " << frameTime / 1000.0 << "fucking hell";
+    ss << "FPS: " << (1000.0 / frameTime) << " Frametime: " << frameTime / 1000.0;
     str = ss.str();
 
     ss.str("");
