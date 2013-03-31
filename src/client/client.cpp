@@ -236,7 +236,7 @@ void Client::poll()
     }
 }
 
-void Client::render(double elapsedTime)
+void Client::render(double frameTime)
 {
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
@@ -245,7 +245,8 @@ void Client::render(double elapsedTime)
     }
 
     m_gui->render();
-    drawDebugText(elapsedTime);
+//FIXME: HACK: y    drawDebugText(elapsedTime);
+    drawDebugText(frameTime);
 
     if (m_physicsDebugRenderingEnabled) {
         if (!m_physicsDebugRenderer && m_box2DWorld && m_world && m_world->spriteSheetRenderer()) {
@@ -265,10 +266,8 @@ void Client::render(double elapsedTime)
     SDL_GL_SwapWindow(m_window);
 }
 
-void Client::tick(double elapsedTime, double fps)
+void Client::tick(double frameTime)
 {
-    m_fps = fps;
-
     handleInputEvents();
 
     if (m_peer) {
@@ -276,13 +275,13 @@ void Client::tick(double elapsedTime, double fps)
     }
 
     if (m_world) {
-        m_world->update(elapsedTime);
+        m_world->update(frameTime);
     }
 }
 
-void Client::drawDebugText(double frametime)
+void Client::drawDebugText(double frameTime)
 {
-    m_debugMenu->update();
+    m_debugMenu->update(frameTime);
 }
 
 void Client::handleInputEvents()

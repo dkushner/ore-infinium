@@ -43,7 +43,7 @@ public:
     /// reimplemented from Rocket::Core::EventListener
     virtual void ProcessEvent(Rocket::Core::Event& event);
 
-    void update();
+    void update(double frameTime);
 
     void show();
     void close();

@@ -79,13 +79,13 @@ void DebugMenu::setCollapsed(bool collapsed)
     m_debug->SetProperty("width", Rocket::Core::Property(width, Rocket::Core::Property::PERCENT));
 }
 
-void DebugMenu::update()
+void DebugMenu::update(double frameTime)
 {
     std::stringstream ss;
     std::string str;
 
     ss.str("");
-    ss << "FPS: " << m_client->fps() << " Frametime: " << "fucking hell";//frametime;
+    ss << "FPS: " << (1000.0 / frameTime) << " Frametime: " << frameTime / 1000.0 << "fucking hell";
     str = ss.str();
 
     ss.str("");

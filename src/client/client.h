@@ -56,8 +56,8 @@ public:
      */
     void startMultiplayerHost(const std::string& playername, unsigned int port = 44543);
 
-    void tick(double elapsedTime, double fps);
-    void render(double elapsedTime);
+    void tick(double frameTime);
+    void render(double frameTime);
 
     void handlePlayerInput(SDL_Event& event);
 
@@ -74,9 +74,7 @@ public:
     bool connected() {
         return m_connected;
     }
-    double fps() {
-        return m_fps;
-    }
+
     bool hosting() {
         return m_server;
     }
@@ -124,7 +122,7 @@ private:
     void initSDL();
 
     void handleInputEvents();
-    void drawDebugText(double frametime);
+    void drawDebugText(double frameTime);
 
 private:
     Server* m_server = nullptr;
@@ -138,8 +136,6 @@ private:
 
     SDL_Window *m_window = nullptr;
     SDL_GLContext m_GLcontext;
-
-    double m_fps = 0.0;
 
     std::string m_playerName;
 
