@@ -34,9 +34,15 @@ public:
     unsigned int width() const;
     unsigned int height() const;
 
+    enum TextureFilter {
+        TextureFilterLinear,
+        TextureFilterNearest
+    };
+
     void bind();
-    void generate();
+    void generate(TextureFilter textureFilter);
     GLuint textureHandle();
+
 
 private:
     void loadImage(const std::string& fileName);

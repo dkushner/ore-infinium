@@ -73,7 +73,7 @@ void SpriteSheetRenderer::loadSpriteSheet(const std::string& fileName, SpriteShe
 {
     auto& wrapper = m_spriteSheetTextures[type];
     wrapper.texture = new Texture(fileName);
-    wrapper.texture->generate();
+    wrapper.texture->generate(Texture::TextureFilterLinear);
 }
 
 void SpriteSheetRenderer::unloadSpriteSheet(SpriteSheetRenderer::SpriteSheetType type)
