@@ -58,7 +58,7 @@ void Entity::update(double elapsedTime, World* world)
 {
     //server, physics enabled
     if (m_body) {
-        glm::vec2 position = glm::vec2(World::metersToPixels(m_body->GetPosition().x), World::metersToPixels(m_body->GetPosition().y));
+        glm::vec2 position = glm::vec2(m_body->GetPosition().x, m_body->GetPosition().y);
         this->setPosition(position);
         //        Debug::log() << "SETTING SPRITE POSITION TO X: " << m_body->GetPosition().x << " Y : " << m_body->GetPosition().y <<
         //        "value actually is X: " << Sprite::position().x << " Y: " << Sprite::position().y;

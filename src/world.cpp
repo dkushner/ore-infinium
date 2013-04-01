@@ -18,6 +18,8 @@
 #include "world.h"
 #include "debug.h"
 
+#include "globals.h"
+
 #include "src/server/server.h"
 #include "src/server/contactlistener.h"
 
@@ -493,16 +495,6 @@ void World::performBlockAttack(Entities::Player* player)
     if (blocksModified) {
         m_server->sendWorldChunk(&chunk);
     }
-}
-
-glm::vec2 World::tileOffset(Entities::Player* player) const
-{
-    const glm::vec2 playerPosition = player->position();
-    // to get per-pixel smooth scrolling, we get the remainders and pass it as an offset to things that need to know the tile positions
-    const glm::vec2 ret = glm::vec2(int((round(playerPosition.x))) & Block::BLOCK_SIZE - 1, int((round(playerPosition.y))) & Block::BLOCK_SIZE - 1);
-
-    Debug::log() << " RET OFFSET:  X: " << ret.x << " Y: " << ret.y;
-    return ret;
 }
 
 void World::loadMap()

@@ -160,7 +160,7 @@ inline void CollisionMap::addEntryToCell(unsigned int x, unsigned int y, Entity*
 void CollisionMap::addToGrid(Entity* entity)
 {
     const glm::vec2& position = entity->position();
-    const glm::vec2& size = entity->size();
+    const glm::vec2& size = entity->sizeMeters();
 
     unsigned int left = position.x / m_cellWidth;
     unsigned int right = (position.x + size.x) / m_cellWidth;
@@ -201,7 +201,7 @@ inline void CollisionMap::removeEntryFromCell(unsigned int x, unsigned int y, En
 void CollisionMap::removeFromGrid(Entity* entity)
 {
     const glm::vec2& position = entity->position();
-    const glm::vec2& size = entity->size();
+    const glm::vec2& size = entity->sizeMeters();
 
     unsigned int left = position.x / m_cellWidth;
     unsigned int right = (position.x + size.x) / m_cellWidth;

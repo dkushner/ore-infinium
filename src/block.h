@@ -20,6 +20,7 @@
 
 #include <map>
 #include <string>
+#include "globals.h"
 
 class Block
 {
@@ -49,7 +50,8 @@ public:
     };
 
     // height is the same as width (they're square)
-    static constexpr unsigned char BLOCK_SIZE = 16;
+    // turns pixels into meters, as the world has everything done in meters
+    static constexpr float BLOCK_SIZE = 16 / PIXELS_PER_METER;
 
     struct BlockStruct {
         BlockStruct(const char *_texture, bool _collides) {

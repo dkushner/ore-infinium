@@ -61,10 +61,11 @@ public:
 //    void setSpriteSheetType(SpriteSheetManager::SpriteSheetType spriteSheetType);
 
     /**
-     * Returns the width and height of the bitmap of this Texture
+     * Returns the width and height of this sprite in meters.
+     * (at load time the pixel size is converted into meters)
      */
-    glm::vec2 size() const {
-        return m_size;
+    glm::vec2 sizeMeters() const {
+        return m_sizeMeters;
     }
 
     /**
@@ -98,8 +99,11 @@ private:
 
     std::string m_frameName;
 
-    glm::vec2 m_size;
+    glm::vec2 m_sizeMeters;
+
+    // position is in meters as is everything else the game deals with. size is in meters as well, converted from pixels.
     glm::vec2 m_position;
+
     glm::vec2 m_origin;
 
     friend SpriteSheetRenderer;

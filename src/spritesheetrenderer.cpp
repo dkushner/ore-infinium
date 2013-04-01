@@ -118,9 +118,10 @@ void SpriteSheetRenderer::registerSprite(Sprite* sprite)
     case SpriteSheetType::Character: {
         m_characterSprites.insert(m_characterSprites.end(), sprite);
         // TODO: look up the size of the graphic/frame, in the spritesheet map.
+
         auto frameIdentifier = m_spriteSheetCharactersDescription.find(sprite->frameName());
         SpriteFrameIdentifier& frame = frameIdentifier->second;
-        sprite->m_size = glm::vec2(frame.width, frame.height);
+        sprite->m_sizeMeters = glm::vec2(World::pixelsToMeters(frame.width), World::pixelsToMeters(frame.height));
 
         //NOTE: terraria's player size is (blocksize*2, blocksize*3), and that's a great default. sprite->m_size = glm::vec2(Block::blockSize * 2, Block::blockSize * 3);
         Debug::log(Debug::Area::Graphics) << "character sprite registered, setting default size, which is that of source texture: width: " << frame.width << " height: " << frame.height << " new sprite count: " << m_entitySprites.size();
@@ -129,9 +130,10 @@ void SpriteSheetRenderer::registerSprite(Sprite* sprite)
 
     case SpriteSheetType::Entity: {
         m_entitySprites.insert(m_entitySprites.end(), sprite);
+
         auto frameIdentifier = m_spriteSheetEntitiesDescription.find(sprite->frameName());
         SpriteFrameIdentifier& frame = frameIdentifier->second;
-        sprite->m_size = glm::vec2(frame.width, frame.height);
+        sprite->m_sizeMeters = glm::vec2(World::pixelsToMeters(frame.width), World::pixelsToMeters(frame.height));
 
         Debug::log(Debug::Area::Graphics) << "entity sprite registered, setting default size, which is that of source texture: width: " << frame.width << " height: " << frame.height << " new sprite count: " << m_entitySprites.size();
         break;
@@ -213,7 +215,7 @@ void SpriteSheetRenderer::renderCharacters()
 
         glm::vec2 spritePosition = sprite->position();
 
-        glm::vec2 spriteSize = sprite->size();
+        glm::vec2 spriteSize = sprite->sizeMeters();
 
         glm::vec4 rect = glm::vec4(spritePosition.x, spritePosition.y, spritePosition.x + spriteSize.x, spritePosition.y + spriteSize.y);
 
@@ -330,7 +332,7 @@ void SpriteSheetRenderer::renderEntities()
 
         glm::vec2 spritePosition = sprite->position();
 
-        glm::vec2 spriteSize = sprite->size();
+        glm::vec2 spriteSize = sprite->sizeMeters();
 
         glm::vec4 rect = glm::vec4(round(spritePosition.x), round(spritePosition.y), round(spritePosition.x + spriteSize.x), round(spritePosition.y + spriteSize.y));
 
