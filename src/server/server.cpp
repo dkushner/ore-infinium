@@ -430,8 +430,8 @@ Entities::Player* Server::createPlayer(const std::string& playerName)
 
     //HACK FIXME: HOLY FUCK BACKMAN this is fucked horribly until physics integration is 100% complete. both of these have to be at the same position, and that simpyl shouldn't be needed..
     // if you don't set oen of them, BAD SHIT HAPPENS
-    float posX = 2500.0f;
-    float posY = 1492.0f;
+    float posX = 2500.0f/PIXELS_PER_METER;
+    float posY = 1492.0f/PIXELS_PER_METER;
     player->setPosition(posX, posY);
     player->createPhysicsBody(m_world, glm::vec2(posX, posY));
 
