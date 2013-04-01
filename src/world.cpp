@@ -62,7 +62,7 @@ World::World(Entities::Player* mainPlayer, Client* client, Server* server)
     m_blocks.resize(WORLD_ROWCOUNT * WORLD_COLUMNCOUNT);
 
     m_uselessEntity = new Entity("player1Standing1", SpriteSheetRenderer::SpriteSheetType::Character);
-    m_uselessEntity->setPosition(2300, 1400);
+    m_uselessEntity->setPosition(2300 / PIXELS_PER_METER, 1400 / PIXELS_PER_METER);
     m_entities.insert(m_entities.end(), m_uselessEntity);
 
     if (!m_server) {
@@ -73,7 +73,7 @@ World::World(Entities::Player* mainPlayer, Client* client, Server* server)
 
         m_tileRenderer = new TileRenderer(this, m_camera, m_mainPlayer);
 
-        Torch* torch = new Torch(glm::vec2(2400, 1420));
+        Torch* torch = new Torch(glm::vec2(2400 / PIXELS_PER_METER, 1420 / PIXELS_PER_METER));
         m_torches.push_back(torch);
         m_spriteSheetRenderer->registerSprite(torch);
 
@@ -144,12 +144,12 @@ void World::addPlayer(Entities::Player* player)
 
         //FIXME: HACK: this needs improvement. obviously..otherwise it could very easily destroy everything underneath wherever the player left off.
         //clear an area around the player's rect, of tiles, so he can spawn properly.
-        const int startX = ((playerPosition.x) / Block::BLOCK_SIZE) - 5;
-        const int endX = startX + 10;
+        const int startX = ((playerPosition.x) / Block::BLOCK_SIZE) - (5 / PIXELS_PER_METER);
+        const int endX = startX + (10 / PIXELS_PER_METER);
 
         //columns are our X value, rows the Y
-        const int startY = ((playerPosition.y) / Block::BLOCK_SIZE) - 5;
-        const int endY = startY + 10;
+        const int startY = ((playerPosition.y) / Block::BLOCK_SIZE) - (5 / PIXELS_PER_METER);
+        const int endY = startY + (10 / PIXELS_PER_METER);
         int index = 0;
 
         for (int row = startY; row < endY; ++row) {
@@ -178,6 +178,8 @@ void World::removePlayer(Entities::Player* player)
 
 void World::createInitialTilePhysicsObjects(Entities::Player* player)
 {
+    //HACK HACK HACK
+#if 0
     glm::vec2 position = player->position();
 
     b2Body* body = nullptr;
@@ -205,6 +207,7 @@ void World::createInitialTilePhysicsObjects(Entities::Player* player)
     fixtureDef.friction = 1.0f;
 
     body->CreateFixture(&fixtureDef);
+#endif
 }
 
 void World::updateTilePhysicsObjects(Entities::Player* player)

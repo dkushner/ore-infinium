@@ -658,6 +658,8 @@ void Client::receiveInitialPlayerData(std::stringstream* ss)
         m_mainPlayer->setPlayerID(message.playerid());
         m_mainPlayer->setPosition(message.x(), message.y());
 
+        Debug::log() << "CLIENT..INITIAL PLAYER DATA RECEIVED, pos: x: " << m_mainPlayer->position().x << " Y: " << m_mainPlayer->position().y;
+
         QuickBarInventory* quickBarInventory = new QuickBarInventory();
         m_mainPlayer->setQuickBarInventory(quickBarInventory);
 
@@ -703,6 +705,7 @@ void Client::receivePlayerMove(std::stringstream* ss)
 
     Entities::Player* player = m_world->findPlayer(message.playerid());
     player->setPosition(message.x(), message.y());
+    Debug::log() << "CILENT SETTING POSITION TO: " << player->position().x << " Y: " << player->position().y;
 }
 
 void Client::receiveChunk(std::stringstream* ss)

@@ -110,6 +110,7 @@ void TileRenderer::render()
 //    Debug::log() << "OFFSET: " << offset.x << " Y : " << offset.y;
     Debug::checkGLError();
     glm::vec2 playerPosition = m_mainPlayer->position();
+    Debug::log () << "player pos x : " << playerPosition.x << " y: " << playerPosition.y;
     int tilesBeforeX = playerPosition.x / Block::BLOCK_SIZE;
     //row
     int tilesBeforeY = playerPosition.y / Block::BLOCK_SIZE;

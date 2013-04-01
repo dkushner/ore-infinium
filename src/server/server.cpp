@@ -432,8 +432,10 @@ Entities::Player* Server::createPlayer(const std::string& playerName)
     // if you don't set oen of them, BAD SHIT HAPPENS
     float posX = 2500.0f/PIXELS_PER_METER;
     float posY = 1492.0f/PIXELS_PER_METER;
+    Debug::log() << "CREATING PLAYER, SETTING PLAYER POS X : " << posX << " Y : " << posY;
     player->setPosition(posX, posY);
     player->createPhysicsBody(m_world, glm::vec2(posX, posY));
+    Debug::log() << " POS IS: " << player->position().x << " Y: " << player->position().y;
 
     QuickBarInventory* quickBarInventory = new QuickBarInventory();
     player->setQuickBarInventory(quickBarInventory);
