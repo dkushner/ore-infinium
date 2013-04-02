@@ -332,6 +332,7 @@ void World::update(double elapsedTime)
 
 void World::generateTileMeshes()
 {
+    /*
     for (int row = 0; row < WORLD_ROWCOUNT; ++row) {
         for (int column = 0; column < WORLD_COLUMNCOUNT; ++column) {
             if (column - 4 >= 0 && row - 4 >= 0) {
@@ -341,6 +342,7 @@ void World::generateTileMeshes()
             }
         }
     }
+    */
 }
 
 uint8_t World::calculateTileMeshingType(int tileX, int tileY) const
