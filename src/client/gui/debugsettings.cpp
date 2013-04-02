@@ -20,6 +20,7 @@
 
 #include "src/client/client.h"
 #include <src/debug.h>
+#include <src/settings/settings.h>
 
 #include <Rocket/Core.h>
 #include <Rocket/Controls.h>
@@ -47,49 +48,49 @@ void DebugSettings::ProcessEvent(Rocket::Core::Event& event)
         std::cout << "BLAM\n";
 
     } else if (id == "TileRendererArea") {
-        std::cout << "BLAM\n";
+        Settings::instance()->debugAreas |= Debug::Area::TileRendererArea;
     } else if (id == "SpriteSheetRendererArea") {
-        std::cout << "BLAM\n";
+        Settings::instance()->debugAreas |= Debug::Area::SpriteSheetRendererArea;
     } else if (id == "LightingRendererArea") {
-        std::cout << "BLAM\n";
+        Settings::instance()->debugAreas |= Debug::Area::LightingRendererArea;
     } else if (id == "PhysicsArea") {
-        std::cout << "BLAM\n";
+        Settings::instance()->debugAreas |= Debug::Area::PhysicsArea;
     } else if (id == "AudioArea") {
-        std::cout << "BLAM\n";
+        Settings::instance()->debugAreas |= Debug::Area::AudioArea;
     } else if (id == "AudioLoaderArea") {
-        std::cout << "BLAM\n";
+        Settings::instance()->debugAreas |= Debug::Area::AudioLoaderArea;
     } else if (id == "GUILoggerArea") {
-        std::cout << "BLAM\n";
+        Settings::instance()->debugAreas |= Debug::Area::GUILoggerArea;
     } else if (id == "ShadersArea") {
-        std::cout << "BLAM\n";
+        Settings::instance()->debugAreas |= Debug::Area::ShadersArea;
     } else if (id == "NetworkClientInitialArea") {
-        std::cout << "BLAM\n";
+        Settings::instance()->debugAreas |= Debug::Area::NetworkClientInitialArea;
     } else if (id == "NetworkServerInitialArea") {
-        std::cout << "BLAM\n";
+        Settings::instance()->debugAreas |= Debug::Area::NetworkServerInitialArea;
     } else if (id == "NetworkClientContinuousArea") {
-        std::cout << "BLAM\n";
+        Settings::instance()->debugAreas |= Debug::Area::NetworkClientContinuousArea;
     } else if (id == "NetworkServerContinuousArea") {
-        std::cout << "BLAM\n";
+        Settings::instance()->debugAreas |= Debug::Area::NetworkServerContinuousArea;
     } else if (id == "ClientInventoryArea") {
-        std::cout << "BLAM\n";
+        Settings::instance()->debugAreas |= Debug::Area::ClientInventoryArea;
     } else if (id == "ServerInventoryArea") {
-        std::cout << "BLAM\n";
+        Settings::instance()->debugAreas |= Debug::Area::ServerInventoryArea;
     } else if (id == "ServerEntityLogicArea") {
-        std::cout << "BLAM\n";
+        Settings::instance()->debugAreas |= Debug::Area::ServerEntityLogicArea;
     } else if (id == "ImageLoaderArea") {
-        std::cout << "BLAM\n";
+        Settings::instance()->debugAreas |= Debug::Area::ImageLoaderArea;
     } else if (id == "WorldGeneratorArea") {
-        std::cout << "BLAM\n";
+        Settings::instance()->debugAreas |= Debug::Area::WorldGeneratorArea;
     } else if (id == "WorldLoaderArea") {
-        std::cout << "BLAM\n";
+        Settings::instance()->debugAreas |= Debug::Area::WorldLoaderArea;
     } else if (id == "ClientEntityCreationArea") {
-        std::cout << "BLAM\n";
+        Settings::instance()->debugAreas |= Debug::Area::ClientEntityCreationArea;
     } else if (id == "ServerEntityCreationArea") {
-        std::cout << "BLAM\n";
+        Settings::instance()->debugAreas |= Debug::Area::ServerEntityCreationArea;
     } else if (id == "SettingsArea") {
-        std::cout << "BLAM\n";
+        Settings::instance()->debugAreas |= Debug::Area::SettingsArea;
     } else if (id == "StartupArea") {
-        std::cout << "BLAM\n";
+        Settings::instance()->debugAreas |= Debug::Area::StartupArea;
     }
 }
 
