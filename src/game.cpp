@@ -149,10 +149,6 @@ void Game::tick()
         std::this_thread::sleep_for(timeUntilNextFrame);
     }
     */
-
-
-shutdown:
-    shutdown();
 }
 
 void Game::shutdown()
