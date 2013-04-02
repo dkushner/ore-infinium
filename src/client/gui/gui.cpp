@@ -42,8 +42,6 @@ GUI* GUI::instance()
 
 GUI::GUI()
 {
-    Debug::log() << "GUI CTOR HIT!";
-
     m_system = new SystemInterfaceSDL2();
     Rocket::Core::SetSystemInterface(m_system);
 

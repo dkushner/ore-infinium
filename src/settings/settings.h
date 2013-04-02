@@ -36,6 +36,9 @@ public:
 
     bool debugOutput = true;
     bool debugRendererOutput = false;
+
+    int debugAreas = 0;
+
     bool debugRenderingEnabled = false;
     bool debugGUIRenderingEnabled = false;
 //static int SDL_LOGPRIORITY = SDL_LOG_PRIORITY_WARN;

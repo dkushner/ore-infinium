@@ -28,23 +28,36 @@ class LogStream;
 class Debug
 {
 public:
-    enum class Type
-    {
-        DebugType,
-        Warning,
-        Error,
-    };
-
-    enum class Area
+    enum Area
     {
         General,
         Graphics,
         Network,
         NetworkClient,
         NetworkServer,
+        ClientRenderer,
         System,
         Physics,
-        Sound
+        Audio,
+        TileRendererArea,
+        SpriteSheetRendererArea,
+        LightingRendererArea,
+        PhysicsArea,
+        AudioArea,
+        AudioLoaderArea,
+        GUILoggerArea,
+        ShadersArea,
+        NetworkClientInitialArea,
+        NetworkServerInitialArea,
+        NetworkClientContinuousArea,
+        NetworkServerContinousArea,
+        ClientInventoryArea,
+        ServerInventoryArea,
+        ImageLoaderArea,
+        WorldGeneratorArea,
+        ClientEntityCreationArea,
+        ServerEntityCreationArea,
+        SettingsArea
     };
 
     static LogStream log(Area area = Area::General);

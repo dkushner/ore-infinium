@@ -43,6 +43,7 @@ public:
     void abort_game(const char* message);
     void shutdown();
 
+    void enableStartupDebugLogging() { m_startupDebugLogging = true; }
 
 private:
     Client* m_client = nullptr;
@@ -50,7 +51,7 @@ private:
 
     World *m_world = nullptr;
 
-
+    bool m_startupDebugLogging = false;
     bool m_running = true;
 };
 

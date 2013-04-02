@@ -249,8 +249,8 @@ LogStream::~LogStream()
         case Debug::Area::Physics:
             areaString.append("[Physics]");
             break;
-        case Debug::Area::Sound:
-            areaString.append("[Sound]");
+        case Debug::Area::Audio:
+            areaString.append("[Audio]");
             break;
         case Debug::Area::System:
             areaString.append("[System]");
