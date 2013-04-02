@@ -50,8 +50,11 @@ public:
     };
 
     // height is the same as width (they're square)
-    // turns pixels into meters, as the world has everything done in meters
+    // Block size in meters.
     static constexpr float BLOCK_SIZE = 16 / PIXELS_PER_METER;
+
+    //Block size in pixels, should NOT be used for ingame calculations but only for texture thangs.
+    static constexpr float BLOCK_SIZE_PIXELS = 16;
 
     struct BlockStruct {
         BlockStruct(const char *_texture, bool _collides) {

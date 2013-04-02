@@ -110,18 +110,25 @@ void TileRenderer::render()
     Debug::checkGLError();
     glm::vec2 playerPosition = m_mainPlayer->position();
     Debug::log(Debug::TileRendererArea) << "player pos x : " << playerPosition.x << " y: " << playerPosition.y;
-    int tilesBeforeX = playerPosition.x / Block::BLOCK_SIZE;
+    float tilesBeforeX = playerPosition.x / Block::BLOCK_SIZE;
     //row
-    int tilesBeforeY = playerPosition.y / Block::BLOCK_SIZE;
+    float tilesBeforeY = playerPosition.y / Block::BLOCK_SIZE;
+
+    float halfScreenMetersHeight = (Settings::instance()->screenResolutionHeight * 0.5) / PIXELS_PER_METER;
+    float halfScreenMetersWidth = (Settings::instance()->screenResolutionWidth * 0.5) / PIXELS_PER_METER;
 
     // -1 so that we render an additional row and column..to smoothly scroll
-    const int startRow = tilesBeforeY - ((Settings::instance()->screenResolutionHeight * 0.5) / Block::BLOCK_SIZE) - 1;
-    const int endRow = tilesBeforeY + ((Settings::instance()->screenResolutionHeight * 0.5) / Block::BLOCK_SIZE) + 1;
+    const int startRow = tilesBeforeY - (halfScreenMetersHeight / Block::BLOCK_SIZE);
+    const int endRow = tilesBeforeY + (halfScreenMetersHeight / Block::BLOCK_SIZE);
 
     //columns are our X value, rows the Y
-    const int startColumn = tilesBeforeX - ((Settings::instance()->screenResolutionWidth * 0.5) / Block::BLOCK_SIZE) - 1;
-    const int endColumn = tilesBeforeX + ((Settings::instance()->screenResolutionWidth * 0.5) / Block::BLOCK_SIZE) + 1;
-//    Debug:: log() << "starRow: " << startRow << "endrow: " << endRow << "startcol: " << startColumn << " endcol: " << endColumn;
+    const int startColumn = tilesBeforeX - (halfScreenMetersWidth / Block::BLOCK_SIZE);
+    const int endColumn = tilesBeforeX + (halfScreenMetersWidth / Block::BLOCK_SIZE);
+
+    Debug:: log(Debug::TileRendererArea) << "tilesBeforeX: " << tilesBeforeX << " tilebeforeY: " << tilesBeforeY;
+    Debug:: log(Debug::TileRendererArea) << "halfScreenMetersHeight: " << halfScreenMetersHeight << " Width: " << halfScreenMetersWidth;
+
+    Debug:: log(Debug::TileRendererArea) << "starRow: " << startRow << "endrow: " << endRow << "startcol: " << startColumn << " endcol: " << endColumn;
 
     if (std::abs(startColumn) != startColumn) {
         Debug::log(Debug::TileRendererArea) << "FIXME, WENT INTO NEGATIVE COLUMN!!";
@@ -194,11 +201,11 @@ void TileRenderer::render()
             assert(blockIndex < WORLD_ROWCOUNT * WORLD_COLUMNCOUNT);
             Block& block = m_world->m_blocks[blockIndex];
 
-            const float tileWidth = 1.0f / float(Block::BLOCK_SIZE) * 16.0f;
-            const float tileHeight = 1.0f / float(Block::BLOCK_SIZE) * 16.0f;
+            const float tileWidth = 1.0f / float(Block::BLOCK_SIZE_PIXELS) * 16.0f;
+            const float tileHeight = 1.0f / float(Block::BLOCK_SIZE_PIXELS) * 16.0f;
 
-            float xPadding = 1.0f / float(Block::BLOCK_SIZE) * 1.0f * (float(column) + 1.0);
-            float yPadding = 1.0f / float(Block::BLOCK_SIZE) * 1.0f * (float(row) + 1.0);
+            float xPadding = 1.0f / float(Block::BLOCK_SIZE_PIXELS) * 1.0f * (float(column) + 1.0);
+            float yPadding = 1.0f / float(Block::BLOCK_SIZE_PIXELS) * 1.0f * (float(row) + 1.0);
 
             const float tileLeft = (column *  tileWidth) + xPadding;
             const float tileRight = tileLeft + tileWidth;

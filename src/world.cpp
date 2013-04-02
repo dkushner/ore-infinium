@@ -331,7 +331,7 @@ void World::update(double elapsedTime)
 
 void World::generateTileMeshes()
 {
-    for (int row; row < WORLD_ROWCOUNT; ++row) {
+    for (int row = 0; row < WORLD_ROWCOUNT; ++row) {
         for (int column = 0; column < WORLD_COLUMNCOUNT; ++column) {
             if (column - 4 >= 0 && row - 4 >= 0) {
                 if (column + 4 <= WORLD_COLUMNCOUNT && row + 4 <= WORLD_ROWCOUNT) {

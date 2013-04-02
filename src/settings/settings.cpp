@@ -28,6 +28,7 @@ Settings* Settings::instance()
 }
 
 Settings::Settings()
+: debugAreas(0)
 {
 
 }

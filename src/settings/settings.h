@@ -37,7 +37,7 @@ public:
     bool debugOutput = true;
     bool debugRendererOutput = false;
 
-    int debugAreas = 0;
+    int debugAreas;
 
     bool debugRenderingEnabled = false;
     bool debugGUIRenderingEnabled = false;
