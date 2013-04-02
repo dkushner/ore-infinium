@@ -33,7 +33,7 @@ class Client;
 class Game
 {
 public:
-    Game();
+    Game(bool startupDebugLogging);
     ~Game();
 
     void init();
@@ -42,8 +42,6 @@ public:
 
     void abort_game(const char* message);
     void shutdown();
-
-    void enableStartupDebugLogging() { m_startupDebugLogging = true; }
 
 private:
     Client* m_client = nullptr;

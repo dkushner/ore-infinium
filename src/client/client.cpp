@@ -164,8 +164,7 @@ void Client::initSDL()
 
     GLint textureSize;
     glGetIntegerv(GL_MAX_TEXTURE_SIZE, &textureSize);
-    Debug::log(Debug::Area::StartupArea) << "Maximum OpenGL texture size allowed: " << textureSize;
-    std::cout << "\n\n\n\n";
+    Debug::log(Debug::Area::StartupArea) << "Maximum OpenGL texture size allowed: " << textureSize << "\n\n\n";
 
 #ifdef GLEW_KHR_debug
     if (!GLEW_KHR_debug) {

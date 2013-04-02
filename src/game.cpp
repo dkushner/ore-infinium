@@ -40,14 +40,15 @@
 
 #include <assert.h>
 
-Game::Game()
+Game::Game(bool startupDebugLogging)
+    :   m_startupDebugLogging(startupDebugLogging)
 {
     // Verify that the version of the library that we linked against is
     // compatible with the version of the headers we compiled against.
     GOOGLE_PROTOBUF_VERIFY_VERSION;
 
     if (m_startupDebugLogging) {
-       
+       Settings::instance()->debugAreas |= Debug::Area::StartupArea;
     }
 }
 

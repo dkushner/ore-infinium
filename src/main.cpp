@@ -35,8 +35,7 @@ bool contains(const std::string& str)
 
 int main(int argc, char* argv[])
 {
-    Game game;
-
+    bool startupDebugEnabled = false;
 
     if (argc > 1) {
         //NOTE: we start at 1 because the first element(0) is app name.
@@ -58,11 +57,12 @@ int main(int argc, char* argv[])
             std::cout << "Lead Developer - Shaun Reich <sreich@kde.org>\n";
             exit(0);
         } else if (contains("-d") || contains("--debug")) {
-            game.enableStartupDebugLogging();
+            startupDebugEnabled = true;
         }
     }
 
     std::cout << "Ore Infinium Version " << ore_infinium_VERSION_MAJOR << "." << ore_infinium_VERSION_MINOR << "\n";
 
+    Game game(startupDebugEnabled);
     game.init();
 }
