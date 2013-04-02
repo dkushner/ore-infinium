@@ -62,7 +62,7 @@ void Debug::checkSDLError()
 {
     std::string error = SDL_GetError();
     if (*error.c_str() != '\0') {
-        Debug::log(Debug::Area::System) << "SDL Error: " << error;
+        Debug::log(Debug::Area::StartupArea) << "SDL Error: " << error;
         SDL_ClearError();
     }
 }
@@ -231,19 +231,10 @@ LogStream::~LogStream()
 
         areaString.append("\e[36;40m");
         switch (m_area) {
-        case Debug::Area::NetworkServer:
-            areaString.append("[Network::Server]");
-            break;
 
-        case Debug::Area::Physics:
-            areaString.append("[Physics]");
-            break;
-        case Debug::Area::Audio:
-            areaString.append("[Audio]");
-            break;
-        case Debug::Area::System:
-            areaString.append("[System]");
-            break;
+ //       case Debug::Area::System:
+//            areaString.append("[System]");
+  //          break;
         }
 
         areaString.append("\e[36;40m\e[0m");
