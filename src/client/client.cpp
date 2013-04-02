@@ -205,6 +205,7 @@ void Client::poll()
 
         case ENET_EVENT_TYPE_DISCONNECT: {
             Debug::log(Debug::Area::NetworkClientContinuousArea) << "Peer disconnected: " << event.data;
+            m_connected = false;
 
             switch (event.data) {
             case Packet::ConnectionEventType::DisconnectedVersionMismatch:
@@ -442,7 +443,9 @@ void Client::handlePlayerInput(SDL_Event& event)
 
 void Client::shutdown()
 {
-    disconnect();
+    if (m_connected) {
+        disconnect();
+    }
     //FIXME: graceful client shutdown needed..
     exit(0);
 }
