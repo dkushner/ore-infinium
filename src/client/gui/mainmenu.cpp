@@ -94,7 +94,6 @@ MainMenu::~MainMenu()
 void MainMenu::ProcessEvent(Rocket::Core::Event& event)
 {
     const Rocket::Core::String& id = event.GetCurrentElement()->GetId();
-    std::cout << "mainmenu Processing element id:" << id.CString() << " type: " << event.GetType().CString() << '\n';
 
     //process submenus first since those are on top, obviously..
     if (m_mainMenuSingleplayerCreate->IsVisible()) {
@@ -278,7 +277,7 @@ void MainMenu::processMultiplayerJoin(Rocket::Core::Event& event)
         Rocket::Core::Element* portInput = m_mainMenuMultiplayerJoin->GetElementById("port");
         Rocket::Core::String port = portInput->GetAttribute("value")->Get<Rocket::Core::String>();
 
-        Debug::log(Debug::Area::NetworkClient) << "joining multiplayer session with player: " << playerName.CString() << " ip: " << ip.CString() << " port: " << atoi(port.CString());
+        Debug::log(Debug::Area::NetworkClientInitialArea) << "joining multiplayer session with player: " << playerName.CString() << " ip: " << ip.CString() << " port: " << atoi(port.CString());
 
         if (m_client->startMultiplayerClientConnection(playerName.CString(), ip.CString(), atoi(port.CString()))) {
             hideSubmenus();

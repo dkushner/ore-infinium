@@ -231,9 +231,6 @@ LogStream::~LogStream()
 
         areaString.append("\e[36;40m");
         switch (m_area) {
-        case Debug::Area::NetworkClient:
-            areaString.append("[Network::Client]");
-            break;
         case Debug::Area::NetworkServer:
             areaString.append("[Network::Server]");
             break;
