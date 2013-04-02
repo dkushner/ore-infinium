@@ -30,7 +30,6 @@ class Debug
 public:
     enum Area
     {
-        Graphics,
         NetworkClient,
         NetworkServer,
         ClientRenderer,

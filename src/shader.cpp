@@ -189,7 +189,7 @@ bool Shader::checkProgramLinkStatus(GLuint obj)
 
         glGetProgramInfoLog(obj, length, &length, &log[0]);
 
-        Debug::log(Debug::Area::Graphics) << &log[0];
+        Debug::log(Debug::Area::ShadersArea) << &log[0];
         return false;
     }
     return true;

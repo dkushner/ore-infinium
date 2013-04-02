@@ -124,7 +124,7 @@ void SpriteSheetRenderer::registerSprite(Sprite* sprite)
         sprite->m_sizeMeters = glm::vec2(World::pixelsToMeters(frame.width), World::pixelsToMeters(frame.height));
 
         //NOTE: terraria's player size is (blocksize*2, blocksize*3), and that's a great default. sprite->m_size = glm::vec2(Block::blockSize * 2, Block::blockSize * 3);
-        Debug::log(Debug::Area::Graphics) << "character sprite registered, setting default size, which is that of source texture: width: " << frame.width << " height: " << frame.height << " new sprite count: " << m_entitySprites.size();
+        Debug::log(Debug::Area::SpriteSheetRendererArea) << "character sprite registered, setting default size, which is that of source texture: width: " << frame.width << " height: " << frame.height << " new sprite count: " << m_entitySprites.size();
         break;
     }
 
@@ -135,7 +135,7 @@ void SpriteSheetRenderer::registerSprite(Sprite* sprite)
         SpriteFrameIdentifier& frame = frameIdentifier->second;
         sprite->m_sizeMeters = glm::vec2(World::pixelsToMeters(frame.width), World::pixelsToMeters(frame.height));
 
-        Debug::log(Debug::Area::Graphics) << "entity sprite registered, setting default size, which is that of source texture: width: " << frame.width << " height: " << frame.height << " new sprite count: " << m_entitySprites.size();
+        Debug::log(Debug::Area::SpriteSheetRendererArea) << "entity sprite registered, setting default size, which is that of source texture: width: " << frame.width << " height: " << frame.height << " new sprite count: " << m_entitySprites.size();
         break;
     }
     }
@@ -163,8 +163,8 @@ std::map<std::string, SpriteSheetRenderer::SpriteFrameIdentifier> SpriteSheetRen
     struct stat fileAttribute;
     bool fileExists = stat(filename.c_str(), &fileAttribute) == 0;
 
-    Debug::log(Debug::Area::System) << "parsing: '" << filename << "' spreadsheet description...";
-    Debug::fatal(fileExists, Debug::Area::System, "sprite sheet description file failed to load, filename: " + filename);
+    Debug::log(Debug::Area::SpriteSheetRendererArea) << "parsing: '" << filename << "' spreadsheet description...";
+    Debug::fatal(fileExists, Debug::Area::SpriteSheetRendererArea, "sprite sheet description file failed to load, filename: " + filename);
 
     std::ifstream fin(filename);
     YAML::Parser parser(fin);
@@ -176,11 +176,11 @@ std::map<std::string, SpriteSheetRenderer::SpriteFrameIdentifier> SpriteSheetRen
         SpriteFrameIdentifier frame;
         doc[i] >> frame;
 
-        Debug::log(Debug::Area::System) << "frameName: " << frame.frameName;
-        Debug::log(Debug::Area::System) << "x: " << frame.x;
-        Debug::log(Debug::Area::System) << "y: " << frame.y;
-        Debug::log(Debug::Area::System) << "width: " << frame.width;
-        Debug::log(Debug::Area::System) << "height: " << frame.height;
+        Debug::log(Debug::Area::SpriteSheetRendererArea) << "frameName: " << frame.frameName;
+        Debug::log(Debug::Area::SpriteSheetRendererArea) << "x: " << frame.x;
+        Debug::log(Debug::Area::SpriteSheetRendererArea) << "y: " << frame.y;
+        Debug::log(Debug::Area::SpriteSheetRendererArea) << "width: " << frame.width;
+        Debug::log(Debug::Area::SpriteSheetRendererArea) << "height: " << frame.height;
 
         descriptionMap[frame.frameName] = frame;
     }
@@ -200,7 +200,7 @@ void SpriteSheetRenderer::renderCharacters()
 
     for (Sprite * sprite : m_characterSprites) {
         auto frameIdentifier = m_spriteSheetCharactersDescription.find(sprite->frameName());
-        Debug::fatal(frameIdentifier != m_spriteSheetCharactersDescription.end(), Debug::Area::Graphics, "sprite sheet character frame description could not be located, name: " + sprite->frameName());
+        Debug::fatal(frameIdentifier != m_spriteSheetCharactersDescription.end(), Debug::Area::SpriteSheetRendererArea, "sprite sheet character frame description could not be located, name: " + sprite->frameName());
 
         SpriteFrameIdentifier& frame = frameIdentifier->second;
 
@@ -317,7 +317,7 @@ void SpriteSheetRenderer::renderEntities()
     int index = 0;
     for (Sprite * sprite : m_entitySprites) {
         auto frameIdentifier = m_spriteSheetEntitiesDescription.find(sprite->frameName());
-        Debug::fatal(frameIdentifier != m_spriteSheetEntitiesDescription.end(), Debug::Area::Graphics, "sprite sheet entity frame description could not be located framename: " + sprite->frameName());
+        Debug::fatal(frameIdentifier != m_spriteSheetEntitiesDescription.end(), Debug::Area::SpriteSheetRendererArea, "sprite sheet entity frame description could not be located framename: " + sprite->frameName());
 
         SpriteFrameIdentifier& frame = frameIdentifier->second;
 

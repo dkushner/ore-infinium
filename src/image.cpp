@@ -63,7 +63,7 @@ void Image::loadImage(const std::string& filename)
 
     //still unknown, we're boned.
     if (imageFormat == FIF_UNKNOWN) {
-        Debug::fatal(false, Debug::Area::Graphics, "failure to load image, type unknown");
+        Debug::fatal(false, Debug::Area::ImageLoaderArea, "failure to load image, type unknown");
     }
 
     //check that the plugin has reading capabilities for this file and load the file

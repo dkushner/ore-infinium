@@ -53,7 +53,7 @@ void Debug::checkGLError()
 {
     GLenum error = glGetError();
     if (error != GL_NO_ERROR) {
-        Debug::log(Debug::Area::Graphics) << gluErrorString(error);
+        Debug::log(Debug::Area::ClientRenderer) << gluErrorString(error);
         assert(0);
     }
 }
@@ -213,7 +213,7 @@ void Debug::glDebugCallback(unsigned int source, unsigned int type, unsigned int
         idString.append("\nError ID: ");
         idString.append("\e[32;40m\e[0m");
 
-        log(Debug::Area::Graphics) << "\nOpenGL Error Report: " << sourceString << typeString << idString << severityString << messageString << "\n";
+        log(Debug::Area::ClientRenderer) << "\nOpenGL Error Report: " << sourceString << typeString << idString << severityString << messageString << "\n";
     }
 }
 #endif
@@ -237,9 +237,7 @@ LogStream::~LogStream()
         case Debug::Area::NetworkServer:
             areaString.append("[Network::Server]");
             break;
-        case Debug::Area::Graphics:
-            areaString.append("[Graphics]");
-            break;
+
         case Debug::Area::Physics:
             areaString.append("[Physics]");
             break;

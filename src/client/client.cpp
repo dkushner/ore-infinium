@@ -169,7 +169,7 @@ void Client::initSDL()
 
 #ifdef GLEW_KHR_debug
     if (!GLEW_KHR_debug) {
-        Debug::log(Debug::Area::Graphics) << "GLEW_KHR_debug is not available, disabling OpenGL debug mode (TODO)";
+        Debug::log(Debug::Area::ClientRenderer) << "FIXME: GLEW_KHR_debug is not available, disabling OpenGL debug mode";
         assert(0);
     }
 
