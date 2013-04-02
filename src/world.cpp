@@ -309,6 +309,7 @@ void World::update(double elapsedTime)
             if (player->dirtyFlags() & Entity::DirtyFlags::PositionDirty) {
                 m_server->sendPlayerMove(player);
                 player->clearDirtyFlag(Entity::DirtyFlags::PositionDirty);
+                Debug::log(Debug::ServerEntityLogicArea) << "Player position, x: " << player->position().x << " y: " << player->position().y;
             }
         }
     }

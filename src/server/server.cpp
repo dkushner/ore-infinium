@@ -469,6 +469,8 @@ void Server::sendPlayerMove(Entities::Player* player)
     message.set_x(player->position().x);
     message.set_y(player->position().y);
 
+    Debug::log(Debug::NetworkServerContinuousArea) << "Sending player move, position x: " << player->position().x << " y: " << player->position().y;
+
     Packet::sendPacketBroadcast(m_server, &message, Packet::FromServerPacketContents::PlayerMoveFromServerPacket, ENET_PACKET_FLAG_UNSEQUENCED);
 }
 
