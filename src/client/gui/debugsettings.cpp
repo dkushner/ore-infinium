@@ -45,8 +45,7 @@ void DebugSettings::ProcessEvent(Rocket::Core::Event& event)
     const Rocket::Core::String& type = event.GetType();
 
     if (id == "ClientRendererArea") {
-        std::cout << "BLAM\n";
-
+        Settings::instance()->debugAreas |= Debug::Area::ClientRendererArea;
     } else if (id == "TileRendererArea") {
         Settings::instance()->debugAreas |= Debug::Area::TileRendererArea;
     } else if (id == "SpriteSheetRendererArea") {
