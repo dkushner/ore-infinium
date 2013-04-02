@@ -155,6 +155,7 @@ void DebugMenu::update(double frameTime)
     m_debug->GetElementById("6")->SetInnerRML(connectedString.c_str());
     m_debug->GetElementById("7")->SetInnerRML("F9 to toggle light rendering pass");
     m_debug->GetElementById("8")->SetInnerRML("F10 to toggle tile rendering pass");
+    m_debug->GetElementById("9")->SetInnerRML("F11 to show/hide debug settings menu");
     // 8 is up top, player pos
 }
 

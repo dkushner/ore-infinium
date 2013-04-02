@@ -30,6 +30,7 @@ class Debug
 public:
     enum Area
     {
+        //WARNING: UPDATE THE DEBUG SETTINGS GUI (RML AND CPP) WHEN YOU ADD A FLAG
         ClientRendererArea = 1 << 0,
         TileRendererArea = 1 << 1,
         SpriteSheetRendererArea = 1 << 2,

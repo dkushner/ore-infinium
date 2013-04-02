@@ -1,68 +1,81 @@
-
 <rml>
-        <head>
-                <title>Help</title>
-                <link type="text/template" href="window.rml" />
-                <link type="text/template" href="frame.rml" />
-                <style>
-                        body
-                        {
-                            min-width: 36%;
-                            min-height: 28%;
+    <head>
+        <title>Options</title>
+        <link type="text/template" href="window.rml" />
+        <style>
+            body
+            {
+                width: 400px;
+                height: 500px;
 
-                            width: 36%;
-                            height: 28%;
+                margin: auto;
+            }
 
-                            margin-top: auto;
-                        }
+            form div
+            {
+                margin: auto;
+            }
+        </style>
+    </head>
 
-                        div#content
-                        {
-                            text-align: left;
-                        }
+    <body template="window" onload="restore">
+<!--
+        <select name="resolution">
+            <option value="1">1600x900</option>
+        </select>
+        ClientRendererArea = 1 << 0,
+        TileRendererArea = 1 << 1,
+        SpriteSheetRendererArea = 1 << 2,
+        LightingRendererArea = 1 << 3,
+        PhysicsArea = 1 << 4,
+        AudioArea = 1 << 5,
+        AudioLoaderArea = 1 << 6,
+        GUILoggerArea = 1 << 7,
+        ShadersArea = 1 << 8,
+        NetworkClientInitialArea = 1 << 9,
+        NetworkServerInitialArea = 1 << 10,
+        NetworkClientContinuousArea = 1 << 11,
+        NetworkServerContinuousArea = 1 << 12,
+        ClientInventoryArea = 1 << 13,
+        ServerInventoryArea = 1 << 14,
+        ServerEntityLogicArea = 1 << 15,
+        ImageLoaderArea = 1 << 16,
+        WorldGeneratorArea = 1 << 17,
+        WorldLoaderArea = 1 << 18,
+        ClientEntityCreationArea = 1 << 19,
+        ServerEntityCreationArea = 1 << 20,
+        SettingsArea = 1 << 21,
+        StartupArea = 1 << 22
+!-->
 
-                        div#framecontent
-                        {
-                            text-align: left;
-                        }
-                        input.text
-                        {
-                            margin-left: 0px;
-                            margin-bottom: 0px;
-                            padding-bottom: 0px;
-                            vertical-align: 0px;
-                        }
-
-                        button,
-                        input.submit
-                        {
-                            display: inline-block;
-
-                            width: 159px;
-                            height: 30px;
-
-                            padding-top: 0px;
-                            margin-bottom: 0px;
-                            padding-bottom: 0px;
-                            vertical-align: 0px;
-                        }
-
-                        tabset
-                        {
-                            padding-bottom: 10px;
-                        }
-                </style>
-        </head>
-
-        <body template="window">
-            <tabset id="tabset">
-                <tab>Chat Tab</tab>
-                    <panel id="panel1">
-                        This is where some text for the chat history goes
-                    </panel>
-            </tabset>
-
-                    <input id="inputLine" type="text" value="" maxLength="128" />
-                    <button id="sendButton">send</button>
-        </body>
+        <form id="form">
+            <div>
+                    <p>
+                        <input id="ClientRendererArea" type="checkbox" value="false"/>ClientRendererArea<br/>
+                        <input id="TileRendererArea" type="checkbox" value="false"/>TileRendererArea<br/>
+                        <input id="SpriteSheetRendererArea" type="checkbox" value="false"/>SpriteSheetRendererArea<br/>
+                        <input id="LightingRendererArea" type="checkbox" value="false"/>LightingRendererArea<br/>
+                        <input id="PhysicsArea" type="checkbox" value="false"/>PhysicsArea<br/>
+                        <input id="AudioArea" type="checkbox" value="false"/>AudioArea<br/>
+                        <input id="AudioLoaderArea" type="checkbox" value="false"/>AudioLoaderArea<br/>
+                        <input id="GUILoggerArea" type="checkbox" value="false"/>GUILoggerArea<br/>
+                        <input id="ShadersArea" type="checkbox" value="false"/>ShadersArea<br/>
+                        <input id="NetworkClientInitialArea" type="checkbox" value="false"/>NetworkClientInitialArea<br/>
+                        <input id="NetworkServerInitialArea" type="checkbox" value="false"/>NetworkServerInitialArea<br/>
+                        <input id="NetworkClientContinuousArea" type="checkbox" value="false"/>NetworkClientContinuousArea<br/>
+                        <input id="NetworkServerContinuousArea" type="checkbox" value="false"/>NetworkServerContinuousArea<br/>
+                        <input id="ClientInventoryArea" type="checkbox" value="false"/>ClientInventoryArea<br/>
+                        <input id="ServerInventoryArea" type="checkbox" value="false"/>ServerInventoryArea<br/>
+                        <input id="ServerEntityLogicArea" type="checkbox" value="false"/>ServerEntityLogicArea<br/>
+                        <input id="ImageLoaderArea" type="checkbox" value="false"/>ImageLoaderArea<br/>
+                        <input id="WorldGeneratorArea" type="checkbox" value="false"/>WorldGeneratorArea<br/>
+                        <input id="WorldLoaderArea" type="checkbox" value="false"/>WorldLoaderArea<br/>
+                        <input id="ClientEntityCreationArea" type="checkbox" value="false"/>ClientEntityCreationArea<br/>
+                        <input id="ServerEntityCreationArea" type="checkbox" value="false"/>ServerEntityCreationArea<br/>
+                        <input id="SettingsArea" type="checkbox" value="false"/>SettingsArea<br/>
+                        <input id="StartupArea" type="checkbox" value="false"/>StartupArea<br/>
+                    </p>
+            </div>
+        </form>
+    </body>
 </rml>
