@@ -49,7 +49,7 @@
 Server::Server(unsigned int maxClients, unsigned int port, Client* client) :
     m_client(client)
 {
-    Debug::log(Debug::Area::NetworkServer) << "creating server at port: " << port;
+    Debug::log(Debug::Area::NetworkServerInitialArea) << "creating server at port: " << port;
 
     m_address.host = ENET_HOST_ANY;
     m_address.port = port;
@@ -115,8 +115,8 @@ void Server::poll()
 
         switch (event.type) {
         case ENET_EVENT_TYPE_CONNECT:
-            Debug::log(Debug::Area::NetworkServer) << "Received a new peer, adding to client list, connection from host:  " << event.peer->address.host << " at port: " << event.peer->address.port << " client has not yet been validated.";
-            Debug::log(Debug::Area::NetworkServer) << "client count, before adding: " << m_clients.size();
+            Debug::log(Debug::Area::NetworkServerContinousArea) << "Received a new peer, adding to client list, connection from host:  " << event.peer->address.host << " at port: " << event.peer->address.port << " client has not yet been validated.";
+            Debug::log(Debug::Area::NetworkServerContinousArea) << "client count, before adding: " << m_clients.size();
             //NOTE: we don't actually act on it, first we wait for them to send us a packet then we validate it and if so we add it to our client list
             //FIXME: probably should timeout if they're not validated within n seconds, that way they can't just keep piling on top of us
 
@@ -132,15 +132,16 @@ void Server::poll()
             break;
 
         case ENET_EVENT_TYPE_DISCONNECT: {
-            Debug::log(Debug::Area::NetworkServer) << "Peer has disconnected:  " << event.peer->address.host << " at port: " << event.peer->address.port;
+            Debug::log(Debug::Area::NetworkServerContinousArea) << "Peer has disconnected:  " << event.peer->address.host << " at port: " << event.peer->address.port;
             printf("%s disconnected.\n", event.peer->data);
+
             for (auto & client : m_clients) {
                 if (client.first == event.peer) {
-                    Debug::log(Debug::Area::NetworkServer) << "FOUND PEER for disconnect, deleting it";
+                    Debug::log(Debug::Area::NetworkServerContinousArea) << "Found peer for disconnect, deleting it";
                     m_clients.erase(client.first);
                 }
             }
-            Debug::log(Debug::Area::NetworkServer) << "m_clients size: " << m_clients.size();
+            Debug::log(Debug::Area::NetworkServerContinousArea) << "m_clients size: " << m_clients.size();
 
             // Reset client's information
             event.peer->data = NULL;
@@ -230,7 +231,7 @@ uint32_t Server::receiveInitialClientData(std::stringstream* ss, ENetEvent& even
     PacketBuf::ClientInitialConnection message;
     Packet::deserialize(ss, &message);
 
-    Debug::log(Debug::Area::NetworkServer) << "client sent player name and version data name: " << message.playername() << " version major: " << message.versionmajor() << " minor: " << message.versionminor();
+    Debug::log(Debug::Area::NetworkServerInitialArea) << "receiving client's player name and version data. Name: " << message.playername() << " version major: " << message.versionmajor() << " minor: " << message.versionminor();
 
     if (message.versionmajor() != ore_infinium_VERSION_MAJOR || message.versionminor() != ore_infinium_VERSION_MINOR) {
         return Packet::ConnectionEventType::DisconnectedVersionMismatch;
@@ -284,7 +285,7 @@ void Server::receiveQuickBarInventorySelectSlotRequest(std::stringstream* ss, En
     const uint32_t index = message.index();
 
     if (index > player->quickBarInventory()->maxEquippedSlots()) {
-        Debug::log(Debug::Area::General) << "server told to equip a quickbar inventory slot, but index was greater than maxEquippedSlots. this is likely a sync failure(or malicious intent).";
+        Debug::log(Debug::Area::ServerInventoryArea) << "server told to equip a quickbar inventory slot, but index was greater than maxEquippedSlots. this is likely a sync failure(or malicious intent).";
         return;
     }
 
@@ -432,10 +433,12 @@ Entities::Player* Server::createPlayer(const std::string& playerName)
     // if you don't set oen of them, BAD SHIT HAPPENS
     float posX = 2500.0f/PIXELS_PER_METER;
     float posY = 1492.0f/PIXELS_PER_METER;
-    Debug::log() << "CREATING PLAYER, SETTING PLAYER POS X : " << posX << " Y : " << posY;
+    Debug::log(Debug::Area::NetworkServerInitialArea) << "CREATING PLAYER, SETTING PLAYER POS X : " << posX << " Y : " << posY;
+
     player->setPosition(posX, posY);
     player->createPhysicsBody(m_world, glm::vec2(posX, posY));
-    Debug::log() << " POS IS: " << player->position().x << " Y: " << player->position().y;
+
+    Debug::log(Debug::Area::NetworkServerInitialArea) << " POS IS: " << player->position().x << " Y: " << player->position().y;
 
     QuickBarInventory* quickBarInventory = new QuickBarInventory();
     player->setQuickBarInventory(quickBarInventory);
@@ -474,7 +477,7 @@ void Server::sendPlayerQuickBarInventory(Entities::Player* player, uint8_t index
     Item* item = player->quickBarInventory()->item(index);
 
     if (item == nullptr) {
-        Debug::log(Debug::Area::NetworkServer) << "warning, BAD SHIT HAPPENED, server tried sending a player's quickbar inventory but an element was nullptr, which means we didn't send as much as we should have, so the client is empty for this element index..VERY BAD SHIT";
+        Debug::log(Debug::Area::ServerInventoryArea) << "warning, BAD SHIT HAPPENED, server tried sending a player's quickbar inventory but an element was nullptr, which means we didn't send as much as we should have, so the client is empty for this element index..VERY BAD SHIT";
         return;
     }
 

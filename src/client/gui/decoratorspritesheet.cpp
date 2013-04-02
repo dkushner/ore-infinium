@@ -179,7 +179,7 @@ void DecoratorSpriteSheet::RenderElement(Rocket::Core::Element* element, Rocket:
         image_index = LoadTexture(imageSource, imageSourceProperty->source);
 
         if (image_index == -1) {
-            Debug::fatal(false, Debug::Area::Graphics, "librocket inventory decorator render element texture load failure. likely invalid path specified, or something.");
+            Debug::fatal(false, Debug::Area::GUILoggerArea, "librocket inventory decorator render element texture load failure. likely invalid path specified, or something.");
         }
     }
 

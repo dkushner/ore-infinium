@@ -138,7 +138,7 @@ void World::addPlayer(Entities::Player* player)
     m_players.push_back(player);
 
     if (m_server) {
-        Debug::log() << "ADDING PLAYE RPOS X :"  << player->position().x << " Y : " << player->position().y;
+        Debug::log(Debug::Area::ServerEntityCreationArea) << "Adding player to world. Position X :"  << player->position().x << " Y : " << player->position().y;
 
         const glm::vec2& playerPosition = player->position();
 
@@ -289,9 +289,6 @@ void World::update(double elapsedTime)
         }
     }
 
-    for (int i = 0; i < 2; ++i) {
-
-    }
     //    m_sky->update(elapsedTime);
 
     //NOTE: players are not exactly considered entities. they are, but they aren't
@@ -467,7 +464,7 @@ void World::performBlockAttack(Entities::Player* player)
     int tilesBeforeX = playerPosition.x / Block::BLOCK_SIZE;
     //row
     int tilesBeforeY = playerPosition.y / Block::BLOCK_SIZE;
-    Debug::log() << "tilesbeforeX: " << tilesBeforeX << " tilesbeforey: " << tilesBeforeY;
+    Debug::log(Debug::Area::ServerEntityLogicArea) << "performBlockAttack, tilesbeforeX: " << tilesBeforeX << " tilesbeforey: " << tilesBeforeY;
 
     //FIXME:
     const int startX = ((playerPosition.x - (Settings::instance()->screenResolutionWidth * 0.5) + player->mousePosition().x) / Block::BLOCK_SIZE) - 1; // -1 for alignment with crosshair
@@ -502,14 +499,16 @@ void World::performBlockAttack(Entities::Player* player)
 
 void World::loadMap()
 {
-    Debug::log(Debug::Area::General) << "loading map!";
-    Debug::log(Debug::Area::General) << "SIZEOF Block class: " << sizeof(Block);
-    Debug::log(Debug::Area::General) << "SIZEOF m_blocks: " << sizeof(m_blocks) / 1e6 << " MiB";
+    Debug::log(Debug::Area::WorldLoaderArea) << "Loading world!";
+    Debug::log(Debug::Area::WorldLoaderArea) << "SIZEOF Block class: " << sizeof(Block);
+    Debug::log(Debug::Area::WorldLoaderArea) << "SIZEOF m_blocks: " << sizeof(m_blocks) / 1e6 << " MiB";
     generateMap();
 }
 
 void World::generateMap()
 {
+    Debug::log(Debug::Area::WorldGeneratorArea) << "Generating a new world.";
+
     Timer timer;
 
     std::random_device device;
@@ -534,7 +533,7 @@ void World::generateMap()
 
     generateTileMeshes();
 
-    Debug::log(Debug::Area::General) << "Time taken for map generation: " << timer.milliseconds() << " Milliseconds";
+    Debug::log(Debug::Area::WorldGeneratorArea) << "Time taken for world generation: " << timer.milliseconds() << " milliseconds";
 }
 
 void World::saveMap()
@@ -561,7 +560,9 @@ void World::saveMap()
 void World::loadChunk(Chunk* chunk)
 {
     int sourceIndex = 0;
-    Debug::log() << "LOADING CHUNK, CLIENT: START Y: " << chunk->startY() << " ENDY: " << chunk->endY() << " STARTX: " <<  chunk->startX() << " ENDX: " << chunk->endX();
+
+    Debug::log(Debug::NetworkClientContinuousArea) << "Loading Chunk START Y: " << chunk->startY() << " ENDY: " << chunk->endY() << " STARTX: " <<  chunk->startX() << " ENDX: " << chunk->endX();
+
     for (int row = chunk->startY(); row < chunk->endY(); ++row) {
         for (int column = chunk->startX(); column < chunk->endX(); ++column) {
 
@@ -659,7 +660,7 @@ void World::attemptItemPlacement(Entities::Player* player)
     }
 
     if (item->stackSize() == 0) {
-        Debug::log() << "server: well that's odd, was told that we should place an item, but the item is valid/hanging around, but has no stack size..so it's a count of 0...shouldn't happen.";
+        Debug::log(Debug::ServerEntityLogicArea) << "server: well that's odd, was told that we should place an item, but the item is valid/hanging around, but has no stack size..so it's a count of 0...shouldn't happen.";
         return;
     }
 

@@ -88,19 +88,19 @@ Client::~Client()
 
 void Client::initSDL()
 {
-    Debug::log(Debug::Area::System) << "SDL on platform: " << SDL_GetPlatform();
+    Debug::log(Debug::Area::StartupArea) << "SDL on platform: " << SDL_GetPlatform();
 
     SDL_version compiled;
     SDL_version linked;
     SDL_VERSION(&compiled);
     SDL_GetVersion(&linked);
 
-    Debug::log(Debug::Area::System) << "Compiled against SDL version: " << int(compiled.major) << "." << int(compiled.minor) << "-" << int(compiled.patch) <<
+    Debug::log(Debug::Area::StartupArea) << "Compiled against SDL version: " << int(compiled.major) << "." << int(compiled.minor) << "-" << int(compiled.patch) <<
                                     " Running (linked) against version: " << int(linked.major) << "." << int(linked.minor) << "-" << int(linked.patch);
 
     if (SDL_Init(SDL_INIT_VIDEO | SDL_INIT_AUDIO | SDL_INIT_TIMER) != 0) {
         std::string error = SDL_GetError();
-        Debug::fatal(false, Debug::Area::System, "failure to initialize SDL error: " + error);
+        Debug::fatal(false, Debug::Area::StartupArea, "failure to initialize SDL error: " + error);
     }
 
     m_window = SDL_CreateWindow("Ore Infinium", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED,
@@ -164,7 +164,7 @@ void Client::initSDL()
 
     GLint textureSize;
     glGetIntegerv(GL_MAX_TEXTURE_SIZE, &textureSize);
-    Debug::log(Debug::Area::Graphics) << "Maximum OpenGL texture size allowed: " << textureSize;
+    Debug::log(Debug::Area::StartupArea) << "Maximum OpenGL texture size allowed: " << textureSize;
     std::cout << "\n\n\n\n";
 
 #ifdef GLEW_KHR_debug
@@ -178,7 +178,7 @@ void Client::initSDL()
     glDebugMessageControl(GL_DONT_CARE, GL_DONT_CARE, GL_DONT_CARE, 0, 0, GL_TRUE);
 #endif
 
-    Debug::fatal(enet_initialize != 0, Debug::Area::NetworkClientInitialArea, "An error occurred during ENet init (network init failure");
+    Debug::fatal(enet_initialize != 0, Debug::Area::StartupArea, "An error occurred during ENet init (network init failure");
 
     glClearColor(0.f, .5f, 0.f, 1.0f);
 
@@ -205,22 +205,23 @@ void Client::poll()
             break;
 
         case ENET_EVENT_TYPE_DISCONNECT: {
-            Debug::log(Debug::Area::NetworkClient) << "Peer disconnected: " << event.data;
+            Debug::log(Debug::Area::NetworkClientContinuousArea) << "Peer disconnected: " << event.data;
+
             switch (event.data) {
             case Packet::ConnectionEventType::DisconnectedVersionMismatch:
-                Debug::log(Debug::Area::NetworkClient) << "Server booted us, client version does not match server version.";
+                Debug::log(Debug::Area::NetworkClientContinuousArea) << "Server booted us, client version does not match server version.";
                 //FIXME: gracefully handle a version mismatch, obviously
                 assert(0);
                 break;
             case Packet::ConnectionEventType::DisconnectedInvalidPlayerName:
-                Debug::log(Debug::Area::NetworkClient) << "Server booted us, invalid player name";
+                Debug::log(Debug::Area::NetworkClientContinuousArea) << "Server booted us, invalid player name";
                 assert(0);
                 break;
             }
 
             char hostname[32];
             enet_address_get_host_ip(&event.peer->address, hostname, static_cast<size_t>(32));
-            Debug::log(Debug::Area::NetworkClient) << "disconnected from server host IP: " << hostname;
+            Debug::log(Debug::Area::NetworkClientContinuousArea) << "disconnected from server host IP: " << hostname;
             enet_peer_reset(m_peer);
 
             // Reset client's information
@@ -463,13 +464,13 @@ bool Client::connect(const char* address, unsigned int port)
     m_peer = enet_host_connect(m_client, &m_address, 2, 0);
 
     if (m_peer == NULL) {
-        Debug::log(Debug::Area::NetworkClient) << "Client failed to connect to server";
+        Debug::log(Debug::Area::NetworkClientInitialArea) << "Client failed to connect to server";
         exit(EXIT_FAILURE);
     }
 
     ENetEvent event;
     if (enet_host_service(m_client, &event, 5000) > 0 && event.type == ENET_EVENT_TYPE_CONNECT) {
-        Debug::log(Debug::Area::NetworkClient) << "Client connection to server succeeded!";
+        Debug::log(Debug::Area::NetworkClientInitialArea) << "Client connection to server succeeded!";
         m_mainMenu->hideMainMenu();
 
         m_chat = new ChatDialog(this, m_mainMenu);
@@ -481,8 +482,8 @@ bool Client::connect(const char* address, unsigned int port)
         sendInitialConnectionData();
         return true;
     } else {
-        Debug::log(Debug::Area::NetworkClient) << "Client connection to server failed!";
-        Debug::log(Debug::Area::NetworkClient) << "Client failed to connect to server within timeout";
+        Debug::log(Debug::Area::NetworkClientInitialArea) << "Client connection to server failed!";
+        Debug::log(Debug::Area::NetworkClientInitialArea) << "Client failed to connect to server within timeout";
         enet_peer_reset(m_peer);
         return false;
     }
@@ -490,13 +491,13 @@ bool Client::connect(const char* address, unsigned int port)
 
 void Client::disconnect()
 {
-    Debug::log(Debug::Area::NetworkClient) << "attempting disconnect from server";
+    Debug::log(Debug::Area::NetworkClientInitialArea) << "attempting disconnect from server";
     enet_peer_disconnect(m_peer, 0);
 }
 
 void Client::startSinglePlayer(const std::string& playername)
 {
-    Debug::log(Debug::Area::NetworkClient) << "starting singleplayer! Entities::Playername: " << playername;
+    Debug::log(Debug::Area::NetworkClientInitialArea) << "starting singleplayer! Entities::Playername: " << playername;
     m_playerName = playername;
 
     //create a local server, and connect to it.
@@ -507,21 +508,21 @@ void Client::startSinglePlayer(const std::string& playername)
 
 bool Client::startMultiplayerClientConnection(const std::string& playername, const char* address, unsigned int port)
 {
-    Debug::log(Debug::Area::NetworkClient) << "starting multiplayer joining address: " << address << "! Entities::Playername: " << playername;
+    Debug::log(Debug::Area::NetworkClientInitialArea) << "starting multiplayer joining address: " << address << "! Entities::Playername: " << playername;
     m_playerName = playername;
 
     if (connect(address, port)) {
-        Debug::log(Debug::Area::NetworkClient) << "connection success!";
+        Debug::log(Debug::Area::NetworkClientInitialArea) << "connection success!";
         return true;
     } else {
-        Debug::log(Debug::Area::NetworkClient) << "connection failure!";
+        Debug::log(Debug::Area::NetworkClientInitialArea) << "connection failure!";
         return false;
     }
 }
 
 void Client::startMultiplayerHost(const std::string& playername, unsigned int port)
 {
-    Debug::log(Debug::Area::NetworkClient) << "starting multiplayer, hosting! Entities::Playername: " << playername << " port: " << port;
+    Debug::log(Debug::Area::NetworkClientInitialArea) << "starting multiplayer, hosting! Entities::Playername: " << playername << " port: " << port;
     if (!m_server) {
         m_playerName = playername;
 
@@ -529,7 +530,7 @@ void Client::startMultiplayerHost(const std::string& playername, unsigned int po
         m_serverThread = new std::thread(&Server::tick, m_server);
         connect();
     } else {
-        Debug::log(Debug::Area::NetworkClient) << "error, attempted to create player-hosted a server but we're still connected to this one";
+        Debug::log(Debug::Area::NetworkClientInitialArea) << "error, attempted to create player-hosted a server but we're still connected to this one";
     }
 }
 
@@ -647,7 +648,7 @@ void Client::receiveInitialPlayerData(std::stringstream* ss)
 {
     PacketBuf::InitialPlayerDataFromServer message;
     Packet::deserialize(ss, &message);
-    Debug::log(Debug::Area::NetworkClient) << "initial player data received";
+    Debug::log(Debug::Area::NetworkClientInitialArea) << "initial player data received";
 
     Entities::Player* player = new Entities::Player("player1Standing1");
     std::stringstream chatMessage;
@@ -658,7 +659,7 @@ void Client::receiveInitialPlayerData(std::stringstream* ss)
         m_mainPlayer->setPlayerID(message.playerid());
         m_mainPlayer->setPosition(message.x(), message.y());
 
-        Debug::log() << "CLIENT..INITIAL PLAYER DATA RECEIVED, pos: x: " << m_mainPlayer->position().x << " Y: " << m_mainPlayer->position().y;
+        Debug::log(Debug::Area::NetworkClientInitialArea) << "initial player data received, pos: x: " << m_mainPlayer->position().x << " Y: " << m_mainPlayer->position().y;
 
         QuickBarInventory* quickBarInventory = new QuickBarInventory();
         m_mainPlayer->setQuickBarInventory(quickBarInventory);
@@ -682,7 +683,7 @@ void Client::receiveInitialPlayerData(std::stringstream* ss)
         if (m_initialPlayersReceivedFinished) {
             m_chat->addChatLine("", chatMessage.str());
         } else {
-            Debug::log() << "PLAYERNAME: " << player->name() << " we're not adding the chat line because we haven't finished receiving initail client data";
+            Debug::log(Debug::Area::NetworkClientInitialArea) << "Player name: " << player->name() << " we're not adding the chat line because we haven't finished receiving initial client data";
         }
     }
 
@@ -705,7 +706,7 @@ void Client::receivePlayerMove(std::stringstream* ss)
 
     Entities::Player* player = m_world->findPlayer(message.playerid());
     player->setPosition(message.x(), message.y());
-    Debug::log() << "CILENT SETTING POSITION TO: " << player->position().x << " Y: " << player->position().y;
+    Debug::log(Debug::Area::NetworkClientContinuousArea) << "Setting player position to: " << player->position().x << " Y: " << player->position().y;
 }
 
 void Client::receiveChunk(std::stringstream* ss)

@@ -92,9 +92,9 @@ char* Shader::loadFile(const char* fname, GLint* fSize)
         file.close();
         text.assign(memblock);
 
-        Debug::log(Debug::Area::Graphics) << "shader : " << fname << " loaded successfully";
+        Debug::log(Debug::Area::ShadersArea) << "shader : " << fname << " loaded successfully";
     } else {
-        Debug::fatal(false,  Debug::Area::Graphics, "failed to load shader: " + std::string(fname));
+        Debug::fatal(false,  Debug::Area::ShadersArea, "failed to load shader: " + std::string(fname));
     }
     return memblock;
 }
@@ -122,7 +122,7 @@ void Shader::loadShaders(const char* vertexShader, const char* fragmentShader)
         assert(0);
         Debug::assertf(false, "vertex shader failed to compile properly");
     } else {
-        Debug::log(Debug::Area::Graphics) << "vertex shader compiled!";
+        Debug::log(Debug::Area::ShadersArea) << "vertex shader compiled!";
     }
 
     m_fragmentShader = glCreateShader(GL_FRAGMENT_SHADER);
@@ -132,7 +132,7 @@ void Shader::loadShaders(const char* vertexShader, const char* fragmentShader)
     if (!checkShaderCompileStatus(m_fragmentShader)) {
         Debug::assertf(false, "fragment shader failed to compile properly");
     } else {
-        Debug::log(Debug::Area::Graphics) << "fragment shader compiled!";
+        Debug::log(Debug::Area::ShadersArea) << "fragment shader compiled!";
     }
 
     m_shaderProgram = glCreateProgram();
@@ -147,9 +147,9 @@ void Shader::loadShaders(const char* vertexShader, const char* fragmentShader)
     glLinkProgram(m_shaderProgram);
 
     if (checkProgramLinkStatus(m_shaderProgram)) {
-        Debug::log(Debug::Area::Graphics) << "shader program linked!";
+        Debug::log(Debug::Area::ShadersArea) << "shader program linked!";
     } else {
-        Debug::fatal(false, Debug::Area::Graphics, "shader program link FAILURE");
+        Debug::fatal(false, Debug::Area::ShadersArea, "shader program link FAILURE");
     }
 
     delete [] vertSource;
@@ -169,7 +169,7 @@ bool Shader::checkShaderCompileStatus(GLuint obj)
         std::vector<char> log(length);
         glGetShaderInfoLog(obj, length, &length, &log[0]);
 
-        Debug::log(Debug::Area::Graphics) << &log[0];
+        Debug::log(Debug::Area::ShadersArea) << &log[0];
         return false;
     }
     return true;
@@ -209,7 +209,7 @@ void Shader::printShaderInfoLog(GLuint shader)
         infoLog = new GLchar[infoLogLen];
         glGetShaderInfoLog(shader, infoLogLen, &charsWritten, infoLog);
 
-        Debug::log(Debug::Area::Graphics) << "Shader info log: " << infoLog;
+        Debug::log(Debug::Area::ShadersArea) << "Shader info log: " << infoLog;
 
         delete [] infoLog;
     }

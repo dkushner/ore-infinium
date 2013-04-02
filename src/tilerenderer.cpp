@@ -63,7 +63,6 @@ TileRenderer::TileRenderer(World* world, Camera* camera, Entities::Player* mainP
     const GLsizei depth = 1;
 
     for (int i = 0; i < Block::blockTypeMap.size(); ++i) {
-        Debug::log() << "LOADING TILEMAP TEX: " << Block::blockTypeMap.at(i).texture;
         Image image(Block::blockTypeMap.at(i).texture);
 
         glTexSubImage3D(GL_TEXTURE_2D_ARRAY, level, xoffset, yoffset, i, 16, 16, depth, GL_BGRA, GL_UNSIGNED_BYTE, image.bytes());
@@ -110,7 +109,7 @@ void TileRenderer::render()
 //    Debug::log() << "OFFSET: " << offset.x << " Y : " << offset.y;
     Debug::checkGLError();
     glm::vec2 playerPosition = m_mainPlayer->position();
-    Debug::log () << "player pos x : " << playerPosition.x << " y: " << playerPosition.y;
+    Debug::log(Debug::TileRendererArea) << "player pos x : " << playerPosition.x << " y: " << playerPosition.y;
     int tilesBeforeX = playerPosition.x / Block::BLOCK_SIZE;
     //row
     int tilesBeforeY = playerPosition.y / Block::BLOCK_SIZE;
@@ -125,10 +124,10 @@ void TileRenderer::render()
 //    Debug:: log() << "starRow: " << startRow << "endrow: " << endRow << "startcol: " << startColumn << " endcol: " << endColumn;
 
     if (std::abs(startColumn) != startColumn) {
-        std::cout << "FIXME, WENT INTO NEGATIVE COLUMN!!";
+        Debug::log(Debug::TileRendererArea) << "FIXME, WENT INTO NEGATIVE COLUMN!!";
         assert(0);
     } else if (std::abs(startRow) != startRow) {
-        std::cout << "FIXME, WENT INTO NEGATIVE ROW!!";
+        Debug::log(Debug::TileRendererArea) << "FIXME, WENT INTO NEGATIVE ROW!!";
         assert(0);
     }
 

@@ -46,10 +46,12 @@ void Image::loadImage(const std::string& filename)
 {
     FREE_IMAGE_FORMAT imageFormat = FIF_UNKNOWN;
 
+    Debug::log(Debug::Area::ImageLoaderArea) << "Loading image: " << filename << " ... ";
+
     struct stat fileAttribute;
     bool fileExists = stat(filename.c_str(), &fileAttribute) == 0;
 
-    Debug::fatal(fileExists, Debug::Area::System, "image file failed to load, file does not exist. Filename: " + filename);
+    Debug::fatal(fileExists, Debug::Area::ImageLoaderArea, "image file failed to load, file does not exist. Filename: " + filename);
 
     imageFormat = FreeImage_GetFileType(filename.c_str());
 
@@ -69,13 +71,13 @@ void Image::loadImage(const std::string& filename)
         m_bitmap = FreeImage_Load(imageFormat, filename.c_str());
     }
 
-    Debug::fatal(m_bitmap, Debug::Area::Graphics, "failure to load image, bitmap pointer invalid");
+    Debug::fatal(m_bitmap, Debug::Area::ImageLoaderArea, "failure to load image, bitmap pointer invalid");
 
     m_width = FreeImage_GetWidth(m_bitmap);
     m_height = FreeImage_GetHeight(m_bitmap);
 
     if (m_width == 0 || m_height == 0) {
-        Debug::fatal(false, Debug::Area::Graphics, "failure to load image, bitmap sizes invalid or bits invalid");
+        Debug::fatal(false, Debug::Area::ImageLoaderArea, "failure to load image, bitmap sizes invalid or bits invalid");
     }
 }
 
@@ -86,6 +88,6 @@ void Image::flipVertically()
 
 BYTE* Image::bytes()
 {
-    Debug::fatal(m_bitmap, Debug::Area::Graphics, "bitmap invalid!");
+    Debug::fatal(m_bitmap, Debug::Area::ImageLoaderArea, "bitmap invalid!");
     return FreeImage_GetBits(m_bitmap);
 }

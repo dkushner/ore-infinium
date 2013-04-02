@@ -25,6 +25,7 @@
  *
  */
 #include "SystemInterfaceSDL2.h"
+#include <src/debug.h>
 
 #include <Rocket/Core.h>
 
@@ -376,7 +377,7 @@ bool SystemInterfaceSDL2::LogMessage(Rocket::Core::Log::Type type, const Rocket:
         break;
     };
 
-    printf("%s - %s\n", Type.c_str(), message.CString());
+    Debug::log(Debug::Area::GUILoggerArea) << Type.c_str() << " - " << message.CString();
 
     return true;
 }

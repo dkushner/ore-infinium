@@ -30,7 +30,6 @@ class Debug
 public:
     enum Area
     {
-        General,
         Graphics,
         NetworkClient,
         NetworkServer,
@@ -52,15 +51,17 @@ public:
         NetworkServerContinousArea,
         ClientInventoryArea,
         ServerInventoryArea,
+        ServerEntityLogicArea,
         ImageLoaderArea,
         WorldGeneratorArea,
+        WorldLoaderArea,
         ClientEntityCreationArea,
         ServerEntityCreationArea,
         SettingsArea,
         StartupArea
     };
 
-    static LogStream log(Area area = Area::General);
+    static LogStream log(Area area);
 
     static void assertf(bool value, const std::string& message);
     static void fatal(bool value, Area area, const std::string& message);

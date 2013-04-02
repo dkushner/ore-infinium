@@ -52,7 +52,7 @@ GUI::GUI()
 //   m_fileInterface = new ShellFileInterface("../client/gui/assets");
 //    Rocket::Core::SetFileInterface(m_fileInterface);
 
-    Debug::fatal(Rocket::Core::Initialise(), Debug::Area::Graphics, "rocket init failure");
+    Debug::fatal(Rocket::Core::Initialise(), Debug::Area::GUILoggerArea, "Rocket init failure");
     Rocket::Controls::Initialise();
 
     m_context = Rocket::Core::CreateContext("main", Rocket::Core::Vector2i(Settings::instance()->windowWidth, Settings::instance()->windowHeight));
@@ -60,10 +60,10 @@ GUI::GUI()
     Rocket::Debugger::Initialise(m_context);
 
     bool success = Rocket::Core::FontDatabase::LoadFontFace("../client/gui/assets/Delicious-Roman.otf");
-    Debug::fatal(success, Debug::Area::Graphics, "font load failure");
+    Debug::fatal(success, Debug::Area::GUILoggerArea, "font load failure");
 
     auto cursor = m_context->LoadMouseCursor("../client/gui/assets/cursor.rml");
-    Debug::assertf(cursor, "cursor load failure");
+    Debug::fatal(cursor, Debug::Area::GUILoggerArea, "cursor load failure");
 }
 
 GUI::~GUI()
@@ -126,7 +126,7 @@ void GUI::render()
 void GUI::addInputDemand()
 {
     ++m_inputDemand;
-    Debug::log(Debug::Area::Graphics) << "GUI::addInputDemand, input demand count: " << m_inputDemand;
+    Debug::log(Debug::Area::GUILoggerArea) << "GUI::addInputDemand, input demand count: " << m_inputDemand;
 }
 
 void GUI::removeInputDemand()
@@ -135,10 +135,10 @@ void GUI::removeInputDemand()
     if (m_inputDemand > 0) {
         --m_inputDemand;
     } else {
-        Debug::log(Debug::Area::Graphics) << "WARNING: GUI::removeInputDemand minor failure, tried to remove refcount below 0. This will break GUI focusing., input demand count: " << m_inputDemand;
+        Debug::log(Debug::Area::GUILoggerArea) << "WARNING: GUI::removeInputDemand minor failure, tried to remove refcount below 0. This will break GUI focusing., input demand count: " << m_inputDemand;
     }
 
-    Debug::log(Debug::Area::Graphics) << "GUI::removeInputDemand, input demand count: " << m_inputDemand;
+    Debug::log(Debug::Area::GUILoggerArea) << "GUI::removeInputDemand, input demand count: " << m_inputDemand;
 }
 
 bool GUI::inputDemanded()
