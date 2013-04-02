@@ -30,7 +30,7 @@ class Debug
 public:
     enum Area
     {
-        ClientRenderer,
+        ClientRendererArea,
         TileRendererArea,
         SpriteSheetRendererArea,
         LightingRendererArea,
@@ -42,7 +42,7 @@ public:
         NetworkClientInitialArea,
         NetworkServerInitialArea,
         NetworkClientContinuousArea,
-        NetworkServerContinousArea,
+        NetworkServerContinuousArea,
         ClientInventoryArea,
         ServerInventoryArea,
         ServerEntityLogicArea,

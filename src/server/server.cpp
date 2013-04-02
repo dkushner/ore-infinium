@@ -115,8 +115,8 @@ void Server::poll()
 
         switch (event.type) {
         case ENET_EVENT_TYPE_CONNECT:
-            Debug::log(Debug::Area::NetworkServerContinousArea) << "Received a new peer, adding to client list, connection from host:  " << event.peer->address.host << " at port: " << event.peer->address.port << " client has not yet been validated.";
-            Debug::log(Debug::Area::NetworkServerContinousArea) << "client count, before adding: " << m_clients.size();
+            Debug::log(Debug::Area::NetworkServerContinuousArea) << "Received a new peer, adding to client list, connection from host:  " << event.peer->address.host << " at port: " << event.peer->address.port << " client has not yet been validated.";
+            Debug::log(Debug::Area::NetworkServerContinuousArea) << "client count, before adding: " << m_clients.size();
             //NOTE: we don't actually act on it, first we wait for them to send us a packet then we validate it and if so we add it to our client list
             //FIXME: probably should timeout if they're not validated within n seconds, that way they can't just keep piling on top of us
 
@@ -132,16 +132,16 @@ void Server::poll()
             break;
 
         case ENET_EVENT_TYPE_DISCONNECT: {
-            Debug::log(Debug::Area::NetworkServerContinousArea) << "Peer has disconnected:  " << event.peer->address.host << " at port: " << event.peer->address.port;
+            Debug::log(Debug::Area::NetworkServerContinuousArea) << "Peer has disconnected:  " << event.peer->address.host << " at port: " << event.peer->address.port;
             printf("%s disconnected.\n", event.peer->data);
 
             for (auto & client : m_clients) {
                 if (client.first == event.peer) {
-                    Debug::log(Debug::Area::NetworkServerContinousArea) << "Found peer for disconnect, deleting it";
+                    Debug::log(Debug::Area::NetworkServerContinuousArea) << "Found peer for disconnect, deleting it";
                     m_clients.erase(client.first);
                 }
             }
-            Debug::log(Debug::Area::NetworkServerContinousArea) << "m_clients size: " << m_clients.size();
+            Debug::log(Debug::Area::NetworkServerContinuousArea) << "m_clients size: " << m_clients.size();
 
             // Reset client's information
             event.peer->data = NULL;

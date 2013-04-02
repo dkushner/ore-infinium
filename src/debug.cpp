@@ -53,7 +53,7 @@ void Debug::checkGLError()
 {
     GLenum error = glGetError();
     if (error != GL_NO_ERROR) {
-        Debug::log(Debug::Area::ClientRenderer) << gluErrorString(error);
+        Debug::log(Debug::Area::ClientRendererArea) << gluErrorString(error);
         assert(0);
     }
 }
@@ -213,7 +213,7 @@ void Debug::glDebugCallback(unsigned int source, unsigned int type, unsigned int
         idString.append("\nError ID: ");
         idString.append("\e[32;40m\e[0m");
 
-        log(Debug::Area::ClientRenderer) << "\nOpenGL Error Report: " << sourceString << typeString << idString << severityString << messageString << "\n";
+        log(Debug::Area::ClientRendererArea) << "\nOpenGL Error Report: " << sourceString << typeString << idString << severityString << messageString << "\n";
     }
 }
 #endif
@@ -231,10 +231,97 @@ LogStream::~LogStream()
 
         areaString.append("\e[36;40m");
         switch (m_area) {
+            case Debug::Area::ClientRendererArea:
+                areaString.append("[ClientRendererArea]");
+                break;
 
- //       case Debug::Area::System:
-//            areaString.append("[System]");
-  //          break;
+            case Debug::Area::TileRendererArea:
+                areaString.append("[TileRendererArea]");
+                break;
+
+            case Debug::Area::SpriteSheetRendererArea:
+                areaString.append("[SpriteSheetRendererArea]");
+                break;
+
+            case Debug::Area::LightingRendererArea:
+                areaString.append("[LightingRendererArea]");
+                break;
+
+            case Debug::Area::PhysicsArea:
+                areaString.append("[PhysicsArea]");
+                break;
+
+            case Debug::Area::AudioArea:
+                areaString.append("[AudioArea]");
+                break;
+
+            case Debug::Area::AudioLoaderArea:
+                areaString.append("[AudioLoaderArea]");
+                break;
+
+            case Debug::Area::GUILoggerArea:
+                areaString.append("[GUILoggerArea]");
+                break;
+
+            case Debug::Area::ShadersArea:
+                areaString.append("[ShadersArea]");
+                break;
+
+            case Debug::Area::NetworkClientInitialArea:
+                areaString.append("[NetworkClientInitialArea]");
+                break;
+
+            case Debug::Area::NetworkServerInitialArea:
+                areaString.append("[NetworkServerInitialArea]");
+                break;
+
+            case Debug::Area::NetworkClientContinuousArea:
+                areaString.append("[NetworkClientContinuousArea]");
+                break;
+
+            case Debug::Area::NetworkServerContinuousArea:
+                areaString.append("[NetworkServerContinuousArea]");
+                break;
+
+            case Debug::Area::ClientInventoryArea:
+                areaString.append("[ClientInventoryArea]");
+                break;
+
+            case Debug::Area::ServerInventoryArea:
+                areaString.append("[ServerInventoryArea]");
+                break;
+
+            case Debug::Area::ServerEntityLogicArea:
+                areaString.append("[ServerEntityLogicArea]");
+                break;
+
+            case Debug::Area::ImageLoaderArea:
+                areaString.append("[ImageLoaderArea]");
+                break;
+
+            case Debug::Area::WorldGeneratorArea:
+                areaString.append("[WorldGeneratorArea]");
+                break;
+
+            case Debug::Area::WorldLoaderArea:
+                areaString.append("[WorldLoaderArea]");
+                break;
+
+            case Debug::Area::ClientEntityCreationArea:
+                areaString.append("[ClientEntityCreationArea]");
+                break;
+
+            case Debug::Area::ServerEntityCreationArea:
+                areaString.append("[ServerEntityCreationArea]");
+                break;
+
+            case Debug::Area::SettingsArea:
+                areaString.append("[SettingsArea]");
+                break;
+
+            case Debug::Area::StartupArea:
+                areaString.append("[StartupArea]");
+                break;
         }
 
         areaString.append("\e[36;40m\e[0m");
