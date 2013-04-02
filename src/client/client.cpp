@@ -28,6 +28,7 @@
 #include "gui/chatdialog.h"
 #include "gui/debugmenu.h"
 #include "gui/quickbarmenu.h"
+#include "gui/debugsettings.h"
 
 #include "src/settings/settings.h"
 
@@ -338,6 +339,17 @@ void Client::handleInputEvents()
                 if (m_world) {
                     m_world->toggleTileRenderingEnabled();
                 }
+            } else if (event.key.keysym.sym == SDLK_F11) {
+               if (m_debugSettings == nullptr) {
+                    m_debugSettings = new DebugSettings(this);
+                    m_debugSettings->show();
+               } else {
+                   if (m_debugSettings->visible()) {
+                        m_debugSettings->hide();
+                   } else {
+                        m_debugSettings->show();
+                   }
+               }
             } else if (event.key.keysym.sym == SDLK_EQUALS) {
                 if (m_world) {
                     //FIXME: do i even want zooming? it means a fuckton more work on the handling of just about everything

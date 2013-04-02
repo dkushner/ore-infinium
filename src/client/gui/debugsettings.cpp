@@ -68,13 +68,9 @@ void DebugSettings::show()
     m_debugSettings->GetElementById("title")->Focus();
 }
 
-void DebugSettings::close()
+void DebugSettings::hide()
 {
-    m_debugSettings->Close();
-    GUI::instance()->context()->UnloadDocument(m_debugSettings);
-    //FIXME: gosh i hate this with a passion. but it's more complicated than it seems to do right. or at least i think it is.
-    //also, notice i don't delete m_options. i'm seriously hoping that rocket does that. if i call delete on it, it crashsee.
-    delete m_debugSettings;
+    m_debugSettings->Hide();
 }
 
 bool DebugSettings::visible()

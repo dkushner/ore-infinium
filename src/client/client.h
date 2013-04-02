@@ -28,6 +28,7 @@
 #include <thread>
 #include <Box2D/Dynamics/b2World.h>
 
+class DebugSettings;
 class PhysicsDebugRenderer;
 class QuickBarMenu;
 class Player;
@@ -133,6 +134,7 @@ private:
     ChatDialog* m_chat = nullptr;
     DebugMenu* m_debugMenu = nullptr;
     QuickBarMenu* m_quickBarMenu = nullptr;
+    DebugSettings* m_debugSettings = nullptr;
 
     SDL_Window *m_window = nullptr;
     SDL_GLContext m_GLcontext;

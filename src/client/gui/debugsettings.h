@@ -44,7 +44,7 @@ public:
     virtual void ProcessEvent(Rocket::Core::Event& event);
 
     void show();
-    void close();
+    void hide();
     bool visible();
 
     Rocket::Core::ElementDocument* document();
