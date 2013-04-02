@@ -32,7 +32,6 @@ public:
     {
         General,
         Graphics,
-        Network,
         NetworkClient,
         NetworkServer,
         ClientRenderer,
@@ -57,7 +56,8 @@ public:
         WorldGeneratorArea,
         ClientEntityCreationArea,
         ServerEntityCreationArea,
-        SettingsArea
+        SettingsArea,
+        StartupArea
     };
 
     static LogStream log(Area area = Area::General);
