@@ -52,8 +52,8 @@
 
 World::World(Entities::Player* mainPlayer, Client* client, Server* server)
     : m_mainPlayer(mainPlayer),
-      m_client(client),
-      m_server(server)
+      m_server(server),
+      m_client(client)
 {
     //FIXME:
 //    m_player = new Entities::Player("someframe");
@@ -224,6 +224,7 @@ Entities::Player* World::findPlayer(uint32_t playerID)
     }
 
     Debug::assertf(false, "World::findPlayer, player does not exist? that shit's whack");
+    return nullptr;
 }
 
 void World::render(Entities::Player* player)

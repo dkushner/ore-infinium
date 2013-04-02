@@ -34,8 +34,8 @@
 #include <stdlib.h>
 
 TileRenderer::TileRenderer(World* world, Camera* camera, Entities::Player* mainPlayer)
-    :   m_world(world),
-        m_mainPlayer(mainPlayer)
+    :   m_mainPlayer(mainPlayer),
+        m_world(world)
 {
     m_shader = new Shader("tilerenderer.vert", "tilerenderer.frag");
     setCamera(camera);

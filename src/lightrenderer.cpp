@@ -39,8 +39,8 @@
 #include <SDL_timer.h>
 
 LightRenderer::LightRenderer(World* world, Camera* camera, Entities::Player* mainPlayer)
-    :   m_world(world),
-        m_mainPlayer(mainPlayer)
+    :   m_mainPlayer(mainPlayer),
+        m_world(world)
 {
     m_shader = new Shader("lightrenderer.vert", "lightrenderer.frag");
     m_shaderPassthrough = new Shader("lightrendererpassthrough.vert", "lightrendererpassthrough.frag");

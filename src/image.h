@@ -24,7 +24,7 @@
 #include <string>
 #include <FreeImage.h>
 
-class FIBITMAP;
+struct FIBITMAP;
 
 class Image
 {
