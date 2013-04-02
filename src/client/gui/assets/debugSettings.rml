@@ -1,0 +1,68 @@
+
+<rml>
+        <head>
+                <title>Help</title>
+                <link type="text/template" href="window.rml" />
+                <link type="text/template" href="frame.rml" />
+                <style>
+                        body
+                        {
+                            min-width: 36%;
+                            min-height: 28%;
+
+                            width: 36%;
+                            height: 28%;
+
+                            margin-top: auto;
+                        }
+
+                        div#content
+                        {
+                            text-align: left;
+                        }
+
+                        div#framecontent
+                        {
+                            text-align: left;
+                        }
+                        input.text
+                        {
+                            margin-left: 0px;
+                            margin-bottom: 0px;
+                            padding-bottom: 0px;
+                            vertical-align: 0px;
+                        }
+
+                        button,
+                        input.submit
+                        {
+                            display: inline-block;
+
+                            width: 159px;
+                            height: 30px;
+
+                            padding-top: 0px;
+                            margin-bottom: 0px;
+                            padding-bottom: 0px;
+                            vertical-align: 0px;
+                        }
+
+                        tabset
+                        {
+                            padding-bottom: 10px;
+                        }
+                </style>
+        </head>
+
+        <body template="window">
+            <tabset id="tabset">
+                <tab>Chat Tab</tab>
+                    <panel id="panel1">
+                        This is where some text for the chat history goes
+                    </panel>
+            </tabset>
+
+                    <input id="inputLine" type="text" value="" maxLength="128" />
+                    <button id="sendButton">send</button>
+        </body>
+</rml>
