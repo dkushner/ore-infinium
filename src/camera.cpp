@@ -40,27 +40,32 @@ void Camera::translate(const glm::vec2 vec)
 
 void Camera::zoom(const float factor)
 {
-    m_scaleFactor = factor;
+    m_scaleFactor *= factor;
 
-    m_viewMatrix = glm::scale(m_viewMatrix, glm::vec3(factor));
+    m_viewMatrix = glm::scale(m_viewMatrix, glm::vec3(m_scaleFactor));
+
     pushMatrix();
 }
 
 void Camera::centerOn(const glm::vec2 vec)
 {
+    if (Settings::instance()->debugAreas & Debug::Area::ClientRendererArea) {
+        return;
+    }
     glm::vec2 position = glm::vec2(round(vec.x), round(vec.y));
 
     glm::vec2 halfScreen((Settings::instance()->screenResolutionWidth * 0.5), (Settings::instance()->screenResolutionHeight * 0.5));
 
-
-    m_viewMatrix =  glm::translate(glm::mat4(), -glm::vec3(position - halfScreen, 0.0f)) ;
+    m_viewMatrix =  glm::translate(glm::mat4(), -glm::vec3(position - halfScreen, 1.0f));
+    m_viewMatrix = glm::scale(m_viewMatrix, glm::vec3(m_scaleFactor));
     pushMatrix();
 }
 
 void Camera::setPosition(const glm::vec2 vec)
 {
-    glm::vec2 screenSize(Settings::instance()->screenResolutionWidth, Settings::instance()->screenResolutionHeight);
+    glm::vec2 screenSize((Settings::instance()->screenResolutionWidth), (Settings::instance()->screenResolutionHeight));
     m_viewMatrix = glm::translate(glm::mat4(), -glm::vec3(vec, 0.0f));
+    m_viewMatrix = glm::scale(m_viewMatrix, glm::vec3(m_scaleFactor));
     pushMatrix();
 }
 
