@@ -16,6 +16,7 @@ find_path(BOX2D_INCLUDE_DIR Box2D/Box2D.h
   ~/Library/Frameworks
   /Library/Frameworks
   /usr/local
+  /usr/include
   /usr
   /sw          # Fink
   /opt/local   # DarwinPorts
@@ -31,6 +32,7 @@ find_library(BOX2D_LIBRARY_DEBUG
   ~/Library/Frameworks
   /Library/Frameworks
   /usr/local
+  /usr/lib
   /usr
   /sw          # Fink
   /opt/local   # DarwinPorts
@@ -46,6 +48,7 @@ find_library(BOX2D_LIBRARY_RELEASE
   ~/Library/Frameworks
   /Library/Frameworks
   /usr/local
+  /usr/lib
   /usr
   /sw          # Fink
   /opt/local   # DarwinPorts
