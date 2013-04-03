@@ -241,14 +241,17 @@ void Client::poll()
 void Client::render(double frameTime)
 {
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+    /*
 
     if (m_world && m_mainPlayer) {
         m_world->render(m_mainPlayer);
     }
+    */
 
     m_gui->render();
-//FIXME: HACK: y    drawDebugText(elapsedTime);
     drawDebugText(frameTime);
+//FIXME: HACK: y    drawDebugText(elapsedTime);
+    /*
 
     if (m_physicsDebugRenderingEnabled) {
         if (!m_physicsDebugRenderer && m_box2DWorld && m_world && m_world->spriteSheetRenderer()) {
@@ -264,6 +267,7 @@ void Client::render(double frameTime)
             m_physicsDebugRenderer->render();
         }
     }
+    */
 
     SDL_GL_SwapWindow(m_window);
 }

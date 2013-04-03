@@ -82,11 +82,24 @@ void DebugMenu::setCollapsed(bool collapsed)
 void DebugMenu::update(double frameTime)
 {
     std::stringstream ss;
-    std::string str;
+    std::string fpsString;
 
-    ss.str("");
-    ss << "FPS: " << (1000.0 / frameTime) << " Frametime: " << (frameTime / 1000.0);
-    str = ss.str();
+    static double previousFrameTime = frameTime;
+    static int limiter = 0;
+    ++limiter;
+
+    //FIXME: pretty hacky, eh? But it's just to limit update time for framerate so you can actually *see* it
+    if (limiter > 15) {
+        previousFrameTime = frameTime;
+        limiter = 0;
+
+        ss.str("");
+        ss << "FPS: " << (1000.0 / previousFrameTime) << " Frametime: " << (previousFrameTime / 1000.0);
+        fpsString = ss.str();
+
+        m_debug->GetElementById("1")->SetInnerRML(fpsString.c_str());
+    }
+
 
     ss.str("");
     ss << "Client Connection Status: ";
@@ -112,7 +125,7 @@ void DebugMenu::update(double frameTime)
         ss << "Player Position X: " << m_client->mainPlayer()->position().x << " Y: " << m_client->mainPlayer()->position().y;
         playerString = ss.str();
 
-        m_debug->GetElementById("8")->SetInnerRML(playerString.c_str());
+        m_debug->GetElementById("10")->SetInnerRML(playerString.c_str());
     }
 
     ss.str("");
@@ -147,7 +160,6 @@ void DebugMenu::update(double frameTime)
 
     std::string debugGUIRenderer = ss.str();
 
-    m_debug->GetElementById("1")->SetInnerRML(str.c_str());
     m_debug->GetElementById("2")->SetInnerRML(debugLoggingString.c_str());
     m_debug->GetElementById("3")->SetInnerRML(debugRendererOutputString.c_str());
     m_debug->GetElementById("4")->SetInnerRML(debugGUIRenderer.c_str());
@@ -156,7 +168,7 @@ void DebugMenu::update(double frameTime)
     m_debug->GetElementById("7")->SetInnerRML("F9 to toggle light rendering pass");
     m_debug->GetElementById("8")->SetInnerRML("F10 to toggle tile rendering pass");
     m_debug->GetElementById("9")->SetInnerRML("F11 to show/hide debug settings menu");
-    // 8 is up top, player pos
+    // 10 is up top, player pos
 }
 
 void DebugMenu::show()
