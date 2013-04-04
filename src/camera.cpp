@@ -29,7 +29,7 @@ Camera::Camera()
     m_viewMatrix = glm::translate(glm::mat4(), glm::vec3(x, y, 0.0f));
     Debug::log(Debug::Area::ClientRendererArea) << "camera init, screen at width: " << Settings::instance()->screenResolutionWidth << " height: " << Settings::instance()->screenResolutionHeight;
 //    m_orthoMatrix = glm::ortho(0.0f, float(Settings::instance()->screenResolutionWidth), float(Settings::instance()->screenResolutionHeight), 0.0f, -1.0f, 1.0f);
-    m_orthoMatrix = glm::ortho(0.0f, float(1000), float(1000), 0.0f, -1.0f, 1.0f);
+    m_orthoMatrix = glm::ortho(0.0f, float(1000/PIXELS_PER_METER), float(1000/PIXELS_PER_METER), 0.0f, -1.0f, 1.0f);
 }
 
 void Camera::translate(const glm::vec2 vec)
@@ -54,9 +54,9 @@ void Camera::centerOn(const glm::vec2 vec)
     }
     glm::vec2 position = glm::vec2(round(vec.x), round(vec.y));
 
-    glm::vec2 halfScreen((Settings::instance()->screenResolutionWidth * 0.5), (Settings::instance()->screenResolutionHeight * 0.5));
+//    glm::vec2 halfScreen((Settings::instance()->screenResolutionWidth * 0.2), (Settings::instance()->screenResolutionHeight * 0.2));
 
-    m_viewMatrix =  glm::translate(glm::mat4(), -glm::vec3(position - halfScreen, 1.0f));
+    m_viewMatrix =  glm::translate(glm::mat4(), -glm::vec3(position, 1.0f));
     m_viewMatrix = glm::scale(m_viewMatrix, glm::vec3(m_scaleFactor));
     pushMatrix();
 }
