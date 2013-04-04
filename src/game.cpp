@@ -115,8 +115,8 @@ void Game::tick()
         const double alpha = accumulator / dt;
 
         // sleep so we don't burn cpu
-        std::chrono::milliseconds timeUntilNextFrame(int(dt - accumulator));
-        std::this_thread::sleep_for(timeUntilNextFrame);
+      //  std::chrono::milliseconds timeUntilNextFrame(int(dt - accumulator));
+      //  std::this_thread::sleep_for(timeUntilNextFrame);
     }
 
     /*

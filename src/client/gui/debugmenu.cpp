@@ -89,7 +89,7 @@ void DebugMenu::update(double frameTime)
     ++limiter;
 
     //FIXME: pretty hacky, eh? But it's just to limit update time for framerate so you can actually *see* it
-    if (limiter > 15) {
+    if (limiter > 10) {
         previousFrameTime = frameTime;
         limiter = 0;
 

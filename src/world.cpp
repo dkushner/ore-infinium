@@ -237,7 +237,7 @@ void World::render(Entities::Player* player)
 
     //set our view so that the player will stay relative to the view, in the center.
     //HACK    m_window->setView(*m_view);
-    m_lightRenderer->renderToFBO();
+   m_lightRenderer->renderToFBO();
 
     m_tileRenderer->render();
 
