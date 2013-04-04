@@ -113,7 +113,7 @@ World::World(Entities::Player* mainPlayer, Client* client, Server* server)
             m_server->client()->setBox2DWorld(m_box2DWorld);
         }
 
-        loadMap();
+        loadWorld();
     }
 
     //FIXME: saveMap();
@@ -501,15 +501,15 @@ void World::performBlockAttack(Entities::Player* player)
     }
 }
 
-void World::loadMap()
+void World::loadWorld()
 {
     Debug::log(Debug::Area::WorldLoaderArea) << "Loading world!";
     Debug::log(Debug::Area::WorldLoaderArea) << "SIZEOF Block class: " << sizeof(Block);
     Debug::log(Debug::Area::WorldLoaderArea) << "SIZEOF m_blocks: " << sizeof(m_blocks) / 1e6 << " MiB";
-    generateMap();
+    generateWorld();
 }
 
-void World::generateMap()
+void World::generateWorld()
 {
     Debug::log(Debug::Area::WorldGeneratorArea) << "Generating a new world.";
 
@@ -540,7 +540,7 @@ void World::generateMap()
     Debug::log(Debug::Area::WorldGeneratorArea) << "Time taken for world generation: " << timer.milliseconds() << " milliseconds";
 }
 
-void World::saveMap()
+void World::saveWorld()
 {
     /*
 

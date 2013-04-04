@@ -75,7 +75,7 @@ public:
     void update(double elapsedTime);
     void render(Entities::Player* player);
 
-    void loadMap();
+    void loadWorld();
 
     static float pixelsToMeters(float pixels);
     static float metersToPixels(float meters);
@@ -159,7 +159,7 @@ private:
     /**
     * From scratch, create a randomly generated tileset and store it in our array
     */
-    void generateMap();
+    void generateWorld();
 
     /**
     * FIXME: presently only calculates the center of the screen according to resolution.
@@ -182,7 +182,7 @@ private:
      */
     void handlePlayerLeftMouse(Entities::Player* player);
 
-    void saveMap();
+    void saveWorld();
 
     /**
      * Should be called AFTER the world has been fully processed in raw block form.
