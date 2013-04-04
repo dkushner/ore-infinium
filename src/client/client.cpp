@@ -248,7 +248,6 @@ void Client::render(double frameTime)
 
     m_gui->render();
     drawDebugText(frameTime);
-//FIXME: HACK: y    drawDebugText(elapsedTime);
 
     if (m_physicsDebugRenderingEnabled) {
         if (!m_physicsDebugRenderer && m_box2DWorld && m_world && m_world->spriteSheetRenderer()) {
@@ -350,11 +349,11 @@ void Client::handleInputEvents()
                         m_debugSettings->show();
                    }
                }
-            } else if (event.key.keysym.sym == SDLK_EQUALS) {
+            } else if (event.key.keysym.sym == SDLK_EQUALS || event.key.keysym.sym == SDLK_l) {
                 if (m_world) {
                     m_world->zoomIn();
                 }
-            } else if (event.key.keysym.sym == SDLK_MINUS) {
+            } else if (event.key.keysym.sym == SDLK_MINUS || event.key.keysym.sym == SDLK_k) {
                 if (m_world) {
                     m_world->zoomOut();
                 }
