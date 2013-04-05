@@ -258,9 +258,9 @@ void Client::render(double frameTime)
         }
 
         if (m_box2DWorld && m_physicsDebugRenderer && m_physicsDebugRenderingEnabled) {
-           m_box2DWorld->DrawDebugData();
+//           m_box2DWorld->DrawDebugData();
             //finalize rendering to screen.
-            m_physicsDebugRenderer->render();
+ //           m_physicsDebugRenderer->render();
         }
     }
 

@@ -334,7 +334,7 @@ void SpriteSheetRenderer::renderEntities()
 
         glm::vec2 spriteSize = sprite->sizeMeters();
 
-        glm::vec4 rect = glm::vec4(round(spritePosition.x), round(spritePosition.y), round(spritePosition.x + spriteSize.x), round(spritePosition.y + spriteSize.y));
+        glm::vec4 rect = glm::vec4(spritePosition.x, spritePosition.y, spritePosition.x + spriteSize.x, spritePosition.y + spriteSize.y);
 
         float x = rect.x;
         float width = rect.z;
