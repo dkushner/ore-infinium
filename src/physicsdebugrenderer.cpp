@@ -25,19 +25,6 @@ PhysicsDebugRenderer::PhysicsDebugRenderer(Camera* camera)
     m_shader = new Shader("physicsdebugrenderer.vert", "physicsdebugrenderer.frag");
     m_shader->bindProgram();
     setCamera(camera);
-//m_ortho = m_camera->ortho();
-
-//    glm::vec2 pos = glm::vec2(2500/50, 1492/50);
-//    glm::mat4 viewMatrix;// = m_camera->view();
-//    glm::vec2 position = glm::vec2(round(pos.x), round(pos.y));
-//
-    glm::vec2 halfScreen((Settings::instance()->screenResolutionWidth * 0.5) / 50, (Settings::instance()->screenResolutionHeight * 0.5) / 50);
-
-//    viewMatrix =  glm::translate(glm::mat4(), glm::vec3(position - halfScreen, 0.0f)) ;
-//    view = glm::scale(view, glm::vec3(50.0f, 50.0f, 1.0f));
-//   m_ortho = glm::ortho(0.0f, float(PIXELS_PER_METER), float(PIXELS_PER_METER), 0.0f, -1.0f, 1.0f);
-//   m_ortho = glm::ortho(0.0f, float(PIXELS_PER_METER), float(PIXELS_PER_METER), 0.0f, -1.0f, 1.0f) * m_camera->view() * glm::scale(m_camera->view(), glm::vec3(1/50.0f, 1/50.0f, 1.0f));
-    m_ortho = glm::scale(m_camera->view(), glm::vec3(-50.0f, -50.0f, 1.0f));
 
     Debug::checkGLError();
     initGL();
@@ -56,6 +43,7 @@ PhysicsDebugRenderer::~PhysicsDebugRenderer()
 void PhysicsDebugRenderer::setCamera(Camera* camera)
 {
     m_camera = camera;
+    m_camera->addShader(m_shader);
 }
 
 void PhysicsDebugRenderer::initGL()
@@ -78,13 +66,6 @@ void PhysicsDebugRenderer::DrawPolygon(const b2Vec2* vertices, int32 vertexCount
     }
 
     m_shader->bindProgram();
-
-    //    glm::mat4 view = glm::translate(glm::mat4(), glm::vec3(50, 50, 0.0f));
-
-    glm::mat4 mvp = m_ortho;
-
-    int mvpLoc = glGetUniformLocation(m_shader->shaderProgram(), "mvp");
-    glUniformMatrix4fv(mvpLoc, 1, GL_FALSE, &mvp[0][0]);
 
     int colorLoc = glGetUniformLocation(m_shader->shaderProgram(), "color");
     glUniform4f(colorLoc, color.r, color.g, color.b, 1.0);
@@ -141,13 +122,6 @@ void PhysicsDebugRenderer::DrawSolidPolygon(const b2Vec2* vertices, int32 vertex
     }
 
     m_shader->bindProgram();
-
-//    glm::mat4 view = glm::translate(glm::mat4(), glm::vec3(50, 50, 0.0f));
-
-    glm::mat4 mvp = m_ortho;
-
-    int mvpLoc = glGetUniformLocation(m_shader->shaderProgram(), "mvp");
-    glUniformMatrix4fv(mvpLoc, 1, GL_FALSE, &mvp[0][0]);
 
     int colorLoc = glGetUniformLocation(m_shader->shaderProgram(), "color");
     glUniform4f(colorLoc, color.r, color.g, color.b, 1.0);
@@ -255,13 +229,6 @@ void PhysicsDebugRenderer::DrawSegment(const b2Vec2& p1, const b2Vec2& p2, const
     verts.push_back(p2);
 
     m_shader->bindProgram();
-
-    //    glm::mat4 view = glm::translate(glm::mat4(), glm::vec3(50, 50, 0.0f));
-
-    glm::mat4 mvp = m_ortho;
-
-    int mvpLoc = glGetUniformLocation(m_shader->shaderProgram(), "mvp");
-    glUniformMatrix4fv(mvpLoc, 1, GL_FALSE, &mvp[0][0]);
 
     int colorLoc = glGetUniformLocation(m_shader->shaderProgram(), "color");
     glUniform4f(colorLoc, color.r, color.g, color.b, 1.0);

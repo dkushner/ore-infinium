@@ -69,7 +69,7 @@ World::World(Entities::Player* mainPlayer, Client* client, Server* server)
 
         m_camera = new Camera();
         m_spriteSheetRenderer = new SpriteSheetRenderer(m_camera);
-        m_spriteSheetRenderer->registerSprite(m_uselessEntity);
+//FIXME:        m_spriteSheetRenderer->registerSprite(m_uselessEntity);
 
         m_tileRenderer = new TileRenderer(this, m_camera, m_mainPlayer);
 
