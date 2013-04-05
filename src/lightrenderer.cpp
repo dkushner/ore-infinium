@@ -47,10 +47,6 @@ LightRenderer::LightRenderer(World* world, Camera* camera, Entities::Player* mai
     setCamera(camera);
 
     initGL();
-
-    float scale = 1.0f;
-    m_modelMatrix = glm::scale(glm::mat4(1.0f), glm::vec3(scale));
-    m_projectionMatrix = glm::ortho(0.0f, float(Settings::instance()->screenResolutionWidth), float(Settings::instance()->screenResolutionHeight), 0.0f, -1.0f, 1.0f);
 }
 
 LightRenderer::~LightRenderer()

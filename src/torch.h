@@ -51,7 +51,8 @@ public:
     }
 
 private:
-    float m_radius = 300.0f;
+    /// meters
+    float m_radius = 10.0f;
 };
 
 #endif
