@@ -118,12 +118,12 @@ void TileRenderer::render()
     float halfScreenMetersWidth = (Settings::instance()->screenResolutionWidth * 0.5) / PIXELS_PER_METER;
 
     // -1 so that we render an additional row and column..to smoothly scroll
-    const int startRow = tilesBeforeY - (halfScreenMetersHeight / Block::BLOCK_SIZE);
-    const int endRow = tilesBeforeY + (halfScreenMetersHeight / Block::BLOCK_SIZE);
+    const int startRow = tilesBeforeY - (halfScreenMetersHeight / Block::BLOCK_SIZE) - 2;
+    const int endRow = tilesBeforeY + (halfScreenMetersHeight / Block::BLOCK_SIZE) + 2;
 
     //columns are our X value, rows the Y
-    const int startColumn = tilesBeforeX - (halfScreenMetersWidth / Block::BLOCK_SIZE);
-    const int endColumn = tilesBeforeX + (halfScreenMetersWidth / Block::BLOCK_SIZE);
+    const int startColumn = tilesBeforeX - (halfScreenMetersWidth / Block::BLOCK_SIZE) - 2;
+    const int endColumn = tilesBeforeX + (halfScreenMetersWidth / Block::BLOCK_SIZE) + 2;
 
     Debug:: log(Debug::TileRendererArea) << "tilesBeforeX: " << tilesBeforeX << " tilebeforeY: " << tilesBeforeY;
     Debug:: log(Debug::TileRendererArea) << "halfScreenMetersHeight: " << halfScreenMetersHeight << " Width: " << halfScreenMetersWidth;

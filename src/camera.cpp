@@ -52,7 +52,7 @@ void Camera::centerOn(const glm::vec2 vec)
     if (Settings::instance()->debugAreas & Debug::Area::ClientRendererArea) {
         return;
     }
-    glm::vec2 position = glm::vec2(round(vec.x), round(vec.y));
+    glm::vec2 position = glm::vec2((vec.x), (vec.y));
 
     glm::vec2 halfScreen((Settings::instance()->screenResolutionWidth)/PIXELS_PER_METER / 2.0f, (Settings::instance()->screenResolutionHeight/PIXELS_PER_METER) / 2.0f);
 
