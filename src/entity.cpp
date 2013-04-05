@@ -66,11 +66,10 @@ void Entity::update(double elapsedTime, World* world)
 
         this->setPosition(position);
 
-        /*
         //        Debug::log() << "SETTING SPRITE POSITION TO X: " << m_body->GetPosition().x << " Y : " << m_body->GetPosition().y <<
         //        "value actually is X: " << Sprite::position().x << " Y: " << Sprite::position().y;
 
-        glm::vec2 fullVector = glm::vec2(0, 0);//m_velocity;// * glm::vec2(300, 300);
+        glm::vec2 fullVector = m_velocity * glm::vec2(300, 300);
 
 
         b2Vec2 currentVelocity = m_body->GetLinearVelocity();
@@ -78,16 +77,11 @@ void Entity::update(double elapsedTime, World* world)
         b2Vec2 desiredVelocity = b2Vec2(fullVector.x, fullVector.y);
         float velocityChange = desiredVelocity.x - currentVelocity.x;
 
-        if (currentVelocity.x >= desiredVelocity.x || currentVelocity.y >= desiredVelocity.y) {
-            return;
-        }
-
         Debug::log(Debug::Area::ServerEntityLogicArea) << "Entity update, desired velocity is x: " << desiredVelocity.x << " y: " << desiredVelocity.y << " current velocity is x: " << currentVelocity.x << " y: " << currentVelocity.y;
 
         float impulse = m_body->GetMass() * velocityChange;
 
         m_body->ApplyLinearImpulse(b2Vec2(impulse, 0), m_body->GetWorldCenter());
-        */
     }
 }
 
