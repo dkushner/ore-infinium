@@ -240,8 +240,6 @@ private:
      */
     Camera* m_camera = nullptr;
 
-    Camera* m_lightingCamera = nullptr;
-
     b2World* m_box2DWorld = nullptr;
 //    b2Vec2 m_gravity = b2Vec2(0.0f, 9.8f);
     b2Vec2 m_gravity = b2Vec2(0.0f, 0.0f);

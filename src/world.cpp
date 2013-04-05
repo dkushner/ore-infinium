@@ -80,8 +80,7 @@ World::World(Entities::Player* mainPlayer, Client* client, Server* server)
         m_blockPickingCrosshair = new Sprite("crosshairPickingActive", SpriteSheetRenderer::SpriteSheetType::Entity);
         m_spriteSheetRenderer->registerSprite(m_blockPickingCrosshair);
 
-        m_lightingCamera = new Camera();
-        m_lightRenderer = new LightRenderer(this, m_lightingCamera, m_mainPlayer);
+        m_lightRenderer = new LightRenderer(this, m_camera, m_mainPlayer);
         m_lightRenderer->setTileRendererTexture(m_tileRenderer->fboTexture());
 
         //FIXME: call each update, and make it only do visible ones
@@ -324,7 +323,6 @@ void World::update(double elapsedTime)
     //only occurs on client side, obviously the server doesn't need to do this stuff
     if (m_mainPlayer) {
         m_camera->centerOn(m_mainPlayer->position());
-        m_lightingCamera->centerOn(m_mainPlayer->position());
     }
 
 
