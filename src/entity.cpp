@@ -58,23 +58,31 @@ void Entity::update(double elapsedTime, World* world)
 {
     //server, physics enabled
     if (m_body) {
+        Debug::log(Debug::Area::ServerEntityLogicArea) << "Sprites present position is: x: " << position().x << " y: " << position().y << " SETTING SPRITE POSITION TO X: " << m_body->GetPosition().x << " Y : " << m_body->GetPosition().y;
 
         Debug::log(Debug::Area::ServerEntityLogicArea) << "Entity update, apply velocity. velocity is x: " << m_velocity.x << " y: " << m_velocity.y;
         //HACK FIXME:
-        /*
         glm::vec2 position = glm::vec2(m_body->GetPosition().x, m_body->GetPosition().y);
+
         this->setPosition(position);
+
+        /*
         //        Debug::log() << "SETTING SPRITE POSITION TO X: " << m_body->GetPosition().x << " Y : " << m_body->GetPosition().y <<
         //        "value actually is X: " << Sprite::position().x << " Y: " << Sprite::position().y;
 
-        glm::vec2 fullVector = m_velocity * glm::vec2(300, 300);
+        glm::vec2 fullVector = glm::vec2(0, 0);//m_velocity;// * glm::vec2(300, 300);
 
-        m_body->SetFixedRotation(true);
 
         b2Vec2 currentVelocity = m_body->GetLinearVelocity();
 
         b2Vec2 desiredVelocity = b2Vec2(fullVector.x, fullVector.y);
         float velocityChange = desiredVelocity.x - currentVelocity.x;
+
+        if (currentVelocity.x >= desiredVelocity.x || currentVelocity.y >= desiredVelocity.y) {
+            return;
+        }
+
+        Debug::log(Debug::Area::ServerEntityLogicArea) << "Entity update, desired velocity is x: " << desiredVelocity.x << " y: " << desiredVelocity.y << " current velocity is x: " << currentVelocity.x << " y: " << currentVelocity.y;
 
         float impulse = m_body->GetMass() * velocityChange;
 

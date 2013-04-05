@@ -93,7 +93,7 @@ void Player::createPhysicsBody(World* world, const glm::vec2& position)
     b2BodyDef bodyDef;
     bodyDef.type = b2_dynamicBody;
     //        bodyDef.position.Set(pixelsToMeters(200), -pixelsToMeters(100));
-    bodyDef.position.Set(World::pixelsToMeters(position.x), World::pixelsToMeters(position.y));
+    bodyDef.position.Set(position.x, position.y);
 
     m_body = world->box2DWorld()->CreateBody(&bodyDef);
     // sleeping doesn't make sense for a player body.
@@ -105,7 +105,7 @@ void Player::createPhysicsBody(World* world, const glm::vec2& position)
     m_body->SetUserData(userData);
 
     b2PolygonShape dynamicBox;
-    dynamicBox.SetAsBox(World::pixelsToMeters(50.0f), World::pixelsToMeters(50.0f));
+    dynamicBox.SetAsBox(50.0f / PIXELS_PER_METER, 50.0f / PIXELS_PER_METER);
 
     // create main body's fixture
     b2FixtureDef fixtureDef;
@@ -127,6 +127,8 @@ void Player::createPhysicsBody(World* world, const glm::vec2& position)
     userDataFoot->type = ContactListener::BodyType::PlayerFootSensor;
     userDataFoot->data = this;
     footSensorFixture->SetUserData(userDataFoot);
+
+    m_body->SetFixedRotation(true);
 }
 
 void Player::move(int32_t directionX, int32_t directionY)

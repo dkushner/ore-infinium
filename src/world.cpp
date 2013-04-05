@@ -114,6 +114,7 @@ World::World(Entities::Player* mainPlayer, Client* client, Server* server)
         }
 
         loadWorld();
+        Debug::log(Debug::WorldLoaderArea) << "World is x: " << (WORLD_COLUMNCOUNT * Block::BLOCK_SIZE) << " y: " << (WORLD_ROWCOUNT * Block::BLOCK_SIZE) << " meters big";
     }
 
     //FIXME: saveMap();
