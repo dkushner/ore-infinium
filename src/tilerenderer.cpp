@@ -141,8 +141,6 @@ void TileRenderer::render()
     int drawingRow = 0;
     int index = 0;
 
-    glm::vec2 topLeftWorldCoordinates = m_world->topLeftScreenWorldCoordinates(m_mainPlayer);
-
     Debug::checkGLError();
     // [y*rowlength + x]
     for (int currentRow = startRow; currentRow < endRow; ++currentRow) {
