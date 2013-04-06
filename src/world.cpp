@@ -249,23 +249,24 @@ void World::render(Entities::Player* player)
     m_spriteSheetRenderer->renderCharacters();
 
     // ==================================================
-    glm::ivec2 mouse = mousePosition();
 
 //    glm::vec2 topLeftLocalCoordinates = glm::vec2(m_mainPlayer->position().x - Settings::instance()->screenResolutionWidth / 2, m_mainPlayer->position().y - Settings::instance()->screenResolutionHeight / 2);
     glm::vec2 topLeftLocalCoordinates = glm::vec2(0.0f, 0.0f); //glm::vec2(m_mainPlayer->position().x - Settings::instance()->screenResolutionWidth / 2, m_mainPlayer->position().y - Settings::instance()->screenResolutionHeight / 2);
 //    glm::vec2 transformedMouse = glm::vec2(topLeftLocalCoordinates.x + mouse.x, topLeftLocalCoordinates.y + mouse.y);
+    //snap crosshair to the tile grid..the offset is already calculated for us (apparently), so even with per-pixel tilemap scrolling it snaps fine.
+//    glm::vec2 crosshairPosition(floor(transformedMouse.x / Block::BLOCK_SIZE) * Block::BLOCK_SIZE, floor(transformedMouse.y / Block::BLOCK_SIZE) * Block::BLOCK_SIZE);
 
-    glm::vec2 transformedMouse = glm::vec2(mouse.x / PIXELS_PER_METER + m_mainPlayer->position().x, mouse.y / PIXELS_PER_METER + m_mainPlayer->position().y);
+    glm::vec2 mouse = glm::vec2(mousePosition().x, 900 - mousePosition().y);
+    glm::vec2 transformedMouse = glm::vec2(mouse.x, mouse.y);
     Debug::log(Debug::ClientRendererArea) << "Player position, x: " << m_mainPlayer->position().x << " Y: " << m_mainPlayer->position().y << " transformed mouse x: " << transformedMouse.x << " y: " << transformedMouse.y;
 
     glm::vec4 viewport = glm::vec4(0, 0, 1600, 900);
     glm::vec3 wincoord = glm::vec3(mouse.x, mouse.y, 0);
     glm::vec3 unproject = glm::unProject(wincoord, m_camera->view(), m_camera->ortho(), viewport);
 
-    Debug::log(Debug::ClientRendererArea) << "unproject x: " << unproject.x << " y: " << unproject.y << " z: " << unproject.z;
-    //snap crosshair to the tile grid..the offset is already calculated for us (apparently), so even with per-pixel tilemap scrolling it snaps fine.
-//    glm::vec2 crosshairPosition(floor(transformedMouse.x / Block::BLOCK_SIZE) * Block::BLOCK_SIZE, floor(transformedMouse.y / Block::BLOCK_SIZE) * Block::BLOCK_SIZE);
 
+    transformedMouse = glm::vec2(unproject.x, unproject.y);
+    Debug::log(Debug::ClientRendererArea) << "unproject x: " << unproject.x << " y: " << unproject.y << " z: " << unproject.z;
     m_blockPickingCrosshair->setPosition(transformedMouse);
 
 //    m_blockPickingCrosshair->setPosition(crosshairPosition);
