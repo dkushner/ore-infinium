@@ -251,16 +251,24 @@ void World::render(Entities::Player* player)
     // ==================================================
     glm::ivec2 mouse = mousePosition();
 
-    const float radius = 16.0f;
-    const float halfRadius = radius * 0.5;
-    const float halfBlockSize = Block::BLOCK_SIZE * 0.5;
+//    glm::vec2 topLeftLocalCoordinates = glm::vec2(m_mainPlayer->position().x - Settings::instance()->screenResolutionWidth / 2, m_mainPlayer->position().y - Settings::instance()->screenResolutionHeight / 2);
+    glm::vec2 topLeftLocalCoordinates = glm::vec2(0.0f, 0.0f); //glm::vec2(m_mainPlayer->position().x - Settings::instance()->screenResolutionWidth / 2, m_mainPlayer->position().y - Settings::instance()->screenResolutionHeight / 2);
+//    glm::vec2 transformedMouse = glm::vec2(topLeftLocalCoordinates.x + mouse.x, topLeftLocalCoordinates.y + mouse.y);
 
-    glm::vec2 topLeftLocalCoordinates = glm::vec2(m_mainPlayer->position().x - Settings::instance()->screenResolutionWidth / 2, m_mainPlayer->position().y - Settings::instance()->screenResolutionHeight / 2);
-    glm::vec2 transformedMouse = glm::vec2(topLeftLocalCoordinates.x + mouse.x, topLeftLocalCoordinates.y + mouse.y);
+    glm::vec2 transformedMouse = glm::vec2(mouse.x / PIXELS_PER_METER + m_mainPlayer->position().x, mouse.y / PIXELS_PER_METER + m_mainPlayer->position().y);
+    Debug::log(Debug::ClientRendererArea) << "Player position, x: " << m_mainPlayer->position().x << " Y: " << m_mainPlayer->position().y << " transformed mouse x: " << transformedMouse.x << " y: " << transformedMouse.y;
+
+    glm::vec4 viewport = glm::vec4(0, 0, 1600, 900);
+    glm::vec3 wincoord = glm::vec3(mouse.x, mouse.y, 0);
+    glm::vec3 unproject = glm::unProject(wincoord, m_camera->view(), m_camera->ortho(), viewport);
+
+    Debug::log(Debug::ClientRendererArea) << "unproject x: " << unproject.x << " y: " << unproject.y << " z: " << unproject.z;
     //snap crosshair to the tile grid..the offset is already calculated for us (apparently), so even with per-pixel tilemap scrolling it snaps fine.
-    glm::vec2 crosshairPosition(floor(transformedMouse.x / Block::BLOCK_SIZE) * Block::BLOCK_SIZE, floor(transformedMouse.y / Block::BLOCK_SIZE) * Block::BLOCK_SIZE);
+//    glm::vec2 crosshairPosition(floor(transformedMouse.x / Block::BLOCK_SIZE) * Block::BLOCK_SIZE, floor(transformedMouse.y / Block::BLOCK_SIZE) * Block::BLOCK_SIZE);
 
-    m_blockPickingCrosshair->setPosition(crosshairPosition);
+    m_blockPickingCrosshair->setPosition(transformedMouse);
+
+//    m_blockPickingCrosshair->setPosition(crosshairPosition);
     // ==================================================
 
     //    ALLEGRO_COLOR color = al_map_rgb(255, 0, 0);
@@ -377,7 +385,7 @@ bool World::isBlockSolid(const glm::vec2& vecDest) const
     return  blockType != 0;
 }
 
-uint8_t World::getBlockType(const glm::vec2& vecPoint) const
+uint8_t World::blockType(const glm::vec2& vecPoint) const
 {
     const int column = int(std::ceil(vecPoint.x) / Block::BLOCK_SIZE);
     const int row = int(std::ceil(vecPoint.y) / Block::BLOCK_SIZE);

@@ -82,7 +82,7 @@ public:
 
     bool isBlockSolid(const glm::vec2& vecDest) const;
 
-    unsigned char getBlockType(const glm::vec2& vecPoint) const;
+    unsigned char blockType(const glm::vec2& vecPoint) const;
 
     /**
      * Adds the player to the world, but will not take ownership of (you delete it when you're done)
