@@ -44,52 +44,146 @@ void DebugSettings::ProcessEvent(Rocket::Core::Event& event)
     const Rocket::Core::String& id = event.GetCurrentElement()->GetId();
     const Rocket::Core::String& type = event.GetType();
 
+    const bool isChecked = event.GetCurrentElement()->HasAttribute("checked");
+
     if (id == "ClientRendererArea") {
-        Settings::instance()->debugAreas |= Debug::Area::ClientRendererArea;
+        if (isChecked) {
+            Settings::instance()->debugAreas |= Debug::Area::ClientRendererArea;
+        } else {
+            Settings::instance()->debugAreas &= ~Debug::Area::ClientRendererArea;
+        }
     } else if (id == "TileRendererArea") {
-        Settings::instance()->debugAreas |= Debug::Area::TileRendererArea;
+        if (isChecked) {
+            Settings::instance()->debugAreas |= Debug::Area::TileRendererArea;
+        } else {
+            Settings::instance()->debugAreas &= ~Debug::Area::TileRendererArea;
+        }
     } else if (id == "SpriteSheetRendererArea") {
-        Settings::instance()->debugAreas |= Debug::Area::SpriteSheetRendererArea;
+        if (isChecked) {
+            Settings::instance()->debugAreas |= Debug::Area::SpriteSheetRendererArea;
+        } else {
+            Settings::instance()->debugAreas &= ~Debug::Area::SpriteSheetRendererArea;
+        }
     } else if (id == "LightingRendererArea") {
-        Settings::instance()->debugAreas |= Debug::Area::LightingRendererArea;
+        if (isChecked) {
+            Settings::instance()->debugAreas |= Debug::Area::LightingRendererArea;
+        } else {
+            Settings::instance()->debugAreas &= ~Debug::Area::LightingRendererArea;
+        }
     } else if (id == "PhysicsArea") {
-        Settings::instance()->debugAreas |= Debug::Area::PhysicsArea;
+        if (isChecked) {
+            Settings::instance()->debugAreas |= Debug::Area::PhysicsArea;
+        } else {
+            Settings::instance()->debugAreas &= ~Debug::Area::PhysicsArea;
+        }
     } else if (id == "AudioArea") {
-        Settings::instance()->debugAreas |= Debug::Area::AudioArea;
+        if (isChecked) {
+            Settings::instance()->debugAreas |= Debug::Area::AudioArea;
+        } else {
+            Settings::instance()->debugAreas &= ~Debug::Area::AudioArea;
+        }
     } else if (id == "AudioLoaderArea") {
-        Settings::instance()->debugAreas |= Debug::Area::AudioLoaderArea;
+        if (isChecked) {
+            Settings::instance()->debugAreas |= Debug::Area::AudioLoaderArea;
+        } else {
+            Settings::instance()->debugAreas &= ~Debug::Area::AudioLoaderArea;
+        }
     } else if (id == "GUILoggerArea") {
-        Settings::instance()->debugAreas |= Debug::Area::GUILoggerArea;
+        if (isChecked) {
+            Settings::instance()->debugAreas |= Debug::Area::GUILoggerArea;
+        } else {
+            Settings::instance()->debugAreas &= ~Debug::Area::GUILoggerArea;
+        }
     } else if (id == "ShadersArea") {
-        Settings::instance()->debugAreas |= Debug::Area::ShadersArea;
+        if (isChecked) {
+            Settings::instance()->debugAreas |= Debug::Area::ShadersArea;
+        } else {
+            Settings::instance()->debugAreas &= ~Debug::Area::ShadersArea;
+        }
     } else if (id == "NetworkClientInitialArea") {
-        Settings::instance()->debugAreas |= Debug::Area::NetworkClientInitialArea;
+        if (isChecked) {
+            Settings::instance()->debugAreas |= Debug::Area::NetworkClientInitialArea;
+        } else {
+            Settings::instance()->debugAreas &= ~Debug::Area::NetworkClientInitialArea;
+        }
     } else if (id == "NetworkServerInitialArea") {
-        Settings::instance()->debugAreas |= Debug::Area::NetworkServerInitialArea;
+        if (isChecked) {
+            Settings::instance()->debugAreas |= Debug::Area::NetworkServerInitialArea;
+        } else {
+            Settings::instance()->debugAreas &= ~Debug::Area::NetworkServerInitialArea;
+        }
     } else if (id == "NetworkClientContinuousArea") {
-        Settings::instance()->debugAreas |= Debug::Area::NetworkClientContinuousArea;
+        if (isChecked) {
+            Settings::instance()->debugAreas |= Debug::Area::NetworkClientContinuousArea;
+        } else {
+            Settings::instance()->debugAreas &= ~Debug::Area::NetworkClientContinuousArea;
+        }
     } else if (id == "NetworkServerContinuousArea") {
-        Settings::instance()->debugAreas |= Debug::Area::NetworkServerContinuousArea;
+        if (isChecked) {
+            Settings::instance()->debugAreas |= Debug::Area::NetworkServerContinuousArea;
+        } else {
+            Settings::instance()->debugAreas &= ~Debug::Area::NetworkServerContinuousArea;
+        }
     } else if (id == "ClientInventoryArea") {
-        Settings::instance()->debugAreas |= Debug::Area::ClientInventoryArea;
+        if (isChecked) {
+            Settings::instance()->debugAreas |= Debug::Area::ClientInventoryArea;
+        } else {
+            Settings::instance()->debugAreas &= ~Debug::Area::ClientInventoryArea;
+        }
     } else if (id == "ServerInventoryArea") {
-        Settings::instance()->debugAreas |= Debug::Area::ServerInventoryArea;
+        if (isChecked) {
+            Settings::instance()->debugAreas |= Debug::Area::ServerInventoryArea;
+        } else {
+            Settings::instance()->debugAreas &= ~Debug::Area::ServerInventoryArea;
+        }
     } else if (id == "ServerEntityLogicArea") {
-        Settings::instance()->debugAreas |= Debug::Area::ServerEntityLogicArea;
+        if (isChecked) {
+            Settings::instance()->debugAreas |= Debug::Area::ServerEntityLogicArea;
+        } else {
+            Settings::instance()->debugAreas &= ~Debug::Area::ServerEntityLogicArea;
+        }
     } else if (id == "ImageLoaderArea") {
-        Settings::instance()->debugAreas |= Debug::Area::ImageLoaderArea;
+        if (isChecked) {
+            Settings::instance()->debugAreas |= Debug::Area::ImageLoaderArea;
+        } else {
+            Settings::instance()->debugAreas &= ~Debug::Area::ImageLoaderArea;
+        }
     } else if (id == "WorldGeneratorArea") {
-        Settings::instance()->debugAreas |= Debug::Area::WorldGeneratorArea;
+        if (isChecked) {
+            Settings::instance()->debugAreas |= Debug::Area::WorldGeneratorArea;
+        } else {
+            Settings::instance()->debugAreas &= ~Debug::Area::WorldGeneratorArea;
+        }
     } else if (id == "WorldLoaderArea") {
-        Settings::instance()->debugAreas |= Debug::Area::WorldLoaderArea;
+        if (isChecked) {
+            Settings::instance()->debugAreas |= Debug::Area::WorldLoaderArea;
+        } else {
+            Settings::instance()->debugAreas &= ~Debug::Area::WorldLoaderArea;
+        }
     } else if (id == "ClientEntityCreationArea") {
-        Settings::instance()->debugAreas |= Debug::Area::ClientEntityCreationArea;
+        if (isChecked) {
+            Settings::instance()->debugAreas |= Debug::Area::ClientEntityCreationArea;
+        } else {
+            Settings::instance()->debugAreas &= ~Debug::Area::ClientEntityCreationArea;
+        }
     } else if (id == "ServerEntityCreationArea") {
-        Settings::instance()->debugAreas |= Debug::Area::ServerEntityCreationArea;
+        if (isChecked) {
+            Settings::instance()->debugAreas |= Debug::Area::ServerEntityCreationArea;
+        } else {
+            Settings::instance()->debugAreas &= ~Debug::Area::ServerEntityCreationArea;
+        }
     } else if (id == "SettingsArea") {
-        Settings::instance()->debugAreas |= Debug::Area::SettingsArea;
+        if (isChecked) {
+            Settings::instance()->debugAreas |= Debug::Area::SettingsArea;
+        } else {
+            Settings::instance()->debugAreas &= ~Debug::Area::SettingsArea;
+        }
     } else if (id == "StartupArea") {
-        Settings::instance()->debugAreas |= Debug::Area::StartupArea;
+        if (isChecked) {
+            Settings::instance()->debugAreas |= Debug::Area::StartupArea;
+        } else {
+            Settings::instance()->debugAreas &= ~Debug::Area::StartupArea;
+        }
     }
 }
 
