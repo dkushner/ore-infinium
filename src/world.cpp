@@ -181,16 +181,13 @@ void World::removePlayer(Entities::Player* player)
 void World::createInitialTilePhysicsObjects(Entities::Player* player)
 {
     //HACK HACK HACK
-#if 0
     glm::vec2 position = player->position();
 
     b2Body* body = nullptr;
 
-    //create dynamic body
     b2BodyDef bodyDef;
-    bodyDef.type = b2_dynamicBody;
-    //        bodyDef.position.Set(pixelsToMeters(200), -pixelsToMeters(100));
-    bodyDef.position.Set(World::pixelsToMeters(position.x - 100), World::pixelsToMeters(position.y - 100));
+    bodyDef.type = b2_staticBody;
+    bodyDef.position.Set(position.x, position.y);
 
     body = m_box2DWorld->CreateBody(&bodyDef);
 
@@ -198,18 +195,16 @@ void World::createInitialTilePhysicsObjects(Entities::Player* player)
     userData->type = ContactListener::BodyType::Block;
     //userData->data = m_blocks ...FIXME
     body->SetUserData(userData);
-    body->SetType(b2BodyType::b2_staticBody);
-    b2PolygonShape dynamicBox;
-    dynamicBox.SetAsBox(World::pixelsToMeters(16.0f), World::pixelsToMeters(16.0f));
+    b2PolygonShape box;
+    box.SetAsBox(Block::BLOCK_SIZE / 2.0f, Block::BLOCK_SIZE / 2.0f);
 
     // create main body's fixture
     b2FixtureDef fixtureDef;
-    fixtureDef.shape = &dynamicBox;
+    fixtureDef.shape = &box;
     fixtureDef.density = 1.0f;
     fixtureDef.friction = 1.0f;
 
     body->CreateFixture(&fixtureDef);
-#endif
 }
 
 void World::updateTilePhysicsObjects(Entities::Player* player)
