@@ -275,6 +275,11 @@ void World::render(Entities::Player* player)
     Debug::log(Debug::ClientRendererArea) << "unproject x: " << unproject.x << " y: " << unproject.y << " z: " << unproject.z;
     m_blockPickingCrosshair->setPosition(transformedMouse);
 
+    float x = tileSizeFloat * floor(transformedMouse.x / tileSizeFloat);
+    glm::vec2 tmouse = glm::vec2(Block::BLOCK_SIZE * floor(transformedMouse.x / Block::BLOCK_SIZE), Block::BLOCK_SIZE * floor(transformedMouse.y / Block::BLOCK_SIZE));
+
+//    m_blockPickingCrosshair->setPosition(transformedMouse);
+    m_blockPickingCrosshair->setPosition(tmouse);
 //    m_blockPickingCrosshair->setPosition(crosshairPosition);
     // ==================================================
 
