@@ -91,6 +91,9 @@ public:
         return m_position;
     }
 
+protected:
+    glm::vec2 m_sizeMeters;
+
 private:
     Sprite() {};
 
@@ -98,8 +101,6 @@ private:
     SpriteSheetRenderer::SpriteSheetType m_spriteSheetType;
 
     std::string m_frameName;
-
-    glm::vec2 m_sizeMeters;
 
     // position is in meters as is everything else the game deals with. size is in meters as well, converted from pixels.
     glm::vec2 m_position;

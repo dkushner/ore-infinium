@@ -39,6 +39,7 @@ Player::Player(const std::string& frameName)
 {
     m_placeableDelayTimer = new Timer();
     m_jumpTimer = new Timer();
+    m_sizeMeters = glm::vec2(Block::BLOCK_SIZE * 2, Block::BLOCK_SIZE * 3);
 }
 
 /*
@@ -105,7 +106,9 @@ void Player::createPhysicsBody(World* world, const glm::vec2& position)
     m_body->SetUserData(userData);
 
     b2PolygonShape dynamicBox;
-    dynamicBox.SetAsBox(50.0f / PIXELS_PER_METER, 50.0f / PIXELS_PER_METER);
+    const glm::vec2 size = this->sizeMeters();
+    Debug::log(Debug::ServerEntityCreationArea) << " PLAYER METERS X: " << size.x << " Y: " << size.y;
+    dynamicBox.SetAsBox(size.x, size.y);
 
     // create main body's fixture
     b2FixtureDef fixtureDef;
