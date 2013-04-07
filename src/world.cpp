@@ -194,6 +194,7 @@ void World::createInitialTilePhysicsObjects(Entities::Player* player)
     int startColumn = centerTileX - 1;
     int endColumn = centerTileX;
 
+    int count = 0;
     int index = 0;
     for (int currentRow = startRow; currentRow < endRow; ++currentRow) {
         for (int currentColumn = startColumn; currentColumn < endColumn; ++currentColumn) {
@@ -205,7 +206,7 @@ void World::createInitialTilePhysicsObjects(Entities::Player* player)
 
             b2BodyDef bodyDef;
             bodyDef.type = b2_staticBody;
-            bodyDef.position.Set(Block::BLOCK_SIZE * float(currentColumn) + (Block::BLOCK_SIZE), Block::BLOCK_SIZE * float(currentRow) + (Block::BLOCK_SIZE / 2.0f));
+            bodyDef.position.Set(Block::BLOCK_SIZE * float(currentColumn) + (Block::BLOCK_SIZE * 0.5f), Block::BLOCK_SIZE * float(currentRow) + (Block::BLOCK_SIZE * 0.5f));
 
             body = m_box2DWorld->CreateBody(&bodyDef);
 
@@ -214,7 +215,7 @@ void World::createInitialTilePhysicsObjects(Entities::Player* player)
             //userData->data = m_blocks ...FIXME
             body->SetUserData(userData);
             b2PolygonShape box;
-            box.SetAsBox(Block::BLOCK_SIZE , Block::BLOCK_SIZE / 2.0f);
+            box.SetAsBox(Block::BLOCK_SIZE * 0.5f , Block::BLOCK_SIZE * 0.5f);
 
             // create main body's fixture
             b2FixtureDef fixtureDef;
