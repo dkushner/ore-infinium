@@ -292,8 +292,10 @@ void World::renderCrosshair()
     glm::vec4 transformedTileSize = tileSize * m_camera->view();// * m_camera->ortho(); //FIXME: ortho need taken into accuont?
 
     glm::vec2 crosshairPosition = glm::vec2(Block::BLOCK_SIZE * floor(mouse.x / Block::BLOCK_SIZE), Block::BLOCK_SIZE * floor(mouse.y / Block::BLOCK_SIZE));
+    glm::vec2 crosshairOriginOffset = glm::vec2(m_blockPickingCrosshair->sizeMeters().x * 0.5f, m_blockPickingCrosshair->sizeMeters().y * 0.5f);
+    glm::vec2 crosshairFinalPosition = glm::vec2(crosshairPosition.x + crosshairOriginOffset.x, crosshairPosition.y + crosshairOriginOffset.y);
 
-    m_blockPickingCrosshair->setPosition(crosshairPosition);
+    m_blockPickingCrosshair->setPosition(crosshairFinalPosition);
 }
 
 

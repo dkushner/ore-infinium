@@ -68,6 +68,10 @@ public:
         return m_sizeMeters;
     }
 
+    void setSizeMeters(float x, float y) {
+       m_sizeMeters = glm::vec2(x, y);
+    }
+
     /**
      * Sets the origin of this texture, to which to offset drawing.
      * Default is the center of the texture.
