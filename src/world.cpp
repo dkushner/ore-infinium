@@ -180,31 +180,57 @@ void World::removePlayer(Entities::Player* player)
 
 void World::createInitialTilePhysicsObjects(Entities::Player* player)
 {
-    //HACK HACK HACK
     glm::vec2 position = player->position();
 
-    b2Body* body = nullptr;
+    float blockSize = Block::BLOCK_SIZE;
+    int centerTileX = int((position.x / blockSize));
+    int centerTileY = int((position.y / blockSize)) + 15;
 
-    b2BodyDef bodyDef;
-    bodyDef.type = b2_staticBody;
-    bodyDef.position.Set(position.x, position.y);
+    //FIXME: obviously find a good value, other than 10..
+    //tile indexes
+    int startRow = centerTileY - 1;
+    int endRow = centerTileY;
 
-    body = m_box2DWorld->CreateBody(&bodyDef);
+    int startColumn = centerTileX - 1;
+    int endColumn = centerTileX;
 
-    ContactListener::BodyUserData* userData = new ContactListener::BodyUserData();
-    userData->type = ContactListener::BodyType::Block;
-    //userData->data = m_blocks ...FIXME
-    body->SetUserData(userData);
-    b2PolygonShape box;
-    box.SetAsBox(Block::BLOCK_SIZE / 2.0f, Block::BLOCK_SIZE / 2.0f);
+    int index = 0;
+    for (int currentRow = startRow; currentRow < endRow; ++currentRow) {
+        for (int currentColumn = startColumn; currentColumn < endColumn; ++currentColumn) {
+            index = currentColumn * WORLD_ROWCOUNT + currentRow;
+            assert(index < WORLD_ROWCOUNT * WORLD_COLUMNCOUNT);
+            Block& block = m_blocks[index];
 
-    // create main body's fixture
-    b2FixtureDef fixtureDef;
-    fixtureDef.shape = &box;
-    fixtureDef.density = 1.0f;
-    fixtureDef.friction = 1.0f;
+            b2Body* body = nullptr;
 
-    body->CreateFixture(&fixtureDef);
+            b2BodyDef bodyDef;
+            bodyDef.type = b2_staticBody;
+            bodyDef.position.Set(Block::BLOCK_SIZE * float(currentColumn) + (Block::BLOCK_SIZE), Block::BLOCK_SIZE * float(currentRow) + (Block::BLOCK_SIZE / 2.0f));
+
+            body = m_box2DWorld->CreateBody(&bodyDef);
+
+            ContactListener::BodyUserData* userData = new ContactListener::BodyUserData();
+            userData->type = ContactListener::BodyType::Block;
+            //userData->data = m_blocks ...FIXME
+            body->SetUserData(userData);
+            b2PolygonShape box;
+            box.SetAsBox(Block::BLOCK_SIZE , Block::BLOCK_SIZE / 2.0f);
+
+            // create main body's fixture
+            b2FixtureDef fixtureDef;
+            fixtureDef.shape = &box;
+            fixtureDef.density = 1.0f;
+            fixtureDef.friction = 1.0f;
+
+            body->CreateFixture(&fixtureDef);
+        }
+    }
+
+    Debug::log(Debug::ServerEntityCreationArea) << "Created initial tile physics objects for player, current world body count: " << m_box2DWorld->GetBodyCount();
+
+//Block::BLOCK_SIZE * floor(mouse.x / Block::BLOCK_SIZE), Block::BLOCK_SIZE * floor(mouse.y / Block::BLOCK_SIZ
+
+
 }
 
 void World::updateTilePhysicsObjects(Entities::Player* player)
