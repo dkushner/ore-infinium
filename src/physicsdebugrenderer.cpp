@@ -68,7 +68,7 @@ void PhysicsDebugRenderer::DrawPolygon(const b2Vec2* vertices, int32 vertexCount
     m_shader->bindProgram();
 
     int colorLoc = glGetUniformLocation(m_shader->shaderProgram(), "color");
-    glUniform4f(colorLoc, color.r, color.g, color.b, 1.0);
+    glUniform4f(colorLoc, color.r, color.g, color.b, 0.5f);
 
     glBindVertexArray(m_vao);
     glBindBuffer(GL_ARRAY_BUFFER, m_vbo);
@@ -124,7 +124,7 @@ void PhysicsDebugRenderer::DrawSolidPolygon(const b2Vec2* vertices, int32 vertex
     m_shader->bindProgram();
 
     int colorLoc = glGetUniformLocation(m_shader->shaderProgram(), "color");
-    glUniform4f(colorLoc, color.r, color.g, color.b, 1.0);
+    glUniform4f(colorLoc, color.r, color.g, color.b, 0.5f);
 
     glBindVertexArray(m_vao);
     glBindBuffer(GL_ARRAY_BUFFER, m_vbo);
