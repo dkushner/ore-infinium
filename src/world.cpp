@@ -264,6 +264,12 @@ void World::render(Entities::Player* player)
     glm::vec3 wincoord = glm::vec3(mouse.x, mouse.y, 0);
     glm::vec3 unproject = glm::unProject(wincoord, m_camera->view(), m_camera->ortho(), viewport);
 
+    float tileSizeFloat = Block::BLOCK_SIZE;
+
+    glm::vec4 tileSize = glm::vec4(tileSizeFloat, tileSizeFloat, 0.0f, 1.0f);
+    glm::vec4 transformedTileSize = tileSize * m_camera->view();// * m_camera->ortho();
+
+    Debug::log(Debug::ClientRendererArea) << "tile size: x: " << transformedTileSize.x << " y: " << transformedTileSize.y;
 
     transformedMouse = glm::vec2(unproject.x, unproject.y);
     Debug::log(Debug::ClientRendererArea) << "unproject x: " << unproject.x << " y: " << unproject.y << " z: " << unproject.z;
