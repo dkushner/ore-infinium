@@ -44,6 +44,8 @@ Player::Player(const std::string& frameName)
 
 void Player::createPhysicsBody(World* world, const glm::vec2& position)
 {
+    const glm::vec2 size = this->sizeMeters();
+
     //create dynamic body
     b2BodyDef bodyDef;
     bodyDef.type = b2_dynamicBody;
@@ -59,8 +61,7 @@ void Player::createPhysicsBody(World* world, const glm::vec2& position)
     m_body->SetUserData(userData);
 
     b2PolygonShape dynamicBox;
-    const glm::vec2 size = this->sizeMeters();
-    dynamicBox.SetAsBox(size.x, size.y);
+    dynamicBox.SetAsBox(size.x * 0.5f, size.y * 0.5f);
 
     // create main body's fixture
     b2FixtureDef fixtureDef;
