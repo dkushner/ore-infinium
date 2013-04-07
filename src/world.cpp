@@ -239,6 +239,7 @@ void World::render(Entities::Player* player)
     //HACK    m_window->setView(*m_view);
    m_lightRenderer->renderToFBO();
 
+    //    m_sky->render();
     m_tileRenderer->render();
 
     //FIXME: incorporate entities into the pre-lit gamescene FBO, then render lighting as last pass
@@ -250,43 +251,22 @@ void World::render(Entities::Player* player)
 
     // ==================================================
 
-//    glm::vec2 topLeftLocalCoordinates = glm::vec2(m_mainPlayer->position().x - Settings::instance()->screenResolutionWidth / 2, m_mainPlayer->position().y - Settings::instance()->screenResolutionHeight / 2);
-    glm::vec2 topLeftLocalCoordinates = glm::vec2(0.0f, 0.0f); //glm::vec2(m_mainPlayer->position().x - Settings::instance()->screenResolutionWidth / 2, m_mainPlayer->position().y - Settings::instance()->screenResolutionHeight / 2);
-//    glm::vec2 transformedMouse = glm::vec2(topLeftLocalCoordinates.x + mouse.x, topLeftLocalCoordinates.y + mouse.y);
-    //snap crosshair to the tile grid..the offset is already calculated for us (apparently), so even with per-pixel tilemap scrolling it snaps fine.
-//    glm::vec2 crosshairPosition(floor(transformedMouse.x / Block::BLOCK_SIZE) * Block::BLOCK_SIZE, floor(transformedMouse.y / Block::BLOCK_SIZE) * Block::BLOCK_SIZE);
-
     glm::vec2 mouse = glm::vec2(mousePosition().x, 900 - mousePosition().y);
-    glm::vec2 transformedMouse = glm::vec2(mouse.x, mouse.y);
-    Debug::log(Debug::ClientRendererArea) << "Player position, x: " << m_mainPlayer->position().x << " Y: " << m_mainPlayer->position().y << " transformed mouse x: " << transformedMouse.x << " y: " << transformedMouse.y;
 
-    glm::vec4 viewport = glm::vec4(0, 0, 1600, 900);
+    glm::vec4 viewport = glm::vec4(0, 0, Settings::instance()->windowWidth, Settings::instance()->windowHeight);
     glm::vec3 wincoord = glm::vec3(mouse.x, mouse.y, 0);
     glm::vec3 unproject = glm::unProject(wincoord, m_camera->view(), m_camera->ortho(), viewport);
+
+    mouse = glm::vec2(unproject.x, unproject.y);
 
     float tileSizeFloat = Block::BLOCK_SIZE;
 
     glm::vec4 tileSize = glm::vec4(tileSizeFloat, tileSizeFloat, 0.0f, 1.0f);
     glm::vec4 transformedTileSize = tileSize * m_camera->view();// * m_camera->ortho();
 
-    Debug::log(Debug::ClientRendererArea) << "tile size: x: " << transformedTileSize.x << " y: " << transformedTileSize.y;
+    glm::vec2 crosshairPosition = glm::vec2(Block::BLOCK_SIZE * floor(mouse.x / Block::BLOCK_SIZE), Block::BLOCK_SIZE * floor(mouse.y / Block::BLOCK_SIZE));
 
-    transformedMouse = glm::vec2(unproject.x, unproject.y);
-    Debug::log(Debug::ClientRendererArea) << "unproject x: " << unproject.x << " y: " << unproject.y << " z: " << unproject.z;
-    m_blockPickingCrosshair->setPosition(transformedMouse);
-
-    float x = tileSizeFloat * floor(transformedMouse.x / tileSizeFloat);
-    glm::vec2 tmouse = glm::vec2(Block::BLOCK_SIZE * floor(transformedMouse.x / Block::BLOCK_SIZE), Block::BLOCK_SIZE * floor(transformedMouse.y / Block::BLOCK_SIZE));
-
-//    m_blockPickingCrosshair->setPosition(transformedMouse);
-    m_blockPickingCrosshair->setPosition(tmouse);
-//    m_blockPickingCrosshair->setPosition(crosshairPosition);
-    // ==================================================
-
-    //    ALLEGRO_COLOR color = al_map_rgb(255, 0, 0);
-    //   al_draw_rectangle(crosshairPosition.x(), crosshairPosition.y(), crosshairPosition.x() + radius, crosshairPosition.y() + radius, color, 1.0f);
-
-    //    m_sky->render();
+    m_blockPickingCrosshair->setPosition(crosshairPosition);
 }
 
 float World::metersToPixels(float meters)
