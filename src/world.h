@@ -73,7 +73,7 @@ public:
     ~World();
 
     void update(double elapsedTime);
-    void render(Entities::Player* player);
+    void render();
 
     void loadWorld();
 

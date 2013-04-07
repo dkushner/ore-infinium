@@ -227,7 +227,7 @@ Entities::Player* World::findPlayer(uint32_t playerID)
     return nullptr;
 }
 
-void World::render(Entities::Player* player)
+void World::render()
 {
     assert(m_mainPlayer && !m_server);
 

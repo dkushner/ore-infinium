@@ -243,7 +243,7 @@ void Client::render(double frameTime)
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
     if (m_world && m_mainPlayer) {
-        m_world->render(m_mainPlayer);
+        m_world->render();
     }
 
     m_gui->render();
