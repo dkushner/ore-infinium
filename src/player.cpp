@@ -74,7 +74,7 @@ void Player::createPhysicsBody(World* world, const glm::vec2& position)
     footSensorFixtureDef.shape = &dynamicBox;
     footSensorFixtureDef.isSensor = true;
 
-    dynamicBox.SetAsBox(0.5, 0.1, b2Vec2(0.0f, 1.0f), 0.0f);
+    dynamicBox.SetAsBox(0.6, 0.1, b2Vec2(0.0f, 1.0f), 0.0f);
 
     b2Fixture* footSensorFixture = m_body->CreateFixture(&footSensorFixtureDef);
 

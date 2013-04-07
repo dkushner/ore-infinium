@@ -142,14 +142,16 @@ void World::addPlayer(Entities::Player* player)
 
         const glm::vec2& playerPosition = player->position();
 
+        // destroy an area around the player and where he spawns (blocks) so that he can collide properly with the tiles.
+
         //FIXME: HACK: this needs improvement. obviously..otherwise it could very easily destroy everything underneath wherever the player left off.
         //clear an area around the player's rect, of tiles, so he can spawn properly.
-        const int startX = ((playerPosition.x) / Block::BLOCK_SIZE) - (5 / PIXELS_PER_METER);
-        const int endX = startX + (10 / PIXELS_PER_METER);
+        const int startX = ((playerPosition.x) / Block::BLOCK_SIZE) - (10);
+        const int endX = startX + (20);
 
         //columns are our X value, rows the Y
-        const int startY = ((playerPosition.y) / Block::BLOCK_SIZE) - (5 / PIXELS_PER_METER);
-        const int endY = startY + (10 / PIXELS_PER_METER);
+        const int startY = ((playerPosition.y) / Block::BLOCK_SIZE) - (10);
+        const int endY = startY + (20);
         int index = 0;
 
         for (int row = startY; row < endY; ++row) {
