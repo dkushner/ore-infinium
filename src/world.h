@@ -156,6 +156,8 @@ private:
      */
     glm::ivec2 mousePosition() const;
 
+    void renderCrosshair();
+
     /**
     * From scratch, create a randomly generated tileset and store it in our array
     */

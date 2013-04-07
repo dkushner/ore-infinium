@@ -249,9 +249,12 @@ void World::render(Entities::Player* player)
     m_spriteSheetRenderer->renderEntities();
     m_spriteSheetRenderer->renderCharacters();
 
-    // ==================================================
+    renderCrosshair();
+}
 
-    glm::vec2 mouse = glm::vec2(mousePosition().x, 900 - mousePosition().y);
+void World::renderCrosshair()
+{
+    glm::vec2 mouse = glm::vec2(mousePosition().x, Settings::instance()->windowHeight - mousePosition().y);
 
     glm::vec4 viewport = glm::vec4(0, 0, Settings::instance()->windowWidth, Settings::instance()->windowHeight);
     glm::vec3 wincoord = glm::vec3(mouse.x, mouse.y, 0);
@@ -262,12 +265,13 @@ void World::render(Entities::Player* player)
     float tileSizeFloat = Block::BLOCK_SIZE;
 
     glm::vec4 tileSize = glm::vec4(tileSizeFloat, tileSizeFloat, 0.0f, 1.0f);
-    glm::vec4 transformedTileSize = tileSize * m_camera->view();// * m_camera->ortho();
+    glm::vec4 transformedTileSize = tileSize * m_camera->view();// * m_camera->ortho(); //FIXME: ortho need taken into accuont?
 
     glm::vec2 crosshairPosition = glm::vec2(Block::BLOCK_SIZE * floor(mouse.x / Block::BLOCK_SIZE), Block::BLOCK_SIZE * floor(mouse.y / Block::BLOCK_SIZE));
 
     m_blockPickingCrosshair->setPosition(crosshairPosition);
 }
+
 
 float World::metersToPixels(float meters)
 {
