@@ -246,8 +246,6 @@ void Client::render(double frameTime)
         m_world->render();
     }
 
-    m_gui->render();
-    drawDebugText(frameTime);
 
     if (m_physicsDebugRenderingEnabled) {
         if (!m_physicsDebugRenderer && m_box2DWorld && m_world && m_world->spriteSheetRenderer()) {
@@ -263,6 +261,9 @@ void Client::render(double frameTime)
             m_physicsDebugRenderer->render();
         }
     }
+
+    m_gui->render();
+    drawDebugText(frameTime);
 
     SDL_GL_SwapWindow(m_window);
 }
