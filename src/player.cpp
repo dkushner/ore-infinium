@@ -42,58 +42,11 @@ Player::Player(const std::string& frameName)
     m_sizeMeters = glm::vec2(Block::BLOCK_SIZE * 2, Block::BLOCK_SIZE * 3);
 }
 
-/*
-void Player::handleEvent(const SDL_Event& event)
-{
-    switch (event.type) {
-    case SDL_KEYDOWN:
-        if (event.key.keysym.sym == SDLK_d || event.key.keysym.sym == SDLK_RIGHT) {
-            m_inputXDirection = 1.f;
-        }
-
-        if (event.key.keysym.sym == SDLK_a || event.key.keysym.sym == SDLK_LEFT) {
-            m_inputXDirection = -1.f;
-        }
-
-        if (event.key.keysym.sym == SDLK_s || event.key.keysym.sym == SDLK_DOWN) {
-            m_inputYDirection = 1.f;
-        }
-
-        if (event.key.keysym.sym == SDLK_w || event.key.keysym.sym == SDLK_UP) {
-            m_inputYDirection = -1.f;
-        }
-        break;
-
-    case SDL_KEYUP:
-        if (event.key.keysym.sym == SDLK_d || event.key.keysym.sym == SDLK_RIGHT) {
-            m_inputXDirection = 0.f;
-        }
-
-        if (event.key.keysym.sym == SDLK_a || event.key.keysym.sym == SDLK_LEFT) {
-            m_inputXDirection = 0.f;
-        }
-
-        if (event.key.keysym.sym == SDLK_s || event.key.keysym.sym == SDLK_DOWN) {
-            m_inputYDirection = 0.f;
-        }
-
-        if (event.key.keysym.sym == SDLK_w || event.key.keysym.sym == SDLK_UP) {
-            m_inputYDirection = 0.f;
-        }
-        break;
-    }
-
-    Entity::setVelocity(m_inputXDirection * movementSpeed, m_inputYDirection * movementSpeed);
-}
-*/
-
 void Player::createPhysicsBody(World* world, const glm::vec2& position)
 {
-
     //create dynamic body
     b2BodyDef bodyDef;
     bodyDef.type = b2_dynamicBody;
-    //        bodyDef.position.Set(pixelsToMeters(200), -pixelsToMeters(100));
     bodyDef.position.Set(position.x, position.y);
 
     m_body = world->box2DWorld()->CreateBody(&bodyDef);
@@ -107,7 +60,6 @@ void Player::createPhysicsBody(World* world, const glm::vec2& position)
 
     b2PolygonShape dynamicBox;
     const glm::vec2 size = this->sizeMeters();
-    Debug::log(Debug::ServerEntityCreationArea) << " PLAYER METERS X: " << size.x << " Y: " << size.y;
     dynamicBox.SetAsBox(size.x, size.y);
 
     // create main body's fixture
@@ -122,7 +74,7 @@ void Player::createPhysicsBody(World* world, const glm::vec2& position)
     footSensorFixtureDef.shape = &dynamicBox;
     footSensorFixtureDef.isSensor = true;
 
-    dynamicBox.SetAsBox(0.5, 0.3, b2Vec2(0, 1), 0);
+    dynamicBox.SetAsBox(0.5, 0.1, b2Vec2(0.0f, 1.0f), 0.0f);
 
     b2Fixture* footSensorFixture = m_body->CreateFixture(&footSensorFixtureDef);
 
