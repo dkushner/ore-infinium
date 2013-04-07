@@ -189,18 +189,24 @@ void World::createInitialTilePhysicsObjects(Entities::Player* player)
     //FIXME: obviously find a good value, other than 10..
     //tile indexes
     int startRow = centerTileY - 1;
-    int endRow = centerTileY;
+    int endRow = centerTileY + 1;
 
     int startColumn = centerTileX - 1;
-    int endColumn = centerTileX;
+    int endColumn = centerTileX + 1;
 
     int count = 0;
     int index = 0;
     for (int currentRow = startRow; currentRow < endRow; ++currentRow) {
         for (int currentColumn = startColumn; currentColumn < endColumn; ++currentColumn) {
+
             index = currentColumn * WORLD_ROWCOUNT + currentRow;
             assert(index < WORLD_ROWCOUNT * WORLD_COLUMNCOUNT);
             Block& block = m_blocks[index];
+
+            if ( Block::blockTypeMap.at(block.primitiveType).collides == false) {
+                //skip over tiles which are not marked as collideable types. obviously, no physics bodies need to be generated for such cases.
+                continue;
+            }
 
             b2Body* body = nullptr;
 
@@ -311,6 +317,12 @@ float World::pixelsToMeters(float pixels)
 
 void World::update(double elapsedTime)
 {
+    //FIXME: MAKE IT CENTER ON THE CENTER OF THE PLAYER SPRITE
+    //only occurs on client side, obviously the server doesn't need to do this stuff
+    if (m_mainPlayer) {
+        m_camera->centerOn(m_mainPlayer->position());
+    }
+
     if (m_server) {
         for (auto * player : m_players) {
             if (player->mouseLeftButtonHeld()) {
@@ -318,6 +330,10 @@ void World::update(double elapsedTime)
                 handlePlayerLeftMouse(player);
             }
         }
+    }
+
+    if (m_server) {
+        m_box2DWorld->Step(FIXED_TIMESTEP, VELOCITY_ITERATIONS, POSITION_ITERATIONS);
     }
 
     //    m_sky->update(elapsedTime);
@@ -344,17 +360,6 @@ void World::update(double elapsedTime)
             }
         }
     }
-
-    if (m_server) {
-        m_box2DWorld->Step(FIXED_TIMESTEP, VELOCITY_ITERATIONS, POSITION_ITERATIONS);
-    }
-
-    //FIXME: MAKE IT CENTER ON THE CENTER OF THE PLAYER SPRITE
-    //only occurs on client side, obviously the server doesn't need to do this stuff
-    if (m_mainPlayer) {
-        m_camera->centerOn(m_mainPlayer->position());
-    }
-
 
     //calculateAttackPosition();
 }

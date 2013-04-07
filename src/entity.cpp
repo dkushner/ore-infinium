@@ -62,9 +62,6 @@ void Entity::update(double elapsedTime, World* world)
 
         Debug::log(Debug::Area::ServerEntityLogicArea) << "Entity update, apply velocity. velocity is x: " << m_velocity.x << " y: " << m_velocity.y;
         //HACK FIXME:
-        glm::vec2 position = glm::vec2(m_body->GetPosition().x, m_body->GetPosition().y);
-
-        this->setPosition(position);
 
         glm::vec2 fullVector = m_velocity * glm::vec2(300, 300);
 
@@ -78,6 +75,10 @@ void Entity::update(double elapsedTime, World* world)
         float impulse = m_body->GetMass() * velocityChange;
 
         m_body->ApplyLinearImpulse(b2Vec2(impulse, 0), m_body->GetWorldCenter());
+
+        glm::vec2 position = glm::vec2(m_body->GetPosition().x, m_body->GetPosition().y);
+
+        this->setPosition(position);
     }
 }
 

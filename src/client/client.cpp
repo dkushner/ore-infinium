@@ -246,7 +246,6 @@ void Client::render(double frameTime)
         m_world->render();
     }
 
-
     if (m_physicsDebugRenderingEnabled) {
         if (!m_physicsDebugRenderer && m_box2DWorld && m_world && m_world->spriteSheetRenderer()) {
             m_physicsDebugRenderer = new PhysicsDebugRenderer(m_world->spriteSheetRenderer()->camera());
