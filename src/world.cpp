@@ -183,21 +183,21 @@ void World::createInitialTilePhysicsObjects(Entities::Player* player)
     glm::vec2 position = player->position();
 
     float blockSize = Block::BLOCK_SIZE;
-    int centerTileX = int((position.x / blockSize));
-    int centerTileY = int((position.y / blockSize)) + 15;
+    int centerTileX = int((position.x / blockSize)) - 20; //FIXME: HACK obviously
+    int centerTileY = int((position.y / blockSize)) - 20;
 
     //FIXME: obviously find a good value, other than 10..
     //tile indexes
-    int startRow = centerTileY - 10;
-    int endRow = centerTileY + 10;
-
-    int startColumn = centerTileX - 10;
-    int endColumn = centerTileX + 10;
+    int startRow = centerTileY;
+    int endRow = centerTileY + 55;
+    int startColumn = centerTileX;
+    int endColumn = centerTileX + 55;
 
     int count = 0;
     int index = 0;
     for (int currentRow = startRow; currentRow < endRow; ++currentRow) {
         for (int currentColumn = startColumn; currentColumn < endColumn; ++currentColumn) {
+            count++;
 
             index = currentColumn * WORLD_ROWCOUNT + currentRow;
             assert(index < WORLD_ROWCOUNT * WORLD_COLUMNCOUNT);
@@ -233,7 +233,7 @@ void World::createInitialTilePhysicsObjects(Entities::Player* player)
         }
     }
 
-    Debug::log(Debug::ServerEntityCreationArea) << "Created initial tile physics objects for player, current world body count: " << m_box2DWorld->GetBodyCount();
+    Debug::log(Debug::ServerEntityCreationArea) << "Created initial tile physics objects for player, current world body count: " << m_box2DWorld->GetBodyCount() << " count: " << count;
 }
 
 void World::updateTilePhysicsObjects(Entities::Player* player)
