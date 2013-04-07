@@ -66,11 +66,7 @@ void Entity::update(double elapsedTime, World* world)
 
         this->setPosition(position);
 
-        //        Debug::log() << "SETTING SPRITE POSITION TO X: " << m_body->GetPosition().x << " Y : " << m_body->GetPosition().y <<
-        //        "value actually is X: " << Sprite::position().x << " Y: " << Sprite::position().y;
-
         glm::vec2 fullVector = m_velocity * glm::vec2(300, 300);
-
 
         b2Vec2 currentVelocity = m_body->GetLinearVelocity();
 
