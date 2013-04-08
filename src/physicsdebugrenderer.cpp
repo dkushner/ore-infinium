@@ -146,19 +146,19 @@ void PhysicsDebugRenderer::DrawSolidPolygon(const b2Vec2* vertices, int32 vertex
     glBindBuffer(GL_ARRAY_BUFFER, m_vboSolidPolygons);
     Debug::checkGLError();
 
-    ++m_solidPolygonCount;
-    m_solidPolygonVertexCount += vertexCount;
     glBufferSubData(
         GL_ARRAY_BUFFER,
-        sizeof(vertices) * m_solidPolygonCount,
-                    sizeof(vertices)*6,
+        sizeof(vertices) * m_solidPolygonCount * 6,
+                    sizeof(vertices),
                     vertices);
-
 
     Debug::checkGLError();
 
     glBindBuffer(GL_ARRAY_BUFFER, 0);
     Debug::checkGLError();
+
+    ++m_solidPolygonCount;
+    m_solidPolygonVertexCount += vertexCount;
 }
 
 
@@ -309,7 +309,7 @@ void PhysicsDebugRenderer::renderSolidPolygons()
     Debug::checkGLError();
 
     glDrawArrays(
-        GL_TRIANGLE_FAN,
+        GL_TRIANGLES,
         0,
         /*m_solidPolygonCount*/ 1* 8000
     );
