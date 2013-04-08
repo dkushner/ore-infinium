@@ -58,11 +58,11 @@ private:
 
     GLuint m_vao; // vertex array object
     GLuint m_vbo; // vertex buffer object
-    GLuint m_ebo; // element buffer object
 
     GLuint m_vaoSolidPolygons; // vertex array object
     GLuint m_vboSolidPolygons; // vertex buffer object
-    GLuint m_eboSolidPolygons; // element buffer object
+    uint32_t m_solidPolygonVertexCount = 0;
+    uint32_t m_solidPolygonCount = 0;
 
     glm::mat4 m_ortho;
 

@@ -53,8 +53,35 @@ void PhysicsDebugRenderer::initGL()
 
     glGenBuffers(1, &m_vbo);
 
+    glGenVertexArrays(1, &m_vaoSolidPolygons);
+    glBindVertexArray(m_vaoSolidPolygons);
+
+    glGenBuffers(1, &m_vboSolidPolygons);
+    glBindBuffer(GL_ARRAY_BUFFER, m_vboSolidPolygons);
+    Debug::checkGLError();
+
+    glBufferData(
+        GL_ARRAY_BUFFER,
+        5000 * 4 * sizeof(b2Vec2),
+                 NULL,
+                 GL_DYNAMIC_DRAW);
+
+    Debug::checkGLError();
+    GLint pos_attrib = glGetAttribLocation(m_shader->shaderProgram(), "position");
+    glEnableVertexAttribArray(pos_attrib);
+    glVertexAttribPointer(
+        pos_attrib,
+        2,
+        GL_FLOAT,
+        GL_FALSE,
+        sizeof(b2Vec2),
+                          (const GLvoid*)0
+    );
+    Debug::checkGLError();
+
     glBindVertexArray(0);
     glBindBuffer(GL_ARRAY_BUFFER, 0);
+    Debug::checkGLError();
 }
 
 void PhysicsDebugRenderer::DrawPolygon(const b2Vec2* vertices, int32 vertexCount, const b2Color& color)
@@ -115,53 +142,25 @@ void PhysicsDebugRenderer::DrawPolygon(const b2Vec2* vertices, int32 vertexCount
 
 void PhysicsDebugRenderer::DrawSolidPolygon(const b2Vec2* vertices, int32 vertexCount, const b2Color& color)
 {
-    m_shader->bindProgram();
+    Debug::checkGLError();
+    glBindBuffer(GL_ARRAY_BUFFER, m_vboSolidPolygons);
+    Debug::checkGLError();
 
-    int colorLoc = glGetUniformLocation(m_shader->shaderProgram(), "color");
-    glUniform4f(colorLoc, color.r, color.g, color.b, 0.5f);
-
-    glBindVertexArray(m_vao);
-    glBindBuffer(GL_ARRAY_BUFFER, m_vbo);
-    // vertices that will be uploaded.
-
-    GLint pos_attrib = glGetAttribLocation(m_shader->shaderProgram(), "position");
-    glEnableVertexAttribArray(pos_attrib);
-    glVertexAttribPointer(
-        pos_attrib,
-        2,
-        GL_FLOAT,
-        GL_FALSE,
-        sizeof(b2Vec2),
-        (const GLvoid*)0
-    );
-
-    // finally upload everything to the actual vbo
-    glBufferData(
+    ++m_solidPolygonCount;
+    m_solidPolygonVertexCount += vertexCount;
+    glBufferSubData(
         GL_ARRAY_BUFFER,
-        sizeof(b2Vec2) * vertexCount,
-        vertices,
-        GL_DYNAMIC_DRAW
-    );
+        sizeof(vertices) * m_solidPolygonCount,
+                    sizeof(vertices)*6,
+                    vertices);
 
-    ////////////////////////////////FINALLY RENDER IT ALL //////////////////////////////////////////
-    glEnable(GL_BLEND);
-    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
-    m_shader->bindProgram();
+    Debug::checkGLError();
 
-    glDrawArrays(
-        GL_TRIANGLE_FAN,
-        0,
-        vertexCount
-    );
-
-    m_shader->unbindProgram();
-    glBindVertexArray(0);
     glBindBuffer(GL_ARRAY_BUFFER, 0);
-    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
-
-    glDisable(GL_BLEND);
+    Debug::checkGLError();
 }
+
 
 void PhysicsDebugRenderer::DrawCircle(const b2Vec2& center, float32 radius, const b2Color& color)
 {
@@ -283,10 +282,46 @@ void PhysicsDebugRenderer::DrawTransform(const b2Transform& xf)
 
 void PhysicsDebugRenderer::render()
 {
-
+    renderSolidPolygons();
 }
 
 void PhysicsDebugRenderer::renderSolidPolygons()
 {
+    m_shader->bindProgram();
 
+    int colorLoc = glGetUniformLocation(m_shader->shaderProgram(), "color");
+
+    Debug::checkGLError();
+    b2Color color = b2Color(120, 0, 0);
+    glUniform4f(colorLoc, color.r, color.g, color.b, 0.5f);
+
+
+    glBindVertexArray(m_vaoSolidPolygons);
+
+    glBindBuffer(GL_ARRAY_BUFFER, m_vboSolidPolygons);
+
+    Debug::checkGLError();
+    ////////////////////////////////FINALLY RENDER IT ALL //////////////////////////////////////////
+    glEnable(GL_BLEND);
+    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+
+    m_shader->bindProgram();
+    Debug::checkGLError();
+
+    glDrawArrays(
+        GL_TRIANGLE_FAN,
+        0,
+        /*m_solidPolygonCount*/ 1* 8000
+    );
+    Debug::checkGLError();
+    m_shader->unbindProgram();
+    glBindVertexArray(0);
+    glBindBuffer(GL_ARRAY_BUFFER, 0);
+    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
+
+    glDisable(GL_BLEND);
+
+    m_solidPolygonCount = 0;
+    m_solidPolygonVertexCount = 0;
+    Debug::checkGLError();
 }
