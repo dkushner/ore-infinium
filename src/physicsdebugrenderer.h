@@ -50,6 +50,8 @@ public:
 private:
     void initGL();
 
+    void renderSolidPolygons();
+
 private:
     typedef uint32_t u32;
     typedef float f32;
@@ -57,6 +59,10 @@ private:
     GLuint m_vao; // vertex array object
     GLuint m_vbo; // vertex buffer object
     GLuint m_ebo; // element buffer object
+
+    GLuint m_vaoSolidPolygons; // vertex array object
+    GLuint m_vboSolidPolygons; // vertex buffer object
+    GLuint m_eboSolidPolygons; // element buffer object
 
     glm::mat4 m_ortho;
 

@@ -50,7 +50,7 @@ static constexpr unsigned short WORLD_ROWCOUNT = 8400;
 //width
 static constexpr unsigned short WORLD_COLUMNCOUNT = 2400;
 
-static constexpr double FIXED_TIMESTEP = 1.0 / 30.0; // hertz
+static constexpr double FIXED_TIMESTEP = 1.0 / 60.0; // hertz
 static constexpr int32_t VELOCITY_ITERATIONS = 6;
 static constexpr int32_t POSITION_ITERATIONS = 2;
 

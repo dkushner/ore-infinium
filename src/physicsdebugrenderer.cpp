@@ -115,12 +115,6 @@ void PhysicsDebugRenderer::DrawPolygon(const b2Vec2* vertices, int32 vertexCount
 
 void PhysicsDebugRenderer::DrawSolidPolygon(const b2Vec2* vertices, int32 vertexCount, const b2Color& color)
 {
-    std::vector<b2Vec2> verts;
-    for (int i = 0; i < vertexCount; ++i) {
-        b2Vec2 newVec = vertices[i];
-        verts.push_back(newVec);
-    }
-
     m_shader->bindProgram();
 
     int colorLoc = glGetUniformLocation(m_shader->shaderProgram(), "color");
@@ -145,7 +139,7 @@ void PhysicsDebugRenderer::DrawSolidPolygon(const b2Vec2* vertices, int32 vertex
     glBufferData(
         GL_ARRAY_BUFFER,
         sizeof(b2Vec2) * vertexCount,
-        verts.data(),
+        vertices,
         GL_DYNAMIC_DRAW
     );
 
@@ -288,6 +282,11 @@ void PhysicsDebugRenderer::DrawTransform(const b2Transform& xf)
 }
 
 void PhysicsDebugRenderer::render()
+{
+
+}
+
+void PhysicsDebugRenderer::renderSolidPolygons()
 {
 
 }
