@@ -146,60 +146,7 @@ void PhysicsDebugRenderer::initGLSegments()
 
 void PhysicsDebugRenderer::DrawPolygon(const b2Vec2* vertices, int32 vertexCount, const b2Color& color)
 {
-    /*
-    std::vector<b2Vec2> verts;
-    for (int i = 0; i < vertexCount; ++i) {
-        b2Vec2 newVec = vertices[i];
-        verts.push_back(newVec);
-    }
 
-    m_shader->bindProgram();
-
-    int colorLoc = glGetUniformLocation(m_shader->shaderProgram(), "color");
-    glUniform4f(colorLoc, color.r, color.g, color.b, 0.5f);
-
-    glBindVertexArray(m_vao);
-    glBindBuffer(GL_ARRAY_BUFFER, m_vbo);
-    // vertices that will be uploaded.
-
-    GLint pos_attrib = glGetAttribLocation(m_shader->shaderProgram(), "position");
-    glEnableVertexAttribArray(pos_attrib);
-    glVertexAttribPointer(
-        pos_attrib,
-        2,
-        GL_FLOAT,
-        GL_FALSE,
-        sizeof(b2Vec2),
-        (const GLvoid*)0
-    );
-
-    // finally upload everything to the actual vbo
-    glBufferData(
-        GL_ARRAY_BUFFER,
-        sizeof(b2Vec2) * vertexCount,
-        verts.data(),
-        GL_DYNAMIC_DRAW
-    );
-
-    ////////////////////////////////FINALLY RENDER IT ALL //////////////////////////////////////////
-    glEnable(GL_BLEND);
-    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-
-    m_shader->bindProgram();
-
-    glDrawArrays(
-        GL_LINE_LOOP,
-        0,
-        vertexCount
-    );
-
-    m_shader->unbindProgram();
-    glBindVertexArray(0);
-    glBindBuffer(GL_ARRAY_BUFFER, 0);
-    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
-
-    glDisable(GL_BLEND);
-    */
 }
 
 void PhysicsDebugRenderer::DrawSolidPolygon(const b2Vec2* vertices, int32 vertexCount, const b2Color& color)
@@ -282,20 +229,6 @@ void PhysicsDebugRenderer::DrawSolidCircle(const b2Vec2& center, float32 radius,
 
 void PhysicsDebugRenderer::DrawSegment(const b2Vec2& p1, const b2Vec2& p2, const b2Color& color)
 {
-    /*
-    std::vector<b2Vec2> verts;
-
-    verts.push_back(p1);
-    verts.push_back(p2);
-
-    glDrawArrays(
-        GL_LINES,
-        0,
-        2 // only 2 points
-    );
-*/
-
-    Debug::log(Debug::ClientRendererArea) << " DRAWING A SEGMENT";
     std::vector<b2Vec2> vertices;
     vertices.push_back(p1);
     vertices.push_back(p2);
@@ -319,8 +252,8 @@ void PhysicsDebugRenderer::DrawSegment(const b2Vec2& p1, const b2Vec2& p2, const
 
     const size_t iboOffset = m_verticesSegments.size();
 
-        m_indicesSegments.push_back(iboOffset);
-        m_indicesSegments.push_back(iboOffset + 1);
+    m_indicesSegments.push_back(iboOffset);
+    m_indicesSegments.push_back(iboOffset + 1);
 }
 
 void PhysicsDebugRenderer::DrawTransform(const b2Transform& xf)
