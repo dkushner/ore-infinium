@@ -128,7 +128,7 @@ void ShellRenderInterfaceOpenGL::RenderGeometry(Rocket::Core::Vertex* vertices, 
         (const GLvoid*)buffer_offset
     );
 
-    buffer_offset += sizeof(f32) * 2;
+    buffer_offset += sizeof(float) * 2;
 
     GLint color_attrib = glGetAttribLocation(m_shader->shaderProgram(), "color");
 
@@ -141,7 +141,7 @@ void ShellRenderInterfaceOpenGL::RenderGeometry(Rocket::Core::Vertex* vertices, 
         sizeof(Rocket::Core::Vertex),
         (const GLvoid*)buffer_offset
     );
-    buffer_offset += sizeof(u32);
+    buffer_offset += sizeof(uint32_t);
 
     GLint texcoord_attrib = glGetAttribLocation(m_shader->shaderProgram(), "texcoord");
     glEnableVertexAttribArray(texcoord_attrib);

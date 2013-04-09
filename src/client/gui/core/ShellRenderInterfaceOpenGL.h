@@ -85,9 +85,6 @@ private:
     int m_width;
     int m_height;
 
-    typedef uint32_t u32;
-    typedef float f32;
-
     GLuint m_whiteTexture;
 
     GLuint m_vao; // vertex array object
