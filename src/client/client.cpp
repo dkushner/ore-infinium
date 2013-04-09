@@ -249,7 +249,7 @@ void Client::render(double frameTime)
     if (m_physicsDebugRenderingEnabled) {
         if (!m_physicsDebugRenderer && m_box2DWorld && m_world && m_world->spriteSheetRenderer()) {
             m_physicsDebugRenderer = new PhysicsDebugRenderer(m_world->spriteSheetRenderer()->camera());
-            m_physicsDebugRenderer->SetFlags(b2Draw::e_shapeBit);// | b2Draw::e_aabbBit | b2Draw::e_centerOfMassBit | b2Draw::e_jointBit);
+            m_physicsDebugRenderer->SetFlags(b2Draw::e_shapeBit | b2Draw::e_aabbBit | b2Draw::e_centerOfMassBit | b2Draw::e_jointBit);
             // physics debug renderer first init...
             m_box2DWorld->SetDebugDraw(m_physicsDebugRenderer);
         }
