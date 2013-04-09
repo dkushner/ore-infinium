@@ -52,12 +52,21 @@ private:
 
     void renderSolidPolygons();
 
+    /* Each vertex is:
+     * two floats for the 2d coordinate
+     * four uint8_t's for the color (packed in 1 uint32_t)
+     * */
+    struct Vertex {
+        float x, y;
+        uint32_t color; // packed with 4 u8s (unsigned chars) for color
+    };
+
 private:
     GLuint m_iboSolidPolygons; // index buffer object
     GLuint m_vaoSolidPolygons; // vertex array object
     GLuint m_vboSolidPolygons; // vertex buffer object
 
-    std::vector<b2Vec2> m_vertices;
+    std::vector<Vertex> m_vertices;
     std::vector<uint16_t> m_indices;
     size_t m_maxVBOSizeSolidPolygons = 0;
     size_t m_highestIBOSizeSolidPolygons = 0;
