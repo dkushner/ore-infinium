@@ -159,9 +159,9 @@ void PhysicsDebugRenderer::DrawSolidPolygon(const b2Vec2* vertices, int32 vertex
         vertex.x = vertices[i].x;
         vertex.y = vertices[i].y;
 
-        uint8_t red = 255;
-        uint8_t green = 255;
-        uint8_t blue = 255;
+        uint8_t red = static_cast<uint8_t>(ceil(color.r * 255));
+        uint8_t green = static_cast<uint8_t>(ceil(color.g * 255));
+        uint8_t blue = static_cast<uint8_t>(ceil(color.b * 255));
         uint8_t alpha = 255;
         int32_t colorPacked = red | (green << 8) | (blue << 16) | (alpha << 24);
         vertex.color = colorPacked;
