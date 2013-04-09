@@ -48,7 +48,7 @@ void PhysicsDebugRenderer::setCamera(Camera* camera)
 
 void PhysicsDebugRenderer::initGL()
 {
-//    initGLSolidPolygons();
+    initGLSolidPolygons();
     initGLSegments();
 }
 
@@ -319,10 +319,8 @@ void PhysicsDebugRenderer::DrawSegment(const b2Vec2& p1, const b2Vec2& p2, const
 
     const size_t iboOffset = m_verticesSegments.size();
 
-    for (int i = 0; i < vertexCount; i++) {
         m_indicesSegments.push_back(iboOffset);
-        m_indicesSegments.push_back(iboOffset+1);
-    }
+        m_indicesSegments.push_back(iboOffset + 1);
 }
 
 void PhysicsDebugRenderer::DrawTransform(const b2Transform& xf)
@@ -338,7 +336,7 @@ void PhysicsDebugRenderer::DrawTransform(const b2Transform& xf)
 
 void PhysicsDebugRenderer::render()
 {
-//    renderSolidPolygons();
+    renderSolidPolygons();
     renderSegments();
 }
 
