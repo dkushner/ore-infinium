@@ -193,9 +193,9 @@ void PhysicsDebugRenderer::initGLSegments()
 
 void PhysicsDebugRenderer::DrawPolygon(const b2Vec2* vertices, int32 vertexCount, const b2Color& color)
 {
-        const size_t iboOffset = m_verticesPolygons.size();
+    const size_t iboOffset = m_verticesPolygons.size();
 
-    for (size_t i = 0; i < vertexCount; i++) {
+    for (size_t i = 0; i < vertexCount; ++i) {
         Vertex vertex;
         vertex.x = vertices[i].x;
         vertex.y = vertices[i].y;
@@ -210,8 +210,9 @@ void PhysicsDebugRenderer::DrawPolygon(const b2Vec2* vertices, int32 vertexCount
         m_verticesPolygons.push_back(vertex);
     }
 
-    for (int i = 0; i < vertexCount ; i++) {
-        m_indicesPolygons.push_back(iboOffset + i);
+    for (int i = 0; i < vertexCount; i++) {
+        m_indicesPolygons.push_back(iboOffset + (i % vertexCount));
+        m_indicesPolygons.push_back(iboOffset + ((i + 1) % vertexCount));
     }
 }
 
@@ -219,7 +220,7 @@ void PhysicsDebugRenderer::DrawSolidPolygon(const b2Vec2* vertices, int32 vertex
 {
     const size_t iboOffset = m_verticesSolidPolygons.size();
 
-    for (size_t i = 0; i < vertexCount; i++) {
+    for (size_t i = 0; i < vertexCount; ++i) {
         Vertex vertex;
         vertex.x = vertices[i].x;
         vertex.y = vertices[i].y;
@@ -298,7 +299,7 @@ void PhysicsDebugRenderer::DrawSegment(const b2Vec2& p1, const b2Vec2& p2, const
 
     size_t vertexCount = vertices.size();
 
-    for (size_t i = 0; i < vertexCount; i++) {
+    for (size_t i = 0; i < vertexCount; ++i) {
         Vertex vertex;
         vertex.x = vertices[i].x;
         vertex.y = vertices[i].y;
@@ -363,11 +364,7 @@ void PhysicsDebugRenderer::renderPolygons()
         glBufferSubData(GL_ELEMENT_ARRAY_BUFFER, 0, sizeof(uint16_t) * m_indicesPolygons.size(), m_indicesPolygons.data());
     }
 
-//    glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
-
     glDrawElements(GL_LINES, m_indicesPolygons.size(), GL_UNSIGNED_SHORT, (GLvoid*)0);
-
-//    glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
 
     glDisable(GL_BLEND);
 
