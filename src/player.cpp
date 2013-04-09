@@ -81,10 +81,10 @@ void Player::createPhysicsBody(World* world, const glm::vec2& position)
 //    vertices[2].Set(2.0f, 2.5f); // bottom center
 //    vertices[3].Set(5.1f, 4.5f); // center right
 
-    vertices[0].Set(0,-1);
-    vertices[1].Set(1,1);
-    vertices[2].Set(0,2);
-    vertices[3].Set(-1,1);
+    vertices[0].Set(0, -1);
+    vertices[1].Set(1, 1);
+    vertices[2].Set(0, 3);
+    vertices[3].Set(-1, 1);
 
 //    vertices[4].Set(6.1f, 5.5f); // center right
 //    vertices[5].Set(7.1f, 6.9f); // bottom left
