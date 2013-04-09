@@ -306,14 +306,6 @@ void PhysicsDebugRenderer::renderSolidPolygons()
 {
     m_shader->bindProgram();
 
-    int colorLoc = glGetUniformLocation(m_shader->shaderProgram(), "color");
-
-    Debug::checkGLError();
-    b2Color color = b2Color(120, 0, 0);
-    glUniform4f(colorLoc, color.r, color.g, color.b, 0.5f);
-
-
-
     Debug::checkGLError();
 
     ////////////////////////////////FINALLY RENDER IT ALL //////////////////////////////////////////
