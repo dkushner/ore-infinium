@@ -49,6 +49,8 @@ public:
 
 private:
     void initGL();
+    void initGLSolidPolygons();
+    void initGLSegment();
 
     void renderSolidPolygons();
 
@@ -66,10 +68,19 @@ private:
     GLuint m_vaoSolidPolygons; // vertex array object
     GLuint m_vboSolidPolygons; // vertex buffer object
 
-    std::vector<Vertex> m_vertices;
-    std::vector<uint16_t> m_indices;
+    std::vector<Vertex> m_verticesSolidPolygons;
+    std::vector<uint16_t> m_indicesSolidPolygons;
     size_t m_maxVBOSizeSolidPolygons = 0;
     size_t m_highestIBOSizeSolidPolygons = 0;
+
+    GLuint m_iboSegment; // index buffer object
+    GLuint m_vaoSegment; // vertex array object
+    GLuint m_vboSegment; // vertex buffer object
+
+    std::vector<Vertex> m_verticesSegment;
+    std::vector<uint16_t> m_indicesSegment;
+    size_t m_maxVBOSizeSegment = 0;
+    size_t m_highestIBOSizeSegment = 0;
 
     glm::mat4 m_ortho;
 
