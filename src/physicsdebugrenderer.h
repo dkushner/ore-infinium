@@ -53,9 +53,6 @@ private:
     void renderSolidPolygons();
 
 private:
-    GLuint m_vao; // vertex array object
-    GLuint m_vbo; // vertex buffer object
-
     GLuint m_iboSolidPolygons; // index buffer object
     GLuint m_vaoSolidPolygons; // vertex array object
     GLuint m_vboSolidPolygons; // vertex buffer object

@@ -33,8 +33,8 @@ PhysicsDebugRenderer::PhysicsDebugRenderer(Camera* camera)
 
 PhysicsDebugRenderer::~PhysicsDebugRenderer()
 {
-    glDeleteBuffers(1, &m_vbo);
-    glDeleteVertexArrays(1, &m_vao);
+    glDeleteBuffers(1, &m_vboSolidPolygons);
+    glDeleteVertexArrays(1, &m_vaoSolidPolygons);
 
     // NOTE: cam is not ours to delete.
     delete m_shader;
@@ -48,11 +48,6 @@ void PhysicsDebugRenderer::setCamera(Camera* camera)
 
 void PhysicsDebugRenderer::initGL()
 {
-    glGenVertexArrays(1, &m_vao);
-    glBindVertexArray(m_vao);
-
-    glGenBuffers(1, &m_vbo);
-
     glGenVertexArrays(1, &m_vaoSolidPolygons);
     glBindVertexArray(m_vaoSolidPolygons);
 
@@ -82,6 +77,7 @@ void PhysicsDebugRenderer::initGL()
 
 void PhysicsDebugRenderer::DrawPolygon(const b2Vec2* vertices, int32 vertexCount, const b2Color& color)
 {
+    /*
     std::vector<b2Vec2> verts;
     for (int i = 0; i < vertexCount; ++i) {
         b2Vec2 newVec = vertices[i];
@@ -134,6 +130,7 @@ void PhysicsDebugRenderer::DrawPolygon(const b2Vec2* vertices, int32 vertexCount
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
 
     glDisable(GL_BLEND);
+    */
 }
 
 void PhysicsDebugRenderer::DrawSolidPolygon(const b2Vec2* vertices, int32 vertexCount, const b2Color& color)
@@ -206,6 +203,7 @@ void PhysicsDebugRenderer::DrawSolidCircle(const b2Vec2& center, float32 radius,
 
 void PhysicsDebugRenderer::DrawSegment(const b2Vec2& p1, const b2Vec2& p2, const b2Color& color)
 {
+    /*
     std::vector<b2Vec2> verts;
 
     verts.push_back(p1);
@@ -257,6 +255,7 @@ void PhysicsDebugRenderer::DrawSegment(const b2Vec2& p1, const b2Vec2& p2, const
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
 
     glDisable(GL_BLEND);
+    */
 }
 
 void PhysicsDebugRenderer::DrawTransform(const b2Transform& xf)
