@@ -4,7 +4,6 @@ uniform mat4 mvp;
 
 in vec2 position;
 in vec2 texcoord;
-
 in vec4 color;
 
 out vec2 frag_texcoord;

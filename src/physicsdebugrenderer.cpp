@@ -55,6 +55,8 @@ void PhysicsDebugRenderer::initGL()
     glBindBuffer(GL_ARRAY_BUFFER, m_vboSolidPolygons);
     Debug::checkGLError();
 
+    size_t buffer_offset = 0;
+
     GLint pos_attrib = glGetAttribLocation(m_shader->shaderProgram(), "position");
     glEnableVertexAttribArray(pos_attrib);
     glVertexAttribPointer(
@@ -65,7 +67,22 @@ void PhysicsDebugRenderer::initGL()
         sizeof(Vertex),
                           (const GLvoid*)0
     );
+    buffer_offset += sizeof(float) * 2;
     Debug::checkGLError();
+
+    GLint color_attrib = glGetAttribLocation(m_shader->shaderProgram(), "color");
+
+    Debug::checkGLError();
+
+    glEnableVertexAttribArray(color_attrib);
+    glVertexAttribPointer(
+        color_attrib,
+        4,
+        GL_UNSIGNED_BYTE,
+        GL_TRUE,
+        sizeof(Vertex),
+                          (const GLvoid*)buffer_offset);
+    buffer_offset += sizeof(uint32_t);
 
     glGenBuffers(1, &m_iboSolidPolygons);
 
@@ -141,7 +158,14 @@ void PhysicsDebugRenderer::DrawSolidPolygon(const b2Vec2* vertices, int32 vertex
         Vertex vertex;
         vertex.x = vertices[i].x;
         vertex.y = vertices[i].y;
-        vertex.color = 255;//vertices[i].y;
+
+        uint8_t red = 255;
+        uint8_t green = 255;
+        uint8_t blue = 255;
+        uint8_t alpha = 255;
+        int32_t colorPacked = red | (green << 8) | (blue << 16) | (alpha << 24);
+        vertex.color = colorPacked;
+
         m_vertices.push_back(vertex);
     }
 
