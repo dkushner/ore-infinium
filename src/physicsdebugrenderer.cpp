@@ -319,13 +319,38 @@ void PhysicsDebugRenderer::DrawSolidCircle(const b2Vec2& center, float32 radius,
     const float32 k_increment = 2.0f * b2_pi / k_segments;
     float32 theta = 0.0f;
 
-    GLfloat                         glVertices[vertexCount*2];
+    std::vector<Vertex> vertices;
     for (int32 i = 0; i < k_segments; ++i)
     {
         b2Vec2 v = center + radius * b2Vec2(cosf(theta), sinf(theta));
-        glVertices[i*2]=v.x;
-        glVertices[i*2+1]=v.y;
+        Vertex vert;
+        vert.x = v.x;
+        vert.y = v.y;
+        vertices.push_back(vert);
         theta += k_increment;
+    }
+
+    const size_t iboOffset = m_verticesSolidCircles.size();
+
+    for (size_t i = 0; i < vertices.size(); ++i) {
+        Vertex vertex;
+        vertex.x = vertices[i].x;
+        vertex.y = vertices[i].y;
+
+        uint8_t red = static_cast<uint8_t>(ceil(color.r * 255));
+        uint8_t green = static_cast<uint8_t>(ceil(color.g * 255));
+        uint8_t blue = static_cast<uint8_t>(ceil(color.b * 255));
+        uint8_t alpha = 80;
+        int32_t colorPacked = red | (green << 8) | (blue << 16) | (alpha << 24);
+        vertex.color = colorPacked;
+
+        m_verticesSolidCircles.push_back(vertex);
+    }
+
+    for (int i = 1; i < vertices.size() - 1; i++) {
+        m_indicesSolidCircles.push_back(iboOffset);
+        m_indicesSolidCircles.push_back(iboOffset + i);
+        m_indicesSolidCircles.push_back(iboOffset + i + 1);
     }
 
     /*
