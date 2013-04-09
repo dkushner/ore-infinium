@@ -59,10 +59,16 @@ private:
     GLuint m_vao; // vertex array object
     GLuint m_vbo; // vertex buffer object
 
+    GLuint m_iboSolidPolygons; // index buffer object
     GLuint m_vaoSolidPolygons; // vertex array object
     GLuint m_vboSolidPolygons; // vertex buffer object
     uint32_t m_solidPolygonVertexCount = 0;
     uint32_t m_solidPolygonCount = 0;
+
+    std::vector<b2Vec2> m_vertices;
+    std::vector<uint16_t> m_indices;
+    size_t m_lastVBOSize = 0;
+    size_t m_lastIBOSize = 0;
 
     glm::mat4 m_ortho;
 
