@@ -318,6 +318,29 @@ void PhysicsDebugRenderer::DrawSegment(const b2Vec2& p1, const b2Vec2& p2, const
     }
 */
 
+    std::vector<b2Vec2> vertices;
+    vertices.push_back(p1);
+    vertices.push_back(p2);
+
+    size_t vertexCount = vertices.size();
+
+    for (size_t i = 0; i < vertexCount; i++) {
+        Vertex vertex;
+        vertex.x = vertices[i].x;
+        vertex.y = vertices[i].y;
+
+        uint8_t red = static_cast<uint8_t>(ceil(color.r * 255));
+        uint8_t green = static_cast<uint8_t>(ceil(color.g * 255));
+        uint8_t blue = static_cast<uint8_t>(ceil(color.b * 255));
+        uint8_t alpha = 80;
+        int32_t colorPacked = red | (green << 8) | (blue << 16) | (alpha << 24);
+        vertex.color = colorPacked;
+
+        m_verticesSegments.push_back(vertex);
+    }
+
+    m_indicesSegments.push_back(0);
+    m_indicesSegments.push_back(1);
 }
 
 void PhysicsDebugRenderer::DrawTransform(const b2Transform& xf)
@@ -380,38 +403,38 @@ void PhysicsDebugRenderer::renderSegments()
 {
     ////////////////////////////////FINALLY RENDER IT ALL //////////////////////////////////////////
 
-    /*
     glEnable(GL_BLEND);
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
     m_shader->bindProgram();
     Debug::checkGLError();
 
-    glBindVertexArray(m_vaoSolidPolygons);
-    glBindBuffer(GL_ARRAY_BUFFER, m_vboSolidPolygons);
-    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_iboSolidPolygons);
+    glBindVertexArray(m_vaoSegments);
+    glBindBuffer(GL_ARRAY_BUFFER, m_vboSegments);
+    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_iboSegments);
 
-    if (m_verticesSolidPolygons.size() > m_maxVBOSizeSolidPolygons) {
-        glBufferData(GL_ARRAY_BUFFER, sizeof(Vertex) * m_verticesSolidPolygons.size(), m_verticesSolidPolygons.data(), GL_DYNAMIC_DRAW);
+    if (m_verticesSegments.size() > m_maxVBOSizeSegments) {
+        glBufferData(GL_ARRAY_BUFFER, sizeof(Vertex) * m_verticesSegments.size(), m_verticesSegments.data(), GL_DYNAMIC_DRAW);
     } else {
-        glBufferSubData(GL_ARRAY_BUFFER, 0, sizeof(Vertex) * m_verticesSolidPolygons.size(), m_verticesSolidPolygons.data());
+        glBufferSubData(GL_ARRAY_BUFFER, 0, sizeof(Vertex) * m_verticesSegments.size(), m_verticesSegments.data());
     }
 
-    if (m_indicesSolidPolygons.size() > m_highestIBOSizeSolidPolygons) {
-        glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(uint16_t) * m_indicesSolidPolygons.size(), m_indicesSolidPolygons.data(), GL_DYNAMIC_DRAW);
+    if (m_indicesSegments.size() > m_highestIBOSizeSegments) {
+        glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(uint16_t) * m_indicesSegments.size(), m_indicesSegments.data(), GL_DYNAMIC_DRAW);
     } else {
-        glBufferSubData(GL_ELEMENT_ARRAY_BUFFER, 0, sizeof(uint16_t) * m_indicesSolidPolygons.size(), m_indicesSolidPolygons.data());
+        glBufferSubData(GL_ELEMENT_ARRAY_BUFFER, 0, sizeof(uint16_t) * m_indicesSegments.size(), m_indicesSegments.data());
     }
 
-    glDrawElements(GL_TRIANGLES, m_indicesSolidPolygons.size(), GL_UNSIGNED_SHORT, (GLvoid*)0);
+    glDrawElements(GL_LINES, m_indicesSegments.size(), GL_UNSIGNED_SHORT, (GLvoid*)0);
+
+    glDisable(GL_BLEND);
 
     glBindVertexArray(0);
     glBindBuffer(GL_ARRAY_BUFFER, 0);
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
 
-    m_maxVBOSizeSolidPolygons = m_verticesSolidPolygons.size();
-    m_highestIBOSizeSolidPolygons = m_indicesSolidPolygons.size();
-    m_verticesSolidPolygons.clear();
-    m_indicesSolidPolygons.clear();
-    */
+    m_maxVBOSizeSegments = m_verticesSegments.size();
+    m_highestIBOSizeSegments = m_indicesSegments.size();
+    m_verticesSegments.clear();
+    m_indicesSegments.clear();
 }
