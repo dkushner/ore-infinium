@@ -98,10 +98,6 @@ private:
         Texture* texture = nullptr;
     };
 
-
-    typedef uint32_t u32;
-    typedef float f32;
-
     /* Each vertex is:
      * two floats for the 2d coordinate
      * four u8s for the color
