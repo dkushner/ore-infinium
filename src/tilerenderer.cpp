@@ -316,10 +316,10 @@ void TileRenderer::initGL()
 
     Debug::checkGLError();
 
-    std::vector<u32> indicesv;
+    std::vector<uint32_t> indicesv;
 
     // prepare and upload indices as a one time deal
-    const u32 indices[] = { 0, 1, 2, 0, 2, 3 }; // pattern for a triangle array
+    const uint32_t indices[] = { 0, 1, 2, 0, 2, 3 }; // pattern for a triangle array
     // for each possible sprite, add the 6 index pattern
     for (size_t j = 0; j < m_maxTileCount; j++) {
         for (size_t i = 0; i < sizeof(indices) / sizeof(*indices); i++) {
@@ -331,7 +331,7 @@ void TileRenderer::initGL()
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_ebo);
     glBufferData(
         GL_ELEMENT_ARRAY_BUFFER,
-        indicesv.size()*sizeof(u32),
+        indicesv.size()*sizeof(uint32_t),
         indicesv.data(),
         GL_STATIC_DRAW);
 
@@ -348,7 +348,7 @@ void TileRenderer::initGL()
         GL_FALSE,
         sizeof(Vertex),
         (const GLvoid*)buffer_offset);
-    buffer_offset += sizeof(f32) * 2;
+    buffer_offset += sizeof(float) * 2;
 
     GLint color_attrib = glGetAttribLocation(m_shader->shaderProgram(), "color");
 
@@ -362,7 +362,7 @@ void TileRenderer::initGL()
         GL_TRUE,
         sizeof(Vertex),
         (const GLvoid*)buffer_offset);
-    buffer_offset += sizeof(u32);
+    buffer_offset += sizeof(uint32_t);
 
     Debug::checkGLError();
 
