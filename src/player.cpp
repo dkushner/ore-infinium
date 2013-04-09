@@ -60,8 +60,21 @@ void Player::createPhysicsBody(World* world, const glm::vec2& position)
     userData->data = this;
     m_body->SetUserData(userData);
 
-    b2PolygonShape dynamicBox;
-    dynamicBox.SetAsBox(size.x * 0.5f, size.y * 0.5f);
+    b2CircleShape dynamicBox;
+//    dynamicBox.SetAsBox(size.x * 0.5f, size.y * 0.5f);
+    dynamicBox.m_radius = 1.0f;
+    /*
+    b2Vec2 vertices[8];
+    vertices[0].Set( (-mWidth/2 + 5.0f) / PhysicsManager::mPhysicsScale, (mHeight/2) / PhysicsManager::mPhysicsScale);
+    vertices[1].Set( (-mWidth/2) / PhysicsManager::mPhysicsScale, (mHeight/2 - 5.0f) / PhysicsManager::mPhysicsScale);
+    vertices[2].Set( (-mWidth/2) / PhysicsManager::mPhysicsScale, (-mHeight/2 + 5.0f) / PhysicsManager::mPhysicsScale);
+    vertices[3].Set( (-mWidth/2 + 5.0f) / PhysicsManager::mPhysicsScale, (-mHeight/2) / PhysicsManager::mPhysicsScale);
+    vertices[4].Set( (mWidth/2 - 5.0f) / PhysicsManager::mPhysicsScale, (-mHeight/2) / PhysicsManager::mPhysicsScale);
+    vertices[5].Set( (mWidth/2) / PhysicsManager::mPhysicsScale, (-mHeight/2 + 5.0f) / PhysicsManager::mPhysicsScale);
+    vertices[6].Set( (mWidth/2) / PhysicsManager::mPhysicsScale, (mHeight/2 - 5.0f) / PhysicsManager::mPhysicsScale);
+    vertices[7].Set( (mWidth/2 - 5.0f) / PhysicsManager::mPhysicsScale, (mHeight/2) / PhysicsManager::mPhysicsScale);
+    shape.Set( vertices, 8 );
+    */
 
     // create main body's fixture
     b2FixtureDef fixtureDef;
@@ -71,11 +84,13 @@ void Player::createPhysicsBody(World* world, const glm::vec2& position)
 
     m_body->CreateFixture(&fixtureDef);
 
+
+    b2PolygonShape footBox;
     b2FixtureDef footSensorFixtureDef;
-    footSensorFixtureDef.shape = &dynamicBox;
+    footSensorFixtureDef.shape = &footBox;
     footSensorFixtureDef.isSensor = true;
 
-    dynamicBox.SetAsBox(0.3, 0.1, b2Vec2(0.0f, 0.4f), 0.0f);
+    footBox.SetAsBox(0.3, 0.1, b2Vec2(0.0f, 0.4f), 0.0f);
 
     b2Fixture* footSensorFixture = m_body->CreateFixture(&footSensorFixtureDef);
 
