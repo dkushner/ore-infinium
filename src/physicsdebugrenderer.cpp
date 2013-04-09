@@ -49,7 +49,7 @@ void PhysicsDebugRenderer::setCamera(Camera* camera)
 void PhysicsDebugRenderer::initGL()
 {
     initGLSolidPolygons();
-    initGLSegment();
+    initGLSegments();
 }
 
 void PhysicsDebugRenderer::initGLSolidPolygons()
@@ -98,13 +98,13 @@ void PhysicsDebugRenderer::initGLSolidPolygons()
     Debug::checkGLError();
 }
 
-void PhysicsDebugRenderer::initGLSegment()
+void PhysicsDebugRenderer::initGLSegments()
 {
-    glGenVertexArrays(1, &m_vaoSegment);
-    glBindVertexArray(m_vaoSegment);
+    glGenVertexArrays(1, &m_vaoSegments);
+    glBindVertexArray(m_vaoSegments);
 
-    glGenBuffers(1, &m_vboSegment);
-    glBindBuffer(GL_ARRAY_BUFFER, m_vboSegment);
+    glGenBuffers(1, &m_vboSegments);
+    glBindBuffer(GL_ARRAY_BUFFER, m_vboSegments);
     Debug::checkGLError();
 
     size_t buffer_offset = 0;
@@ -136,14 +136,13 @@ void PhysicsDebugRenderer::initGLSegment()
                           (const GLvoid*)buffer_offset);
     buffer_offset += sizeof(uint32_t);
 
-    glGenBuffers(1, &m_iboSegment);
+    glGenBuffers(1, &m_iboSegments);
 
     glBindVertexArray(0);
     glBindBuffer(GL_ARRAY_BUFFER, 0);
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
     Debug::checkGLError();
 }
-
 
 void PhysicsDebugRenderer::DrawPolygon(const b2Vec2* vertices, int32 vertexCount, const b2Color& color)
 {
@@ -229,7 +228,6 @@ void PhysicsDebugRenderer::DrawSolidPolygon(const b2Vec2* vertices, int32 vertex
     }
 }
 
-
 void PhysicsDebugRenderer::DrawCircle(const b2Vec2& center, float32 radius, const b2Color& color)
 {
     /*
@@ -290,53 +288,36 @@ void PhysicsDebugRenderer::DrawSegment(const b2Vec2& p1, const b2Vec2& p2, const
     verts.push_back(p1);
     verts.push_back(p2);
 
-    m_shader->bindProgram();
-
-    int colorLoc = glGetUniformLocation(m_shader->shaderProgram(), "color");
-    glUniform4f(colorLoc, color.r, color.g, color.b, 1.0);
-
-    glBindVertexArray(m_vao);
-    glBindBuffer(GL_ARRAY_BUFFER, m_vbo);
-    // vertices that will be uploaded.
-
-    GLint pos_attrib = glGetAttribLocation(m_shader->shaderProgram(), "position");
-    glEnableVertexAttribArray(pos_attrib);
-    glVertexAttribPointer(
-        pos_attrib,
-        2,
-        GL_FLOAT,
-        GL_FALSE,
-        sizeof(b2Vec2),
-        (const GLvoid*)0
-    );
-
-    // finally upload everything to the actual vbo
-    glBufferData(
-        GL_ARRAY_BUFFER,
-        sizeof(b2Vec2) * 2,
-        verts.data(),
-        GL_DYNAMIC_DRAW
-    );
-
-    ////////////////////////////////FINALLY RENDER IT ALL //////////////////////////////////////////
-    glEnable(GL_BLEND);
-    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-
-    m_shader->bindProgram();
-
     glDrawArrays(
         GL_LINES,
         0,
         2 // only 2 points
     );
 
-    m_shader->unbindProgram();
-    glBindVertexArray(0);
-    glBindBuffer(GL_ARRAY_BUFFER, 0);
-    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
+    const size_t iboOffset = m_verticesSolidPolygons.size();
 
-    glDisable(GL_BLEND);
-    */
+    for (size_t i = 0; i < vertexCount; i++) {
+        Vertex vertex;
+        vertex.x = vertices[i].x;
+        vertex.y = vertices[i].y;
+
+        uint8_t red = static_cast<uint8_t>(ceil(color.r * 255));
+        uint8_t green = static_cast<uint8_t>(ceil(color.g * 255));
+        uint8_t blue = static_cast<uint8_t>(ceil(color.b * 255));
+        uint8_t alpha = 80;
+        int32_t colorPacked = red | (green << 8) | (blue << 16) | (alpha << 24);
+        vertex.color = colorPacked;
+
+        m_verticesSolidPolygons.push_back(vertex);
+    }
+
+    for (int i = 1; i < vertexCount - 1; i++) {
+        m_indicesSolidPolygons.push_back(iboOffset);
+        m_indicesSolidPolygons.push_back(iboOffset + i);
+        m_indicesSolidPolygons.push_back(iboOffset + i + 1);
+    }
+*/
+
 }
 
 void PhysicsDebugRenderer::DrawTransform(const b2Transform& xf)
@@ -344,10 +325,10 @@ void PhysicsDebugRenderer::DrawTransform(const b2Transform& xf)
     b2Vec2 p1 = xf.p, p2;
     const float32 k_axisScale = 0.4f;
     p2 = p1 + k_axisScale * xf.q.GetXAxis();
-    DrawSegment(p1, p2, b2Color(1, 0, 0));
+    DrawSegment(p1, p2, b2Color(1.0f, 0.0f, 0.0f));
 
     p2 = p1 + k_axisScale * xf.q.GetYAxis();
-    DrawSegment(p1, p2, b2Color(0, 1, 0));
+    DrawSegment(p1, p2, b2Color(0.0f, 1.0f, 0.0f));
 }
 
 void PhysicsDebugRenderer::render()
@@ -383,6 +364,8 @@ void PhysicsDebugRenderer::renderSolidPolygons()
 
     glDrawElements(GL_TRIANGLES, m_indicesSolidPolygons.size(), GL_UNSIGNED_SHORT, (GLvoid*)0);
 
+    glDisable(GL_BLEND);
+
     glBindVertexArray(0);
     glBindBuffer(GL_ARRAY_BUFFER, 0);
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
@@ -391,4 +374,44 @@ void PhysicsDebugRenderer::renderSolidPolygons()
     m_highestIBOSizeSolidPolygons = m_indicesSolidPolygons.size();
     m_verticesSolidPolygons.clear();
     m_indicesSolidPolygons.clear();
+}
+
+void PhysicsDebugRenderer::renderSegments()
+{
+    ////////////////////////////////FINALLY RENDER IT ALL //////////////////////////////////////////
+
+    /*
+    glEnable(GL_BLEND);
+    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+
+    m_shader->bindProgram();
+    Debug::checkGLError();
+
+    glBindVertexArray(m_vaoSolidPolygons);
+    glBindBuffer(GL_ARRAY_BUFFER, m_vboSolidPolygons);
+    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_iboSolidPolygons);
+
+    if (m_verticesSolidPolygons.size() > m_maxVBOSizeSolidPolygons) {
+        glBufferData(GL_ARRAY_BUFFER, sizeof(Vertex) * m_verticesSolidPolygons.size(), m_verticesSolidPolygons.data(), GL_DYNAMIC_DRAW);
+    } else {
+        glBufferSubData(GL_ARRAY_BUFFER, 0, sizeof(Vertex) * m_verticesSolidPolygons.size(), m_verticesSolidPolygons.data());
+    }
+
+    if (m_indicesSolidPolygons.size() > m_highestIBOSizeSolidPolygons) {
+        glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(uint16_t) * m_indicesSolidPolygons.size(), m_indicesSolidPolygons.data(), GL_DYNAMIC_DRAW);
+    } else {
+        glBufferSubData(GL_ELEMENT_ARRAY_BUFFER, 0, sizeof(uint16_t) * m_indicesSolidPolygons.size(), m_indicesSolidPolygons.data());
+    }
+
+    glDrawElements(GL_TRIANGLES, m_indicesSolidPolygons.size(), GL_UNSIGNED_SHORT, (GLvoid*)0);
+
+    glBindVertexArray(0);
+    glBindBuffer(GL_ARRAY_BUFFER, 0);
+    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
+
+    m_maxVBOSizeSolidPolygons = m_verticesSolidPolygons.size();
+    m_highestIBOSizeSolidPolygons = m_indicesSolidPolygons.size();
+    m_verticesSolidPolygons.clear();
+    m_indicesSolidPolygons.clear();
+    */
 }
