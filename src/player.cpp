@@ -60,11 +60,40 @@ void Player::createPhysicsBody(World* world, const glm::vec2& position)
     userData->data = this;
     m_body->SetUserData(userData);
 
-    b2CircleShape dynamicBox;
+    b2PolygonShape dynamicBox;
 //    dynamicBox.SetAsBox(size.x * 0.5f, size.y * 0.5f);
-    dynamicBox.m_radius = 1.0f;
+
+    int vertCount = 3;
+    b2Vec2 vertices[vertCount];
+//
+//    vertices[0].Set(2.1f, 1.1f); // top left
+//    vertices[1].Set(3.5f, 2.5f); // top center
+//    vertices[2].Set(4.1f, 3.1f); // top right
+//    vertices[3].Set(5.1f, 4.5f); // center left
+//    vertices[4].Set(6.1f, 5.5f); // center right
+//    vertices[5].Set(7.1f, 6.9f); // bottom left
+//    vertices[6].Set(8.2f, 7.1f); // bottom center
+//    vertices[7].Set(9.1f, 8.9f);
+
+    //CCW order
+//    vertices[0].Set(2.0f, 0.0f); // top center
+//    vertices[1].Set(1.0f, 3.1f); // center left
+//    vertices[2].Set(2.0f, 2.5f); // bottom center
+//    vertices[3].Set(5.1f, 4.5f); // center right
+
+    vertices[0].Set(0,-1);
+    vertices[1].Set(1,1);
+    vertices[2].Set(-1,1);
+
+//    vertices[4].Set(6.1f, 5.5f); // center right
+//    vertices[5].Set(7.1f, 6.9f); // bottom left
+//    vertices[6].Set(8.2f, 7.1f); // bottom center
+//    vertices[7].Set(9.1f, 8.9f);
+
+
+    dynamicBox.Set(vertices, vertCount);
+
     /*
-    b2Vec2 vertices[8];
     vertices[0].Set( (-mWidth/2 + 5.0f) / PhysicsManager::mPhysicsScale, (mHeight/2) / PhysicsManager::mPhysicsScale);
     vertices[1].Set( (-mWidth/2) / PhysicsManager::mPhysicsScale, (mHeight/2 - 5.0f) / PhysicsManager::mPhysicsScale);
     vertices[2].Set( (-mWidth/2) / PhysicsManager::mPhysicsScale, (-mHeight/2 + 5.0f) / PhysicsManager::mPhysicsScale);
@@ -73,7 +102,6 @@ void Player::createPhysicsBody(World* world, const glm::vec2& position)
     vertices[5].Set( (mWidth/2) / PhysicsManager::mPhysicsScale, (-mHeight/2 + 5.0f) / PhysicsManager::mPhysicsScale);
     vertices[6].Set( (mWidth/2) / PhysicsManager::mPhysicsScale, (mHeight/2 - 5.0f) / PhysicsManager::mPhysicsScale);
     vertices[7].Set( (mWidth/2 - 5.0f) / PhysicsManager::mPhysicsScale, (mHeight/2) / PhysicsManager::mPhysicsScale);
-    shape.Set( vertices, 8 );
     */
 
     // create main body's fixture
@@ -83,7 +111,6 @@ void Player::createPhysicsBody(World* world, const glm::vec2& position)
     fixtureDef.friction = 0.0f;
 
     m_body->CreateFixture(&fixtureDef);
-
 
     b2PolygonShape footBox;
     b2FixtureDef footSensorFixtureDef;
