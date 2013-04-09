@@ -362,7 +362,8 @@ void PhysicsDebugRenderer::DrawSolidCircle(const b2Vec2& center, float32 radius,
     */
 
     // Draw the axis line
-//FIXME:    DrawSegment(center, center + radius * axis, color);
+    //FIXME: i don't think this works? but i don't see why it wouldn't..
+    DrawSegment(center, center + radius * axis, color);
 }
 
 void PhysicsDebugRenderer::DrawSegment(const b2Vec2& p1, const b2Vec2& p2, const b2Color& color)
