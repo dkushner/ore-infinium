@@ -63,7 +63,7 @@ void Player::createPhysicsBody(World* world, const glm::vec2& position)
     b2PolygonShape dynamicBox;
 //    dynamicBox.SetAsBox(size.x * 0.5f, size.y * 0.5f);
 
-    int vertCount = 3;
+    int vertCount = 4;
     b2Vec2 vertices[vertCount];
 //
 //    vertices[0].Set(2.1f, 1.1f); // top left
@@ -83,7 +83,8 @@ void Player::createPhysicsBody(World* world, const glm::vec2& position)
 
     vertices[0].Set(0,-1);
     vertices[1].Set(1,1);
-    vertices[2].Set(-1,1);
+    vertices[2].Set(0,2);
+    vertices[3].Set(-1,1);
 
 //    vertices[4].Set(6.1f, 5.5f); // center right
 //    vertices[5].Set(7.1f, 6.9f); // bottom left
