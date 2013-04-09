@@ -304,10 +304,6 @@ void PhysicsDebugRenderer::render()
 
 void PhysicsDebugRenderer::renderSolidPolygons()
 {
-    m_shader->bindProgram();
-
-    Debug::checkGLError();
-
     ////////////////////////////////FINALLY RENDER IT ALL //////////////////////////////////////////
 
     glEnable(GL_BLEND);
@@ -333,8 +329,6 @@ void PhysicsDebugRenderer::renderSolidPolygons()
     }
 
     glDrawElements(GL_TRIANGLES, m_indices.size(), GL_UNSIGNED_SHORT, (GLvoid*)0);
-
-    glEnableVertexAttribArray(0);
 
     glBindVertexArray(0);
     glBindBuffer(GL_ARRAY_BUFFER, 0);
