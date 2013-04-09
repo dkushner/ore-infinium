@@ -50,9 +50,11 @@ public:
 private:
     void initGL();
     void initGLSolidPolygons();
+    void initGLPolygons();
     void initGLSegments();
 
     void renderSolidPolygons();
+    void renderPolygons();
     void renderSegments();
 
     /* Each vertex is:
@@ -65,6 +67,7 @@ private:
     };
 
 private:
+    /////////////////////////////////////////////////////////////// SOLID POLYGONS
     GLuint m_iboSolidPolygons; // index buffer object
     GLuint m_vaoSolidPolygons; // vertex array object
     GLuint m_vboSolidPolygons; // vertex buffer object
@@ -73,7 +76,20 @@ private:
     std::vector<uint16_t> m_indicesSolidPolygons;
     size_t m_maxVBOSizeSolidPolygons = 0;
     size_t m_highestIBOSizeSolidPolygons = 0;
+    //////////////////////////////////////////////////////////
 
+    ////////////////////////////////////////////////////////////////////// NON SOLID POLYGONS
+    GLuint m_iboPolygons; // index buffer object
+    GLuint m_vaoPolygons; // vertex array object
+    GLuint m_vboPolygons; // vertex buffer object
+
+    std::vector<Vertex> m_verticesPolygons;
+    std::vector<uint16_t> m_indicesPolygons;
+    size_t m_maxVBOSizePolygons = 0;
+    size_t m_highestIBOSizePolygons = 0;
+    /////////////////////////////////////////////////////////////////////
+
+    ///////////////////////////////////////////////////////////////////////// SEGMENTS
     GLuint m_iboSegments; // index buffer object
     GLuint m_vaoSegments; // vertex array object
     GLuint m_vboSegments; // vertex buffer object
@@ -82,6 +98,7 @@ private:
     std::vector<uint16_t> m_indicesSegments;
     size_t m_maxVBOSizeSegments = 0;
     size_t m_highestIBOSizeSegments = 0;
+    //////////////////////////////////////////////////////////////
 
     glm::mat4 m_ortho;
 
