@@ -95,6 +95,7 @@ World::World(Entities::Player* mainPlayer, Client* client, Server* server)
         m_contactListener = new ContactListener();
         m_box2DWorld->SetContactListener(m_contactListener);
 
+        /*
         b2BodyDef groundBodyDef;
         groundBodyDef.position.Set(pixelsToMeters(0.0f), pixelsToMeters(2000.0f));//pixelsToMeters(1000));
 
@@ -107,6 +108,7 @@ World::World(Entities::Player* mainPlayer, Client* client, Server* server)
         groundBox.SetAsBox(pixelsToMeters(2500), pixelsToMeters(50));
 
         groundBody->CreateFixture(&groundBox, 0.0f);
+        */
 
         if (m_server->client()) {
             m_server->client()->setBox2DWorld(m_box2DWorld);
