@@ -48,7 +48,7 @@ void PhysicsDebugRenderer::setCamera(Camera* camera)
 
 void PhysicsDebugRenderer::initGL()
 {
-    initGLSolidPolygons();
+//    initGLSolidPolygons();
     initGLSegments();
 }
 
@@ -293,31 +293,9 @@ void PhysicsDebugRenderer::DrawSegment(const b2Vec2& p1, const b2Vec2& p2, const
         0,
         2 // only 2 points
     );
-
-    const size_t iboOffset = m_verticesSolidPolygons.size();
-
-    for (size_t i = 0; i < vertexCount; i++) {
-        Vertex vertex;
-        vertex.x = vertices[i].x;
-        vertex.y = vertices[i].y;
-
-        uint8_t red = static_cast<uint8_t>(ceil(color.r * 255));
-        uint8_t green = static_cast<uint8_t>(ceil(color.g * 255));
-        uint8_t blue = static_cast<uint8_t>(ceil(color.b * 255));
-        uint8_t alpha = 80;
-        int32_t colorPacked = red | (green << 8) | (blue << 16) | (alpha << 24);
-        vertex.color = colorPacked;
-
-        m_verticesSolidPolygons.push_back(vertex);
-    }
-
-    for (int i = 1; i < vertexCount - 1; i++) {
-        m_indicesSolidPolygons.push_back(iboOffset);
-        m_indicesSolidPolygons.push_back(iboOffset + i);
-        m_indicesSolidPolygons.push_back(iboOffset + i + 1);
-    }
 */
 
+    Debug::log(Debug::ClientRendererArea) << " DRAWING A SEGMENT";
     std::vector<b2Vec2> vertices;
     vertices.push_back(p1);
     vertices.push_back(p2);
@@ -332,15 +310,19 @@ void PhysicsDebugRenderer::DrawSegment(const b2Vec2& p1, const b2Vec2& p2, const
         uint8_t red = static_cast<uint8_t>(ceil(color.r * 255));
         uint8_t green = static_cast<uint8_t>(ceil(color.g * 255));
         uint8_t blue = static_cast<uint8_t>(ceil(color.b * 255));
-        uint8_t alpha = 80;
+        uint8_t alpha = 255;
         int32_t colorPacked = red | (green << 8) | (blue << 16) | (alpha << 24);
         vertex.color = colorPacked;
 
         m_verticesSegments.push_back(vertex);
     }
 
-    m_indicesSegments.push_back(0);
-    m_indicesSegments.push_back(1);
+    const size_t iboOffset = m_verticesSegments.size();
+
+    for (int i = 0; i < vertexCount; i++) {
+        m_indicesSegments.push_back(iboOffset);
+        m_indicesSegments.push_back(iboOffset+1);
+    }
 }
 
 void PhysicsDebugRenderer::DrawTransform(const b2Transform& xf)
@@ -356,7 +338,8 @@ void PhysicsDebugRenderer::DrawTransform(const b2Transform& xf)
 
 void PhysicsDebugRenderer::render()
 {
-    renderSolidPolygons();
+//    renderSolidPolygons();
+    renderSegments();
 }
 
 void PhysicsDebugRenderer::renderSolidPolygons()
@@ -433,6 +416,7 @@ void PhysicsDebugRenderer::renderSegments()
     glBindBuffer(GL_ARRAY_BUFFER, 0);
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
 
+    Debug::log(Debug::ClientRendererArea) << " DREW ALL SEGMENTS";
     m_maxVBOSizeSegments = m_verticesSegments.size();
     m_highestIBOSizeSegments = m_indicesSegments.size();
     m_verticesSegments.clear();
