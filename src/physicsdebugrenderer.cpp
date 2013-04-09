@@ -60,15 +60,6 @@ void PhysicsDebugRenderer::initGL()
     glBindBuffer(GL_ARRAY_BUFFER, m_vboSolidPolygons);
     Debug::checkGLError();
 
-    /*
-    glBufferData(
-        GL_ARRAY_BUFFER,
-        5000 * 4 * sizeof(b2Vec2),
-                 NULL,
-                 GL_DYNAMIC_DRAW);
-                 */
-
-    Debug::checkGLError();
     GLint pos_attrib = glGetAttribLocation(m_shader->shaderProgram(), "position");
     glEnableVertexAttribArray(pos_attrib);
     glVertexAttribPointer(
@@ -80,7 +71,6 @@ void PhysicsDebugRenderer::initGL()
                           (const GLvoid*)0
     );
     Debug::checkGLError();
-
 
     glGenBuffers(1, &m_iboSolidPolygons);
 
@@ -296,13 +286,11 @@ void PhysicsDebugRenderer::renderSolidPolygons()
     glUniform4f(colorLoc, color.r, color.g, color.b, 0.5f);
 
 
-    /*
     glBindVertexArray(m_vaoSolidPolygons);
 
     glBindBuffer(GL_ARRAY_BUFFER, m_vboSolidPolygons);
 
     Debug::checkGLError();
-    */
     ////////////////////////////////FINALLY RENDER IT ALL //////////////////////////////////////////
     glEnable(GL_BLEND);
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
@@ -313,19 +301,17 @@ void PhysicsDebugRenderer::renderSolidPolygons()
     glBindBuffer(GL_ARRAY_BUFFER, m_vboSolidPolygons);
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_iboSolidPolygons);
 
-    if (m_vertices.size() > m_lastVBOSize) {
+    if (m_vertices.size() > m_maxVBOSizeSolidPolygons) {
         glBufferData(GL_ARRAY_BUFFER, sizeof(b2Vec2) * m_vertices.size(), m_vertices.data(), GL_DYNAMIC_DRAW);
     } else {
         glBufferSubData(GL_ARRAY_BUFFER, 0, sizeof(b2Vec2) * m_vertices.size(), m_vertices.data());
     }
 
-    if (m_indices.size() > m_lastIBOSize) {
+    if (m_indices.size() > m_highestIBOSizeSolidPolygons) {
         glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(uint16_t) * m_indices.size(), m_indices.data(), GL_DYNAMIC_DRAW);
     } else {
         glBufferSubData(GL_ELEMENT_ARRAY_BUFFER, 0, sizeof(uint16_t) * m_indices.size(), m_indices.data());
     }
-
-    glVertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE, sizeof(b2Vec2), (GLvoid*)0);
 
     glDrawElements(GL_TRIANGLES, m_indices.size(), GL_UNSIGNED_SHORT, (GLvoid*)0);
 
@@ -335,8 +321,8 @@ void PhysicsDebugRenderer::renderSolidPolygons()
     glBindBuffer(GL_ARRAY_BUFFER, 0);
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
 
-    m_lastVBOSize = m_vertices.size();
-    m_lastIBOSize = m_indices.size();
+    m_maxVBOSizeSolidPolygons = m_vertices.size();
+    m_highestIBOSizeSolidPolygons = m_indices.size();
     m_vertices.clear();
     m_indices.clear();
 }
