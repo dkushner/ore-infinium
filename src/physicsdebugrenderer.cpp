@@ -312,9 +312,7 @@ void PhysicsDebugRenderer::renderSolidPolygons()
     b2Color color = b2Color(120, 0, 0);
     glUniform4f(colorLoc, color.r, color.g, color.b, 0.5f);
 
-    glBindVertexArray(m_vaoSolidPolygons);
 
-    glBindBuffer(GL_ARRAY_BUFFER, m_vboSolidPolygons);
 
     Debug::checkGLError();
 
@@ -326,6 +324,7 @@ void PhysicsDebugRenderer::renderSolidPolygons()
     m_shader->bindProgram();
     Debug::checkGLError();
 
+    glBindVertexArray(m_vaoSolidPolygons);
     glBindBuffer(GL_ARRAY_BUFFER, m_vboSolidPolygons);
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_iboSolidPolygons);
 
