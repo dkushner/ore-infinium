@@ -211,9 +211,7 @@ void PhysicsDebugRenderer::DrawPolygon(const b2Vec2* vertices, int32 vertexCount
     }
 
     for (int i = 0; i < vertexCount ; i++) {
-        m_indicesPolygons.push_back(iboOffset);
         m_indicesPolygons.push_back(iboOffset + i);
-        m_indicesPolygons.push_back(iboOffset + i + 1);
     }
 }
 
