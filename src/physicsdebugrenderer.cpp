@@ -365,7 +365,11 @@ void PhysicsDebugRenderer::renderPolygons()
         glBufferSubData(GL_ELEMENT_ARRAY_BUFFER, 0, sizeof(uint16_t) * m_indicesPolygons.size(), m_indicesPolygons.data());
     }
 
-    glDrawElements(GL_TRIANGLES, m_indicesPolygons.size(), GL_UNSIGNED_SHORT, (GLvoid*)0);
+//    glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+
+    glDrawElements(GL_LINES, m_indicesPolygons.size(), GL_UNSIGNED_SHORT, (GLvoid*)0);
+
+//    glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
 
     glDisable(GL_BLEND);
 
