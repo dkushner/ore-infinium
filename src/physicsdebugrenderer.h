@@ -50,10 +50,12 @@ public:
 private:
     void initGL();
     void initGLSolidPolygons();
+    void initGLSolidCircles();
     void initGLPolygons();
     void initGLSegments();
 
     void renderSolidPolygons();
+    void renderSolidCircles();
     void renderPolygons();
     void renderSegments();
 
@@ -76,6 +78,17 @@ private:
     std::vector<uint16_t> m_indicesSolidPolygons;
     size_t m_maxVBOSizeSolidPolygons = 0;
     size_t m_highestIBOSizeSolidPolygons = 0;
+    //////////////////////////////////////////////////////////
+
+    /////////////////////////////////////////////////////////////// SOLID CIRCLES
+    GLuint m_iboSolidCircles; // index buffer object
+    GLuint m_vaoSolidCircles; // vertex array object
+    GLuint m_vboSolidCircles; // vertex buffer object
+
+    std::vector<Vertex> m_verticesSolidCircles;
+    std::vector<uint16_t> m_indicesSolidCircles;
+    size_t m_maxVBOSizeSolidCircles = 0;
+    size_t m_highestIBOSizeSolidCircles = 0;
     //////////////////////////////////////////////////////////
 
     ////////////////////////////////////////////////////////////////////// NON SOLID POLYGONS

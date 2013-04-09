@@ -49,6 +49,7 @@ void PhysicsDebugRenderer::setCamera(Camera* camera)
 void PhysicsDebugRenderer::initGL()
 {
     initGLSolidPolygons();
+    initGLSolidCircles();
     initGLPolygons();
     initGLSegments();
 }
@@ -138,6 +139,52 @@ void PhysicsDebugRenderer::initGLSolidPolygons()
     buffer_offset += sizeof(uint32_t);
 
     glGenBuffers(1, &m_iboSolidPolygons);
+
+    glBindVertexArray(0);
+    glBindBuffer(GL_ARRAY_BUFFER, 0);
+    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
+    Debug::checkGLError();
+}
+
+void PhysicsDebugRenderer::initGLSolidCircles()
+{
+    glGenVertexArrays(1, &m_vaoSolidCircles);
+    glBindVertexArray(m_vaoSolidCircles);
+
+    glGenBuffers(1, &m_vboSolidCircles);
+    glBindBuffer(GL_ARRAY_BUFFER, m_vboSolidCircles);
+    Debug::checkGLError();
+
+    size_t buffer_offset = 0;
+
+    GLint pos_attrib = glGetAttribLocation(m_shader->shaderProgram(), "position");
+    glEnableVertexAttribArray(pos_attrib);
+    glVertexAttribPointer(
+        pos_attrib,
+        2,
+        GL_FLOAT,
+        GL_FALSE,
+        sizeof(Vertex),
+                          (const GLvoid*)0
+    );
+    buffer_offset += sizeof(float) * 2;
+    Debug::checkGLError();
+
+    GLint color_attrib = glGetAttribLocation(m_shader->shaderProgram(), "color");
+
+    Debug::checkGLError();
+
+    glEnableVertexAttribArray(color_attrib);
+    glVertexAttribPointer(
+        color_attrib,
+        4,
+        GL_UNSIGNED_BYTE,
+        GL_TRUE,
+        sizeof(Vertex),
+                          (const GLvoid*)buffer_offset);
+    buffer_offset += sizeof(uint32_t);
+
+    glGenBuffers(1, &m_iboSolidCircles);
 
     glBindVertexArray(0);
     glBindBuffer(GL_ARRAY_BUFFER, 0);
@@ -268,7 +315,7 @@ void PhysicsDebugRenderer::DrawCircle(const b2Vec2& center, float32 radius, cons
 void PhysicsDebugRenderer::DrawSolidCircle(const b2Vec2& center, float32 radius, const b2Vec2& axis, const b2Color& color)
 {
     const float32 k_segments = 16.0f;
-    int vertexCount=16;
+    int vertexCount = 16;
     const float32 k_increment = 2.0f * b2_pi / k_segments;
     float32 theta = 0.0f;
 
@@ -281,14 +328,16 @@ void PhysicsDebugRenderer::DrawSolidCircle(const b2Vec2& center, float32 radius,
         theta += k_increment;
     }
 
+    /*
     glColor4f(color.r, color.g, color.b,0.5f);
     glVertexPointer(2, GL_FLOAT, 0, glVertices);
     glDrawArrays(GL_TRIANGLE_FAN, 0, vertexCount);
     glColor4f(color.r, color.g, color.b,1);
     glDrawArrays(GL_LINE_LOOP, 0, vertexCount);
+    */
 
     // Draw the axis line
-    DrawSegment(center, center + radius * axis, color);
+//FIXME:    DrawSegment(center, center + radius * axis, color);
 }
 
 void PhysicsDebugRenderer::DrawSegment(const b2Vec2& p1, const b2Vec2& p2, const b2Color& color)
@@ -334,6 +383,7 @@ void PhysicsDebugRenderer::DrawTransform(const b2Transform& xf)
 void PhysicsDebugRenderer::render()
 {
     renderSolidPolygons();
+    renderSolidCircles();
     renderPolygons();
     renderSegments();
 }
@@ -416,6 +466,46 @@ void PhysicsDebugRenderer::renderSolidPolygons()
     m_highestIBOSizeSolidPolygons = m_indicesSolidPolygons.size();
     m_verticesSolidPolygons.clear();
     m_indicesSolidPolygons.clear();
+}
+
+void PhysicsDebugRenderer::renderSolidCircles()
+{
+    ////////////////////////////////FINALLY RENDER IT ALL //////////////////////////////////////////
+
+    glEnable(GL_BLEND);
+    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+
+    m_shader->bindProgram();
+    Debug::checkGLError();
+
+    glBindVertexArray(m_vaoSolidCircles);
+    glBindBuffer(GL_ARRAY_BUFFER, m_vboSolidCircles);
+    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_iboSolidCircles);
+
+    if (m_verticesSolidCircles.size() > m_maxVBOSizeSolidCircles) {
+        glBufferData(GL_ARRAY_BUFFER, sizeof(Vertex) * m_verticesSolidCircles.size(), m_verticesSolidCircles.data(), GL_DYNAMIC_DRAW);
+    } else {
+        glBufferSubData(GL_ARRAY_BUFFER, 0, sizeof(Vertex) * m_verticesSolidCircles.size(), m_verticesSolidCircles.data());
+    }
+
+    if (m_indicesSolidCircles.size() > m_highestIBOSizeSolidCircles) {
+        glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(uint16_t) * m_indicesSolidCircles.size(), m_indicesSolidCircles.data(), GL_DYNAMIC_DRAW);
+    } else {
+        glBufferSubData(GL_ELEMENT_ARRAY_BUFFER, 0, sizeof(uint16_t) * m_indicesSolidCircles.size(), m_indicesSolidCircles.data());
+    }
+
+    glDrawElements(GL_TRIANGLES, m_indicesSolidCircles.size(), GL_UNSIGNED_SHORT, (GLvoid*)0);
+
+    glDisable(GL_BLEND);
+
+    glBindVertexArray(0);
+    glBindBuffer(GL_ARRAY_BUFFER, 0);
+    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
+
+    m_maxVBOSizeSolidCircles = m_verticesSolidCircles.size();
+    m_highestIBOSizeSolidCircles = m_indicesSolidCircles.size();
+    m_verticesSolidCircles.clear();
+    m_indicesSolidCircles.clear();
 }
 
 void PhysicsDebugRenderer::renderSegments()
