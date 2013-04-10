@@ -60,40 +60,9 @@ void Player::createPhysicsBody(World* world, const glm::vec2& position)
     userData->data = this;
     m_body->SetUserData(userData);
 
-    b2PolygonShape dynamicBox;
-//    dynamicBox.SetAsBox(size.x * 0.5f, size.y * 0.5f);
+    b2CircleShape circleShape;
+    circleShape.m_radius = 1.0f;
 
-    int vertCount = 5;
-    b2Vec2 vertices[vertCount];
-//
-//    vertices[0].Set(2.1f, 1.1f); // top left
-//    vertices[1].Set(3.5f, 2.5f); // top center
-//    vertices[2].Set(4.1f, 3.1f); // top right
-//    vertices[3].Set(5.1f, 4.5f); // center left
-//    vertices[4].Set(6.1f, 5.5f); // center right
-//    vertices[5].Set(7.1f, 6.9f); // bottom left
-//    vertices[6].Set(8.2f, 7.1f); // bottom center
-//    vertices[7].Set(9.1f, 8.9f);
-
-    //CCW order
-//    vertices[0].Set(2.0f, 0.0f); // top center
-//    vertices[1].Set(1.0f, 3.1f); // center left
-//    vertices[2].Set(2.0f, 2.5f); // bottom center
-//    vertices[3].Set(5.1f, 4.5f); // center right
-
-    vertices[0].Set(0, -1);
-    vertices[1].Set(1, 1);
-    vertices[2].Set(0, 3);
-    vertices[3].Set(-1.0f, 2.9);
-    vertices[4].Set(-1, 1);
-
-//    vertices[4].Set(6.1f, 5.5f); // center right
-//    vertices[5].Set(7.1f, 6.9f); // bottom left
-//    vertices[6].Set(8.2f, 7.1f); // bottom center
-//    vertices[7].Set(9.1f, 8.9f);
-
-
-    dynamicBox.Set(vertices, vertCount);
 
     /*
     vertices[0].Set( (-mWidth/2 + 5.0f) / PhysicsManager::mPhysicsScale, (mHeight/2) / PhysicsManager::mPhysicsScale);
@@ -106,14 +75,39 @@ void Player::createPhysicsBody(World* world, const glm::vec2& position)
     vertices[7].Set( (mWidth/2 - 5.0f) / PhysicsManager::mPhysicsScale, (mHeight/2) / PhysicsManager::mPhysicsScale);
     */
 
+
     // create main body's fixture
     b2FixtureDef fixtureDef;
-    fixtureDef.shape = &dynamicBox;
+    fixtureDef.shape = &circleShape;
     fixtureDef.density = 1.0f;
     fixtureDef.friction = 0.0f;
 
     m_body->CreateFixture(&fixtureDef);
 
+    //////////// LOWER BODY
+
+/*
+    b2PolygonShape circleShapeLower;
+    b2FixtureDef circleShapeLowerFixtureDef;
+    circleShapeLowerFixtureDef.shape = &circleShapeLower;
+    circleShapeLower.m_radius = 2.5f;
+
+    b2Fixture* circleShapeLowerFixture = m_body->CreateFixture(&circleShapeLowerFixtureDef);
+
+    */
+b2CircleShape b;
+b2FixtureDef bf;
+bf.shape = &b;
+
+b.m_radius = .5f;
+b.m_p = b2Vec2(1.0f, 1.0f);
+
+m_body->CreateFixture(&bf);
+
+
+    ///////// FOOT
+
+    /*
     b2PolygonShape footBox;
     b2FixtureDef footSensorFixtureDef;
     footSensorFixtureDef.shape = &footBox;
@@ -127,6 +121,9 @@ void Player::createPhysicsBody(World* world, const glm::vec2& position)
     userDataFoot->type = ContactListener::BodyType::PlayerFootSensor;
     userDataFoot->data = this;
     footSensorFixture->SetUserData(userDataFoot);
+    */
+
+    ///////////////////////////////////////////////////////////////////////////////////////////////////////
 
     m_body->SetFixedRotation(true);
 }
