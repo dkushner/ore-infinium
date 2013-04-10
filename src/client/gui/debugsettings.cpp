@@ -218,7 +218,9 @@ void DebugSettings::loadDocument()
     m_debugSettings = GUI::instance()->context()->LoadDocument("../client/gui/assets/debugSettings.rml");
     m_debugSettings->GetElementById("title")->SetInnerRML("Debug Settings");
 
-//    m_tabSet = dynamic_cast<Rocket::Controls::ElementTabSet*>(m_chat->GetElementById("tabset"));
+    m_tabSet = dynamic_cast<Rocket::Controls::ElementTabSet*>(m_debugSettings->GetElementById("tabset"));
+
+    m_tabSet->SetActiveTab(1);
 
     m_debugSettings->GetElementById("ClientRendererArea")->AddEventListener("change", this);
     m_debugSettings->GetElementById("TileRendererArea")->AddEventListener("change", this);
@@ -243,6 +245,7 @@ void DebugSettings::loadDocument()
     m_debugSettings->GetElementById("ServerEntityCreationArea")->AddEventListener("change", this);
     m_debugSettings->GetElementById("SettingsArea")->AddEventListener("change", this);
     m_debugSettings->GetElementById("StartupArea")->AddEventListener("change", this);
+
 
 //    m_debugSettings->GetElementById("sendButton")->AddEventListener("click", this);
 //    m_debugSettings->GetElementById("inputLine")->AddEventListener("keydown", this);

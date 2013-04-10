@@ -15,6 +15,49 @@
             {
                 margin: auto;
             }
+
+tabset
+{
+        display: block;
+
+        width: auto;
+}
+
+/* Display the tab container as a block element 20 pixels high; it will
+   be positioned at the top of the tabset. */
+tabset tabs
+{
+        display: block;
+        height: 20px;
+        width: auto;
+}
+
+/* Force each tab to only take up 50 pixels across the tabs element. */
+tabset tab
+{
+        width: auto;
+        width: 60px;
+}
+
+/* Display the panel container as a block element 180 pixels high; it will
+   be positioned below the tab container and take up the rest of the space
+   in the tabset. */
+tabset panels
+{
+        display: block;
+        height: auto;
+        width: auto;
+}
+
+/* Fix each panel to take up exactly the panelled space. */
+tabset panels panel
+{
+        overflow-y: auto;
+        display: block;
+        width: auto;
+height: auto;
+}
+
         </style>
     </head>
 
@@ -49,33 +92,51 @@
 !-->
 
         <form id="form">
-            <div>
-                    <p>
-                        <input id="ClientRendererArea" type="checkbox" value="false"/>ClientRendererArea<br/>
-                        <input id="TileRendererArea" type="checkbox" value="false"/>TileRendererArea<br/>
-                        <input id="SpriteSheetRendererArea" type="checkbox" value="false"/>SpriteSheetRendererArea<br/>
-                        <input id="LightingRendererArea" type="checkbox" value="false"/>LightingRendererArea<br/>
-                        <input id="PhysicsArea" type="checkbox" value="false"/>PhysicsArea<br/>
-                        <input id="AudioArea" type="checkbox" value="false"/>AudioArea<br/>
-                        <input id="AudioLoaderArea" type="checkbox" value="false"/>AudioLoaderArea<br/>
-                        <input id="GUILoggerArea" type="checkbox" value="false"/>GUILoggerArea<br/>
-                        <input id="ShadersArea" type="checkbox" value="false"/>ShadersArea<br/>
-                        <input id="NetworkClientInitialArea" type="checkbox" value="false"/>NetworkClientInitialArea<br/>
-                        <input id="NetworkServerInitialArea" type="checkbox" value="false"/>NetworkServerInitialArea<br/>
-                        <input id="NetworkClientContinuousArea" type="checkbox" value="false"/>NetworkClientContinuousArea<br/>
-                        <input id="NetworkServerContinuousArea" type="checkbox" value="false"/>NetworkServerContinuousArea<br/>
-                        <input id="ClientInventoryArea" type="checkbox" value="false"/>ClientInventoryArea<br/>
-                        <input id="ServerInventoryArea" type="checkbox" value="false"/>ServerInventoryArea<br/>
-                        <input id="ServerEntityLogicArea" type="checkbox" value="false"/>ServerEntityLogicArea<br/>
-                        <input id="ImageLoaderArea" type="checkbox" value="false"/>ImageLoaderArea<br/>
-                        <input id="WorldGeneratorArea" type="checkbox" value="false"/>WorldGeneratorArea<br/>
-                        <input id="WorldLoaderArea" type="checkbox" value="false"/>WorldLoaderArea<br/>
-                        <input id="ClientEntityCreationArea" type="checkbox" value="false"/>ClientEntityCreationArea<br/>
-                        <input id="ServerEntityCreationArea" type="checkbox" value="false"/>ServerEntityCreationArea<br/>
-                        <input id="SettingsArea" type="checkbox" value="false"/>SettingsArea<br/>
-                        <input id="StartupArea" type="checkbox" value="false"/>StartupArea<br/>
-                    </p>
-            </div>
+            <tabset id="tabset">
+                <tab>Log Areas</tab>
+                    <panel id="logAreas">
+
+                    <div>
+                        <p>
+                            <input id="ClientRendererArea" type="checkbox" value="false"/>ClientRendererArea<br/>
+                            <input id="TileRendererArea" type="checkbox" value="false"/>TileRendererArea<br/>
+                            <input id="SpriteSheetRendererArea" type="checkbox" value="false"/>SpriteSheetRendererArea<br/>
+                            <input id="LightingRendererArea" type="checkbox" value="false"/>LightingRendererArea<br/>
+                            <input id="PhysicsArea" type="checkbox" value="false"/>PhysicsArea<br/>
+                            <input id="AudioArea" type="checkbox" value="false"/>AudioArea<br/>
+                            <input id="AudioLoaderArea" type="checkbox" value="false"/>AudioLoaderArea<br/>
+                            <input id="GUILoggerArea" type="checkbox" value="false"/>GUILoggerArea<br/>
+                            <input id="ShadersArea" type="checkbox" value="false"/>ShadersArea<br/>
+                            <input id="NetworkClientInitialArea" type="checkbox" value="false"/>NetworkClientInitialArea<br/>
+                            <input id="NetworkServerInitialArea" type="checkbox" value="false"/>NetworkServerInitialArea<br/>
+                            <input id="NetworkClientContinuousArea" type="checkbox" value="false"/>NetworkClientContinuousArea<br/>
+                            <input id="NetworkServerContinuousArea" type="checkbox" value="false"/>NetworkServerContinuousArea<br/>
+                            <input id="ClientInventoryArea" type="checkbox" value="false"/>ClientInventoryArea<br/>
+                            <input id="ServerInventoryArea" type="checkbox" value="false"/>ServerInventoryArea<br/>
+                            <input id="ServerEntityLogicArea" type="checkbox" value="false"/>ServerEntityLogicArea<br/>
+                            <input id="ImageLoaderArea" type="checkbox" value="false"/>ImageLoaderArea<br/>
+                            <input id="WorldGeneratorArea" type="checkbox" value="false"/>WorldGeneratorArea<br/>
+                            <input id="WorldLoaderArea" type="checkbox" value="false"/>WorldLoaderArea<br/>
+                            <input id="ClientEntityCreationArea" type="checkbox" value="false"/>ClientEntityCreationArea<br/>
+                            <input id="ServerEntityCreationArea" type="checkbox" value="false"/>ServerEntityCreationArea<br/>
+                            <input id="SettingsArea" type="checkbox" value="false"/>SettingsArea<br/>
+                            <input id="StartupArea" type="checkbox" value="false"/>StartupArea<br/>
+                        </p>
+                    </div>
+
+                </panel>
+
+                <tab>YOLO</tab>
+                <panel id="rendererSettings">
+                    <div>
+                            <p>
+                            <input id="fuuuuuuuuu" type="checkbox" value="false"/>fuuuuuuuuuuuu<br/>
+                            </p>
+                    </div>
+
+                </panel>
+
+            </tabset>
         </form>
     </body>
 </rml>

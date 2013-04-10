@@ -56,7 +56,7 @@ private:
     Client* m_client = nullptr;
 
     Rocket::Core::ElementDocument* m_debugSettings = nullptr;
-//    Rocket::Controls::ElementTabSet* m_tabSet = nullptr;
+    Rocket::Controls::ElementTabSet* m_tabSet = nullptr;
 };
 
 #endif
