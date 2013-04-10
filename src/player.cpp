@@ -61,7 +61,7 @@ void Player::createPhysicsBody(World* world, const glm::vec2& position)
     m_body->SetUserData(userData);
 
     b2CircleShape circleShape;
-    circleShape.m_radius = 0.5f;
+    circleShape.m_radius = 0.3f;
 
     // create main body's fixture
     b2FixtureDef fixtureDef;
@@ -77,15 +77,14 @@ void Player::createPhysicsBody(World* world, const glm::vec2& position)
     b2FixtureDef lowerCircleDef;
     lowerCircleDef.shape = &lowerCircleShape;
 
-    lowerCircleShape.m_radius = 0.5f;
-    lowerCircleShape.m_p = b2Vec2(0.0f, 0.5f);
+    lowerCircleShape.m_radius = 0.3f;
+    lowerCircleShape.m_p = b2Vec2(0.0f, 0.1f);
 
     m_body->CreateFixture(&lowerCircleDef);
 
 
     ///////// FOOT
 
-    /*
     b2PolygonShape footBox;
     b2FixtureDef footSensorFixtureDef;
     footSensorFixtureDef.shape = &footBox;
@@ -99,7 +98,6 @@ void Player::createPhysicsBody(World* world, const glm::vec2& position)
     userDataFoot->type = ContactListener::BodyType::PlayerFootSensor;
     userDataFoot->data = this;
     footSensorFixture->SetUserData(userDataFoot);
-    */
 
     ///////////////////////////////////////////////////////////////////////////////////////////////////////
 
