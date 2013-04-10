@@ -61,20 +61,7 @@ void Player::createPhysicsBody(World* world, const glm::vec2& position)
     m_body->SetUserData(userData);
 
     b2CircleShape circleShape;
-    circleShape.m_radius = 1.0f;
-
-
-    /*
-    vertices[0].Set( (-mWidth/2 + 5.0f) / PhysicsManager::mPhysicsScale, (mHeight/2) / PhysicsManager::mPhysicsScale);
-    vertices[1].Set( (-mWidth/2) / PhysicsManager::mPhysicsScale, (mHeight/2 - 5.0f) / PhysicsManager::mPhysicsScale);
-    vertices[2].Set( (-mWidth/2) / PhysicsManager::mPhysicsScale, (-mHeight/2 + 5.0f) / PhysicsManager::mPhysicsScale);
-    vertices[3].Set( (-mWidth/2 + 5.0f) / PhysicsManager::mPhysicsScale, (-mHeight/2) / PhysicsManager::mPhysicsScale);
-    vertices[4].Set( (mWidth/2 - 5.0f) / PhysicsManager::mPhysicsScale, (-mHeight/2) / PhysicsManager::mPhysicsScale);
-    vertices[5].Set( (mWidth/2) / PhysicsManager::mPhysicsScale, (-mHeight/2 + 5.0f) / PhysicsManager::mPhysicsScale);
-    vertices[6].Set( (mWidth/2) / PhysicsManager::mPhysicsScale, (mHeight/2 - 5.0f) / PhysicsManager::mPhysicsScale);
-    vertices[7].Set( (mWidth/2 - 5.0f) / PhysicsManager::mPhysicsScale, (mHeight/2) / PhysicsManager::mPhysicsScale);
-    */
-
+    circleShape.m_radius = 0.5f;
 
     // create main body's fixture
     b2FixtureDef fixtureDef;
@@ -86,23 +73,14 @@ void Player::createPhysicsBody(World* world, const glm::vec2& position)
 
     //////////// LOWER BODY
 
-/*
-    b2PolygonShape circleShapeLower;
-    b2FixtureDef circleShapeLowerFixtureDef;
-    circleShapeLowerFixtureDef.shape = &circleShapeLower;
-    circleShapeLower.m_radius = 2.5f;
+    b2CircleShape lowerCircleShape;
+    b2FixtureDef lowerCircleDef;
+    lowerCircleDef.shape = &lowerCircleShape;
 
-    b2Fixture* circleShapeLowerFixture = m_body->CreateFixture(&circleShapeLowerFixtureDef);
+    lowerCircleShape.m_radius = 0.5f;
+    lowerCircleShape.m_p = b2Vec2(0.0f, 0.5f);
 
-    */
-b2CircleShape b;
-b2FixtureDef bf;
-bf.shape = &b;
-
-b.m_radius = .5f;
-b.m_p = b2Vec2(1.0f, 1.0f);
-
-m_body->CreateFixture(&bf);
+    m_body->CreateFixture(&lowerCircleDef);
 
 
     ///////// FOOT
