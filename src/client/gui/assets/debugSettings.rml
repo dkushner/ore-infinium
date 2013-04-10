@@ -16,50 +16,51 @@
                 margin: auto;
             }
 
-tabset
-{
-        display: block;
+            tabset
+            {
+                    display: block;
 
-        width: auto;
-}
+                    width: auto;
+            }
 
-/* Display the tab container as a block element 20 pixels high; it will
-   be positioned at the top of the tabset. */
-tabset tabs
-{
-        display: block;
-        height: 20px;
-        width: auto;
-}
+            /* Display the tab container as a block element 20 pixels high; it will
+            be positioned at the top of the tabset. */
+            tabset tabs
+            {
+                    display: block;
+                    height: 20px;
+                    width: auto;
+            }
 
-/* Force each tab to only take up 50 pixels across the tabs element. */
-tabset tab
-{
-        width: auto;
-        width: 60px;
-}
+            /* Force each tab to only take up 50 pixels across the tabs element. */
+            tabset tab
+            {
+                    height: 20px;
+                    width: 60px;
+            }
 
-/* Display the panel container as a block element 180 pixels high; it will
-   be positioned below the tab container and take up the rest of the space
-   in the tabset. */
-tabset panels
-{
-        display: block;
-        height: auto;
-        width: auto;
-}
+            /* Display the panel container as a block element 180 pixels high; it will
+            be positioned below the tab container and take up the rest of the space
+            in the tabset. */
+            tabset panels
+            {
+                    display: block;
+                    height: auto;
+                    width: auto;
+            }
 
-/* Fix each panel to take up exactly the panelled space. */
-tabset panels panel
-{
-        overflow-y: auto;
-        display: block;
-        width: auto;
-height: auto;
-}
+            /* Fix each panel to take up exactly the panelled space. */
+            tabset panels panel
+            {
+                    overflow-y: auto;
+                    display: block;
+                    width: auto;
+margin-top: 50px;
+                    height: 80%;
+            }
 
-        </style>
-    </head>
+                    </style>
+                </head>
 
     <body template="window" onload="restore">
 <!--
@@ -94,6 +95,7 @@ height: auto;
         <form id="form">
             <tabset id="tabset">
                 <tab>Log Areas</tab>
+                <tab>Renderer Settings</tab>
                     <panel id="logAreas">
 
                     <div>
@@ -126,7 +128,6 @@ height: auto;
 
                 </panel>
 
-                <tab>YOLO</tab>
                 <panel id="rendererSettings">
                     <div>
                             <p>
