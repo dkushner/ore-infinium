@@ -36,7 +36,9 @@
             tabset tab
             {
                     height: 20px;
-                    width: 60px;
+                    width: 40%;
+                    border: solid;
+                    border-width: 1px 1px 1px 1px;
             }
 
             /* Display the panel container as a block element 180 pixels high; it will
@@ -55,7 +57,7 @@
                     overflow-y: auto;
                     display: block;
                     width: auto;
-margin-top: 50px;
+                    margin-top: 10px;
                     height: 100%;
             }
 
