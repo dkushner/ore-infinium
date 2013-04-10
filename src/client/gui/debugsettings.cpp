@@ -220,8 +220,7 @@ void DebugSettings::loadDocument()
 
     m_tabSet = dynamic_cast<Rocket::Controls::ElementTabSet*>(m_debugSettings->GetElementById("tabset"));
 
-    m_tabSet->SetActiveTab(1);
-
+    /////////// LOG DEBUG AREA TAB
     m_debugSettings->GetElementById("ClientRendererArea")->AddEventListener("change", this);
     m_debugSettings->GetElementById("TileRendererArea")->AddEventListener("change", this);
     m_debugSettings->GetElementById("SpriteSheetRendererArea")->AddEventListener("change", this);
@@ -246,9 +245,8 @@ void DebugSettings::loadDocument()
     m_debugSettings->GetElementById("SettingsArea")->AddEventListener("change", this);
     m_debugSettings->GetElementById("StartupArea")->AddEventListener("change", this);
 
-
-//    m_debugSettings->GetElementById("sendButton")->AddEventListener("click", this);
-//    m_debugSettings->GetElementById("inputLine")->AddEventListener("keydown", this);
+    //////  RENDERER SETTINGS TAB
+    m_debugSettings->GetElementById("StartupArea")->AddEventListener("change", this);
 }
 
 void DebugSettings::show()
