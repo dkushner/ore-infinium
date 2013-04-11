@@ -322,7 +322,7 @@ void World::update(double elapsedTime)
         m_box2DWorld->Step(FIXED_TIMESTEP, VELOCITY_ITERATIONS, POSITION_ITERATIONS);
     }
 
-    //    m_sky->update(elapsedTime);
+    //    m_sky->update(elapsedTime);   glm::vec2 mouse = m_mainPlayer->mousePositionWorldCoords();
 
     //NOTE: players are not exactly considered entities. they are, but they aren't
     for (Entity * currentEntity : m_entities) {
@@ -448,67 +448,46 @@ void World::calculateAttackPosition()
      */
 }
 
-//FIXME: this function needs a lot of help.
-//so make it so it doesn't iterate over the whole visible screen but just the blockPickingRadius size.
 void World::performBlockAttack(Entities::Player* player)
 {
     glm::vec2 mouse = player->mousePositionWorldCoords();
+    glm::ivec2 intendedBlockToPick = glm::ivec2(Block::BLOCK_SIZE * floor(mouse.x / Block::BLOCK_SIZE), Block::BLOCK_SIZE * floor(mouse.y / Block::BLOCK_SIZE));
+    intendedBlockToPick = glm::ivec2(round(intendedBlockToPick.x / Block::BLOCK_SIZE), round(intendedBlockToPick.y / Block::BLOCK_SIZE));
 
-    glm::vec2 center(Settings::instance()->screenResolutionWidth * 0.5, Settings::instance()->screenResolutionHeight * 0.5);
-
-    // if the attempted block pick location is out of range, do nothing.
-    if (mouse.x < center.x - Entities::Player::blockPickingRadius ||
-            mouse.x > center.x + Entities::Player::blockPickingRadius ||
-            mouse.y < center.y - Entities::Player::blockPickingRadius ||
-            mouse.y > center.y + Entities::Player::blockPickingRadius) {
-        return;
-    }
-
-    glm::ivec2 transformedMouse = glm::ivec2(floor((mouse.x / 2 + player->position().x) / Block::BLOCK_SIZE), floor((mouse.y / 2 + player->position().y) / Block::BLOCK_SIZE));
-
-    const int radius = Entities::Player::blockPickingRadius / Block::BLOCK_SIZE;
-
-    int attackX = transformedMouse.x;
-    int attackY = transformedMouse.y;
+    uint32_t x = intendedBlockToPick.x;
+    uint32_t y = intendedBlockToPick.y;
 
     const glm::vec2 playerPosition = player->position();
 
-    //consider block map as starting at player pos == 0,0 and going down and to the right-ward
-    //tilesBefore{X,Y} is only at the center of the view though..find the whole screen real estate
-    // which is why startRow etc add and subtract half the screen
-    //column
-    int tilesBeforeX = playerPosition.x / Block::BLOCK_SIZE;
-    //row
-    int tilesBeforeY = playerPosition.y / Block::BLOCK_SIZE;
-    Debug::log(Debug::Area::ServerEntityLogicArea) << "performBlockAttack, tilesbeforeX: " << tilesBeforeX << " tilesbeforey: " << tilesBeforeY;
-
-    //FIXME:
-    const int startX = ((playerPosition.x - (Settings::instance()->screenResolutionWidth * 0.5) + player->mousePositionWorldCoords().x) / Block::BLOCK_SIZE) - 1; // -1 for alignment with crosshair
-    const int endX = startX + 1;
-//
-    //columns are our X value, rows the Y
-    const int startY = ((playerPosition.y - (Settings::instance()->screenResolutionHeight * 0.5) + player->mousePositionWorldCoords().y) / Block::BLOCK_SIZE) - 2; //HACK: -2 for alignment..fuck if i know why it's needed
-    const int endY = startY + 1;
-    int index = 0;
-
-    bool blocksModified = false;
-    for (int row = startY; row < endY; ++row) {
-        for (int column = startX; column < endX; ++column) {
-//            if (row == attackY && column == attackX) {
-            index = column * WORLD_ROWCOUNT + row;
-            assert(index < WORLD_ROWCOUNT * WORLD_COLUMNCOUNT);
-            Block& block = m_blocks[index];
-            if (block.primitiveType != 0) {
-                //FIXME: decrement health..
-                block.primitiveType = 0; //FIXME:
-                blocksModified = true;
-            }
-        }
+    // if the attempted block pick location is out of range, do nothing.
+    if (x < playerPosition.x - Entities::Player::blockPickingRadius ||
+            x > playerPosition.x + Entities::Player::blockPickingRadius ||
+            y < playerPosition.y - Entities::Player::blockPickingRadius ||
+            y > playerPosition.y + Entities::Player::blockPickingRadius) {
+//        return;
     }
 
-    Chunk chunk(startX, startY, endX, endY, &m_blocks);
+//    glm::vec2 crosshairOriginOffset = glm::vec2(m_blockPickingCrosshair->sizeMeters().x * 0.5f, m_blockPickingCrosshair->sizeMeters().y * 0.5f);
+ //   glm::vec2 crosshairFinalPosition = glm::vec2(crosshairPosition.x + crosshairOriginOffset.x, crosshairPosition.y + crosshairOriginOffset.y);
+
+    bool blocksModified = false;
+//            if (row == attackY && column == attackX) {
+//            index = column * WORLD_ROWCOUNT + row;
+//            assert(index < WORLD_ROWCOUNT * WORLD_COLUMNCOUNT);
+    Debug::log(Debug::ServerEntityLogicArea) << " BLOCK ATTACK PERFORMING, trying to pick block at x: " << x << " y: " << y << " MOUSE X : " << mouse.x << " Y: " << mouse.y;
+
+    int index = x * WORLD_ROWCOUNT + y;
+    Block& block = m_blocks[index];
+
+//    if (block.primitiveType != 0) {
+        //FIXME: decrement health..
+        block.primitiveType = Block::BlockType::Null; //FIXME:
+        blocksModified = true;
+//    }
 
     if (blocksModified) {
+        Chunk chunk(x- 10, y - 10, x + 10, y + 10, &m_blocks);
+//        Chunk chunk(x- 100, y - 1000, x + 1000, y + 1000, &m_blocks);
         m_server->sendWorldChunk(&chunk);
     }
 }
@@ -634,7 +613,9 @@ void World::itemSecondaryActivated(Entities::Player* player, Item* item)
 void World::handlePlayerLeftMouse(Entities::Player* player)
 {
     //TODO: HANDLE INVENTORY AND TAKE THAT INTO ACCOUNT
-    // performBlockAttack(player);
+     performBlockAttack(player);
+     //FIXME:
+    return;
 
     // FIXME: HACK: perform the action based on what type of thing is equipped.
     // if it's a sword we attack shit, if it's a pickaxe we attack blocks. for now, lets
