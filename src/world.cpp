@@ -287,19 +287,11 @@ void World::renderCrosshair()
 {
     glm::vec2 mouse = m_mainPlayer->mousePositionWorldCoords();
 
-    glm::vec4 viewport = glm::vec4(0, 0, Settings::instance()->windowWidth, Settings::instance()->windowHeight);
-    glm::vec3 wincoord = glm::vec3(mouse.x, mouse.y, 0);
-    glm::vec3 unproject = glm::unProject(wincoord, m_camera->view(), m_camera->ortho(), viewport);
-
-    mouse = glm::vec2(unproject.x, unproject.y);
-
     glm::vec2 crosshairPosition = glm::vec2(Block::BLOCK_SIZE * floor(mouse.x / Block::BLOCK_SIZE), Block::BLOCK_SIZE * floor(mouse.y / Block::BLOCK_SIZE));
     glm::vec2 crosshairOriginOffset = glm::vec2(m_blockPickingCrosshair->sizeMeters().x * 0.5f, m_blockPickingCrosshair->sizeMeters().y * 0.5f);
     glm::vec2 crosshairFinalPosition = glm::vec2(crosshairPosition.x + crosshairOriginOffset.x, crosshairPosition.y + crosshairOriginOffset.y);
 
-    glm::vec2 mousePositionWorldCoords = m_mainPlayer->mousePositionWorldCoords();
-
-    m_blockPickingCrosshair->setPosition(crosshairFinalPosition);
+    m_blockPickingCrosshair->setPosition(mouse);
 }
 
 float World::metersToPixels(float meters)
