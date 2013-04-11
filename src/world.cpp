@@ -480,7 +480,7 @@ void World::performBlockAttack(Entities::Player* player)
     }
 
     if (blocksModified) {
-        Chunk chunk(x- 10, y - 10, x + 10, y + 10, &m_blocks);
+        Chunk chunk(x, y, x + 1, y + 1, &m_blocks);
         m_server->sendWorldChunk(&chunk);
     }
 }
