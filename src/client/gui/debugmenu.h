@@ -54,6 +54,10 @@ public:
         return m_collapsed;
     }
 
+    void setPhysicsWorldBodyCount(int32_t count) {
+        m_physicsWorldBodyCount = count;
+    }
+
     Rocket::Core::ElementDocument* document();
 
 private:
@@ -64,6 +68,8 @@ private:
 
     Rocket::Core::ElementDocument* m_debug = nullptr;
     bool m_collapsed = false;
+
+    int32_t m_physicsWorldBodyCount = 0;
 };
 
 #endif

@@ -279,6 +279,8 @@ void Client::render(double frameTime)
             m_physicsDebugRenderer->SetFlags(rendererFlags);
             //finalize rendering to screen.
             m_physicsDebugRenderer->render();
+
+            m_debugMenu->setPhysicsWorldBodyCount(m_box2DWorld->GetBodyCount());
         }
     }
 

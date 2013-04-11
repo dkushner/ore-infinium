@@ -57,8 +57,6 @@ void DebugMenu::ProcessEvent(Rocket::Core::Event& event)
 void DebugMenu::loadDocument()
 {
     m_debug = GUI::instance()->context()->LoadDocument("../client/gui/assets/debugMenu.rml");
-
-//    m_debug->GetElementById("sendButton")->AddEventListener("click", this);
 }
 
 void DebugMenu::setCollapsed(bool collapsed)
@@ -66,7 +64,7 @@ void DebugMenu::setCollapsed(bool collapsed)
     m_collapsed = collapsed;
 
     int height = 135;
-    int width = 24;
+    int width = 34;
 
     if (!collapsed) {
         height = Settings::instance()->screenResolutionHeight;
@@ -123,11 +121,17 @@ void DebugMenu::update(double frameTime)
         std::string playerString;
         ss << "Player Position X: " << m_client->mainPlayer()->position().x << " Y: " << m_client->mainPlayer()->position().y;
         playerString = ss.str();
+        ss.str("");
 
         m_debug->GetElementById("5")->SetInnerRML(playerString.c_str());
     }
 
-    m_debug->GetElementById("6")->SetInnerRML("Physics body count: -1");
+    ss << "Physics Body Count: " << m_physicsWorldBodyCount;
+
+    std::string physicsBodyCount = ss.str();
+    ss.str("");
+
+    m_debug->GetElementById("6")->SetInnerRML(physicsBodyCount.c_str());
 
     m_debug->GetElementById("4")->SetInnerRML(connectedString.c_str());
     m_debug->GetElementById("2")->SetInnerRML("F8 instant multiplayer host session");
