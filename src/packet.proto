@@ -50,8 +50,9 @@ message PlayerMoveFromClient {
 }
 
 message PlayerMouseStateFromClient {
-    optional uint32 x = 1;
-    optional uint32 y = 2;
+    //mouse x and y, translated to world coordinates. is NOT local coordinates
+    optional float x = 1;
+    optional float y = 2;
     optional bool leftButtonHeld = 3;
     optional bool rightButtonHeld = 4;
 }

@@ -92,6 +92,8 @@ public:
      * Called each tick, informs server of the player mouse position and button state,
      * *AND* sets the m_mainPlayer's mouse state to the present state. The latter is important
      * for the world to be able to generalize things regardless if in client or server mode. (e.g. picking vs. crosshair rendering)
+     * Sends mouse position in world coordinates, since client coordinates are useless to the server. (since it has no cameras and so
+     * doesn't know how to unproject them)
      */
     void sendPlayerMouseState();
 
@@ -122,6 +124,8 @@ private:
 
 private:
     void initSDL();
+
+    glm::vec2 mousePositionToWorldCoords();
 
     void handleInputEvents();
     void drawDebugText(double frameTime);

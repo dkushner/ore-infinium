@@ -85,6 +85,15 @@ public:
     unsigned char blockType(const glm::vec2& vecPoint) const;
 
     /**
+     * Used only by the client for unprojection of mouse coordinates, for example.
+     * Remember that the server has no concept of cameras or views.
+     */
+    Camera* camera() {
+        assert(m_camera);
+        return m_camera;
+    }
+
+    /**
      * Adds the player to the world, but will not take ownership of (you delete it when you're done)
      */
     void addPlayer(Entities::Player* player);

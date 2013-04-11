@@ -581,21 +581,38 @@ void Client::sendPlayerMovement()
     Packet::sendPacket(m_peer, &message, Packet::FromClientPacketContents::PlayerMoveFromClientPacket, ENET_PACKET_FLAG_RELIABLE);
 }
 
-void Client::sendPlayerMouseState()
+glm::vec2 Client::mousePositionToWorldCoords()
 {
+    assert(m_world);
+
     int x; int y;
     SDL_GetMouseState(&x, &y);
 
+    glm::vec2 mouse = glm::vec2(x, Settings::instance()->windowHeight - y);
+
+    glm::vec4 viewport = glm::vec4(0, 0, Settings::instance()->windowWidth, Settings::instance()->windowHeight);
+    glm::vec3 wincoord = glm::vec3(mouse.x, mouse.y, 0);
+    glm::vec3 unproject = glm::unProject(wincoord, m_world->camera()->view(), m_world->camera()->ortho(), viewport);
+
+    mouse = glm::vec2(unproject.x, unproject.y);
+
+    return mouse;
+}
+
+void Client::sendPlayerMouseState()
+{
+    glm::vec2 mousePosition = mousePositionToWorldCoords();
+
     //set the main player's mouse position, which we can then use for generalized lookups regardless if we're in server or client mode
     // (e.g. rendering crosshair vs. networked picking/block selection..both would otherwise require two different solutions but now do not)
-    m_mainPlayer->setMousePosition(x, y);
+    m_mainPlayer->setMousePositionWorldCoords(mousePosition.x, mousePosition.y);
 
     bool leftHeld = SDL_GetMouseState(nullptr, nullptr) & SDL_BUTTON(1);
     bool rightHeld = SDL_GetMouseState(nullptr, nullptr) & SDL_BUTTON(3);
 
     PacketBuf::PlayerMouseStateFromClient message;
-    message.set_x(x);
-    message.set_y(y);
+    message.set_x(mousePosition.x);
+    message.set_y(mousePosition.y);
     message.set_leftbuttonheld(leftHeld);
     message.set_rightbuttonheld(rightHeld);
 

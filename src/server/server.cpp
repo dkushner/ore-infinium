@@ -274,7 +274,7 @@ void Server::receivePlayerMouseState(std::stringstream* ss, Entities::Player* pl
 
     player->setMouseLeftButtonHeld(message.leftbuttonheld());
     player->setMouseRightButtonHeld(message.rightbuttonheld());
-    player->setMousePosition(message.x(), message.y());
+    player->setMousePositionWorldCoords(message.x(), message.y());
 }
 
 void Server::receiveQuickBarInventorySelectSlotRequest(std::stringstream* ss, Entities::Player* player)

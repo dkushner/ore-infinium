@@ -52,11 +52,11 @@ public:
     /**
      * Server side only, to asociate and keep track of each player's (clients) mouse position
      */
-    void setMousePosition(int32_t x, int32_t y) {
-        m_mousePosition = glm::ivec2(x, y);
+    void setMousePositionWorldCoords(int32_t x, int32_t y) {
+        m_mousePositionWorldCoords = glm::ivec2(x, y);
     }
-    glm::ivec2 mousePosition() {
-        return m_mousePosition;
+    glm::ivec2 mousePositionWorldCoords() {
+        return m_mousePositionWorldCoords;
     }
 
     void setMouseLeftButtonHeld(bool held) {
@@ -130,7 +130,10 @@ private:
 
     Timer* m_placeableDelayTimer = nullptr;
 
-    glm::ivec2 m_mousePosition = glm::ivec2(0, 0);
+    /**
+     * The mouse position, converted into world coordinates (by the client, and received by server).
+     */
+    glm::vec2 m_mousePositionWorldCoords = glm::vec2(0.0f, 0.0f);
     bool m_mouseLeftButtonHeld = false;
     bool m_mouseRightButtonHeld = false;
 

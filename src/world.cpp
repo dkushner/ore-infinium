@@ -293,18 +293,14 @@ void World::renderCrosshair()
 
     mouse = glm::vec2(unproject.x, unproject.y);
 
-    float tileSizeFloat = Block::BLOCK_SIZE;
-
-    glm::vec4 tileSize = glm::vec4(tileSizeFloat, tileSizeFloat, 0.0f, 1.0f);
-    glm::vec4 transformedTileSize = tileSize * m_camera->view();// * m_camera->ortho(); //FIXME: ortho need taken into accuont?
-
     glm::vec2 crosshairPosition = glm::vec2(Block::BLOCK_SIZE * floor(mouse.x / Block::BLOCK_SIZE), Block::BLOCK_SIZE * floor(mouse.y / Block::BLOCK_SIZE));
     glm::vec2 crosshairOriginOffset = glm::vec2(m_blockPickingCrosshair->sizeMeters().x * 0.5f, m_blockPickingCrosshair->sizeMeters().y * 0.5f);
     glm::vec2 crosshairFinalPosition = glm::vec2(crosshairPosition.x + crosshairOriginOffset.x, crosshairPosition.y + crosshairOriginOffset.y);
 
+    glm::vec2 mousePositionWorldCoords = m_mainPlayer->mousePositionWorldCoords();
+
     m_blockPickingCrosshair->setPosition(crosshairFinalPosition);
 }
-
 
 float World::metersToPixels(float meters)
 {
@@ -476,7 +472,7 @@ glm::ivec2 World::mousePosition() const
 //so make it so it doesn't iterate over the whole visible screen but just the blockPickingRadius size.
 void World::performBlockAttack(Entities::Player* player)
 {
-    glm::ivec2 mouse = player->mousePosition();
+    glm::ivec2 mouse = player->mousePositionWorldCoords();
 
     glm::vec2 center(Settings::instance()->screenResolutionWidth * 0.5, Settings::instance()->screenResolutionHeight * 0.5);
 
@@ -507,11 +503,11 @@ void World::performBlockAttack(Entities::Player* player)
     Debug::log(Debug::Area::ServerEntityLogicArea) << "performBlockAttack, tilesbeforeX: " << tilesBeforeX << " tilesbeforey: " << tilesBeforeY;
 
     //FIXME:
-    const int startX = ((playerPosition.x - (Settings::instance()->screenResolutionWidth * 0.5) + player->mousePosition().x) / Block::BLOCK_SIZE) - 1; // -1 for alignment with crosshair
+    const int startX = ((playerPosition.x - (Settings::instance()->screenResolutionWidth * 0.5) + player->mousePositionWorldCoords().x) / Block::BLOCK_SIZE) - 1; // -1 for alignment with crosshair
     const int endX = startX + 1;
 //
     //columns are our X value, rows the Y
-    const int startY = ((playerPosition.y - (Settings::instance()->screenResolutionHeight * 0.5) + player->mousePosition().y) / Block::BLOCK_SIZE) - 2; //HACK: -2 for alignment..fuck if i know why it's needed
+    const int startY = ((playerPosition.y - (Settings::instance()->screenResolutionHeight * 0.5) + player->mousePositionWorldCoords().y) / Block::BLOCK_SIZE) - 2; //HACK: -2 for alignment..fuck if i know why it's needed
     const int endY = startY + 1;
     int index = 0;
 
@@ -708,7 +704,7 @@ void World::attemptItemPlacement(Entities::Player* player)
 
     //FIXME: use mouse cursor
     const glm::vec2 topLeft = topLeftScreenWorldCoordinates(player);
-    glm::vec2 position = glm::vec2(topLeft.x + player->mousePosition().x, topLeft.y + player->mousePosition().y);
+    glm::vec2 position = glm::vec2(topLeft.x + player->mousePositionWorldCoords().x, topLeft.y + player->mousePositionWorldCoords().y);
     item->setPosition(position);
 
     switch (item->type()) {
