@@ -76,12 +76,12 @@ void Player::createPhysicsBody(World* world, const glm::vec2& position)
     b2CircleShape lowerCircleShape;
     b2FixtureDef lowerCircleDef;
     lowerCircleDef.shape = &lowerCircleShape;
+    lowerCircleDef.friction = 0.0f;
 
     lowerCircleShape.m_radius = 0.3f;
     lowerCircleShape.m_p = b2Vec2(0.0f, 0.1f);
 
     m_body->CreateFixture(&lowerCircleDef);
-
 
     ///////// FOOT
 
@@ -89,8 +89,7 @@ void Player::createPhysicsBody(World* world, const glm::vec2& position)
     b2FixtureDef footSensorFixtureDef;
     footSensorFixtureDef.shape = &footBox;
     footSensorFixtureDef.isSensor = true;
-
-    footBox.SetAsBox(0.3, 0.1, b2Vec2(0.0f, 0.4f), 0.0f);
+    footBox.SetAsBox(0.2, 0.1, b2Vec2(0.0f, 0.4f), 0.0f);
 
     b2Fixture* footSensorFixture = m_body->CreateFixture(&footSensorFixtureDef);
 
