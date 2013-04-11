@@ -111,12 +111,6 @@ void GUI::handleEvent(const SDL_Event& event)
         break;
     }
 }
-
-void GUI::debugRenderingChanged()
-{
-    Rocket::Debugger::SetVisible(Settings::instance()->debugGUIRenderingEnabled);
-}
-
 void GUI::render()
 {
     m_context->Update();
@@ -131,7 +125,6 @@ void GUI::addInputDemand()
 
 void GUI::removeInputDemand()
 {
-
     if (m_inputDemand > 0) {
         --m_inputDemand;
     } else {

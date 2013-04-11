@@ -259,6 +259,9 @@ void World::render()
 {
     assert(m_mainPlayer && !m_server);
 
+    m_lightRenderer->setRenderingEnabled(Settings::instance()->debugRendererFlags & Debug::RenderingDebug::LightRenderingPassDebug);
+    m_tileRenderer->setRenderingEnabled(Settings::instance()->debugRendererFlags & Debug::RenderingDebug::TileRenderingPassDebug);
+
     //Sky at bottom layer
 
     //TODO render tilemap..
@@ -608,16 +611,6 @@ void World::loadChunk(Chunk* chunk)
             ++sourceIndex;
         }
     }
-}
-
-void World::toggleLightRenderingEnabled()
-{
-    m_lightRenderer->setRenderingEnabled(!m_lightRenderer->lightRenderingEnabled());
-}
-
-void World::toggleTileRenderingEnabled()
-{
-    m_tileRenderer->setRenderingEnabled(!m_tileRenderer->renderingEnabled());
 }
 
 Chunk World::createChunk(uint32_t startX, uint32_t startY, uint32_t endX, uint32_t endY)

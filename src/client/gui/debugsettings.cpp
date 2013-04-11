@@ -24,6 +24,7 @@
 
 #include <Rocket/Core.h>
 #include <Rocket/Controls.h>
+#include <Rocket/Debugger.h>
 
 #include <iostream>
 #include <sstream>
@@ -189,22 +190,23 @@ void DebugSettings::ProcessEvent(Rocket::Core::Event& event)
     //////////////// RENDERER SETTINGS
     if (id == "GUIDebugRendering") {
         if (isChecked) {
+            Rocket::Debugger::SetVisible(true);
             Settings::instance()->debugRendererFlags |= Debug::RenderingDebug::GUIRenderingDebug;
         } else {
+            Rocket::Debugger::SetVisible(false);
             Settings::instance()->debugRendererFlags &= ~Debug::RenderingDebug::GUIRenderingDebug;
         }
     } else if (id == "LightRenderingPass") {
         if (isChecked) {
             Settings::instance()->debugRendererFlags |= Debug::RenderingDebug::LightRenderingPassDebug;
         } else {
-            Settings::instance()->debugRendererFlags &= ~Debug::RenderingDebug::GUIRenderingDebug;
+            Settings::instance()->debugRendererFlags &= ~Debug::RenderingDebug::LightRenderingPassDebug;
         }
     } else if (id == "TileRenderingPass") {
-
         if (isChecked) {
             Settings::instance()->debugRendererFlags |= Debug::RenderingDebug::TileRenderingPassDebug;
         } else {
-            Settings::instance()->debugRendererFlags &= ~Debug::RenderingDebug::GUIRenderingDebug;
+            Settings::instance()->debugRendererFlags &= ~Debug::RenderingDebug::TileRenderingPassDebug;
         }
     } else if (id == "Box2DShapeRendering") {
         if (isChecked) {

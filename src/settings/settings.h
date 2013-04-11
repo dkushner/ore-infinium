@@ -34,14 +34,9 @@ public:
     int windowWidth = 1600;//screenResolutionWidth;
     int windowHeight = 900;//screenResolutionHeight;
 
-    bool debugOutput = true;
-    bool debugRendererOutput = false;
-
     int debugAreas;
     int debugRendererFlags;
 
-    bool debugRenderingEnabled = false;
-    bool debugGUIRenderingEnabled = false;
 //static int SDL_LOGPRIORITY = SDL_LOG_PRIORITY_WARN;
 
 private:

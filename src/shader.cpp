@@ -33,10 +33,8 @@ Shader::Shader(const char* vertexShader, const char* fragmentShader)
 {
     loadShaders(vertexShader, fragmentShader);
 
-    if (Settings::instance()->debugOutput) {
-        printShaderInfoLog(m_vertexShader);
-        printShaderInfoLog(m_fragmentShader);
-    }
+    printShaderInfoLog(m_vertexShader);
+    printShaderInfoLog(m_fragmentShader);
 }
 
 Shader::~Shader()

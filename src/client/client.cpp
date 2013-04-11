@@ -332,15 +332,6 @@ void Client::handleInputEvents()
                 }
             } else if (event.key.keysym.sym == SDLK_F1) {
                 m_debugMenu->setCollapsed(!m_debugMenu->collapsed());
-            } else if (event.key.keysym.sym == SDLK_F5) {
-                // toggle debug logging
-                Settings::instance()->debugOutput = !Settings::instance()->debugOutput;
-            } else if (event.key.keysym.sym == SDLK_F6) {
-                Settings::instance()->debugRendererOutput = !Settings::instance()->debugRendererOutput;
-            } else if (event.key.keysym.sym == SDLK_F7) {
-                // toggle debug rendering
-                Settings::instance()->debugGUIRenderingEnabled = !Settings::instance()->debugGUIRenderingEnabled;
-                m_gui->debugRenderingChanged();
             } else if (event.key.keysym.sym == SDLK_F8) {
                 std::stringstream ss;
                 ss << "Player";
@@ -351,14 +342,6 @@ void Client::handleInputEvents()
                 ss << distribution(rand);
 
                 startMultiplayerHost(ss.str());
-            } else if (event.key.keysym.sym == SDLK_F9) {
-                if (m_world) {
-                    m_world->toggleLightRenderingEnabled();
-                }
-            } else if (event.key.keysym.sym == SDLK_F10) {
-                if (m_world) {
-                    m_world->toggleTileRenderingEnabled();
-                }
             } else if (event.key.keysym.sym == SDLK_F11) {
                if (m_debugSettings == nullptr) {
                     m_debugSettings = new DebugSettings(this);

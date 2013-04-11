@@ -125,50 +125,15 @@ void DebugMenu::update(double frameTime)
         ss << "Player Position X: " << m_client->mainPlayer()->position().x << " Y: " << m_client->mainPlayer()->position().y;
         playerString = ss.str();
 
-        m_debug->GetElementById("10")->SetInnerRML(playerString.c_str());
+        m_debug->GetElementById("5")->SetInnerRML(playerString.c_str());
     }
 
-    ss.str("");
-    ss << "F5 to toggle debug logging: ";
+    m_debug->GetElementById("6")->SetInnerRML("Physics body count: -1");
 
-    if (Settings::instance()->debugOutput) {
-        ss << "ENABLED";
-    } else {
-        ss << "disabled";
-    }
 
-    std::string debugLoggingString = ss.str();
-
-    ss.str("");
-    ss << "F6 to toggle renderer logging: ";
-
-    if (Settings::instance()->debugRendererOutput) {
-        ss << "ENABLED";
-    } else {
-        ss << "disabled";
-    }
-
-    std::string debugRendererOutputString = ss.str();
-
-    ss.str("");
-    ss << "F7 to toggle GUI renderer debug: ";
-    if (Settings::instance()->debugGUIRenderingEnabled) {
-        ss << "ENABLED";
-    } else {
-        ss << "disabled";
-    }
-
-    std::string debugGUIRenderer = ss.str();
-
-    m_debug->GetElementById("2")->SetInnerRML(debugLoggingString.c_str());
-    m_debug->GetElementById("3")->SetInnerRML(debugRendererOutputString.c_str());
-    m_debug->GetElementById("4")->SetInnerRML(debugGUIRenderer.c_str());
-    m_debug->GetElementById("5")->SetInnerRML("F8 instant multiplayer host session");
-    m_debug->GetElementById("6")->SetInnerRML(connectedString.c_str());
-    m_debug->GetElementById("7")->SetInnerRML("F9 to toggle light rendering pass");
-    m_debug->GetElementById("8")->SetInnerRML("F10 to toggle tile rendering pass");
-    m_debug->GetElementById("9")->SetInnerRML("F11 to show/hide debug settings menu");
-    // 10 is up top, player pos
+    m_debug->GetElementById("4")->SetInnerRML(connectedString.c_str());
+    m_debug->GetElementById("2")->SetInnerRML("F8 instant multiplayer host session");
+    m_debug->GetElementById("3")->SetInnerRML("F11 to show/hide debug settings menu");
 }
 
 void DebugMenu::show()
