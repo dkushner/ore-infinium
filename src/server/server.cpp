@@ -260,7 +260,6 @@ void Server::receivePlayerMove(std::stringstream* ss, Entities::Player* player)
     PacketBuf::PlayerMoveFromClient message;
     Packet::deserialize(ss, &message);
 
-//    Debug::log(Debug::Area::NetworkServer) << " PLAYER MOVE RECEIVED, directionx: " <<  message.directionx() << " Y: " <<
     player->move(message.directionx(), message.directiony());
     if (message.jump()) {
         player->jump();

@@ -111,11 +111,11 @@ void Player::move(int32_t directionX, int32_t directionY)
 void Player::jump()
 {
     if (m_body) {
-        if (m_jumpContacts > 0) {
-            if (m_jumpTimer->milliseconds() >= m_jumpDelay) {
-                glm::vec2 fullVector = glm::vec2(0, -5);
+        if (m_jumpTimer->milliseconds() >= m_jumpDelay) {
+            if (m_jumpContacts > 0) {
                 b2Vec2 currentVelocity = m_body->GetLinearVelocity();
 
+                glm::vec2 fullVector = glm::vec2(0, -5);
                 float velocityChange = fullVector.y;
 
                 float impulse = m_body->GetMass() * velocityChange;

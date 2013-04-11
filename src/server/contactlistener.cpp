@@ -67,6 +67,7 @@ void ContactListener::EndContact(b2Contact* contact)
 
 void ContactListener::checkBeginContact(ContactListener::BodyUserData* userData)
 {
+//    Debug::log(Debug::ServerEntityLogicArea) << "BOX2D BEGINN CONTACT";
     switch (userData->type) {
     case BodyType::PlayerFootSensor: {
         Entities::Player* player = static_cast<Entities::Player*>(userData->data);

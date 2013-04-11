@@ -299,6 +299,12 @@ void Client::tick(double frameTime)
     }
 
     if (m_world) {
+        if (m_mainPlayer) {
+            //NOTE: we send this shit regardless of input events..for obvious reasons. (aka fossils of a once living bug lie here ;)
+            sendPlayerMovement();
+            sendPlayerMouseState();
+        }
+
         m_world->update(frameTime);
     }
 }
@@ -447,14 +453,12 @@ void Client::handlePlayerInput(SDL_Event& event)
         if (event.key.keysym.sym == SDLK_w || event.key.keysym.sym == SDLK_UP) {
             m_playerInputDirectionY = 0;
         }
+
+        if (event.key.keysym.sym == SDLK_SPACE) {
+            m_playerJumpRequested = false;
+        }
         break;
     }
-
-    if (m_playerInputDirectionX != originalX || m_playerInputDirectionY != originalY || m_playerJumpRequested) {
-        sendPlayerMovement();
-    }
-
-    sendPlayerMouseState();
 }
 
 void Client::shutdown()
@@ -576,7 +580,6 @@ void Client::sendPlayerMovement()
     message.set_directionx(m_playerInputDirectionX);
     message.set_directiony(m_playerInputDirectionY);
     message.set_jump(m_playerJumpRequested);
-    m_playerJumpRequested = false;
 
     Packet::sendPacket(m_peer, &message, Packet::FromClientPacketContents::PlayerMoveFromClientPacket, ENET_PACKET_FLAG_RELIABLE);
 }

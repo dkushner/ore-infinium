@@ -143,7 +143,7 @@ private:
     uint16_t m_ping = 0;
 
     Timer* m_jumpTimer = nullptr;
-    uint32_t m_jumpDelay = 800;
+    uint32_t m_jumpDelay = 300;
 };
 
 }
