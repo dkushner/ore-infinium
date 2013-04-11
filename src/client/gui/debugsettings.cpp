@@ -185,6 +185,52 @@ void DebugSettings::ProcessEvent(Rocket::Core::Event& event)
             Settings::instance()->debugAreas &= ~Debug::Area::StartupArea;
         }
     }
+
+    //////////////// RENDERER SETTINGS
+    if (id == "GUIDebugRendering") {
+        if (isChecked) {
+            Settings::instance()->debugRendererFlags |= Debug::RenderingDebug::GUIRenderingDebug;
+        } else {
+            Settings::instance()->debugRendererFlags &= ~Debug::RenderingDebug::GUIRenderingDebug;
+        }
+    } else if (id == "LightRenderingPass") {
+        if (isChecked) {
+            Settings::instance()->debugRendererFlags |= Debug::RenderingDebug::LightRenderingPassDebug;
+        } else {
+            Settings::instance()->debugRendererFlags &= ~Debug::RenderingDebug::GUIRenderingDebug;
+        }
+    } else if (id == "TileRenderingPass") {
+
+        if (isChecked) {
+            Settings::instance()->debugRendererFlags |= Debug::RenderingDebug::TileRenderingPassDebug;
+        } else {
+            Settings::instance()->debugRendererFlags &= ~Debug::RenderingDebug::GUIRenderingDebug;
+        }
+    } else if (id == "Box2DShapeRendering") {
+        if (isChecked) {
+            Settings::instance()->debugRendererFlags |= Debug::RenderingDebug::Box2DShapeRenderingDebug;
+        } else {
+            Settings::instance()->debugRendererFlags &= ~Debug::RenderingDebug::Box2DShapeRenderingDebug;
+        }
+    } else if (id == "Box2DCenterOfMassRendering") {
+        if (isChecked) {
+            Settings::instance()->debugRendererFlags |= Debug::RenderingDebug::Box2DCenterOfMassRenderingDebug;
+        } else {
+            Settings::instance()->debugRendererFlags &= ~Debug::RenderingDebug::Box2DCenterOfMassRenderingDebug;
+        }
+    } else if (id == "Box2DJointRendering") {
+        if (isChecked) {
+            Settings::instance()->debugRendererFlags |= Debug::RenderingDebug::Box2DJointRenderingDebug;
+        } else {
+            Settings::instance()->debugRendererFlags &= ~Debug::RenderingDebug::Box2DJointRenderingDebug;
+        }
+    } else if (id == "Box2DAABBRendering") {
+        if (isChecked) {
+            Settings::instance()->debugRendererFlags |= Debug::RenderingDebug::Box2DAABBRenderingDebug;
+        } else {
+            Settings::instance()->debugRendererFlags &= ~Debug::RenderingDebug::Box2DAABBRenderingDebug;
+        }
+    }
 }
 
 /*
@@ -220,6 +266,9 @@ void DebugSettings::loadDocument()
 
     m_tabSet = dynamic_cast<Rocket::Controls::ElementTabSet*>(m_debugSettings->GetElementById("tabset"));
 
+    //load initial values
+    loadRenderingSettings();
+
     /////////// LOG DEBUG AREA TAB
     m_debugSettings->GetElementById("ClientRendererArea")->AddEventListener("change", this);
     m_debugSettings->GetElementById("TileRendererArea")->AddEventListener("change", this);
@@ -246,7 +295,47 @@ void DebugSettings::loadDocument()
     m_debugSettings->GetElementById("StartupArea")->AddEventListener("change", this);
 
     //////  RENDERER SETTINGS TAB
-    m_debugSettings->GetElementById("StartupArea")->AddEventListener("change", this);
+    m_debugSettings->GetElementById("GUIDebugRendering")->AddEventListener("change", this);
+    m_debugSettings->GetElementById("LightRenderingPass")->AddEventListener("change", this);
+    m_debugSettings->GetElementById("TileRenderingPass")->AddEventListener("change", this);
+    m_debugSettings->GetElementById("Box2DShapeRendering")->AddEventListener("change", this);
+    m_debugSettings->GetElementById("Box2DCenterOfMassRendering")->AddEventListener("change", this);
+    m_debugSettings->GetElementById("Box2DJointRendering")->AddEventListener("change", this);
+    m_debugSettings->GetElementById("Box2DAABBRendering")->AddEventListener("change", this);
+}
+
+void DebugSettings::loadRenderingSettings()
+{
+    int flags = Settings::instance()->debugRendererFlags;
+
+    //all checkboxen are off by default, so just set them to on if they need to be.
+    if (flags & Debug::RenderingDebug::GUIRenderingDebug) {
+        m_debugSettings->GetElementById("GUIDebugRendering")->SetAttribute<Rocket::Core::String>("checked", "");
+    }
+
+    if (flags & Debug::RenderingDebug::LightRenderingPassDebug) {
+        m_debugSettings->GetElementById("LightRenderingPass")->SetAttribute<Rocket::Core::String>("checked", "");
+    }
+
+    if (flags & Debug::RenderingDebug::TileRenderingPassDebug) {
+        m_debugSettings->GetElementById("TileRenderingPass")->SetAttribute<Rocket::Core::String>("checked", "");
+    }
+
+    if (flags & Debug::RenderingDebug::Box2DShapeRenderingDebug) {
+        m_debugSettings->GetElementById("Box2DShapeRendering")->SetAttribute<Rocket::Core::String>("checked", "");
+    }
+
+    if (flags & Debug::RenderingDebug::Box2DCenterOfMassRenderingDebug) {
+        m_debugSettings->GetElementById("Box2DCenterOfMassRendering")->SetAttribute<Rocket::Core::String>("checked", "");
+    }
+
+    if (flags & Debug::RenderingDebug::Box2DJointRenderingDebug) {
+        m_debugSettings->GetElementById("Box2DJointRendering")->SetAttribute<Rocket::Core::String>("checked", "");
+    }
+
+    if (flags & Debug::RenderingDebug::Box2DAABBRenderingDebug) {
+        m_debugSettings->GetElementById("Box2DAABBRendering")->SetAttribute<Rocket::Core::String>("checked", "");
+    }
 }
 
 void DebugSettings::show()

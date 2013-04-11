@@ -16,6 +16,7 @@
  *****************************************************************************/
 
 #include "settings.h"
+#include <src/debug.h>
 
 Settings* Settings::s_instance(0);
 
@@ -28,7 +29,15 @@ Settings* Settings::instance()
 }
 
 Settings::Settings()
-: debugAreas(0)
+: debugAreas(0),
+  debugRendererFlags(
+      //turn some useful shit on by default
+    Debug::RenderingDebug::TileRenderingPassDebug |
+    Debug::RenderingDebug::LightRenderingPassDebug |
+    Debug::RenderingDebug::Box2DAABBRenderingDebug |
+    Debug::RenderingDebug::Box2DJointRenderingDebug |
+    Debug::RenderingDebug::Box2DShapeRenderingDebug
+    )
 {
 
 }

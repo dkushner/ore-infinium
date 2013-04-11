@@ -51,6 +51,8 @@ public:
 
 private:
     void loadDocument();
+    /// load initial debug rendering settings into the GUI (from the debug variable/bitfield)
+    void loadRenderingSettings();
 
 private:
     Client* m_client = nullptr;

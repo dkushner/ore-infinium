@@ -38,6 +38,7 @@ public:
     bool debugRendererOutput = false;
 
     int debugAreas;
+    int debugRendererFlags;
 
     bool debugRenderingEnabled = false;
     bool debugGUIRenderingEnabled = false;

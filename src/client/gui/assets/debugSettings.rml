@@ -133,13 +133,13 @@
                 <panel id="rendererSettings">
                     <div>
                             <p>
-                            <input id="guiDebugRendering" type="checkbox" value="false"/>GUI Debug Renderer<br/>
-                            <input id="lightRenderingPass" type="checkbox" value="false"/>Light Renderer Pass<br/>
-                            <input id="tileRenderingPass" type="checkbox" value="false"/>Tile Renderer Pass<br/>
-                            <input id="box2DShapeRendering" type="checkbox" value="false"/>Box2D Shape Rendering<br/>
-                            <input id="box2DCenterOfMassRendering" type="checkbox" value="false"/>Box2D Center of Mass Rendering<br/>
-                            <input id="box2DJointRendering" type="checkbox" value="false"/>Box2D Joint Rendering<br/>
-                            <input id="box2DAABBRendering" type="checkbox" value="false"/>Box2D AABB Rendering<br/>
+                            <input id="GUIDebugRendering" type="checkbox" value="false"/>GUI Debug Renderer<br/>
+                            <input id="LightRenderingPass" type="checkbox" value="false"/>Light Renderer Pass<br/>
+                            <input id="TileRenderingPass" type="checkbox" value="false"/>Tile Renderer Pass<br/>
+                            <input id="Box2DShapeRendering" type="checkbox" value="false"/>Box2D Shape Rendering<br/>
+                            <input id="Box2DCenterOfMassRendering" type="checkbox" value="false"/>Box2D Center of Mass Rendering<br/>
+                            <input id="Box2DJointRendering" type="checkbox" value="false"/>Box2D Joint Rendering<br/>
+                            <input id="Box2DAABBRendering" type="checkbox" value="false"/>Box2D AABB Rendering<br/>
                             </p>
                     </div>
 

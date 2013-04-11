@@ -84,10 +84,6 @@ public:
         return m_mainPlayer;
     }
 
-    bool physicsDebugRenderingEnabled() {
-        return m_physicsDebugRenderingEnabled;
-    }
-
 ///////////////// Network Communication ////////////////////
 public:
     void sendChatMessage(const std::string& message);
@@ -153,7 +149,6 @@ private:
     PhysicsDebugRenderer* m_physicsDebugRenderer = nullptr;
 
     bool m_playerJumpRequested = false;
-    bool m_physicsDebugRenderingEnabled = true;
 
     bool m_initialPlayersReceivedFinished = false;
 

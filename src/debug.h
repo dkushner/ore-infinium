@@ -56,6 +56,22 @@ public:
         StartupArea = 1 << 22
     };
 
+    /**
+     * The Box2D ones debug renderings are only available for when the client is hosting the server.
+     * Otherwise it won't do anything.
+     */
+    //WARNING: UPDATE THE DEBUG SETTINGS GUI (RML AND CPP) WHEN YOU ADD A FLAG
+    enum RenderingDebug
+    {
+        GUIRenderingDebug = 1 << 0,
+        LightRenderingPassDebug = 1 << 1,
+        TileRenderingPassDebug = 1 << 2,
+        Box2DShapeRenderingDebug = 1 << 3,
+        Box2DCenterOfMassRenderingDebug = 1 << 4,
+        Box2DJointRenderingDebug = 1 << 5,
+        Box2DAABBRenderingDebug = 1 << 6
+    };
+
     static LogStream log(Area area);
 
     static void assertf(bool value, const std::string& message);
