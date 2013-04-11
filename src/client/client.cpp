@@ -586,6 +586,10 @@ void Client::sendPlayerMouseState()
     int x; int y;
     SDL_GetMouseState(&x, &y);
 
+    //set the main player's mouse position, which we can then use for generalized lookups regardless if we're in server or client mode
+    // (e.g. rendering crosshair vs. networked picking/block selection..both would otherwise require two different solutions but now do not)
+    m_mainPlayer->setMousePosition(x, y);
+
     bool leftHeld = SDL_GetMouseState(nullptr, nullptr) & SDL_BUTTON(1);
     bool rightHeld = SDL_GetMouseState(nullptr, nullptr) & SDL_BUTTON(3);
 
