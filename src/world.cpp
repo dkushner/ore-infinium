@@ -291,7 +291,7 @@ void World::renderCrosshair()
     glm::vec2 crosshairOriginOffset = glm::vec2(m_blockPickingCrosshair->sizeMeters().x * 0.5f, m_blockPickingCrosshair->sizeMeters().y * 0.5f);
     glm::vec2 crosshairFinalPosition = glm::vec2(crosshairPosition.x + crosshairOriginOffset.x, crosshairPosition.y + crosshairOriginOffset.y);
 
-    m_blockPickingCrosshair->setPosition(mouse);
+    m_blockPickingCrosshair->setPosition(crosshairFinalPosition);
 }
 
 float World::metersToPixels(float meters)
