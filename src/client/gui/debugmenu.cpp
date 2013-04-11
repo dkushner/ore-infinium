@@ -65,15 +65,15 @@ void DebugMenu::setCollapsed(bool collapsed)
 {
     m_collapsed = collapsed;
 
-    int height = 35;
-    int width = 20;
+    int height = 135;
+    int width = 24;
 
     if (!collapsed) {
         height = Settings::instance()->screenResolutionHeight;
         width = 100;
     }
 
-    Rocket::Core::Colourb shit(255, 0, 0, 155);
+    Rocket::Core::Colourb shit(255, 0, 0, 55);
     m_debug->SetProperty("background-color", Rocket::Core::Property(shit, Rocket::Core::Property::COLOUR));
     m_debug->SetProperty("height", Rocket::Core::Property(height, Rocket::Core::Property::PX));
     m_debug->SetProperty("width", Rocket::Core::Property(width, Rocket::Core::Property::PERCENT));
@@ -99,7 +99,6 @@ void DebugMenu::update(double frameTime)
 
         m_debug->GetElementById("1")->SetInnerRML(fpsString.c_str());
     }
-
 
     ss.str("");
     ss << "Client Connection Status: ";
@@ -129,7 +128,6 @@ void DebugMenu::update(double frameTime)
     }
 
     m_debug->GetElementById("6")->SetInnerRML("Physics body count: -1");
-
 
     m_debug->GetElementById("4")->SetInnerRML(connectedString.c_str());
     m_debug->GetElementById("2")->SetInnerRML("F8 instant multiplayer host session");
