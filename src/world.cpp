@@ -285,7 +285,7 @@ void World::render()
 
 void World::renderCrosshair()
 {
-    glm::vec2 mouse = glm::vec2(mousePosition().x, Settings::instance()->windowHeight - mousePosition().y);
+    glm::vec2 mouse = m_mainPlayer->mousePositionWorldCoords();
 
     glm::vec4 viewport = glm::vec4(0, 0, Settings::instance()->windowWidth, Settings::instance()->windowHeight);
     glm::vec3 wincoord = glm::vec3(mouse.x, mouse.y, 0);
@@ -438,11 +438,6 @@ bool World::tileBlendTypeMatch(int sourceTileX, int sourceTileY, int nearbyTileX
     return isMatched;
 }
 
-glm::vec2 World::viewportCenter() const
-{
-    return glm::vec2(Settings::instance()->screenResolutionWidth * 0.5, Settings::instance()->screenResolutionHeight * 0.5);
-}
-
 //FIXME: unused..will be used for shooting and such. not for block breaking.
 void World::calculateAttackPosition()
 {
@@ -459,13 +454,6 @@ void World::calculateAttackPosition()
      *       const float newY= _viewportCenter.y  + sin(angle) * Entities::Player::blockPickingRadius;
      *       m_relativeVectorToAttack = glm::vec2(newX, newY);
      */
-}
-
-glm::ivec2 World::mousePosition() const
-{
-    int x; int y;
-    SDL_GetMouseState(&x, &y);
-    return glm::ivec2(x, y);
 }
 
 //FIXME: this function needs a lot of help.
@@ -625,13 +613,6 @@ void World::zoomOut()
     m_camera->zoom(m_zoomOutFactor);
 }
 
-glm::vec2 World::topLeftScreenWorldCoordinates(Entities::Player* player)
-{
-    const glm::vec2 position = player->position();
-    const glm::vec2 topLeft = glm::vec2(position.x - Settings::instance()->screenResolutionWidth * 0.5, position.y - Settings::instance()->screenResolutionHeight * 0.5);
-    return topLeft;
-}
-
 void World::itemQuickBarInventoryDropped(Entities::Player* player, Item* item, uint32_t amount)
 {
     Item* droppedItem = item->duplicate();
@@ -703,7 +684,7 @@ void World::attemptItemPlacement(Entities::Player* player)
     item->setState(Item::ItemState::Placed);
 
     //FIXME: use mouse cursor
-    const glm::vec2 topLeft = topLeftScreenWorldCoordinates(player);
+    const glm::vec2 topLeft;//FIXME that's fucked = glm::topLeftScreenWorldCoordinates(player);
     glm::vec2 position = glm::vec2(topLeft.x + player->mousePositionWorldCoords().x, topLeft.y + player->mousePositionWorldCoords().y);
     item->setPosition(position);
 

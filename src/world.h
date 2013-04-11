@@ -152,16 +152,6 @@ private:
      */
     void updateTilePhysicsObjects(Entities::Player* player);
 
-    /**
-     * Finds the position of the top-left corner of screen, in world coordinates (based on player position).
-     */
-    glm::vec2 topLeftScreenWorldCoordinates(Entities::Player* player);
-
-    /**
-     * NOTE: CLIENT ONLY
-     */
-    glm::ivec2 mousePosition() const;
-
     void renderCrosshair();
 
     /**
