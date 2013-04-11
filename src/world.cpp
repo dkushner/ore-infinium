@@ -472,7 +472,7 @@ glm::ivec2 World::mousePosition() const
 //so make it so it doesn't iterate over the whole visible screen but just the blockPickingRadius size.
 void World::performBlockAttack(Entities::Player* player)
 {
-    glm::ivec2 mouse = player->mousePositionWorldCoords();
+    glm::vec2 mouse = player->mousePositionWorldCoords();
 
     glm::vec2 center(Settings::instance()->screenResolutionWidth * 0.5, Settings::instance()->screenResolutionHeight * 0.5);
 

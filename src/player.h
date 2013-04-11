@@ -55,7 +55,7 @@ public:
     void setMousePositionWorldCoords(int32_t x, int32_t y) {
         m_mousePositionWorldCoords = glm::ivec2(x, y);
     }
-    glm::ivec2 mousePositionWorldCoords() {
+    glm::vec2 mousePositionWorldCoords() {
         return m_mousePositionWorldCoords;
     }
 
