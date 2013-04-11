@@ -185,15 +185,15 @@ void World::createInitialTilePhysicsObjects(Entities::Player* player)
     glm::vec2 position = player->position();
 
     float blockSize = Block::BLOCK_SIZE;
-    int centerTileX = int((position.x / blockSize)) - 20; //FIXME: HACK obviously
-    int centerTileY = int((position.y / blockSize)) - 20;
+    int centerTileX = int((position.x / blockSize));
+    int centerTileY = int((position.y / blockSize));
 
-    //FIXME: obviously find a good value, other than 10..
     //tile indexes
-    int startRow = centerTileY;
-    int endRow = centerTileY + 55;
-    int startColumn = centerTileX;
-    int endColumn = centerTileX + 55;
+     //FIXME: HACK obviously
+    int startRow = centerTileY - 20;
+    int endRow = startRow + 60;
+    int startColumn = centerTileX - 50;
+    int endColumn = startColumn + 100;
 
     int count = 0;
     int index = 0;
