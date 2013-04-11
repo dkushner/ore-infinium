@@ -451,8 +451,7 @@ void World::calculateAttackPosition()
 void World::performBlockAttack(Entities::Player* player)
 {
     glm::vec2 mouse = player->mousePositionWorldCoords();
-    glm::ivec2 intendedBlockToPick = glm::ivec2(Block::BLOCK_SIZE * floor(mouse.x / Block::BLOCK_SIZE), Block::BLOCK_SIZE * floor(mouse.y / Block::BLOCK_SIZE));
-    intendedBlockToPick = glm::ivec2(round(intendedBlockToPick.x / Block::BLOCK_SIZE), round(intendedBlockToPick.y / Block::BLOCK_SIZE));
+    glm::ivec2 intendedBlockToPick = glm::ivec2(mouse.x / Block::BLOCK_SIZE, mouse.y / Block::BLOCK_SIZE);
 
     uint32_t x = intendedBlockToPick.x;
     uint32_t y = intendedBlockToPick.y;
@@ -467,27 +466,21 @@ void World::performBlockAttack(Entities::Player* player)
 //        return;
     }
 
-//    glm::vec2 crosshairOriginOffset = glm::vec2(m_blockPickingCrosshair->sizeMeters().x * 0.5f, m_blockPickingCrosshair->sizeMeters().y * 0.5f);
- //   glm::vec2 crosshairFinalPosition = glm::vec2(crosshairPosition.x + crosshairOriginOffset.x, crosshairPosition.y + crosshairOriginOffset.y);
-
     bool blocksModified = false;
-//            if (row == attackY && column == attackX) {
-//            index = column * WORLD_ROWCOUNT + row;
-//            assert(index < WORLD_ROWCOUNT * WORLD_COLUMNCOUNT);
-    Debug::log(Debug::ServerEntityLogicArea) << " BLOCK ATTACK PERFORMING, trying to pick block at x: " << x << " y: " << y << " MOUSE X : " << mouse.x << " Y: " << mouse.y;
 
     int index = x * WORLD_ROWCOUNT + y;
+    assert(index < WORLD_ROWCOUNT * WORLD_COLUMNCOUNT);
+
     Block& block = m_blocks[index];
 
-//    if (block.primitiveType != 0) {
+    if (block.primitiveType != 0) {
         //FIXME: decrement health..
         block.primitiveType = Block::BlockType::Null; //FIXME:
         blocksModified = true;
-//    }
+    }
 
     if (blocksModified) {
         Chunk chunk(x- 10, y - 10, x + 10, y + 10, &m_blocks);
-//        Chunk chunk(x- 100, y - 1000, x + 1000, y + 1000, &m_blocks);
         m_server->sendWorldChunk(&chunk);
     }
 }
