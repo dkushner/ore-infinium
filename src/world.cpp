@@ -653,7 +653,6 @@ void World::attemptItemPlacement(Entities::Player* player)
     QuickBarInventory* inventory = player->quickBarInventory();
     Item* item = inventory->item(inventory->equippedIndex());
 
-
     if (item == nullptr) {
         return;
     }
@@ -675,9 +674,7 @@ void World::attemptItemPlacement(Entities::Player* player)
 
     item->setState(Item::ItemState::Placed);
 
-    //FIXME: use mouse cursor
-    const glm::vec2 topLeft;//FIXME that's fucked = glm::topLeftScreenWorldCoordinates(player);
-    glm::vec2 position = glm::vec2(topLeft.x + player->mousePositionWorldCoords().x, topLeft.y + player->mousePositionWorldCoords().y);
+    glm::vec2 position = glm::vec2(player->mousePositionWorldCoords().x, player->mousePositionWorldCoords().y);
     item->setPosition(position);
 
     switch (item->type()) {
