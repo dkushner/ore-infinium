@@ -34,8 +34,8 @@ Settings::Settings()
       //turn some useful shit on by default
     Debug::RenderingDebug::TileRenderingPassDebug |
     Debug::RenderingDebug::LightRenderingPassDebug |
-    Debug::RenderingDebug::Box2DAABBRenderingDebug |
-    Debug::RenderingDebug::Box2DJointRenderingDebug |
+//    Debug::RenderingDebug::Box2DAABBRenderingDebug |
+//    Debug::RenderingDebug::Box2DJointRenderingDebug |
     Debug::RenderingDebug::Box2DShapeRenderingDebug
     )
 {
