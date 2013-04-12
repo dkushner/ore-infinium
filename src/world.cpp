@@ -670,8 +670,8 @@ void World::spawnItem(Item* item)
 void World::destroyBlockPhysicsObject(uint32_t column, uint32_t row)
 {
     b2AABB aabb;
-    aabb.lowerBound = b2Vec2((Block::BLOCK_SIZE * (column)), Block::BLOCK_SIZE * (row));
-    aabb.upperBound = b2Vec2((Block::BLOCK_SIZE * (column)), Block::BLOCK_SIZE * (row));
+    aabb.lowerBound = b2Vec2((Block::BLOCK_SIZE * (column)) + (Block::BLOCK_SIZE * 0.5), Block::BLOCK_SIZE * (row) + (Block::BLOCK_SIZE * 0.5));
+    aabb.upperBound = b2Vec2((Block::BLOCK_SIZE * (column)) + (Block::BLOCK_SIZE * 0.5), Block::BLOCK_SIZE * (row)+ (Block::BLOCK_SIZE * 0.5));
 
     m_queryCallback->setBodySearchType(ContactListener::BodyType::Block);
     m_box2DWorld->QueryAABB(m_queryCallback, aabb);
