@@ -694,7 +694,7 @@ void World::performBlockAttack(Entities::Player* player)
     const glm::vec2 playerPosition = player->position();
 
     //FIXME: only doing this for as long as debug mode is here..it works though, trust me. I'm a doctor
-#ifndef NDEBUG
+#if 0
     // if the attempted block pick location is out of range, do nothing.
     if (mouse.x < playerPosition.x - Entities::Player::blockPickingRadius ||
             mouse.x > playerPosition.x + Entities::Player::blockPickingRadius ||

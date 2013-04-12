@@ -7,11 +7,11 @@
                 <style>
                         body
                         {
-                            min-width: 36%;
-                            min-height: 28%;
+                            min-width: 1px;
+                            min-height: 1px;
 
-                            width: 36%;
-                            height: 28%;
+                            width: 29%;
+                            height: 21%;
 
                             margin-top: auto;
                         }
@@ -19,11 +19,15 @@
                         div#content
                         {
                             text-align: left;
+                            min-width: 1px;
+                            min-height: 1px;
                         }
 
                         div#framecontent
                         {
                             text-align: left;
+                            min-width: 1px;
+                            min-height: 1px;
                         }
                         input.text
                         {
@@ -38,7 +42,7 @@
                         {
                             display: inline-block;
 
-                            width: 159px;
+                            width: 50px;
                             height: 30px;
 
                             padding-top: 0px;
@@ -49,7 +53,9 @@
 
                         tabset
                         {
-                            padding-bottom: 10px;
+                            min-width: 1px;
+                            min-height: 1px;
+                            height: 80%;
                         }
                 </style>
         </head>

@@ -737,7 +737,7 @@ tabset panels
 {
         overflow-y: scroll;
         display: block;
-        height: 180px;
+        height: 80%;
         width: auto;
 }
 
