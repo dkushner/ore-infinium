@@ -677,6 +677,8 @@ void World::destroyBlockPhysicsObject(uint32_t column, uint32_t row)
     m_box2DWorld->QueryAABB(m_queryCallback, aabb);
 //    Debug::log(Debug::ServerEntityLogicArea) << "FIXTURE CALLBCK COUNT: " <<  m_queryCallback->bodiesAtPoint(aabb.lowerBound).size();
     for (auto* b : m_queryCallback->bodiesAtPoint(aabb.lowerBound)) {
+        //be sure to delete our body marker
+        delete b->GetUserData();
         m_box2DWorld->DestroyBody(b);
     }
 }
