@@ -670,16 +670,21 @@ void World::spawnItem(Item* item)
 void World::destroyBlockPhysicsObject(uint32_t column, uint32_t row)
 {
     b2AABB aabb;
-    aabb.lowerBound = b2Vec2(Block::BLOCK_SIZE * column, Block::BLOCK_SIZE * row);
-    aabb.upperBound = b2Vec2(Block::BLOCK_SIZE * (column), Block::BLOCK_SIZE * (row));
+    aabb.lowerBound = b2Vec2((Block::BLOCK_SIZE * (column)), Block::BLOCK_SIZE * (row));
+    aabb.upperBound = b2Vec2((Block::BLOCK_SIZE * (column)), Block::BLOCK_SIZE * (row));
 
+    m_queryCallback->setBodySearchType(ContactListener::BodyType::Block);
     m_box2DWorld->QueryAABB(m_queryCallback, aabb);
+//    Debug::log(Debug::ServerEntityLogicArea) << "FIXTURE CALLBCK COUNT: " <<  m_queryCallback->bodiesAtPoint(aabb.lowerBound).size();
+    for (auto* b : m_queryCallback->bodiesAtPoint(aabb.lowerBound)) {
+        m_box2DWorld->DestroyBody(b);
+    }
 }
 
 void World::performBlockAttack(Entities::Player* player)
 {
     glm::vec2 mouse = player->mousePositionWorldCoords();
-    glm::ivec2 intendedBlockToPick = glm::ivec2(mouse.x / Block::BLOCK_SIZE, mouse.y / Block::BLOCK_SIZE);
+    glm::ivec2 intendedBlockToPick = glm::ivec2(floor(mouse.x / Block::BLOCK_SIZE), floor(mouse.y / Block::BLOCK_SIZE));
 
     uint32_t x = intendedBlockToPick.x;
     uint32_t y = intendedBlockToPick.y;

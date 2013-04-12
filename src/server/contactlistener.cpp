@@ -20,6 +20,7 @@
 #include "src/player.h"
 
 #include <src/debug.h>
+#include <set>
 
 ContactListener::ContactListener()
 {
@@ -103,21 +104,40 @@ QueryCallback::QueryCallback(b2World* world)
 
 }
 
+std::set<b2Body*> QueryCallback::bodiesAtPoint(const b2Vec2& point)
+{
+    std::set<b2Body*> bodiesAtPoint;
+
+    for (b2Fixture* fixture : m_fixtures) {
+       if (fixture->TestPoint(point)) {
+            bodiesAtPoint.insert(fixture->GetBody());
+       }
+    }
+
+    m_fixtures.clear();
+
+    return bodiesAtPoint;
+}
+
 bool QueryCallback::ReportFixture(b2Fixture* fixture)
 {
     Debug::log(Debug::ServerEntityLogicArea) << "FIXTURE REPORTING";
 
    ContactListener::BodyUserData* userData = static_cast<ContactListener::BodyUserData*>(fixture->GetBody()->GetUserData());
+
+   if (userData->type == m_searchType) {
+        m_fixtures.push_back(fixture);
+    }
+
+    /*
    switch (userData->type) {
        case ContactListener::BodyType::Block:
            delete userData;
            userData = nullptr;
 
            m_world->DestroyBody(fixture->GetBody());
-        return false;
         break;
    }
-
-
+   */
     return true;
 }
