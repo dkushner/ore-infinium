@@ -53,6 +53,8 @@ find_package(LibRocket)
 find_package(enet)
 find_package(Protobuf)
 
+find_package(ZLIB)
+
 set_package_properties(SDL2 PROPERTIES DESCRIPTION "SDL2" URL "http://hg.libsdl.org/SDL/")
 set_package_properties(SDL2 PROPERTIES TYPE REQUIRED PURPOSE "Used for setting up an OpenGL 3.0+ context as well as for input.")
 
@@ -82,6 +84,9 @@ set_package_properties(Protobuf PROPERTIES TYPE REQUIRED PURPOSE "For serializin
 
 set_package_properties(YamlCpp PROPERTIES DESCRIPTION "YAML CPP < 0.5, >= 0.30" URL "http://code.google.com/p/yaml-cpp/")
 set_package_properties(YamlCpp PROPERTIES TYPE REQUIRED PURPOSE "For config file and sprite sheet reading")
+
+set_package_properties(ZLIB PROPERTIES DESCRIPTION "zlib" URL "zlib")
+set_package_properties(ZLIB PROPERTIES TYPE REQUIRED PURPOSE "For compression for network communication as well as file loading/saving")
 
 feature_summary(WHAT ALL FATAL_ON_MISSING_REQUIRED_PACKAGES)
 
