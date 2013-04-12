@@ -3,6 +3,8 @@ binaries each day). Before you can do that, you must install the following:
 
 IMPORTANT: this game requires at least OpenGL 3.2 or newer. You can figure this
 out usually by running 'glxinfo'. Mesa doesn't yet have 3.2 drivers.
+(so open source drivers won't work on Linux, for example. At least not until
+I can (hopefully) support older GL versions).
 
 To get started building this on Kubuntu (which is what I'm using as a test
 machine, and is, as a rule, a good base for shipping software), you can install
@@ -11,7 +13,7 @@ some packages so that you don't have to build all of them yourself.
 
 Here's a list, just to keep in mind. Commands are further down.
 
-* SDL 2.x http://www.libsdl.org/hg.php
+* SDL 2.x http://www.libsdl.org/hg.php (yet unreleased)
 
 * protobuf (google's libprotobuf. needs both the library and the 'protoc'
 binary, which e.g. ubuntu ships in a separate package
@@ -22,17 +24,21 @@ binary, which e.g. ubuntu ships in a separate package
 
 * librocket (GUI HTML/CSS C++ library)
 
-* C++11 compatible compiler (GCC 4.7 is fine and clang 3.2
+* C++11 compatible compiler (GCC 4.7 is fine and clang 3.2)
 
 * YAML-CPP (0.3.0. NOT GREATER THAN. Newer versions like 0.5 have a new API
 which I unfortunately cannot yet use as evidently, nothing ships it yet, not
 until the next version of ubuntu).
 
+* ZLib (for compression, for both my network packets and file saving, etc.)
+
+--------------------------------------------------------------------
+
 
 If you're running Ubuntu 12.10 (which is what I support the most), then type:
 
 'apt-get install libenet-dev libglew-dev libprotobuf-dev protobuf-compiler
-libyaml-cpp-dev'
+libyaml-cpp-dev zlib1g-dev'
 
 And just to make sure, if you've never done development, you probably need to
 run:
