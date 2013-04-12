@@ -451,7 +451,6 @@ void Client::handlePlayerInput(SDL_Event& event)
         }
         break;
 
-
     case SDL_MOUSEWHEEL:
         //greater than 0 is moving mouse wheel *up*, so we want previous.
         if (m_quickBarMenu) {
