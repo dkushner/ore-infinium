@@ -671,7 +671,7 @@ void World::destroyBlockPhysicsObject(uint32_t column, uint32_t row)
 {
     b2AABB aabb;
     aabb.lowerBound = b2Vec2(Block::BLOCK_SIZE * column, Block::BLOCK_SIZE * row);
-    aabb.upperBound = b2Vec2(Block::BLOCK_SIZE * (column + 1), Block::BLOCK_SIZE * (row + 1));
+    aabb.upperBound = b2Vec2(Block::BLOCK_SIZE * (column), Block::BLOCK_SIZE * (row));
 
     m_box2DWorld->QueryAABB(m_queryCallback, aabb);
 }
