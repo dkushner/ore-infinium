@@ -95,7 +95,7 @@ World::World(Entities::Player* mainPlayer, Client* client, Server* server)
         m_contactListener = new ContactListener();
         m_box2DWorld->SetContactListener(m_contactListener);
 
-        m_queryCallback = new QueryCallback();
+        m_queryCallback = new QueryCallback(m_box2DWorld);
 
         /*
         b2BodyDef groundBodyDef;
@@ -670,6 +670,9 @@ void World::spawnItem(Item* item)
 void World::destroyBlockPhysicsObject(uint32_t column, uint32_t row)
 {
     b2AABB aabb;
+    aabb.lowerBound = b2Vec2(Block::BLOCK_SIZE * column, Block::BLOCK_SIZE * row);
+    aabb.upperBound = b2Vec2(Block::BLOCK_SIZE * (column + 1), Block::BLOCK_SIZE * (row + 1));
+
     m_box2DWorld->QueryAABB(m_queryCallback, aabb);
 }
 
@@ -701,6 +704,8 @@ void World::performBlockAttack(Entities::Player* player)
     if (block.primitiveType != 0) {
         //FIXME: decrement health..
         block.primitiveType = Block::BlockType::Null; //FIXME:
+        destroyBlockPhysicsObject(x, y);
+
         blocksModified = true;
     }
 

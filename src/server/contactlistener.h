@@ -52,9 +52,11 @@ private:
 class QueryCallback : public b2QueryCallback
 {
 public:
-    QueryCallback();
+    QueryCallback(b2World* world);
 
     virtual bool ReportFixture(b2Fixture* fixture);
+
+    b2World* m_world = nullptr;
 };
 
 #endif

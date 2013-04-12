@@ -97,13 +97,27 @@ void ContactListener::PostSolve(b2Contact* contact, const b2ContactImpulse* impu
     b2ContactListener::PostSolve(contact, impulse);
 }
 
-QueryCallback::QueryCallback()
+QueryCallback::QueryCallback(b2World* world)
+: m_world(world)
 {
 
 }
 
 bool QueryCallback::ReportFixture(b2Fixture* fixture)
 {
+    Debug::log(Debug::ServerEntityLogicArea) << "FIXTURE REPORTING";
+
+   ContactListener::BodyUserData* userData = static_cast<ContactListener::BodyUserData*>(fixture->GetBody()->GetUserData());
+   switch (userData->type) {
+       case ContactListener::BodyType::Block:
+           delete userData;
+           userData = nullptr;
+
+           m_world->DestroyBody(fixture->GetBody());
+        return false;
+        break;
+   }
+
 
     return true;
 }
