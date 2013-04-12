@@ -361,27 +361,9 @@ void Client::handleInputEvents()
                         m_debugSettings->show();
                    }
                }
-            } else if (event.key.keysym.sym == SDLK_EQUALS || event.key.keysym.sym == SDLK_l) {
-                if (m_world) {
-                    m_world->zoomIn();
-                }
-            } else if (event.key.keysym.sym == SDLK_MINUS || event.key.keysym.sym == SDLK_k) {
-                if (m_world) {
-                    m_world->zoomOut();
-                }
             }
             break;
 
-        case SDL_MOUSEWHEEL:
-            //greater than 0 is moving mouse wheel *up*, so we want previous.
-            if (m_quickBarMenu) {
-                if (event.wheel.y > 0) {
-                    m_quickBarMenu->previousSlot();
-                } else if (event.wheel.y < 0) {
-                    m_quickBarMenu->nextSlot();
-                }
-            }
-            break;
 
         case SDL_WINDOWEVENT_CLOSE:
             //FIXME: fucking useless. doesn't get called for..gee, what would this event be called for? oh yeah, window closing. No, instead that's fucking SDL_QUIT, which is
@@ -435,6 +417,16 @@ void Client::handlePlayerInput(SDL_Event& event)
         if (event.key.keysym.sym == SDLK_SPACE) {
             m_playerJumpRequested = true;
         }
+
+        if (event.key.keysym.sym == SDLK_EQUALS || event.key.keysym.sym == SDLK_l) {
+            if (m_world) {
+                m_world->zoomIn();
+            }
+        } else if (event.key.keysym.sym == SDLK_MINUS || event.key.keysym.sym == SDLK_k) {
+            if (m_world) {
+                m_world->zoomOut();
+            }
+        }
         break;
 
     case SDL_KEYUP:
@@ -456,6 +448,18 @@ void Client::handlePlayerInput(SDL_Event& event)
 
         if (event.key.keysym.sym == SDLK_SPACE) {
             m_playerJumpRequested = false;
+        }
+        break;
+
+
+    case SDL_MOUSEWHEEL:
+        //greater than 0 is moving mouse wheel *up*, so we want previous.
+        if (m_quickBarMenu) {
+            if (event.wheel.y > 0) {
+                m_quickBarMenu->previousSlot();
+            } else if (event.wheel.y < 0) {
+                m_quickBarMenu->nextSlot();
+            }
         }
         break;
     }
