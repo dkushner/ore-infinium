@@ -95,6 +95,8 @@ World::World(Entities::Player* mainPlayer, Client* client, Server* server)
         m_contactListener = new ContactListener();
         m_box2DWorld->SetContactListener(m_contactListener);
 
+        m_queryCallback = new QueryCallback();
+
         /*
         b2BodyDef groundBodyDef;
         groundBodyDef.position.Set(pixelsToMeters(0.0f), pixelsToMeters(2000.0f));//pixelsToMeters(1000));
@@ -132,6 +134,9 @@ World::~World()
     //    delete m_sky;
 
     delete m_box2DWorld;
+    delete m_contactListener;
+    delete m_queryCallback;
+    delete m_camera;
 }
 
 void World::addPlayer(Entities::Player* player)
@@ -165,7 +170,7 @@ void World::addPlayer(Entities::Player* player)
             }
         }
 
-        createInitialTilePhysicsObjects(player);
+        createInitialBlockPhysicsObjects(player);
 
         //NOTE: you might be asking, why don't we send a chunk? that's because this happens as soon as the client is validated and its
         // player is created. therefore the next calls will be sending player info, and then sending the initial world chunk at this player's position.
@@ -180,7 +185,7 @@ void World::removePlayer(Entities::Player* player)
     m_players.remove(player);
 }
 
-void World::createInitialTilePhysicsObjects(Entities::Player* player)
+void World::createInitialBlockPhysicsObjects(Entities::Player* player)
 {
     glm::vec2 position = player->position();
 
@@ -220,7 +225,8 @@ void World::createInitialTilePhysicsObjects(Entities::Player* player)
 
             ContactListener::BodyUserData* userData = new ContactListener::BodyUserData();
             userData->type = ContactListener::BodyType::Block;
-            //userData->data = m_blocks ...FIXME
+            userData->data = &m_blocks[index];
+
             body->SetUserData(userData);
             b2PolygonShape box;
             box.SetAsBox(Block::BLOCK_SIZE * 0.5f , Block::BLOCK_SIZE * 0.5f);
@@ -447,43 +453,6 @@ void World::calculateAttackPosition()
      */
 }
 
-void World::performBlockAttack(Entities::Player* player)
-{
-    glm::vec2 mouse = player->mousePositionWorldCoords();
-    glm::ivec2 intendedBlockToPick = glm::ivec2(mouse.x / Block::BLOCK_SIZE, mouse.y / Block::BLOCK_SIZE);
-
-    uint32_t x = intendedBlockToPick.x;
-    uint32_t y = intendedBlockToPick.y;
-
-    const glm::vec2 playerPosition = player->position();
-
-    // if the attempted block pick location is out of range, do nothing.
-    if (x < playerPosition.x - Entities::Player::blockPickingRadius ||
-            x > playerPosition.x + Entities::Player::blockPickingRadius ||
-            y < playerPosition.y - Entities::Player::blockPickingRadius ||
-            y > playerPosition.y + Entities::Player::blockPickingRadius) {
-//        return;
-    }
-
-    bool blocksModified = false;
-
-    int index = x * WORLD_ROWCOUNT + y;
-    assert(index < WORLD_ROWCOUNT * WORLD_COLUMNCOUNT);
-
-    Block& block = m_blocks[index];
-
-    if (block.primitiveType != 0) {
-        //FIXME: decrement health..
-        block.primitiveType = Block::BlockType::Null; //FIXME:
-        blocksModified = true;
-    }
-
-    if (blocksModified) {
-        Chunk chunk(x, y, x + 1, y + 1, &m_blocks);
-        m_server->sendWorldChunk(&chunk);
-    }
-}
-
 void World::loadWorld()
 {
     Debug::log(Debug::Area::WorldLoaderArea) << "Loading world!";
@@ -696,4 +665,47 @@ void World::spawnItem(Item* item)
     }
 
     m_spriteSheetRenderer->registerSprite(item);
+}
+
+void World::destroyBlockPhysicsObject(uint32_t column, uint32_t row)
+{
+    b2AABB aabb;
+    m_box2DWorld->QueryAABB(m_queryCallback, aabb);
+}
+
+void World::performBlockAttack(Entities::Player* player)
+{
+    glm::vec2 mouse = player->mousePositionWorldCoords();
+    glm::ivec2 intendedBlockToPick = glm::ivec2(mouse.x / Block::BLOCK_SIZE, mouse.y / Block::BLOCK_SIZE);
+
+    uint32_t x = intendedBlockToPick.x;
+    uint32_t y = intendedBlockToPick.y;
+
+    const glm::vec2 playerPosition = player->position();
+
+    // if the attempted block pick location is out of range, do nothing.
+    if (x < playerPosition.x - Entities::Player::blockPickingRadius ||
+            x > playerPosition.x + Entities::Player::blockPickingRadius ||
+            y < playerPosition.y - Entities::Player::blockPickingRadius ||
+            y > playerPosition.y + Entities::Player::blockPickingRadius) {
+//        return;
+    }
+
+    bool blocksModified = false;
+
+    int index = x * WORLD_ROWCOUNT + y;
+    assert(index < WORLD_ROWCOUNT * WORLD_COLUMNCOUNT);
+
+    Block& block = m_blocks[index];
+
+    if (block.primitiveType != 0) {
+        //FIXME: decrement health..
+        block.primitiveType = Block::BlockType::Null; //FIXME:
+        blocksModified = true;
+    }
+
+    if (blocksModified) {
+        Chunk chunk(x, y, x + 1, y + 1, &m_blocks);
+        m_server->sendWorldChunk(&chunk);
+    }
 }

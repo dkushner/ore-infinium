@@ -30,6 +30,7 @@
 #include <list>
 #include <Box2D/Common/b2Math.h>
 
+class QueryCallback;
 class ContactListener;
 class b2Body;
 class b2World;
@@ -142,7 +143,7 @@ private:
      * the player. Future updates need to call @sa updateTilePhysicsObjects
      * Should be called when a player spawns/teleports to a new area in the world
      */
-    void createInitialTilePhysicsObjects(Entities::Player* player);
+    void createInitialBlockPhysicsObjects(Entities::Player* player);
 
     /**
      *
@@ -152,6 +153,8 @@ private:
      */
     void updateTilePhysicsObjects(Entities::Player* player);
 
+    void destroyBlockPhysicsObject(uint32_t column, uint32_t row);
+
     void renderCrosshair();
 
     /**
@@ -159,20 +162,13 @@ private:
     */
     void generateWorld();
 
-    /**
-    * FIXME: presently only calculates the center of the screen according to resolution.
-    * i'm not sure how zooming will be affected with this..i don't *think* it would. but verify
-    * if this is ideal or not
-    * NOTE: doesn't *actually* use m_camera->getViewport, just a simple Settings::instance()->screenResolutionWidth,H / 2
-    */
-    glm::vec2 viewportCenter() const;
-
     void calculateAttackPosition();
 
     /**
      * Attempts to pick a block at a position. Assumes caller checked inventory to see if it's possible.
      */
     void performBlockAttack(Entities::Player* player);
+
 
     /**
      * Calls various functions determining which sort of action should be taken. Should be called on each update()
@@ -243,6 +239,7 @@ private:
 //    b2Vec2 m_gravity = b2Vec2(0.0f, 0.0f);
 
     ContactListener* m_contactListener = nullptr;
+    QueryCallback* m_queryCallback = nullptr;
 
     /**
      * Null if we are in server mode.

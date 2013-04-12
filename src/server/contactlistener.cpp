@@ -96,3 +96,14 @@ void ContactListener::PostSolve(b2Contact* contact, const b2ContactImpulse* impu
 {
     b2ContactListener::PostSolve(contact, impulse);
 }
+
+QueryCallback::QueryCallback()
+{
+
+}
+
+bool QueryCallback::ReportFixture(b2Fixture* fixture)
+{
+
+    return true;
+}

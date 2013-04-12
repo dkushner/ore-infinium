@@ -49,4 +49,12 @@ private:
     void checkEndContact(BodyUserData* userData);
 };
 
+class QueryCallback : public b2QueryCallback
+{
+public:
+    QueryCallback();
+
+    virtual bool ReportFixture(b2Fixture* fixture);
+};
+
 #endif
