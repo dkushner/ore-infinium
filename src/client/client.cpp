@@ -639,7 +639,7 @@ void Client::processMessage(ENetEvent& event)
 {
     std::stringstream ss(std::string((char*)(event.packet->data), event.packet->dataLength));
 
-    uint32_t packetType = Packet::deserializePacketType(ss);
+    uint32_t packetType = Packet::deserializePacketType(&ss);
 
     switch (packetType) {
     case Packet::FromServerPacketContents::ChatMessageFromServerPacket:

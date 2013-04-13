@@ -102,7 +102,7 @@ public:
      * or @sa FromServerPacketContents
      * Seeks the stream pointer back to zero when done.
      */
-    static uint32_t deserializePacketType(std::stringstream& in);
+    static uint32_t deserializePacketType(std::stringstream* in);
 
     /**
      * Send a packet containing the message @p message to the peer @p peer with the packet type (e.g. InvalidFromClientPacket, InvalidFromServerPacket, etc.)
@@ -111,6 +111,7 @@ public:
     static void sendPacket(ENetPeer* peer, const google::protobuf::Message* message, uint32_t packetType, uint32_t enetPacketType);
 
     static void sendPacketBroadcast(ENetHost* host, const google::protobuf::Message* message, uint32_t packetType, uint32_t enetPacketType);
+    static void sendCompressedPacketBroadcast(ENetHost* host, const google::protobuf::Message* message, uint32_t packetType, uint32_t enetPacketType);
 
 private:
     Packet();

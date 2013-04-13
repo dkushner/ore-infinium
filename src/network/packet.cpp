@@ -24,6 +24,10 @@
 #include <google/protobuf/io/zero_copy_stream_impl.h>
 #include <google/protobuf/io/coded_stream.h>
 
+#include <boost/iostreams/filtering_streambuf.hpp>
+#include <boost/iostreams/copy.hpp>
+#include <boost/iostreams/filter/zlib.hpp>
+
 #include "src/debug.h"
 
 #include <iostream>
@@ -51,9 +55,9 @@ void Packet::serialize(std::stringstream* out, const google::protobuf::Message* 
     coded_out.WriteString(s);
 }
 
-uint32_t Packet::deserializePacketType(std::stringstream& in)
+uint32_t Packet::deserializePacketType(std::stringstream* in)
 {
-    google::protobuf::io::IstreamInputStream raw_in(&in);
+    google::protobuf::io::IstreamInputStream raw_in(in);
     google::protobuf::io::CodedInputStream coded_in(&raw_in);
 
     std::string s;
@@ -68,8 +72,8 @@ uint32_t Packet::deserializePacketType(std::stringstream& in)
         PacketBuf::Packet p;
         p.ParseFromString(s);
 
-        in.clear();
-        in.seekg(0, std::ios::beg);
+        in->clear();
+        in->seekg(0, std::ios::beg);
 
         return p.type();
     } else {
@@ -124,6 +128,51 @@ void Packet::sendPacket(ENetPeer* peer, const google::protobuf::Message* message
 
 //Debug::log() << "SENDING PACKET";
     enet_peer_send(peer, 0, packet);
+}
+
+/*
+boost::iostreams::filtering_streambuf<boost::iostreams::input> out;
+boost::iostreams::zlib_params params;
+params.level = boost::iostreams::zlib::best_compression;
+
+out.push(boost::iostreams::zlib_compressor(params));
+out.push(ss);
+
+std::stringstream compressed;
+boost::iostreams::copy(out, compressed);
+
+//  out.push(file);
+//   char data[5] = {'a', 'b', 'c', 'd', 'e'};
+//    boost::iostreams::copy(boost::iostreams::basic_array_source<char>(data, sizeof(data)), out);
+
+std::ofstream file("TESTWORLDDATA", std::ios::binary);
+file << compressed.str();
+file.close();
+*/
+void Packet::sendCompressedPacketBroadcast(ENetHost* host, const google::protobuf::Message* message, uint32_t packetType, uint32_t enetPacketType)
+{
+    assert(host && message);
+
+    std::stringstream ss(std::stringstream::out | std::stringstream::binary);
+
+    Packet::serialize(&ss, message, packetType);
+
+    // now that the message is serialized, lets compress that ass
+    boost::iostreams::filtering_streambuf<boost::iostreams::input> out;
+
+    boost::iostreams::zlib_params params;
+    params.level = boost::iostreams::zlib::best_compression;
+
+    out.push(boost::iostreams::zlib_compressor(params));
+    out.push(ss);
+
+    std::stringstream compressed;
+    boost::iostreams::copy(out, compressed);
+
+    ENetPacket *packet = enet_packet_create(compressed.str().data(), compressed.str().size(), enetPacketType);
+    assert(packet);
+
+    enet_host_broadcast(host, 0, packet);
 }
 
 void Packet::sendPacketBroadcast(ENetHost* host, const google::protobuf::Message* message, uint32_t packetType, uint32_t enetPacketType)
