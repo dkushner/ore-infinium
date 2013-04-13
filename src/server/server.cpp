@@ -44,6 +44,8 @@
 #include <chrono>
 #include <thread>
 
+#include <zlib.h>
+
 #include <SDL2/SDL.h>
 
 Server::Server(unsigned int maxClients, unsigned int port, Client* client) :

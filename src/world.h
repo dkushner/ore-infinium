@@ -29,7 +29,7 @@
 #include <SDL2/SDL_events.h>
 #include <list>
 #include <Box2D/Common/b2Math.h>
-
+#include <sstream>
 class QueryCallback;
 class ContactListener;
 class b2Body;

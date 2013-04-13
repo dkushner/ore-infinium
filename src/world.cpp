@@ -50,6 +50,11 @@
 #include <fstream>
 #include <chrono>
 
+#include <fstream>
+#include <boost/iostreams/filtering_streambuf.hpp>
+#include <boost/iostreams/copy.hpp>
+#include <boost/iostreams/filter/zlib.hpp>
+
 World::World(Entities::Player* mainPlayer, Client* client, Server* server)
     : m_mainPlayer(mainPlayer),
       m_server(server),
@@ -117,6 +122,8 @@ World::World(Entities::Player* mainPlayer, Client* client, Server* server)
         }
 
         loadWorld();
+        //HACK, as if that wasn't obvious.
+        saveWorld();
         Debug::log(Debug::WorldLoaderArea) << "World is x: " << (WORLD_COLUMNCOUNT * Block::BLOCK_SIZE) << " y: " << (WORLD_ROWCOUNT * Block::BLOCK_SIZE) << " meters big";
     }
 
@@ -498,20 +505,64 @@ void World::saveWorld()
 
      std::cout << "Time taken for map saving: " << elapsedTime << " Milliseconds" << std::endl;
      */
+
     /*
-    std::ofstream file("TESTWORLDDATA");
+
+    std::stringstream ss(std::stringstream::out | std::stringstream::binary);
 
     int index = 0;
     for (int row = 0; row < WORLD_ROWCOUNT; ++row) {
         for (int column = 0; column < WORLD_COLUMNCOUNT; ++column) {
             index = column * WORLD_ROWCOUNT + row;
             Block* block = &m_blocks[index];
-            file.write((char*)(block), sizeof(Block));
+            ss.write((char*)(block), sizeof(Block));
         }
     }
+
+
+    boost::iostreams::filtering_streambuf<boost::iostreams::input> out;
+    boost::iostreams::zlib_params params;
+    params.level = boost::iostreams::zlib::best_compression;
+
+    out.push(boost::iostreams::zlib_compressor(params));
+    out.push(ss);
+
+    std::stringstream compressed;
+    boost::iostreams::copy(out, compressed);
+
+  //  out.push(file);
+ //   char data[5] = {'a', 'b', 'c', 'd', 'e'};
+//    boost::iostreams::copy(boost::iostreams::basic_array_source<char>(data, sizeof(data)), out);
+
+    std::ofstream file("TESTWORLDDATA", std::ios::binary);
+    file << compressed.str();
     file.close();
+
     */
+
+//    file.close();
+
+
+
 }
+/*
+std::string
+compress
+(
+    const std::string& data
+)
+{
+    std::stringstream compressed;
+    std::stringstream decompressed;
+    decompressed << data;
+    boost::iostreams::filtering_streambuf<boost::iostreams::input> out;
+    out.push(boost::iostreams::zlib_compressor());
+    out.push(decompressed);
+    boost::iostreams::copy(out, compressed);
+    return compressed.str();
+
+}
+*/
 
 void World::loadChunk(Chunk* chunk)
 {
