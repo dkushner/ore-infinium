@@ -231,7 +231,7 @@ void Server::processMessage(ENetEvent& event)
 uint32_t Server::receiveInitialClientData(const std::string& packetContents, ENetEvent& event)
 {
     PacketBuf::ClientInitialConnection message;
-    Packet::deserialize(ss, &message);
+    Packet::deserialize(packetContents, &message);
 
     Debug::log(Debug::Area::NetworkServerInitialArea) << "receiving client's player name and version data. Name: " << message.playername() << " version major: " << message.versionmajor() << " minor: " << message.versionminor();
 
