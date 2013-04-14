@@ -35,36 +35,36 @@
 
 std::string Packet::serialize(google::protobuf::Message* message, uint32_t packetType)
 {
-//
-//    std::stringstream ss(std::stringstream::out | std::stringstream::binary);
-//
-//    google::protobuf::io::OstreamOutputStream raw_out(ss);
-//    google::protobuf::io::CodedOutputStream coded_out(&raw_out);
-//
-//    std::string headerString;
-//
-//    // write packet header, containing type of message we're sending
-//    PacketBuf::Packet p;
-//    p.set_type(packetType);
-//    p.SerializeToString(&headerString);
-//
-//    coded_out.WriteVarint32(headerString.size());
-//    coded_out.WriteRaw(headerString.data(), headerString.size());
-//
-//    std::string contentsString;
-//    // write actual contents
-//    message->SerializeToString(&contentsString);
-//
-//    coded_out.WriteVarint32(contentsString.size());
-//    coded_out.WriteString(contentsString);
-//
-//
-//    std::stringstream temp(std::stringstream::out | std::stringstream::binary);
-//
-//    temp << headerString << contentsString;
-//    return temp.str();
 
-//    Debug::log(Debug::StartupArea) << "CONTENTS coded out stringstream, post-serialized: " << out->str().size();
+    std::stringstream ss(std::stringstream::out | std::stringstream::binary);
+
+    google::protobuf::io::OstreamOutputStream raw_out(&ss);
+    google::protobuf::io::CodedOutputStream coded_out(&raw_out);
+
+    std::string headerString;
+
+    // write packet header, containing type of message we're sending
+    PacketBuf::Packet p;
+    p.set_type(packetType);
+    p.SerializeToString(&headerString);
+
+    coded_out.WriteVarint32(headerString.size());
+    coded_out.WriteRaw(headerString.data(), headerString.size());
+
+    std::string contentsString;
+    // write actual contents
+    message->SerializeToString(&contentsString);
+
+    coded_out.WriteVarint32(contentsString.size());
+    coded_out.WriteString(contentsString);
+
+
+    std::stringstream temp(std::stringstream::out | std::stringstream::binary);
+
+    temp << headerString << contentsString;
+    Debug::log(Debug::StartupArea) << "CONTENTS coded out stringstream, post-serialized: " << temp.str().size();
+    return temp.str();
+
 }
 
 std::string Packet::compress(std::stringstream* in)
