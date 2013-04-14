@@ -33,35 +33,36 @@
 #include <iostream>
 #include <fstream>
 
-std::string Packet::serialize(const google::protobuf::Message* message, uint32_t packetType)
+std::string Packet::serialize(google::protobuf::Message* message, uint32_t packetType)
 {
-    std::stringstream ss(std::stringstream::out | std::stringstream::binary);
-
-    google::protobuf::io::OstreamOutputStream raw_out(ss);
-    google::protobuf::io::CodedOutputStream coded_out(&raw_out);
-
-    std::string headerString;
-
-    // write packet header, containing type of message we're sending
-    PacketBuf::Packet p;
-    p.set_type(packetType);
-    p.SerializeToString(&headerString);
-
-    coded_out.WriteVarint32(headerString.size());
-    coded_out.WriteRaw(headerString.data(), headerString.size());
-
-    std::string contentsString;
-    // write actual contents
-    message->SerializeToString(&contentsString);
-
-    coded_out.WriteVarint32(contentsString.size());
-    coded_out.WriteString(contentsString);
-
-
-    std::stringstream temp(std::stringstream::out | std::stringstream::binary);
-
-    temp << headerString << contentsString;
-    return temp.str();
+//
+//    std::stringstream ss(std::stringstream::out | std::stringstream::binary);
+//
+//    google::protobuf::io::OstreamOutputStream raw_out(ss);
+//    google::protobuf::io::CodedOutputStream coded_out(&raw_out);
+//
+//    std::string headerString;
+//
+//    // write packet header, containing type of message we're sending
+//    PacketBuf::Packet p;
+//    p.set_type(packetType);
+//    p.SerializeToString(&headerString);
+//
+//    coded_out.WriteVarint32(headerString.size());
+//    coded_out.WriteRaw(headerString.data(), headerString.size());
+//
+//    std::string contentsString;
+//    // write actual contents
+//    message->SerializeToString(&contentsString);
+//
+//    coded_out.WriteVarint32(contentsString.size());
+//    coded_out.WriteString(contentsString);
+//
+//
+//    std::stringstream temp(std::stringstream::out | std::stringstream::binary);
+//
+//    temp << headerString << contentsString;
+//    return temp.str();
 
 //    Debug::log(Debug::StartupArea) << "CONTENTS coded out stringstream, post-serialized: " << out->str().size();
 }
@@ -111,68 +112,68 @@ std::string Packet::decompress(std::stringstream* in)
 
 uint32_t Packet::deserializePacketType(const std::string& packet)
 {
-    std::stringstream ss(std::stringstream::out | std::stringstream::binary);
-    ss << packet;
-
-    google::protobuf::io::IstreamInputStream raw_in(ss);
-    google::protobuf::io::CodedInputStream coded_in(&raw_in);
-
-    std::string s;
-
-    //packet header
-    uint32_t msgSize;
-    coded_in.ReadVarint32(&msgSize);
-
-    assert(msgSize > 0);
-
-    if (coded_in.ReadString(&s, msgSize)) {
-        PacketBuf::Packet p;
-        p.ParseFromString(s);
-
-        in->clear();
-        in->seekg(0, std::ios::beg);
-
-        return p.type();
-    } else {
-        assert(0);
-    }
+//    std::stringstream ss(std::stringstream::out | std::stringstream::binary);
+//    ss << packet;
+//
+//    google::protobuf::io::IstreamInputStream raw_in(&ss);
+//    google::protobuf::io::CodedInputStream coded_in(&raw_in);
+//
+//    std::string s;
+//
+//    //packet header
+//    uint32_t msgSize;
+//    coded_in.ReadVarint32(&msgSize);
+//
+//    assert(msgSize > 0);
+//
+//    if (coded_in.ReadString(&s, msgSize)) {
+//        PacketBuf::Packet p;
+//        p.ParseFromString(s);
+//
+//        in->clear();
+//        in->seekg(0, std::ios::beg);
+//
+//        return p.type();
+//    } else {
+//        assert(0);
+//    }
 }
 
 void Packet::deserialize(const std::string& packetToDeserialize, google::protobuf::Message* message)
 {
-    std::stringstream ss(std::stringstream::out | std::stringstream::binary);
-    ss << packetToDeserialize;
-
-    google::protobuf::io::IstreamInputStream raw_in(ss);
-    google::protobuf::io::CodedInputStream coded_in(&raw_in);
-
-    std::string s;
-
-    //packet header
-    uint32_t msgSize;
-    coded_in.ReadVarint32(&msgSize);
-    assert(msgSize > 0);
-
-    if (coded_in.ReadString(&s, msgSize)) {
-        //unused, since deserializePacketType exists
-        //PacketBuf::Packet p;
-        //p.ParseFromString(s);
-        //std::cout << "PACKET CONTENTS, PACKET TYPE:: " << p.type() << "\n";
-    } else {
-        assert(0);
-    }
-
-    //packet contents
-    coded_in.ReadVarint32(&msgSize);
-
-    if (coded_in.ReadString(&s, msgSize)) {
-        message->ParseFromString(s);
-    } else {
-        assert(0);
-    }
+//    std::stringstream ss(std::stringstream::out | std::stringstream::binary);
+//    ss << packetToDeserialize;
+//
+//    google::protobuf::io::IstreamInputStream raw_in(ss);
+//    google::protobuf::io::CodedInputStream coded_in(&raw_in);
+//
+//    std::string s;
+//
+//    //packet header
+//    uint32_t msgSize;
+//    coded_in.ReadVarint32(&msgSize);
+//    assert(msgSize > 0);
+//
+//    if (coded_in.ReadString(&s, msgSize)) {
+//        //unused, since deserializePacketType exists
+//        //PacketBuf::Packet p;
+//        //p.ParseFromString(s);
+//        //std::cout << "PACKET CONTENTS, PACKET TYPE:: " << p.type() << "\n";
+//    } else {
+//        assert(0);
+//    }
+//
+//    //packet contents
+//    coded_in.ReadVarint32(&msgSize);
+//
+//    if (coded_in.ReadString(&s, msgSize)) {
+//        message->ParseFromString(s);
+//    } else {
+//        assert(0);
+//    }
 }
 
-void Packet::sendPacket(ENetPeer* peer, const google::protobuf::Message* message, uint32_t packetType, uint32_t enetPacketType)
+void Packet::sendPacket(ENetPeer* peer, google::protobuf::Message* message, uint32_t packetType, uint32_t enetPacketType)
 {
     assert(peer && message);
 
@@ -204,7 +205,7 @@ std::ofstream file("TESTWORLDDATA", std::ios::binary);
 file << compressed.str();
 file.close();
 */
-void Packet::sendCompressedPacketBroadcast(ENetHost* host, const google::protobuf::Message* message, uint32_t packetType, uint32_t enetPacketType)
+void Packet::sendCompressedPacketBroadcast(ENetHost* host, google::protobuf::Message* message, uint32_t packetType, uint32_t enetPacketType)
 {
     assert(host && message);
 
@@ -216,7 +217,7 @@ void Packet::sendCompressedPacketBroadcast(ENetHost* host, const google::protobu
     enet_host_broadcast(host, 0, packet);
 }
 
-void Packet::sendPacketBroadcast(ENetHost* host, const google::protobuf::Message* message, uint32_t packetType, uint32_t enetPacketType)
+void Packet::sendPacketBroadcast(ENetHost* host, google::protobuf::Message* message, uint32_t packetType, uint32_t enetPacketType)
 {
     assert(host && message);
 //Debug::log() << "SENDING PACKET BROAD";
