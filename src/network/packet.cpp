@@ -138,36 +138,36 @@ uint32_t Packet::deserializePacketType(const std::string& packet)
 
 void Packet::deserialize(const std::string& packetToDeserialize, google::protobuf::Message* message)
 {
-//    std::stringstream ss(std::stringstream::out | std::stringstream::binary);
-//    ss << packetToDeserialize;
-//
-//    google::protobuf::io::IstreamInputStream raw_in(ss);
-//    google::protobuf::io::CodedInputStream coded_in(&raw_in);
-//
-//    std::string s;
-//
-//    //packet header
-//    uint32_t msgSize;
-//    coded_in.ReadVarint32(&msgSize);
-//    assert(msgSize > 0);
-//
-//    if (coded_in.ReadString(&s, msgSize)) {
-//        //unused, since deserializePacketType exists
-//        //PacketBuf::Packet p;
-//        //p.ParseFromString(s);
-//        //std::cout << "PACKET CONTENTS, PACKET TYPE:: " << p.type() << "\n";
-//    } else {
-//        assert(0);
-//    }
-//
-//    //packet contents
-//    coded_in.ReadVarint32(&msgSize);
-//
-//    if (coded_in.ReadString(&s, msgSize)) {
-//        message->ParseFromString(s);
-//    } else {
-//        assert(0);
-//    }
+    std::stringstream ss(std::stringstream::out | std::stringstream::binary);
+    ss << packetToDeserialize;
+
+    google::protobuf::io::IstreamInputStream raw_in(&ss);
+    google::protobuf::io::CodedInputStream coded_in(&raw_in);
+
+    std::string s;
+
+    //packet header
+    uint32_t msgSize;
+    coded_in.ReadVarint32(&msgSize);
+    assert(msgSize > 0);
+
+    if (coded_in.ReadString(&s, msgSize)) {
+        //unused, since deserializePacketType exists
+        //PacketBuf::Packet p;
+        //p.ParseFromString(s);
+        //std::cout << "PACKET CONTENTS, PACKET TYPE:: " << p.type() << "\n";
+    } else {
+        assert(0);
+    }
+
+    //packet contents
+    coded_in.ReadVarint32(&msgSize);
+
+    if (coded_in.ReadString(&s, msgSize)) {
+        message->ParseFromString(s);
+    } else {
+        assert(0);
+    }
 }
 
 void Packet::sendPacket(ENetPeer* peer, google::protobuf::Message* message, uint32_t packetType, uint32_t enetPacketType)
