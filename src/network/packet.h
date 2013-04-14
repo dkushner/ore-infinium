@@ -83,27 +83,29 @@ public:
     };
 
     /**
-     * Serializes the @p message into a stringstream, along with the packet header and @p packetType which specifies
+     * Serializes the @p message into a string, along with the packet header and @p packetType which specifies
      * what kind of data is inside it.
      *
-     * @p out, the parameter-specified stringstream, now filled with the message data and a packet header
-     * Seeks the stream pointer back to zero when done.
      */
-    static void serialize(std::stringstream* out, const google::protobuf::Message* message, uint32_t packetType);
+    static std::string serialize(google::protobuf::Message* message, uint32_t packetType);
+
+    /// returns the serialized packet type header in a string
+    static std::string serializePacketType(uint32_t packetType);
 
     /**
      * Deserializes the provided stringstream, @p in and puts the data into @p message
      * Seeks the stream pointer back to zero when done.
      */
-    static void deserialize(std::stringstream* in, google::protobuf::Message* message);
+    static std::string deserialize(const std::string& packetToDeserialize, google::protobuf::Message* message);
 
     /**
      * Returns the packettype, representing an enum of either @sa FromClientPacketContents
      * or @sa FromServerPacketContents
      * Seeks the stream pointer back to zero when done.
      */
-    static uint32_t deserializePacketType(std::stringstream* in);
+    static uint32_t deserializePacketType(const std::string& packet);
 
+    //FIXME unused
     static std::string compress(std::stringstream* in);
     static std::string decompress(std::stringstream* in);
 

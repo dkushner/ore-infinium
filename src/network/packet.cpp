@@ -33,26 +33,29 @@
 #include <iostream>
 #include <fstream>
 
-void Packet::serialize(std::stringstream* out, const google::protobuf::Message* message, uint32_t packetType)
+std::string Packet::serialize(const google::protobuf::Message* message, uint32_t packetType)
 {
     google::protobuf::io::OstreamOutputStream raw_out(out);
     google::protobuf::io::CodedOutputStream coded_out(&raw_out);
 
-    std::string s;
+    std::string headerString;
 
     // write packet header, containing type of message we're sending
     PacketBuf::Packet p;
     p.set_type(packetType);
-    p.SerializeToString(&s);
+    p.SerializeToString(&headerString);
 
-    coded_out.WriteVarint32(s.size());
-    coded_out.WriteRaw(s.data(), s.size());
+    coded_out.WriteVarint32(headerString.size());
+    coded_out.WriteRaw(headerString.data(), headerString.size());
 
+    std::string contentsString;
     // write actual contents
-    message->SerializeToString(&s);
+    message->SerializeToString(&contentsString);
 
-    coded_out.WriteVarint32(s.size());
-    coded_out.WriteString(s);
+    coded_out.WriteVarint32(contentsString.size());
+    coded_out.WriteString(contentsString);
+
+    Debug::log(Debug::StartupArea) << "CONTENTS coded out stringstream, post-serialized: " << out->str().size();
 }
 
 std::string Packet::compress(std::stringstream* in)
@@ -94,7 +97,7 @@ std::string Packet::decompress(std::stringstream* in)
    return decompressedStream.str();
 }
 
-uint32_t Packet::deserializePacketType(std::stringstream* in)
+uint32_t Packet::deserializePacketType(const std::string& packet)
 {
     google::protobuf::io::IstreamInputStream raw_in(in);
     google::protobuf::io::CodedInputStream coded_in(&raw_in);
@@ -120,7 +123,7 @@ uint32_t Packet::deserializePacketType(std::stringstream* in)
     }
 }
 
-void Packet::deserialize(std::stringstream* in, google::protobuf::Message* message)
+std::string Packet::deserialize(const std::string& packetToDeserialize, google::protobuf::Message* message)
 {
     google::protobuf::io::IstreamInputStream raw_in(in);
     google::protobuf::io::CodedInputStream coded_in(&raw_in);
