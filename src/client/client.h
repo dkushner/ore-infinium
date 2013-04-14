@@ -111,14 +111,14 @@ private:
     void poll();
 
     void processMessage(ENetEvent& event);
-    void receiveChatMessage(std::stringstream* ss);
-    void receiveInitialPlayerData(std::stringstream* ss);
-    void receivePlayerDisconnected(std::stringstream* ss);
-    void receivePlayerMove(std::stringstream* ss);
-    void receiveChunk(std::stringstream* ss);
-    void receiveItemSpawned(std::stringstream* ss);
-    void receiveQuickBarInventoryItem(std::stringstream* ss);
-    void receiveQuickBarInventoryItemCountChanged(std::stringstream* ss);
+    void receiveChatMessage(const std::string& packetContents);
+    void receiveInitialPlayerData(const std::string& packetContents);
+    void receivePlayerDisconnected(const std::string& packetContents);
+    void receivePlayerMove(const std::string& packetContents);
+    void receiveChunk(const std::string& packetContents);
+    void receiveItemSpawned(const std::string& packetContents);
+    void receiveQuickBarInventoryItem(const std::string& packetContents);
+    void receiveQuickBarInventoryItemCountChanged(const std::string& packetContents);
 
 ///////////////////////////////////////////////
 

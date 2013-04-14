@@ -637,25 +637,25 @@ void Client::sendQuickBarInventorySlotSelectRequest(uint8_t index)
 
 void Client::processMessage(ENetEvent& event)
 {
-    std::stringstream ss(std::string((char*)(event.packet->data), event.packet->dataLength));
+    std::string packetContents = std::string((char*)(event.packet->data), event.packet->dataLength);
 
-    uint32_t packetType = Packet::deserializePacketType(&ss);
+    uint32_t packetType = Packet::deserializePacketType(packetContents);
 
     switch (packetType) {
     case Packet::FromServerPacketContents::ChatMessageFromServerPacket:
-        receiveChatMessage(&ss);
+        receiveChatMessage(packetContents);
         break;
 
     case Packet::FromServerPacketContents::InitialPlayerDataFromServerPacket:
-        receiveInitialPlayerData(&ss);
+        receiveInitialPlayerData(packetContents);
         break;
 
     case Packet::FromServerPacketContents::PlayerDisconnectedFromServerPacket:
-        receivePlayerDisconnected(&ss);
+        receivePlayerDisconnected(packetContents);
         break;
 
     case Packet::FromServerPacketContents::PlayerMoveFromServerPacket:
-        receivePlayerMove(&ss);
+        receivePlayerMove(packetContents);
         break;
 
     case Packet::FromServerPacketContents::InitialPlayerDataFinishedFromServerPacket:
@@ -663,36 +663,36 @@ void Client::processMessage(ENetEvent& event)
         break;
 
     case Packet::FromServerPacketContents::ChunkFromServerPacket:
-        receiveChunk(&ss);
+        receiveChunk(packetContents);
         break;
 
     case Packet::QuickBarInventoryItemFromServerPacket:
-        receiveQuickBarInventoryItem(&ss);
+        receiveQuickBarInventoryItem(packetContents);
         break;
 
     case Packet::QuickBarInventoryItemCountChangedFromServerPacket:
-        receiveQuickBarInventoryItemCountChanged(&ss);
+        receiveQuickBarInventoryItemCountChanged(packetContents);
         break;
 
     case Packet::ItemSpawnedFromServerPacket:
-        receiveItemSpawned(&ss);
+        receiveItemSpawned(packetContents);
         break;
     }
 
     enet_packet_destroy(event.packet);
 }
 
-void Client::receiveChatMessage(std::stringstream* ss)
+void Client::receiveChatMessage(const std::string& packetContents)
 {
     PacketBuf::ChatMessageFromServer chatMessage;
-    Packet::deserialize(ss, &chatMessage);
+    Packet::deserialize(packetContents, &chatMessage);
     m_chat->addChatLine(chatMessage.playername(), chatMessage.message());
 }
 
-void Client::receiveInitialPlayerData(std::stringstream* ss)
+void Client::receiveInitialPlayerData(const std::string& packetContents)
 {
     PacketBuf::InitialPlayerDataFromServer message;
-    Packet::deserialize(ss, &message);
+    Packet::deserialize(packetContents, &message);
     Debug::log(Debug::Area::NetworkClientInitialArea) << "initial player data received";
 
     Entities::Player* player = new Entities::Player("player1Standing1");
@@ -735,29 +735,29 @@ void Client::receiveInitialPlayerData(std::stringstream* ss)
     m_world->addPlayer(player);
 }
 
-void Client::receivePlayerDisconnected(std::stringstream* ss)
+void Client::receivePlayerDisconnected(const std::string& packetContents)
 {
     PacketBuf::PlayerDisconnectedFromServer message;
-    Packet::deserialize(ss, &message);
+    Packet::deserialize(packetContents, &message);
 
     Debug::assertf(m_world, "WARNING:, player disconnected, client attempted to remove him from the worlds player list..but we dont' have a world yet here? seems odd");
     m_world->findPlayer(message.playerid());
 }
 
-void Client::receivePlayerMove(std::stringstream* ss)
+void Client::receivePlayerMove(const std::string& packetContents)
 {
     PacketBuf::PlayerMoveFromServer message;
-    Packet::deserialize(ss, &message);
+    Packet::deserialize(packetContents, &message);
 
     Entities::Player* player = m_world->findPlayer(message.playerid());
     player->setPosition(message.x(), message.y());
     Debug::log(Debug::Area::NetworkClientContinuousArea) << "Setting player position to: " << player->position().x << " Y: " << player->position().y;
 }
 
-void Client::receiveChunk(std::stringstream* ss)
+void Client::receiveChunk(const std::string& packetContents)
 {
     PacketBuf::Chunk message;
-    Packet::deserialize(ss, &message);
+    Packet::deserialize(packetContents, &message);
 
     std::vector<Block> blocks;
 
@@ -779,10 +779,10 @@ void Client::receiveChunk(std::stringstream* ss)
     m_world->loadChunk(&chunk);
 }
 
-void Client::receiveQuickBarInventoryItemCountChanged(std::stringstream* ss)
+void Client::receiveQuickBarInventoryItemCountChanged(const std::string& packetContents)
 {
     PacketBuf::ItemCountChanged message;
-    Packet::deserialize(ss, &message);
+    Packet::deserialize(packetContents, &message);
 
     if (message.newcount() == 0) {
         m_quickBarMenu->inventory()->deleteItem(message.index());
@@ -793,10 +793,10 @@ void Client::receiveQuickBarInventoryItemCountChanged(std::stringstream* ss)
     m_quickBarMenu->reloadSlot(message.index());
 }
 
-void Client::receiveQuickBarInventoryItem(std::stringstream* ss)
+void Client::receiveQuickBarInventoryItem(const std::string& packetContents)
 {
     PacketBuf::Item message;
-    Packet::deserialize(ss, &message);
+    Packet::deserialize(packetContents, &message);
 
     //position isn't used even..but who cares.
     const glm::vec2 position = glm::vec2(message.x(), message.y());
@@ -831,10 +831,10 @@ void Client::receiveQuickBarInventoryItem(std::stringstream* ss)
     m_quickBarMenu->reloadSlot(index);
 }
 
-void Client::receiveItemSpawned(std::stringstream* ss)
+void Client::receiveItemSpawned(const std::string& packetContents)
 {
     PacketBuf::Item message;
-    Packet::deserialize(ss, &message);
+    Packet::deserialize(packetContents, &message);
 
     const glm::vec2 position = glm::vec2(message.x(), message.y());
 
