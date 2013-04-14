@@ -162,14 +162,14 @@ void Server::processMessage(ENetEvent& event)
 //    std::cout << "(Server) Message from client, our client->server round trip latency is: " << event.peer->roundTripTime  << "\n";
 //    std::cout << "(Server) latency is: " << event.peer->lowestRoundTripTime  << "\n";
 
-    std::stringstream ss(std::string((char*)(event.packet->data), event.packet->dataLength));
+    std::string packetContents = std::string((char*)(event.packet->data), event.packet->dataLength);
 
-    uint32_t packetType = Packet::deserializePacketType(&ss);
+    uint32_t packetType = Packet::deserializePacketType(packetContents);
 
     switch (packetType) {
     case Packet::FromClientPacketContents::InitialConnectionDataFromClientPacket: {
         //check for version mismatch, can't let him connect or else we'll have assloads of problems
-        uint32_t result = receiveInitialClientData(&ss, event);
+        uint32_t result = receiveInitialClientData(packetContents, event);
         switch (result) {
         case Packet::ConnectionEventType::None: {
 
@@ -209,26 +209,26 @@ void Server::processMessage(ENetEvent& event)
     }
 
     case Packet::FromClientPacketContents::ChatMessageFromClientPacket:
-        receiveChatMessage(&ss, m_clients[event.peer]->name());
+        receiveChatMessage(packetContents, m_clients[event.peer]->name());
         break;
 
     case Packet::FromClientPacketContents::PlayerMoveFromClientPacket:
-        receivePlayerMove(&ss, m_clients[event.peer]);
+        receivePlayerMove(packetContents, m_clients[event.peer]);
         break;
 
     case Packet::FromClientPacketContents::PlayerMouseStateFromClient:
-        receivePlayerMouseState(&ss, m_clients[event.peer]);
+        receivePlayerMouseState(packetContents, m_clients[event.peer]);
         break;
 
     case Packet::FromClientPacketContents::QuickBarInventorySelectSlotRequestFromClient:
-        receiveQuickBarInventorySelectSlotRequest(&ss, m_clients[event.peer]);
+        receiveQuickBarInventorySelectSlotRequest(packetContents, m_clients[event.peer]);
         break;
     }
 
     enet_packet_destroy(event.packet);
 }
 
-uint32_t Server::receiveInitialClientData(std::stringstream* ss, ENetEvent& event)
+uint32_t Server::receiveInitialClientData(const std::string& packetContents, ENetEvent& event)
 {
     PacketBuf::ClientInitialConnection message;
     Packet::deserialize(ss, &message);
@@ -249,18 +249,18 @@ uint32_t Server::receiveInitialClientData(std::stringstream* ss, ENetEvent& even
     return Packet::ConnectionEventType::None;;
 }
 
-void Server::receiveChatMessage(std::stringstream* ss, const std::string& playerName)
+void Server::receiveChatMessage(const std::string& packetContents, const std::string& playerName)
 {
     PacketBuf::ChatMessageFromClient receiveMessage;
-    Packet::deserialize(ss, &receiveMessage);
+    Packet::deserialize(packetContents, &receiveMessage);
 
     sendChatMessage(receiveMessage.message(), playerName);
 }
 
-void Server::receivePlayerMove(std::stringstream* ss, Entities::Player* player)
+void Server::receivePlayerMove(const std::string& packetContents, Entities::Player* player)
 {
     PacketBuf::PlayerMoveFromClient message;
-    Packet::deserialize(ss, &message);
+    Packet::deserialize(packetContents, &message);
 
     player->move(message.directionx(), message.directiony());
     if (message.jump()) {
@@ -268,20 +268,20 @@ void Server::receivePlayerMove(std::stringstream* ss, Entities::Player* player)
     }
 }
 
-void Server::receivePlayerMouseState(std::stringstream* ss, Entities::Player* player)
+void Server::receivePlayerMouseState(const std::string& packetContents, Entities::Player* player)
 {
     PacketBuf::PlayerMouseStateFromClient message;
-    Packet::deserialize(ss, &message);
+    Packet::deserialize(packetContents, &message);
 
     player->setMouseLeftButtonHeld(message.leftbuttonheld());
     player->setMouseRightButtonHeld(message.rightbuttonheld());
     player->setMousePositionWorldCoords(message.x(), message.y());
 }
 
-void Server::receiveQuickBarInventorySelectSlotRequest(std::stringstream* ss, Entities::Player* player)
+void Server::receiveQuickBarInventorySelectSlotRequest(const std::string& packetContents, Entities::Player* player)
 {
     PacketBuf::QuickBarInventorySelectSlotRequestFromClient message;
-    Packet::deserialize(ss, &message);
+    Packet::deserialize(packetContents, &message);
 
     const uint32_t index = message.index();
 

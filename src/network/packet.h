@@ -96,7 +96,7 @@ public:
      * Deserializes the provided stringstream, @p in and puts the data into @p message
      * Seeks the stream pointer back to zero when done.
      */
-    static std::string deserialize(const std::string& packetToDeserialize, google::protobuf::Message* message);
+    static void deserialize(const std::string& packetToDeserialize, google::protobuf::Message* message);
 
     /**
      * Returns the packettype, representing an enum of either @sa FromClientPacketContents

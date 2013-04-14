@@ -74,11 +74,11 @@ private:
      * a mismatching version, or a non-valid player name...returns Packet::ConnectionEventType::None
      * if nothing bad happened (it's okay to keep them connected).
      */
-    uint32_t receiveInitialClientData(std::stringstream* ss, ENetEvent& event);
-    void receiveChatMessage(std::stringstream* ss, const std::string& playerName);
-    void receivePlayerMove(std::stringstream* ss, Entities::Player* player);
-    void receivePlayerMouseState(std::stringstream* ss, Entities::Player* player);
-    void receiveQuickBarInventorySelectSlotRequest(std::stringstream* ss, Entities::Player* player);
+    uint32_t receiveInitialClientData(const std::string& packetContents, ENetEvent& event);
+    void receiveChatMessage(const std::string& packetContents, const std::string& playerName);
+    void receivePlayerMove(const std::string& packetContents, Entities::Player* player);
+    void receivePlayerMouseState(const std::string& packetContents, Entities::Player* player);
+    void receiveQuickBarInventorySelectSlotRequest(const std::string& packetContents, Entities::Player* player);
 
     void sendChatMessage(const std::string& message, const std::string& playerName);
     void sendInitialPlayerData(ENetPeer* peer, Entities::Player* player);
