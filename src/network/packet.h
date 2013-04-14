@@ -104,6 +104,9 @@ public:
      */
     static uint32_t deserializePacketType(std::stringstream* in);
 
+    static std::string compress(std::stringstream* in);
+    static std::string decompress(std::stringstream* in);
+
     /**
      * Send a packet containing the message @p message to the peer @p peer with the packet type (e.g. InvalidFromClientPacket, InvalidFromServerPacket, etc.)
      * @p enetPacketType e.g. whether ENET_PACKET_FLAG_RELIABLE or something else..

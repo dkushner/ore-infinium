@@ -55,6 +55,45 @@ void Packet::serialize(std::stringstream* out, const google::protobuf::Message* 
     coded_out.WriteString(s);
 }
 
+std::string Packet::compress(std::stringstream* in)
+{
+   /////////////////////////////////////////////////////////////////////////////////////////////
+   boost::iostreams::filtering_streambuf<boost::iostreams::input> out;
+   std::stringstream compressedStream;
+
+   boost::iostreams::zlib_params params;
+   params.level = boost::iostreams::zlib::best_compression;
+
+   out.push(boost::iostreams::zlib_compressor(params));
+   out.push(*in);
+
+   boost::iostreams::copy(out, compressedStream);
+   /////////////////////////////////////////////////////////////////////////////////////////////
+
+   return compressedStream.str();
+}
+
+std::string Packet::decompress(std::stringstream* in)
+{
+   /////////////////////////////////////////////////////////////////////////////////////////////
+   boost::iostreams::filtering_streambuf<boost::iostreams::input> inbuf;
+
+   std::stringstream decompressedStream;
+
+   boost::iostreams::zlib_params params;
+   params.level = boost::iostreams::zlib::best_compression;
+
+   inbuf.push(boost::iostreams::zlib_decompressor(params));
+   inbuf.push(*in);
+
+   std::stringstream compressed;
+   boost::iostreams::copy(inbuf, decompressedStream);
+
+   /////////////////////////////////////////////////////////////////////////////////////////////
+
+   return decompressedStream.str();
+}
+
 uint32_t Packet::deserializePacketType(std::stringstream* in)
 {
     google::protobuf::io::IstreamInputStream raw_in(in);
@@ -157,19 +196,7 @@ void Packet::sendCompressedPacketBroadcast(ENetHost* host, const google::protobu
 
     Packet::serialize(&ss, message, packetType);
 
-    // now that the message is serialized, lets compress that ass
-    boost::iostreams::filtering_streambuf<boost::iostreams::input> out;
-
-    boost::iostreams::zlib_params params;
-    params.level = boost::iostreams::zlib::best_compression;
-
-    out.push(boost::iostreams::zlib_compressor(params));
-    out.push(ss);
-
-    std::stringstream compressed;
-    boost::iostreams::copy(out, compressed);
-
-    ENetPacket *packet = enet_packet_create(compressed.str().data(), compressed.str().size(), enetPacketType);
+    ENetPacket *packet = enet_packet_create(ss.str().data(), ss.str().size(), enetPacketType);
     assert(packet);
 
     enet_host_broadcast(host, 0, packet);
