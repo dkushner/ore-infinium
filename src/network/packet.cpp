@@ -112,31 +112,28 @@ std::string Packet::decompress(std::stringstream* in)
 
 uint32_t Packet::deserializePacketType(const std::string& packet)
 {
-//    std::stringstream ss(std::stringstream::out | std::stringstream::binary);
-//    ss << packet;
-//
-//    google::protobuf::io::IstreamInputStream raw_in(&ss);
-//    google::protobuf::io::CodedInputStream coded_in(&raw_in);
-//
-//    std::string s;
-//
-//    //packet header
-//    uint32_t msgSize;
-//    coded_in.ReadVarint32(&msgSize);
-//
-//    assert(msgSize > 0);
-//
-//    if (coded_in.ReadString(&s, msgSize)) {
-//        PacketBuf::Packet p;
-//        p.ParseFromString(s);
-//
-//        in->clear();
-//        in->seekg(0, std::ios::beg);
-//
-//        return p.type();
-//    } else {
-//        assert(0);
-//    }
+    std::stringstream ss(std::stringstream::out | std::stringstream::binary);
+    ss << packet;
+
+    google::protobuf::io::IstreamInputStream raw_in(&ss);
+    google::protobuf::io::CodedInputStream coded_in(&raw_in);
+
+    std::string s;
+
+    //packet header
+    uint32_t msgSize;
+    coded_in.ReadVarint32(&msgSize);
+
+    assert(msgSize > 0);
+
+    if (coded_in.ReadString(&s, msgSize)) {
+        PacketBuf::Packet p;
+        p.ParseFromString(s);
+
+        return p.type();
+    } else {
+        assert(0);
+    }
 }
 
 void Packet::deserialize(const std::string& packetToDeserialize, google::protobuf::Message* message)
