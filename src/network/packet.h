@@ -97,10 +97,8 @@ public:
      *
      */
     static std::string serialize(google::protobuf::Message* message, uint32_t packetType);
-    static void serializeStream(google::protobuf::io::StringOutputStream* stringOut, google::protobuf::Message* message, uint32_t packetType);
-
-    /// returns the serialized packet type header in a string
-    static std::string serializePacketType(uint32_t packetType);
+    static void serializeStreamHeader(google::protobuf::io::StringOutputStream* stringOut, uint32_t packetType);
+    static void serializeStreamContents(google::protobuf::io::StringOutputStream* stringOut, google::protobuf::Message* message, uint32_t packetType);
 
     /**
      * Deserializes the provided stringstream, @p in and puts the data into @p message

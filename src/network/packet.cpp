@@ -35,18 +35,24 @@
 
 std::string Packet::serialize(google::protobuf::Message* message, uint32_t packetType)
 {
-    std::string stringPacketContents;
-    google::protobuf::io::StringOutputStream stringOut(&stringPacketContents);
+    std::string stringPacketHeader;
+    google::protobuf::io::StringOutputStream stringStreamPacketHeader(&stringPacketHeader);
 
-    serializeStream(&stringOut, message, packetType);
+    serializeStreamHeader(&stringStreamPacketHeader, packetType);
+
+    std::string stringPacketContents;
+    google::protobuf::io::StringOutputStream stringStreamPacketContents(&stringPacketContents);
+
+    serializeStreamContents(&stringStreamPacketContents, message, packetType);
 
     assert(stringPacketContents.size() > 0);
+    Debug::log(Debug::StartupArea) << "HEADER coded out stringstream, post-serialized: " << stringPacketHeader.size();
     Debug::log(Debug::StartupArea) << "CONTENTS coded out stringstream, post-serialized: " << stringPacketContents.size();
     assert(0);
     return stringPacketContents;
 }
 
-void Packet::serializeStream(google::protobuf::io::StringOutputStream* stringOut, google::protobuf::Message* message, uint32_t packetType)
+void Packet::serializeStreamHeader(google::protobuf::io::StringOutputStream* stringOut, uint32_t packetType)
 {
     google::protobuf::io::CodedOutputStream coded_out(stringOut);
 
@@ -57,8 +63,14 @@ void Packet::serializeStream(google::protobuf::io::StringOutputStream* stringOut
     p.set_type(packetType);
     p.SerializeToString(&headerString);
 
+    // write the size of the serialized packet header and the contents itself
     coded_out.WriteVarint32(headerString.size());
     coded_out.WriteRaw(headerString.data(), headerString.size());
+}
+
+void Packet::serializeStreamContents(google::protobuf::io::StringOutputStream* stringOut, google::protobuf::Message* message, uint32_t packetType)
+{
+    google::protobuf::io::CodedOutputStream coded_out(stringOut);
 
     std::string contentsString;
     // write actual contents
@@ -66,9 +78,7 @@ void Packet::serializeStream(google::protobuf::io::StringOutputStream* stringOut
 
     coded_out.WriteVarint32(contentsString.size());
     coded_out.WriteString(contentsString);
-
 }
-
 
 std::string Packet::compress(std::stringstream* in)
 {
