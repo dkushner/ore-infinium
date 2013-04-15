@@ -48,8 +48,13 @@ std::string Packet::serialize(google::protobuf::Message* message, uint32_t packe
     assert(stringPacketContents.size() > 0);
     Debug::log(Debug::StartupArea) << "HEADER coded out stringstream, post-serialized: " << stringPacketHeader.size();
     Debug::log(Debug::StartupArea) << "CONTENTS coded out stringstream, post-serialized: " << stringPacketContents.size();
-    assert(0);
-    return stringPacketContents;
+
+    std::stringstream ss(std::stringstream::out | std::stringstream::binary);
+    ss << stringPacketHeader;
+    ss << stringPacketContents;
+    Debug::log(Debug::StartupArea) << "SS post-serialized: " << ss.str().size();
+
+    return ss.str();
 }
 
 void Packet::serializeStreamHeader(google::protobuf::io::StringOutputStream* stringOut, uint32_t packetType)
@@ -137,7 +142,9 @@ uint32_t Packet::deserializePacketType(const std::string& packet)
 
     //packet header
     uint32_t msgSize;
-    coded_in.ReadVarint32(&msgSize);
+
+    bool result = coded_in.ReadVarint32(&msgSize);
+    assert(result);
 
     assert(msgSize > 0);
 
