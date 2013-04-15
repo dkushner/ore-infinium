@@ -24,6 +24,15 @@
 
 #include <iostream>
 
+namespace google {
+namespace protobuf {
+namespace io {
+class CodedOutputStream;
+class StringOutputStream;
+}
+}
+}
+
 class Packet
 {
 public:
@@ -88,6 +97,7 @@ public:
      *
      */
     static std::string serialize(google::protobuf::Message* message, uint32_t packetType);
+    static void serializeStream(google::protobuf::io::StringOutputStream* stringOut, google::protobuf::Message* message, uint32_t packetType);
 
     /// returns the serialized packet type header in a string
     static std::string serializePacketType(uint32_t packetType);
