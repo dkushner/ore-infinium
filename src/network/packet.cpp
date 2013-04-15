@@ -130,8 +130,7 @@ std::string Packet::decompress(std::stringstream* in)
 
 uint32_t Packet::deserializePacketType(const std::string& packet)
 {
-    std::stringstream ss(std::stringstream::out | std::stringstream::binary);
-    ss << packet;
+    std::stringstream ss(packet);
 
     google::protobuf::io::IstreamInputStream raw_in(&ss);
     google::protobuf::io::CodedInputStream coded_in(&raw_in);
@@ -160,8 +159,7 @@ uint32_t Packet::deserializePacketType(const std::string& packet)
 
 void Packet::deserialize(const std::string& packetToDeserialize, google::protobuf::Message* message)
 {
-    std::stringstream ss(std::stringstream::out | std::stringstream::binary);
-    ss << packetToDeserialize;
+    std::stringstream ss(packetToDeserialize);
 
     google::protobuf::io::IstreamInputStream raw_in(&ss);
     google::protobuf::io::CodedInputStream coded_in(&raw_in);
