@@ -131,7 +131,7 @@ public:
     static void sendPacketCompressed(ENetPeer* peer, google::protobuf::Message* message, uint32_t packetType, uint32_t enetPacketType);
 
     static void sendPacketBroadcast(ENetHost* host, google::protobuf::Message* message, uint32_t packetType, uint32_t enetPacketType);
-    static void sendCompressedPacketBroadcast(ENetHost* host, google::protobuf::Message* message, uint32_t packetType, uint32_t enetPacketType);
+    static void sendPacketCompressedBroadcast(ENetHost* host, google::protobuf::Message* message, uint32_t packetType, uint32_t enetPacketType);
 
 private:
     Packet();

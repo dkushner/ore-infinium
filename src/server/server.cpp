@@ -355,7 +355,7 @@ void Server::sendInitialWorldChunk(ENetPeer* peer)
         }
     }
 
-    Packet::sendPacket(peer, &message, Packet::FromServerPacketContents::ChunkFromServerPacket, ENET_PACKET_FLAG_RELIABLE);
+    Packet::sendPacketCompressed(peer, &message, Packet::FromServerPacketContents::ChunkFromServerPacket, ENET_PACKET_FLAG_RELIABLE);
 }
 
 void Server::sendWorldChunk(Chunk* chunk)
@@ -380,7 +380,7 @@ void Server::sendWorldChunk(Chunk* chunk)
         }
     }
 
-    Packet::sendPacketBroadcast(m_server, &message, Packet::FromServerPacketContents::ChunkFromServerPacket, ENET_PACKET_FLAG_RELIABLE);
+    Packet::sendPacketCompressedBroadcast(m_server, &message, Packet::FromServerPacketContents::ChunkFromServerPacket, ENET_PACKET_FLAG_RELIABLE);
 }
 
 void Server::sendItemSpawned(Item* item)
@@ -403,7 +403,7 @@ void Server::sendItemSpawned(Item* item)
         break;
     }
 
-    Packet::sendPacketBroadcast(m_server, &message, Packet::FromServerPacketContents::ItemSpawnedFromServerPacket, ENET_PACKET_FLAG_RELIABLE);
+    Packet::sendPacketCompressedBroadcast(m_server, &message, Packet::FromServerPacketContents::ItemSpawnedFromServerPacket, ENET_PACKET_FLAG_RELIABLE);
 }
 
 void Server::sendQuickBarInventoryItemCountChanged(Entities::Player* player, uint8_t index, uint8_t newCount)
@@ -509,6 +509,6 @@ void Server::sendPlayerQuickBarInventory(Entities::Player* player, uint8_t index
         }
     }
 
-    Packet::sendPacket(peer, &message, Packet::QuickBarInventoryItemFromServerPacket, ENET_PACKET_FLAG_RELIABLE);
+    Packet::sendPacketCompressed(peer, &message, Packet::QuickBarInventoryItemFromServerPacket, ENET_PACKET_FLAG_RELIABLE);
 }
 

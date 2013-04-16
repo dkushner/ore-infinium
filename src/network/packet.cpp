@@ -255,7 +255,7 @@ void Packet::sendPacketCompressed(ENetPeer* peer, google::protobuf::Message* mes
     enet_peer_send(peer, 0, packet);
 }
 
-void Packet::sendCompressedPacketBroadcast(ENetHost* host, google::protobuf::Message* message, uint32_t packetType, uint32_t enetPacketType)
+void Packet::sendPacketCompressedBroadcast(ENetHost* host, google::protobuf::Message* message, uint32_t packetType, uint32_t enetPacketType)
 {
     assert(host && message);
 
