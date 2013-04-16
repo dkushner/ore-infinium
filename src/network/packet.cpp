@@ -66,6 +66,8 @@ void Packet::serializeStreamHeader(google::protobuf::io::StringOutputStream* str
     // write packet header, containing type of message we're sending
     PacketBuf::Packet p;
     p.set_type(packetType);
+    bool isCompressed = (compressed == PacketCompression::CompressedPacket);
+    p.set_compressed(isCompressed);
     p.SerializeToString(&headerString);
 
     // write the size of the serialized packet header and the contents itself
