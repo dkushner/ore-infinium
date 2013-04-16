@@ -91,14 +91,19 @@ public:
         DisconnectedInvalidPlayerName
     };
 
+    enum class PacketCompression {
+        CompressedPacket,
+        UncompressedPacket
+    };
+
     /**
      * Serializes the @p message into a string, along with the packet header and @p packetType which specifies
      * what kind of data is inside it.
      *
      */
-    static std::string serialize(google::protobuf::Message* message, uint32_t packetType);
-    static void serializeStreamHeader(google::protobuf::io::StringOutputStream* stringOut, uint32_t packetType);
-    static void serializeStreamContents(google::protobuf::io::StringOutputStream* stringOut, google::protobuf::Message* message, uint32_t packetType);
+    static std::string serialize(google::protobuf::Message* message, uint32_t packetType, PacketCompression compressed);
+    static void serializeStreamHeader(google::protobuf::io::StringOutputStream* stringOut, uint32_t packetType, PacketCompression compressed);
+    static void serializeStreamContents(google::protobuf::io::StringOutputStream* stringOut, google::protobuf::Message* message, uint32_t packetType, PacketCompression compressed);
 
     /**
      * Deserializes the provided stringstream, @p in and puts the data into @p message

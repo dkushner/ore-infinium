@@ -33,17 +33,17 @@
 #include <iostream>
 #include <fstream>
 
-std::string Packet::serialize(google::protobuf::Message* message, uint32_t packetType)
+std::string Packet::serialize(google::protobuf::Message* message, uint32_t packetType, PacketCompression compressed)
 {
     std::string stringPacketHeader;
     google::protobuf::io::StringOutputStream stringStreamPacketHeader(&stringPacketHeader);
 
-    serializeStreamHeader(&stringStreamPacketHeader, packetType);
+    serializeStreamHeader(&stringStreamPacketHeader, packetType, compressed);
 
     std::string stringPacketContents;
     google::protobuf::io::StringOutputStream stringStreamPacketContents(&stringPacketContents);
 
-    serializeStreamContents(&stringStreamPacketContents, message, packetType);
+    serializeStreamContents(&stringStreamPacketContents, message, packetType, compressed);
 
     assert(stringPacketContents.size() > 0);
     Debug::log(Debug::StartupArea) << "HEADER coded out stringstream, post-serialized: " << stringPacketHeader.size();
@@ -57,7 +57,7 @@ std::string Packet::serialize(google::protobuf::Message* message, uint32_t packe
     return ss.str();
 }
 
-void Packet::serializeStreamHeader(google::protobuf::io::StringOutputStream* stringOut, uint32_t packetType)
+void Packet::serializeStreamHeader(google::protobuf::io::StringOutputStream* stringOut, uint32_t packetType, PacketCompression compressed)
 {
     google::protobuf::io::CodedOutputStream coded_out(stringOut);
 
@@ -73,7 +73,7 @@ void Packet::serializeStreamHeader(google::protobuf::io::StringOutputStream* str
     coded_out.WriteRaw(headerString.data(), headerString.size());
 }
 
-void Packet::serializeStreamContents(google::protobuf::io::StringOutputStream* stringOut, google::protobuf::Message* message, uint32_t packetType)
+void Packet::serializeStreamContents(google::protobuf::io::StringOutputStream* stringOut, google::protobuf::Message* message, uint32_t packetType, PacketCompression compressed)
 {
     google::protobuf::io::CodedOutputStream coded_out(stringOut);
 
@@ -196,7 +196,7 @@ void Packet::sendPacket(ENetPeer* peer, google::protobuf::Message* message, uint
 {
     assert(peer && message);
 
-    std::string packetContents = Packet::serialize(message, packetType);
+    std::string packetContents = Packet::serialize(message, packetType, PacketCompression::UncompressedPacket);
 
     ENetPacket *packet = enet_packet_create(packetContents.data(), packetContents.size(), enetPacketType);
     assert(packet);
@@ -228,7 +228,7 @@ void Packet::sendCompressedPacketBroadcast(ENetHost* host, google::protobuf::Mes
 {
     assert(host && message);
 
-    std::string packetContents = Packet::serialize(message, packetType);
+    std::string packetContents = Packet::serialize(message, packetType, PacketCompression::UncompressedPacket);
 
     ENetPacket *packet = enet_packet_create(packetContents.data(), packetContents.size(), enetPacketType);
     assert(packet);
@@ -241,7 +241,7 @@ void Packet::sendPacketBroadcast(ENetHost* host, google::protobuf::Message* mess
     assert(host && message);
 //Debug::log() << "SENDING PACKET BROAD";
 
-    std::string packetContents = Packet::serialize(message, packetType);
+    std::string packetContents = Packet::serialize(message, packetType, PacketCompression::UncompressedPacket);
 
     ENetPacket *packet = enet_packet_create(packetContents.data(), packetContents.size(), enetPacketType);
     assert(packet);

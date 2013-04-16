@@ -2,6 +2,7 @@ package PacketBuf;
 
 message Packet {
     optional uint32 type = 1;
+    optional bool compressed = 2;
 }
 
 message ClientInitialConnection {
