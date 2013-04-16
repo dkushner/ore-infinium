@@ -85,14 +85,11 @@ void Packet::serializeStreamContents(google::protobuf::io::StringOutputStream* s
 
     switch (compressed) {
         case PacketCompression::CompressedPacket: {
-//        std::stringstream uncompressedStream(contentsString);
-//        std::string compressedString = compress(&uncompressedStream);
-//
-//        coded_out.WriteVarint32(compressedString.size());
-//        coded_out.WriteString(compressedString);
+        std::stringstream uncompressedStream(contentsString);
+        std::string compressedString = compress(&uncompressedStream);
 
         coded_out.WriteVarint32(contentsString.size());
-        coded_out.WriteString(contentsString);
+        coded_out.WriteString(compressedString);
         break;
         }
 
@@ -106,7 +103,7 @@ void Packet::serializeStreamContents(google::protobuf::io::StringOutputStream* s
 
 std::string Packet::compress(std::stringstream* in)
 {
-    /*
+    Debug::log(Debug::StartupArea) << "compressing packet..precompressed size: " << in->str().size();
    /////////////////////////////////////////////////////////////////////////////////////////////
    boost::iostreams::filtering_streambuf<boost::iostreams::input> out;
    std::stringstream compressedStream;
@@ -119,15 +116,14 @@ std::string Packet::compress(std::stringstream* in)
 
    boost::iostreams::copy(out, compressedStream);
    /////////////////////////////////////////////////////////////////////////////////////////////
+    Debug::log(Debug::StartupArea) << "compressing packet..compressed size: " << compressedStream.str().size();
 
    return compressedStream.str();
-   */
-    return in->str();
 }
 
 std::string Packet::decompress(std::stringstream* in)
 {
-    /*
+    Debug::log(Debug::StartupArea) << "decompressing packet..stream size: " << in->str().size();
    /////////////////////////////////////////////////////////////////////////////////////////////
    boost::iostreams::filtering_streambuf<boost::iostreams::input> inbuf;
 
@@ -145,8 +141,6 @@ std::string Packet::decompress(std::stringstream* in)
    /////////////////////////////////////////////////////////////////////////////////////////////
 
    return decompressedStream.str();
-   */
-    return in->str();
 }
 
 uint32_t Packet::deserializePacketType(const std::string& packet)
@@ -205,9 +199,10 @@ void Packet::deserialize(const std::string& packetToDeserialize, google::protobu
         assert(0);
     }
 
+    // retrieve the size of the uncompressed message..this size is uncompressed as well
+    coded_in.ReadVarint32(&msgSize);
     if (compressed == false) {
         //packet contents
-        coded_in.ReadVarint32(&msgSize);
 
         if (coded_in.ReadString(&s, msgSize)) {
             message->ParseFromString(s);
@@ -238,8 +233,6 @@ void Packet::deserialize(const std::string& packetToDeserialize, google::protobu
 
         google::protobuf::io::IstreamInputStream decompressedRaw(&decompressedStream);
         google::protobuf::io::CodedInputStream decompressedCoded(&decompressedRaw);
-
-        decompressedCoded.ReadVarint32(&msgSize);
 
         if (decompressedCoded.ReadString(&s, msgSize)) {
             message->ParseFromString(s);
