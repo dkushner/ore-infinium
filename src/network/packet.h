@@ -100,6 +100,7 @@ public:
      * Serializes the @p message into a string, along with the packet header and @p packetType which specifies
      * what kind of data is inside it.
      *
+    * packet structure is: (size of header message + header message) + (size of precompressed message contents + compressed message contents)
      */
     static std::string serialize(google::protobuf::Message* message, uint32_t packetType, PacketCompression compressed);
     static void serializeStreamHeader(google::protobuf::io::StringOutputStream* stringOut, uint32_t packetType, PacketCompression compressed);

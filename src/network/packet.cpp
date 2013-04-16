@@ -46,13 +46,10 @@ std::string Packet::serialize(google::protobuf::Message* message, uint32_t packe
     serializeStreamContents(&stringStreamPacketContents, message, packetType, compressed);
 
     assert(stringPacketContents.size() > 0);
-    //Debug::log(Debug::StartupArea) << "HEADER coded out stringstream, post-serialized: " << stringPacketHeader.size();
-    //Debug::log(Debug::StartupArea) << "CONTENTS coded out stringstream, post-serialized: " << stringPacketContents.size();
 
     std::stringstream ss(std::stringstream::out | std::stringstream::binary);
     ss << stringPacketHeader;
     ss << stringPacketContents;
-    Debug::log(Debug::StartupArea) << "post-serialized: header count: " << stringPacketHeader.size() << " contents count: " << stringPacketContents.size();
 
     return ss.str();
 }
@@ -123,7 +120,6 @@ std::string Packet::compress(std::stringstream* in)
 
 std::string Packet::decompress(std::stringstream* in)
 {
-    Debug::log(Debug::StartupArea) << "decompressing packet..stream size: " << in->str().size();
    /////////////////////////////////////////////////////////////////////////////////////////////
    boost::iostreams::filtering_streambuf<boost::iostreams::input> inbuf;
 
@@ -175,7 +171,6 @@ uint32_t Packet::deserializePacketType(const std::string& packet)
 void Packet::deserialize(const std::string& packetToDeserialize, google::protobuf::Message* message)
 {
     std::stringstream ss(packetToDeserialize);
-    Debug::log(Debug::StartupArea) << " deserializing, entire packet size: " << packetToDeserialize.size();
 
     google::protobuf::io::IstreamInputStream raw_in(&ss);
     google::protobuf::io::CodedInputStream coded_in(&raw_in);
@@ -199,11 +194,11 @@ void Packet::deserialize(const std::string& packetToDeserialize, google::protobu
         assert(0);
     }
 
-    // retrieve the size of the uncompressed message..this size is uncompressed as well
+    // retrieve the size of the uncompressed message..this size is part of the uncompressed data
     coded_in.ReadVarint32(&msgSize);
+
     if (compressed == false) {
         //packet contents
-
         if (coded_in.ReadString(&s, msgSize)) {
             message->ParseFromString(s);
         } else {
@@ -211,25 +206,20 @@ void Packet::deserialize(const std::string& packetToDeserialize, google::protobu
         }
     } else {
         // we need to decompress the packet contents before giving it to protobuf to deserialize
-        Debug::log(Debug::StartupArea) << "PROTO STREAM POSITION: " << coded_in.CurrentPosition();
-
         //seek to the end of the header so everything after is the contents
-        Debug::log(Debug::StartupArea) << "RAW CONTENTS: " << packetToDeserialize.size();
-
         std::string rawContentsRemaining = packetToDeserialize.substr(coded_in.CurrentPosition(), packetToDeserialize.size() );
-        Debug::log(Debug::StartupArea) << "RAW CONTENTS REMAINING SIZE: " << rawContentsRemaining.size();
 
         std::stringstream compressedStream(rawContentsRemaining);
 
-        Debug::log(Debug::StartupArea) << "COMPRESSED STREAM: " << compressedStream.str().size();
+        //Debug::log(Debug::StartupArea) << "COMPRESSED STREAM: " << compressedStream.str().size();
 
         std::string decompressedString = decompress(&compressedStream);
 
-        Debug::log(Debug::StartupArea) << "DECOMPRESSED STR: " << decompressedString.size();
+        //Debug::log(Debug::StartupArea) << "DECOMPRESSED STR: " << decompressedString.size();
 
         std::stringstream decompressedStream(decompressedString);
 
-        Debug::log(Debug::StartupArea) << " DECOMPRESSED STREAM STR: " << decompressedStream.str().size();
+        //Debug::log(Debug::StartupArea) << " DECOMPRESSED STREAM STR: " << decompressedStream.str().size();
 
         google::protobuf::io::IstreamInputStream decompressedRaw(&decompressedStream);
         google::protobuf::io::CodedInputStream decompressedCoded(&decompressedRaw);
