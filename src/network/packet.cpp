@@ -52,7 +52,7 @@ std::string Packet::serialize(google::protobuf::Message* message, uint32_t packe
     std::stringstream ss(std::stringstream::out | std::stringstream::binary);
     ss << stringPacketHeader;
     ss << stringPacketContents;
-    //Debug::log(Debug::StartupArea) << "SS post-serialized: " << ss.str().size();
+    Debug::log(Debug::StartupArea) << "post-serialized: header count: " << stringPacketHeader.size() << " contents count: " << stringPacketContents.size();
 
     return ss.str();
 }
@@ -181,6 +181,7 @@ uint32_t Packet::deserializePacketType(const std::string& packet)
 void Packet::deserialize(const std::string& packetToDeserialize, google::protobuf::Message* message)
 {
     std::stringstream ss(packetToDeserialize);
+    Debug::log(Debug::StartupArea) << " deserializing, entire packet size: " << packetToDeserialize.size();
 
     google::protobuf::io::IstreamInputStream raw_in(&ss);
     google::protobuf::io::CodedInputStream coded_in(&raw_in);
@@ -215,18 +216,20 @@ void Packet::deserialize(const std::string& packetToDeserialize, google::protobu
         }
     } else {
         // we need to decompress the packet contents before giving it to protobuf to deserialize
-        std::string rawContents;
+        Debug::log(Debug::StartupArea) << "PROTO STREAM POSITION: " << coded_in.CurrentPosition();
 
         //seek to the end of the header so everything after is the contents
-//        ss.seekg(coded_in.CurrentPosition());
-        ss >> rawContents;
+        Debug::log(Debug::StartupArea) << "RAW CONTENTS: " << packetToDeserialize.size();
 
-        Debug::log(Debug::StartupArea) << "RAW CONTENTS: " << rawContents.size();
+        std::string rawContentsRemaining = packetToDeserialize.substr(coded_in.CurrentPosition(), packetToDeserialize.size() );
+        Debug::log(Debug::StartupArea) << "RAW CONTENTS REMAINING SIZE: " << rawContentsRemaining.size();
 
-        std::stringstream compressedStream(rawContents);
+        std::stringstream compressedStream(rawContentsRemaining);
+
         Debug::log(Debug::StartupArea) << "COMPRESSED STREAM: " << compressedStream.str().size();
 
         std::string decompressedString = decompress(&compressedStream);
+
         Debug::log(Debug::StartupArea) << "DECOMPRESSED STR: " << decompressedString.size();
 
         std::stringstream decompressedStream(decompressedString);
