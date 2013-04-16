@@ -85,11 +85,14 @@ void Packet::serializeStreamContents(google::protobuf::io::StringOutputStream* s
 
     switch (compressed) {
         case PacketCompression::CompressedPacket: {
-        std::stringstream uncompressedStream(contentsString);
-        std::string compressedString = compress(&uncompressedStream);
+//        std::stringstream uncompressedStream(contentsString);
+//        std::string compressedString = compress(&uncompressedStream);
+//
+//        coded_out.WriteVarint32(compressedString.size());
+//        coded_out.WriteString(compressedString);
 
-        coded_out.WriteVarint32(compressedString.size());
-        coded_out.WriteString(compressedString);
+        coded_out.WriteVarint32(contentsString.size());
+        coded_out.WriteString(contentsString);
         break;
         }
 
@@ -186,8 +189,6 @@ void Packet::deserialize(const std::string& packetToDeserialize, google::protobu
 
     assert(ss.str().size() > 0);
 
-  //  Debug::log(Debug::StartupArea) << "DESERIALIZE SS POINTER POSITION BEFORE ALL READS: " <<  coded_in.CurrentPosition();
-
     //packet header
     uint32_t msgSize;
     coded_in.ReadVarint32(&msgSize);
@@ -203,8 +204,6 @@ void Packet::deserialize(const std::string& packetToDeserialize, google::protobu
         assert(0);
     }
 
- //   Debug::log(Debug::StartupArea) << "DESERIALIZE SS POINTER POSITION after header READS: " <<  coded_in.CurrentPosition();
-
     if (compressed == false) {
         //packet contents
         coded_in.ReadVarint32(&msgSize);
@@ -219,31 +218,39 @@ void Packet::deserialize(const std::string& packetToDeserialize, google::protobu
         std::string rawContents;
 
         //seek to the end of the header so everything after is the contents
-        ss.seekp(coded_in.CurrentPosition());
+//        ss.seekg(coded_in.CurrentPosition());
         ss >> rawContents;
 
+        Debug::log(Debug::StartupArea) << "RAW CONTENTS: " << rawContents.size();
+
         std::stringstream compressedStream(rawContents);
-        std::stringstream decompressedStream(decompress(&compressedStream));
+        Debug::log(Debug::StartupArea) << "COMPRESSED STREAM: " << compressedStream.str().size();
 
-        google::protobuf::io::IstreamInputStream raw_in(&decompressedStream);
-        google::protobuf::io::CodedInputStream coded_in(&raw_in);
+        std::string decompressedString = decompress(&compressedStream);
+        Debug::log(Debug::StartupArea) << "DECOMPRESSED STR: " << decompressedString.size();
 
-        coded_in.ReadVarint32(&msgSize);
+        std::stringstream decompressedStream(decompressedString);
 
-        if (coded_in.ReadString(&s, msgSize)) {
+        Debug::log(Debug::StartupArea) << " DECOMPRESSED STREAM STR: " << decompressedStream.str().size();
+
+        google::protobuf::io::IstreamInputStream decompressedRaw(&decompressedStream);
+        google::protobuf::io::CodedInputStream decompressedCoded(&decompressedRaw);
+
+        decompressedCoded.ReadVarint32(&msgSize);
+
+        if (decompressedCoded.ReadString(&s, msgSize)) {
             message->ParseFromString(s);
         } else {
             assert(0);
         }
     }
-//    Debug::log(Debug::StartupArea) << "DESERIALIZE SS POINTER POSITION after contents READS: " << coded_in.CurrentPosition();
 }
 
 void Packet::sendPacket(ENetPeer* peer, google::protobuf::Message* message, uint32_t packetType, uint32_t enetPacketType)
 {
     assert(peer && message);
 
-    std::string packetContents = Packet::serialize(message, packetType, PacketCompression::UncompressedPacket);
+    std::string packetContents = Packet::serialize(message, packetType, PacketCompression::CompressedPacket);
 
     ENetPacket *packet = enet_packet_create(packetContents.data(), packetContents.size(), enetPacketType);
     assert(packet);
@@ -288,7 +295,7 @@ void Packet::sendPacketBroadcast(ENetHost* host, google::protobuf::Message* mess
     assert(host && message);
 //Debug::log() << "SENDING PACKET BROAD";
 
-    std::string packetContents = Packet::serialize(message, packetType, PacketCompression::UncompressedPacket);
+    std::string packetContents = Packet::serialize(message, packetType, PacketCompression::CompressedPacket);
 
     ENetPacket *packet = enet_packet_create(packetContents.data(), packetContents.size(), enetPacketType);
     assert(packet);
