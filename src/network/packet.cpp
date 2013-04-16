@@ -126,7 +126,6 @@ std::string Packet::decompress(std::stringstream* in)
    std::stringstream decompressedStream;
 
    boost::iostreams::zlib_params params;
-   params.level = boost::iostreams::zlib::best_compression;
 
    inbuf.push(boost::iostreams::zlib_decompressor(params));
    inbuf.push(*in);
@@ -236,39 +235,31 @@ void Packet::sendPacket(ENetPeer* peer, google::protobuf::Message* message, uint
 {
     assert(peer && message);
 
+    std::string packetContents = Packet::serialize(message, packetType, PacketCompression::UncompressedPacket);
+
+    ENetPacket *packet = enet_packet_create(packetContents.data(), packetContents.size(), enetPacketType);
+    assert(packet);
+
+    enet_peer_send(peer, 0, packet);
+}
+
+void Packet::sendPacketCompressed(ENetPeer* peer, google::protobuf::Message* message, uint32_t packetType, uint32_t enetPacketType)
+{
+    assert(peer && message);
+
     std::string packetContents = Packet::serialize(message, packetType, PacketCompression::CompressedPacket);
 
     ENetPacket *packet = enet_packet_create(packetContents.data(), packetContents.size(), enetPacketType);
     assert(packet);
 
-//Debug::log() << "SENDING PACKET";
     enet_peer_send(peer, 0, packet);
 }
 
-/*
-boost::iostreams::filtering_streambuf<boost::iostreams::input> out;
-boost::iostreams::zlib_params params;
-params.level = boost::iostreams::zlib::best_compression;
-
-out.push(boost::iostreams::zlib_compressor(params));
-out.push(ss);
-
-std::stringstream compressed;
-boost::iostreams::copy(out, compressed);
-
-//  out.push(file);
-//   char data[5] = {'a', 'b', 'c', 'd', 'e'};
-//    boost::iostreams::copy(boost::iostreams::basic_array_source<char>(data, sizeof(data)), out);
-
-std::ofstream file("TESTWORLDDATA", std::ios::binary);
-file << compressed.str();
-file.close();
-*/
 void Packet::sendCompressedPacketBroadcast(ENetHost* host, google::protobuf::Message* message, uint32_t packetType, uint32_t enetPacketType)
 {
     assert(host && message);
 
-    std::string packetContents = Packet::serialize(message, packetType, PacketCompression::UncompressedPacket);
+    std::string packetContents = Packet::serialize(message, packetType, PacketCompression::CompressedPacket);
 
     ENetPacket *packet = enet_packet_create(packetContents.data(), packetContents.size(), enetPacketType);
     assert(packet);
@@ -279,9 +270,8 @@ void Packet::sendCompressedPacketBroadcast(ENetHost* host, google::protobuf::Mes
 void Packet::sendPacketBroadcast(ENetHost* host, google::protobuf::Message* message, uint32_t packetType, uint32_t enetPacketType)
 {
     assert(host && message);
-//Debug::log() << "SENDING PACKET BROAD";
 
-    std::string packetContents = Packet::serialize(message, packetType, PacketCompression::CompressedPacket);
+    std::string packetContents = Packet::serialize(message, packetType, PacketCompression::UncompressedPacket);
 
     ENetPacket *packet = enet_packet_create(packetContents.data(), packetContents.size(), enetPacketType);
     assert(packet);
