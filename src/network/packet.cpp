@@ -46,13 +46,13 @@ std::string Packet::serialize(google::protobuf::Message* message, uint32_t packe
     serializeStreamContents(&stringStreamPacketContents, message, packetType, compressed);
 
     assert(stringPacketContents.size() > 0);
-    Debug::log(Debug::StartupArea) << "HEADER coded out stringstream, post-serialized: " << stringPacketHeader.size();
-    Debug::log(Debug::StartupArea) << "CONTENTS coded out stringstream, post-serialized: " << stringPacketContents.size();
+    //Debug::log(Debug::StartupArea) << "HEADER coded out stringstream, post-serialized: " << stringPacketHeader.size();
+    //Debug::log(Debug::StartupArea) << "CONTENTS coded out stringstream, post-serialized: " << stringPacketContents.size();
 
     std::stringstream ss(std::stringstream::out | std::stringstream::binary);
     ss << stringPacketHeader;
     ss << stringPacketContents;
-    Debug::log(Debug::StartupArea) << "SS post-serialized: " << ss.str().size();
+    //Debug::log(Debug::StartupArea) << "SS post-serialized: " << ss.str().size();
 
     return ss.str();
 }
@@ -168,28 +168,57 @@ void Packet::deserialize(const std::string& packetToDeserialize, google::protobu
 
     assert(ss.str().size() > 0);
 
+  //  Debug::log(Debug::StartupArea) << "DESERIALIZE SS POINTER POSITION BEFORE ALL READS: " <<  coded_in.CurrentPosition();
+
     //packet header
     uint32_t msgSize;
     coded_in.ReadVarint32(&msgSize);
     assert(msgSize > 0);
 
+    bool compressed = false;
     if (coded_in.ReadString(&s, msgSize)) {
-        //unused, since deserializePacketType exists
-        //PacketBuf::Packet p;
-        //p.ParseFromString(s);
-        //std::cout << "PACKET CONTENTS, PACKET TYPE:: " << p.type() << "\n";
+        PacketBuf::Packet p;
+        p.ParseFromString(s);
+
+        compressed = p.compressed();
     } else {
         assert(0);
     }
 
-    //packet contents
-    coded_in.ReadVarint32(&msgSize);
+ //   Debug::log(Debug::StartupArea) << "DESERIALIZE SS POINTER POSITION after header READS: " <<  coded_in.CurrentPosition();
 
-    if (coded_in.ReadString(&s, msgSize)) {
-        message->ParseFromString(s);
+    if (compressed == false) {
+        //packet contents
+        coded_in.ReadVarint32(&msgSize);
+
+        if (coded_in.ReadString(&s, msgSize)) {
+            message->ParseFromString(s);
+        } else {
+            assert(0);
+        }
     } else {
-        assert(0);
+        // we need to decompress the packet contents before giving it to protobuf to deserialize
+        std::string rawContents;
+
+        //seek to the end of the header so everything after is the contents
+        ss.seekp(coded_in.CurrentPosition());
+        ss >> rawContents;
+
+        std::stringstream compressedStream(rawContents);
+        std::stringstream decompressedStream(decompress(&compressedStream));
+
+        google::protobuf::io::IstreamInputStream raw_in(&decompressedStream);
+        google::protobuf::io::CodedInputStream coded_in(&raw_in);
+
+        coded_in.ReadVarint32(&msgSize);
+
+        if (coded_in.ReadString(&s, msgSize)) {
+            message->ParseFromString(s);
+        } else {
+            assert(0);
+        }
     }
+//    Debug::log(Debug::StartupArea) << "DESERIALIZE SS POINTER POSITION after contents READS: " << coded_in.CurrentPosition();
 }
 
 void Packet::sendPacket(ENetPeer* peer, google::protobuf::Message* message, uint32_t packetType, uint32_t enetPacketType)
