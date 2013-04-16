@@ -83,8 +83,22 @@ void Packet::serializeStreamContents(google::protobuf::io::StringOutputStream* s
     // write actual contents
     message->SerializeToString(&contentsString);
 
-    coded_out.WriteVarint32(contentsString.size());
-    coded_out.WriteString(contentsString);
+    switch (compressed) {
+        case PacketCompression::CompressedPacket: {
+        std::stringstream uncompressedStream(contentsString);
+        std::string compressedString = compress(&uncompressedStream);
+
+        coded_out.WriteVarint32(compressedString.size());
+        coded_out.WriteString(compressedString);
+        break;
+        }
+
+        case PacketCompression::UncompressedPacket: {
+        coded_out.WriteVarint32(contentsString.size());
+        coded_out.WriteString(contentsString);
+        break;
+        }
+    }
 }
 
 std::string Packet::compress(std::stringstream* in)
@@ -105,6 +119,7 @@ std::string Packet::compress(std::stringstream* in)
 
    return compressedStream.str();
    */
+    return in->str();
 }
 
 std::string Packet::decompress(std::stringstream* in)
@@ -128,6 +143,7 @@ std::string Packet::decompress(std::stringstream* in)
 
    return decompressedStream.str();
    */
+    return in->str();
 }
 
 uint32_t Packet::deserializePacketType(const std::string& packet)
