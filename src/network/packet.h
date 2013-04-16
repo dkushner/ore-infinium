@@ -104,7 +104,7 @@ public:
      */
     static std::string serialize(google::protobuf::Message* message, uint32_t packetType, PacketCompression compressed);
     static void serializeStreamHeader(google::protobuf::io::StringOutputStream* stringOut, uint32_t packetType, PacketCompression compressed);
-    static void serializeStreamContents(google::protobuf::io::StringOutputStream* stringOut, google::protobuf::Message* message, uint32_t packetType, PacketCompression compressed);
+    static PacketCompression serializeStreamContents(google::protobuf::io::StringOutputStream* stringOut, google::protobuf::Message* message, uint32_t packetType, PacketCompression compressed);
 
     /**
      * Deserializes the provided stringstream, @p in and puts the data into @p message

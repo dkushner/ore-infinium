@@ -35,15 +35,16 @@
 
 std::string Packet::serialize(google::protobuf::Message* message, uint32_t packetType, PacketCompression compressed)
 {
-    std::string stringPacketHeader;
-    google::protobuf::io::StringOutputStream stringStreamPacketHeader(&stringPacketHeader);
-
-    serializeStreamHeader(&stringStreamPacketHeader, packetType, compressed);
 
     std::string stringPacketContents;
     google::protobuf::io::StringOutputStream stringStreamPacketContents(&stringPacketContents);
 
-    serializeStreamContents(&stringStreamPacketContents, message, packetType, compressed);
+    PacketCompression actualCompression = serializeStreamContents(&stringStreamPacketContents, message, packetType, compressed);
+
+    std::string stringPacketHeader;
+    google::protobuf::io::StringOutputStream stringStreamPacketHeader(&stringPacketHeader);
+
+    serializeStreamHeader(&stringStreamPacketHeader, packetType, actualCompression);
 
     assert(stringPacketContents.size() > 0);
 
@@ -72,7 +73,7 @@ void Packet::serializeStreamHeader(google::protobuf::io::StringOutputStream* str
     coded_out.WriteRaw(headerString.data(), headerString.size());
 }
 
-void Packet::serializeStreamContents(google::protobuf::io::StringOutputStream* stringOut, google::protobuf::Message* message, uint32_t packetType, PacketCompression compressed)
+Packet::PacketCompression Packet::serializeStreamContents(google::protobuf::io::StringOutputStream* stringOut, google::protobuf::Message* message, uint32_t packetType, PacketCompression compressed)
 {
     google::protobuf::io::CodedOutputStream coded_out(stringOut);
 
@@ -80,6 +81,12 @@ void Packet::serializeStreamContents(google::protobuf::io::StringOutputStream* s
     // write actual contents
     message->SerializeToString(&contentsString);
 
+    if ((compressed == PacketCompression::CompressedPacket) && (contentsString.size() <= 60)) {
+        Debug::log(Debug::StartupArea) << "packet serialization, forgoing packet compression, packet size is too small to likely have a positive yield.";
+        compressed = PacketCompression::UncompressedPacket;
+    }
+
+    //FIXME: SECURITY: packet exception is not caught if the packet claims it's compressed but boost's zlib fails
     switch (compressed) {
         case PacketCompression::CompressedPacket: {
         std::stringstream uncompressedStream(contentsString);
@@ -96,6 +103,8 @@ void Packet::serializeStreamContents(google::protobuf::io::StringOutputStream* s
         break;
         }
     }
+
+    return compressed;
 }
 
 std::string Packet::compress(std::stringstream* in)
